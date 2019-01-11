@@ -25,7 +25,8 @@ class COrderListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-                  `o`.`id`                                               AS `id`,
+                  `o`.`id` as `id`,
+                  `o`.remoteOrderId                                           as remoteOrderId,
                   concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
                   `ud`.`name`                                            AS `name`,
                   `ud`.`surname`                                         AS `surname`,
@@ -39,7 +40,7 @@ class COrderListAjaxController extends AAjaxController
                   `opm`.`name`                                           AS `payment`,
                   `ols`.`title`                                          AS `orderLineStatus`,
                   `pb`.`name`                                            AS `productBrand`,
-                  #concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
+                  concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
@@ -144,6 +145,7 @@ class COrderListAjaxController extends AAjaxController
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
+            $row['remoteOrderId']=$val->remoteOrderId;
             $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
             if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 

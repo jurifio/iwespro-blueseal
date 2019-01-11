@@ -203,9 +203,11 @@ FROM `Product` `p`
   JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
-  JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  LEFT JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
-  JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+  LEFT JOIN (DirtyProduct dp
+    JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+    ON (shp.productId,shp.productVariantId,shp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
   LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   LEFT JOIN ProductName pn ON p.id = pn.id
   LEFT JOIN MarketplaceHasShop mpas ON php.shopId=mpas.shopId
@@ -427,7 +429,7 @@ ORDER BY `p`.`id`";
     }
 }
 
-          
+
 
 
 

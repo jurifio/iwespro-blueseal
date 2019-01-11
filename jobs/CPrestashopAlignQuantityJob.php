@@ -223,6 +223,10 @@ ORDER BY `p`.`id`";
             $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
 
 
+            $productRepo = \Monkey::app()->repoFactory->create('Product');
+            $productNameTranslationRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+            $dirtyProductRepo = \Monkey::app()->repoFactory->create('DirtyProduct');
+
             foreach ($res_product as $value_product) {
                 $eanproductparent = \Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
 
@@ -239,9 +243,7 @@ ORDER BY `p`.`id`";
                 if ($value_product['isOnSale'] == 0) {
                     $price = $value_product['priceMarketplace'] - ($value_product['priceMarketplace'] * 22 / 122);
                 } else {
-
                     $price = $value_product['salePrice'] - ($value_product['salePrice'] * 22 / 122);
-
                 }
 
 
@@ -253,18 +255,18 @@ ORDER BY `p`.`id`";
              WHERE id_product=" . $p);
                 $stmtUpdateProductShop->execute();
                 if ($value_product['titleSale'] == 1) {
-                    $findname = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+                    $findname = $productRepo->findOneBy(['id' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                     //concat(pb.name,' ',pn.name,' ',dp.var , dp.itemno,' ', pv.name)
                     $productbrandName = $findname->productBrand->name;
-                    $findProductName = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => 1]);
+                    $findProductName = $productNameTranslationRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => 1]);
                     if ($findProductName == null) {
                         $productnameName = '';
                     } else {
                         $productnameName = $findProductName->name;
                     }
 
-                    $category= $findname->getLocalizedProductCategories('<br>');
-                    $dirtyProduct = \Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+                    $category = $findname->getLocalizedProductCategories('<br>');
+                    $dirtyProduct = $dirtyProductRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                     $productitemnoName = $dirtyProduct->itemno;
                     $productcolorSupplierName = $dirtyProduct->var;
                     $titleTextSaleLang2 = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',str_replace("'", "\'", $productbrandName) .  " Sconto del " . number_format($value_product['percentSale'],0,',','.') . "%  da EUR " . number_format($value_product['priceMarketplace'], 2, ',', '.') . " a EUR " . number_format($value_product['salePrice'], 2, ',', '.')." ". $productitemnoName . " " . $productcolorSupplierName );

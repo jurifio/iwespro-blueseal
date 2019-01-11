@@ -53,6 +53,11 @@
                                     data-orderable="true"
                                     class="center">Utente
                                 </th>
+                                <th data-slug="remoteOrderId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Ordine Remoto
+                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"

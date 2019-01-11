@@ -50,15 +50,7 @@ class CPrestashopInsertNewProduct extends AAjaxController
         } else {
             $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
-        if (file_exists($save_to . 'psz6_image_single_link.csv')) {
-            unlink($save_to . 'psz6_image_single_link.csv');
-        }
-        $image_single_link_csv = fopen($save_to . 'psz6_image_single_link.csv', 'w');
-        fputcsv($image_single_link_csv, array('id_image',
-            'id_product',
-            'position',
-            'cover',
-            'link'), ';');
+
 
         /******* apertura e creazione file csv per espostazione********/
         $db_host = "iwes.shop";
@@ -86,7 +78,6 @@ class CPrestashopInsertNewProduct extends AAjaxController
         } else {
             $save_to = '/home/pickyshop/public_html/temp-prestashop/';
         }
-
 
 
         /**
@@ -121,12 +112,18 @@ class CPrestashopInsertNewProduct extends AAjaxController
   '1'                                                                            AS minimal_quantity,
   '1'                                                                            AS low_stock_threshold,
   '0'                                                                            AS low_stock_alert,
- S3.price  /122*22 AS vatfullprice,
-  S3.price AS full_price,
-  S3.salePrice AS salePrice,
-  S3.salePrice /122*22 AS vatsaleprice,
-  IF(`p`.isOnSale=1,'saldo','prezzopieno') AS tipoprezzo,
-  IF(`p`.isOnSale=1,S3.salePrice-(S3.salePrice *22/122),S3.price-(S3.price*22/122) )     AS price,
+ php.price  /122*22 AS vatfullprice,
+  php.price AS full_price,
+  php.priceSale AS salePrice,
+  php.priceSale /122*22 AS vatsaleprice,
+  php.priceMarketplace AS priceMarketplace,
+  php.percentSale AS percentSale,
+  php.amount AS increaseAmountSale,  
+  php.isOnSale AS isOnSale,
+  IF(`php`.isOnSale=1,'saldo','prezzopieno') AS tipoprezzo,
+  php.price   AS price,
+  php.titleSale AS titleSale,
+  php.prestashopId AS shopPrestashopId,
   '0'                                                   AS wholesale_price,
   '0'                                                                            AS unity,
   '0.000000'                                                                     AS unit_price_ratio,
@@ -193,9 +190,11 @@ FROM `Product` `p`
   JOIN  `ProductPublicSku` S3 ON  (`p`.`id`, `p`.`productVariantId`) = (`S3`.`productId`, `S3`.`productVariantId`)
   JOIN  `ProductSku` S2 ON  (`p`.`id`, `p`.`productVariantId`) = (`S2`.`productId`, `S2`.`productVariantId`)
   JOIN `ProductHasProductCategory` `phpc`  ON (`p`.`id`, `p`.`productVariantId`)=(`phpc`.`productId`, `phpc`.`productVariantId`)
-  JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
+  LEFT JOIN  ProductDescriptionTranslation pdt ON p.id = pdt.productId AND p.productVariantId = pdt.productVariantId
   JOIN  MarketplaceHasProductAssociate php ON p.id = php.productId  AND p.productVariantId =php.productVariantId
-  JOIN DirtyProduct dp ON p.id = dp.productId AND dp.productVariantId = p.productVariantId
+ LEFT JOIN (DirtyProduct dp
+    JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+    ON (shp.productId,shp.productVariantId,shp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
   LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   LEFT JOIN ProductName pn ON p.id = pn.id
   LEFT JOIN MarketplaceHasShop mpas ON php.shopId=mpas.shopId
@@ -205,10 +204,17 @@ ORDER BY `p`.`id`";
 
         /*and p.productStatuId = 6 */
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-
+        $productEanRepo = \Monkey::app()->repoFactory('ProductEan');
+        $productNameTranslationRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+        $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
 
         foreach ($res_product as $value_product) {
             $p = $value_product['prestaId'];
+            $deletepsz6_image_shop = $db_con->prepare("DELETE FROM psz6_image_shop WHERE id_product=" . $p);
+            $deletepsz6_image_shop->execute();
+            $deletepsz6_image = $db_con->prepare("DELETE FROM psz6_image WHERE id_product=" . $p);
+            $deletepsz6_image->execute();
+
             $id_supplier = $value_product['id_supplier'];
             $id_manufacturer = $value_product['id_manufacturer'];
             $id_category_default = $value_product['id_category_default'];
@@ -216,7 +222,31 @@ ORDER BY `p`.`id`";
             $id_tax_rules_group = $value_product['id_tax_rules_group'];
             $on_sale = $value_product['on_sale'];
             $online_only = $value_product['online_only'];
-            $ean13 = $value_product['ean13'];
+            if ($value_product['ean13'] == '') {
+                $productEanFind = $productEanRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'productSizeId' => 0]);
+                if ($productEanFind == null) {
+                    $productEanInsert = $productEanRepo->findOneBy(['productId' => null, 'productVariantId' => null, 'productSizeId' => null, 'used' => 0]);
+                    $productEanInsert->productId = $value_product['productId'];
+                    $productEanInsert->productVariantId = $value_product['productVariantId'];
+                    $productEanInsert->productSizeId = 0;
+                    $productEanInsert->usedForParent = 1;
+                    $productEanInsert->used = 1;
+                    $productEanInsert->brandAssociate = $value_product['id_manufacturer'];
+                    $productEanInsert->shopId = $value_product['id_supplier'];
+                    $productEanInsert->insert();
+                    $productEanRefind = $productEanRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'productSizeId' => 0]);
+                    $ean13 = $productEanRefind->ean;
+
+                } else {
+                    $ean13 = $productEanFind->ean;
+
+                }
+
+            } else {
+                $ean13 = $value_product['ean13'];
+            }
+
+
             $isbn = $value_product['isbn'];
             $upc = $value_product['upc'];
             $ecotax = $value_product['ecotax'];
@@ -237,7 +267,7 @@ ORDER BY `p`.`id`";
             $depth = '20';
             $weight = '1';
             $out_of_stock = $value_product['out_of_stock'];
-            $addtitional_delivery_times = '1';
+            $additional_delivery_times = '1';
             $quantity_discount = $value_product['quantity_discount'];
             $customizable = $value_product['customizable'];
             $uploadable_files = $value_product['uploadable_files'];
@@ -262,9 +292,11 @@ ORDER BY `p`.`id`";
             $pack_stock_type = $value_product['pack_stock_type'];
             $state = $value_product['state'];
             $status = $value_product['status'];
+            try {
+                $stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product WHERE id_product=" . $p);
+                $stmtFeatureProductDelete->execute();
 
-
-            $stmtInsertProduct = $db_con->prepare("INSERT INTO psz6_product (`id_product`,
+                $stmtInsertProduct = $db_con->prepare("INSERT INTO psz6_product (`id_product`,
                                                                           `id_supplier`,
                                                                           `id_manufacturer`,
                                                                           `id_category_default`,
@@ -325,7 +357,7 @@ ORDER BY `p`.`id`";
                                                            '" . $id_tax_rules_group . "',
                                                            '" . $on_sale . "',
                                                            '" . $online_only . "',
-                                                           '',
+                                                            '" . $ean13 . "',
                                                            '" . $isbn . "',
                                                            '" . $upc . "',
                                                            '" . $ecotax . "',
@@ -346,7 +378,7 @@ ORDER BY `p`.`id`";
                                                            '" . $depth . "',
                                                            '" . $weight . "',
                                                            '" . $out_of_stock . "',
-                                                           '" . $addtitional_delivery_times . "',
+                                                           '" . $additional_delivery_times . "',
                                                            '" . $quantity_discount . "',
                                                            '" . $customizable . "',
                                                            '" . $uploadable_files . "',
@@ -369,13 +401,67 @@ ORDER BY `p`.`id`";
                                                            '" . $date_upd . "',
                                                            '" . $advanced_stock_management . "',
                                                            '" . $pack_stock_type . "',
-                                                           '" . $state . "')"
+                                                           '" . $state . "')
+                                                            ON DUPLICATE KEY 
+                                                           UPDATE 
+                                                `id_product`                ='" . $p . "',
+                                                `id_supplier`               ='" . $id_supplier . "',
+                                                `id_manufacturer`           ='" . $id_manufacturer . "',
+                                                `id_category_default`       ='" . $id_category_default . "',
+                                                `id_shop_default`           ='" . $id_shop_default . "', 
+                                                `id_tax_rules_group`        ='" . $id_tax_rules_group . "',
+                                                `on_sale`                   ='" . $on_sale . "',
+                                                `online_only`               ='" . $online_only . "',
+                                                `ean13`                     ='" . $ean13 . "',
+                                                `isbn`                      ='" . $isbn . "',
+                                                `upc`                       ='" . $upc . "',
+                                                `ecotax`                    ='" . $ecotax . "',
+                                                `quantity`                  ='" . $quantity . "',
+                                                `minimal_quantity`          ='" . $minimal_quantity . "',
+                                                `low_stock_threshold`       ='" . $low_stock_thresold . "',
+                                                `low_stock_alert`           ='" . $low_stock_alert . "',
+                                                `price`                     ='" . $price . "',
+                                                `wholesale_price`           ='" . $wholesale_price . "',
+                                                `unity`                     ='" . $unity . "',
+                                                `unit_price_ratio`          ='" . $unit_price_ratio . "',
+                                                `additional_shipping_cost`  ='" . $additional_shipping_cost . "',
+                                                `reference`                 ='" . $reference . "',
+                                                `supplier_reference`        ='" . $supplier_reference . "',
+                                                `location`                  ='" . $location . "',
+                                                `width`                     ='" . $width . "',
+                                                `height`                    ='" . $height . "',
+                                                `depth`                     ='" . $depth . "',
+                                                `weight`                    ='" . $weight . "',
+                                                `out_of_stock`              ='" . $out_of_stock . "',
+                                                `additional_delivery_times`='" . $additional_delivery_times . "',
+                                                `quantity_discount`         ='" . $quantity_discount . "',
+                                                `customizable`              ='" . $customizable . "',
+                                                `uploadable_files`          ='" . $uploadable_files . "',
+                                                `text_fields`               ='" . $text_fields . "',
+                                                `active`                    ='" . $active . "',
+                                                `redirect_type`             ='" . $redirect_type . "',
+                                                `id_type_redirected`        ='" . $id_type_redirected . "',
+                                                `available_for_order`       ='" . $available_for_order . "',
+                                                `available_date`            ='" . $available_date . "',
+                                                `show_condition`            ='" . $show_condition . "',
+                                                `condition`                 ='" . $condition . "',
+                                                `show_price`                ='" . $show_price . "',
+                                                `indexed`                   ='" . $indexed . "',
+                                                `visibility`                ='" . $visibility . "',
+                                                `cache_is_pack`             ='" . $cache_is_pack . "',
+                                                `cache_has_attachments`     ='" . $cache_has_attachments . "',
+                                                `is_virtual`                ='" . $is_virtual . "',
+                                                `cache_default_attribute`   ='" . $cache_default_attribute . "',
+                                                `date_add`                  ='" . $date_add . "',
+                                                `date_upd`                  ='" . $date_upd . "',
+                                                `advanced_stock_management` ='" . $advanced_stock_management . "',
+                                                `pack_stock_type`           ='" . $pack_stock_type . "',
+                                                `state`                     ='" . $state . "' ");
+
+                $stmtInsertProduct->execute();
 
 
-            );
-            $stmtInsertProduct->execute();
-
-            $stmtInsertProductShop = $db_con->prepare("INSERT INTO psz6_product_shop (       
+                $stmtInsertProductShop = $db_con->prepare("INSERT INTO psz6_product_shop (       
                                                                           `id_product`,
                                                                           `id_shop`,
                                                                           `id_category_default`,
@@ -443,22 +529,58 @@ ORDER BY `p`.`id`";
                                                            '" . $date_add . "',
                                                            '" . $date_upd . "',
                                                            '" . $pack_stock_type . "'
-                                                          )");
+                                                          )
+                                                          ON DUPLICATE KEY 
+                                                           UPDATE 
+                                                `id_product`                    ='" . $p . "',
+                                                `id_shop`                       ='" . $id_shop_default . "',
+                                                `id_category_default`           ='" . $id_category_default . "',
+                                                `id_tax_rules_group`            ='" . $id_tax_rules_group . "', 
+                                                `on_sale`                       ='" . $on_sale . "',
+                                                `online_only`                   ='" . $online_only . "',
+                                                `ecotax`                    ='" . $ecotax . "',
+                                                `minimal_quantity`          ='" . $minimal_quantity . "',
+                                                `low_stock_threshold`       ='" . $low_stock_thresold . "',
+                                                `low_stock_alert`           ='" . $low_stock_alert . "',
+                                                `price`                     ='" . $price . "',
+                                                `wholesale_price`           ='" . $wholesale_price . "',
+                                                `unity`                     ='" . $unity . "',
+                                                `unit_price_ratio`          ='" . $unit_price_ratio . "',
+                                                `additional_shipping_cost`  ='" . $additional_shipping_cost . "',
+                                                `customizable`              ='" . $customizable . "',
+                                                `uploadable_files`          ='" . $uploadable_files . "',
+                                                `text_fields`               ='" . $text_fields . "',
+                                                `active`                    ='" . $active . "',
+                                                `redirect_type`             ='" . $redirect_type . "',
+                                                `id_type_redirected`        ='" . $id_type_redirected . "',
+                                                `available_for_order`       ='" . $available_for_order . "',
+                                                `available_date`            ='" . $available_date . "',
+                                                `show_condition`            ='" . $show_condition . "',
+                                                `condition`                 ='" . $condition . "',
+                                                `show_price`                ='" . $show_price . "',
+                                                `indexed`                   ='" . $indexed . "',
+                                                `visibility`                ='" . $visibility . "',
+                                                `cache_default_attribute`   ='" . $cache_default_attribute . "',
+                                                `advanced_stock_management` ='" . $advanced_stock_management . "',
+                                                `date_add`                  ='" . $date_add . "',
+                                                `date_upd`                  ='" . $date_upd . "',
+                                                `pack_stock_type`           ='" . $pack_stock_type . "'
+                                                          ");
 
-            $stmtInsertProductShop->execute();
+                $stmtInsertProductShop->execute();
 
 
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '2']);
-            if (empty($res_product_lang)) {
+                $res_product_lang = $productNameTranslationRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '2']);
+                if (empty($res_product_lang)) {
 
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
-                $in_stock = "in stock";
-                $current_supply = "Current supply. Ordering available";
-                $product_available = "Delivered in 3-4 Days";
-                $product_not_available = "Delivered in 10-15 Days";
-                $valuelang = 1;
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+                    $valuelang = 1;
 
-                $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
                                                               `id_product`,
                                                                `id_shop`,
                                                                `id_lang`,
@@ -486,264 +608,334 @@ ORDER BY `p`.`id`";
                                                            '" . $in_stock . "',
                                                            '" . $current_supply . "',
                                                            '" . $product_available . "',
-                                                           '" . $product_not_available . "')");
+                                                           '" . $product_not_available . "')
+                                                           ON DUPLICATE KEY 
+                                                           UPDATE 
+                                                               `id_product`        ='" . $p . "',
+                                                               `id_shop`           ='" . $id_shop_default . "',
+                                                               `id_lang`           ='" . $valuelang . "',
+                                                               `description`       ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `description_short` ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `link_rewrite`      = '" . $value_product['product_id'] . "',
+                                                               `meta_description`  = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_keywords`     = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_title`        = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `name`              = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `available_now`     = '" . $in_stock . "',
+                                                               `available_later`   = '" . $current_supply . "',
+                                                               `delivery_in_stock` = '" . $product_available . "',
+                                                               `delivery_out_stock`= '" . $product_not_available . "'
+                                                           ");
 
-                $stmtLangProduct->execute();
-
-            } else {
-
-
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $res_product_lang->name . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
-
-                $in_stock = "in stock";
-                $current_supply = "Current supply. Ordering available";
-                $product_available = "Delivered in 3-4 Days";
-                $product_not_available = "Delivered in 10-15 Days";
-
-                $valuelang = 1;
-
-
-                $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
-                                                              `id_product`,
-                                                               `id_shop`,
-                                                               `id_lang`,
-                                                               `description`,
-                                                               `description_short`,
-                                                               `link_rewrite`,
-                                                               `meta_description`,
-                                                               `meta_keywords`,
-                                                               `meta_title`,
-                                                               `name`,
-                                                               `available_now`,
-                                                               `available_later`,
-                                                               `delivery_in_stock`,
-                                                               `delivery_out_stock`) 
-                                                   VALUES ('" . $p . "',
-                                                           '" . $id_shop_default . "',
-                                                           '" . $valuelang . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . $value_product['product_id'] . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . $in_stock . "',
-                                                           '" . $current_supply . "',
-                                                           '" . $product_available . "',
-                                                           '" . $product_not_available . "')");
-
-                $stmtLangProduct->execute();
-            }
-            $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '1']);
-            if (empty($res_product_lang)) {
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
-                $in_stock = "in Vendita";
-                $current_supply = 'In magazzino. ordinabile';
-                $product_available = 'Consegna in 3-4 Giorni Lavorati';
-                $product_not_available = 'Consegna  in 10-15 lavorativi';
-                $valuelang = 2;
-
-                $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
-                                                              `id_product`,
-                                                               `id_shop`,
-                                                               `id_lang`,
-                                                               `description`,
-                                                               `description_short`,
-                                                               `link_rewrite`,
-                                                               `meta_description`,
-                                                               `meta_keywords`,
-                                                               `meta_title`,
-                                                               `name`,
-                                                               `available_now`,
-                                                               `available_later`,
-                                                               `delivery_in_stock`,
-                                                               `delivery_out_stock`) 
-                                                   VALUES ('" . $p . "',
-                                                           '" . $id_shop_default . "',
-                                                           '" . $valuelang . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . $value_product['product_id'] . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . $in_stock . "',
-                                                           '" . $current_supply . "',
-                                                           '" . $product_available . "',
-                                                           '" . $product_not_available . "')");
-
-                $stmtLangProduct->execute();
-
-
-            } else {
-
-
-                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $res_product_lang->name . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
-
-
-                $in_stock = "in Vendita";
-                $current_supply = 'In magazzino. ordinabile';
-                $product_available = 'Consegna in 3-4 Giorni Lavorati';
-                $product_not_available = 'Consegna  in 10-15 lavorativi';
-
-
-                $valuelang = 2;
-
-                $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
-                                                              `id_product`,
-                                                               `id_shop`,
-                                                               `id_lang`,
-                                                               `description`,
-                                                               `description_short`,
-                                                               `link_rewrite`,
-                                                               `meta_description`,
-                                                               `meta_keywords`,
-                                                               `meta_title`,
-                                                               `name`,
-                                                               `available_now`,
-                                                               `available_later`,
-                                                               `delivery_in_stock`,
-                                                               `delivery_out_stock`) 
-                                                   VALUES ('" . $p . "',
-                                                           '" . $id_shop_default . "',
-                                                           '" . $valuelang . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . $value_product['product_id'] . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                           '" . $in_stock . "',
-                                                           '" . $current_supply . "',
-                                                           '" . $product_available . "',
-                                                           '" . $product_not_available . "')");
-
-                $stmtLangProduct->execute();
-            }
-            /*  $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '3']);
-              if (empty($res_product_lang)) {
-                  iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
-                  $in_stock = "in stock";
-                  $current_supply = "Current supply. Ordering available";
-                  $product_available = "Delivered in 3-4 Days";
-                  $product_not_available = "Delivered in 10-15 Days";
-                  $valuelang = 3;
-
-                  $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
-                                                                `id_product`,
-                                                                 `id_shop`,
-                                                                 `id_lang`,
-                                                                 `description`,
-                                                                 `description_short`,
-                                                                 `link_rewrite`,
-                                                                 `meta_description`,
-                                                                 `meta_keywords`,
-                                                                 `meta_title`,
-                                                                 `name`,
-                                                                 `available_now`,
-                                                                 `available_later`,
-                                                                 `delivery_in_stock`,
-                                                                 `delivery_out_stock`)
-                                                     VALUES ('" . $p . "',
-                                                             '" . $id_shop_default . "',
-                                                             '" . $valuelang . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . $value_product['product_id'] . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . $in_stock . "',
-                                                             '" . $current_supply . "',
-                                                             '" . $product_available . "',
-                                                             '" . $product_not_available . "')");
-
-                  $stmtLangProduct->execute();
-              } else {
-
-
-                  iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $res_product_lang->name . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
-
-
-                  $in_stock = "in stock";
-                  $current_supply = "Current supply. Ordering available";
-                  $product_available = "Delivered in 3-4 Days";
-                  $product_not_available = "Delivered in 10-15 Days";
-
-
-                  $valuelang = 3;
-
-                  $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
-                                                                `id_product`,
-                                                                 `id_shop`,
-                                                                 `id_lang`,
-                                                                 `description`,
-                                                                 `description_short`,
-                                                                 `link_rewrite`,
-                                                                 `meta_description`,
-                                                                 `meta_keywords`,
-                                                                 `meta_title`,
-                                                                 `name`,
-                                                                 `available_now`,
-                                                                 `available_later`,
-                                                                 `delivery_in_stock`,
-                                                                 `delivery_out_stock`)
-                                                     VALUES ('" . $p . "',
-                                                             '" . $id_shop_default . "',
-                                                             '" . $valuelang . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . $value_product['product_id'] . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
-                                                             '" . $in_stock . "',
-                                                             '" . $current_supply . "',
-                                                             '" . $product_available . "',
-                                                             '" . $product_not_available . "')");
-
-                  $stmtLangProduct->execute();
-              }*/
-            /** ricerca varianti attributi */
-            /**** acquisizione ultimo id attributo tabella psz6_attribute_product
-             */
-            $stmtLastIdProductAttribute = $db_con->prepare("SELECT max(id_product_attribute) AS maxIdProductAttribute FROM psz6_product_attribute");
-            $stmtLastIdProductAttribute->execute();
-            $id_product_attribute = $stmtLastIdProductAttribute->fetch();
-            $w = $id_product_attribute[0];
-
-            $res_product_attribute = \Monkey::app()->repoFactory->create('ProductSku')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
-            $lock_default_on = 0;
-            foreach ($res_product_attribute as $value_product_attribute) {
-                $w = $w + 1;
-                $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
-                $quantity_attribute_combination = $value_product_attribute->stockQty;
-                if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
-                    $default_on = '1';
-                    $lock_default_on = 1;
-                } else {
-                    $default_on = '0';
-                }
-                $price_attribute_combination = $value_product_attribute->price - ($value_product_attribute->price * 22 / 122);
-                $salePrice_attribute_combination = $value_product_attribute->salePrice - ($value_product_attribute->salePrice * 22 / 122);
-                if ($value_product['on_sale'] == '1') {
-                    $price = $salePrice_attribute_combination;
-                } else {
-                    $price = $price_attribute_combination;
-                }
-                if ($quantity_attribute_combination >= 1) {
-                    $available_date = date("Y-m-d");
+                    $stmtLangProduct->execute();
 
                 } else {
-                    $available_date = '2018-08-01';
-                }
 
-                $stmtInsertProductAttribute = $db_con->prepare("INSERT INTO psz6_product_attribute (`id_product_attribute`,
+
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $res_product_lang->name . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
+
+                    $in_stock = "in stock";
+                    $current_supply = "Current supply. Ordering available";
+                    $product_available = "Delivered in 3-4 Days";
+                    $product_not_available = "Delivered in 10-15 Days";
+
+                    $valuelang = 1;
+
+
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                                                              `id_product`,
+                                                               `id_shop`,
+                                                               `id_lang`,
+                                                               `description`,
+                                                               `description_short`,
+                                                               `link_rewrite`,
+                                                               `meta_description`,
+                                                               `meta_keywords`,
+                                                               `meta_title`,
+                                                               `name`,
+                                                               `available_now`,
+                                                               `available_later`,
+                                                               `delivery_in_stock`,
+                                                               `delivery_out_stock`) 
+                                                   VALUES ('" . $p . "',
+                                                           '" . $id_shop_default . "',
+                                                           '" . $valuelang . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . $value_product['product_id'] . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . $in_stock . "',
+                                                           '" . $current_supply . "',
+                                                           '" . $product_available . "',
+                                                           '" . $product_not_available . "')
+                                                           ON DUPLICATE KEY 
+                                                           UPDATE 
+                                                               `id_product`        ='" . $p . "',
+                                                               `id_shop`           ='" . $id_shop_default . "',
+                                                               `id_lang`           ='" . $valuelang . "',
+                                                               `description`       ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `description_short` ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `link_rewrite`      = '" . $value_product['product_id'] . "',
+                                                               `meta_description`  = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_keywords`     = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_title`        = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `name`              = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `available_now`     = '" . $in_stock . "',
+                                                               `available_later`   = '" . $current_supply . "',
+                                                               `delivery_in_stock` = '" . $product_available . "',
+                                                               `delivery_out_stock`= '" . $product_not_available . "'
+                                                           ");
+
+                    $stmtLangProduct->execute();
+                }
+                $res_product_lang = $productNameTranslationRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '1']);
+                if (empty($res_product_lang)) {
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
+                    $in_stock = "in Vendita";
+                    $current_supply = 'In magazzino. ordinabile';
+                    $product_available = 'Consegna in 3-4 Giorni Lavorati';
+                    $product_not_available = 'Consegna  in 10-15 lavorativi';
+                    $valuelang = 2;
+
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                                                              `id_product`,
+                                                               `id_shop`,
+                                                               `id_lang`,
+                                                               `description`,
+                                                               `description_short`,
+                                                               `link_rewrite`,
+                                                               `meta_description`,
+                                                               `meta_keywords`,
+                                                               `meta_title`,
+                                                               `name`,
+                                                               `available_now`,
+                                                               `available_later`,
+                                                               `delivery_in_stock`,
+                                                               `delivery_out_stock`) 
+                                                   VALUES ('" . $p . "',
+                                                           '" . $id_shop_default . "',
+                                                           '" . $valuelang . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . $value_product['product_id'] . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . $in_stock . "',
+                                                           '" . $current_supply . "',
+                                                           '" . $product_available . "',
+                                                           '" . $product_not_available . "')
+                                                           ON DUPLICATE KEY 
+                                                           UPDATE 
+                                                               `id_product`        ='" . $p . "',
+                                                               `id_shop`           ='" . $id_shop_default . "',
+                                                               `id_lang`           ='" . $valuelang . "',
+                                                               `description`       ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `description_short` ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `link_rewrite`      = '" . $value_product['product_id'] . "',
+                                                               `meta_description`  = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_keywords`     = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_title`        = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `name`              = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `available_now`     = '" . $in_stock . "',
+                                                               `available_later`   = '" . $current_supply . "',
+                                                               `delivery_in_stock` = '" . $product_available . "',
+                                                               `delivery_out_stock`= '" . $product_not_available . "'
+                                                           ");
+
+                    $stmtLangProduct->execute();
+
+
+                } else {
+
+
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $res_product_lang->name . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
+
+
+                    $in_stock = "in Vendita";
+                    $current_supply = 'In magazzino. ordinabile';
+                    $product_available = 'Consegna in 3-4 Giorni Lavorati';
+                    $product_not_available = 'Consegna  in 10-15 lavorativi';
+
+
+                    $valuelang = 2;
+
+                    $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                                                              `id_product`,
+                                                               `id_shop`,
+                                                               `id_lang`,
+                                                               `description`,
+                                                               `description_short`,
+                                                               `link_rewrite`,
+                                                               `meta_description`,
+                                                               `meta_keywords`,
+                                                               `meta_title`,
+                                                               `name`,
+                                                               `available_now`,
+                                                               `available_later`,
+                                                               `delivery_in_stock`,
+                                                               `delivery_out_stock`) 
+                                                   VALUES ('" . $p . "',
+                                                           '" . $id_shop_default . "',
+                                                           '" . $valuelang . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . $value_product['product_id'] . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                           '" . $in_stock . "',
+                                                           '" . $current_supply . "',
+                                                           '" . $product_available . "',
+                                                           '" . $product_not_available . "')
+                                                            ON DUPLICATE KEY 
+                                                           UPDATE 
+                                                               `id_product`        ='" . $p . "',
+                                                               `id_shop`           ='" . $id_shop_default . "',
+                                                               `id_lang`           ='" . $valuelang . "',
+                                                               `description`       ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `description_short` ='" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `link_rewrite`      = '" . $value_product['product_id'] . "',
+                                                               `meta_description`  = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_keywords`     = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `meta_title`        = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `name`              = '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                               `available_now`     = '" . $in_stock . "',
+                                                               `available_later`   = '" . $current_supply . "',
+                                                               `delivery_in_stock` = '" . $product_available . "',
+                                                               `delivery_out_stock`= '" . $product_not_available . "'
+                                                           ");
+
+                    $stmtLangProduct->execute();
+                }
+                /*  $res_product_lang = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'langId' => '3']);
+                  if (empty($res_product_lang)) {
+                      iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
+                      $in_stock = "in stock";
+                      $current_supply = "Current supply. Ordering available";
+                      $product_available = "Delivered in 3-4 Days";
+                      $product_not_available = "Delivered in 10-15 Days";
+                      $valuelang = 3;
+
+                      $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                                                                    `id_product`,
+                                                                     `id_shop`,
+                                                                     `id_lang`,
+                                                                     `description`,
+                                                                     `description_short`,
+                                                                     `link_rewrite`,
+                                                                     `meta_description`,
+                                                                     `meta_keywords`,
+                                                                     `meta_title`,
+                                                                     `name`,
+                                                                     `available_now`,
+                                                                     `available_later`,
+                                                                     `delivery_in_stock`,
+                                                                     `delivery_out_stock`)
+                                                         VALUES ('" . $p . "',
+                                                                 '" . $id_shop_default . "',
+                                                                 '" . $valuelang . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . $value_product['product_id'] . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . $in_stock . "',
+                                                                 '" . $current_supply . "',
+                                                                 '" . $product_available . "',
+                                                                 '" . $product_not_available . "')");
+
+                      $stmtLangProduct->execute();
+                  } else {
+
+
+                      iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", htmlentities($name_product_lang = $value_product['brand_name'] . " " . $res_product_lang->name . " " . $value_product['supplier_reference'] . " " . $value_product['color_supplier'], ENT_QUOTES)));
+
+
+                      $in_stock = "in stock";
+                      $current_supply = "Current supply. Ordering available";
+                      $product_available = "Delivered in 3-4 Days";
+                      $product_not_available = "Delivered in 10-15 Days";
+
+
+                      $valuelang = 3;
+
+                      $stmtLangProduct = $db_con->prepare("INSERT INTO psz6_product_lang (
+                                                                    `id_product`,
+                                                                     `id_shop`,
+                                                                     `id_lang`,
+                                                                     `description`,
+                                                                     `description_short`,
+                                                                     `link_rewrite`,
+                                                                     `meta_description`,
+                                                                     `meta_keywords`,
+                                                                     `meta_title`,
+                                                                     `name`,
+                                                                     `available_now`,
+                                                                     `available_later`,
+                                                                     `delivery_in_stock`,
+                                                                     `delivery_out_stock`)
+                                                         VALUES ('" . $p . "',
+                                                                 '" . $id_shop_default . "',
+                                                                 '" . $valuelang . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . $value_product['product_id'] . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', str_replace("'", " ", $name_product_lang)) . "',
+                                                                 '" . $in_stock . "',
+                                                                 '" . $current_supply . "',
+                                                                 '" . $product_available . "',
+                                                                 '" . $product_not_available . "')");
+
+                      $stmtLangProduct->execute();
+                  }*/
+                /** ricerca varianti attributi */
+                /**** acquisizione ultimo id attributo tabella psz6_attribute_product
+                 */
+                $stmtLastIdProductAttribute = $db_con->prepare("SELECT max(id_product_attribute) AS maxIdProductAttribute FROM psz6_product_attribute");
+                $stmtLastIdProductAttribute->execute();
+                $id_product_attribute = $stmtLastIdProductAttribute->fetch();
+                $w = $id_product_attribute[0];
+
+                $res_product_attribute = $productSkuRepo->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
+                $lock_default_on = 0;
+                $stmtdeleteProductAttributeStockAvailable = $db_con->prepare("DELETE FROM psz6_stock_available WHERE id_product=" . $p);
+                $stmtdeleteProductAttributeStockAvailable->execute();
+                foreach ($res_product_attribute as $value_product_attribute) {
+                    $w = $w + 1;
+                    $productSizeId_attribute_combination = $value_product_attribute->productSizeId;
+                    $quantity_attribute_combination = $value_product_attribute->stockQty;
+                    if (($quantity_attribute_combination >= 0) && ($lock_default_on == 0)) {
+                        $default_on = '1';
+                        $lock_default_on = 1;
+                    } else {
+                        $default_on = '0';
+                    }
+                    $price_attribute_combination = $value_product_attribute->price - ($value_product_attribute->price * 22 / 122);
+                    $salePrice_attribute_combination = $value_product_attribute->salePrice - ($value_product_attribute->salePrice * 22 / 122);
+                    if ($value_product['on_sale'] == '1') {
+                        $price = $salePrice_attribute_combination;
+                    } else {
+                        $price = $price_attribute_combination;
+                    }
+                    if ($quantity_attribute_combination >= 1) {
+                        $available_date = date("Y-m-d");
+
+                    } else {
+                        $available_date = '2018-08-01';
+                    }
+
+                    $stmtInsertProductAttribute = $db_con->prepare("INSERT INTO psz6_product_attribute (`id_product_attribute`,
                                                                           `id_product`,
                                                                           `reference`,
                                                                           `supplier_reference`,
@@ -764,7 +956,7 @@ ORDER BY `p`.`id`";
                                                                           `available_date`) 
                                                    VALUES ('" . $w . "',
                                                            '" . $p . "',
-                                                           '" . $value_product['reference'] . '-' . $productSizeId_attribute_combination . "',
+                                                           '" . $value_product['reference'] . "-" . $productSizeId_attribute_combination . "',
                                                            '" . $value_product['supplier_reference'] . "',
                                                            ' ',
                                                            '" . $value_product_attribute->ean . "',
@@ -780,21 +972,46 @@ ORDER BY `p`.`id`";
                                                            '" . $value_product['minimal_quantity'] . "',
                                                            '" . $value_product['low_stock_threshold'] . "',
                                                            '" . $value_product['low_stock_alert'] . "',
-                                                           '" . $available_date . "'
-                                                          )");
+                                                           '" . $available_date . "')
+                                                           ON DUPLICATE KEY UPDATE
+                                                `id_product_attribute`      =  '" . $w . "',    
+                                                `id_product`                ='" . $p . "',
+                                                `reference`                 ='" . $value_product['reference'] . "-" . $productSizeId_attribute_combination . "',
+                                                `supplier_reference`        = '" . $value_product['supplier_reference'] . "',
+                                                `location`                  =' ', 
+                                                `ean13`                     = '" . $value_product_attribute->ean . "',
+                                                `isbn`                      = '" . $value_product['isbn'] . "',
+                                                `upc`                       = '" . $value_product['upc'] . "',
+                                                `wholesale_price`           = '0.000000',
+                                                `price`                     ='.0.000000',
+                                                `ecotax`                    = '" . $value_product['ecotax'] . "',
+                                                `quantity`                  ='" . $quantity_attribute_combination . "',
+                                                `weight`                    ='" . $value_product['weight'] . "',
+                                                `unit_price_impact`         = '0.000000',
+                                                 `default_on`               = NULL,
+                                                `minimal_quantity`          ='" . $value_product['minimal_quantity'] . "',
+                                                `low_stock_threshold`       ='" . $value_product['low_stock_threshold'] . "',
+                                                `low_stock_alert`           = '" . $value_product['low_stock_alert'] . "',
+                                                `available_date`            = '" . $available_date . "'
+                                                           ");
 
-                $stmtInsertProductAttribute->execute();
+                    $stmtInsertProductAttribute->execute();
 
 
-                $stmtInsertProductAttributeCombination = $db_con->prepare("INSERT INTO psz6_product_attribute_combination (
+                    $stmtInsertProductAttributeCombination = $db_con->prepare("INSERT INTO psz6_product_attribute_combination (
                                                               `id_attribute`,
                                                               `id_product_attribute`) 
                                                    VALUES ('" . $productSizeId_attribute_combination . "',
-                                                           '" . $w . "')");
-                $stmtInsertProductAttributeCombination->execute();
+                                                           '" . $w . "')
+                                                            ON DUPLICATE KEY UPDATE
+                                                            `id_attribute`                ='" . $productSizeId_attribute_combination . "',
+                                                            `id_product_attribute`      =  '" . $w . "'");
 
 
-                $stmtInsertProductAttributeShop = $db_con->prepare("INSERT INTO psz6_product_attribute_shop (
+                    $stmtInsertProductAttributeCombination->execute();
+
+
+                    $stmtInsertProductAttributeShop = $db_con->prepare("INSERT INTO psz6_product_attribute_shop (
                                                                           `id_product`,
                                                                           `id_product_attribute`,
                                                                           `id_shop`,
@@ -820,10 +1037,27 @@ ORDER BY `p`.`id`";
                                                            '" . $value_product['minimal_quantity'] . "',
                                                            '" . $value_product['low_stock_threshold'] . "',
                                                            '" . $value_product['low_stock_alert'] . "',
-                                                           '" . $available_date . "')");
-                $stmtInsertProductAttributeShop->execute();
+                                                           '" . $available_date . "')
+                                                             ON DUPLICATE KEY UPDATE
+                                                              `id_product`            =     '" . $p . "',
+                                                              `id_product_attribute`  =     '" . $w . "',
+                                                              `id_shop`               =     '" . $value_product['prestashopId'] . "',                        
+                                                              `wholesale_price`       =     '0.000000',
+                                                              `price`                 =       '0.000000', 
+                                                              `ecotax`                =     '" . $value_product['ecotax'] . "',
+                                                              `weight`                =     '1',
+                                                              `unit_price_impact`     =     '0.000000',
+                                                              `default_on`            =     NULL,
+                                                              `minimal_quantity`      =      '" . $value_product['minimal_quantity'] . "',
+                                                              `low_stock_threshold`   =     '" . $value_product['low_stock_threshold'] . "',
+                                                              `low_stock_alert`       =    '" . $value_product['low_stock_alert'] . "',
+                                                              `available_date`        =     '" . $available_date . "'
+                                                            
+                                                           ");
+                    $stmtInsertProductAttributeShop->execute();
 
-                $stmtInsertProductAttributeStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+
+                    $stmtInsertProductAttributeStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
                                                                 `id_shop`,
@@ -843,15 +1077,13 @@ ORDER BY `p`.`id`";
                                                            '0',
                                                            '0',
                                                            '0')");
-                $stmtInsertProductAttributeStockAvailable->execute();
+                    $stmtInsertProductAttributeStockAvailable->execute();
 
+                }
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
             }
         }
-
-
-
-
-
 
 
         $sql = "
@@ -859,8 +1091,9 @@ ORDER BY `p`.`id`";
             sum(pps.stockQty) AS quantity
             FROM ProductPublicSku pps JOIN MarketplaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId WHERE php.statusPublished IN (0)  GROUP BY pps.ProductId";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        foreach($res_quantity_stock as $res_value_quantity) {
-            $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+        foreach ($res_quantity_stock as $res_value_quantity) {
+            try {
+                $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
                                                                 `id_shop`,
@@ -875,12 +1108,15 @@ ORDER BY `p`.`id`";
                                                            '0',
                                                            '" . $value_product['prestashopId'] . "',
                                                            '0',
-                                                           '" .  $res_value_quantity['quantity'] . "',
+                                                           '" . $res_value_quantity['quantity'] . "',
                                                            '0',
                                                            '0',
                                                            '0',
                                                            '0')");
-            $stmtInsertProductStockAvailable->execute();
+                $stmtInsertProductStockAvailable->execute();
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
         }
         $sql = "SELECT php.id AS prestaId, psa.productDetailLabelId AS productDetailLabelId, psa.productDetailId AS productDetailId 
                 FROM  MarketplaceHasProductAssociate php 
@@ -888,12 +1124,17 @@ ORDER BY `p`.`id`";
              AND php.productVariantId=" . $value_product['productVariantId'];
         $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_feature_product as $value_feature_product) {
+            try {
+                $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
+                                                   VALUES ('" . $value_feature_product['productDetailLabelId'] . "',
+                                                           '" . $value_feature_product['prestaId'] . "',
+                                                           '" . $value_feature_product['productDetailId'] . "')");
 
-        $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
-                                                   VALUES ('" . $value_feature_product['productDetailLabelId'] . "','" .$value_feature_product['prestaId'] . "','" . $value_feature_product['productDetailId'] . "')");
-
-        $stmtFeatureProduct->execute();
-    }
+                $stmtFeatureProduct->execute();
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
+        }
         /*** immagini   */
 
         $sql = "SELECT php.id AS productId, php.shopId AS shopId, concat(php.productId,'-',php.productVariantId) AS reference, concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name) AS link , pp.name AS namefile,  concat('https://iwes.s3.amazonaws.com/',pb.slug,'/',pp.name)   AS picture, pp.order AS position, if(pp.order='1',1,0) AS cover
@@ -907,124 +1148,126 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = 0;
-        foreach ($image_product as $value_image_product) {
 
-            $link = $value_image_product['link'];
-            $position = $value_image_product['position'];
-            $shopId = $value_image_product['shopId'];
-            $namefile = $value_image_product['namefile'];
-            $cover=$value_image_product['position'];
-            if ($cover!=1) {
-                $cover = 'null';
-            }
-            $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_product`,`position`,`cover`) 
+
+        foreach ($image_product as $value_image_product) {
+            try {
+                $link = $value_image_product['link'];
+                $position = $value_image_product['position'];
+                $shopId = $value_image_product['shopId'];
+                $namefile = $value_image_product['namefile'];
+                $cover = $value_image_product['position'];
+
+                if ($cover != 1) {
+                    $cover = 'null';
+                }
+                $stmtInsertImage = $db_con->prepare("INSERT INTO psz6_image (`id_product`,`position`,`cover`) 
                                                    VALUES (
                                                            '" . $value_image_product['productId'] . "',
                                                            '" . $position . "',
                                                            " . $cover . ")");
-            $stmtInsertImage->execute();
+                $stmtInsertImage->execute();
 
 
-            $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
-            $stmtLastIdImageProduct->execute();
-            $id_lastImage = $stmtLastIdImageProduct->fetch();
-            $q = $id_lastImage[0];
-            if ($cover!=1) {
-                $cover = 'null';
-                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                $stmtLastIdImageProduct = $db_con->prepare("SELECT max(id_image) AS maxIdImageProduct FROM psz6_image");
+                $stmtLastIdImageProduct->execute();
+                $id_lastImage = $stmtLastIdImageProduct->fetch();
+                $q = $id_lastImage[0];
+                if ($cover != 1) {
+                    $cover = 'null';
+                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
-                                                           '" . $shopId . "',".$cover.")");
-                $stmtInsertImageShop->execute();
-            }else{
-                $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
+                                                           '" . $shopId . "'," . $cover . ")");
+                    $stmtInsertImageShop->execute();
+                } else {
+                    $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
                                                    VALUES ('" . $value_image_product['productId'] . "',
                                                            '" . $q . "',
                                                            '" . $value_image_product['shopId'] . "',
                                                             '" . $cover . "')");
-                $stmtInsertImageShop->execute();
-            }
+                    $stmtInsertImageShop->execute();
+                }
 
 
-
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '1',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang->execute();
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '2',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
-            $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
+                $stmtInsertImageLang->execute();
+                $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '3',
                                                            '" . $value_image_product['reference'] . "')");
-            $stmtInsertImageLang->execute();
+                $stmtInsertImageLang->execute();
 
 
-
-
-
-
-        $fileUrl = $link;
+                $fileUrl = $link;
 
 //The path & filename to save to.
-        $saveTo = $save_to . $namefile;
+                $saveTo = $save_to . $namefile;
 
 //Open file handler.
-        $fp = fopen($saveTo, 'w+');
+                $fp = fopen($saveTo, 'w+');
 
 //If $fp is FALSE, something went wrong.
-        if ($fp === false) {
-            throw new Exception('Could not open: ' . $saveTo);
-        }
+                if ($fp === false) {
+                    throw new Exception('Could not open: ' . $saveTo);
+                }
 
-        $ch = curl_init($fileUrl);
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-        curl_exec($ch);
-        if (curl_errno($ch)) {
-            throw new Exception(curl_error($ch));
-        }
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        if ($statusCode == 200) {
-            echo 'Downloaded!';
-        } else {
-            echo "Status Code: " . $statusCode;
-        }
-        $success = file_get_contents("http://iwes.shop/createdirImage.php?token=10210343943202393403&dir=".$q);
+                $ch = curl_init($fileUrl);
+                curl_setopt($ch, CURLOPT_FILE, $fp);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+                curl_exec($ch);
+                if (curl_errno($ch)) {
+                    throw new Exception(curl_error($ch));
+                }
+                $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if ($statusCode == 200) {
+                    echo 'Downloaded!';
+                } else {
+                    echo "Status Code: " . $statusCode;
+                }
+                $success = file_get_contents("http://iwes.shop/createdirImage.php?token=10210343943202393403&dir=" . $q);
 
 
-        echo $success;  // "OK" or "FAIL"
-        /*****  trasferimento ftp ******/
-        $ftp_server = "ftp.iwes.shop";
-        $ftp_user_name = "iwesshop";
-        $ftp_user_pass = "XtUWicJUrEXv";
-        $remote_file = "/public_html/img/p/".chunk_split($q, 1, '/');;
+                echo $success;  // "OK" or "FAIL"
+                /*****  trasferimento ftp ******/
+                $ftp_server = "ftp.iwes.shop";
+                $ftp_user_name = "iwesshop";
+                $ftp_user_pass = "XtUWicJUrEXv";
+                $remote_file = "/public_html/img/p/" . chunk_split($q, 1, '/');;
 
-        $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $q.".jpg";
-        $errorMsg = 'ftp fail connect';
-        $fileToSend = $saveTo;
+                $ftp_url = "ftp://" . $ftp_user_name . ":" . $ftp_user_pass . "@" . $ftp_server . $remote_file . $q . ".jpg";
+                $errorMsg = 'ftp fail connect';
+                $fileToSend = $saveTo;
 // ------- Upload file through FTP ---------------
 
-        $ch = curl_init();
-        $fp = fopen($fileToSend, "r");
-        // we upload a TXT file
-        curl_setopt($ch, CURLOPT_URL, $ftp_url);
-        curl_setopt($ch, CURLOPT_UPLOAD, 1);
-        curl_setopt($ch, CURLOPT_INFILE, $fp);
-        // set size of the file, which isn't _mandatory_ but
-        // helps libcurl to do extra error checking on the upload.
-        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
-        $res = curl_exec($ch);
-        $errorMsg = curl_error($ch);
-        $errorNumber = curl_errno($ch);
-        curl_close($ch);
-        $success = file_get_contents("http://iwes.shop/createThumbImage.php?token=10210343943202393403&dir=".$q);
+                $ch = curl_init();
+                $fp = fopen($fileToSend, "r");
+                // we upload a TXT file
+                curl_setopt($ch, CURLOPT_URL, $ftp_url);
+                curl_setopt($ch, CURLOPT_UPLOAD, 1);
+                curl_setopt($ch, CURLOPT_INFILE, $fp);
+                // set size of the file, which isn't _mandatory_ but
+                // helps libcurl to do extra error checking on the upload.
+                curl_setopt($ch, CURLOPT_INFILESIZE, filesize($fileToSend));
+                $res = curl_exec($ch);
+                $errorMsg = curl_error($ch);
+                $errorNumber = curl_errno($ch);
+                curl_close($ch);
+                $success = file_get_contents("http://iwes.shop/createThumbImage.php?token=10210343943202393403&dir=" . $q);
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
         }
+
         $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='0'";
         \Monkey::app()->dbAdapter->query($sql, []);
         $sql = "UPDATE PrestashopHasProductImage SET status='1' WHERE status='0'";
@@ -1032,7 +1275,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
 
 
-            $res = "Inserimento Nuovo Prodotto Eseguito";
+        $res = "Inserimento Nuovo Prodotto Eseguito";
             return $res;
         }
 
