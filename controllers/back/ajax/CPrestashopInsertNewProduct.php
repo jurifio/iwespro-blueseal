@@ -204,7 +204,7 @@ ORDER BY `p`.`id`";
 
         /*and p.productStatuId = 6 */
         $res_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-        $productEanRepo = \Monkey::app()->repoFactory('ProductEan');
+        $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
         $productNameTranslationRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
         $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
 
