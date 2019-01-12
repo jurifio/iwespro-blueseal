@@ -1137,8 +1137,8 @@ ORDER BY `p`.`id`";
                                                            '0')");
                     $stmtInsertProductStockAvailable->execute();
 
-                }
-                $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+                }else {
+                    $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
                                                                 `id_shop`,
@@ -1171,7 +1171,8 @@ ORDER BY `p`.`id`";
                                                                 `out_of_stock`='0'
                                                            
                                                            ");
-                $stmtInsertProductStockAvailable->execute();
+                    $stmtInsertProductStockAvailable->execute();
+                }
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
             }
