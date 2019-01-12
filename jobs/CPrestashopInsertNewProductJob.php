@@ -1111,6 +1111,33 @@ ORDER BY `p`.`id`";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_quantity_stock as $res_value_quantity) {
             try {
+                $stmtCheckStockAvailable = $db_con->prepare("SELECT  count(id_stock_available) AS checkStockExist FROM    psz6_stock_available WHERE id_product=" . $res_value_quantity['ProductId'] . " AND id_product_attribute=0");
+                $stmtCheckStockAvailable->execute();
+                $rows = $stmtCheckStockAvailable->fetchAll(PDO::FETCH_ASSOC);
+                if ($rows[0]['checkStockExist'] == 0) {
+                    $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
+                                                                `id_product`,
+                                                                `id_product_attribute`,
+                                                                `id_shop`,
+                                                                `id_shop_group`,
+                                                                `quantity`,
+                                                                `physical_quantity`,
+                                                                `reserved_quantity`,
+                                                                `depends_on_stock`,
+                                                                `out_of_stock`)
+                                                   VALUES ( 
+                                                           '" . $res_value_quantity['ProductId'] . "',
+                                                           '0',
+                                                           '" . $value_product['prestashopId'] . "',
+                                                           '0',
+                                                           '" . $res_value_quantity['quantity'] . "',
+                                                           '" . $res_value_quantity['quantity'] . "',
+                                                           '0',
+                                                           '0',
+                                                           '0')");
+                    $stmtInsertProductStockAvailable->execute();
+
+                }
                 $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
