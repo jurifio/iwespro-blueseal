@@ -1233,17 +1233,32 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '1',
-                                                           '" . $value_image_product['reference'] . "')");
+                                                           '" . $value_image_product['reference'] . "')
+                                                           ON DUPLICATE KEY UPDATE
+                                                           `id_image`='" . $q . "'
+                                                           `id_lang`='1',
+                                                           `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
+                                                                                                                      ");
                 $stmtInsertImageLang->execute();
                 $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '2',
-                                                           '" . $value_image_product['reference'] . "')");
+                                                           '" . $value_image_product['reference'] . "')
+                                                            ON DUPLICATE KEY UPDATE
+                                                           `id_image`='" . $q . "'
+                                                           `id_lang`='2',
+                                                           `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
+                                                                                                                      ");
                 $stmtInsertImageLang->execute();
                 $stmtInsertImageLang = $db_con->prepare("INSERT INTO psz6_image_lang (`id_image`,`id_lang`,`legend`) 
                                                    VALUES ('" . $q . "',
                                                            '3',
-                                                           '" . $value_image_product['reference'] . "')");
+                                                           '" . $value_image_product['reference'] . "')
+                                                            ON DUPLICATE KEY UPDATE
+                                                           `id_image`='" . $q . "'
+                                                           `id_lang`='3',
+                                                           `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
+                                                                                                                      ");
                 $stmtInsertImageLang->execute();
 
 
