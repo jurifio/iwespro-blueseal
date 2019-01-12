@@ -1229,7 +1229,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            '1',
                                                            '" . $value_image_product['reference'] . "')
                                                            ON DUPLICATE KEY UPDATE
-                                                           `id_image`='" . $q . "'
+                                                           `id_image`='" . $q . "',
                                                            `id_lang`='1',
                                                            `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
                                                                                                                       ");
@@ -1239,7 +1239,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            '2',
                                                            '" . $value_image_product['reference'] . "')
                                                             ON DUPLICATE KEY UPDATE
-                                                           `id_image`='" . $q . "'
+                                                           `id_image`='" . $q . "',
                                                            `id_lang`='2',
                                                            `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
                                                                                                                       ");
@@ -1249,7 +1249,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            '3',
                                                            '" . $value_image_product['reference'] . "')
                                                             ON DUPLICATE KEY UPDATE
-                                                           `id_image`='" . $q . "'
+                                                           `id_image`='" . $q . "',
                                                            `id_lang`='3',
                                                            `legend`= '" . $value_image_product['reference'] . "'                                                                                                                      
                                                                                                                       ");
