@@ -1067,16 +1067,28 @@ ORDER BY `p`.`id`";
                                                                 `reserved_quantity`,
                                                                 `depends_on_stock`,
                                                                 `out_of_stock`)
-                                                   VALUES ( 
+                                                    VALUES ( 
                                                            '" . $p . "',
                                                            '" . $w . "',
                                                            '" . $value_product['prestashopId'] . "',
                                                            '0',
                                                            '" . $quantity_attribute_combination . "',
+                                                           '" . $quantity_attribute_combination . "',
                                                            '0',
                                                            '0',
-                                                           '0',
-                                                           '0')");
+                                                           '0')
+                                                           ON DUPLICATE KEY 
+                                                           UPDATE
+                                                           `id_product` = '" . $p . "',
+                                                           `id_product_attribute`= '" . $w . "',
+                                                            `id_shop` = '" . $value_product['prestashopId'] . "',
+                                                            `id_shop_group` = '0',
+                                                            `quantity` = '" . $quantity_attribute_combination . "',
+                                                            `physical_quantity` = '" . $quantity_attribute_combination . "',
+                                                            `reserved_quantity` = '0',
+                                                            `depends_on_stock` = '0',
+                                                            `out_of_stock` = '0'
+                                                      ");
                     $stmtInsertProductAttributeStockAvailable->execute();
 
                 }

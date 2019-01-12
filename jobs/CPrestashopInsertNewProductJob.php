@@ -1079,10 +1079,22 @@ ORDER BY `p`.`id`";
                                                            '" . $value_product['prestashopId'] . "',
                                                            '0',
                                                            '" . $quantity_attribute_combination . "',
+                                                           '" . $quantity_attribute_combination . "',
                                                            '0',
                                                            '0',
-                                                           '0',
-                                                           '0')");
+                                                           '0')
+                                                           ON DUPLICATE KEY 
+                                                           UPDATE
+                                                           `id_product` ='" . $p . "',
+                                                           `id_product_attribute`='" . $w . "',
+                                                            `id_shop` ='" . $value_product['prestashopId'] . "',
+                                                            `id_shop_group` = '0',
+                                                            `quantity` = '" . $quantity_attribute_combination . "',
+                                                            `physical_quantity` = '" . $quantity_attribute_combination . "',
+                                                            `reserved_quantity` = '0',
+                                                            `depends_on_stock` = '0',
+                                                            `out_of_stock` = '0'
+                                                      ");
                     $stmtInsertProductAttributeStockAvailable->execute();
 
                 }
@@ -1110,7 +1122,7 @@ ORDER BY `p`.`id`";
                                                                 `depends_on_stock`,
                                                                 `out_of_stock`)
                                                    VALUES ( 
-                                                           '" . $p . "',
+                                                           '" . $res_value_quantity['ProductId'] . "',
                                                            '0',
                                                            '" . $value_product['prestashopId'] . "',
                                                            '0',
@@ -1121,7 +1133,7 @@ ORDER BY `p`.`id`";
                                                            '0')
                                                            ON DUPLICATE KEY 
                                                            UPDATE
-                                                                `id_product` =     '" . $p . "',
+                                                                `id_product` =     '" . $res_value_quantity['ProductId'] . "',
                                                                 `id_product_attribute`='0',
                                                                 `id_shop`='" . $value_product['prestashopId'] . "',
                                                                 `id_shop_group`='0',
@@ -1190,7 +1202,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            `id_product`= '" . $value_image_product['productId'] . "',
                                                            `position`='" . $position . "',
                                                            `cover`=" . $cover
-                                                           );
+                );
                 $stmtInsertImage->execute();
 
 
@@ -1210,8 +1222,8 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            `id_product`='" . $value_image_product['productId'] . "',
                                                            `id_image`= '" . $q . "',
                                                            `id_shop`='" . $shopId . "',
-                                                           `cover`=".$cover
-                                                           );
+                                                           `cover`=" . $cover
+                    );
                     $stmtInsertImageShop->execute();
                 } else {
                     $stmtInsertImageShop = $db_con->prepare("INSERT INTO psz6_image_shop (`id_product`,`id_image`,`id_shop`,`cover`) 
@@ -1224,8 +1236,8 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                                                            `id_product`='" . $value_image_product['productId'] . "',
                                                            `id_image`= '" . $q . "',
                                                            `id_shop`='" . $shopId . "',
-                                                           `cover`=".$cover
-                                                           );
+                                                           `cover`=" . $cover
+                    );
                     $stmtInsertImageShop->execute();
                 }
 
