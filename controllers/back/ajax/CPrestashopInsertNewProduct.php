@@ -1146,8 +1146,7 @@ ORDER BY `p`.`id`";
         }
         $sql = "SELECT php.id AS prestaId, psa.productDetailLabelId AS productDetailLabelId, psa.productDetailId AS productDetailId 
                 FROM  MarketplaceHasProductAssociate php 
-                JOIN ProductSheetActual psa ON php.productId=psa.productId AND php.productVariantId =psa.productVariantId WHERE php.statusPublished IN (0) AND php.productId=" . $value_product['productId'] . "
-             AND php.productVariantId=" . $value_product['productVariantId'];
+                JOIN ProductSheetActual psa ON php.productId=psa.productId AND php.productVariantId =psa.productVariantId WHERE php.statusPublished IN (0) ";
         $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_feature_product as $value_feature_product) {
             try {

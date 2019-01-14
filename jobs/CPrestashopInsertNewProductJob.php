@@ -1107,7 +1107,7 @@ ORDER BY `p`.`id`";
         $sql = "
             SELECT  php.id AS ProductId ,php.prestashopId,
             sum(pps.stockQty) AS quantity
-            FROM ProductPublicSku pps JOIN MarketplaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId WHERE php.statusPublished IN (0)  GROUP BY pps.ProductId";
+            FROM ProductPublicSku pps JOIN MarketplaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId WHERE php.statusPublished IN (0)   GROUP BY pps.ProductId";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_quantity_stock as $res_value_quantity) {
             try {
@@ -1137,7 +1137,7 @@ ORDER BY `p`.`id`";
                                                            '0')");
                     $stmtInsertProductStockAvailable->execute();
 
-                }else {
+                } else {
                     $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
                                                                 `id_product`,
                                                                 `id_product_attribute`,
@@ -1179,8 +1179,7 @@ ORDER BY `p`.`id`";
         }
         $sql = "SELECT php.id AS prestaId, psa.productDetailLabelId AS productDetailLabelId, psa.productDetailId AS productDetailId 
                 FROM  MarketplaceHasProductAssociate php 
-                JOIN ProductSheetActual psa ON php.productId=psa.productId AND php.productVariantId =psa.productVariantId WHERE php.statusPublished IN (0) AND php.productId=" . $value_product['productId'] . "
-             AND php.productVariantId=" . $value_product['productVariantId'];
+                JOIN ProductSheetActual psa ON php.productId=psa.productId AND php.productVariantId =psa.productVariantId WHERE php.statusPublished IN (0) ";
         $res_feature_product = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         foreach ($res_feature_product as $value_feature_product) {
             try {
@@ -1207,10 +1206,10 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = 0;
-        foreach($image_product as $image_lang_product){
+        foreach ($image_product as $image_lang_product) {
             try {
-                $deletepsz6_image_lang=$db_con->prepare("delete pil from psz6_image_lang  pil  inner  join
-                psz6_image pi on  pil.id_image=pi.id_image   where id_product =" .$image_lang_product['productId'] );
+                $deletepsz6_image_lang = $db_con->prepare("DELETE pil FROM psz6_image_lang  pil  INNER  JOIN
+                psz6_image pi ON  pil.id_image=pi.id_image   WHERE id_product =" . $image_lang_product['productId']);
                 $deletepsz6_image_lang->execute();
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
