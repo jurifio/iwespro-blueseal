@@ -1103,6 +1103,7 @@ ORDER BY `p`.`id`";
             sum(pps.stockQty) AS quantity
             FROM ProductPublicSku pps JOIN MarketplaceHasProductAssociate php ON pps.productId=php.productId AND pps.productVariantId =php.productVariantId WHERE php.statusPublished IN (0)  GROUP BY pps.ProductId";
         $res_quantity_stock = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+
         foreach ($res_quantity_stock as $res_value_quantity) {
             try {
                 $stmtInsertProductStockAvailable = $db_con->prepare("INSERT INTO psz6_stock_available (
@@ -1173,6 +1174,15 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = 0;
+        foreach($image_product as $image_lang_product){
+            try {
+                $deletepsz6_image_lang=$db_con->prepare("delete from psz6_image_lang where id_product =" .$image_lang_product['productId']);
+                $deletepsz6_image_lang->execute();
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
+
+        }
 
 
         foreach ($image_product as $value_image_product) {

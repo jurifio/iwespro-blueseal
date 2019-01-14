@@ -1207,6 +1207,15 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = 0;
+        foreach($image_product as $image_lang_product){
+            try {
+                $deletepsz6_image_lang=$db_con->prepare("delete from psz6_image_lang where id_product =" .$image_lang_product['productId']);
+                $deletepsz6_image_lang->execute();
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
+
+        }
 
 
         foreach ($image_product as $value_image_product) {
