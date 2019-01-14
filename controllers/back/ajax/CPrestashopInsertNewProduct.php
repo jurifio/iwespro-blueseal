@@ -1177,7 +1177,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
         foreach($image_product as $image_lang_product){
             try {
                 $deletepsz6_image_lang=$db_con->prepare("delete pil from psz6_image_lang  pil  inner  join
-                psz6_id_image pi on  pil.id_image= pi.id_image   where id_product =" .$image_lang_product['productId'] );
+                psz6_image pi on  pil.id_image= pi.id_image   where id_product =" .$image_lang_product['productId'] );
                 $deletepsz6_image_lang->execute();
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
