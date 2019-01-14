@@ -43,7 +43,10 @@
                                     data-orderable="true" class="center">Numero</th>
                                 <th data-slug="totalWithVat"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Totale</th>
+                                    data-orderable="true" class="center">Totale fattura da Operator</th>
+                                <th data-slug="effectiveTotal"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Totale fattura</th>
                                 <th data-slug="invoiceTypeName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Tipo di fattura</th>

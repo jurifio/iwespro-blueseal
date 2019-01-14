@@ -105,13 +105,11 @@ class CProductBatchRepo extends ARepo
         return true;
     }
 
-    public function calculateProductBatchCost($productBatch)
+    public function calculateProductBatchCost($productBatchId)
     {
+        /** @var CProductBatch $pB */
+        $pB = $this->findOneBy(['id' => $productBatchId]);
 
-        if (is_numeric($productBatch)) {
-            /** @var CProductBatch $pB */
-            $pB = $this->findOneBy(['id' => $productBatch]);
-        }
 
         $numberOfProducts = count($pB->getElements());
 

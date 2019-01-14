@@ -35,17 +35,15 @@ class CProductBatchInvoiceManage extends AAjaxController
         $singleProductBatchCost = 0;
         $res = [];
 
-        /** @var CProductBatch $pB */
-        $pB = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=>$productBatchIds[0]]);
-
-
+        /** @var CProductBatchRepo $pBRepo */
+        $pBRepo = \Monkey::app()->repoFactory->create('ProductBatch');
 
         foreach ($productBatchIds as $pbId){
 
-            /** @var CProductBatchRepo $pBRepo */
-            $pBRepo = \Monkey::app()->repoFactory->create('ProductBatch');
+            /** @var CProductBatch $productBatch */
+            $productBatch = $pBRepo->findOneBy(['id'=>$pbId]);
 
-            $singleProductBatchCost = $singleProductBatchCost + $pBRepo->calculateProductBatchCost($pbId);
+            if(!is_null($productBatch->closingDate)) $singleProductBatchCost = $singleProductBatchCost + $pBRepo->calculateProductBatchCost($pbId);
         }
 
 
@@ -71,7 +69,7 @@ class CProductBatchInvoiceManage extends AAjaxController
                 break;
         }
 
-        $res["user"] = $pB->contractDetails->contracts->foison->user->id;
+        $res["user"] = $productBatch->contractDetails->contracts->foison->user->id;
 
         return json_encode($res);
 

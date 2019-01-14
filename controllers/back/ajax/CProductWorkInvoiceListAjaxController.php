@@ -2,6 +2,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CContractDetails;
 use bamboo\domain\entities\CContracts;
 use bamboo\domain\entities\CDocument;
@@ -69,16 +70,41 @@ class CProductWorkInvoiceListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(false);
 
+        $productBatchRepo = \Monkey::app()->repoFactory->create('ProductBatch');
         /** @var CDocumentRepo $document */
         $document = \Monkey::app()->repoFactory->create('Document');
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
+
+            /** @var CObjectCollection $prsBatch */
+            $prsBatch = $productBatchRepo->findBy(['documentId' =>$row['id']]);
             /** @var CDocument $d */
             $d = $document->findOneBy(['id'=>$row["id"]]);
             $row["id"] = $d->id;
             $row["completeName"] = $d->user->foison->name.' '.$d->user->foison->surname;
             $row["number"] = $d->number;
+            $singleProductBatchCost = 0;
+            foreach ($prsBatch as $prBatch){
+                $singleProductBatchCost = $singleProductBatchCost + $productBatchRepo->calculateProductBatchCost($prBatch->id);
+            }
+
+            switch ($d->invoiceTypeId){
+                //fattura
+                case 13:
+                    $effectiveTotal = $singleProductBatchCost * 1.22;
+                    break;
+                //Prestazione occasionale
+                case 14:
+                    $effectiveTotal = $singleProductBatchCost - ($singleProductBatchCost * 0.20);
+                    break;
+                //Ricevuta
+                case 15:
+                    $effectiveTotal = $singleProductBatchCost;
+                    break;
+            }
+
+            $row['effectiveTotal'] = $effectiveTotal;
             $row["totalWithVat"] = $d->totalWithVat;
             $row["invoiceTypeName"] = $d->invoiceType->name;
 

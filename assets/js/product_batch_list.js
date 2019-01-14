@@ -152,8 +152,9 @@
 
         //Far scegliere
         modal = new $.bsModal(
-            'Registrazione fattura',
-            { body: '<div id="invoiceType">' +
+            `Registrazione fattura`,
+            { body: '<strong>NB: I lotti non chiusi non verranno conteggiati nel totale</strong>' +
+                '<div id="invoiceType">' +
                 '<select id="productBatchInvoiceType">' +
                ' <option disabled selected value>Seleziona un\'opzione</option>' +
                 '<option value="1">Fattura</option>' +
