@@ -187,6 +187,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['cpf'] = $v->product->printCpf();
             $response['data'][$i]['extId'] = $v->productSku->getExternalId();
             $response['data'][$i]['shopName'] = $v->shop->title;
+            $response['data'][$i]['shopId'] = $v->shop->id;
             if ($v->orderLineFriendPaymentStatusId) {
                 $fpsColor = $olfpsR->getColor($v->orderLineFriendPaymentStatusId);
                 $fps = '<span style="color: ' . $fpsColor . ';">' . $v->orderLineFriendPaymentStatus->name . '</span>';

@@ -27,6 +27,8 @@ $(document).on('bs-orderline-friend-ok', function () {
         row.push(v.line_id);
     });
 
+    let shopId = selectedRows[0].shopId;
+
     var modal = new $.bsModal('Conferma Ordine', {
         body: '<label for="addressBook">Seleziona l\'indirizzo di ritiro</label><br />' +
         '<select id="addressBook" name="addressBook" class="full-width selectize"></select><br />' +
@@ -111,11 +113,17 @@ $(document).on('bs-orderline-friend-ok', function () {
     });
 
     Pace.ignore(function () {
+        let par = null;
+        if(shopId == 1) {
+            par = {id: 5};
+        } else {
+            par = {isActive: 1, isForPickUp: 1}
+        }
         $.ajax({
             url: '/blueseal/xhr/GetTableContent',
             data: {
                 table: 'Carrier',
-                condition: {isActive: 1, isForPickUp: 1}
+                condition: par
             },
             dataType: 'json'
         }).done(function (res) {
