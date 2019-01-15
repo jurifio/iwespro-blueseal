@@ -131,6 +131,9 @@
             data-remote="bs.invoice.split"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.invoice.split.value"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.document.cancel"
         ></bs-toolbar-button>
         <bs-toolbar-button
