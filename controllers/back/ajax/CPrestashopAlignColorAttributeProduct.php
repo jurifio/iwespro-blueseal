@@ -360,8 +360,8 @@ ORDER BY `p`.`id`";
                     $stmtFeatureLastValueInsert=$db_con->prepare("select max(id_feature_value) as idfeaturevalue from psz6_feature_value");
                     $stmtFeatureLastValueInsert->execute();
 
-                    $stmtfeatureValueLastId=$stmtFeatureLastValueInsert->fetch();
-
+                    $stmtfeatureValueLastnumberId=$stmtFeatureLastValueInsert->fetch();
+                    $stmtfeatureValueLastId=$stmtfeatureValueLastnumberId[0];
                     //inserimento valore su tabella lingua psz6_feature_value_lang per tutte e tre le lingue
                     $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
                                                     VALUES ('" . $stmtfeatureValueLastId . "',
