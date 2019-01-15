@@ -322,6 +322,9 @@ ORDER BY `p`.`id`";
             }
                 $featureId=4685;
                 $id_product=$value_product['prestaId'];
+                $colorgroupName=$productColorGroupTranslationRepo->findOneBy(['productColorGroupId'=>$value_product['colorGroupId']]);
+                $colorName=$colorgroupName->name;
+
 
                 //associazione Gruppo colore con feature prodotto
                 try {
@@ -336,6 +339,7 @@ ORDER BY `p`.`id`";
                                                            `id_feature_value`='".$colorgroup."'");
 
                     $stmtFeatureProduct->execute();
+                    $res.="Inserimento Gruppo Colore " .$colorName." per il prodotto ". $value_product['product_id']. " <br>";
                 } catch (PDOException $e) {
                     $res .= $e->getMessage();
                 }
@@ -357,6 +361,7 @@ ORDER BY `p`.`id`";
                     $stmtFeatureLastValueInsert->execute();
 
                     $stmtfeatureValueLastId=$stmtFeatureLastValueInsert->fetch();
+
                     //inserimento valore su tabella lingua psz6_feature_value_lang per tutte e tre le lingue
                     $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
                                                     VALUES ('" . $stmtfeatureValueLastId . "',
@@ -368,6 +373,7 @@ ORDER BY `p`.`id`";
                                                            `id_lang`='1',
                                                            `value`='".$color."'");
                     $stmtFeatureValueLang->execute();
+                    $res.="Inserimento lingua inglese colore fornitore". $color. "per il prodotto ". $value_product['product_id']. " <br>";
 
                     $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
                                                     VALUES ('" . $stmtfeatureValueLastId . "',
@@ -379,6 +385,7 @@ ORDER BY `p`.`id`";
                                                            `id_lang`='2',
                                                            `value`='".$color."'");
                     $stmtFeatureValueLang->execute();
+                    $res.="Inserimento lingua italiana colore fornitore". $color. "per il prodotto ". $value_product['product_id']. " <br>";
 
                     $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
                                                     VALUES ('" . $stmtfeatureValueLastId . "',
@@ -390,6 +397,7 @@ ORDER BY `p`.`id`";
                                                            `id_lang`='3',
                                                            `value`='".$color."'");
                     $stmtFeatureValueLang->execute();
+                    $res.="Inserimento lingua tedesca colore fornitore". $color. "per il prodotto ". $value_product['product_id']. " <br>";
                     //associazione feature colore produttore a prodotto prestashop
                     $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
                                                    VALUES ('" . $stmtfeatureValueLastId . "',
@@ -402,6 +410,7 @@ ORDER BY `p`.`id`";
                                                            `id_feature_value`='".$color."'");
 
                     $stmtFeatureProduct->execute();
+                    $res.="associazione colore fornitore ".$color. " prodotto prestashop ".$id_product;
                 } catch (PDOException $e) {
                     $res .= $e->getMessage();
                 }
@@ -411,6 +420,7 @@ ORDER BY `p`.`id`";
             }
 
         }
+        return $res;
 
     }
 
