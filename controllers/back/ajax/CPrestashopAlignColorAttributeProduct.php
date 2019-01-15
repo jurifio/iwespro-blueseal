@@ -229,7 +229,7 @@ ORDER BY `p`.`id`";
 
 
             foreach ($res_product as $value_product) {
-
+// recupero id colore dalle caratteristiche
             switch($value_product['colorGroupId']){
                 case 1:
                     $colorgroup=77226;
@@ -322,6 +322,8 @@ ORDER BY `p`.`id`";
             }
                 $featureId=4685;
                 $id_product=$value_product['prestaId'];
+
+                //associazione Gruppo colore con feature prodotto
                 try {
                     $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
                                                    VALUES ('" . $featureId . "',
@@ -337,16 +339,65 @@ ORDER BY `p`.`id`";
                 } catch (PDOException $e) {
                     $res .= $e->getMessage();
                 }
+
+
+
                 $featureColorId=4686;
+
+                // recupero colore produttore da  Tabella DirtyProduct
                 $color=$value_product['color_supplier'];
                 try {
+
+                    //creazione feature su psz6_feature_value
+                    $stmtFeaturevalueinsert=$db_con->prepare("INSERT INTO psz6_feature_value (`id_feature`,`custom`) 
+                    VALUES (".$featureColorId.", 0)");
+                    $stmtFeaturevalueinsert->execute();
+                    //recupero ultimo id inserito
+                    $stmtFeatureLastValueInsert=$db_con->prepare("select max(id_feature_value) as idfeaturevalue from psz6_feature_value");
+                    $stmtFeatureLastValueInsert->execute();
+
+                    $stmtfeatureValueLastId=$stmtFeatureLastValueInsert->fetch();
+                    //inserimento valore su tabella lingua psz6_feature_value_lang per tutte e tre le lingue
+                    $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
+                                                    VALUES ('" . $stmtfeatureValueLastId . "',
+                                                           ' 1 ',
+                                                           '" . $color . "')
+                                                           ON DUPLICATE KEY
+                                                           UPDATE
+                                                           `id_feature_value`='".$featureColorId."',
+                                                           `id_lang`='1',
+                                                           `value`='".$color."'");
+                    $stmtFeatureValueLang->execute();
+
+                    $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
+                                                    VALUES ('" . $stmtfeatureValueLastId . "',
+                                                           ' 2 ',
+                                                           '" . $color . "')
+                                                           ON DUPLICATE KEY
+                                                           UPDATE
+                                                           `id_feature_value`='".$stmtfeatureValueLastId."',
+                                                           `id_lang`='2',
+                                                           `value`='".$color."'");
+                    $stmtFeatureValueLang->execute();
+
+                    $stmtFeatureValueLang=$db_con->prepare("INSERT INTO psz6_feature_value_lang (`id_feature_value`,`id_lang`,`value`) 
+                                                    VALUES ('" . $stmtfeatureValueLastId . "',
+                                                           ' 3 ',
+                                                           '" . $color . "')
+                                                           ON DUPLICATE KEY
+                                                           UPDATE
+                                                           `id_feature_value`='".$stmtfeatureValueLastId."',
+                                                           `id_lang`='3',
+                                                           `value`='".$color."'");
+                    $stmtFeatureValueLang->execute();
+                    //associazione feature colore produttore a prodotto prestashop
                     $stmtFeatureProduct = $db_con->prepare("INSERT INTO psz6_feature_product (`id_feature`,`id_product`,`id_feature_value`) 
-                                                   VALUES ('" . $featureColorId . "',
+                                                   VALUES ('" . $stmtfeatureValueLastId . "',
                                                            '" . $id_product . "',
                                                            '" . $color . "')
                                                            ON DUPLICATE KEY
                                                            UPDATE
-                                                           `id_feature`='".$featureColorId."',
+                                                           `id_feature`='".$stmtfeatureValueLastId."',
                                                            `id_product`='".$id_product."',
                                                            `id_feature_value`='".$color."'");
 
