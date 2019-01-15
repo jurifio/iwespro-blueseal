@@ -213,7 +213,7 @@ FROM `Product` `p`
   LEFT  JOIN ProductColorGroup PCG ON p.productColorGroupId = PCG.id
   LEFT JOIN ProductName pn ON p.id = pn.id
   LEFT JOIN MarketplaceHasShop mpas ON php.shopId=mpas.shopId
-WHERE   p.id=" . $productId . " AND p.productVariantId=" . $productVariantId . " AND  php.statusPublished IN (2)  AND S3.price > 0 
+WHERE   p.id=" . $productId . " AND p.productVariantId=" . $productVariantId . " AND  php.statusPublished IN (1)  AND S3.price > 0 
 GROUP BY p.id,p.productVariantId
 ORDER BY `p`.`id`";
 
