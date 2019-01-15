@@ -412,6 +412,7 @@ ORDER BY `p`.`id`";
                     $stmtFeatureProduct->execute();
                     $res.="associazione colore fornitore ".$color. " prodotto prestashop ".$id_product;
                 } catch (PDOException $e) {
+
                     $res .= $e->getMessage();
                 }
 
