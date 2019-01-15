@@ -230,7 +230,7 @@ ORDER BY `p`.`id`";
 
             foreach ($res_product as $value_product) {
 
-            switch($value_product['colorGroup']){
+            switch($value_product['colorGroupId']){
                 case 1:
                     $colorgroup=77226;
                     break;
