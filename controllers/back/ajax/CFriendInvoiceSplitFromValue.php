@@ -43,12 +43,12 @@ class CFriendInvoiceSplitFromValue extends AAjaxController
             $document2 = clone $document;
             unset($document2->id);
             $document2->number .= " ACC.";
-            $document2->totalWithVat = $data['parts'];
+            $document2->totalWithVat = $newPrice;
             $document2->insert();
 
 
             $document->number .= " SLD";
-            $document->totalWithVat = $newPrice;
+            $document->totalWithVat = $data['parts'];
             $document->update();
 
         }
