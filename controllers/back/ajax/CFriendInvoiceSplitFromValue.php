@@ -35,7 +35,8 @@ class CFriendInvoiceSplitFromValue extends AAjaxController
 
             if(!$document->paymentBill->isEmpty()) {
                 \Monkey::app()->repoFactory->rollback();
-                throw new \Exception('Non puoi dividere una fattura già in distinta');
+                return 'Non puoi dividere una fattura già in distinta';
+                //throw new \Exception('Non puoi dividere una fattura già in distinta');
             }
 
             $newPrice = $document->totalWithVat - $data['parts'];
@@ -54,5 +55,7 @@ class CFriendInvoiceSplitFromValue extends AAjaxController
         }
 
         \Monkey::app()->repoFactory->commit();
+
+        return 'Fattura divisa con successo';
     }
 }

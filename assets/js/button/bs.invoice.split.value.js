@@ -50,8 +50,8 @@ $(document).on('bs-invoice-split-value', function () {
                     invoicesId: rows,
                     parts: parts
                 }
-            }).done(function () {
-                modal.writeBody('Fatto');
+            }).done(function (res) {
+                modal.writeBody(res);
                 modal.okButton.show();
             }).fail(function (res) {
                 modal.writeBody('Si è verificato un errore, controlla la console');
