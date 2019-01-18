@@ -223,6 +223,7 @@ class CImportExternalOrder extends AAjaxController
             if ($checkOrderExist == null) {
                 if (strpos($rowOrder['remoteOrderId'], 'PayPal') != false) {
                     $orderPaymentMethodId = 1;
+
                 }
                 if (strpos($rowOrder['remoteOrderId'], 'carta di Credito') != false) {
                     $orderPaymentMethodId = 2;
@@ -279,6 +280,7 @@ class CImportExternalOrder extends AAjaxController
                 $insertOrder->sellingFee = '0';
                 $insertOrder->customModifier = '0';
                 $insertOrder->orderDate = $rowOrder['date_add'];
+                $insertOrder->note = $rowOrder['remoteOrderId'];
                 $insertOrder->paidAmount = $rowOrder['total_paid_real'];
                 $insertOrder->lastUpdate = $rowOrder['date_upd'];
                 $insertOrder->paymentDate = $rowOrder['paymentDate'];
