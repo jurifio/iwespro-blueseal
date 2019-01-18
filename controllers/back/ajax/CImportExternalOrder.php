@@ -72,17 +72,21 @@ class CImportExternalOrder extends AAjaxController
                                      pac.phone AS phone,
                                      pac.phone_mobile AS phone_mobile,
                                      pac.dni AS fiscalcode,
-                                     pc.date_add AS creationDate
+                                     pc.date_add AS creationDate,
+                                     pac.id_country as id_country,
+                                     psc.iso_code as country_isocode
                                      FROM psz6_customer pc
                                       JOIN psz6_address pac ON pc.id_customer =pac.id_customer
                                      LEFT JOIN psz6_state pst ON pac.id_state
+                                     LEFT JOIN psz6_country psc on pac.id_country=psc.id_country
+                                     
                                    GROUP BY  remoteId");
         $stmtUser->execute();
 
         $userRepo = \Monkey::app()->repoFactory->create('User');
         $getUserIdRepo = \Monkey::app()->repoFactory->create('User');
         $insertUserAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');
-        $findCountryRepo = \Monkey::app()->repoFactory->create('ZipCode');
+        $findCountryRepo = \Monkey::app()->repoFactory->create('Country');
         $checkOrderExistRepo = \Monkey::app()->repoFactory->create('Order');
         $insertOrderRepo = \Monkey::app()->repoFactory->create('Order');
         $findshippingDetailsRepo = \Monkey::app()->repoFactory->create('UserAddress');
@@ -124,9 +128,9 @@ class CImportExternalOrder extends AAjaxController
                 $insertUserAddress->province = $rowUser['province'];
                 $insertUserAddress->city = $rowUser['city'];
                 $insertUserAddress->postcode = $rowUser['postcode'];
-                $findCountry = $findCountryRepo->findOneBy(['code' => $rowUser['postcode'], 'orderSubdivision2Code' => $rowUser['province']]);
+                $findCountry = $findCountryRepo->findOneBy(['ISO' => $rowUser['country_isocode']]);
                 if ($findCountry == null) {
-                    $insertUserAddress->countryId = '101';
+                    $insertUserAddress->countryId = null;
                 } else {
                     $country = $findCountry->countryId;
                     $insertUserAddress->countryId = $country;
