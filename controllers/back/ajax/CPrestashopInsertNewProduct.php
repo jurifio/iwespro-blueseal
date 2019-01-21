@@ -233,7 +233,7 @@ ORDER BY `p`.`id`";
                     $productEanInsert->used = 1;
                     $productEanInsert->brandAssociate = $value_product['id_manufacturer'];
                     $productEanInsert->shopId = $value_product['id_supplier'];
-                    $productEanInsert->insert();
+                    $productEanInsert->update();
                     $productEanRefind = $productEanRepo->findOneBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId'], 'productSizeId' => 0]);
                     $ean13 = $productEanRefind->ean;
 
