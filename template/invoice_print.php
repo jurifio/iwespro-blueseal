@@ -245,7 +245,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                         </address>
                         <br>
                         <div>
-                            <div class="pull-left font-montserrat all-caps small"><strong>Fattura N. :</strong>
+                            <div class="pull-left font-montserrat all-caps small"><strong><?php echo $invoiceTypeText;?></strong>
                                 <?php echo '  ' . $invoice->invoiceNumber . '<strong> del </strong>' . $invoiceDate->format('d-m-Y'); ?>
                             </div>
 
@@ -264,7 +264,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                         </div>
                     </div>
                     <div class="pull-right sm-m-t-0">
-                        <h2 class="font-montserrat all-caps hint-text">Fattura</h2>
+                        <h2 class="font-montserrat all-caps hint-text"><?php echo $invoiceHeaderText;?></h2>
 
                         <div class="col-md-12 col-sm-height sm-padding-20">
                             <p class="small no-margin">Intestata a</p>
@@ -347,11 +347,11 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                         <td class="separate text-center"><?php echo money_format('%.2n', $order->shippingPrice) . ' &euro;'; ?></td>
                     </tr>
                     <tr style="border: 0px" class="text-left font-montserrat small hint-text">
-                        <td class="text-left" width="30%">Imponibile<br><?php $imp = ($order->netTotal * 100) / 122;
-                            echo money_format('%.2n', $imp) . ' &euro;'; ?></td>
-                        <td class="text-left" width="25%">IVA 22%<br><?php $iva = $order->netTotal - $imp;
-                            echo money_format('%.2n', $iva) . ' &euro;'; ?></td>
-                        <td class="semi-bold"><h4>Totale Fattura</h4></td>
+                        <td class="text-left" width="30%"><?php if ($invoiceType=='F'){ echo "Imponibile";}?><br><?php $imp = ($order->netTotal * 100) / 122;
+                            if ($invoiceType=='F'){ echo money_format('%.2n', $imp) . ' &euro;';} ?></td>
+                        <td class="text-left" width="25%"><?php if ($invoiceType=='F'){ echo "IVA 22%";}?><br><?php $iva = $order->netTotal - $imp;
+                             if ($invoiceType=='F'){echo money_format('%.2n', $iva) . ' &euro;';} ?></td>
+                        <td class="semi-bold"><h4><?php echo $invoiceTotalDocumentText;?></h4></td>
                         <td class="semi-bold text-center">
                             <h2><?php echo money_format('%.2n', $order->netTotal) . ' &euro;'; ?></h2></td>
                     </tr>

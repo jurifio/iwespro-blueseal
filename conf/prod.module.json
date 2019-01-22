@@ -21,6 +21,14 @@
             "ORD_WAIT_NPAY": "Not Paid due to payment method",
             "ORD_WAIT_PERR": "Error in payment"
         },
+        "fattureInCloud": {
+            "api_uid": "34021",
+            "api_key": "443884d05056b5f0831446538c6e840f"
+        },
+        "payPal": {
+            "business": "transazioni@pickyshop.com",
+            "urlPost": "https://www.pickyshop.com/WebServiceLight/PayPal"
+        },
         "photoFTPClient": {
             "host": "fiber.office.iwes.it",
             "user": "shooting",

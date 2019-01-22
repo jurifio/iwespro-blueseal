@@ -426,6 +426,8 @@ ORDER BY `p`.`id`";
             }
             $replaceEuro=$db_con->prepare("UPDATE psz6_product_lang set description=replace(description, 'EUR ', '€'), description_short=replace(description_short, 'EUR ', '€'), name=replace(name, 'EUR ', '€'), meta_title=replace(meta_title, 'EUR ', '€')");
             $replaceEuro->execute();
+            $replaceEuro=$db_con->prepare("UPDATE psz6_product_lang set description=replace(description, 'EUR ', '€'), description_short=replace(description_short, 'EUR ', '€'), name=replace(name, 'EUR ', '€'), meta_title=replace(meta_title, 'EUR ', '€')");
+            $replaceEuro->execute();
             $sql = "UPDATE MarketplaceHasProductAssociate SET statusPublished='1' WHERE statusPublished='2' and id=".$prestashopProductId;
             \Monkey::app()->dbAdapter->query($sql, []);
         }
