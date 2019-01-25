@@ -41,9 +41,12 @@ class CInvoiceAjaxController extends AAjaxController
         $countryRepo=\Monkey::app()->repoFactory->create('Country');
         $findIsExtraUe=$countryRepo->findOneBy(['id'=>$extraUe]);
         $isExtraUe=$findIsExtraUe->extraue;
+        $changelanguage=1;
             if($extraUe!='110'){
             $changelanguage="1";
 
+            }else{
+                $changelanguage="0";
             }
 
 
@@ -70,8 +73,10 @@ class CInvoiceAjaxController extends AAjaxController
                             $invoiceTypeText = "Invoice N. :";
                             $invoiceHeaderText = "INVOICE";
                             $invoiceTotalDocumentText = "Invoice Total";
+
                         }
                     }else{
+                        $invoiceType ='P';
                         if($changelanguage!="1") {
                             $invoiceTypeText = "Fattura N. :";
                             $invoiceHeaderText = "FATTURA";
@@ -143,6 +148,7 @@ class CInvoiceAjaxController extends AAjaxController
                             $invoiceTotalDocumentText = "Invoice Total";
                         }
                     }else{
+                        $invoiceType='P';
                         if($changelanguage!="1") {
                             $invoiceTypeText = "Fattura N. :";
                             $invoiceHeaderText = "FATTURA";
