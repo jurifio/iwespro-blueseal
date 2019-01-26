@@ -41,7 +41,7 @@ class CInvoiceAjaxController extends AAjaxController
         $countryRepo=\Monkey::app()->repoFactory->create('Country');
         $findIsExtraUe=$countryRepo->findOneBy(['id'=>$extraUe]);
         $isExtraUe=$findIsExtraUe->extraue;
-        $changelanguage=1;
+
             if($extraUe!='110'){
             $changelanguage="1";
 
@@ -193,7 +193,7 @@ class CInvoiceAjaxController extends AAjaxController
                     $invoiceRepo->update($invoice);
                     $api_uid = $this->app->cfg()->fetch('fattureInCloud', 'api_uid');
                     $api_key = $this->app->cfg()->fetch('fattureInCloud', 'api_key');
-                    if ($hasInvoice == 1 && $extraUe == 0) {
+                    if ($hasInvoice == '1' && $isExtraUe == '0') {
                         $insertJson = '{
   "api_uid": "' . $api_uid . '",
   "api_key": "' . $api_key . '",

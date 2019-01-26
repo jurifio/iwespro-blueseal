@@ -59,11 +59,11 @@ class CPrestashopInsertNewProductJob extends ACronJob
 
 
         /******* apertura e creazione file csv per espostazione********/
-        $db_host = "iwes.shop";
+        $db_host = "5.189.159.187";
         $db_name = "iwesshop_pres848";
         $db_user = "iwesshop_pres848";
         $db_pass = "@5pM5S)Mn8";
-        define("HOST", "iwes.shop");
+        define("HOST", "5.189.159.187");
         define("USERNAME", "iwesshop_pres848");
         define("PASSWORD", "@5pM5S)Mn8");
         define("DATABASE", "iwesshop_pres848");
