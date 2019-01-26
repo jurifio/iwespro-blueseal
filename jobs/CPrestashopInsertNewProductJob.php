@@ -216,9 +216,11 @@ ORDER BY `p`.`id`";
 
         foreach ($res_product as $value_product) {
             $p = $value_product['prestaId'];
-            $deletepsz6_image_shop = $db_con->prepare("DELETE FROM psz6_image_shop WHERE id_product=" . $p);
+           // $deletepsz6_image_shop = $db_con->prepare("DELETE FROM psz6_image_shop WHERE id_product=" . $p);
+            $deletepsz6_image_shop = $db_con->prepare("DELETE FROM psz6_image_shop");
             $deletepsz6_image_shop->execute();
-            $deletepsz6_image = $db_con->prepare("DELETE FROM psz6_image WHERE id_product=" . $p);
+           // $deletepsz6_image = $db_con->prepare("DELETE FROM psz6_image WHERE id_product=" . $p);
+            $deletepsz6_image = $db_con->prepare("DELETE FROM psz6_image");
             $deletepsz6_image->execute();
 
             $id_supplier = $value_product['id_supplier'];
@@ -299,7 +301,8 @@ ORDER BY `p`.`id`";
             $state = $value_product['state'];
             $status = $value_product['status'];
             try {
-                $stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product WHERE id_product=" . $p);
+                //$stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product WHERE id_product=" . $p);
+                $stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product ");
                 $stmtFeatureProductDelete->execute();
 
                 $stmtInsertProduct = $db_con->prepare("INSERT INTO psz6_product (`id_product`,
@@ -915,7 +918,8 @@ ORDER BY `p`.`id`";
 
                 $res_product_attribute = $productSkuRepo->findBy(['productId' => $value_product['productId'], 'productVariantId' => $value_product['productVariantId']]);
                 $lock_default_on = 0;
-                $stmtdeleteProductAttributeStockAvailable = $db_con->prepare("DELETE FROM psz6_stock_available WHERE id_product=" . $p);
+                //$stmtdeleteProductAttributeStockAvailable = $db_con->prepare("DELETE FROM psz6_stock_available WHERE id_product=" . $p);
+                $stmtdeleteProductAttributeStockAvailable = $db_con->prepare("DELETE FROM psz6_stock_available ");
                 $stmtdeleteProductAttributeStockAvailable->execute();
                 foreach ($res_product_attribute as $value_product_attribute) {
                     $w = $w + 1;
@@ -1206,8 +1210,9 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
 
         //popolamento aggiornamento tabella PrestashopHasProductImage
         $current_productId = 0;
-        foreach ($image_product as $image_lang_product) {
+        /*foreach ($image_product as $image_lang_product) {
             try {
+
                 $deletepsz6_image_lang = $db_con->prepare("DELETE pil FROM psz6_image_lang  pil  INNER  JOIN
                 psz6_image pi ON  pil.id_image=pi.id_image   WHERE id_product =" . $image_lang_product['productId']);
                 $deletepsz6_image_lang->execute();
@@ -1215,7 +1220,7 @@ FROM MarketplaceHasProductAssociate php JOIN ProductHasProductPhoto phpp ON php.
                 $res .= $e->getMessage();
             }
 
-        }
+        }*/
 
 
         foreach ($image_product as $value_image_product) {
