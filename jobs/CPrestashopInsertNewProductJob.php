@@ -302,8 +302,8 @@ ORDER BY `p`.`id`";
             $status = $value_product['status'];
             try {
                 //$stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product WHERE id_product=" . $p);
-                $stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product ");
-                $stmtFeatureProductDelete->execute();
+                /*$stmtFeatureProductDelete = $db_con->prepare("DELETE FROM psz6_feature_product ");
+                $stmtFeatureProductDelete->execute();*/
 
                 $stmtInsertProduct = $db_con->prepare("INSERT INTO psz6_product (`id_product`,
                                                                           `id_supplier`,
