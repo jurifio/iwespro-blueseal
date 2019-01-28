@@ -129,7 +129,6 @@ class CInvoiceAjaxController extends AAjaxController
                 if($checkIfDocumentExist == null){
                     $insertDocument=$documentRepo->getEmptyEntity();
                     $insertDocument->userId=$order->userId;
-                    $insertDocument->userAddressRecipientId=$BillingUserAddress->id;
                     $insertDocument->shopRecipientId=1;
                     $insertDocument->number=$sectional;
                     $insertDocument->date=$order->orderDate;
