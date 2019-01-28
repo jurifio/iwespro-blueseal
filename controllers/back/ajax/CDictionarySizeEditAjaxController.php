@@ -3,6 +3,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProductSizeGroupHasProductSize;
 
 
 /**
@@ -53,7 +54,9 @@ class CDictionarySizeEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        $sql = "select `DictionarySize`.`shopId` AS `shopId`,`DictionarySize`.`term` AS `term`,`DictionarySize`.`productSizeId` AS `foreign` from `DictionarySize`";
+        $sql = "select `DictionarySize`.`shopId` AS `shopId`,`DictionarySize`.`term` AS `term`,`DictionarySize`.`productSizeId` AS `foreign`,
+  `DictionaryCategory`.`term` AS `termCategory`,`DictionaryCategory`.`productCategoryId` AS `productCategoryId` from `DictionarySize`
+  join `DictionaryCategory` on `DictionarySize`.`shopId` = `DictionaryCategory`.`shopId`";
         $datatable = new CDataTables($sql,['shopId','term'],$_GET,true);
         $datatable->addCondition('shopId',[$shopId]);
 
@@ -71,11 +74,22 @@ class CDictionarySizeEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
+
         $productSizes = \Monkey::app()->repoFactory->create('ProductSize')->findAll("limit 99999", "order by name");
+        $productSizeGroupHasProductSizeRepo=\Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
+        $productSizeMacroGroupRepo=\Monkey::app()->repoFactory->create('ProductSizeMacroGroup');
+        $productSizeGroupRepo=\Monkey::app()->repoFactory->create('ProductSizeGroup');
 
         $i = 0;
         foreach($sizes as $size) {
             $html = '<div class="form-group form-group-default selectize-enabled full-width">';
+            $productSizeGroup=$productSizeGroupHasProductSizeRepo->findOneBy(['productSizeId'=>$size->productSizeId]);
+            $productSizeGroupId=$productSizeGroup->productSizeGroupId;
+            $productSizeGroup=$productSizeGroupRepo->findOneBy(['id'=> $productSizeGroupId]);
+            $productSizeMacrogroupId=$productSizeGroup->productSizeMacroGroupId;
+            $productSizeMacroGroup=$productSizeMacroGroupRepo->findOneBy(['id'=>$productSizeMacrogroupId]);
+            $ProductSizeMacroGroupName=$productSizeMacroGroup->name;
+
             $html .= '<select class="full-width selectpicker" placeholder="Seleziona la taglia" data-init-plugin="selectize" data-action="' . $this->urls['base'] .'xhr/DictionarySizeEditAjaxController" data-pid="' . $size->shopId . '_' . $size->term . '" tabindex="-1" title="sizeId" name="sizeId" id="sizeId">';
             $html .= '<option value="' . null . '" required ></option>';
             foreach ($productSizes as $productSize) {
@@ -83,14 +97,16 @@ class CDictionarySizeEditAjaxController extends AAjaxController
                 if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
                     $html .= 'selected="selected"';
                 }
-                $html .= '>' . $productSize->name . '</option>';
+                $html .= '>' . $productSize->name .'-'.$ProductSizeMacroGroupName. '</option>';
             }
+
             $html .= '</select>';
             $html .= '</div>';
 
             $response['data'][$i]["DT_RowId"] = 'row__'.$size->productSizeId;
             $response['data'][$i]["DT_RowClass"] = 'colore';
             $response['data'][$i]['term'] = $size->term;
+            $response['data'][$i]['termCategory'] = $size->categoryFriend;
             $response['data'][$i]['foreign'] = $html;
 
             $i++;

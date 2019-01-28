@@ -65,18 +65,23 @@ class CInvoiceAjaxController extends AAjaxController
                if($hasInvoice =='1') {
                     if($isExtraUe=='1') {
                         $invoiceType = 'X';
+                        $documentType='17';
                         if($changelanguage!="1") {
                             $invoiceTypeText = "Fattura N. :";
                             $invoiceHeaderText = "FATTURA";
                             $invoiceTotalDocumentText = "Totale Fattura";
+                            $documentType='18';
                         }else{
                             $invoiceTypeText = "Invoice N. :";
                             $invoiceHeaderText = "INVOICE";
                             $invoiceTotalDocumentText = "Invoice Total";
 
+
+
                         }
                     }else{
                         $invoiceType ='P';
+                        $documentType='17';
                         if($changelanguage!="1") {
                             $invoiceTypeText = "Fattura N. :";
                             $invoiceHeaderText = "FATTURA";
@@ -89,11 +94,13 @@ class CInvoiceAjaxController extends AAjaxController
                     }
                }else{
                    if($changelanguage!="1") {
+                       $documentType='16';
                        $invoiceType = 'K';
                        $invoiceTypeText = "Ricevuta N. :";
                        $invoiceHeaderText = "RICEVUTA FISCALE";
                        $invoiceTotalDocumentText = "Totale Ricevuta";
                    }else{
+                       $documentType='16';
                        $invoiceType = 'K';
                        $invoiceTypeText = "Receipt N. :";
                        $invoiceHeaderText = "RECEIPT";
@@ -116,6 +123,25 @@ class CInvoiceAjaxController extends AAjaxController
                 $todayInvoice=$today->format('d/m/Y');
 
                 $invoiceRepo->insert($invoiceNew);
+                $sectional=$number.'/'.$invoiceType;
+                $documentRepo=\Monkey::app()->repoFactory->create('Document');
+                $checkIfDocumentExist=$documentRepo->findOneBy(['number'=>$number,'year'=>$year]);
+                if($checkIfDocumentExist == null){
+                    $insertDocument=$documentRepo->getEmptyEntity();
+                    $insertDocument->userId=$order->userId;
+                    $insertDocument->userAddressRecipientId=$BillingUserAddress->id;
+                    $insertDocument->shopRecipientId=1;
+                    $insertDocument->number=$sectional;
+                    $insertDocument->date=$order->orderDate;
+                    $insertDocument->invoiceTypeId=$documentType;
+                    $insertDocument->paydAmount=$order->paidAmount;
+                    $insertDocument->paymentExpectedDate=$order->paymentDate;
+                    $insertDocument->note=$order->note;
+                    $insertDocument->creationDate=$order->orderDate;
+                    $insertDocument->totalWithVat=$order->netTotal;
+                    $insertDocument->year=$year;
+                    $insertDocument->insert();
+                }
                 $order = $orderRepo->findOneBy(['id' => $orderId]);
             } catch (\Throwable $e) {
                 throw $e;
@@ -404,6 +430,7 @@ class CInvoiceAjaxController extends AAjaxController
 
                 }
             }
+
 
             return $invoice->invoiceText;
         }
