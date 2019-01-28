@@ -60,6 +60,30 @@
             ]
         },
         {
+            "pattern": "/blueseal/registri(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/registri/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterManageController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/ordini/utenti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
