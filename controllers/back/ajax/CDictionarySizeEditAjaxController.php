@@ -91,6 +91,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
                 $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $productSizeGroupId]);
                 if ($productSizeGroup != null) {
                     $productSizeMacrogroupId = $productSizeGroup->productSizeMacroGroupId;
+                    $locale=$productSizeGroup->locale;
 
 
                     $productSizeMacroGroup = $productSizeMacroGroupRepo->findOneBy(['id' => $productSizeMacrogroupId]);
@@ -108,7 +109,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
                     if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
                         $html .= 'selected="selected"';
                     }
-                    $html .= '>' . $productSize->name . '-' . $ProductSizeMacroGroupName . '</option>';
+                    $html .= '>' . $productSize->name . '-' . $ProductSizeMacroGroupName . '-'.$locale.'K</option>';
                 }
 
                 $html .= '</select>';
