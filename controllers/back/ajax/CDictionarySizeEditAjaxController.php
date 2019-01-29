@@ -101,6 +101,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
                 }
             } else {
                 $ProductSizeMacroGroupName = '';
+                $locale='';
             }
                 $html .= '<select class="full-width selectpicker" placeholder="Seleziona la taglia" data-init-plugin="selectize" data-action="' . $this->urls['base'] . 'xhr/DictionarySizeEditAjaxController" data-pid="' . $size->shopId . '_' . $size->term . '" tabindex="-1" title="sizeId" name="sizeId" id="sizeId">';
                 $html .= '<option value="' . null . '" required ></option>';
