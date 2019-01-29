@@ -109,7 +109,7 @@ class CDictionarySizeEditAjaxController extends AAjaxController
                     if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
                         $html .= 'selected="selected"';
                     }
-                    $html .= '>' . $productSize->name . '-' . $ProductSizeMacroGroupName . '-'.$locale.'K</option>';
+                    $html .= '>' . $productSize->name . '-' . $ProductSizeMacroGroupName . '-'.$locale.'</option>';
                 }
 
                 $html .= '</select>';
