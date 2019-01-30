@@ -38,8 +38,18 @@ abstract class APrestashopMarketplace
     public function __construct()
     {
         $this->readConfig();
+        $fullClassName = get_class($this);
+        $partClassName = $id = substr($fullClassName, strrpos($fullClassName, '\\') + 1);
 
-        $configConstructor = $this->config->fetchAll('category');
+        $configSection = null;
+
+        switch ($partClassName){
+            case 'CPrestashopCategory':
+                $configSection = 'category';
+                break;
+        }
+
+        $configConstructor = $this->config->fetchAll($configSection);
         $this->url = $configConstructor['url'];
         $this->key = $configConstructor['key'];
         $this->debug = $configConstructor['debug'];
