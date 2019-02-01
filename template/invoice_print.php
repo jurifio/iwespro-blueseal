@@ -489,14 +489,14 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                 }else {
                                     echo 'VAT 22%<br>';
                                 }
-                                $iva = $order->netTotal - $imp;
+                                $iva = $order->vat;
                                 echo money_format('%.2n', $imp) . ' &euro;';
                             } elseif ($invoiceType == "X") {
                                 echo "non imponibile ex art 8/A  D.P.R. n. 633/72";
                                 $iva = "0,00";
                                 echo "<br>";
                             } else {
-                                $iva = $order->netTotal - $imp;
+                                $iva = $order->vat;
                                 echo "<br>";
                             }
 
