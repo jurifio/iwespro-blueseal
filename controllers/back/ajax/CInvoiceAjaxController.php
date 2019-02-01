@@ -411,8 +411,12 @@ class CInvoiceAjaxController extends AAjaxController
                         );
                         $context  = stream_context_create($options);
                         $result = json_decode(file_get_contents($urlInsert, false, $context), true);
-                        $resultApi="Risultato=".$result['success']." new_id:".$result['new_id']." token:".$result['token'];
-                        \Monkey::app()->applicationLog('InvoiceAjaxController', 'alert', 'ResponseApi fatture in Cloud Numero'.$number.' data:'.$dateInvoice, $resultApi,$insertJson);
+                        if($result['success']!=null) {
+                            $resultApi = "Risultato=" . $result['success'] . " new_id:" . $result['new_id'] . " token:" . $result['token'];
+                        }else{
+                            $resultApi = "Errore=" . $result['error'] . " codice di errore:" . $result['error_code'];
+                        }
+                        \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'ResponseApi fatture in Cloud Numero'.$number.' data:'.$dateInvoice, 'Risposta FatturaincCloud',$resultApi);
                         $fattureinCloudId=$result['new_id'];
                         $fattureinCloudToken=$result['token'];
                         $updateInvoice=\Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId'=>$orderId]);
