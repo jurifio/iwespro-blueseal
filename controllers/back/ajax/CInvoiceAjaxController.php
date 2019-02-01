@@ -350,7 +350,7 @@ class CInvoiceAjaxController extends AAjaxController
                                 'prezzo_lordo' =>$prezzo_lordo,
                                 'cod_iva' => $cod_iva,
                                 'tassabile' => true,
-                                'sconto' => $sconto,
+                                'sconto' => '"'.$sconto.'"',
                                 'applica_ra_contributi'=>$applica_ra_contributi,
                                 'ordine'=> $ordine,
                                 'sconto_rosso' =>$sconto_rosso,
