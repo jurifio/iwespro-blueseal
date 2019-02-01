@@ -411,7 +411,7 @@ class CInvoiceAjaxController extends AAjaxController
                         );
                         $context  = stream_context_create($options);
                         $result = json_decode(file_get_contents($urlInsert, false, $context), true);
-                        if($result['success']!=null) {
+                        if(array_key_exists('success',$result)) {
                             $resultApi = "Risultato=" . $result['success'] . " new_id:" . $result['new_id'] . " token:" . $result['token'];
                         }else{
                             $resultApi = "Errore=" . $result['error'] . " codice di errore:" . $result['error_code'];
