@@ -294,6 +294,7 @@ class CInvoiceAjaxController extends AAjaxController
                         $insertJson .= '"lista_articoli": ';
                         $tot = 0;
                         $i = 0;
+                        $scontotot = 0;
                         $articoli=[];
 
                         foreach ($order->orderLine as $orderLine) {
@@ -310,14 +311,14 @@ class CInvoiceAjaxController extends AAjaxController
                             $categoria="";
                             $prezzo_netto=number_format($orderLine->activePrice+$orderLine->couponCharge,2);
                             $prezzo_lordo=number_format($orderLine->activePrice,2);
-                            $sconto= abs(number_format($orderLine->couponCharge));
+                            $sconto = abs(number_format($orderLine->couponCharge));
                             $cod_iva="0";
                             $applica_ra_contributi="true";
                             $ordine=$order->id;
                             $sconto_rosso="0";
                             $in_ddt=false;
                             $magazzino=true;
-
+                            $scontotot+=abs(number_format($orderLine->couponCharge,2));
                             $tot += $orderLine->activePrice;
                           /*  $insertLineJSon.='{
                                    "id": "'.$idlineaordine.'",
@@ -358,7 +359,7 @@ class CInvoiceAjaxController extends AAjaxController
                                 'magazzino'=>$magazzino
                             ];
                         }
-                        $tot = number_format($tot,2);
+                        $tot = number_format($tot,2)- number_format($scontotot,2);
                         $today = new \DateTime();
                         $dateInvoice = $today->format('d/m/Y');
                         $insertJson.= json_encode($articoli).',
