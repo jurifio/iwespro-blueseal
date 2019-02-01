@@ -320,7 +320,7 @@ class CInvoiceAjaxController extends AAjaxController
                             $sconto_rosso="0";
                             $in_ddt=false;
                             $magazzino=true;
-                            $scontotot+=$sconto;
+                            $scontotot+=abs($scontoCharge);
                             $tot += $orderLine->activePrice;
                           /*  $insertLineJSon.='{
                                    "id": "'.$idlineaordine.'",
