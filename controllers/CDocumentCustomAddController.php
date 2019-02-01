@@ -2,7 +2,9 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\domain\entities\CInvoiceType;
 use bamboo\domain\repositories\CDocumentRepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\ecommerce\views\VBase;
 use bamboo\utils\time\STimeToolbox;
 
@@ -66,6 +68,28 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                 true,
                 $files['invoiceBin']['name'],
                 $files['invoiceBin']['tmp_name']);
+
+            if($data['invoiceTypeId'] == CInvoiceType::CREDIT_REQUEST){
+
+                $shopEmail = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['billingAddressBookId'=>$data['shopRecipientId']])->amministrativeEmails;
+
+                $body = 'Salve,
+                <br />
+                Preghiamo prendere nota che la vostra richiesta di accredito pari a ' . $data['total'] . '€ è stata inserita nella distinta
+                n. ' . $data['number'] . ' e compensata con i pagamenti da voi dovuti.
+                <br />
+                Cordialmente,<br />
+                <br />
+                <img height="25" src="https://www.pickyshop.com/it/assets/logoiwes.png">
+                <br />
+                Iwes International Web Ecommerce Services
+                ';
+
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $emailRepo->newMail('no-reply@pickyshop.com', [$shopEmail], [], [], 'Richiesta di accredito', $body);
+
+            }
         } catch (\Throwable $e) {
             \Monkey::app()->repoFactory->rollback();
             throw $e;
