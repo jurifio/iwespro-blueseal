@@ -357,7 +357,10 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                     } else {
                                         $transfiscalcode = 'VAT';
                                     } ?>
-                                    <br><?php (!is_null($order->user->userDetails->fiscalCode)) ? $transfiscalcode . $order->user->userDetails->fiscalCode : null; ?>
+                                    <br><?php if(!is_null($order->user->userDetails->fiscalCode)){
+                                        echo $transfiscalcode.$order->user->userDetails->fiscalCode;
+                                        }
+                                        ?>
                                 </strong>
                             </address>
                             <div class="clearfix"></div>
@@ -490,7 +493,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                     echo 'VAT 22%<br>';
                                 }
                                 $iva = $order->vat;
-                                echo money_format('%.2n', $imp) . ' &euro;';
+                                echo money_format('%.2n', $iva) . ' &euro;';
                             } elseif ($invoiceType == "X") {
                                 echo "non imponibile ex art 8/A  D.P.R. n. 633/72";
                                 $iva = "0,00";
