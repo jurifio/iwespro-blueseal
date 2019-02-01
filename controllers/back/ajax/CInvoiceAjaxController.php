@@ -400,7 +400,7 @@ class CInvoiceAjaxController extends AAjaxController
               },
               "split_payment": false
             }';
-
+                        \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'jsonfattureincloud', $insertJson);
                         $urlInsert = "https://api.fattureincloud.it/v1/fatture/nuovo";
                         $options = array(
                             "http" => array(
