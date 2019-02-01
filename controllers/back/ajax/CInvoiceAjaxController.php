@@ -311,7 +311,7 @@ class CInvoiceAjaxController extends AAjaxController
                             $categoria="";
                             $prezzo_netto=number_format($orderLine->activePrice+$orderLine->couponCharge,2);
                             $prezzo_lordo=number_format($orderLine->activePrice,2);
-                            $sconto = abs(number_format($orderLine->couponCharge));
+                            $sconto = abs(number_format($orderLine->couponCharge),2);
                             $cod_iva="0";
                             $applica_ra_contributi="true";
                             $ordine=$order->id;
