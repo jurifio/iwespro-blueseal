@@ -237,7 +237,7 @@ class CInvoiceAjaxController extends AAjaxController
   "cf": "' .$userAddress->fiscalCode . '",
   "autocompila_anagrafica": false,
   "salva_anagrafica": false,
-  "numero": "'.$number.'/'.$invoiceType.'",
+  "numero": "'.$sectional.'",
   "data": "'.$todayInvoice.'",
   "valuta": "EUR",
   "valuta_cambio": 1,
@@ -423,11 +423,12 @@ class CInvoiceAjaxController extends AAjaxController
                         }
                         if(array_key_exists('token',$result)) {
                             $fattureinCloudToken = $result['token'];
+
+                            $updateInvoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId' => $orderId]);
+                            $updateInvoice->fattureInCloudId = $fattureinCloudId;
+                            $updateInvoice->fattureInCloudToken = $fattureinCloudToken;
+                            $updateInvoice->update();
                         }
-                        $updateInvoice=\Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId'=>$orderId]);
-                        $updateInvoice->fattureInCloudId=$fattureinCloudId;
-                        $updateInvoice->fattureInCloudToken=$fattureinCloudToken;
-                        $updateInvoice->update();
 
 
                     }
