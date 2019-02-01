@@ -359,7 +359,7 @@ class CInvoiceAjaxController extends AAjaxController
                                 'magazzino'=>$magazzino
                             ];
                         }
-                        $tot = number_format($tot,2)- number_format($scontotot,2);
+                        $tot = number_format($tot,2) - number_format($scontotot,2);
                         $today = new \DateTime();
                         $dateInvoice = $today->format('d/m/Y');
                         $insertJson.= json_encode($articoli).',
@@ -418,8 +418,12 @@ class CInvoiceAjaxController extends AAjaxController
                             $resultApi = "Errore=" . $result['error'] . " codice di errore:" . $result['error_code'];
                         }
                         \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'ResponseApi fatture in Cloud Numero'.$number.' data:'.$dateInvoice, 'Risposta FatturaincCloud',$resultApi);
-                        $fattureinCloudId=$result['new_id'];
-                        $fattureinCloudToken=$result['token'];
+                        if(array_key_exists('new_id',$result)) {
+                            $fattureinCloudId = $result['new_id'];
+                        }
+                        if(array_key_exists('token',$result)) {
+                            $fattureinCloudToken = $result['token'];
+                        }
                         $updateInvoice=\Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId'=>$orderId]);
                         $updateInvoice->fattureInCloudId=$fattureinCloudId;
                         $updateInvoice->fattureInCloudToken=$fattureinCloudToken;
