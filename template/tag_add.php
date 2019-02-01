@@ -30,13 +30,25 @@
                               autocomplete="off">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="row">
-                                        <div class="col-sm-12">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group form-group-default">
+                                                    <label for="slug">Slug</label>
+                                                    ​<input type="text" class="form-control" id="slug" name="slug"
+                                                            required="required"
+                                                            value=""/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
                                             <div class="form-group form-group-default">
-                                                <label for="slug">Slug</label>
-                                                ​<input type="text" class="form-control" id="slug" name="slug"
+                                                ​<input type="checkbox" class="form-control" id="isSpecial" name="isSpecial"
                                                         required="required"
-                                                        value=""/>
+                                                        />
+                                                <p class="text-center">Tag Speciale</p>
                                             </div>
                                         </div>
                                     </div>
