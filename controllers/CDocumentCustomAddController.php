@@ -73,16 +73,21 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
 
                 $shopEmail = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['billingAddressBookId'=>$data['shopRecipientId']])->amministrativeEmails;
 
-                $body = 'Salve,
+                $body = '
+                <img height="300px" src="https://www.pickyshop.com/it/assets/logoiwes.png">
+                 <br />
+                 <br />
+                 Salve,
                 <br />
-                Preghiamo prendere nota che la vostra richiesta di accredito pari a ' . $data['total'] . '€ è stata inserita nella distinta
-                n. ' . $data['number'] . ' e compensata con i pagamenti da voi dovuti.
+                Preghiamo prendere nota che la vostra richiesta di accredito pari a 20€ è stata inserita nella distinta
+                n. 30 e compensata con i pagamenti da voi dovuti.
                 <br />
                 Cordialmente,<br />
                 <br />
-                <img height="25" src="https://www.pickyshop.com/it/assets/logoiwes.png">
+                <img width="40px" src="https://www.pickyshop.com/it/assets/Iwes.png">
                 <br />
-                Iwes International Web Ecommerce Services
+                 <br />
+                Billing Department
                 ';
 
                 /** @var CEmailRepo $emailRepo */
