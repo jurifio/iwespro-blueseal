@@ -79,8 +79,8 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                  <br />
                  Salve,
                 <br />
-                Preghiamo prendere nota che la vostra richiesta di accredito pari a 20€ è stata inserita nella distinta
-                n. 30 e compensata con i pagamenti da voi dovuti.
+                Preghiamo prendere nota che la vostra richiesta di accredito pari a ' . $data['total'] . '€ è stata inserita nella distinta
+                n. ' . $data['number'] . ' e compensata con i pagamenti da voi dovuti.
                 <br />
                 Cordialmente,<br />
                 <br />
