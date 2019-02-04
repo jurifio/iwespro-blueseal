@@ -74,7 +74,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                 $shopEmail = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['billingAddressBookId'=>$data['shopRecipientId']])->amministrativeEmails;
 
                 $body = '
-                <img height="300px" src="https://www.pickyshop.com/it/assets/logoiwes.png">
+                <img height="150px" src="https://www.pickyshop.com/it/assets/logoiwes.png">
                  <br />
                  <br />
                  Salve,
@@ -84,7 +84,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                 <br />
                 Cordialmente,<br />
                 <br />
-                <img width="40px" src="https://www.pickyshop.com/it/assets/Iwes.png">
+                <img height="40px" src="https://www.pickyshop.com/it/assets/Iwes.png">
                 <br />
                  <br />
                 Billing Department
