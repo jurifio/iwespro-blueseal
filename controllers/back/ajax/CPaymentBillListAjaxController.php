@@ -3,6 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\CInvoiceType;
 use bamboo\domain\entities\CPaymentBill;
 use bamboo\utils\time\STimeToolbox;
 
@@ -71,6 +72,7 @@ class CPaymentBillListAjaxController extends AAjaxController
             foreach ($paymentBill->document as $invoice) {
                 try {
                     if ($invoice->getSignedValueWithVat() < 0) $color = "text-green";
+                    elseif ($invoice->invoiceTypeId == CInvoiceType::CREDIT_REQUEST) $color = "text-blue";
                     elseif ($invoice->getSignedValueWithVat(true) != $invoice->calculateOurTotal()) $color = "text-red";
                     else $color = "";
                     if (!$invoice->note == "ANNULLATA"){

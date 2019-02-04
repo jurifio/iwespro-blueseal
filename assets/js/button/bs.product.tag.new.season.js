@@ -58,12 +58,11 @@ $(document).on('bs-product-tag-new-season', function () {
         });
     });
 
-    let bsModal = new $.bsModal("Seleziona la nuova stagione da marchiare come 'New Season'", {
-        body: `<p>Seleziona la stagione da impostare/eliminare come "New Season"</p>
+    let bsModal = new $.bsModal("Seleziona la nuova stagione da associare al tag", {
+        body: `<p>Seleziona la stagione da associare/eliminare con un tag speciale</p>
                 <div>
                 <p id="actualSelectedSeason">Le stagioni attualmente utilizzate sono: </p>
                 </div>
-                <small>(Il processo potrebbe richieder un po di tempo, non toccare nulla fino al messaggio di avvenuto inserimento)</small>
                 <select id="season">
                 <option disabled selected value>Seleziona una stagione</option>
                 </select>
