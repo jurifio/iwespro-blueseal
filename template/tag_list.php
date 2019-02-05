@@ -83,6 +83,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.tag.new.brand"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.massive.tag.change"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

@@ -228,6 +228,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.tag.change"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.massive.tag.change"
+        ></bs-toolbar-button>
         <!--<bs-toolbar-button
             data-remote="bs.product.delete"
             ></bs-toolbar-button>-->
