@@ -169,18 +169,32 @@
         disabled.each(function () {
             $(this).prop('disabled','disabled');
         });
+
+        let docType = $('#invoiceTypeId').val();
+
+        let emailString = docType == 16 ? '<input type="checkbox" id="email"><label for="email">Inviare la mail?</label>' : '';
+
         //let formElement = document.querySelector("form");
         let modal = new $.bsModal('Salva Fattura', {
-            body: 'Sei sicuro di voler inserire questa fattura?',
+            body: `<p>Sei sicuro di voler inserire questa fattura?</p>
+                    ${emailString}`,
         });
         modal.setOkEvent(function() {
+            let email = null;
+            if(docType != 19 || $('#email').is(':checked') == false){
+                email = 0;
+            } else if ($('#email').is(':checked') == true) {
+                email = 1;
+            }
+
+            form.append('email', email);
             modal.showLoader();
             modal.cancelButton.hide();
             modal.setOkEvent(function() {
                 modal.hide();
             });
             modal.setCloseEvent(function() {
-                window.location.reload();
+               window.location.reload();
             });
             Pace.ignore(function() {
                 $.ajax({

@@ -43,6 +43,8 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
 
+        $emailBool = (bool) array_pop($data);
+
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
 
@@ -69,7 +71,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                 $files['invoiceBin']['name'],
                 $files['invoiceBin']['tmp_name']);
 
-            if($data['invoiceTypeId'] == CInvoiceType::CREDIT_REQUEST){
+            if($data['invoiceTypeId'] == CInvoiceType::CREDIT_REQUEST && $emailBool){
 
                 $shopEmail = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['billingAddressBookId'=>$data['shopRecipientId']])->amministrativeEmails;
 
