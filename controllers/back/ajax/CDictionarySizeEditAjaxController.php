@@ -3,7 +3,10 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProductSize;
+use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeGroupHasProductSize;
 
 
@@ -55,9 +58,11 @@ class CDictionarySizeEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        $sql = "SELECT `DictionarySize`.`shopId` AS `shopId`,`DictionarySize`.`term` AS `term`,`DictionarySize`.`productSizeId` AS `foreign`,
-  `DictionaryCategory`.`term` AS `termCategory`,`DictionaryCategory`.`productCategoryId` AS `productCategoryId` FROM `DictionarySize`
-  JOIN `DictionaryCategory` ON `DictionarySize`.`shopId` = `DictionaryCategory`.`shopId`";
+        $sql = "select `DictionarySize`.`shopId` AS `shopId`,
+                  `DictionarySize`.`term` AS `term`,
+                  `DictionarySize`.`productSizeId` AS `foreign`,
+                  `DictionarySize`.`categoryFriend` AS `termCategory`
+               from `DictionarySize`";
         $datatable = new CDataTables($sql, ['shopId', 'term'], $_GET, true);
         $datatable->addCondition('shopId', [$shopId]);
 
@@ -77,40 +82,42 @@ class CDictionarySizeEditAjaxController extends AAjaxController
 
 
         $productSizes = \Monkey::app()->repoFactory->create('ProductSize')->findAll("limit 99999", "order by name");
+
+        /** @var CRepo $productSizeGroupHasProductSizeRepo */
         $productSizeGroupHasProductSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
-        $productSizeMacroGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeMacroGroup');
-        $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
 
         $i = 0;
         foreach ($sizes as $size) {
             $html = '<div class="form-group form-group-default selectize-enabled full-width">';
-            $productSizeGroup = $productSizeGroupHasProductSizeRepo->findOneBy(['productSizeId' => $size->productSizeId]);
-            if ($productSizeGroup != null) {
-                $productSizeGroupId = $productSizeGroup->productSizeGroupId;
 
-                $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $productSizeGroupId]);
-                if ($productSizeGroup != null) {
-                    $productSizeMacrogroupId = $productSizeGroup->productSizeMacroGroupId;
-                    $locale=$productSizeGroup->locale;
-
-
-                    $productSizeMacroGroup = $productSizeMacroGroupRepo->findOneBy(['id' => $productSizeMacrogroupId]);
-                    if ($productSizeMacroGroup != null) {
-                        $ProductSizeMacroGroupName = $productSizeMacroGroup->name;
-                    }
-                }
-            } else {
-                $ProductSizeMacroGroupName = '';
-                $locale='';
-            }
                 $html .= '<select class="full-width selectpicker" placeholder="Seleziona la taglia" data-init-plugin="selectize" data-action="' . $this->urls['base'] . 'xhr/DictionarySizeEditAjaxController" data-pid="' . $size->shopId . '_' . $size->term . '" tabindex="-1" title="sizeId" name="sizeId" id="sizeId">';
                 $html .= '<option value="' . null . '" required ></option>';
-                foreach ($productSizes as $productSize) {
-                    $html .= '<option value="' . $productSize->id . '" required ';
-                    if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
-                        $html .= 'selected="selected"';
+
+                /** @var CProductSize $productSize */
+            foreach ($productSizes as $productSize) {
+
+                $productSizeGroupHasProductSizeCollection = $productSizeGroupHasProductSizeRepo->findBySql('
+                        SELECT *
+                        FROM ProductSizeGroupHasProductSize psghps
+                        WHERE psghps.productSizeId = ?
+                        GROUP BY psghps.productSizeGroupId', [$productSize->id]);
+                    if (!$productSizeGroupHasProductSizeCollection->isEmpty()) {
+                        /** @var CProductSizeGroupHasProductSize $productSizeGroupHasProductSize */
+                        foreach($productSizeGroupHasProductSizeCollection as $productSizeGroupHasProductSize){
+
+                            //$productSizeGroup = $productSizeGroups->productSizeGroupId;
+                            $locale = $productSizeGroupHasProductSize->productSizeGroup->locale;
+                            $ProductSizeMacroGroupName = $productSizeGroupHasProductSize->productSizeGroup->productSizeMacroGroup->name;
+
+                            $html .= '<option value="' . $productSize->id . '" required ';
+                            if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
+                                $html .= 'selected="selected"';
+                            }
+                            $html .= '>' . $productSize->name . ' || ' . $ProductSizeMacroGroupName . ' || ' . $locale.'</option>';
+                        }
+                    } else {
+                        continue;
                     }
-                    $html .= '>' . $productSize->name . '-' . $ProductSizeMacroGroupName . '-'.$locale.'</option>';
                 }
 
                 $html .= '</select>';

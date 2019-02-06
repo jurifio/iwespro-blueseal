@@ -290,6 +290,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/importatori/dizionari/immaginidimensioni(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryImageSizeListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/importatori/dizionari/taglie/modifica/:shopId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeEditController"
