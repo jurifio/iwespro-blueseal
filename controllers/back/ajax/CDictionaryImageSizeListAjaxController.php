@@ -34,6 +34,16 @@ class CDictionaryImageSizeListAjaxController extends AAjaxController
                        S.name AS name,
                        dis.heightImage as heightImage,
                        dis.widthImage as widthImage,
+                       dis.destinationfile as destinationfile,
+                       dis.destinationXPoint as destinationXPoint,
+                       dis.destinationYPoint as destinationYPoint,
+                       dis.divisionByX as divisionByX,
+                       dis.divisionByY as divisionByY,
+                       dis.emptyZero as emptyZero,
+                       dis.heightPercentageVariation as heightPercentageVariation,
+                       dis.widthPercentageVariation as widthPercentageVariation,
+                       dis.useDivision as useDivision,
+                       dis.coverImage as coverImage,
                        dis.renameAction as renameAction
                        FROM DictionaryImageSize dis  JOIN Shop S ON dis.shopId=S.id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

@@ -44,6 +44,60 @@
                                     data-default-order="desc"
                                     class="center">Altezza Immagine in Px
                                 </th>
+                                <th data-slug="useDivision"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Usa Divisore
+                                </th>
+                                <th data-slug="widthPercentageVariation"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Larghezza Percentuale  di ingrandimento
+                                </th>
+                                <th data-slug="heightPercentageVariation"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Altezza Percentuale  di ingrandimento
+                                </th>
+                                <th data-slug="divisionByX"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Divisore Larghezza
+                                </th>
+                                <th data-slug="divisionByY"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Divisore Altezza
+                                </th>
+                                <th data-slug="destinationXPoint"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Punto di Destinazione Larghezza
+                                </th>
+                                <th data-slug="destinationYPoint"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Punto di Destinazione Altezza
+                                </th>
+                                <th data-slug="emptyZero"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Inserimento Zeri Nome
+                                </th>
+                                <th data-slug="coverImage"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">Immagine di Copertina
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
