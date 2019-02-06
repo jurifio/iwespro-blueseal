@@ -4,7 +4,7 @@
 
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length < 1) {
+        if (selectedRows.length < 1) {
             new Alert({
                 type: "warning",
                 message: "Non hai selezionato niente"
@@ -51,21 +51,6 @@
 
     $(document).on('bs.product.sheet.model.cat.group.macro', function () {
 
-        let selectedRows = $('.table').DataTable().rows('.selected').data();
-
-        if(selectedRows.length < 1) {
-            new Alert({
-                type: "warning",
-                message: "Devi selezionare almeno unac categoria per poterla associare a una Macrocategoria"
-            }).open();
-            return false;
-        }
-
-        let cats = [];
-        $.each(selectedRows, function (k, v) {
-            cats.push(v.id);
-        });
-
 
         $.ajax({
             method: 'GET',
@@ -86,18 +71,61 @@
         });
 
         let bsModal = new $.bsModal('Associa categoria a macrocategoria', {
-            body: `<p>Seleziona una categoria</p>
+            body: `<p>Cerca categoria</p>
+                   <div>
+                   <label for="catName">Nome categoria</label>
+                   <input type="text" id="catName">
+                   <button class="btn-success" id="searchCatName">Cerca</button>
+                   </div>
+                   <div>
                    <select id="oldMacroCat">
                    <option disabled selected value>Seleziona un'opzione</option>
                    </select>
+                   </div> 
+                   <div id="catResult">
+                   </div>
                    `
+        });
+
+        $('#searchCatName').on('click', function () {
+
+            $.ajax({
+                method: 'get',
+                url: '/blueseal/xhr/ProductModelPrototypeMacroCategoryGroupAjaxManage',
+                data: {
+                    cat: $('#catName').val(),
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                let tableR = $('#catResult');
+
+                tableR.empty();
+                
+                let table = `<table class="table"> 
+                <thead> 
+                <tr> 
+                <th>Categoria</th> 
+                <th>Macroategoria</th> 
+                </tr> 
+                </thead> 
+                <tbody>`;
+                
+                $.each(res, function (k,v) {
+                    table += `<tr>
+                    <td style="padding-right: 3px">${v['catN']}</td> 
+                    <td>${v['macroCatName']}</td> 
+                    </tr>`
+                });
+
+                tableR.append(table);
+            });
         });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
 
             const data = {
-                ids: cats,
+                cat: $('#catName').val(),
                 macroCat: $('#oldMacroCat').val()
             };
             $.ajax({
@@ -121,13 +149,12 @@
     });
 
 
-
     $(document).on('bs.product.sheet.model.cat.group.name', function () {
 
 
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length != 1) {
+        if (selectedRows.length != 1) {
             new Alert({
                 type: "warning",
                 message: "Puoi inserire un nome alla volta"
@@ -173,7 +200,7 @@
 
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length < 1) {
+        if (selectedRows.length < 1) {
             new Alert({
                 type: "warning",
                 message: "seleziona almeno una riga"
@@ -229,7 +256,7 @@
 
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length < 1) {
+        if (selectedRows.length < 1) {
             new Alert({
                 type: "warning",
                 message: "Non hai selezionato nessuna riga"

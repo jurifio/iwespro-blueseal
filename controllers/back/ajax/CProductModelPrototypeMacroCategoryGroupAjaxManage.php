@@ -22,6 +22,21 @@ use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
 {
 
+    public function get(){
+
+        $catName = \Monkey::app()->router->request()->getRequestData('cat');
+
+        $sql = 'SELECT c.id catId, c.name catN, cm.name macroCatName
+                  FROM ProductSheetModelPrototypeCategoryGroup c
+                  JOIN ProductSheetModelPrototypeMacroCategoryGroup cm ON c.macroCategoryGroupId = cm.id
+                  WHERE c.name RLIKE ?';
+
+        $ids = \Monkey::app()->dbAdapter->query($sql, [$catName])->fetchAll();
+
+        return json_encode($ids);
+
+    }
+
     /**
      * @return string
      * @throws \bamboo\core\exceptions\BambooException
@@ -31,15 +46,24 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
     public function put()
     {
 
-        $ids = \Monkey::app()->router->request()->getRequestData('ids');
+        $catName = \Monkey::app()->router->request()->getRequestData('cat');
         $mCat = \Monkey::app()->router->request()->getRequestData('macroCat');
+
+        if(empty($catName) || empty($mCat)) return 'Compila tutti i campi';
+
+        $sql = 'SELECT id
+                  FROM ProductSheetModelPrototypeCategoryGroup
+                  WHERE name RLIKE ?';
+
+        $ids = \Monkey::app()->dbAdapter->query($sql, [$catName])->fetchAll();
+
 
         /** @var CRepo $catGR */
         $catGR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
 
         foreach ($ids as $id){
             /** @var CProductSheetModelPrototypeCategoryGroup $catG */
-            $catG = $catGR->findOneBy(['id'=>$id]);
+            $catG = $catGR->findOneBy(['id'=>$id['id']]);
             $catG->macroCategoryGroupId = $mCat;
             $catG->update();
         }
