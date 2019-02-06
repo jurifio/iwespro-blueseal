@@ -89,6 +89,8 @@
 
         $('#searchCatName').on('click', function () {
 
+            if($('#catName').val() == "") return false;
+
             $.ajax({
                 method: 'get',
                 url: '/blueseal/xhr/ProductModelPrototypeMacroCategoryGroupAjaxManage',
