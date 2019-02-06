@@ -45,25 +45,33 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
      */
     public function put()
     {
-
-        $catName = \Monkey::app()->router->request()->getRequestData('cat');
+        $type = \Monkey::app()->router->request()->getRequestData('type');
         $mCat = \Monkey::app()->router->request()->getRequestData('macroCat');
+        if(empty($mCat)) return 'Specifica la macrocategoria';
 
-        if(empty($catName) || empty($mCat)) return 'Compila tutti i campi';
+        switch ($type){
+            case 'single':
+                $ids = \Monkey::app()->router->request()->getRequestData('ids');
+                break;
+            case 'multiple':
+                $catName = \Monkey::app()->router->request()->getRequestData('cat');
+                if(empty($catName)) return 'Specifica il nome della categoria';
 
-        $sql = 'SELECT id
+                $sql = 'SELECT id
                   FROM ProductSheetModelPrototypeCategoryGroup
                   WHERE name RLIKE ?';
 
-        $ids = \Monkey::app()->dbAdapter->query($sql, [$catName])->fetchAll();
-
+                $ids = \Monkey::app()->dbAdapter->query($sql, [$catName])->fetchAll();
+                if(empty($ids)) return 'Non sono state trovate categorie con il nome specificato';
+                break;
+        }
 
         /** @var CRepo $catGR */
         $catGR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
 
         foreach ($ids as $id){
             /** @var CProductSheetModelPrototypeCategoryGroup $catG */
-            $catG = $catGR->findOneBy(['id'=>$id['id']]);
+            $catG = $catGR->findOneBy(['id'=> $type == 'single' ? $id : $id['id']]);
             $catG->macroCategoryGroupId = $mCat;
             $catG->update();
         }
