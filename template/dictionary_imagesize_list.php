@@ -44,6 +44,12 @@
                                     data-default-order="desc"
                                     class="center">Altezza Immagine in Px
                                 </th>
+                                <th data-slug="destinationfile"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center">file Template
+                                </th>
                                 <th data-slug="useDivision"
                                     data-searchable="true"
                                     data-orderable="true"
