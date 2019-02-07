@@ -5,10 +5,12 @@ namespace bamboo\blueseal\marketplace\prestashop;
 use bamboo\controllers\api\Helper\DateTime;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\theming\nestedCategory\CCategoryManager;
 use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductCategoryHasPrestashopCategory;
 use bamboo\domain\entities\CProductCategoryTranslation;
+use bamboo\domain\repositories\CProductRepo;
 
 
 /**
@@ -102,7 +104,7 @@ class CPrestashopCategory extends APrestashopMarketplace
 
     /**
      * @param CObjectCollection $productCategories
-     * @throws \PrestaShopWebserviceException
+     * @throws \Exception
      */
     public function addNewCategories(CObjectCollection $productCategories){
 
@@ -128,50 +130,104 @@ class CPrestashopCategory extends APrestashopMarketplace
             $pchpcFather = $pchpcR->findOneBy(['productCategoryId' => $fatherId]);
             if(!is_null($pchpcFather)){
                 //if father is in table insert new cat
-                $this->insertPrestashopCategory($productCategory, $pchpcFather);
+                if($this->insertPrestashopCategory($productCategory, $pchpcFather)){
+                    continue;
+                } else throw new \Exception('Errore while insert Product Category');
             } else {
+                $fatherTree = $this->getRecursiveFatherProductCategory($fatherId);
 
+                foreach ($fatherTree as $father){
+
+                }
             }
 
         }
     }
 
     /**
+     * @param $productCategoryId
+     * @return array
+     */
+    private function getRecursiveFatherProductCategory($productCategoryId){
+        $res = [
+            'fathers' => [$productCategoryId],
+            'lastFatherPrestashopCategoryId' => null
+        ];
+
+
+        /** @var CRepo $pchpcRepo */
+        $pchpcRepo = \Monkey::app()->repoFactory->create('ProductCategoryHasPrestashopCategory');
+
+        /** @var CCategoryManager $cm */
+        $cm = \Monkey::app()->categoryManager;
+
+        $grandFatherId = $cm->getCategoryParent($productCategoryId)['id'];
+
+        /** @var CProductCategoryHasPrestashopCategory $pchpcGF */
+        $pchpcGF = $pchpcRepo->findOneBy(['productCategoryId' => $grandFatherId]);
+
+        if(is_null($pchpcGF)){
+            $res['fathers'][] = $grandFatherId;
+            $this->getRecursiveFatherProductCategory($grandFatherId);
+        }
+
+        $res['lastFatherPrestashopCategoryId'] = $pchpcGF->prestashopCategoryId;
+
+        return $res;
+    }
+
+    /**
      * @param CProductCategory $productCategory
      * @param CProductCategoryHasPrestashopCategory $pchpcFather
      * @return bool
-     * @throws \PrestaShopWebserviceException
      */
     public function insertPrestashopCategory(CProductCategory $productCategory, CProductCategoryHasPrestashopCategory $pchpcFather){
 
-        /** @var \SimpleXMLElement $blankXml */
-        $blankXml = $this->getCategoryBlankSchema();
+        try {
+            /** @var \SimpleXMLElement $blankXml */
+            $blankXml = $this->getCategoryBlankSchema();
 
-        /** @var CProductCategoryTranslation $productCategoryTranslation */
-        $productCategoryTranslation = $productCategory->productCategoryTranslation->findOneByKey('langId', 1);
+            $resources = $blankXml->children()->children();
+            /** @var CProductCategoryTranslation $productCategoryTranslation */
+            $productCategoryTranslation = $productCategory->productCategoryTranslation->findOneByKey('langId', 1);
 
-        $date = date_format(new \DateTime(), 'Y-m-d H:i:s');
-        $categorySlug = $productCategoryTranslation->slug;
-        $categoryName = $productCategoryTranslation->name;
-        
+            $date = date_format(new \DateTime(), 'Y-m-d H:i:s');
+            $categorySlug = $productCategoryTranslation->slug;
+            $categoryName = $productCategoryTranslation->name;
 
-        $blankXml[0]->children()->id_parent = $pchpcFather->prestashopCategoryId;
-        $blankXml[0]->children()->active = 1;
-        $blankXml[0]->children()->id_shop_default = 1;
-        $blankXml[0]->children()->is_root_category = 0;
-        $blankXml[0]->children()->position = 0;
-        $blankXml[0]->children()->date_add = $date;
-        $blankXml[0]->children()->date_upd = $date;
-        $blankXml[0]->children()->name->language[0][0] = $categoryName;
-        $blankXml[0]->children()->link_rewrite->language[0][0] = $categorySlug;
-        $blankXml[0]->children()->description->language[0][0] = $categoryName;
-        $blankXml[0]->children()->meta_title->language[0][0] = $categoryName;
-        $blankXml[0]->children()->meta_description->language[0][0] = $categoryName;
-        $blankXml[0]->children()->meta_keywords->language[0][0] = $categoryName;
 
-        $opt = array('resource' => 'categories');
-        $opt['postXml'] = $blankXml->asXML();
-        $response = $this->ws->add($opt);
+            $resources->id_parent = $pchpcFather->prestashopCategoryId;
+            $resources->active = 1;
+            $resources->id_shop_default = 1;
+            $resources->is_root_category = 0;
+            $resources->position = 0;
+            $resources->date_add = $date;
+            $resources->date_upd = $date;
+            $resources->name->language[0][0] = $categoryName;
+            $resources->link_rewrite->language[0][0] = $categorySlug;
+            $resources->description->language[0][0] = $categoryName;
+            $resources->meta_title->language[0][0] = $categoryName;
+            $resources->meta_description->language[0][0] = $categoryName;
+            $resources->meta_keywords->language[0][0] = $categoryName;
+
+            $opt = array('resource' => 'categories');
+            $opt['postXml'] = $blankXml->asXML();
+            $response = $this->ws->add($opt);
+
+
+            if ($response instanceof \SimpleXMLElement) {
+                $prestashopCategoryId = (int)$response->children()->children()[0];
+
+                /** @var CProductCategoryHasPrestashopCategory $pchpcNew */
+                $pchpcNew = \Monkey::app()->repoFactory->create('ProductCategoryHasPrestashopCategory')->getEmptyEntity();
+                $pchpcNew->productCategoryId = $productCategory->id;
+                $pchpcNew->prestashopCategoryId = $prestashopCategoryId;
+                $pchpcNew->smartInsert();
+            } else throw new BambooException('Prestashop response ProductCategory error');
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('PrestashopCategory', 'Error', 'Errore while insert', $e->getMessage());
+            return false;
+        }
 
         return true;
     }
