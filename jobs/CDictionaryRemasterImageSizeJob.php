@@ -95,8 +95,12 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                 if ($result == true) {
 
                     $localDirectory = $save_to_dir . $item;
-                    mkdir($localDirectory);
-                    mkdir($localDirectory . '/' . $resultdate);
+                    if (!file_exists($localDirectory)) {
+                        mkdir($localDirectory);
+                    }
+                    if (!file_exists($localDirectory. '/' . $resultdate)) {
+                        mkdir($localDirectory . '/' . $resultdate);
+                    }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
                     copy($pathlocal . 'destination1125X1500.jpg', $remotetoLocalDirectory . '/destination1125X1500.jpg');
                     copy($pathlocal . 'destination1200X1500.jpg', $remotetoLocalDirectory . '/destination1200X1500.jpg');
