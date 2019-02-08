@@ -7,9 +7,11 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\theming\nestedCategory\CCategoryManager;
+use bamboo\core\utils\slugify\CSlugify;
 use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductCategoryHasPrestashopCategory;
 use bamboo\domain\entities\CProductCategoryTranslation;
+use bamboo\domain\repositories\CProductCategoryRepo;
 use bamboo\domain\repositories\CProductRepo;
 
 
@@ -104,6 +106,7 @@ class CPrestashopCategory extends APrestashopMarketplace
 
     /**
      * @param CObjectCollection $productCategories
+     * @return bool
      * @throws \Exception
      */
     public function addNewCategories(CObjectCollection $productCategories){
@@ -113,6 +116,9 @@ class CPrestashopCategory extends APrestashopMarketplace
 
         /** @var CCategoryManager $categoryManager */
         $categoryManager = \Monkey::app()->categoryManager;
+
+        /** @var CProductCategoryRepo $productCategoryRepo */
+        $productCategoryRepo = \Monkey::app()->repoFactory->create('ProductCategory');
 
         /** @var CProductCategory $productCategory */
         foreach ($productCategories as $productCategory){
@@ -134,26 +140,50 @@ class CPrestashopCategory extends APrestashopMarketplace
                     continue;
                 } else throw new \Exception('Errore while insert Product Category');
             } else {
-                $fatherTree = $this->getRecursiveFatherProductCategory($fatherId);
+                $fatherTree = $this->getRecursiveFatherProductCategory($fatherId, true);
 
-                foreach ($fatherTree as $father){
+                for($i = 0; $i < count($fatherTree['fathers']); $i++){
 
+                    /** @var CProductCategory $prodCat */
+                    $prodCat = $productCategoryRepo->findOneBy(['id' => $fatherTree['fathers'][$i]]);
+
+                    if($i === 0){
+                        /** @var CProductCategoryHasPrestashopCategory $pchpcFatherFirst */
+                        $pchpcFatherFirst = $pchpcR->findOneBy(['productCategoryId' => $fatherTree['lastFatherProductCategoryId']]);
+                        if($this->insertPrestashopCategory($prodCat, $pchpcFatherFirst)){
+                            continue;
+                        } else throw new \Exception('Errore while insert Product Category');
+                    }
+
+                    /** @var CProductCategoryHasPrestashopCategory $previousFather */
+                    $previousFather = $pchpcR->findOneBy(['productCategoryId' => $fatherTree['fathers'][$i-1]]);
+                    if($this->insertPrestashopCategory($prodCat, $previousFather)){
+                        continue;
+                    } else throw new \Exception('Errore while insert Product Category');
                 }
+
+                //child insert
+                /** @var CProductCategoryHasPrestashopCategory $lastChildFather */
+                $lastChildFather = $pchpcR->findOneBy(['productCategoryId' => end($fatherTree['fathers'])]);
+                if($this->insertPrestashopCategory($productCategory, $lastChildFather)){
+                    continue;
+                } else throw new \Exception('Errore while insert Product Category');
             }
 
         }
+
+        return true;
     }
 
     /**
      * @param $productCategoryId
+     * @param bool $init
+     * @param array $res
      * @return array
      */
-    private function getRecursiveFatherProductCategory($productCategoryId){
-        $res = [
-            'fathers' => [$productCategoryId],
-            'lastFatherPrestashopCategoryId' => null
-        ];
+    private function getRecursiveFatherProductCategory($productCategoryId, bool $init, array $res = []){
 
+        if($init) $res[] = $productCategoryId;
 
         /** @var CRepo $pchpcRepo */
         $pchpcRepo = \Monkey::app()->repoFactory->create('ProductCategoryHasPrestashopCategory');
@@ -167,11 +197,12 @@ class CPrestashopCategory extends APrestashopMarketplace
         $pchpcGF = $pchpcRepo->findOneBy(['productCategoryId' => $grandFatherId]);
 
         if(is_null($pchpcGF)){
-            $res['fathers'][] = $grandFatherId;
-            $this->getRecursiveFatherProductCategory($grandFatherId);
+            $res[] = $grandFatherId;
+            return $this->getRecursiveFatherProductCategory($grandFatherId, false, $res);
         }
 
-        $res['lastFatherPrestashopCategoryId'] = $pchpcGF->prestashopCategoryId;
+        $res['fathers'] = array_reverse($res);
+        $res['lastFatherProductCategoryId'] = $pchpcGF->productCategoryId;
 
         return $res;
     }
@@ -184,6 +215,9 @@ class CPrestashopCategory extends APrestashopMarketplace
     public function insertPrestashopCategory(CProductCategory $productCategory, CProductCategoryHasPrestashopCategory $pchpcFather){
 
         try {
+
+            $slugy = new CSlugify();
+
             /** @var \SimpleXMLElement $blankXml */
             $blankXml = $this->getCategoryBlankSchema();
 
@@ -192,7 +226,7 @@ class CPrestashopCategory extends APrestashopMarketplace
             $productCategoryTranslation = $productCategory->productCategoryTranslation->findOneByKey('langId', 1);
 
             $date = date_format(new \DateTime(), 'Y-m-d H:i:s');
-            $categorySlug = $productCategoryTranslation->slug;
+            $categorySlug = (is_null($productCategoryTranslation->slug) || empty($productCategoryTranslation->slug)) ? $slugy->slugify(trim($productCategoryTranslation->name)) : $productCategoryTranslation->slug;
             $categoryName = $productCategoryTranslation->name;
 
 
@@ -200,7 +234,7 @@ class CPrestashopCategory extends APrestashopMarketplace
             $resources->active = 1;
             $resources->id_shop_default = 1;
             $resources->is_root_category = 0;
-            $resources->position = 0;
+            unset($resources->position);
             $resources->date_add = $date;
             $resources->date_upd = $date;
             $resources->name->language[0][0] = $categoryName;
