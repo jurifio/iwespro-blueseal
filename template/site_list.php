@@ -92,6 +92,9 @@
         <bs-toolbar-button
                 data-remote="bs.colorproductprestashop.update"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.billingjournal.insert"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
