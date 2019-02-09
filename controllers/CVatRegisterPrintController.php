@@ -64,7 +64,7 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
         $groupUeTextInvoice=$billingJournal->groupUeTextInvoice;
         $groupXUeTextInvoice=$billingJournal->groupXUeTextInvoice;
         $dateNow=new\DateTime();
-        $datePrint=$dateNow->format('d-m-Y');
+        $datePrint=$dateNow->format('Y-m-d 00:00:00');
         $billingJournal->datePrint=$datePrint;
         $billingJournal->update();
         $sql = "SELECT invoiceText as invoiceText,

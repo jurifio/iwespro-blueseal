@@ -29,6 +29,5 @@ $(document).on('bs-billingjournal-print', function () {
         row[i] = v.id;
         i++;
     });
-    alert(row);
     window.open('/blueseal/print/billingJournal?BillingJournal=' + row+'' ,'_blank');
 });

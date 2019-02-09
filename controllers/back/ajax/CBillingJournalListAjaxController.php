@@ -55,10 +55,6 @@ class CBillingJournalListAjaxController extends AAjaxController
             $row['totalXUeInvoice']=money_format('%.2n',  $row['totalXUeInvoice']) . ' &euro;';
             if(is_null($row['datePrint'])){
                 $row['datePrint']='Da Stampare';
-            } else {
-                $datePrint=new \DateTime($row['datePrint']);
-
-                $row['datePrint']='<font color="#f0f0f0">'.$datePrint.'</font>';
             }
 
 
