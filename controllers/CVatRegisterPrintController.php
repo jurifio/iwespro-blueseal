@@ -82,6 +82,7 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
 
 
 
+
                 $renderRegister = $view->render([
                     'app' => new CRestrictedAccessWidgetHelper($this->app),
                     'date'=>$date,
