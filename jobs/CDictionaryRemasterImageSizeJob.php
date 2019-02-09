@@ -1,6 +1,7 @@
 <?php
 
 namespace bamboo\blueseal\jobs;
+
 use bamboo\core\base\CFTPClient;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
@@ -58,16 +59,16 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/temp-remaster/';
             $save_to_dir = '/media/sf_sites/PickyshopNew/temp-remaster';
             $path = 'shootImport/incoming2';
-            $remotepathTodo='shootImport/newage2/todo2/';
-            $remotepathOriginal='/shootImport/newage2/original2/';
+            $remotepathTodo = 'shootImport/newage2/todo2/';
+            $remotepathOriginal = '/shootImport/newage2/original2/';
 
         } else {
             $pathlocal = '/home/pickyshop/public_html/temp-remaster/';
             $save_to = '/home/pickyshop/public_html/temp-remaster/';
             $save_to_dir = '/home/pickyshop/public_html/temp-remaster';
             $path = 'shootImport/incoming';
-            $remotepathTodo='shootImport/newage2/todo/';
-            $remotepathOriginal='/shootImport/newage2/original/';
+            $remotepathTodo = 'shootImport/newage2/todo/';
+            $remotepathOriginal = '/shootImport/newage2/original/';
         }
         $ftp_server = 'fiber.office.iwes.it';
         $ftp_server_port = "21";
@@ -105,7 +106,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     if (!file_exists($localDirectory)) {
                         mkdir($localDirectory);
                     }
-                    if (!file_exists($localDirectory. '/' . $resultdate)) {
+                    if (!file_exists($localDirectory . '/' . $resultdate)) {
                         mkdir($localDirectory . '/' . $resultdate);
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
@@ -118,15 +119,13 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     $directorypathArr = explode(DIRECTORY_SEPARATOR, $item);
                     $directoryName = end($directorypathArr);
                 }
-                $result2 = in_array($remotepathOriginal.$directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathOriginal.$directoryName . '_' . $resultdate)));
-                if ($result2==false)
-                {
-                    ftp_mkdir($conn_id, $remotepathOriginal.$directoryName . '_' . $resultdate);
+                $result2 = in_array($remotepathOriginal . $directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathOriginal . $directoryName . '_' . $resultdate)));
+                if ($result2 == false) {
+                    ftp_mkdir($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate);
                 }
-                $result3 = in_array($remotepathTodo.$directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathTodo.$directoryName . '_' . $resultdate)));
-                if ($result3==false)
-                {
-                    ftp_mkdir($conn_id, $remotepathTodo.$directoryName . '_' . $resultdate);
+                $result3 = in_array($remotepathTodo . $directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathTodo . $directoryName . '_' . $resultdate)));
+                if ($result3 == false) {
+                    ftp_mkdir($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate);
                 }
 
 
@@ -183,25 +182,30 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     $repoShop = \Monkey::app()->repoFactory->create('Shop')->findAll();
                     foreach ($repoShop as $stringitems) {
                         $stringitem = $stringitems->name;
-                        if (strpos($source, $stringitem) !== false) {
-
-                            /** @var integer $shopId */
-                            $shopId = $stringitems->id;
-                        } else {
+                        if ($stringitem == 'pickyshop') {
                             continue;
+                        } else {
+                            if (strpos($source, $stringitem) !== false) {
+
+
+                                /** @var integer $shopId */
+                                $shopId = $stringitems->id;
+                            } else {
+                                continue;
+                            }
                         }
 
 
                     }
 
-                    $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' =>$shopId]);
-                    \Monkey::app()->applicationLog('CdictionaryRemasterImageSizeJob', 'Report', 'ShopId in Remaster Image', "ShopId defined".$shopId);
+                    $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' => $shopId]);
+                    \Monkey::app()->applicationLog('CdictionaryRemasterImageSizeJob', 'Report', 'ShopId in Remaster Image', "ShopId defined" . $shopId);
                     $emptyZero = $repoDictionaryImageSizeRepo->emptyZero;
                     if ($emptyZero != 1) {
                         $sectional = substr($imagetoWork, -7, 3) . '.jpg';
                         $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
                     } else {
-                        $sectional = '00'.substr($imagetoWork, -5, 1) . '.jpg';
+                        $sectional = '00' . substr($imagetoWork, -5, 1) . '.jpg';
                         $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
                     }
                     $PuntoCopiaX = 0;
@@ -250,7 +254,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
 
 
                     imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
-                    ftp_put($conn_id,$remotepathOriginal.$directoryName . '_' . $resultdate.'/'.$filenametoextrat, $source, FTP_BINARY);
+                    ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
                     $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
                     $source = imagecreatefromjpeg($filenameremaster);
                     list($width, $height) = getimagesize($filenameremaster);
@@ -261,7 +265,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
 
 
                     imagejpeg($destination1, $filenameremaster);
-                    ftp_put($conn_id,$remotepathTodo.$directoryName . '_' . $resultdate.'/'.$imagetoWorkName, $filenameremaster, FTP_BINARY);
+                    ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
                     //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
 
                     unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
