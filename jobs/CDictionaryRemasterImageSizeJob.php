@@ -184,7 +184,8 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     foreach ($repoShop as $stringitems) {
                         $stringitem = $stringitems->name;
                         if (strpos($source, $stringitem) !== false) {
-                          /** @var int $shopId */
+
+                            /** @var integer $shopId */
                             $shopId = $stringitems->id;
                         } else {
                             continue;
