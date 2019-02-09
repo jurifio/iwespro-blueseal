@@ -6,6 +6,7 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooFTPClientException;
 use bamboo\domain\entities\CCartAbandonedEmailSend;
+use bamboo\domain\entities\CShop;
 use bamboo\domain\repositories\CCartAbandonedEmailSendRepo;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CCart;
@@ -183,6 +184,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     foreach ($repoShop as $stringitems) {
                         $stringitem = $stringitems->name;
                         if (strpos($source, $stringitem) !== false) {
+                          /** @var int $shopId */
                             $shopId = $stringitems->id;
                         } else {
                             continue;
@@ -190,7 +192,9 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
 
 
                     }
-                    $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' => $shopId]);
+
+                    $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' =>$shopId]);
+                    \Monkey::app()->applicationLog('CdictionaryRemasterImageSizeJob', 'Report', 'ShopId in Remaster Image', "ShopId defined".$shopId);
                     $emptyZero = $repoDictionaryImageSizeRepo->emptyZero;
                     if ($emptyZero != 1) {
                         $sectional = substr($imagetoWork, -7, 3) . '.jpg';
