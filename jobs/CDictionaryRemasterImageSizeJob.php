@@ -47,6 +47,9 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
     {
         $today = new \DateTime();
         $resultdate = $today->format('Y-m-d');
+        /**@var CRepo $repoDictionaryImageSizeRepo
+         **/
+        $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize');
 
 //definisco l'ambiente di sviluppo
         if (ENV == 'dev') {
@@ -184,8 +187,9 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
 
 
                     }
-                    $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' => $shopId]);
-                    $emptyZero = $repoDictionaryImageSizeRepo->emptyZero;
+                    /** @var  $CDictionaryImageSize $dictionaryImageSize **/
+                    $dictionaryImageSize=$repoDictionaryImageSizeRepo->findOneBy(['shopId' => $shopId]);
+                    $emptyZero = $dictionaryImageSize->emptyZero;
                     if ($emptyZero != 1) {
                         $sectional = substr($imagetoWork, -7, 3) . '.jpg';
                         $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
