@@ -199,14 +199,14 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     }
                     $PuntoCopiaX = 0;
                     $PuntoCopiaY = 0;
-                    $LarghezzaCopia = $repoDictionaryImageSizeRepo->widthImage;
-                    $AltezzaCopia = $repoDictionaryImageSizeRepo->heightImage;
-                    $divisoreX = $repoDictionaryImageSizeRepo->divisionByX;
-                    $divisoreY = $repoDictionaryImageSizeRepo->divisionByY;
-                    $percentualeVariazioneLarghezza = $repoDictionaryImageSizeRepo->widthPercentageVariation;
-                    $percentualeVariazioneAltezza = $repoDictionaryImageSizeRepo->heightPercentageVariation;
-                    $destination = $remotetoLocalDirectory . '/' . $repoDictionaryImageSizeRepo->destinationfile;
-                    $useDivision = $repoDictionaryImageSizeRepo->useDivision;
+                    $LarghezzaCopia = $dictionaryImageSize->widthImage;
+                    $AltezzaCopia = $dictionaryImageSize->heightImage;
+                    $divisoreX = $dictionaryImageSize->divisionByX;
+                    $divisoreY = $dictionaryImageSize->divisionByY;
+                    $percentualeVariazioneLarghezza = $dictionaryImageSize->widthPercentageVariation;
+                    $percentualeVariazioneAltezza = $dictionaryImageSize->heightPercentageVariation;
+                    $destination = $remotetoLocalDirectory . '/' . $dictionaryImageSize->destinationfile;
+                    $useDivision = $dictionaryImageSize->useDivision;
                     $NomeFile = $source;// carica il file
 //$percentualeVariazione = 1.8; //definisce la percentuale di variazione,se superiore 1 ingrandisce
 // legge dimensioni dell'immagine
@@ -221,8 +221,8 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                         $PuntoDestinazioneX = ($infoImage[0] - $larghezzaNEW) / $divisoreX;
                         $PuntoDestinazioneY = ($infoImage[1] - $altezzaNEW) / $divisoreY;
                     } else {
-                        $PuntoDestinazioneX = $repoDictionaryImageSizeRepo->destinationXPoint;
-                        $PuntoDestinazioneY = $repoDictionaryImageSizeRepo->destinationYPoint;
+                        $PuntoDestinazioneX = $dictionaryImageSize->destinationXPoint;
+                        $PuntoDestinazioneY = $dictionaryImageSize->destinationYPoint;
                     }
 
 
