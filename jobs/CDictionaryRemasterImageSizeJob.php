@@ -187,7 +187,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
 
 
                     }
-                    /** @var  $CDictionaryImageSize $dictionaryImageSize **/
+
                     $dictionaryImageSize=$repoDictionaryImageSizeRepo->findOneBy(['shopId' => $shopId]);
                     $emptyZero = $dictionaryImageSize->emptyZero;
                     if ($emptyZero != 1) {
