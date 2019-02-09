@@ -1,32 +1,16 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
-use bamboo\core\base\CFTPClient;
+
+namespace bamboo\controllers\back\ajax;
+
+use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
-use bamboo\core\exceptions\BambooException;
-use bamboo\core\exceptions\BambooFTPClientException;
-use bamboo\domain\entities\CCartAbandonedEmailSend;
-use bamboo\domain\repositories\CCartAbandonedEmailSendRepo;
-use bamboo\domain\entities\COrder;
-use bamboo\domain\entities\CCart;
-use bamboo\domain\entities\CCartAbandonedEmailParam;
-use bamboo\domain\entities\CCouponType;
-use bamboo\domain\entities\CCoupon;
-use bamboo\domain\entities\CCartLine;
-use bamboo\core\base\CSerialNumber;
-use bamboo\core\db\pandaorm\repositories\ARepo;
-use bamboo\domain\repositories\CEmailRepo;
-use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
 
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CProductPublicSku;
-use bamboo\domain\entities\CProduct;
-use bamboo\core\events\AEventListener;
-
+use bamboo\domain\entities\CBillingJournal;
 
 /**
- * Class CDictionaryRemasterImageSizeJob
- * @package bamboo\blueseal\jobs
+ * Class CDictionaryRemasterImageSizeAjaxController
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -34,16 +18,14 @@ use bamboo\core\events\AEventListener;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 04/02/2019
+ * @date 09/02/2019
  * @since 1.0
  */
-class CDictionaryRemasterImageSizeJob extends ACronJob
+
+class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 {
-    /**
-     * @param null $args
-     * @throws \bamboo\core\exceptions\BambooDBALException
-     */
-    public function run($args = null)
+
+    public function POST()
     {
         $today = new \DateTime();
         $resultdate = $today->format('Y-m-d');
@@ -68,6 +50,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             $remotepathTodo='shootImport/newage2/todo/';
             $remotepathOriginal='/shootImport/newage2/original/';
         }
+
         $ftp_server = 'fiber.office.iwes.it';
         $ftp_server_port = "21";
         $ftp_user_name = 'jobimages';
@@ -274,8 +257,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             //var_dump($contents);
         }
         ftp_close($conn_id);
-
+        $res='eseguito';
+        return $res;
     }
-
-
 }
