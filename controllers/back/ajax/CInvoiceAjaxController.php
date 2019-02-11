@@ -97,7 +97,7 @@ class CInvoiceAjaxController extends AAjaxController
                        $documentType='16';
                        $invoiceType = 'K';
                        $invoiceTypeText = "Ricevuta N. :";
-                       $invoiceHeaderText = "RICEVUTA FISCALE";
+                       $invoiceHeaderText = "RICEVUTA";
                        $invoiceTotalDocumentText = "Totale Ricevuta";
                    }else{
                        $documentType='16';
@@ -188,7 +188,7 @@ class CInvoiceAjaxController extends AAjaxController
                     if($changelanguage!="1") {
                         $invoiceType = 'K';
                         $invoiceTypeText = "Ricevuta N. :";
-                        $invoiceHeaderText = "RICEVUTA FISCALE";
+                        $invoiceHeaderText = "RICEVUTA";
                         $invoiceTotalDocumentText = "Totale Ricevuta";
                     }else{
                         $invoiceType = 'K';

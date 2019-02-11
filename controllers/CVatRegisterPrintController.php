@@ -2,6 +2,8 @@
 
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CUserAddress;
 use bamboo\domain\entities\CProduct;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\base\CArrayCollection;
@@ -68,16 +70,42 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
         $billingJournal->datePrint=$datePrint;
         $billingJournal->update();
         $sql = "SELECT invoiceText as invoiceText,
-                      invoiceDate as invoiceDate
+                      invoiceDate as invoiceDate,
+                      orderId as orderId,
+                      concat(invoiceNumber,'/',invoiceType,'/',invoiceYear) as numberInvoice
+                      
               FROM Invoice 
                 
                 WHERE invoiceDate between '" . $dateFilter . " 00:00:00' and '" . $dateFilter . " 23:59:59' ";
         $invoiceText='';
+        /** @var CRepo $orderRepo */
+        $orderRepo=\Monkey::app()->repoFactory->create('Order');
+        $orderLineRepo=\Monkey::app()->repoFactory->create('OrderLine');
+        $productRepo=\Monkey::app()->repoFactory->create('Product');
+        $testolineadimarmo='';
+        $orderLineTable='';
         $resultTextInvoice = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
         forEach ($resultTextInvoice as $resultTextInvoices) {
             $stringInvoice=$resultTextInvoices['invoiceText'];
             $invoiceText .= get_string_between($stringInvoice, '<!--start-->', '<!--end-->');
             $invoiceText .='<div class="newpage">';
+            $order=$orderRepo->findOneBy(['Id'=>$resultTextInvoices['orderId']]);
+            $customerDetail=CUserAddress::defrost($order->frozenBillingAddress);
+            $customerName=$customerDetail->name.' '.$customerDetail->surname.' '.$customerDetail->company;
+            $orderId=$order->id;
+            $orderLine=$orderLineRepo->findBy(['orderId'=>$orderId]);
+
+            foreach ($orderLine as $orderLines) {
+                 $productSku = \bamboo\domain\entities\CProductSku::defrost($orderLines->frozenProduct);
+
+
+                                $iscurrentProductSku=$productSku->productId."-".$productSku->productVariantId;
+
+
+                $testolineadimarmo =$testolineadimarmo.'<tr><td>' .$resultTextInvoices['numberInvoice'].'</td><td>'.$orderId.'</td><td>'.$customerName.'</td><td>'.$iscurrentProductSku.'</td><td>1</td><td>'. money_format('%.2n', $orderLines->netPrice) . '&euro;'.'</td></tr>';
+            }
+
+
         }
 
 
@@ -99,6 +127,7 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
                     'groupUeTextInvoice'=> $groupUeTextInvoice,
                     'groupXUeTextInvoice'=> $groupXUeTextInvoice,
                     'invoiceText'=>$invoiceText,
+                    'testolineadimarmo'=>$testolineadimarmo,
 
                     'page' => $this->page,
                     'logo' => $this->app->cfg()->fetch("miscellaneous", "logo"),

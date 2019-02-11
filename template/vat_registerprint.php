@@ -1,6 +1,4 @@
-<?php
-echo $date;
-?>
+
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
@@ -280,7 +278,9 @@ echo $date;
 
     <div class="panel panel-default">
         <div class="panel-body">
-
+            <div align="center">Registro Rendiconto del giorno<?php
+                echo $date;
+                ?> </div>
             <table class="table invoice-table m-t-0">
                 <thead>
                 <!--tabella prodotti-->
@@ -349,6 +349,22 @@ echo $date;
 
 
 
+            </table>
+            <table class="table invoice-table m-t-0">
+                <thead>
+                <!--tabella prodotti-->
+                <tr>
+                    <th  class="text-center small">Documento </th>
+                    <th  class="text-center small">ordine</th>
+                    <th  class="text-center small">Cliente</th>
+                    <th  class="text-center small">Prodotto</th>
+                    <th  class="text-center small">Quantita'</th>
+                    <th  class="text-center small">Importo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php echo $testolineadimarmo;?>
+                </tbody>
             </table>
         </div>
 
