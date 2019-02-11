@@ -39,18 +39,19 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             $save_to = '/media/sf_sites/PickyshopNew/temp-remaster/';
             $save_to_dir = '/media/sf_sites/PickyshopNew/temp-remaster';
             $path = 'shootImport/incoming2';
-            $remotepathTodo='shootImport/newage2/todo2/';
-            $remotepathOriginal='/shootImport/newage2/original2/';
+            $remotepathTodo = 'shootImport/newage2/todo2/';
+            $remotepathOriginal = '/shootImport/newage2/original_dev/';
+            $remotepathToRename = '/shootImport/newage2/torename_dev/';
 
         } else {
             $pathlocal = '/home/pickyshop/public_html/temp-remaster/';
             $save_to = '/home/pickyshop/public_html/temp-remaster/';
             $save_to_dir = '/home/pickyshop/public_html/temp-remaster';
             $path = 'shootImport/incoming';
-            $remotepathTodo='shootImport/newage2/todo/';
-            $remotepathOriginal='/shootImport/newage2/original/';
+            $remotepathTodo = 'shootImport/newage2/todo/';
+            $remotepathOriginal = '/shootImport/newage2/original/';
+            $remotepathToRename = '/shootImport/newage2/torename/';
         }
-
         $ftp_server = 'fiber.office.iwes.it';
         $ftp_server_port = "21";
         $ftp_user_name = 'jobimages';
@@ -87,7 +88,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                     if (!file_exists($localDirectory)) {
                         mkdir($localDirectory);
                     }
-                    if (!file_exists($localDirectory. '/' . $resultdate)) {
+                    if (!file_exists($localDirectory . '/' . $resultdate)) {
                         mkdir($localDirectory . '/' . $resultdate);
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
@@ -100,15 +101,17 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                     $directorypathArr = explode(DIRECTORY_SEPARATOR, $item);
                     $directoryName = end($directorypathArr);
                 }
-                $result2 = in_array($remotepathOriginal.$directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathOriginal.$directoryName . '_' . $resultdate)));
-                if ($result2==false)
-                {
-                    ftp_mkdir($conn_id, $remotepathOriginal.$directoryName . '_' . $resultdate);
+                $result2 = in_array($remotepathOriginal . $directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathOriginal . $directoryName . '_' . $resultdate)));
+                if ($result2 == false) {
+                    ftp_mkdir($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate);
                 }
-                $result3 = in_array($remotepathTodo.$directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathTodo.$directoryName . '_' . $resultdate)));
-                if ($result3==false)
-                {
-                    ftp_mkdir($conn_id, $remotepathTodo.$directoryName . '_' . $resultdate);
+                $result3 = in_array($remotepathTodo . $directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathTodo . $directoryName . '_' . $resultdate)));
+                if ($result3 == false) {
+                    ftp_mkdir($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate);
+                }
+                $result4 = in_array($remotepathToRename . $directoryName . '_' . $resultdate, ftp_nlist($conn_id, dirname($remotepathToRename . $directoryName . '_' . $resultdate)));
+                if ($result4 == false) {
+                    ftp_mkdir($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate);
                 }
 
 
@@ -165,23 +168,39 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                     $repoShop = \Monkey::app()->repoFactory->create('Shop')->findAll();
                     foreach ($repoShop as $stringitems) {
                         $stringitem = $stringitems->name;
-                        if (strpos($source, $stringitem) !== false) {
-                            $shopId = $stringitems->id;
-                        } else {
+                        if ($stringitem == 'pickyshop') {
                             continue;
+                        } else {
+                            if (strpos($source, $stringitem) !== false) {
+
+
+                                /** @var integer $shopId */
+                                $shopId = $stringitems->id;
+                            } else {
+                                continue;
+                            }
                         }
 
 
                     }
+
                     $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' => $shopId]);
+                    \Monkey::app()->applicationLog('CdictionaryRemasterImageSizeJob', 'Report', 'ShopId in Remaster Image', "ShopId defined" . $shopId);
                     $emptyZero = $repoDictionaryImageSizeRepo->emptyZero;
-                    if ($emptyZero != 1) {
-                        $sectional = substr($imagetoWork, -7, 3) . '.jpg';
-                        $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
+                    $renameImage = $repoDictionaryImageSizeRepo->renameAction;
+                    if ($renameImage == 1) {
+                        if ($emptyZero != 1) {
+                            $sectional = substr($imagetoWork, -7, 3) . '.jpg';
+                            $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
+                        } else {
+                            $sectional = '00' . substr($imagetoWork, -5, 1) . '.jpg';
+                            $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
+                        }
                     } else {
-                        $sectional = '00'.substr($imagetoWork, -5, 1) . '.jpg';
-                        $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
+
+                        $imagetoWorkName =$filename;
                     }
+
                     $PuntoCopiaX = 0;
                     $PuntoCopiaY = 0;
                     $LarghezzaCopia = $repoDictionaryImageSizeRepo->widthImage;
@@ -226,21 +245,37 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                         $LarghezzaCopia, $AltezzaCopia
                     );
 
+                    if ($renameImage == 1) {
+                        imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
+                        ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
+                        $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
+                        $source = imagecreatefromjpeg($filenameremaster);
+                        list($width, $height) = getimagesize($filenameremaster);
+                        $newwidth = 1125;
+                        $newheight = 1500;
+                        $destination1 = imagecreatetruecolor($newwidth, $newheight);
+                        imagecopyresampled($destination1, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
-                    imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
-                    ftp_put($conn_id,$remotepathOriginal.$directoryName . '_' . $resultdate.'/'.$filenametoextrat, $source, FTP_BINARY);
-                    $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
-                    $source = imagecreatefromjpeg($filenameremaster);
-                    list($width, $height) = getimagesize($filenameremaster);
-                    $newwidth = 1125;
-                    $newheight = 1500;
-                    $destination1 = imagecreatetruecolor($newwidth, $newheight);
-                    imagecopyresampled($destination1, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
+                        imagejpeg($destination1, $filenameremaster);
+                        ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
+                        //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
+                    }else{
+                        imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
+                        ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
+                        $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
+                        $source = imagecreatefromjpeg($filenameremaster);
+                        list($width, $height) = getimagesize($filenameremaster);
+                        $newwidth = 1125;
+                        $newheight = 1500;
+                        $destination1 = imagecreatetruecolor($newwidth, $newheight);
+                        imagecopyresampled($destination1, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
 
-                    imagejpeg($destination1, $filenameremaster);
-                    ftp_put($conn_id,$remotepathTodo.$directoryName . '_' . $resultdate.'/'.$imagetoWorkName, $filenameremaster, FTP_BINARY);
-                    //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
+                        imagejpeg($destination1, $filenameremaster);
+                        ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
+
+                    }
 
                     unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
                     unlink($filenameremaster);
