@@ -3,5 +3,10 @@
         "url": "dev.prestapicky.com",
         "key": "SK16MRINAAJUVX6HNLBVM7ZJ1H5FXP48",
         "debug": "false"
+    },
+    "shop": {
+        "url": "dev.prestapicky.com",
+        "key": "CD7SD5RN261Q2578NPTSTGQED2NF6I3H",
+        "debug": "false"
     }
 }

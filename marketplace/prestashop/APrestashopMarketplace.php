@@ -47,6 +47,9 @@ abstract class APrestashopMarketplace
             case 'CPrestashopCategory':
                 $configSection = 'category';
                 break;
+            case 'CPrestashopShop':
+                $configSection = 'shop';
+                break;
         }
 
         $configConstructor = $this->config->fetchAll($configSection);

@@ -37,79 +37,25 @@ class CPrestashopCategory extends APrestashopMarketplace
      */
     public function getCategoryBlankSchema() : \SimpleXMLElement
     {
-        $xml = $this->ws->get(array('resource' => 'categories'));
+        $xml = $this->ws->get(array('resource' => 'categories/?schema=blank'));
         return $xml;
     }
 
     /**
-     * @param CObjectCollection $productCategories
-     * @return bool
-     * @throws \PrestaShopWebserviceException
-     */
-    public function addAllCategories(CObjectCollection $productCategories)
-    {
-        /** @var \SimpleXMLElement $blankXml */
-        $blankXml = $this->getCategoryBlankSchema();
-
-        $counter = 0;
-        /** @var CCategoryManager $catManager */
-        $catManager = \Monkey::app()->categoryManager;
-        /** @var CProductCategory $productCategory */
-        foreach ($productCategories as $productCategory){
-
-            //root category
-            if ($counter == 0){
-                $blankXml[0]->children()[$counter]->id_parent = $catManager->getCategoryParent($productCategory->id)['id'];
-                $blankXml[0]->children()[$counter]->active = 1;
-                $blankXml[0]->children()[$counter]->id_shop_default = 1;
-                $blankXml[0]->children()[$counter]->is_root_category = 0;
-                $blankXml[0]->children()[$counter]->position = 0;
-                $blankXml[0]->children()[$counter]->date_add = '2019-01-21 17:53:51';
-                $blankXml[0]->children()[$counter]->date_upd = '2019-01-21 17:53:51';
-                $blankXml[0]->children()[$counter]->name->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-                $blankXml[0]->children()[$counter]->link_rewrite->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->slug;
-                $blankXml[0]->children()[$counter]->description->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-                $blankXml[0]->children()[$counter]->meta_title->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-                $blankXml[0]->children()[$counter]->meta_description->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-                $blankXml[0]->children()[$counter]->meta_keywords->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-                $counter++;
-                continue;
-            }
-
-            $dom_thing = dom_import_simplexml($blankXml);
-            $dom_node  = dom_import_simplexml($blankXml->category);
-            $dom_new   = $dom_thing->appendChild($dom_node->cloneNode(true));
-            $new_node  = simplexml_import_dom($dom_new);
-
-            $blankXml[0]->children()[$counter]->id_parent = $catManager->getCategoryParent($productCategory->id)['id'];
-            $blankXml[0]->children()[$counter]->active = 1;
-            $blankXml[0]->children()[$counter]->id_shop_default = 1;
-            $blankXml[0]->children()[$counter]->is_root_category = 0;
-            $blankXml[0]->children()[$counter]->position = 0;
-            $blankXml[0]->children()[$counter]->date_add = '2019-01-21 17:53:51';
-            $blankXml[0]->children()[$counter]->date_upd = '2019-01-21 17:53:51';
-            $blankXml[0]->children()[$counter]->name->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-            $blankXml[0]->children()[$counter]->link_rewrite->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->slug;
-            $blankXml[0]->children()[$counter]->description->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-            $blankXml[0]->children()[$counter]->meta_title->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-            $blankXml[0]->children()[$counter]->meta_description->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-            $blankXml[0]->children()[$counter]->meta_keywords->language[0][0] = $productCategory->productCategoryTranslation->findOneByKey('langId', 1)->name;
-            $counter++;
-        }
-
-        $opt = array('resource' => 'categories');
-        $opt['postXml'] = $blankXml->asXML();
-        $response = $this->ws->add($opt);
-
-        return true;
-    }
-
-    /**
-     * @param CObjectCollection $productCategories
+     * @param $productCategories
      * @return bool
      * @throws \Exception
      */
-    public function addNewCategories(CObjectCollection $productCategories){
+    public function addNewCategories($productCategories) : bool{
+
+        //if argument is object create objectCollection and then iterate it
+        if($productCategories instanceof CProductCategory){
+            $singleProductCategory = $productCategories;
+
+            unset($productCategories);
+            $productCategories = new CObjectCollection();
+            $productCategories->add($singleProductCategory);
+        }
 
         /** @var CRepo $pchpcR */
         $pchpcR = \Monkey::app()->repoFactory->create('ProductCategoryHasPrestashopCategory');
@@ -181,7 +127,7 @@ class CPrestashopCategory extends APrestashopMarketplace
      * @param array $res
      * @return array
      */
-    private function getRecursiveFatherProductCategory($productCategoryId, bool $init, array $res = []){
+    private function getRecursiveFatherProductCategory($productCategoryId, bool $init, array $res = []) : array {
 
         if($init) $res[] = $productCategoryId;
 
@@ -212,7 +158,7 @@ class CPrestashopCategory extends APrestashopMarketplace
      * @param CProductCategoryHasPrestashopCategory $pchpcFather
      * @return bool
      */
-    public function insertPrestashopCategory(CProductCategory $productCategory, CProductCategoryHasPrestashopCategory $pchpcFather){
+    private function insertPrestashopCategory(CProductCategory $productCategory, CProductCategoryHasPrestashopCategory $pchpcFather) : bool {
 
         try {
 
@@ -264,5 +210,54 @@ class CPrestashopCategory extends APrestashopMarketplace
         }
 
         return true;
+    }
+
+    /**
+     * @param CProductCategory $productCategory
+     * @return array
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
+     */
+    public function deletePrestahopCategory(CProductCategory $productCategory) : array {
+
+        /** @var CProductCategoryHasPrestashopCategory $productCategoryHasPrestashopCategory */
+        $productCategoryHasPrestashopCategory = $productCategory->productCategoryHasPrestashopCategory;
+
+        $prestashopCategoryId = $productCategoryHasPrestashopCategory->prestashopCategoryId;
+        $prestashopShop = new CPrestashopShop();
+
+        $shopIds = $prestashopShop->getAllPrestashopShops();
+
+        $res = [];
+        foreach ($shopIds as $shopId) {
+            try{
+                $this->ws->delete(array('resource' => 'categories', 'id' => $prestashopCategoryId, 'id_shop' => $shopId));
+                $res['deleted'][] = $shopId;
+            } catch (\Throwable $e){
+                $res['notDeleted'][] = $shopId;
+                \Monkey::app()->applicationLog('PrestashopCategory', 'Error', 'Error while deleting', $e->getMessage());
+                break;
+            }
+        }
+
+        if(empty($res['notDeleted'])){
+            $cm = \Monkey::app()->categoryManager;
+
+            $childIds = $cm->categories()->childrenIds($productCategory->id);
+
+            foreach ($childIds as $childId){
+
+                /** @var CRepo $prodCatHPrestaCatRepo */
+                $prodCatHPrestaCatRepo = \Monkey::app()->repoFactory->create('ProductCategoryHasPrestashopCategory');
+
+                /** @var CProductCategoryHasPrestashopCategory $prdCatHasPresCat */
+                $prdCatHasPresCat = $prodCatHPrestaCatRepo->findOneBy(['productCategoryId'=>$childId]);
+                $prdCatHasPresCat->delete();
+            }
+
+            $productCategoryHasPrestashopCategory->delete();
+        }
+
+        return $res;
     }
 }

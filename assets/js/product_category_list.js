@@ -153,6 +153,26 @@
                     key: res
                 });
                 bsModal.hide();
+
+                $.ajax({
+                    url: "/blueseal/xhr/PrestashopCategoryTreeController",
+                    method: "post",
+                    data: {
+                        id: res
+                    }
+                }).done(function () {
+                    new Alert({
+                        type: "success",
+                        message: "Categoria inserita correttamente all'interno di Prestashop"
+                    }).open();
+                }).fail(function () {
+                    new Alert({
+                        type: "error",
+                        message: "Errore durante l'inserimento della categoria dentro Prestahop"
+                    }).open();
+                    return false;
+                });
+                
                 return true;
             }).fail(function (res) {
                 bsModal.writeBody('ERRORE');
@@ -189,6 +209,26 @@
                 bsModal.writeBody('Categoria Eliminata');
                 bsModal.showOkBtn();
                 node.remove();
+
+                $.ajax({
+                    url: "/blueseal/xhr/PrestashopCategoryTreeController",
+                    method: "delete",
+                    data: {
+                        id: node.key
+                    }
+                }).done(function (resPrestashop) {
+                    new Alert({
+                        type: "success",
+                        message: resPrestashop
+                    }).open();
+                }).fail(function () {
+                    new Alert({
+                        type: "error",
+                        message: "Errore grave durante l'eliminazione della categoria dentro Prestahop"
+                    }).open();
+                    return false;
+                });
+
                 return true;
             }).fail(function (res) {
                 res = JSON.parse(res.responseText);
