@@ -298,7 +298,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     }
 
                     unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
-                    unlink($filenameremaster);
+                    //unlink($filenameremaster);
 
                 }
                 unlink($remotetoLocalDirectory . '/destination1125X1500.jpg');
