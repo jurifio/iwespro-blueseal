@@ -59,7 +59,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/temp-remaster/';
             $save_to_dir = '/media/sf_sites/PickyshopNew/temp-remaster';
             $path = 'shootImport/incoming2';
-            $remotepathTodo = 'shootImport/newage2/todo2/';
+            $remotepathTodo = 'shootImport/newage2/topublish2/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
 
@@ -68,7 +68,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             $save_to = '/home/pickyshop/public_html/temp-remaster/';
             $save_to_dir = '/home/pickyshop/public_html/temp-remaster';
             $path = 'shootImport/incoming';
-            $remotepathTodo = 'shootImport/newage2/todo/';
+            $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
         }
