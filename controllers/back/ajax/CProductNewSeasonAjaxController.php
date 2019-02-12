@@ -73,8 +73,9 @@ class CProductNewSeasonAjaxController extends AAjaxController
             }
 
             $sql = '
-            INSERT IGNORE INTO ProductHasTag (productId, productVariantId, tagId, position)
-              VALUES ' . $string;
+            INSERT INTO ProductHasTag (productId, productVariantId, tagId, position)
+              VALUES ' . $string . ' 
+              ON DUPLICATE KEY UPDATE position = ' . $position;
 
             \Monkey::app()->dbAdapter->query($sql, []);
 
