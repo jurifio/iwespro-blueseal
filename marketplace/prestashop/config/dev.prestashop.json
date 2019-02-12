@@ -8,5 +8,15 @@
         "url": "dev.prestapicky.com",
         "key": "CD7SD5RN261Q2578NPTSTGQED2NF6I3H",
         "debug": "false"
+    },
+    "product": {
+        "url": "dev.prestapicky.com",
+        "key": "LEQA82EUA1J5RYHBMMNZA6E6FBUABWKA",
+        "debug": "false"
+    },
+    "image": {
+        "url": "dev.prestapicky.com",
+        "key": "79DDZNNTYFSGDLKKEU7W42FW76DKTZAD",
+        "debug": "false"
     }
 }

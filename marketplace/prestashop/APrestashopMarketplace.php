@@ -50,6 +50,12 @@ abstract class APrestashopMarketplace
             case 'CPrestashopShop':
                 $configSection = 'shop';
                 break;
+            case 'CPrestashopProduct':
+                $configSection = 'product';
+                break;
+            case 'CPrestashopImage':
+            $configSection = 'image';
+            break;
         }
 
         $configConstructor = $this->config->fetchAll($configSection);
