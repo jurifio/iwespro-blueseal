@@ -59,7 +59,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/temp-remaster/';
             $save_to_dir = '/media/sf_sites/PickyshopNew/temp-remaster';
             $path = 'shootImport/incoming2';
-            $remotepathTodo = 'shootImport/newage2/topublish2/';
+            $remotepathTodo = 'shootImport/newage2/topublish_dev/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
 
