@@ -260,6 +260,8 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                         imagejpeg($destination1, $filenameremaster);
                         ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
                         //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
+                        unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
+                        unlink($filenameremaster);
                     }else{
                         imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
                         ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
@@ -274,11 +276,11 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
                         imagejpeg($destination1, $filenameremaster);
                         ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
-
+                        unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
+                       // unlink($filenameremaster);
                     }
 
-                    unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
-                    unlink($filenameremaster);
+
 
                 }
                 unlink($remotetoLocalDirectory . '/destination1125X1500.jpg');

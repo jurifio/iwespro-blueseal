@@ -72,11 +72,12 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
         $sql = "SELECT invoiceText as invoiceText,
                       invoiceDate as invoiceDate,
                       orderId as orderId,
-                      concat(invoiceNumber,'/',invoiceType,'/',invoiceYear) as numberInvoice
+                      concat(invoiceNumber,'/',invoiceType,'/',invoiceYear) as numberInvoice,
+                      invoiceType as invoiceType
                       
               FROM Invoice 
                 
-                WHERE invoiceDate between '" . $dateFilter . " 00:00:00' and '" . $dateFilter . " 23:59:59' ";
+                WHERE invoiceDate between '" . $dateFilter . " 00:00:00' and '" . $dateFilter . " 23:59:59' and invoiceType='K'";
         $invoiceText='';
         /** @var CRepo $orderRepo */
         $orderRepo=\Monkey::app()->repoFactory->create('Order');
@@ -85,6 +86,9 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
         $testolineadimarmo='';
         $orderLineTable='';
         $resultTextInvoice = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
+        $orderTot=0;
+        $orderVatTot=0;
+
         forEach ($resultTextInvoice as $resultTextInvoices) {
             $stringInvoice=$resultTextInvoices['invoiceText'];
             $invoiceText .= get_string_between($stringInvoice, '<!--start-->', '<!--end-->');
@@ -94,19 +98,24 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
             $customerName=$customerDetail->name.' '.$customerDetail->surname.' '.$customerDetail->company;
             $orderId=$order->id;
             $orderLine=$orderLineRepo->findBy(['orderId'=>$orderId]);
+            $orderTot+=$order->netTotal;
+            $orderVatTot+=$order->vat;
 
+
+$numeropezzi=0;
             foreach ($orderLine as $orderLines) {
                  $productSku = \bamboo\domain\entities\CProductSku::defrost($orderLines->frozenProduct);
 
 
                                 $iscurrentProductSku=$productSku->productId."-".$productSku->productVariantId;
+                $numeropezzi=$numeropezzi+1;
 
 
-                $testolineadimarmo =$testolineadimarmo.'<tr><td>' .$resultTextInvoices['numberInvoice'].'</td><td>'.$orderId.'</td><td>'.$customerName.'</td><td>'.$iscurrentProductSku.'</td><td>1</td><td>'. money_format('%.2n', $orderLines->netPrice) . '&euro;'.'</td></tr>';
             }
-
+            $testolineadimarmo =$testolineadimarmo.'<tr><td class="text-center small">'.$resultTextInvoices['numberInvoice'].'</td><td class="text-center small">'.$orderId.'</td><td class="text-center small">'.$customerName.'</td><td class="text-center small">'.$numeropezzi.'</td><td class="text-center small">'. money_format('%.2n', $order->netTotal) . '&euro;'.'</td></tr>';
 
         }
+        $orderImpTot= $orderTot - $orderVatTot;
 
 
 
@@ -128,7 +137,10 @@ class CVatRegisterPrintController extends ARestrictedAccessRootController
                     'groupXUeTextInvoice'=> $groupXUeTextInvoice,
                     'invoiceText'=>$invoiceText,
                     'testolineadimarmo'=>$testolineadimarmo,
-
+                    'logo' => $this->app->cfg()->fetch("miscellaneous", "logo"),
+                    'orderImpTot'=>$orderImpTot,
+                    'orderVatTot' => $orderVatTot,
+                    'orderTot'=>$orderTot,
                     'page' => $this->page,
                     'logo' => $this->app->cfg()->fetch("miscellaneous", "logo"),
                     'fiscalData' => $this->app->cfg()->fetch("miscellaneous", "fiscalData"),

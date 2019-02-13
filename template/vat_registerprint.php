@@ -21,6 +21,12 @@
                 height: 1100px;
                 overflow: hidden;
             }
+            .bel {
+                position:relative;
+                margin-left: 0mm;
+                margin-right:0mm;
+                margin-top: 45pc;
+            }
 
             .container {
                 width: 100%;
@@ -278,86 +284,19 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <div align="center">Registro Rendiconto del giorno<?php
+            <div align="center"> <img width="235" height="47" alt="" class="invoice-logo"
+                                      data-src-retina=<?php echo $logo ?> data-src=<?php echo $logo ?> src=<?php echo $logo ?>></div>
+            <div align="center">Registro Rendiconto Ricevute Emesse del giorno <?php
                 echo $date;
                 ?> </div>
+
             <table class="table invoice-table m-t-0">
                 <thead>
                 <!--tabella prodotti-->
                 <tr>
-                    <th  class="text-center small">Data </th>
-                    <th colspan="2" class="text-center small">Ricevute<br>
-                                                  Imponibile<br>
-                                                  Iva<br>
-                                                  ToTale</th>
-
-                    <th colspan="2" class="text-center small">Fatture UE<br>
-                        Imponibile<br>
-                        Iva<br>
-                        ToTale</th>
-                    <th colspan="2" class="text-center small">Fatture ExtraUE<br>
-                        Imponibile<br>
-                        Iva<br>
-                        ToTale</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="text-center small">Corrispettivo</td>
-                    <td class="text-center small">Ricevute<br>
-                        Imponibile<br>
-                        Iva<br>
-                        ToTale</td>
-                    <td class="text-center small">Elenco Ricevute</td>
-                    <td class="text-center small">Fatture UE<br>
-                        Imponibile<br>
-                        Iva<br>
-                        ToTale</td>
-                    <td class="text-center small">Elenco Fatture UE</td>
-                    <td class="text-center small">Fatture ExtraUE<br>
-                        Imponibile<br>
-                        Iva<br>
-                        ToTale</td>
-                    <td class="text-center small">Elenco Fatture ExtraUE</td>
-
-
-                </tr>
-
-                <tr>
-                    <td class="text-center small"><?php echo $date;?></td>
-                    <td class="text-center small">
-                        <?php echo $totalUeNetReceipt;?><br>
-                        <?php echo $totalUeVatReceipt;?><br>
-                        <?php echo $totalUeReceipt;?></td>
-                    <td class="text-center small"><?php echo $groupUeTextReceipt;?></td>
-                    <td class="text-center small">
-                        <?php echo $totalUeNetInvoice;?><br>
-                        <?php echo $totalUeVatInvoice;?><br>
-                        <?php echo $totalUeInvoice;?></td>
-                    <td class="text-center small"><?php echo $groupUeTextInvoice;?></td>
-                    <td class="text-center small">
-                        <?php echo $totalXUeNetInvoice;?><br>
-                        <?php echo $totalXUeVatInvoice;?><br>
-                        <?php echo $totalXUeInvoice;?></td></td>
-                    <td class="text-center small"><?php echo $groupXUeTextInvoice;?></td>
-
-
-                </tr>
-
-                </tbody>
-
-
-
-            </table>
-            <table class="table invoice-table m-t-0">
-                <thead>
-                <!--tabella prodotti-->
-                <tr>
-                    <th  class="text-center small">Documento </th>
+                    <th  class="text-center small">Documento</th>
                     <th  class="text-center small">ordine</th>
                     <th  class="text-center small">Cliente</th>
-                    <th  class="text-center small">Prodotto</th>
                     <th  class="text-center small">Quantita'</th>
                     <th  class="text-center small">Importo</th>
                 </tr>
@@ -366,7 +305,33 @@
                 <?php echo $testolineadimarmo;?>
                 </tbody>
             </table>
+            <div class="bel">
+                <table class="table invoice-table m-t-0">
+                    <thead>
+                    <!--tabella prodotti-->
+                    <tr>
+
+                        <th colspan="2" class="text-center small">Totale Imponibile</th>
+                        <th colspan="2" class="text-center small">Iva</th>
+                        <th colspan="1" class="text-right small">Totale Ricevute Emesse</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td  colspan="2" class="text-center small"><?php echo money_format('%.2n', $orderImpTot) . '&euro;';?></td>
+                        <td  colspan="2" class="text-center small"><?php echo money_format('%.2n', $orderVatTot) . '&euro;';?></td>
+                        <td colspan="1" class="text-right small"><?php echo money_format('%.2n', $orderTot) . '&euro;';?></td>
+                    </tr>
+
+                    </tbody>
+
+
+
+                </table>
+            </div>
         </div>
+
 
     </div>
 </div>
