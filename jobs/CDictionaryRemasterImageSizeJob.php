@@ -282,7 +282,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                         //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
                     }else{
                         imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
-                        ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
+                        ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
                         $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
                         $source = imagecreatefromjpeg($filenameremaster);
                         list($width, $height) = getimagesize($filenameremaster);
