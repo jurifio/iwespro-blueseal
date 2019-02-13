@@ -296,11 +296,11 @@ class CInvoiceAjaxController extends AAjaxController
                         $i = 0;
                         $scontotot = 0;
                         $articoli=[];
-
+                        $ordinearticolo=0;
                         foreach ($order->orderLine as $orderLine) {
                             $idlineaordine=$i+1;
                             $idOrderLine = $orderLine->id;
-
+$ordinearticolo+1;
                             $productSku = CProductSku::defrost($orderLine->frozenProduct);
                             $codice=$orderLine->orderId."-".$orderLine->id;
                             $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
@@ -316,7 +316,7 @@ class CInvoiceAjaxController extends AAjaxController
                             $sconto = number_format(100*$sconto/$orderLine->activePrice,2);
                             $cod_iva="0";
                             $applica_ra_contributi="true";
-                            $ordine=$order->id;
+                            $ordine=$ordinearticolo;
                             $sconto_rosso="0";
                             $in_ddt=false;
                             $magazzino=true;
