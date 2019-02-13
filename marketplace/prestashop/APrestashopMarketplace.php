@@ -30,6 +30,7 @@ abstract class APrestashopMarketplace
     protected $config;
 
     protected $ws;
+    protected $resource;
 
     /**
      * APrestashopMarketplace constructor.
@@ -53,8 +54,8 @@ abstract class APrestashopMarketplace
             case 'CPrestashopProduct':
                 $configSection = 'product';
                 break;
-            case 'CPrestashopImage':
-            $configSection = 'image';
+            case 'CPrestashopManufacturer':
+            $configSection = 'manufacturer';
             break;
         }
 
@@ -62,6 +63,7 @@ abstract class APrestashopMarketplace
         $this->url = $configConstructor['url'];
         $this->key = $configConstructor['key'];
         $this->debug = $configConstructor['debug'];
+        $this->resource = $configConstructor['resource'];
 
         switch (ENV) {
             CASE 'dev':

@@ -2,21 +2,25 @@
     "category": {
         "url": "dev.prestapicky.com",
         "key": "SK16MRINAAJUVX6HNLBVM7ZJ1H5FXP48",
-        "debug": "false"
+        "resource": "categories",
+        "debug": false
+    },
+    "manufacturer": {
+        "url": "dev.prestapicky.com",
+        "key": "W5GJSFXX18DJBJJFJBVM4GEUTIC9Q4EL",
+        "resource": "manufacturers",
+        "debug": false
     },
     "shop": {
         "url": "dev.prestapicky.com",
         "key": "CD7SD5RN261Q2578NPTSTGQED2NF6I3H",
-        "debug": "false"
+        "resource": "shops",
+        "debug": false
     },
     "product": {
         "url": "dev.prestapicky.com",
         "key": "LEQA82EUA1J5RYHBMMNZA6E6FBUABWKA",
-        "debug": "false"
-    },
-    "image": {
-        "url": "dev.prestapicky.com",
-        "key": "79DDZNNTYFSGDLKKEU7W42FW76DKTZAD",
-        "debug": "false"
+        "resource": "products",
+        "debug": false
     }
 }

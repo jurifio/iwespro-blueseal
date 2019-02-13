@@ -249,6 +249,11 @@ class PrestaShopWebserviceTest
 		$request = self::executeRequest($urlDomain, array(CURLOPT_CUSTOMREQUEST => 'POST', CURLOPT_POSTFIELDS => $xml), $urlArgs);
 
 		self::checkStatusCode($request['status_code']);
+
+        if (strpos($request['response'], 'Content-Type') !== false) {
+            $request['response'] = explode("Content-Type: text/xml;charset=utf-8\r\n\r\n", $request['response'])[1];
+        }
+
 		return self::parseXML($request['response']);
 	}
 
