@@ -125,8 +125,8 @@ class CInvoiceAjaxController extends AAjaxController
                 $invoiceRepo->insert($invoiceNew);
                 $sectional=$number.'/'.$invoiceType;
                 $documentRepo=\Monkey::app()->repoFactory->create('Document');
-                /* codice per inserire all'interno della cartella document
-                 * $checkIfDocumentExist=$documentRepo->findOneBy(['number'=>$number,'year'=>$year]);
+                // codice per inserire all'interno della cartella document
+                 $checkIfDocumentExist=$documentRepo->findOneBy(['number'=>$number,'year'=>$year]);
                 if($checkIfDocumentExist == null){
                     $insertDocument=$documentRepo->getEmptyEntity();
                     $insertDocument->userId=$order->userId;
@@ -141,7 +141,7 @@ class CInvoiceAjaxController extends AAjaxController
                     $insertDocument->totalWithVat=$order->netTotal;
                     $insertDocument->year=$year;
                     $insertDocument->insert();
-                }*/
+                }
                 $order = $orderRepo->findOneBy(['id' => $orderId]);
             } catch (\Throwable $e) {
                 throw $e;
