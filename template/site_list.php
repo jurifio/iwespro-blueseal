@@ -97,6 +97,9 @@
         <bs-toolbar-button
                 data-remote="bs.dictionarysizeimage.run"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.getfattureincloud.list"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
