@@ -55,8 +55,11 @@ abstract class APrestashopMarketplace
                 $configSection = 'product';
                 break;
             case 'CPrestashopManufacturer':
-            $configSection = 'manufacturer';
-            break;
+                $configSection = 'manufacturer';
+                break;
+            case 'CPrestashopProductOptionValues':
+                $configSection = 'productOption';
+                break;
         }
 
         $configConstructor = $this->config->fetchAll($configSection);
@@ -87,6 +90,25 @@ abstract class APrestashopMarketplace
 
         $this->config = new CConfig($filePath);
         $this->config->load();
+    }
+
+    /**
+     * @return \SimpleXMLElement
+     * @throws \PrestaShopWebserviceException
+     */
+    public function getBlankSchema(): \SimpleXMLElement
+    {
+        return $this->ws->get(array('resource' => $this->resource . '/?schema=blank'));
+    }
+
+    /**
+     * @param int $id
+     * @return \SimpleXMLElement
+     * @throws \PrestaShopWebserviceException
+     */
+    public function getResourceFromId(int $id): \SimpleXMLElement
+    {
+        return $this->ws->get(array('resource' => $this->resource, 'id' => $id));
     }
 
 }

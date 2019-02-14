@@ -8,8 +8,6 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\entities\CProductBrandHasPrestashopManufacturer;
-use bamboo\domain\entities\CProductCategory;
-use bamboo\domain\entities\CProductCategoryHasPrestashopCategory;
 
 
 /**
@@ -34,63 +32,77 @@ class CPrestashopManufacturer extends APrestashopMarketplace
      */
     public function getManufacturesBlankSchema(): \SimpleXMLElement
     {
-        $xml = $this->ws->get(array('resource' => 'manufacturers/?schema=blank'));
+        $xml = $this->ws->get(array('resource' => $this->resource . '/?schema=blank'));
         return $xml;
     }
 
     /**
      * @param $productBrands
      * @return bool
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
      */
     public function addNewManufacturers($productBrands): bool
     {
         //if argument is object create objectCollection and then iterate it
         if ($productBrands instanceof CProductBrand) {
-            $singleProductCategory = $productBrands;
+            $singleProductBrand = $productBrands;
 
             unset($productBrands);
             $productBrands = new CObjectCollection();
-            $productBrands->add($singleProductCategory);
+            $productBrands->add($singleProductBrand);
         }
+
+        $prestashopShop = new CPrestashopShop();
+        $shopIds = $prestashopShop->getAllPrestashopShops();
 
         /** @var CProductBrand $productBrand */
         foreach ($productBrands as $productBrand) {
 
-            try {
+            foreach ($shopIds as $shopId) {
+                try {
 
-                if ($this->checkIfExistManufacturer($productBrand)) continue;
+                    if (!$this->checkIfExistManufacturer($productBrand)) {
 
-                /** @var \SimpleXMLElement $blankXml */
-                $blankXml = $this->getManufacturesBlankSchema();
+                        /** @var \SimpleXMLElement $blankXml */
+                        $blankXml = $this->getManufacturesBlankSchema();
 
-                $resources = $blankXml->children()->children();
+                        $resources = $blankXml->children()->children();
 
-                $resources->active = 1;
-                $resources->name = $productBrand->name;
-                $resources->description->language[0][0] = $productBrand->name;;
-                $resources->short_description->language[0][0] = $productBrand->name;;
-                $resources->meta_title->language[0][0] = $productBrand->name;;
-                $resources->meta_description->language[0][0] = $productBrand->name;;
-                $resources->meta_keywords->language[0][0] = $productBrand->name;;
+                        $resources->active = 1;
+                        $resources->name = $productBrand->name;
+                        $resources->description->language[0][0] = $productBrand->name;
+                        $resources->short_description->language[0][0] = $productBrand->name;
+                        $resources->meta_title->language[0][0] = $productBrand->name;
+                        $resources->meta_description->language[0][0] = $productBrand->name;
+                        $resources->meta_keywords->language[0][0] = $productBrand->name;
 
-                $opt = array('resource' => 'manufacturers');
-                $opt['postXml'] = $blankXml->asXML();
-                $response = $this->ws->add($opt);
+                        $opt = array('resource' => $this->resource, 'id_shop' => $shopId);
+                        $opt['postXml'] = $blankXml->asXML();
+                        $response = $this->ws->add($opt);
 
 
-                if ($response instanceof \SimpleXMLElement) {
-                    $prestashopManufacturerId = (int)$response->children()->children()->id[0];
+                        if ($response instanceof \SimpleXMLElement) {
+                            $prestashopManufacturerId = (int)$response->children()->children()->id[0];
 
-                    /** @var CProductBrandHasPrestashopManufacturer $pbhpmNew */
-                    $pbhpmNew = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->getEmptyEntity();
-                    $pbhpmNew->productBrandId = $productBrand->id;
-                    $pbhpmNew->prestashopManufacturerId = $prestashopManufacturerId;
-                    $pbhpmNew->smartInsert();
-                } else throw new BambooException('Prestashop response ProductCategory error');
+                            /** @var CProductBrandHasPrestashopManufacturer $pbhpmNew */
+                            $pbhpmNew = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->getEmptyEntity();
+                            $pbhpmNew->productBrandId = $productBrand->id;
+                            $pbhpmNew->prestashopManufacturerId = $prestashopManufacturerId;
+                            $pbhpmNew->smartInsert();
+                        } else throw new BambooException('Prestashop response ProductCategory error');
 
-            } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('PrestashopManufacturers', 'Error', 'Errore while insert', $e->getMessage());
-                return false;
+                    } else {
+                        $opt = [];
+                        $opt['id_shop'] = $shopId;
+                        $this->updatePrestashopManufacturer($productBrand, [], $opt);
+                }
+
+
+                } catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('PrestashopManufacturers', 'Error', 'Errore while insert', $e->getMessage());
+                    return false;
+                }
             }
         }
 
@@ -116,7 +128,10 @@ class CPrestashopManufacturer extends APrestashopMarketplace
     public function checkIfExistManufacturer(CProductBrand $productBrand)
     {
         //check if data are consistent between Prestashop database and Pickyshop database
-        if (!is_null($productBrand->productBrandHasPrestashopManufacturer)) {
+
+        $existInPrestashop = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->findOneBy(['productBrandId'=>$productBrand->id]);
+
+        if (!is_null($existInPrestashop)) {
             $manufacturerExist = $this->getManufacturer($productBrand->productBrandHasPrestashopManufacturer->prestashopManufacturerId);
 
             if (empty($manufacturerExist->children()->children())) {
@@ -153,5 +168,43 @@ class CPrestashopManufacturer extends APrestashopMarketplace
         $prodBrHPrestaMan->delete();
 
         return true;
+    }
+
+    /**
+     * @param CProductBrand $productBrand
+     * @param array $fields
+     * @param array $opt
+     * @return bool
+     * @throws \PrestaShopWebserviceException
+     */
+
+    public function updatePrestashopManufacturer(CProductBrand $productBrand, array $fields, array $opt = [])
+    {
+
+        if (isset($opt['resource']) || isset($opt['putXml']) || isset($opt['id'])) return false;
+
+        $id = $productBrand->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
+
+        $xml = $this->getManufacturer($id);
+        $resources = $xml->children()->children();
+
+        if (!empty($fields)) {
+            foreach ($fields as $nameField => $valueField) {
+                $resources->{$nameField} = $valueField;
+            }
+        }
+
+        unset($resources->link_rewrite);
+
+        //set static opt
+        $opt['resource'] = $this->resource;
+        $opt['putXml'] = $xml->asXML();
+        $opt['id'] = $id;
+
+        //set passed opt
+        $xml = $this->ws->edit($opt);
+
+        return true;
+
     }
 }

@@ -308,7 +308,8 @@ class PrestaShopWebserviceTest
 			throw new PrestaShopWebserviceException('Bad parameters given');
 
 		$urlDomain = explode('/api/', $url)[0];
-		$urlArgs = '/api/'. $options['resource'];
+        $id = isset($options['id']) ? '/' . $options['id'] : '';
+		$urlArgs = '/api/'. $options['resource'] . $id;
 		$request = self::executeRequest($urlDomain, array(CURLOPT_CUSTOMREQUEST => 'GET'), $urlArgs);
 
 		self::checkStatusCode($request['status_code']);// check the response validity
@@ -376,6 +377,11 @@ class PrestaShopWebserviceTest
         $urlArgs = explode('.com', $url)[1];
 		$request = self::executeRequest($urlDomain,  array(CURLOPT_CUSTOMREQUEST => 'PUT', CURLOPT_POSTFIELDS => $xml), $urlArgs);
 		self::checkStatusCode($request['status_code']);// check the response validity
+
+        if (strpos($request['response'], 'Content-Type') !== false) {
+            $request['response'] = explode("Content-Type: text/xml;charset=utf-8\r\n\r\n", $request['response'])[1];
+        }
+
 		return self::parseXML($request['response']);
 	}
 

@@ -7,7 +7,7 @@
     },
     "manufacturer": {
         "url": "dev.prestapicky.com",
-        "key": "W5GJSFXX18DJBJJFJBVM4GEUTIC9Q4EL",
+        "key": "Q5TQG7ZHFJCVANGR1NHA7P5DMBIQ4AP4",
         "resource": "manufacturers",
         "debug": false
     },
@@ -21,6 +21,12 @@
         "url": "dev.prestapicky.com",
         "key": "LEQA82EUA1J5RYHBMMNZA6E6FBUABWKA",
         "resource": "products",
+        "debug": false
+    },
+    "productOption": {
+        "url": "dev.prestapicky.com",
+        "key": "9LUEDZHTTJLK19A92Q2QRC2A2UTPGZC5",
+        "resource": "product_option_values",
         "debug": false
     }
 }
