@@ -2846,6 +2846,31 @@
                 "DELETE",
                 "PUT"
             ]
+        },
+        {
+            "pattern": "/blueseal/manage-fixed-page(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/manage-fixed-page/:id/:langId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageDetailListController"
+            },
+            "filters": {
+                "id": ":?[A-Za-z0-9_-]+",
+                "langId": ":?[A-Za-z0-9_-]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         }
     ]
 }
