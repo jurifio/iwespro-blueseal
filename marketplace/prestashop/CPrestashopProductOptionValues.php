@@ -9,6 +9,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\entities\CProductBrandHasPrestashopManufacturer;
 use bamboo\domain\entities\CProductColorGroup;
+use bamboo\domain\entities\CProductColorGroupHasPrestashopColorOption;
 
 
 /**
@@ -28,7 +29,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 {
 
     CONST PRESTASHOP_SIZE = 1;
-    CONST PRESTASHOP_COLOR = 1;
+    CONST PRESTASHOP_COLOR = 2;
 
     /**
      * @param $productColorGroups
@@ -45,13 +46,13 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
             $productColorGroups->add($singleProductColorGroup);
         }
 
-       // $prestashopShop = new CPrestashopShop();
-       // $shopIds = $prestashopShop->getAllPrestashopShops();
+        $prestashopShop = new CPrestashopShop();
+        $shopIds = $prestashopShop->getAllPrestashopShops();
 
         /** @var CProductColorGroup $productColorGroup */
         foreach ($productColorGroups as $productColorGroup) {
 
-          //  foreach ($shopIds as $shopId) {
+            foreach ($shopIds as $shopId) {
                 try {
 
                     if (!$this->checkIfExistColor($productColorGroup)) {
@@ -70,24 +71,28 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
                         $response = $this->ws->add($opt);
 
 
-                        //if ($response instanceof \SimpleXMLElement) {
-                        //    $prestashopManufacturerId = (int)$response->children()->children()->id[0];
+                        if ($response instanceof \SimpleXMLElement) {
+                            $prestashopColorId = (int)$response->children()->children()->id[0];
 
-                            /** @var CProductBrandHasPrestashopManufacturer $pbhpmNew */
-                        //    $pbhpmNew = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->getEmptyEntity();
-                        //    $pbhpmNew->productBrandId = $productBrand->id;
-                        //    $pbhpmNew->prestashopManufacturerId = $prestashopManufacturerId;
-                        //    $pbhpmNew->smartInsert();
-                        //} else throw new BambooException('Prestashop response ProductCategory error');
+                            /** @var CProductColorGroupHasPrestashopColorOption $pchpcNew */
+                            $pchpcNew = \Monkey::app()->repoFactory->create('ProductColorGroupHasPrestashopColorOption')->getEmptyEntity();
+                            $pchpcNew->productColorGroupId = $productColorGroup->id;
+                            $pchpcNew->prestashopColorId = $prestashopColorId;
+                            $pchpcNew->smartInsert();
+                        } else throw new BambooException('Prestashop response ProductColor error');
 
+                    } else {
+                        $opt = [];
+                        $opt['id_shop'] = $shopId;
+                        $this->updatePrestashopColor($productColorGroup, [], $opt);
                     }
 
 
                 } catch (\Throwable $e) {
-                    \Monkey::app()->applicationLog('PrestashopManufacturers', 'Error', 'Errore while insert', $e->getMessage());
+                    \Monkey::app()->applicationLog('PrestashopColor', 'Error', 'Errore while insert', $e->getMessage());
                     return false;
                 }
-           // }
+            }
         }
 
         return true;
@@ -105,7 +110,8 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
         $existInPrestashop = \Monkey::app()->repoFactory->create('ProductColorGroupHasPrestashopColorOption')->findOneBy(['productColorGroupId'=>$productColorGroup->id]);
 
         if (!is_null($existInPrestashop)) {
-            $colorOptionExist = $this->getResourceFromId($productColorGroup->productColorGroupHasPrestashopColorOption->prestashopColorOptionValueId);
+
+            $colorOptionExist = $this->getResourceFromId($productColorGroup->productColorGroupHasPrestashopColorOption->prestashopColorId);
 
             if (empty($colorOptionExist->children()->children())) {
                 \Monkey::app()->applicationLog('PrestashopProductOptionValues', 'Error', 'Dangerous error while try to insert color', $productColorGroup->id . ' on Pickyshop database but not in Prestashop database');
@@ -117,48 +123,14 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
         return false;
     }
 
-    /**
-     * @param CProductBrand $productBrand
-     * @return bool
-     * @throws BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    public function deletePrestahopManufacturer(CProductBrand $productBrand): bool
-    {
-        try {
-            $this->ws->delete(array('resource' => $this->resource, 'id' => $productBrand->productBrandHasPrestashopManufacturer->prestashopManufacturerId));
-        } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('PrestashopBrand', 'Error', 'Error while deleting', $e->getMessage());
-        }
-
-
-        /** @var CRepo $prodBrHPrestaManRepo */
-        $prodBrHPrestaManRepo = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer');
-
-        /** @var CProductBrandHasPrestashopManufacturer $prodBrHPrestaMan */
-        $prodBrHPrestaMan = $prodBrHPrestaManRepo->findOneBy(['productBrandId' => $productBrand->id]);
-        $prodBrHPrestaMan->delete();
-
-        return true;
-    }
-
-    /**
-     * @param CProductBrand $productBrand
-     * @param array $fields
-     * @param array $opt
-     * @return bool
-     * @throws \PrestaShopWebserviceException
-     */
-
-    public function updatePrestashopManufacturer(CProductBrand $productBrand, array $fields, array $opt = [])
+    public function updatePrestashopColor(CProductColorGroup $productColorGroup, array $fields, array $opt = [])
     {
 
         if (isset($opt['resource']) || isset($opt['putXml']) || isset($opt['id'])) return false;
 
-        $id = $productBrand->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
+        $id = $productColorGroup->productColorGroupHasPrestashopColorOption->prestashopColorId;
 
-        $xml = $this->getManufacturer($id);
+        $xml = $this->getResourceFromId($id);
         $resources = $xml->children()->children();
 
         if (!empty($fields)) {
@@ -180,4 +152,5 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
         return true;
 
     }
+
 }

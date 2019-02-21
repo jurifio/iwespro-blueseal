@@ -90,7 +90,7 @@ class CPrestashopManufacturer extends APrestashopMarketplace
                             $pbhpmNew->productBrandId = $productBrand->id;
                             $pbhpmNew->prestashopManufacturerId = $prestashopManufacturerId;
                             $pbhpmNew->smartInsert();
-                        } else throw new BambooException('Prestashop response ProductCategory error');
+                        } else throw new BambooException('Prestashop response ProductManufacturer error');
 
                     } else {
                         $opt = [];
