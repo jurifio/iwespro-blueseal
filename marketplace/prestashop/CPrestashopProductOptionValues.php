@@ -4,12 +4,10 @@
 namespace bamboo\blueseal\marketplace\prestashop;
 
 use bamboo\core\base\CObjectCollection;
-use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
-use bamboo\domain\entities\CProductBrand;
-use bamboo\domain\entities\CProductBrandHasPrestashopManufacturer;
 use bamboo\domain\entities\CProductColorGroup;
 use bamboo\domain\entities\CProductColorGroupHasPrestashopColorOption;
+use bamboo\domain\entities\CProductSize;
 
 
 /**
@@ -34,6 +32,8 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
     /**
      * @param $productColorGroups
      * @return bool
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
      */
     public function addNewColorsOptionValues($productColorGroups): bool
     {
@@ -114,7 +114,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
             $colorOptionExist = $this->getResourceFromId($productColorGroup->productColorGroupHasPrestashopColorOption->prestashopColorId);
 
             if (empty($colorOptionExist->children()->children())) {
-                \Monkey::app()->applicationLog('PrestashopProductOptionValues', 'Error', 'Dangerous error while try to insert color', $productColorGroup->id . ' on Pickyshop database but not in Prestashop database');
+                \Monkey::app()->applicationLog('PrestashopProductOptionValues (COLOR)', 'Error', 'Dangerous error while try to insert color', $productColorGroup->id . ' on Pickyshop database but not in Prestashop database');
                 throw new BambooException($productColorGroup->id . ' on Pickyshop database but not in Prestashop database');
             }
             return true;
@@ -123,6 +123,13 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
         return false;
     }
 
+    /**
+     * @param CProductColorGroup $productColorGroup
+     * @param array $fields
+     * @param array $opt
+     * @return bool
+     * @throws \PrestaShopWebserviceException
+     */
     public function updatePrestashopColor(CProductColorGroup $productColorGroup, array $fields, array $opt = [])
     {
 
@@ -139,7 +146,6 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
             }
         }
 
-        unset($resources->link_rewrite);
 
         //set static opt
         $opt['resource'] = $this->resource;
@@ -149,8 +155,139 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
         //set passed opt
         $xml = $this->ws->edit($opt);
 
-        return true;
+        if($xml instanceof \SimpleXMLElement) return true;
 
+        return false;
+    }
+
+
+    /**
+     * @param $productSizes
+     * @return bool
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
+     */
+    public function addNewSizesOptionValues($productSizes): bool
+    {
+        //if argument is object create objectCollection and then iterate it
+        if ($productSizes instanceof CProductSize) {
+            $singleProductSize = $productSizes;
+
+            unset($productSizes);
+            $productSizes = new CObjectCollection();
+            $productSizes->add($singleProductSize);
+        }
+
+        $prestashopShop = new CPrestashopShop();
+        $shopIds = $prestashopShop->getAllPrestashopShops();
+
+        /** @var CProductSize $productSize */
+        foreach ($productSizes as $productSize) {
+
+            foreach ($shopIds as $shopId) {
+                try {
+
+                    if (!$this->checkIfExistSize($productSize)) {
+
+                        /** @var \SimpleXMLElement $blankXml */
+                        $blankXml = $this->getBlankSchema();
+
+                        $resources = $blankXml->children()->children();
+
+                        $resources->id_attribute_group = $this::PRESTASHOP_SIZE;
+                        $resources->name->language[0][0] = $productSize->name;
+
+                        $opt = array('resource' => $this->resource);
+                        $opt['postXml'] = $blankXml->asXML();
+                        $response = $this->ws->add($opt);
+
+
+                        if ($response instanceof \SimpleXMLElement) {
+                            $prestashopSizeId = (int)$response->children()->children()->id[0];
+
+                            /** @var CProductSizeHasPrestashopSizeOption $pshpsNew */
+                            $pshpsNew = \Monkey::app()->repoFactory->create('ProductSizeHasPrestashopSizeOption')->getEmptyEntity();
+                            $pshpsNew->productSizeId = $productSize->id;
+                            $pshpsNew->prestashopSizeId = $prestashopSizeId;
+                            $pshpsNew->smartInsert();
+                        } else throw new BambooException('Prestashop response ProductSize error');
+
+                    } else {
+                        $opt = [];
+                        $opt['id_shop'] = $shopId;
+                        $this->updatePrestashopSize($productSize, [], $opt);
+                    }
+
+
+                } catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('PrestashopColor', 'Error', 'Errore while insert', $e->getMessage());
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param CProductSize $productSize
+     * @return bool
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
+     */
+    public function checkIfExistSize(CProductSize $productSize)
+    {
+        //check if data are consistent between Prestashop database and Pickyshop database
+        $existInPrestashop = \Monkey::app()->repoFactory->create('ProductSizeHasPrestashopSizeOption')->findOneBy(['productSizeId'=>$productSize->id]);
+
+        if (!is_null($existInPrestashop)) {
+
+            $sizeExist = $this->getResourceFromId($productSize->productSizeHasPrestashopSizeOption->prestashopSizeId);
+
+            if (empty($sizeExist->children()->children())) {
+                \Monkey::app()->applicationLog('PrestashopProductOptionValues (SIZE)', 'Error', 'Dangerous error while try to insert color', $productSize->id . ' on Pickyshop database but not in Prestashop database');
+                throw new BambooException($productSize->id . ' on Pickyshop database but not in Prestashop database');
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param CProductSize $productSize
+     * @param array $fields
+     * @param array $opt
+     * @return bool
+     * @throws \PrestaShopWebserviceException
+     */
+    public function updatePrestashopSize(CProductSize $productSize, array $fields, array $opt = [])
+    {
+
+        if (isset($opt['resource']) || isset($opt['putXml']) || isset($opt['id'])) return false;
+
+        $id = $productSize->productSizeHasPrestashopSizeOption->prestashopSizeId;
+
+        $xml = $this->getResourceFromId($id);
+        $resources = $xml->children()->children();
+
+        if (!empty($fields)) {
+            foreach ($fields as $nameField => $valueField) {
+                $resources->{$nameField} = $valueField;
+            }
+        }
+
+        //set static opt
+        $opt['resource'] = $this->resource;
+        $opt['putXml'] = $xml->asXML();
+        $opt['id'] = $id;
+
+        //set passed opt
+        $xml = $this->ws->edit($opt);
+
+        if($xml instanceof \SimpleXMLElement) return true;
+
+        return false;
     }
 
 }
