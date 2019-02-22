@@ -58,19 +58,15 @@ class CDictionarySizeEditAjaxController extends AAjaxController
     public function get()
     {
         $shopId = $this->app->router->request()->getRequestData('shop');
-        $sql = "select `DictionarySize`.`shopId` AS `shopId`,
-                  `DictionarySize`.`term` AS `term`,
-                  `DictionarySize`.`productSizeId` AS `foreign`,
-                  `DictionarySize`.`categoryFriend` AS `termCategory`
-               from `DictionarySize`";
-        $datatable = new CDataTables($sql, ['shopId', 'term'], $_GET, true);
-        $datatable->addCondition('shopId', [$shopId]);
+        $sql = "select `DictionarySize`.`shopId` AS `shopId`,`DictionarySize`.`term` AS `term`,`DictionarySize`.`productSizeId` AS `foreign` from `DictionarySize`";
+        $datatable = new CDataTables($sql,['shopId','term'],$_GET,true);
+        $datatable->addCondition('shopId',[$shopId]);
 
         if (!empty($this->authorizedShops)) {
-            $datatable->addCondition('shopId', $this->authorizedShops);
+            $datatable->addCondition('shopId',$this->authorizedShops);
         }
 
-        $sizes = \Monkey::app()->repoFactory->create('DictionarySize')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $sizes = \Monkey::app()->repoFactory->create('DictionarySize')->em()->findBySql($datatable->getQuery(),$datatable->getParams());
         $count = $this->em->sizes->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = $this->em->sizes->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -80,81 +76,54 @@ class CDictionarySizeEditAjaxController extends AAjaxController
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
 
-
         $productSizes = \Monkey::app()->repoFactory->create('ProductSize')->findAll("limit 99999", "order by name");
 
-        /** @var CRepo $productSizeGroupHasProductSizeRepo */
-        $productSizeGroupHasProductSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
-
         $i = 0;
-        foreach ($sizes as $size) {
+        foreach($sizes as $size) {
             $html = '<div class="form-group form-group-default selectize-enabled full-width">';
-
-                $html .= '<select class="full-width selectpicker" placeholder="Seleziona la taglia" data-init-plugin="selectize" data-action="' . $this->urls['base'] . 'xhr/DictionarySizeEditAjaxController" data-pid="' . $size->shopId . '_' . $size->term . '" tabindex="-1" title="sizeId" name="sizeId" id="sizeId">';
-                $html .= '<option value="' . null . '" required ></option>';
-
-                /** @var CProductSize $productSize */
+            $html .= '<select class="full-width selectpicker" placeholder="Seleziona la taglia" data-init-plugin="selectize" data-action="' . $this->urls['base'] .'xhr/DictionarySizeEditAjaxController" data-pid="' . $size->shopId . '_' . $size->term . '" tabindex="-1" title="sizeId" name="sizeId" id="sizeId">';
+            $html .= '<option value="' . null . '" required ></option>';
             foreach ($productSizes as $productSize) {
-
-                $productSizeGroupHasProductSizeCollection = $productSizeGroupHasProductSizeRepo->findBySql('
-                        SELECT *
-                        FROM ProductSizeGroupHasProductSize psghps
-                        WHERE psghps.productSizeId = ?
-                        GROUP BY psghps.productSizeGroupId', [$productSize->id]);
-                    if (!$productSizeGroupHasProductSizeCollection->isEmpty()) {
-                        /** @var CProductSizeGroupHasProductSize $productSizeGroupHasProductSize */
-                        foreach($productSizeGroupHasProductSizeCollection as $productSizeGroupHasProductSize){
-
-                            //$productSizeGroup = $productSizeGroups->productSizeGroupId;
-                            $locale = $productSizeGroupHasProductSize->productSizeGroup->locale;
-                            $ProductSizeMacroGroupName = $productSizeGroupHasProductSize->productSizeGroup->productSizeMacroGroup->name;
-
-                            $html .= '<option value="' . $productSize->id . '" required ';
-                            if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
-                                $html .= 'selected="selected"';
-                            }
-                            $html .= '>' . $productSize->name . ' || ' . $ProductSizeMacroGroupName . ' || ' . $locale.'</option>';
-                        }
-                    } else {
-                        continue;
-                    }
+                $html .= '<option value="' . $productSize->id . '" required ';
+                if ((!is_null($size->productSizeId)) && ($productSize->id == $size->productSizeId)) {
+                    $html .= 'selected="selected"';
                 }
-
-                $html .= '</select>';
-                $html .= '</div>';
-
-                $response['data'][$i]["DT_RowId"] = 'row__' . $size->productSizeId;
-                $response['data'][$i]["DT_RowClass"] = 'colore';
-                $response['data'][$i]['term'] = $size->term;
-                $response['data'][$i]['termCategory'] = $size->categoryFriend;
-                $response['data'][$i]['foreign'] = $html;
-
-                $i++;
+                $html .= '>' . $productSize->name . '</option>';
             }
+            $html .= '</select>';
+            $html .= '</div>';
 
-            return json_encode($response);
+            $response['data'][$i]["DT_RowId"] = 'row__'.$size->productSizeId;
+            $response['data'][$i]["DT_RowClass"] = 'colore';
+            $response['data'][$i]['term'] = $size->term;
+            $response['data'][$i]['foreign'] = $html;
+
+            $i++;
         }
 
-        public
-        function put()
-        {
-            $sizeId = $this->app->router->request()->getRequestData('sizeId');
-            $id = $this->app->router->request()->getRequestData('id');
-            $names = explode('_', $id);
-            $shopId = $names[0];
-            $term = $names[1];
+        return json_encode($response);
+    }
 
-            \Monkey::app()->repoFactory->beginTransaction();
-            try {
-                $productSize = \Monkey::app()->repoFactory->create('DictionarySize')->findOneBy(['shopId' => $shopId, 'term' => $term]);
+    public
+    function put()
+    {
+        $sizeId = $this->app->router->request()->getRequestData('sizeId');
+        $id = $this->app->router->request()->getRequestData('id');
+        $names = explode('_', $id);
+        $shopId = $names[0];
+        $term = $names[1];
 
-                $productSize->productSizeId = $sizeId;
-                $productSize->update();
+        \Monkey::app()->repoFactory->beginTransaction();
+        try {
+            $productSize = \Monkey::app()->repoFactory->create('DictionarySize')->findOneBy(['shopId' => $shopId, 'term' => $term]);
 
-                \Monkey::app()->repoFactory->commit();
-                return true;
-            } catch (\Throwable $e) {
-                \Monkey::app()->repoFactory->rollback();
-            }
+            $productSize->productSizeId = $sizeId;
+            $productSize->update();
+
+            \Monkey::app()->repoFactory->commit();
+            return true;
+        } catch (\Throwable $e) {
+            \Monkey::app()->repoFactory->rollback();
         }
     }
+}

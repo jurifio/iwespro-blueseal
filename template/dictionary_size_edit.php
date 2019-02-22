@@ -33,10 +33,6 @@
                                data-display-length="50">
                             <thead>
                             <tr>
-                                <th data-slug="termCategory"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center sorting">Categoria Friend</th>
                                 <th data-slug="term"
                                     data-searchable="true"
                                     data-orderable="true"
