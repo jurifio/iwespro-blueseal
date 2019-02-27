@@ -89,7 +89,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
                         foreach ($pickyDetails as $pickyDetail) {
                             //search if detail is already in matching table
-                            if(!$this->checkIfExistDetail($productDetailLabel,$pickyDetail)){
+                            if (!$this->checkIfExistDetail($productDetailLabel, $pickyDetail)) {
 
                             } else continue;
 
@@ -175,22 +175,15 @@ class CPrestashopFeatures extends APrestashopMarketplace
             }
 
             return true;
-        } else {
-            //if not exist with the same label search with another to retrive the correct prestashop feature value id
-            /** @var CProductDetailsHasPrestashopFeatures $existInPrestashop */
-            $existInPrestashop = \Monkey::app()->repoFactory->create('ProductDetailsHasPrestashopFeatures')->findOneBy([
-                'productDetailLabelId' => $productDetailLabel->id,
-            ]);
         }
 
-            $featureExist = $this->getResourceFromId($existInPrestashop->prestashopFeatureValueId, $this::FEATURE_VALUE_RESOURCE);
+        //if not exist with the same label search with another to retrive the correct prestashop feature value id
+        /** @var CProductDetailsHasPrestashopFeatures $existInPrestashop */
+        $existInPrestashop = \Monkey::app()->repoFactory->create('ProductDetailsHasPrestashopFeatures')->findOneBy([
+            'productDetailLabelId' => $productDetailLabel->id,
+        ]);
 
-            if (empty($featureExist->children()->children())) {
-                \Monkey::app()->applicationLog('ProductDetailsHasPrestashopFeatures (FEATURE VALUE)', 'Error', 'Dangerous error while try to insert feature value (product detail)', $productDetailLabel->id . ' on Pickyshop database but not in Prestashop database');
-                throw new BambooException($productDetailLabel->id . ' on Pickyshop database but not in Prestashop database');
-            }
-            return true;
-
+        if (!is_null($existInPrestashop)) return $existInPrestashop->prestashopFeatureValueId;
 
         return false;
     }
