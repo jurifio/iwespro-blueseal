@@ -28,5 +28,11 @@
         "key": "9LUEDZHTTJLK19A92Q2QRC2A2UTPGZC5",
         "resource": "product_option_values",
         "debug": false
+    },
+    "features": {
+        "url": "dev.prestapicky.com",
+        "key": "DPWAV7RWQED4SL3ZLFDXN2YV9QBJU5LR",
+        "resource": "",
+        "debug": false
     }
 }
