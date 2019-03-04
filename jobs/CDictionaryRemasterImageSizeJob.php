@@ -242,11 +242,16 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                     $altezzaNEW = $AltezzaCopia * $percentualeVariazioneAltezza;
 //  misure per il centraggio dell'immagine
                     if ($useDivision == 1) {
-                        $PuntoDestinazioneX = ($infoImage[0] - $larghezzaNEW) / $divisoreX;
-                        $PuntoDestinazioneY = ($infoImage[1] - $altezzaNEW) / $divisoreY;
+                        $PuntoDestinazioneX = ($larghezzaNEW-$infoImage[0]) / $divisoreX;
+                        $PuntoDestinazioneY = ( $altezzaNEW-$infoImage[1]) / $divisoreY;
                     } else {
                         $PuntoDestinazioneX = $repoDictionaryImageSizeRepo->destinationXPoint;
                         $PuntoDestinazioneY = $repoDictionaryImageSizeRepo->destinationYPoint;
+                    }
+                    if ($renameImage == 1) {
+                        ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
+                    }else{
+                        ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
                     }
 
 
@@ -267,7 +272,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
 
                     if ($renameImage == 1) {
                         imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
-                        ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
+
                         $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
                         $source = imagecreatefromjpeg($filenameremaster);
                         list($width, $height) = getimagesize($filenameremaster);
@@ -284,7 +289,7 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
                         unlink($filenameremaster);
                     }else{
                         imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
-                        ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
+
                         $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
                         $source = imagecreatefromjpeg($filenameremaster);
                         list($width, $height) = getimagesize($filenameremaster);
