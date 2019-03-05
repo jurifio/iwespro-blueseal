@@ -8,7 +8,9 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductCategory;
+use bamboo\domain\entities\CProductPhoto;
 use bamboo\domain\entities\CProductPublicSku;
+use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
 /**
@@ -155,7 +157,24 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $resourcesBlankProduct->associations->categories->category->id = $prestashopCategoryObj->prestashopCategoryId;
                 }
 
+                //add features
+                $first = false;
+                $productSheets = $product->productSheetActual;
+                /** @var CProductSheetActual $productSheetActual */
+                foreach ($productSheets as $productSheetActual){
+                    $prestashopFeatureObj = $productSheetActual->productDetailsHasPrestashopFeatures;
+                    if(is_null($prestashopFeatureObj)) continue;
 
+                    if($first){
+                        $resourcesBlankProduct->associations->product_features->product_feature->id = $prestashopFeatureObj->prestashopFeatureId;
+                        $resourcesBlankProduct->associations->product_features->product_feature->id_feature_value = $prestashopFeatureObj->prestashopFeatureValueId;
+                        continue;
+                    }
+
+                    $resourcesBlankProduct->associations->categories->addChild('product_feature')->addChild('id', $prestashopFeatureObj->prestashopFeatureId);
+                    $resourcesBlankProduct->associations->categories->addChild('product_feature')->addChild('id_feature_value', $prestashopFeatureObj->prestashopFeatureValueId);
+
+                }
 
                 //Here we call to add a new product
                 try {
@@ -198,9 +217,12 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                     $resourcesCombination = $xml_response_combination->children()->children();
 
-                    $xml_ext_stock_available = $this->getStockAvaibles(null, ['id_product_attribute' => (int) $resourcesCombination->id]);
+                    $xml_ext_stock_available_id = $this->getStockAvaibles(null, ['id_product_attribute' => (int) $resourcesCombination->id]);
+                    $xml_ext_stock_available_resource = $xml_ext_stock_available_id->children()->children();
+                    $ext_stock_available = (int) $xml_ext_stock_available_resource->stock_available[0]['id'];
 
-                    $resourcesStockAvailable = $xml_ext_stock_available->children()->children();
+                    $resourcesStockAvailableXml = $this->getStockAvaibles($ext_stock_available);
+                    $resourcesStockAvailable = $resourcesStockAvailableXml->children()->children();
 
                     $resourcesStockAvailable->quantity = $productPublicSku->stockQty;
                     $resourcesStockAvailable->depends_on_stock = 0;
@@ -208,8 +230,8 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                     try {
                         $opt = array('resource' => $this::STOCK_AVAILABLES_RESOURCE);
-                        $opt['putXml'] = $resourcesStockAvailable->asXML();
-                        $opt['id'] = $resourcesStockAvailable->id;
+                        $opt['putXml'] = $resourcesStockAvailableXml->asXML();
+                        $opt['id'] = (int) $resourcesStockAvailable->id;
                         $xmlModifiedStockAvailable = $this->ws->edit($opt);
                         // if WebService don't throw an exception the action worked well and we don't show the following message
                         echo "Successfully updated.";
@@ -222,38 +244,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     }
                 }
 
-
-                /*
-                Here we add an image a created product
-                 */
-                //$urlRest = '/api/images/products/' . $id_created_product;
-                /**.
-                 * Uncomment the following line in order to update an existing image
-                 */
-
-                //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
-                // $image_path = __DIR__ . '/test/105475-4022825-001-1124.jpg';
-/*
-                $image_path = curl_file_create(__DIR__ . '/test/105475-4022825-001-1124.jpg');
-
-                $request_host = $this->url;
-                $headers = array("Host: " . $request_host);
-                $request_url = 'https://192.168.1.245';
-
-                $ch = curl_init();
-                //curl_setopt($ch, CURLOPT_HEADER, true);
-                curl_setopt($ch, CURLOPT_URL, $request_url . $urlRest);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, array('image' => '@' . $image_path->name));
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-                //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                $result = curl_exec($ch);
-                curl_close($ch);
-*/
+                $result = $this->uploadImage($resourcesProduct->id, $product);
 
 
             } catch (\Throwable $e) {
@@ -261,6 +252,77 @@ class CPrestashopProduct extends APrestashopMarketplace
                 return false;
             }
         }
+        return true;
+    }
+
+    public function uploadImage($prestashopProductId, CProduct $product): bool
+    {
+
+        //creo la cartella
+        $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
+        if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
+
+        $cdnUrl = \Monkey::app()->cfg()->fetch("general","product-photo-host");
+
+        $productPhotos = $product->productPhoto;
+        $productPhotos->reorder('order');
+        /** @var CProductPhoto $productPhoto */
+        foreach ($productPhotos as $productPhoto){
+
+            if($productPhoto->size != 843) continue;
+
+            $url = $cdnUrl . $product->productBrand->slug . '/' . $productPhoto->name;
+
+            //download image from aws
+            $imgBody = file_get_contents(htmlspecialchars_decode($url));
+
+            file_put_contents($destDir . $productPhoto->name, $imgBody);
+
+            //Here we add an image a created product
+            $urlRest = '/api/images/products/' . $prestashopProductId;
+
+            //Uncomment the following line in order to update an existing image
+            //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
+
+            // $image_path = __DIR__ . '/test/105475-4022825-001-1124.jpg';
+            $image_path = curl_file_create($destDir . $productPhoto->name, 'image/jpg');
+
+            $request_host = $this->url;
+            //$headers = array("Host: " . $request_host);
+            $request_url = 'https://192.168.1.245';
+
+            $data = array('image' => $image_path);
+
+            $ch = curl_init();
+            $headers = array("Content-Type:multipart/form-data", "Host: " . $request_host);
+            //curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            curl_setopt($ch, CURLOPT_URL, $request_url . $urlRest);
+            curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+            //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $result = curl_exec($ch);
+            curl_close($ch);
+        }
+
+        try {
+            $files = glob($destDir . '*');
+            foreach ($files as $file) {
+                if (is_file($file))
+                    unlink($file);
+            }
+            rmdir($destDir);
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while deleting photo', $e->getMessage());
+        }
+
         return true;
     }
 

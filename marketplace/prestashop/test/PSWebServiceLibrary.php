@@ -310,7 +310,11 @@ class PrestaShopWebserviceTest
 		$urlDomain = explode('/api/', $url)[0];
         $id = isset($options['id']) ? '/' . $options['id'] : '';
 		$urlArgs = '/api/'. $options['resource'] . $id;
-		$request = self::executeRequest($urlDomain, array(CURLOPT_CUSTOMREQUEST => 'GET'), $urlArgs);
+
+		$addParam = '';
+		if(isset($url_params) && count($url_params) > 0) $addParam = '?'.http_build_query($url_params);
+
+		$request = self::executeRequest($urlDomain, array(CURLOPT_CUSTOMREQUEST => 'GET'), $urlArgs . $addParam);
 
 		self::checkStatusCode($request['status_code']);// check the response validity
 		return self::parseXML($request['response']);
