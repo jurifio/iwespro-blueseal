@@ -236,26 +236,4 @@ class CPrestashopFeatures extends APrestashopMarketplace
         return false;
     }
 
-
-    /**
-     * @param string $resource
-     * @return \SimpleXMLElement
-     * @throws \PrestaShopWebserviceException
-     */
-    public function getBlankSchema(string $resource = ''): \SimpleXMLElement
-    {
-        return $this->ws->get(array('resource' => $resource . '/?schema=blank'));
-    }
-
-    /**
-     * @param int $id
-     * @param string $resource
-     * @return \SimpleXMLElement
-     * @throws \PrestaShopWebserviceException
-     */
-    public function getResourceFromId(int $id, string $resource = ''): \SimpleXMLElement
-    {
-        return $this->ws->get(array('resource' => $resource, 'id' => $id));
-    }
-
 }

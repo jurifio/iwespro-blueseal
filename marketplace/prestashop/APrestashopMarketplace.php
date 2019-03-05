@@ -102,7 +102,8 @@ abstract class APrestashopMarketplace
      */
     public function getBlankSchema(string $resource = ''): \SimpleXMLElement
     {
-        return $this->ws->get(array('resource' => $this->resource . '/?schema=blank'));
+        $resource = empty($resource) ? $this->resource : $resource;
+        return $this->ws->get(array('resource' => $resource . '/?schema=blank'));
     }
 
     /**
@@ -113,7 +114,8 @@ abstract class APrestashopMarketplace
      */
     public function getResourceFromId(int $id, string $resource = ''): \SimpleXMLElement
     {
-        return $this->ws->get(array('resource' => $this->resource, 'id' => $id));
+        $resource = empty($resource) ? $resource : $this->resource;
+        return $this->ws->get(array('resource' => $resource, 'id' => $id));
     }
 
 }
