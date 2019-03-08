@@ -64,12 +64,16 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $productPrice = $product->getDisplayPrice();
                 if (!$productPrice) continue;
 
+                $exist = true;
+                if($this->checkIfProductExist($product)) {
+                    $exist = false;
+                }
 
                 foreach ($shopIds as $shopId){
 
 
                     //check if data are consistent between Prestashop database and Pickyshop database
-                    if($this->checkDataConsistency($product)) {
+                    if(!$exist) {
                         //INSERT PRODUCT
                         $xmlResponseProduct = $this->insertProduct($product, $productPrice, $shopId);
 
@@ -86,12 +90,17 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                         //upload product photo
                         //$this->uploadImage($resourcesProduct->id, $product, $destDir, $shopId);
+
+                        $exist = true;
                     } else {
                         //update product
                         $opt = [];
                         $opt['id_shop'] = $shopId;
                         if($this->updatePrestashopProduct($product, [], $opt)){
-
+                           //$resourcesProductXml = $this->getResourceFromId($product->prestashopHasProduct->prestaId, $this::PRODUCT_RESOURCE);
+                           //$resourcesProduct = $resourcesProductXml->children()->children();
+                           //$this->addCombination($product, $resourcesProduct, $shopId);
+                            $this->updatePrestashopProductStockAvailable($product, [], $opt);
                         };
                     }
                 }
@@ -205,7 +214,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         return $xml;
     }
 
-    public function checkDataConsistency(CProduct $product): bool {
+    public function checkIfProductExist(CProduct $product): bool {
         /** @var CPrestashopHasProduct $pHp */
         $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId]);
         if (is_null($pHp)) {
@@ -408,6 +417,9 @@ class CPrestashopProduct extends APrestashopMarketplace
             }
         }
 
+        unset($resources->manufacturer_name);
+        unset($resources->quantity);
+
         //set static opt
         $opt['resource'] = $this::PRODUCT_RESOURCE;
         $opt['putXml'] = $xml->asXML();
@@ -436,11 +448,11 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         $xml = $this->ws->get(array('resource' => $this::COMBINATION_RESOURCE, 'filter' => array('id_product' => $prestashopProductId)));
 
-        $stockAvailableExist = $xml->children()->children();
+        $combinationExist = $xml->children()->children();
 
         if (!empty($fields)) {
             foreach ($fields as $nameField => $valueField) {
-                $stockAvailableExist->{$nameField} = $valueField;
+                $combinationExist->{$nameField} = $valueField;
             }
         }
 

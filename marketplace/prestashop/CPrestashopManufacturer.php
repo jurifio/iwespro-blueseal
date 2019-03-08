@@ -53,13 +53,10 @@ class CPrestashopManufacturer extends APrestashopMarketplace
             $productBrands->add($singleProductBrand);
         }
 
-        $prestashopShop = new CPrestashopShop();
-        $shopIds = $prestashopShop->getAllPrestashopShops();
 
         /** @var CProductBrand $productBrand */
         foreach ($productBrands as $productBrand) {
 
-            foreach ($shopIds as $shopId) {
                 try {
 
                     if (!$this->checkIfExistManufacturer($productBrand)) {
@@ -77,7 +74,7 @@ class CPrestashopManufacturer extends APrestashopMarketplace
                         $resources->meta_description->language[0][0] = $productBrand->name;
                         $resources->meta_keywords->language[0][0] = $productBrand->name;
 
-                        $opt = array('resource' => $this->resource, 'id_shop' => $shopId);
+                        $opt = array('resource' => $this->resource, 'id_group_shop' => 5);
                         $opt['postXml'] = $blankXml->asXML();
                         $response = $this->ws->add($opt);
 
@@ -92,18 +89,13 @@ class CPrestashopManufacturer extends APrestashopMarketplace
                             $pbhpmNew->smartInsert();
                         } else throw new BambooException('Prestashop response ProductManufacturer error');
 
-                    } else {
-                        $opt = [];
-                        $opt['id_shop'] = $shopId;
-                        $this->updatePrestashopManufacturer($productBrand, [], $opt);
-                }
-
+                    }
 
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('PrestashopManufacturers', 'Error', 'Errore while insert', $e->getMessage());
                     return false;
                 }
-            }
+
         }
 
         return true;

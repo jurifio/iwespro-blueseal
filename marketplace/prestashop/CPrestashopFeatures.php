@@ -39,9 +39,6 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
     public function addNewFeatures($productDetailsLabel): bool
     {
-        //prepare all repository
-        /** @var CRepo $pDHPf */
-        $pDHPf = \Monkey::app()->repoFactory->create('ProductDetailsHasPrestashopFeatures');
 
         //if argument is object create objectCollection and then iterate it
         if ($productDetailsLabel instanceof CProductDetailLabel) {
@@ -52,9 +49,6 @@ class CPrestashopFeatures extends APrestashopMarketplace
             $productDetailsLabel->add($singleProductDetailLabel);
         }
 
-        $prestashopShop = new CPrestashopShop();
-        $shopIds = $prestashopShop->getAllPrestashopShops();
-
         /** @var CProductDetailLabel $productDetailLabel */
         foreach ($productDetailsLabel as $productDetailLabel) {
 
@@ -62,7 +56,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
             $pickyDetails = $productDetailLabel->getAssociatedDetails(true);
             if(!$pickyDetails) continue;
 
-            foreach ($shopIds as $shopId) {
+
                 try {
 
                     //Search feature -> if not exist insert feature and values
@@ -77,6 +71,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
                         $optFeature = array('resource' => $this::FEATURE_RESOURCE);
                         $optFeature['postXml'] = $blankFeatureXml->asXML();
+                        $optFeature['id_group_shop'] = 5;
                         $responseFeature = $this->ws->add($optFeature);
 
                         //if succesfull added then save feature
@@ -122,10 +117,6 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
                         }
 
-                    } else {
-                        $opt = [];
-                        $opt['id_shop'] = $shopId;
-                        $this->updatePrestashopFeature($productDetailLabel, [], $opt);
                     }
 
 
@@ -133,7 +124,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
                     \Monkey::app()->applicationLog('PrestashopFeature', 'Error', 'Errore while insert', $e->getMessage());
                     return false;
                 }
-            }
+
         }
 
         return true;

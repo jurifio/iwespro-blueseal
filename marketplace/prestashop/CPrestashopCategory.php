@@ -192,6 +192,7 @@ class CPrestashopCategory extends APrestashopMarketplace
 
             $opt = array('resource' => 'categories');
             $opt['postXml'] = $blankXml->asXML();
+            $opt['id_group_shop'] = 5;
             $response = $this->ws->add($opt);
 
 

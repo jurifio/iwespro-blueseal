@@ -114,8 +114,8 @@ abstract class APrestashopMarketplace
      */
     public function getResourceFromId(int $id, string $resource = ''): \SimpleXMLElement
     {
-        $resource = empty($resource) ? $resource : $this->resource;
-        return $this->ws->get(array('resource' => $resource, 'id' => $id));
+        $correctResource = empty($resource) ? $this->resource : $resource;
+        return $this->ws->get(array('resource' => $correctResource, 'id' => $id));
     }
 
 }

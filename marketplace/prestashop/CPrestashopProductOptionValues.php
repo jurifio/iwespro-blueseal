@@ -46,13 +46,10 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
             $productColorGroups->add($singleProductColorGroup);
         }
 
-        $prestashopShop = new CPrestashopShop();
-        $shopIds = $prestashopShop->getAllPrestashopShops();
 
         /** @var CProductColorGroup $productColorGroup */
         foreach ($productColorGroups as $productColorGroup) {
 
-            foreach ($shopIds as $shopId) {
                 try {
 
                     if (!$this->checkIfExistColor($productColorGroup)) {
@@ -68,6 +65,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 
                         $opt = array('resource' => $this->resource);
                         $opt['postXml'] = $blankXml->asXML();
+                        $opt['id_group_shop'] = 5;
                         $response = $this->ws->add($opt);
 
 
@@ -81,10 +79,6 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
                             $pchpcNew->smartInsert();
                         } else throw new BambooException('Prestashop response ProductColor error');
 
-                    } else {
-                        $opt = [];
-                        $opt['id_shop'] = $shopId;
-                        $this->updatePrestashopColor($productColorGroup, [], $opt);
                     }
 
 
@@ -92,7 +86,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
                     \Monkey::app()->applicationLog('PrestashopColor', 'Error', 'Errore while insert', $e->getMessage());
                     return false;
                 }
-            }
+
         }
 
         return true;
@@ -178,16 +172,13 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
             $productSizes->add($singleProductSize);
         }
 
-        $prestashopShop = new CPrestashopShop();
-        $shopIds = $prestashopShop->getAllPrestashopShops();
 
         /** @var CProductSize $productSize */
         foreach ($productSizes as $productSize) {
 
-            foreach ($shopIds as $shopId) {
                 try {
 
-                    if (!$this->checkIfExistSize($productSize)) {
+                    //if (!$this->checkIfExistSize($productSize)) {
 
                         /** @var \SimpleXMLElement $blankXml */
                         $blankXml = $this->getBlankSchema();
@@ -199,6 +190,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 
                         $opt = array('resource' => $this->resource);
                         $opt['postXml'] = $blankXml->asXML();
+                        $opt['id_group_shop'] = 5;
                         $response = $this->ws->add($opt);
 
 
@@ -212,18 +204,14 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
                             $pshpsNew->smartInsert();
                         } else throw new BambooException('Prestashop response ProductSize error');
 
-                    } else {
-                        $opt = [];
-                        $opt['id_shop'] = $shopId;
-                        $this->updatePrestashopSize($productSize, [], $opt);
-                    }
+                    //}
 
 
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('PrestashopColor', 'Error', 'Errore while insert', $e->getMessage());
                     return false;
                 }
-            }
+
         }
 
         return true;
