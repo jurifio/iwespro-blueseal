@@ -65,7 +65,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 
                         $opt = array('resource' => $this->resource);
                         $opt['postXml'] = $blankXml->asXML();
-                        $opt['id_group_shop'] = 5;
+                        $opt['id_group_shop'] = $this->shopGroup;
                         $response = $this->ws->add($opt);
 
 
@@ -178,7 +178,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 
                 try {
 
-                    //if (!$this->checkIfExistSize($productSize)) {
+                    if (!$this->checkIfExistSize($productSize)) {
 
                         /** @var \SimpleXMLElement $blankXml */
                         $blankXml = $this->getBlankSchema();
@@ -190,7 +190,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 
                         $opt = array('resource' => $this->resource);
                         $opt['postXml'] = $blankXml->asXML();
-                        $opt['id_group_shop'] = 5;
+                        $opt['id_group_shop'] = $this->shopGroup;
                         $response = $this->ws->add($opt);
 
 
@@ -204,7 +204,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
                             $pshpsNew->smartInsert();
                         } else throw new BambooException('Prestashop response ProductSize error');
 
-                    //}
+                    }
 
 
                 } catch (\Throwable $e) {

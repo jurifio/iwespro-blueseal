@@ -32,6 +32,7 @@ abstract class APrestashopMarketplace
     protected $ws;
     protected $resource;
 
+    protected $shopGroup;
     /**
      * APrestashopMarketplace constructor.
      * @throws BambooConfigException
@@ -70,6 +71,7 @@ abstract class APrestashopMarketplace
         $this->key = $configConstructor['key'];
         $this->debug = $configConstructor['debug'];
         $this->resource = $configConstructor['resource'];
+        $this->shopGroup = $this->config->fetchAll('shopGroup');
 
         switch (ENV) {
             CASE 'dev':

@@ -71,7 +71,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
                         $optFeature = array('resource' => $this::FEATURE_RESOURCE);
                         $optFeature['postXml'] = $blankFeatureXml->asXML();
-                        $optFeature['id_group_shop'] = 5;
+                        $optFeature['id_group_shop'] = $this->shopGroup;
                         $responseFeature = $this->ws->add($optFeature);
 
                         //if succesfull added then save feature

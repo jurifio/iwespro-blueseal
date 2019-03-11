@@ -1,0 +1,12 @@
+{
+    "origin": {
+        "engine": "mysql",
+        "host": "www.iwes.it",
+        "port": "3306",
+        "name": "iwes_wp",
+        "user": "iwes_wp",
+        "pass": "Mtp7SmnA",
+        "charset": "utf8",
+        "options": {}
+    }
+}

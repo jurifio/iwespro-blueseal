@@ -74,7 +74,7 @@ class CPrestashopManufacturer extends APrestashopMarketplace
                         $resources->meta_description->language[0][0] = $productBrand->name;
                         $resources->meta_keywords->language[0][0] = $productBrand->name;
 
-                        $opt = array('resource' => $this->resource, 'id_group_shop' => 5);
+                        $opt = array('resource' => $this->resource, 'id_group_shop' => $this->shopGroup);
                         $opt['postXml'] = $blankXml->asXML();
                         $response = $this->ws->add($opt);
 

@@ -1,4 +1,5 @@
 {
+    "shopGroup" : 1,
     "category": {
         "url": "dev.prestapicky.com",
         "key": "SK16MRINAAJUVX6HNLBVM7ZJ1H5FXP48",
@@ -7,7 +8,7 @@
     },
     "manufacturer": {
         "url": "dev.prestapicky.com",
-        "key": "MJF4JCX3T5VQC65LR2VQMM2TZ31YK423",
+        "key": "Q5TQG7ZHFJCVANGR1NHA7P5DMBIQ4AP4",
         "resource": "manufacturers",
         "debug": false
     },
