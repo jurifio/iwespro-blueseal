@@ -117,6 +117,18 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+        <bs-toolbar-group data-group-label="Importa contatti da Liste esterne">
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-address-book"
+                    data-permission="/admin/product/add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.newsletter.user.import"
+                    data-title="Importa Csv"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
