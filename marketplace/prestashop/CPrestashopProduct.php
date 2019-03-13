@@ -186,17 +186,21 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param $resource
      * @param null $id
-     * @param array|null $filter
+     * @param array $filter
+     * @param null $display
+     * @param null $shopGroupId
      * @param null $shopId
      * @return \SimpleXMLElement
      * @throws \PrestaShopWebserviceException
      */
-    public function getDataFromResource($resource, $id = null, array $filter = [], $shopId = null){
+    public function getDataFromResource($resource, $id = null, array $filter = [], $display = null, $shopGroupId = null, $shopId = null){
 
         $opt['resource'] = $resource;
 
         if(!is_null($id)) $opt['id'] = $id;
         if(!empty($filter)) $opt['filter'] = $filter;
+        if(!is_null($display)) $opt['display'] = $display;
+        if(!is_null($shopGroupId)) $opt['id_group_shop'] = $shopGroupId;
         if(!is_null($shopId)) $opt['id_shop'] = $shopId;
 
         $xml = $this->ws->get($opt);
@@ -455,32 +459,55 @@ class CPrestashopProduct extends APrestashopMarketplace
 
     /**
      * @param $productId
+     * @param $sizeId
      * @param $qty
      * @param $shops
+     * @return bool
      * @throws \PrestaShopWebserviceException
      */
     public function updateProductQuantity($productId, $sizeId, $qty, $shops){
 
-        $product = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], 4);
+        foreach ($shops as $shopId) {
+            $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
+            $productXmlChildren = $productXmlFather->children()->children();
 
-        foreach ($shops as $shopId){
-            $stockAvailableFather = $this->getStockAvaibles(null, ['id_product' => $productId], $shopId);
-            $stockAvailableChildren = $stockAvailableFather->children()->children();
+            foreach ($productXmlChildren->associations->combinations->combination as $association) {
+                $combinationXmlFather = $this->getDataFromResource($this::COMBINATION_RESOURCE, (int)$association->id, [], [], null, $shopId);
 
-            $stockAvailableChildren->quantity = $qty;
+                $combinationXmlChildren = $combinationXmlFather->children()->children();
+                $productSizeOnPrestashop = explode('-', $combinationXmlChildren->reference)[2];
 
-            try {
-                $opt['resource'] = $this::STOCK_AVAILABLES_RESOURCE;
-                $opt['putXml'] = $stockAvailableFather->asXML();
-                $opt['id'] = (int)$stockAvailableChildren->id;
-                $this->ws->edit($opt);
-            } catch (\PrestaShopWebserviceException $e) {
-                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
-                return false;
+                if ($sizeId == $productSizeOnPrestashop) {
+                    //size is the same
+                    $idProductAttribute = (int)$combinationXmlChildren->id;
+
+                    //get stock available id
+                    $stockAvailableXmlIndexFather = $this->getDataFromResource($this::STOCK_AVAILABLES_RESOURCE, null, ['id_product_attribute' => $idProductAttribute], [], null, $shopId);
+                    $stockAvailableXmlIndexChildren = $stockAvailableXmlIndexFather->children()->children();
+                    $stockAvailableId = (int)$stockAvailableXmlIndexChildren->stock_available[0]['id'];
+
+                    //get stock available
+                    $stockAvailableXmlFather = $this->getDataFromResource($this::STOCK_AVAILABLES_RESOURCE, $stockAvailableId, [], [], null, $shopId);
+                    $stockAvailableXmlChildren = $stockAvailableXmlFather->children()->children();
+
+                    //modify stock_available quantity
+                    $stockAvailableXmlChildren->quantity = $qty;
+
+                    try {
+                        $opt['resource'] = $this::STOCK_AVAILABLES_RESOURCE;
+                        $opt['putXml'] = $stockAvailableXmlFather->asXML();
+                        $opt['id'] = $stockAvailableId;
+                        $this->ws->edit($opt);
+                    } catch (\PrestaShopWebserviceException $e) {
+                        \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
+                        return false;
+                    }
+                }
+
             }
         }
 
-
+        return true;
     }
 
 }
