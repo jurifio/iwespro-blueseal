@@ -76,11 +76,7 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
 
             fclose($file);
 
-            $files = glob($tempFolder . '*');
-            foreach($files as $file){
-                if(is_file($file))
-                    unlink($file); //
-            }
+            unlink($filename);
 
         }
 
