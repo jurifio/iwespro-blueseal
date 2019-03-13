@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\ecommerce\views\VBase;
@@ -28,50 +29,69 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
 
     public function post()
     {
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolderCsv')."/";
-        $newsletterUserRepo=\Monkey::app()->repoFactory->create('NewsletterUser');
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolderCsv') . "/";
+        $newsletterUserRepo = \Monkey::app()->repoFactory->create('NewsletterUser');
         if (!move_uploaded_file($_FILES['file']['tmp_name'][0], $tempFolder . $_FILES['file']['name'][0])) {
             throw new RedPandaException('Cannot move the uploaded Files');
-        }else{
+        } else {
             $filename = $tempFolder . $_FILES['file']['name'][0];
 
-            $file = fopen( $filename, 'r');
+            $file = fopen($filename, 'r');
             $count = 0;
-            while (!feof($file)) {
-                if (!$getData = fgetcsv($file, 1000000, ';')) {
-                    continue;
-                }
-                if ($count > 0) {
-                    if(is_null($newsletterUserRepo->findOneBy(['email'=>$getData[14]]))) {
 
-                        $newsletterUser = $newsletterUserRepo->getEmptyEntity();
-                        $newsletterUser->email = $getData[14];
-                        $newsletterUser->isActive = 1;
-                        $newsletterUser->langId = 1;
-                        if ($getData[15] == 'male' || $getData[15] == 'Uomo') {
-                            $newsletterUser->genderNewsletterUser = 'M';
-                        } elseif ($getData[15] == 'female' || $getData[15] == 'Donna') {
-                            $newsletterUser->genderNewsletterUser = 'F';
-                        } else {
-                            $newsletterUser->genderNewsletterUser = null;
+                while (($getData = fgetcsv($file, 0, "\t")) !== false) {
+
+                    if ($count == 0 || $this->clean($getData[0]) == '') {
+                        $count++;
+                        continue;
+                    };
+
+                        $email = $this->clean($getData[14]);
+                        if (is_null($newsletterUserRepo->findOneBy(['email' => $email]))) {
+
+                            $name = $this->clean($getData[12]);
+                            $surname = $this->clean($getData[13]);
+                            $sex = $this->clean($getData[15]);
+
+                            $newsletterUser = $newsletterUserRepo->getEmptyEntity();
+                            $newsletterUser->email = $email;
+                            $newsletterUser->isActive = 1;
+                            $newsletterUser->langId = 1;
+
+                            if (strtolower($sex[0]) == 'm' || strtolower($sex[0]) == 'u') {
+                                $newsletterUser->genderNewsletterUser = 'M';
+                            } else if (strtolower($sex[0]) == 'f' || strtolower($sex[0]) == 'd') {
+                                $newsletterUser->genderNewsletterUser = 'F';
+                            } else {
+                                $newsletterUser->genderNewsletterUser = null;
+                            }
+
+                            $newsletterUser->nameNewsletter = $name;
+                            $newsletterUser->surnameNewsletter = $surname;
+
+                            $newsletterUser->smartInsert();
                         }
-                        $newsletterUser->nameNewsletter = $getData[12];
-                        $newsletterUser->surnameNewsletter = $getData[13];
-
-                        $newsletterUser->insert();
-                    }
                 }
-                $count++;
-            }
+
+
             fclose($file);
 
+            $files = glob($tempFolder . '*');
+            foreach($files as $file){
+                if(is_file($file))
+                    unlink($file); //
+            }
 
         }
 
 
-
-
         return true;
+    }
+
+    private function clean($string) {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+
+        return preg_replace('/[^@.A-Za-z0-9\-]/', '', $string); // Removes special chars.
     }
 
     public function put()
@@ -82,16 +102,16 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
         unset($data['productVariantId']);
 
         \Monkey::app()->repoFactory->beginTransaction();
-	    foreach ($product->productPhoto as $photo) {
-		    foreach ($data as $newOrder => $oldOrder) {
-			    $oldOrder = (int)substr($oldOrder, 5);
-			    $newOrder = ((int)substr($newOrder, 1)) + 1;
-			    if ($oldOrder != $photo->order || $oldOrder == $newOrder ) continue;
-			    $photo->order = $newOrder;
-			    $photo->update();
-			    break;
-		    }
-	    }
+        foreach ($product->productPhoto as $photo) {
+            foreach ($data as $newOrder => $oldOrder) {
+                $oldOrder = (int)substr($oldOrder, 5);
+                $newOrder = ((int)substr($newOrder, 1)) + 1;
+                if ($oldOrder != $photo->order || $oldOrder == $newOrder) continue;
+                $photo->order = $newOrder;
+                $photo->update();
+                break;
+            }
+        }
         \Monkey::app()->repoFactory->commit();
         return true;
     }
@@ -101,7 +121,7 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
         $id = $this->app->router->request()->getRequestData('id');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
 
-        $product = \Monkey::app()->repoFactory->create('Product')->findOne([$id,$productVariantId]);
+        $product = \Monkey::app()->repoFactory->create('Product')->findOne([$id, $productVariantId]);
 
         $res = $this->app->dbAdapter->query("SELECT pp.id, pp.name
                                       FROM  ProductHasProductPhoto ppp,
@@ -109,25 +129,25 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
                                       WHERE ppp.productPhotoId = pp.id AND
                                             ppp.productId = ? AND
                                             ppp.productVariantId = ? AND
-                                            pp.`order` = ?",[
-                                                        $id,
-                                                        $productVariantId,
-                                                        substr($this->app->router->request()->getRequestData('photoOrder'),5)])->fetchAll();
+                                            pp.`order` = ?", [
+            $id,
+            $productVariantId,
+            substr($this->app->router->request()->getRequestData('photoOrder'), 5)])->fetchAll();
         \Monkey::app()->repoFactory->beginTransaction();
 
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
         $s3 = new S3Manager($config['credential']);
 
-        foreach($res as $photo){
-            $del = $s3->delImage($product->productBrand->slug."/".$photo['name'],$config['bucket']);
-            if(!$del) {
+        foreach ($res as $photo) {
+            $del = $s3->delImage($product->productBrand->slug . "/" . $photo['name'], $config['bucket']);
+            if (!$del) {
                 \Monkey::app()->repoFactory->rollback();
                 throw new RedPandaException('Could not Delete all the photos');
             }
-            $this->app->dbAdapter->delete('ProductHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);
-            $this->app->dbAdapter->delete('ProductHasProductPhoto',["productId"=>$id,"productVariantId"=>$productVariantId,"productPhotoId"=>$photo['id']]);
-            $this->app->dbAdapter->delete('ProductPhoto',["id"=>$photo['id']]);
+            $this->app->dbAdapter->delete('ProductHasProductPhoto', ["productId" => $id, "productVariantId" => $productVariantId, "productPhotoId" => $photo['id']]);
+            $this->app->dbAdapter->delete('ProductHasProductPhoto', ["productId" => $id, "productVariantId" => $productVariantId, "productPhotoId" => $photo['id']]);
+            $this->app->dbAdapter->delete('ProductPhoto', ["id" => $photo['id']]);
         }
         \Monkey::app()->repoFactory->commit();
     }

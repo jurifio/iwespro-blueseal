@@ -32,9 +32,9 @@
                             <thead>
                             <tr>
                                 <th data-slug="id"
-                                          data-searchable="true"
-                                          data-orderable="true"
-                                          class="center">Id
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Id
                                 </th>
                                 <th data-slug="email"
                                     data-searchable="true"
@@ -47,14 +47,14 @@
                                     class="center">Nome
                                 </th>
                                 <th data-slug="surname"
-                                         data-searchable="true"
-                                         data-orderable="true"
-                                         class="center">Cognome
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Cognome
                                 </th>
                                 <th data-slug="subscriptionDate"
-                                         data-searchable="true"
-                                         data-orderable="true"
-                                         class="center">Data Sottoscrizione
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Data Sottoscrizione
                                 </th>
                                 <th data-slug="unsubscriptionDate"
                                     data-searchable="true"
@@ -66,25 +66,11 @@
                                     data-orderable="true"
                                     class="center">Attivo
                                 </th>
-                                <th data-slug="List"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Liste di Distribuzione
-                                </th>
-                                <th data-slug="nuG"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Sesso (Lista newsletter)
-                                </th>
                                 <th data-slug="gender"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Sesso (Lista utenti)
                                 </th>
-
-
-
-
                             </tr>
                             </thead>
                             <tbody>
@@ -117,17 +103,17 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-        <bs-toolbar-group data-group-label="Importa contatti da Liste esterne">
-            <bs-toolbar-button
-                    data-tag="a"
-                    data-icon="fa-address-book"
-                    data-permission="/admin/product/add"
-                    data-class="btn btn-default"
-                    data-rel="tooltip"
-                    data-event="bs.newsletter.user.import"
-                    data-title="Importa Csv"
-                    data-placement="bottom"
-            ></bs-toolbar-button>
+    <bs-toolbar-group data-group-label="Importa contatti da Liste esterne">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-address-book"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.newsletter.user.import"
+                data-title="Importa Csv"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

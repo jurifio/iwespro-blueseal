@@ -110,8 +110,7 @@
             photoUrl =  file;
         });
         dropzone.on('queuecomplete', function () {
-            okButton.removeAttr("disabled");
-            $(document).trigger('bs.load.photo');
+            $.refreshDataTable();
         });
 
     });

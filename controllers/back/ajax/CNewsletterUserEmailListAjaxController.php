@@ -32,57 +32,32 @@ class CNewsletterUserEmailListAjaxController extends AAjaxController
                   ud.surname,
                   ud.gender,
                   n.genderNewsletterUser as nuG
-FROM NewsletterUser n left outer join UserEmail ue On n.userId =ue.userId
-left outer join UserDetails ud ON n.userId=ud.userId";
+                  FROM NewsletterUser n 
+                  LEFT JOIN UserDetails ud ON n.userId = ud.userId";
+
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $datatable->doAllTheThings(true);
+        $datatable->doAllTheThings();
 
 
 
-        /** @var CNewsletterRepo $newsletterRepo */
-        $newsletterRepo = \Monkey::app()->repoFactory->create('NewsletterUser');
-
-
-
+        /** @var CNewsletterUserRepo $newsletterUserRepo */
+        $newsletterUserRepo = \Monkey::app()->repoFactory->create('NewsletterUser');
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
+            /** @var CNewsletterUser $newsletterUser */
+            $newsletterUser = $newsletterUserRepo->findOneBy(['id' => $row['id']]);
 
-            /** @var CNewsletter $newsletter */
-            $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"] ]);
-            $verified=$newsletter->isActive;
-            $email=$newsletter->email;
-            /** @var CRepo $newsletterEmailList */
-            $newsletterEmailList=\Monkey::app()->repoFactory->create('NewsletterGroup');
-            $group=[];
-
-            /** @var CObjectCollection $newslettersql */
-            $newslettersql = $newsletterEmailList->findAll();
-            foreach ($newslettersql as $value) {
-
-                $sql = $value->sql . " and nu.email LIKE '%" . $email . "%' GROUP by nu.email";
-
-                $searchRes = $this->app->dbAdapter->query($sql,array())->fetchAll();
-                foreach ($searchRes as $val) {
+            $row['id'] = $newsletterUser->id;
+            $row['email'] = $newsletterUser->email;
+            $row['name'] = is_null($newsletterUser->userId) ? $newsletterUser->nameNewsletter : $newsletterUser->user->userDetails->name;
+            $row['surname'] = is_null($newsletterUser->userId) ? $newsletterUser->surnameNewsletter : $newsletterUser->user->userDetails->surname;
+            $row['subscriptionDate'] = $newsletterUser->subscriptionDate;
+            $row['unsubscriptionDate'] = $newsletterUser->unsubscriptionDate;
+            $row['isActive'] = $newsletterUser->isActive ? 'Attivo' : 'Non attivo';
+            $row['gender'] = is_null($newsletterUser->userId) ? $newsletterUser->genderNewsletterUser : $newsletterUser->user->userDetails->gender;
 
 
-                    if ($email == $val['email']) {
-                        $news=$value->name;
-                    array_push($group,$news);
-
-                        //$group =$value->name;
-                    }
-
-                }
-
-            }
-            $row['List']= $group;
-            if ($verified=="1") {
-
-                $row['isActive'] = "Attivo";
-            }else{
-                $row['isActive']="Non Attivo";
-            }
             $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();
