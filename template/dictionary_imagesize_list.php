@@ -119,11 +119,17 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione">
+    <bs-toolbar-group data-group-label="Operazioni">
         <bs-toolbar-button
-                data-remote="bs.dictionaryimagesize.insert"
-        >
-
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-dictionaryimagesize-insert"
+                data-title="Aggiungi Parametri"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
