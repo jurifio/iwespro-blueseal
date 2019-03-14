@@ -316,6 +316,11 @@
                 data-remote="bs.product.special.tag.custom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Lista Prestashop">
+        <bs-toolbar-button
+                data-remote="bs.insert.product.prestashop"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
