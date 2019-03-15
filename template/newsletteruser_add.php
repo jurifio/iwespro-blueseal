@@ -119,7 +119,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="newsletterEmailListId">Seleziona il Segmento di
                                                     Pubblico</label>
@@ -128,6 +128,12 @@
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
                                                 </select>
+                                            </div>
+                                            <input type="hidden" id="newsletterShopId">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                            <div id="totalcount"></div>
                                             </div>
                                             <input type="hidden" id="newsletterShopId">
                                         </div>

@@ -23,7 +23,7 @@ class CDictionaryImageSizeManageAjaxController extends AAjaxController
 {
 
 
-    Public function post()
+    Public function put()
     {
         $data = $this->app->router->request()->getRequestData();
         $shopId = $data["shopId"];
@@ -51,7 +51,7 @@ class CDictionaryImageSizeManageAjaxController extends AAjaxController
         $finddictionaryImageSize =$repoDictionaryImageSizeRepo->findOneBy(['shopId'=>$shopId]);
         if(is_null($finddictionaryImageSize)) {
             /** @var CDictionaryImageSize $dictionaryImageSize */
-            $dictionaryImageSize = $repodictionaryImageSizeRepo->getEmptyEntity();
+            $dictionaryImageSize = $repoDictionaryImageSizeRepo->getEmptyEntity();
             $dictionaryImageSize->shopId=$shopId;
             $dictionaryImageSize->widthImage=$widthImage;
             $dictionaryImageSize->heightImage=$heightImage;
@@ -74,5 +74,14 @@ class CDictionaryImageSizeManageAjaxController extends AAjaxController
             $res='Esiste Già una parametrizzazione per lo Shop Selezionato';
         }
 return $res;
+    }
+
+    Public Function get(){
+        $idparameter = \Monkey::app()->router->request()->getRequestData('id');
+       $res=$idparameter;
+        return $res;
+
+
+
     }
 }

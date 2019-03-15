@@ -479,6 +479,22 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
                 });
             });
         }
+        $('#newsletterEmailListId').change(function () {
+            let idnewsletterEmailList=$('#newsletterEmailListId').val();
+            $.ajax({
+                method: 'get',
+                url: '/blueseal/xhr/GetNumberContactEmailListAjaxController',
+                data: {
+                    idnewsletterEmailList: idnewsletterEmailList
+                }
+            }).done(function (res) {
+                $('#totalcount').append(res);
+            }).fail(function (res) {
+                $('#totalcount').append(res);
+            }).always(function (res) {
+            });
+
+        });
 
         $('#nameShop').change(function () {
 

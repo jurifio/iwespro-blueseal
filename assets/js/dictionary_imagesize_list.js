@@ -163,7 +163,7 @@ $(document).on('bs-dictionaryimagesize-insert', function () {
 
         };
         $.ajax({
-            method: 'POST',
+            method: 'PUT',
             url: "/blueseal/xhr/DictionaryImageSizeManageAjaxController",
             data:data
         }).done(function (res) {
@@ -180,4 +180,61 @@ $(document).on('bs-dictionaryimagesize-insert', function () {
         });
 
     });
+});
+
+$(document).on('bs-dictionaryimagesize-modify', function () {
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
+    let parameterId = selectedRows[0].row_id;
+
+    if(selectedRows.length != 1){
+        new Alert({
+            type: "warning",
+            message: "Puoi modificare un parametro alla volta"
+        }).open();
+        return false;
+    }
+    $.ajax({
+        method: "get",
+        url: "/DictionaryImageSizeManageAjaxController",
+        data: {
+             id: parameterId
+        }
+    }).done(function (res) {
+       alert(res)
+    }).fail(function (res) {
+        alert(res);
+    }).always(function (res) {
+       alert(res);
+    });
+
+    let bsModal = new $.bsModal('Modifica Parametri Dizionario', {
+        body: `<div>
+               <p>Inserire il nuovo nome dell'inserzione</p>
+               <input type="text" id="name-modify">
+               </div>`
+    });
+
+    bsModal.setOkEvent(function () {
+
+        let insName = $('#name-modify').val();
+        $.ajax({
+            method: "get",
+            url: "/blueseal/xhr/NewsletterInsertionManage",
+            data: {
+                name: insName,
+                insertionId: insertionId
+            }
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                $.refreshDataTable()
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
 });

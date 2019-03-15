@@ -27,6 +27,11 @@
                                data-display-length="50">
                             <thead>
                             <tr>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">id
+                                </th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -128,6 +133,16 @@
                 data-rel="tooltip"
                 data-event="bs-dictionaryimagesize-insert"
                 data-title="Aggiungi Parametri"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-edit"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-dictionaryimagesize-modify"
+                data-title="Modifica Parametri"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
