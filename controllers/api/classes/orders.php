@@ -21,6 +21,7 @@ use bamboo\domain\entities\COrderLine;
 class orders extends AApi
 {
     private $shop;
+    private $uniqueId;
 
     public function createAction($action)
     {
@@ -30,11 +31,19 @@ class orders extends AApi
         return $this->{$action}();
     }
 
+    /**
+     * @return array
+     * @throws \bamboo\core\exceptions\BambooDBALException
+     */
     public function get(){
+
+        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>1]);
+        $this->uniqueId = uniqid();
+
         $fromDate = $this->data['fromDate'] . ' 00:00:00';
         $toDate = $this->data['toDate'] . ' 00:00:00';
 
-        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>1]);
+        $this->report($this::GET, 'Orders','report', 'Init get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->shop->shopId);
 
         $orderLines = \Monkey::app()->repoFactory->create('OrderLine')->findBySql
         (
@@ -63,6 +72,8 @@ class orders extends AApi
             $orderInfo[$i]['var'] = $dirtySku->dirtyProduct->var;
             $i++;
         }
+
+        $this->report($this::GET, 'Orders','report', 'End get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->shop->shopId);
 
         return $orderInfo;
     }
