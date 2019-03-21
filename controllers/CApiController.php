@@ -82,12 +82,9 @@ class CApiController extends ARootController
                 break;
             case "PUT":
                 $action = 'put';
-                $put = [];
-                foreach (explode('&',file_get_contents('php://input')) as $var) {
-                    $a = explode('=',$var);
-                    $put[$a[0]] = $a[1];
-                }
-                $data = $put + $filters;
+                $jsonData = [];
+                $jsonData['json'] = json_decode(file_get_contents('php://input'), true);
+                $data = $jsonData + $filters;
                 break;
             case "DELETE":
                 $action = 'delete';

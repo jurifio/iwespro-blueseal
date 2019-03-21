@@ -2932,13 +2932,14 @@
             ]
         },
         {
-            "pattern": "/api/:endpoint",
+            "pattern": "/api/:endpoint(/?):resource",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"
             },
             "filters": {
                 "loc": "[a-z]{2}",
-                "endpoint": "[a-zA-Z]+"
+                "endpoint": "[a-zA-Z]+",
+                "resource": "(:?[A-Za-z0-9_-]+)?"
             },
             "translations": {},
             "methods": [
