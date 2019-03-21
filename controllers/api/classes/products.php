@@ -157,7 +157,7 @@ class products extends AApi
         $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>$this->id]);
         $this->uniqueId = uniqid();
 
-        $this->report($this::POST, 'Products','report', 'Process DirtyProduct', 'Init insert of: '. count($this->data['json']) . ' elements', $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'Process DirtyProduct', 'Init insert of: '. count($this->data['json']) . ' elements', $this->uniqueId, $this->id);
 
         foreach ($this->data['json'] as $product) {
 
@@ -231,7 +231,7 @@ class products extends AApi
                         if ($existingDirtyProductExtend) {
                             \Monkey::app()->dbAdapter->update('DirtyProductExtend', $newDirtyProductExtend, ['dirtyProductId' => $existProductWithMainKey['id']]);
                         } else {
-                            $this->report($this::POST, 'Products','error', 'DirtyProductExtend', 'Error while looking at dirtyProductId: ' . $existProductWithMainKey['id'] . ' on DirtyProductExtend table', $this->uniqueId, $this->shop->shopId);
+                            $this->report($this::POST, 'Products','error', 'DirtyProductExtend', 'Error while looking at dirtyProductId: ' . $existProductWithMainKey['id'] . ' on DirtyProductExtend table', $this->uniqueId, $this->id);
                         }
                     } else {
 
@@ -247,7 +247,7 @@ class products extends AApi
                         $dirtyProductId = $newDirtyProductExtend['dirtyProductId'];
                     }
                 } else if ($existingDirtyProduct > 1){
-                    $this->report($this::POST, 'Products','report', 'Multiple dirty product founded', 'Procedure has founded '.$existingDirtyProduct.' dirty product', $this->uniqueId, $this->shop->shopId);
+                    $this->report($this::POST, 'Products','report', 'Multiple dirty product founded', 'Procedure has founded '.$existingDirtyProduct.' dirty product', $this->uniqueId, $this->id);
                     continue;
                 } else {
                     $dirtyProductId = \Monkey::app()->dbAdapter->select('DirtyProduct', ['checksum' => $newDirtyProduct['checksum']])->fetch()['id'];
@@ -274,13 +274,13 @@ class products extends AApi
                 \Monkey::app()->repoFactory->commit();
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products','error', 'Error reading Product', 'Error reading Product: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Error reading Product', 'Error reading Product: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(), $this->uniqueId, $this->id);
                 continue;
             }
 
             //DIRTY SKU
             try {
-                $this->report($this::POST, 'Products','report', 'Process DirtySku', 'Init insert sku', $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','report', 'Process DirtySku', 'Init insert sku', $this->uniqueId, $this->id);
 
                 $dirtySku = [];
                 $mainKeyForSku = [];
@@ -291,7 +291,7 @@ class products extends AApi
                 $dirtyProduct = $existingDirtyProductExtend = \Monkey::app()->dbAdapter->select('DirtyProduct', $mainKeyForSku)->fetch();
 
                 if(!$dirtyProduct){
-                    $this->report($this::POST, 'Products','error', 'Reading Skus', 'Dirty Product not found while looking at sku. Product: ' . json_encode($product), $this->uniqueId, $this->shop->shopId);
+                    $this->report($this::POST, 'Products','error', 'Reading Skus', 'Dirty Product not found while looking at sku. Product: ' . json_encode($product), $this->uniqueId, $this->id);
                     continue;
                 }
 
@@ -344,7 +344,7 @@ class products extends AApi
                     }
 
                 } else if ($existDirtySku > 1){
-                    $this->report($this::POST, 'Products','error', 'Multiple dirty sku founded', 'Procedure has founded '.$existDirtySku.' dirty sku', $this->uniqueId, $this->shop->shopId);
+                    $this->report($this::POST, 'Products','error', 'Multiple dirty sku founded', 'Procedure has founded '.$existDirtySku.' dirty sku', $this->uniqueId, $this->id);
                     continue;
                 } else if ($existDirtySku == 1){
                     $noChangedSku = \Monkey::app()->dbAdapter->select('DirtySku', ['checksum' => $newDirtySku['checksum']])->fetch();
@@ -353,14 +353,14 @@ class products extends AApi
 
 
             } catch (\Throwable $e){
-                $this->report($this::POST, 'Products','error', 'Error reading sku', 'Error reading sku: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Error reading sku', 'Error reading sku: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(), $this->uniqueId, $this->id);
                 continue;
             }
 
         }
 
-        $this->report($this::POST, 'Products','report', 'End products', 'End of reading and writing dirty product: New Dirty Product: '.$countNewDirtyProduct.' Updated Dirty product: '.$countUpdatedDirtyProduct, $this->uniqueId, $this->shop->shopId);
-        $this->report($this::POST, 'Products','report', 'End skus', 'End of reading and writing dirty skus: New Dirty Sku: '.$countNewDirtySku.' Updated Dirty product: '.$countUpdatedDirtySku, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'End products', 'End of reading and writing dirty product: New Dirty Product: '.$countNewDirtyProduct.' Updated Dirty product: '.$countUpdatedDirtyProduct, $this->uniqueId, $this->id);
+        $this->report($this::POST, 'Products','report', 'End skus', 'End of reading and writing dirty skus: New Dirty Sku: '.$countNewDirtySku.' Updated Dirty product: '.$countUpdatedDirtySku, $this->uniqueId, $this->id);
 
         $this->findZeroSkus($seenSkus);
     }
@@ -387,8 +387,8 @@ class products extends AApi
                                                           ds.qty != 0 and
                                                           ps.shopId = ?", [$this->shop->shopId])->fetchAll();
 
-        $this->report($this::POST, 'Products','error', 'Seen skus', "Seen Skus: " . count($seenSkus), $this->uniqueId, $this->shop->shopId);
-        $this->report($this::POST, 'Products','error', 'Seen skus', "Product not at 0: " . count($res), $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','error', 'Seen skus', "Seen Skus: " . count($seenSkus), $this->uniqueId, $this->id);
+        $this->report($this::POST, 'Products','error', 'Seen skus', "Product not at 0: " . count($res), $this->uniqueId, $this->id);
 
         $i = 0;
 
@@ -398,7 +398,7 @@ class products extends AApi
                 $i++;
             }
         }
-        $this->report($this::POST, 'Products','error', 'Seen skus', "Product set 0: " . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','error', 'Seen skus', "Product set 0: " . $i, $this->uniqueId, $this->id);
     }
 
 
@@ -408,21 +408,21 @@ class products extends AApi
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
     private function workDirtyData($args = null) {
-        $this->report($this::POST, 'Products','report', 'updateDictionaries launch', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries launch', null, $this->uniqueId, $this->id);
         $this->updateDictionaries();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries end', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries end', null, $this->uniqueId, $this->id);
 
-        $this->report($this::POST, 'Products','report', 'createProducts launch', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'createProducts launch', null, $this->uniqueId, $this->id);
         $this->createProducts();
-        $this->report($this::POST, 'Products','report', 'createProducts end', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'createProducts end', null, $this->uniqueId, $this->id);
 
-        $this->report($this::POST, 'Products','report', 'checkForNewDetails launch', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'checkForNewDetails launch', null, $this->uniqueId, $this->id);
         $this->checkForNewDetails();
-        $this->report($this::POST, 'Products','report', 'checkForNewDetails end', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'checkForNewDetails end', null, $this->uniqueId, $this->id);
 
-        $this->report($this::POST, 'Products','report', 'sendPhotos launch', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'sendPhotos launch', null, $this->uniqueId, $this->id);
         $this->sendPhotos();
-        $this->report($this::POST, 'Products','report', 'sendPhotos end', null, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'sendPhotos end', null, $this->uniqueId, $this->id);
     }
 
     /**
@@ -431,25 +431,25 @@ class products extends AApi
     public function updateDictionaries()
     {
         $i = $this->updateBrandDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Brand terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Brand terms inserted: ' . $i, $this->uniqueId, $this->id);
 
         $i = $this->updateSeasonDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Season terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Season terms inserted: ' . $i, $this->uniqueId, $this->id);
         
         $i = $this->updateCategoryDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Category terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Category terms inserted: ' . $i, $this->uniqueId, $this->id);
         
         $i = $this->updateTagDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Tag terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Tag terms inserted: ' . $i, $this->uniqueId, $this->id);
         
         $i = $this->updateGereralColorDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Color terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Color terms inserted: ' . $i, $this->uniqueId, $this->id);
 
         $i = $this->updateSizeDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Size terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Size terms inserted: ' . $i, $this->uniqueId, $this->id);
         
         $i = $this->updateDetailDictionary();
-        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Detail terms inserted: ' . $i, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'updateDictionaries', 'Detail terms inserted: ' . $i, $this->uniqueId, $this->id);
 
     }
 
@@ -597,7 +597,7 @@ class products extends AApi
             }
 
         } catch (BambooOutOfBoundException $e) {
-            $this->report($this::POST, 'Products','report', 'Create Products', 'Found emptyDictionary for: ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+            $this->report($this::POST, 'Products','report', 'Create Products', 'Found emptyDictionary for: ' . $e->getMessage(), $this->uniqueId, $this->id);
             return false;
         }
 
@@ -622,10 +622,10 @@ class products extends AApi
         $sheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOneBy(["name" => "Generica"]);
 
         $slugify = new CSlugify();
-        $this->report($this::POST, 'Products','report', 'Create Products', 'working ' . count($dps) . ' dirtyProducts', $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'Create Products', 'working ' . count($dps) . ' dirtyProducts', $this->uniqueId, $this->id);
 
         foreach ($dps as $dpId) {
-            $this->report($this::POST, 'Products','report', 'Create Products', 'working for ' . $dpId['id'], $this->uniqueId, $this->shop->shopId);
+            $this->report($this::POST, 'Products','report', 'Create Products', 'working for ' . $dpId['id'], $this->uniqueId, $this->id);
 
             try {
                 /** @var CDirtyProduct $dirtyProduct */
@@ -794,21 +794,21 @@ class products extends AApi
 
                 \Monkey::app()->repoFactory->commit();
                 $done++;
-                $this->report($this::POST, 'Products','report', 'Create Products', 'Created new Product: ' . $product->id . '-' . $product->productVariantId, $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','report', 'Create Products', 'Created new Product: ' . $product->id . '-' . $product->productVariantId, $this->uniqueId, $this->id);
 
             } catch (BambooOutOfBoundException $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products','error', 'Create Products', 'Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Create Products', 'Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
                 $dictionaryProblem = true;
             } catch (BambooException $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products','error', 'Create Products', 'Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Create Products', 'Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
             } catch (\ErrorException $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products','error', 'Errore ErrorException in crezione generico . '.$dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Errore ErrorException in crezione generico . '.$dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products','error', 'Create Products', 'Errore Exception in crezione generico ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Create Products', 'Errore Exception in crezione generico ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
 
             }
         }
@@ -888,7 +888,7 @@ class products extends AApi
             $dirtyProduct->dirtyStatus = 'K';
             $dirtyProduct->update();
 
-            $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Fusing DirtyProduct: ' . $dirtyProduct->id . ' with Product: ' . $existing->printId(), $this->uniqueId, $this->shop->shopId);
+            $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Fusing DirtyProduct: ' . $dirtyProduct->id . ' with Product: ' . $existing->printId(), $this->uniqueId, $this->id);
 
             $product = \Monkey::app()->repoFactory->create('Product')->findOneBy([
                 'id'=> $dirtyProduct->productId,
@@ -896,20 +896,20 @@ class products extends AApi
             ]);
 
             if($product->productSeasonId != $newSeasonId) {
-                $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Season Change for product:'.$product->printId().' from '.$product->productSeasonId.' to '.$newSeasonId, $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Season Change for product:'.$product->printId().' from '.$product->productSeasonId.' to '.$newSeasonId, $this->uniqueId, $this->id);
 
                 $productSeason = \Monkey::app()->repoFactory->create('ProductSeason')->findOneBy(['id'=>$newSeasonId]);
                 if($productSeason->order > $product->productSeason->order) {
-                    $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Season Change, the new season is newer, CHANGE!', $this->uniqueId, $this->shop->shopId);
+                    $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Season Change, the new season is newer, CHANGE!', $this->uniqueId, $this->id);
                     $product->productSeasonId = $newSeasonId;
                     $product->isOnSale = false;
                     $product->update();
                 } else {
-                    $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Season Change, the new season NOT newer no need for update', $this->uniqueId, $this->shop->shopId);
+                    $this->report($this::POST, 'Products','warning', 'Fuse Products', 'Season Change, the new season NOT newer no need for update', $this->uniqueId, $this->id);
                 }
             }
         } else {
-            $this->report($this::POST, 'Products','error', 'Fuse Products', 'Error Fusing DirtyProduct: ' . $dirtyProduct->id . ' existing in context...' .' | ' . $existing, $this->uniqueId, $this->shop->shopId);
+            $this->report($this::POST, 'Products','error', 'Fuse Products', 'Error Fusing DirtyProduct: ' . $dirtyProduct->id . ' existing in context...' .' | ' . $existing, $this->uniqueId, $this->id);
             throw new BambooLogicException("Product already extisting");
         }
 
@@ -934,7 +934,7 @@ class products extends AApi
                 HAVING count(psa.productDetailLabelId) = 0 AND count(dd.id) > 0";
 
         $dirtyProducts = \Monkey::app()->repoFactory->create('DirtyProduct')->findBySql($sql, [$this->shop->shopId]);
-        $this->report($this::POST, 'Products','report', 'checkForNewDetails', 'Found ' . $dirtyProducts->count() . ' to work', $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'checkForNewDetails', 'Found ' . $dirtyProducts->count() . ' to work', $this->uniqueId, $this->id);
 
         $slugify = new CSlugify();
         /** @var CDirtyProduct $dirtyProduct */
@@ -943,7 +943,7 @@ class products extends AApi
 
                 $dirtyProduct->product->productSheetPrototypeId = 33;
                 $dirtyProduct->product->update();
-                $this->report($this::POST, 'Products','report', 'checkForNewDetails', 'DirtyProduct ' . $dirtyProduct->id . ' has ' . $dirtyProduct->dirtyDetail->count() . ' details', $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','report', 'checkForNewDetails', 'DirtyProduct ' . $dirtyProduct->id . ' has ' . $dirtyProduct->dirtyDetail->count() . ' details', $this->uniqueId, $this->id);
                 $dirtyProduct->product->productSheetPrototype->productDetailLabel->rewind();
                 foreach ($dirtyProduct->dirtyDetail as $detail) {
                     if (!$dirtyProduct->product->productSheetPrototype->productDetailLabel->valid()) break;
@@ -969,7 +969,7 @@ class products extends AApi
                     $dirtyProduct->product->productSheetPrototype->productDetailLabel->next();
                 }
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products','error', 'checkForNewDetails', 'Error writing new detail for ' . $dirtyProduct->id . ' | ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'checkForNewDetails', 'Error writing new detail for ' . $dirtyProduct->id . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
             }
         }
 
@@ -982,7 +982,7 @@ class products extends AApi
      */
     private function sendPhotos()
     {
-        $this->report($this::POST, 'Products','report', 'sendPhotos', 'Starting', $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'sendPhotos', 'Starting', $this->uniqueId, $this->id);
 
         $ftpDestination = new CFTPClient(\Monkey::app(), [
             'host' => 'fiber.office.iwes.it',
@@ -999,7 +999,7 @@ class products extends AApi
             "SELECT dpp.id AS id, dpp.dirtyProductId AS dirtyProductID, url, location, position, worked, dpp.shopId AS shopId, p.id AS productId, p.productVariantId FROM DirtyPhoto dpp, DirtyProduct dp, Product p WHERE dpp.dirtyProductId = dp.id AND dp.productId = p.id AND dp.productVariantId = p.productVariantId AND dpp.shopId = ? AND ( dpp.worked = 0 OR dpp.worked IS NULL ) ORDER BY dpp.creationDate DESC",
             [$this->shop->shopId]
         )->fetchAll();
-        $this->report($this::POST, 'Products','report', 'download immagini', 'inizio', $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'download immagini', 'inizio', $this->uniqueId, $this->id);
         
         //creo la cartella
         $destDir = \Monkey::app()->rootPath() . "/temp/tempApiImgs/";
@@ -1008,7 +1008,7 @@ class products extends AApi
         $i = 0;
         foreach ($res as $k => $v) {
             try {
-                if ($i % 50 == 0) $this->report($this::POST, 'Products','report', 'download immagini', 'tentate ' . $k . ' immagini', $this->uniqueId, $this->shop->shopId);
+                if ($i % 50 == 0) $this->report($this::POST, 'Products','report', 'download immagini', 'tentate ' . $k . ' immagini', $this->uniqueId, $this->id);
 
                 if (2000 < $i) break;
                 /** @var CProduct $p */
@@ -1037,17 +1037,17 @@ class products extends AApi
                             //segno come "worked" le immagini importate
                             \Monkey::app()->dbAdapter->update("DirtyPhoto", ['worked' => 1], ['id' => $v['id']]);
                         } else {
-                            $this->report($this::POST, 'Products','error', 'ftp-upload', "file non uploadato sul NAS: " . $ftpDestDir . $destFileName, $this->uniqueId, $this->shop->shopId);
+                            $this->report($this::POST, 'Products','error', 'ftp-upload', "file non uploadato sul NAS: " . $ftpDestDir . $destFileName, $this->uniqueId, $this->id);
                         }
                         unlink($destDir . $destFileName);
                     }
                 } catch (\Throwable $e) {
-                    $this->report($this::POST, 'Products','error', 'download immagini', $destFileName . "non salvato. File scaricato, ma impossibile salvarlo su disco. Url corrispondente: " . $v['url'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                    $this->report($this::POST, 'Products','error', 'download immagini', $destFileName . "non salvato. File scaricato, ma impossibile salvarlo su disco. Url corrispondente: " . $v['url'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
                     if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
                 }
 
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products','error', 'Downloading Photo', 'generic error: | '  . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','error', 'Downloading Photo', 'generic error: | '  . $e->getMessage(), $this->uniqueId, $this->id);
             }
             $i++;
         }
@@ -1059,9 +1059,9 @@ class products extends AApi
             }
             rmdir($destDir);
         } catch (\Throwable $e) {
-            $this->report($this::POST, 'Products','error', 'SendPhotos', 'error while deleting photos | '  . $e->getMessage(), $this->uniqueId, $this->shop->shopId);
+            $this->report($this::POST, 'Products','error', 'SendPhotos', 'error while deleting photos | '  . $e->getMessage(), $this->uniqueId, $this->id);
         }
-        $this->report($this::POST, 'Products','report', 'download immagini', 'fine', $this->uniqueId, $this->shop->shopId);
+        $this->report($this::POST, 'Products','report', 'download immagini', 'fine', $this->uniqueId, $this->id);
 
         return true;
     }
@@ -1089,9 +1089,9 @@ class products extends AApi
                 $imager->save($dummyFolder . '/' . $dummyName);
                 $p->dummyPicture = $dummyName;
                 $p->update();
-                $this->report($this::POST, 'Products','report', 'PhotoDownload', 'Set dummyPicture: ' . $dummyName . ' for: ' . $p->printId(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','report', 'PhotoDownload', 'Set dummyPicture: ' . $dummyName . ' for: ' . $p->printId(), $this->uniqueId, $this->id);
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products','warning', 'PhotoDownload', 'Failed setting dummyPicture: ' . $dummyName . ' for ' . $p->printId(), $this->uniqueId, $this->shop->shopId);
+                $this->report($this::POST, 'Products','warning', 'PhotoDownload', 'Failed setting dummyPicture: ' . $dummyName . ' for ' . $p->printId(), $this->uniqueId, $this->id);
                 throw $e;
             }
 

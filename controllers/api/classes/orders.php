@@ -43,7 +43,7 @@ class orders extends AApi
         $fromDate = $this->data['fromDate'] . ' 00:00:00';
         $toDate = $this->data['toDate'] . ' 00:00:00';
 
-        $this->report($this::GET, 'Orders','report', 'Init get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::GET, 'Orders','report', 'Init get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->id);
 
         $orderLines = \Monkey::app()->repoFactory->create('OrderLine')->findBySql
         (
@@ -73,7 +73,7 @@ class orders extends AApi
             $i++;
         }
 
-        $this->report($this::GET, 'Orders','report', 'End get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->shop->shopId);
+        $this->report($this::GET, 'Orders','report', 'End get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->id);
 
         return $orderInfo;
     }
