@@ -2,6 +2,7 @@
     "paths": {
         "admin-theme": "/back",
         "blueseal": "/back",
+        "api": "/back/controllers/api/conf/",
         "packed-assets": "/client/public/themes/flatize/assets/",
         "blueseal-addin": "/back/addon",
         "friend-logo": "/back/assets/img/clientLogo/",

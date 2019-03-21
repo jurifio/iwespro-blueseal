@@ -1,0 +1,26 @@
+{
+    "requiredFields": {
+        "referenceId": "string || numeric",
+        "supplierArticle": "string",
+        "brand": "string",
+        "categories": "array",
+        "year": "numeric",
+        "season": "string",
+        "var": "string",
+        "size": "string || numeric",
+        "qty": "numeric",
+        "supplierPrice": "numeric",
+        "marketPrice": "numeric",
+        "imgs": "array"
+    },
+    "notRequiredFields": {
+        "barcodeInt": "string || numeric",
+        "ean": "string || numeric",
+        "tags": "array",
+        "sizeGroup": "string || numeric",
+        "audience": "string",
+        "colorDescription": "string",
+        "name": "string",
+        "description": "string"
+    }
+}

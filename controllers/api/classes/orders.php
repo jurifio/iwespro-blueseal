@@ -1,0 +1,79 @@
+<?php
+
+namespace bamboo\controllers\api\classes;
+use bamboo\domain\entities\CDirtySku;
+use bamboo\domain\entities\COrderLine;
+
+
+/**
+ * Class orders
+ * @package bamboo\controllers\api
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 20/07/2018
+ * @since 1.0
+ */
+class orders extends AApi
+{
+    private $shop;
+
+    public function createAction($action)
+    {
+        if(!is_null($this->auth)){
+            return $this->auth;
+        }
+        return $this->{$action}();
+    }
+
+    public function get(){
+        $fromDate = $this->data['fromDate'] . ' 00:00:00';
+        $toDate = $this->data['toDate'] . ' 00:00:00';
+
+        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>1]);
+
+        $orderLines = \Monkey::app()->repoFactory->create('OrderLine')->findBySql
+        (
+           'SELECT *
+           FROM OrderLine ol
+           WHERE ol.creationDate > ? AND ol.creationDate < ? AND ol.shopId = ?',
+           [$fromDate, $toDate, $this->shop->shopId]
+        );
+
+        $orderInfo = [];
+
+        $i = 0;
+        /** @var COrderLine $orderLine */
+        foreach ($orderLines as $orderLine){
+
+            /** @var CDirtySku $dirtySku */
+            $dirtySku = $orderLine->productSku->findRightDirtySku(false, false);
+
+            $orderInfo[$i]['id'] = $orderLine->id . '-' . $orderLine->orderId;
+            $orderInfo[$i]['date'] = $orderLine->creationDate;
+            $orderInfo[$i]['import'] = $orderLine->friendRevenue;
+            $orderInfo[$i]['size'] = $dirtySku->size;
+            $orderInfo[$i]['ean'] = $dirtySku->barcode;
+            $orderInfo[$i]['barcodeInt'] = $dirtySku->barcode_int;
+            $orderInfo[$i]['referenceId'] = $dirtySku->dirtyProduct->extId;
+            $orderInfo[$i]['var'] = $dirtySku->dirtyProduct->var;
+            $i++;
+        }
+
+        return $orderInfo;
+    }
+
+    public function post(){
+    }
+
+    public function put(){
+    }
+
+    public function delete(){
+    }
+
+}

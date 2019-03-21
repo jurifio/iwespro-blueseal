@@ -2871,6 +2871,26 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/api/:endpoint",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"
+            },
+            "filters": {
+                "loc": "[a-z]{2}",
+                "endpoint": "[a-zA-Z]+"
+            },
+            "translations": {},
+            "methods": [
+                "POST",
+                "PUT",
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "*"
+            ]
         }
     ]
 }
