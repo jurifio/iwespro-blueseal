@@ -1,4 +1,5 @@
 {
+    "intervalSecondForNextCall": 7200,
     "requiredFields": {
         "referenceId": "string || numeric",
         "supplierArticle": "string",

@@ -36,7 +36,6 @@ class orders extends AApi
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
     public function get(){
-
         $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>1]);
         $this->uniqueId = uniqid();
 

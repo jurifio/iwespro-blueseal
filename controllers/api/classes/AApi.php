@@ -2,6 +2,8 @@
 
 namespace bamboo\controllers\api\classes;
 use bamboo\controllers\api\AJWTManager;
+use bamboo\utils\time\SDateToolbox;
+use bamboo\utils\time\STimeToolbox;
 
 
 /**
@@ -60,6 +62,24 @@ class AApi extends AJWTManager
                 'uniqueIdCall'=>$uniqueIdCall,
                 'idApiSite'=>$idApiSite
             ]);
+    }
+
+    protected function checkIntervalForNextCall($callType, $source, $interval){
+
+        $lastCall = \Monkey::app()->dbAdapter->query(
+            'SELECT MAX(creationDate) as lastCall
+                    FROM ApiLog
+                    WHERE callType = ? AND source = ?',
+            [$callType, $source]
+        )->fetch();
+
+
+        $now = date("Y-m-d H:i:s");
+        $limitTime = date("Y-m-d H:i:s", strtotime('+' . $interval . ' seconds', strtotime($lastCall['lastCall'])));
+
+        if($now > $limitTime) return true;
+
+        return false;
     }
 
 }

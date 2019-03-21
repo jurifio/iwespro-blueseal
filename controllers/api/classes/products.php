@@ -14,6 +14,7 @@ use bamboo\domain\entities\CDirtyProduct;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductNameTranslation;
 use bamboo\domain\repositories\CProductNameTranslationRepo;
+use bamboo\utils\time\STimeToolbox;
 
 
 /**
@@ -57,12 +58,15 @@ class products extends AApi
     public function post(){
 
         $this->readEntitySettings();
-        $res = $this->validateFile();
-        if($res === true){
-            $this->processFile();
-            $this->workDirtyData();
-            return true;
-        }
+        $interval = $this->settings->fetchAll('intervalSecondForNextCall');
+        if($this->checkIntervalForNextCall('POST', 'Products', $interval)) {
+            $res = $this->validateFile();
+            if ($res === true) {
+                $this->processFile();
+                $this->workDirtyData();
+                return true;
+            }
+        } else $res = 'Tempo necessario fra due esportazioni di prodotto: ' . STimeToolbox::formatTo('seconds', 'hours', $interval) . ' ore';
 
         return $res;
     }
