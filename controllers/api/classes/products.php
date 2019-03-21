@@ -110,7 +110,7 @@ class products extends AApi
                     continue;
                 };
 
-                $notValidFields[][$field] = 'Invalid type';
+                $notValidFields[][$field] = 'Invalid field or type';
             }
 
             if(!empty($notValidFields)) return $notValidFields;
