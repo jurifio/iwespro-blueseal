@@ -23,6 +23,21 @@ class orders extends AApi
     private $shop;
     private $uniqueId;
 
+    /**
+     * orders constructor.
+     * @param $app
+     * @param $data
+     * @throws \bamboo\core\exceptions\BambooConfigException
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\RedPandaCookieException
+     */
+    public function __construct($app, $data)
+    {
+        parent::__construct($app, $data);
+        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>$this->id]);
+        $this->uniqueId = uniqid();
+    }
+
     public function createAction($action)
     {
         if(!is_null($this->auth)){
@@ -36,11 +51,8 @@ class orders extends AApi
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
     public function get(){
-        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id'=>1]);
-        $this->uniqueId = uniqid();
-
-        $fromDate = $this->data['fromDate'] . ' 00:00:00';
-        $toDate = $this->data['toDate'] . ' 00:00:00';
+        $fromDate = str_replace('T', ' ',$this->data['fromDate']);
+        $toDate = str_replace('T', ' ',$this->data['toDate']);
 
         $this->report($this::GET, 'Orders','report', 'Init get order', 'Order from ' . $fromDate . ' to ' . $toDate, $this->uniqueId, $this->id);
 
