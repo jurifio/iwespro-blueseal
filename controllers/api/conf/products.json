@@ -19,7 +19,7 @@
             "barcodeInt": "string || numeric",
             "ean": "string || numeric",
             "tags": "array",
-            "sizeGroup": "string || numeric",
+            "sizeGroup": "string",
             "audience": "string",
             "colorDescription": "string",
             "name": "string",
