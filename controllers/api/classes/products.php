@@ -1217,8 +1217,7 @@ class products extends AApi
 
     private function saveFile()
     {
-        //$doneFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'productSync') . '/' . $this->shop->name . '/import/done/';
-        $doneFolder = \Monkey::app()->rootPath() . "/temp/tempApiImgs/";
+        $doneFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'productSync') . '/' . $this->shop->name . '/import/done/';
         $file = $doneFolder . time() . '.json';
         file_put_contents($file, json_encode($this->data['json']));
 
