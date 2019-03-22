@@ -74,13 +74,13 @@ class orders extends AApi
             $dirtySku = $orderLine->productSku->findRightDirtySku(false, false);
 
             $orderInfo[$i]['id'] = $orderLine->id . '-' . $orderLine->orderId;
-            $orderInfo[$i]['date'] = $orderLine->creationDate;
-            $orderInfo[$i]['import'] = $orderLine->friendRevenue;
+            $orderInfo[$i]['amount'] = $orderLine->friendRevenue;
+            $orderInfo[$i]['referenceId'] = $dirtySku->dirtyProduct->extId;
+            $orderInfo[$i]['var'] = $dirtySku->dirtyProduct->var;
             $orderInfo[$i]['size'] = $dirtySku->size;
             $orderInfo[$i]['ean'] = $dirtySku->barcode;
             $orderInfo[$i]['barcodeInt'] = $dirtySku->barcode_int;
-            $orderInfo[$i]['referenceId'] = $dirtySku->dirtyProduct->extId;
-            $orderInfo[$i]['var'] = $dirtySku->dirtyProduct->var;
+            $orderInfo[$i]['date'] = $orderLine->creationDate;
             $i++;
         }
 
