@@ -152,8 +152,8 @@ class products extends AApi
 
             foreach ($product as $field => $value) {
                 if (
-                    array_key_exists($field, $requiredFields) && $this->checkFieldType($requiredFields, $field, $value)
-                    || array_key_exists($field, $notRequiredFields) && $this->checkFieldType($notRequiredFields, $field, $value)
+                    array_key_exists($field, $requiredFields) && $this->checkFieldType($requiredFields, $field, $value, true)
+                    || array_key_exists($field, $notRequiredFields) && $this->checkFieldType($notRequiredFields, $field, $value, false)
                 ) {
                     continue;
                 };
@@ -168,26 +168,43 @@ class products extends AApi
         return true;
     }
 
-    private function checkFieldType($fields, $field, $value)
+    private function checkFieldType($fields, $field, $value, bool $mandatory)
     {
         $type = $fields[$field];
+
         $resType = null;
         switch ($type) {
             case 'string':
-                $resType = is_string($value);
+                if($mandatory) {
+                    $resType = is_string($value) && !empty(trim($value));
+                } else {
+                    $resType = is_string($value);
+                }
                 break;
             case 'numeric':
                 $resType = is_numeric(str_replace(',', '.', $value));
                 break;
             case 'string || numeric':
-                if (is_string($value) || is_numeric(str_replace(',', '.', $value))) {
-                    $resType = true;
+                if($mandatory){
+                    if ((is_string($value) && !empty(trim($value))) || is_numeric(str_replace(',', '.', $value))) {
+                        $resType = true;
+                    } else {
+                        $resType = false;
+                    }
                 } else {
-                    $resType = false;
+                    if (is_string($value) || is_numeric(str_replace(',', '.', $value))) {
+                        $resType = true;
+                    } else {
+                        $resType = false;
+                    }
                 }
                 break;
             case 'array':
-                $resType = is_array($value);
+                if($mandatory){
+                    $resType = is_array($value) && !empty($value);
+                } else {
+                    $resType = is_array($value);
+                }
                 break;
         }
 
