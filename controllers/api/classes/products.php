@@ -134,6 +134,7 @@ class products extends AApi
     /**
      * @param null $maxProduct
      * @return array|bool|string
+     * @throws \bamboo\core\exceptions\BambooDBALException
      */
     private function validateFile($maxProduct = null)
     {
@@ -147,13 +148,12 @@ class products extends AApi
         }
 
         foreach ($this->data['json'] as $product) {
-            if (count($product) != $totalFields) return 'Hai specificato ' . count($product) . ' su ' . $totalFields;
+            if (count($product) != $totalFields) return 'Hai specificato ' . count($product) . ' campi su ' . $totalFields;
             $notValidFields = [];
 
             foreach ($product as $field => $value) {
                 if (
-                    array_key_exists($field, $requiredFields) && $this->checkFieldType($requiredFields, $field, $value, true)
-                    || array_key_exists($field, $notRequiredFields) && $this->checkFieldType($notRequiredFields, $field, $value, false)
+                    $this->checkFieldType($requiredFields + $notRequiredFields, $field, $value)
                 ) {
                     continue;
                 };
@@ -168,8 +168,15 @@ class products extends AApi
         return true;
     }
 
-    private function checkFieldType($fields, $field, $value, bool $mandatory)
+    private function checkFieldType($fields, $field, $value)
     {
+
+        if(array_key_exists($field, $this->specSettings['requiredFields'])){
+            $mandatory = true;
+        } else if(array_key_exists($field, $this->specSettings['notRequiredFields'])){
+            $mandatory = false;
+        } else return false;
+
         $type = $fields[$field];
 
         $resType = null;
