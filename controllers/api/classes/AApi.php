@@ -64,12 +64,12 @@ class AApi extends AJWTManager
             ]);
     }
 
-    protected function checkIntervalForNextCall($callType, $source, $interval){
+    protected function checkIntervalForNextCall($callType, $source , $interval){
 
         $lastCall = \Monkey::app()->dbAdapter->query(
-            'SELECT MAX(creationDate) as lastCall
+            "SELECT MAX(creationDate) as lastCall
                     FROM ApiLog
-                    WHERE callType = ? AND source = ?',
+                    WHERE callType = ? AND source = ? AND severity = 'success'",
             [$callType, $source]
         )->fetch();
 

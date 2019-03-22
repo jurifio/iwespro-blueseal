@@ -51,6 +51,8 @@ class products extends AApi
     {
         parent::__construct($app, $data);
         $this->readEntitySettings();
+        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id' => $this->id]);
+        $this->uniqueId = uniqid();
     }
 
     public function createAction($action)
@@ -76,12 +78,15 @@ class products extends AApi
     {
 
         $this->specSettings = $this->generalSettings->fetchAll('post');
-        if ($this->checkIntervalForNextCall('POST', 'Products', 1)) {
+
+        if ($this->checkIntervalForNextCall('POST', 'Products', $this->specSettings['intervalSecondForNextCall'])) {
             $res = $this->validateFile();
             if ($res === true) {
                 $this->processFile();
-                //$this->workDirtyData();
-                //$this->saveFile();
+                $this->workDirtyData();
+                $zipFile = $this->saveFile();
+                if($zipFile !== true) unlink($zipFile);
+                $this->report($this::POST, 'Products', 'success', 'Product inserted correctly', null, $this->uniqueId, $this->id);
                 return true;
             }
         } else $res = 'Tempo necessario fra due esportazioni di prodotto: ' . STimeToolbox::formatTo('seconds', 'hours', $this->specSettings['intervalSecondForNextCall']) . ' ore';
@@ -158,6 +163,8 @@ class products extends AApi
 
             if (!empty($notValidFields)) return $notValidFields;
         }
+
+        $this->report($this::POST, 'Products', 'report', 'File validated correctly', null, $this->uniqueId, $this->id);
         return true;
     }
 
@@ -198,9 +205,6 @@ class products extends AApi
         $countNewDirtySku = 0;
         $countUpdatedDirtySku = 0;
         $seenSkus = [];
-
-        $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id' => $this->id]);
-        $this->uniqueId = uniqid();
 
         $this->report($this::POST, 'Products', 'report', 'Process DirtyProduct', 'Init insert of: ' . count($this->data['json']) . ' elements', $this->uniqueId, $this->id);
 
@@ -1211,11 +1215,15 @@ class products extends AApi
         }
     }
 
-    private function saveFile($file, $isGood)
+    private function saveFile()
     {
-        $error = $isGood ? 'done' : 'err';
+        //$doneFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'productSync') . '/' . $this->shop->name . '/import/done/';
+        $doneFolder = \Monkey::app()->rootPath() . "/temp/tempApiImgs/";
+        $file = $doneFolder . time() . '.json';
+        file_put_contents($file, json_encode($this->data['json']));
+
         $now = new \DateTime();
-        $zipName = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'productSync') . '/' . $this->shop->name . '/import/' . $error . '/' . $now->format('YmdHis') . '_' . pathinfo($file)['filename'] . '.tar';
+        $zipName = $doneFolder . $now->format('YmdHis') . '_' . pathinfo($file)['filename'] . '.tar';
         $phar = new \PharData($zipName);
 
         $phar->addFile($file, pathinfo($file)['basename']);
@@ -1225,11 +1233,10 @@ class products extends AApi
             $compressed = $phar->compress(\Phar::GZ);
             if (file_exists($compressed->getPath())) {
                 unlink($file);
-                unlink($zipName);
+                return $zipName;
             }
         }
 
-
-        return $zipName;
+        return true;
     }
 }
