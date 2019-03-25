@@ -18,76 +18,33 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="marketplace_prestashop_product_list"
+                               data-datatable-name="prestashop_marketplace_product"
                                data-controller="MarketplacePrestashopProductListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="prestashopProductId"
+                                <th data-slug="productCode"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Codice Prestashop</th>
-                                <th data-slug="code"
+                                    data-default-order="desc">Codice prodotto</th>
+                                <th data-slug="marketplaceAssociation"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Codice</th>
-                                <th data-slug="ean"
+                                    data-default-order="desc">Associazioni</th>
+                                <th data-slug="status"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                >ean</th>
-                                <th data-slug="shop"
+                                    data-default-order="desc">Stato</th>
+                                <th data-slug="prestaId"
+                                    data-required="true"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Shop</th>
-                                <th data-slug="brand"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Brand</th>
-                                <th data-slug="stock"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Stock</th>
-                                <th data-slug="season"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Season</th>
-                                <th data-slug="itemno"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">CPF</th>
-                                <th data-slug="dummy"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Immagine</th>
-                                <th data-slug="isOnSale"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Stato Saldo</th>
-                                <th data-slug="typeSale"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Tipo Saldo</th>
-                                <th data-slug="associatePrestashopMarketPlace"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Prestashop marketPlace</th>
-                                <th data-slug="price"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Prezzo Listino</th>
-                                <th data-slug="priceSale"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Prezzo Scontato</th>
-                                <th data-slug="percentSale"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Percentuale di sconto</th>
-                                <th data-slug="titleTextSale"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Titolo Prodotto MarketPlace</th>
-                                <th data-slug="statusPublished"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Stato</th>
-                                <th data-slug="creationDate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Creazione</th>
-                                <th data-slug="category"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Prestashop Id</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -108,7 +65,7 @@
                 data-tag="a"
                 data-icon="fa-exchange"
                 data-permission="/admin/product/edit"
-                data-event="bs-product-marketplaceprestashop-publish"
+                data-event="bs.add.presta.product"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Pubblica Prodotti su marketPlace"

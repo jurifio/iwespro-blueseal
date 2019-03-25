@@ -5,7 +5,9 @@ namespace bamboo\blueseal\marketplace\prestashop;
 
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductPhoto;
@@ -36,10 +38,10 @@ class CPrestashopProduct extends APrestashopMarketplace
 
     /**
      * @param $products
-     * @param $shops
+     * @param CMarketplaceHasShop $marketplaceHasShop
      * @return bool
      */
-    public function addNewProducts($products, $shop)
+    public function addNewProducts($products, CMarketplaceHasShop $marketplaceHasShop)
     {
 
         //if argument is object create objectCollection and then iterate it
@@ -64,38 +66,20 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $productPrice = $product->getDisplayPrice();
                 if (!$productPrice) continue;
 
-                $exist = true;
-                if ($this->checkIfProductExist($product)) {
-                    $exist = false;
-                }
+                $operation = $this->checkIfProductExist($product, $marketplaceHasShop->prestashopId);
 
-                //check if data are consistent between Prestashop database and Pickyshop database
-                if (!$exist) {
-                    //INSERT PRODUCT
-                    $xmlResponseProduct = $this->insertProduct($product, $productPrice, $shop);
-
-                    //if error while insert product go to next product
-                    if (!$xmlResponseProduct) continue;
-
-                    $resourcesProduct = $xmlResponseProduct->children()->children();
-                    //add combination sizes --- if false delete product
-                    if (!$this->addCombination($product, $resourcesProduct, $shop)) {
+                if($operation == 'insert'){
+                    if (!$this->insertNewProduct($product, $productPrice, $marketplaceHasShop, $destDir)) continue;
+                } else if ($operation == 'exist'){
+                    continue;
+                } else if ($operation instanceof \SimpleXMLElement){
+                    $resourcesProduct = $operation->children()->children();
+                    if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId)) {
                         $this->deleteProduct((int)$resourcesProduct->id);
-                        continue;
+                        return false;
                     }
-
-                    //upload product photo
-                    $this->uploadImage($resourcesProduct->id, $product, $destDir, $shop);
-
-                    //if all is ok then insert product in pickyshop db
-                    /** @var CPrestashopHasProduct $pHp */
-                    $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->getEmptyEntity();
-                    $pHp->productId = $product->id;
-                    $pHp->productVariantId = $product->productVariantId;
-                    $pHp->prestaId = (int)$xmlResponseProduct->children()->children()->id;
-                    $pHp->status = 1;
-                    $pHp->smartInsert();
                 }
+
 
             } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getMessage());
@@ -114,6 +98,45 @@ class CPrestashopProduct extends APrestashopMarketplace
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while deleting photo', $e->getMessage());
         }
+
+        return true;
+    }
+
+    private function insertNewProduct($product, $productPrice, $marketplaceHasShop, $destDir)
+    {
+        //INSERT PRODUCT
+        $xmlResponseProduct = $this->insertProduct($product, $productPrice, $marketplaceHasShop->prestashopId);
+
+        //if error while insert product go to next product
+        if (!$xmlResponseProduct) return false;
+
+        $resourcesProduct = $xmlResponseProduct->children()->children();
+        //add combination sizes --- if false delete product
+        if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId)) {
+            $this->deleteProduct((int)$resourcesProduct->id);
+            return false;
+        }
+
+        //upload product photo
+        $this->uploadImage($resourcesProduct->id, $product, $destDir, $marketplaceHasShop->prestashopId);
+
+        //if all is ok then insert product in pickyshop db
+        /** @var CPrestashopHasProduct $pHp */
+        $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy([
+            'productId' => $product->id,
+            'productVariantId' =>  $product->productVariantId
+        ]);
+
+        $pHp->prestaId = (int)$xmlResponseProduct->children()->children()->id;
+        $pHp->status = 1;
+        $pHp->update();
+
+        /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
+        $phphmhs = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->getEmptyEntity();
+        $phphmhs->productId = $pHp->productId;
+        $phphmhs->productVariantId = $pHp->productVariantId;
+        $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
+        $phphmhs->smartInsert();
 
         return true;
     }
@@ -146,7 +169,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                 file_put_contents($destDir . $productPhoto->name, $imgBody);
 
-                $urlRest = '/api/images/products/' . $prestashopProductId . '?is_shop=' . $shop;
+                $urlRest = '/api/images/products/' . $prestashopProductId . '?id_shop=' . $shop;
 
                 //Uncomment the following line in order to update an existing image
                 //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
@@ -195,19 +218,18 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return \SimpleXMLElement
      * @throws \PrestaShopWebserviceException
      */
-    public function getDataFromResource($resource, $id = null, array $filter = [], $display = null, $shopGroupId = null, $shopId = null){
+    public function getDataFromResource($resource, $id = null, array $filter = [], $display = null, $shopGroupId = null, $shopId = null)
+    {
 
         $opt['resource'] = $resource;
 
-        if(!is_null($id)) $opt['id'] = $id;
-        if(!empty($filter)) $opt['filter'] = $filter;
-        if(!is_null($display)) $opt['display'] = $display;
-        if(!is_null($shopGroupId)) $opt['id_group_shop'] = $shopGroupId;
-        if(!is_null($shopId)) $opt['id_shop'] = $shopId;
+        if (!is_null($id)) $opt['id'] = $id;
+        if (!empty($filter)) $opt['filter'] = $filter;
+        if (!is_null($display)) $opt['display'] = $display;
+        if (!is_null($shopGroupId)) $opt['id_group_shop'] = $shopGroupId;
+        if (!is_null($shopId)) $opt['id_shop'] = $shopId;
 
-        $xml = $this->ws->get($opt);
-
-        return $xml;
+        return $this->ws->get($opt);
     }
 
     /**
@@ -233,32 +255,40 @@ class CPrestashopProduct extends APrestashopMarketplace
         return $xml;
     }
 
-
-    public function checkIfProductExist(CProduct $product): bool
+    /**
+     * @param CProduct $product
+     * @param $shop
+     * @return string
+     * @throws \PrestaShopWebserviceException
+     */
+    public function checkIfProductExist(CProduct $product, $shop)
     {
+        $allShops = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
         /** @var CPrestashopHasProduct $pHp */
         $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId]);
 
-        //fixme - search only for reference doesn't work (include shop)
-        if (is_null($pHp)) {
-            $prodExist = $this->ws->get(array('resource' => 'products', 'filter' => array('reference' => $product->id . '-' . $product->productVariantId)));
+        $mhs = $pHp->marketplaceHasShop;
 
-            if (!empty($prodExist->children()->children())) {
-                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Dangerous error while try to insert product', $product->id . '-' . $product->productVariantId . ' on Prestashop database but not in Pickyshop database');
-                throw new BambooException($product->id . '-' . $product->productVariantId . ' on Prestashop database but not in Pickyshop database');
+        //if exist product for some shops
+        if ($mhs->count() != 0) {
+            //if exist product for specific shop
+            if ($mhs->findOneByKey('prestashopId', $shop)) {
+                return 'exist';
+            } else {
+                foreach ($allShops as $s){
+                    $xml = null;
+                    try {
+                        $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $s->prestashopId);
+                    } catch (\Throwable $e){}
+
+                    if($xml instanceof \SimpleXMLElement){
+                        return $xml;
+                    }
+                }
             }
-        } else {
-            $prodExist = $this->getResourceFromId($pHp->prestaId, $this::PRODUCT_RESOURCE);
-
-            if (empty($prodExist->children()->children())) {
-                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Dangerous error while try to insert product', $product->id . '-' . $product->productVariantId . ' on Pickyshop database but not in Prestashop database');
-                throw new BambooException($product->id . '-' . $product->productVariantId . ' on Pickyshop database but not in Prestashop database');
-            }
-
-            return false;
         }
 
-        return true;
+        return 'insert';
     }
 
     /**
@@ -369,56 +399,53 @@ class CPrestashopProduct extends APrestashopMarketplace
             $prestashopSizeId = $productPublicSku->productSize->productSizeHasPrestashopSizeOption->prestashopSizeId;
 
 
+            //ADD COMBINATION
+            $blankXmlCombination = $this->getBlankSchema('combinations');
+            $resourcesCombinationBlank = $blankXmlCombination->children()->children();
 
-                //ADD COMBINATION
-                $blankXmlCombination = $this->getBlankSchema('combinations');
-                $resourcesCombinationBlank = $blankXmlCombination->children()->children();
+            //add combination
+            $resourcesCombinationBlank->id_product = $resourcesProduct->id;
+            $resourcesCombinationBlank->reference = $resourcesProduct->reference . '-' . $productPublicSku->productSize->id;
+            $resourcesCombinationBlank->price = $resourcesProduct->price;
+            $resourcesCombinationBlank->minimal_quantity = 1;
+            $resourcesCombinationBlank->associations->product_option_values->product_option_value->id = $prestashopColorId;
+            $resourcesCombinationBlank->associations->product_option_values->addChild('product_option_value')->addChild('id', $prestashopSizeId);
 
-                //add combination
-                $resourcesCombinationBlank->id_product = $resourcesProduct->id;
-                $resourcesCombinationBlank->reference = $resourcesProduct->reference . '-' . $productPublicSku->productSize->id;
-                $resourcesCombinationBlank->price = $resourcesProduct->price;
-                $resourcesCombinationBlank->minimal_quantity = 1;
-                $resourcesCombinationBlank->associations->product_option_values->product_option_value->id = $prestashopColorId;
-                $resourcesCombinationBlank->associations->product_option_values->addChild('product_option_value')->addChild('id', $prestashopSizeId);
+            try {
+                $opt = null;
+                $opt = array('resource' => $this::COMBINATION_RESOURCE);
+                $opt['postXml'] = $blankXmlCombination->asXML();
+                $opt['id_shop'] = $shop;
+                $xml_response_combination = $this->ws->add($opt);
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert combination', $e->getMessage());
+                return false;
+            }
 
-                try {
-                    $opt = null;
-                    $opt = array('resource' => $this::COMBINATION_RESOURCE);
-                    $opt['postXml'] = $blankXmlCombination->asXML();
-                    $opt['id_shop'] = $shop;
-                    $xml_response_combination = $this->ws->add($opt);
-                } catch (\Throwable $e) {
-                    \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert combination', $e->getMessage());
-                    return false;
-                }
+            $resourcesCombination = $xml_response_combination->children()->children();
 
-                $resourcesCombination = $xml_response_combination->children()->children();
+            $xml_ext_stock_available_id = $this->getStockAvaibles(null, ['id_product_attribute' => (int)$resourcesCombination->id], $shop);
+            $xml_ext_stock_available_resource = $xml_ext_stock_available_id->children()->children();
+            $ext_stock_available = (int)$xml_ext_stock_available_resource->stock_available[0]['id'];
 
-                $xml_ext_stock_available_id = $this->getStockAvaibles(null, ['id_product_attribute' => (int)$resourcesCombination->id], $shop);
-                $xml_ext_stock_available_resource = $xml_ext_stock_available_id->children()->children();
-                $ext_stock_available = (int)$xml_ext_stock_available_resource->stock_available[0]['id'];
+            $resourcesStockAvailableXml = $this->getStockAvaibles($ext_stock_available, [], $shop);
+            $resourcesStockAvailable = $resourcesStockAvailableXml->children()->children();
 
-                $resourcesStockAvailableXml = $this->getStockAvaibles($ext_stock_available, [], $shop);
-                $resourcesStockAvailable = $resourcesStockAvailableXml->children()->children();
+            $resourcesStockAvailable->quantity = $productPublicSku->stockQty;
+            $resourcesStockAvailable->depends_on_stock = 0;
+            $resourcesStockAvailable->out_of_stock = 0;
 
-                $resourcesStockAvailable->quantity = $productPublicSku->stockQty;
-                $resourcesStockAvailable->depends_on_stock = 0;
-                $resourcesStockAvailable->out_of_stock = 0;
-
-                try {
-                    $opt = array('resource' => $this::STOCK_AVAILABLES_RESOURCE);
-                    $opt['putXml'] = $resourcesStockAvailableXml->asXML();
-                    $opt['id'] = (int)$resourcesStockAvailable->id;
-                    $this->ws->edit($opt);
-                } catch (\PrestaShopWebserviceException $e) {
-                    //if fail to insert quantity delete combination
-                    $this->deleteCombination((int)$resourcesCombination->id);
-                    \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert stock available', $e->getMessage());
-                    return false;
-                }
-
-
+            try {
+                $opt = array('resource' => $this::STOCK_AVAILABLES_RESOURCE);
+                $opt['putXml'] = $resourcesStockAvailableXml->asXML();
+                $opt['id'] = (int)$resourcesStockAvailable->id;
+                $this->ws->edit($opt);
+            } catch (\PrestaShopWebserviceException $e) {
+                //if fail to insert quantity delete combination
+                $this->deleteCombination((int)$resourcesCombination->id);
+                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert stock available', $e->getMessage());
+                return false;
+            }
 
 
         }
@@ -470,7 +497,8 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function updateProductQuantity($productId, $sizeId, $qty, $shops){
+    public function updateProductQuantity($productId, $sizeId, $qty, $shops)
+    {
 
         foreach ($shops as $shopId) {
             $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
