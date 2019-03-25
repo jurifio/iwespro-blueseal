@@ -39,7 +39,7 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
             $file = fopen($filename, 'r');
             $count = 0;
 
-                while (($getData = fgetcsv($file, 0, "\t")) !== false) {
+                while (($getData = fgetcsv($file, 0, ";")) !== false) {
 
                     if ($count == 0 || $this->clean($getData[0]) == '') {
                         $count++;
