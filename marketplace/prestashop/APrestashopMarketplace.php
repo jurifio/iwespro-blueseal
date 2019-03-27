@@ -118,4 +118,28 @@ abstract class APrestashopMarketplace
         return $this->ws->get(array('resource' => $correctResource, 'id' => $id));
     }
 
+    /**
+     * @param $resource
+     * @param null $id
+     * @param array $filter
+     * @param null $display
+     * @param null $shopGroupId
+     * @param null $shopId
+     * @return \SimpleXMLElement
+     * @throws \PrestaShopWebserviceException
+     */
+    public function getDataFromResource($resource, $id = null, array $filter = [], $display = null, $shopGroupId = null, $shopId = null)
+    {
+
+        $opt['resource'] = $resource;
+
+        if (!is_null($id)) $opt['id'] = $id;
+        if (!empty($filter)) $opt['filter'] = $filter;
+        if (!is_null($display)) $opt['display'] = $display;
+        if (!is_null($shopGroupId)) $opt['id_group_shop'] = $shopGroupId;
+        if (!is_null($shopId)) $opt['id_shop'] = $shopId;
+
+        return $this->ws->get($opt);
+    }
+
 }

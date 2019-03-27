@@ -53,7 +53,7 @@
                 url: '/blueseal/xhr/PrestashopHasProductManage',
                 data: data
             }).done(function (res) {
-                bsModal.writeBody(res);
+                bsModal.writeBody('Prodotti inseriti con successo');
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {

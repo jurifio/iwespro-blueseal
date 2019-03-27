@@ -188,6 +188,29 @@ class CPrestashopFeatures extends APrestashopMarketplace
         return false;
     }
 
+    public function updateAllFeaturesWithShopGroup() : bool
+    {
+        try {
+            $opt['resource'] = $this::FEATURE_RESOURCE;
+            $features = $this->ws->get($opt)->children()->children();
+
+            $optE['resource'] = $this::FEATURE_RESOURCE;
+            foreach ($features->product_feature as $feature) {
+                $featureId = (int)$feature->attributes();
+                $optE['id'] = $featureId;
+                $featureXml = $this->getDataFromResource($this::FEATURE_RESOURCE, $optE['id']);
+
+                $optE['putXml'] = $featureXml->asXML();
+                $optE['id_group_shop'] = 1;
+                $this->ws->edit($optE);
+            }
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopFeatures', 'error', 'Error while update features in new shop', $e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * @param CProductDetailLabel $productDetailLabel

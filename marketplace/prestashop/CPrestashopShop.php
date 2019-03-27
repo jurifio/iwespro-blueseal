@@ -20,6 +20,8 @@ use bamboo\core\exceptions\BambooException;
 
 class CPrestashopShop extends APrestashopMarketplace
 {
+
+    CONST SHOP_RESOURCE = 'shops';
     /**
      * @return array
      * @throws BambooException
@@ -41,6 +43,50 @@ class CPrestashopShop extends APrestashopMarketplace
            return $ids;
        } else throw new BambooException('Error while retriving shops');
 
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function addNewShop($name){
+
+        try {
+            $shopBlankXml = $this->getBlankSchema('shops');
+
+            $shopResource = $shopBlankXml->children()->children();
+            $shopResource->id_shop_group = 1;
+            $shopResource->id_category = 1;
+            $shopResource->active = 1;
+            $shopResource->deleted = 0;
+            $shopResource->name = $name;
+
+            $opt['resource'] = $this::SHOP_RESOURCE;
+            $opt['postXml'] = $shopBlankXml->asXML();
+            $this->ws->add($opt);
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopShop', 'error', 'Error while insert new shop', $e->getMessage());
+            return false;
+        }
+
+        //add category for new shop
+        $prestashopCategory = new CPrestashopCategory();
+        $prestashopCategory->updateAllCategoriesWithShopGroup();
+
+        //add manufacturers for new shop
+        $prestashopManufacturers = new CPrestashopManufacturer();
+        $prestashopManufacturers->updateAllManufacturersWithShopGroup();
+
+        //add attributes for new shop
+        $prestashopOptionValues = new CPrestashopProductOptionValues();
+        $prestashopOptionValues->updateAllProductOptionsWithShopGroup();
+        $prestashopOptionValues->updateAllProductOptionValuesWithShopGroup();
+
+        //add features for new shop
+        $prestashopFeatures = new CPrestashopFeatures();
+        $prestashopFeatures->updateAllFeaturesWithShopGroup();
+
+        return true;
     }
 
 }

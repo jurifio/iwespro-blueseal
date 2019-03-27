@@ -122,6 +122,36 @@ class CPrestashopCategory extends APrestashopMarketplace
     }
 
     /**
+     * @return bool
+     */
+    public function updateAllCategoriesWithShopGroup() : bool
+    {
+        try {
+            $opt['resource'] = 'categories';
+            $cats = $this->ws->get($opt)->children()->children();
+
+            $optE['resource'] = 'categories';
+            foreach ($cats->category as $cat) {
+                $catId = (int)$cat->attributes();
+                $optE['id'] = $catId;
+                $catXml = $this->getDataFromResource('categories', $optE['id']);
+                $catChildXml = $catXml->children()->children();
+                unset($catChildXml->level_depth);
+                unset($catChildXml->nb_products_recursive);
+
+                $optE['putXml'] = $catXml->asXML();
+                $optE['id_group_shop'] = 1;
+                $this->ws->edit($optE);
+            }
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopCategory', 'error', 'Error while update category in new shop', $e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param $productCategoryId
      * @param bool $init
      * @param array $res

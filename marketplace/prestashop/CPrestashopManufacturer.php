@@ -101,6 +101,32 @@ class CPrestashopManufacturer extends APrestashopMarketplace
         return true;
     }
 
+    public function updateAllManufacturersWithShopGroup() : bool
+    {
+        try {
+            $opt['resource'] = 'manufacturers';
+            $mans = $this->ws->get($opt)->children()->children();
+
+            $optE['resource'] = 'manufacturers';
+            foreach ($mans->manufacturer as $man) {
+                $manId = (int)$man->attributes();
+                $optE['id'] = $manId;
+                $manXml = $this->getDataFromResource('manufacturers', $optE['id']);
+                $manChildXml = $manXml->children()->children();
+                unset($manChildXml->link_rewrite);
+
+                $optE['putXml'] = $manXml->asXML();
+                $optE['id_group_shop'] = 1;
+                $this->ws->edit($optE);
+            }
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopManufacturers', 'error', 'Error while update manufacturers in new shop', $e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @param int $prestashopManufacturerId
      * @return \SimpleXMLElement

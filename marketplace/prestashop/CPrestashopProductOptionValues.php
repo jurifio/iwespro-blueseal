@@ -278,4 +278,50 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
         return false;
     }
 
+    public function updateAllProductOptionsWithShopGroup(){
+        try {
+            $opt['resource'] = 'product_options';
+            $prodOptions = $this->ws->get($opt)->children()->children();
+
+            $optE['resource'] = 'product_options';
+            foreach ($prodOptions->product_option as $prodOpt) {
+                $pOptId = (int)$prodOpt->attributes();
+                $optE['id'] = $pOptId;
+                $prodOptXml = $this->getDataFromResource('product_options', $optE['id']);
+
+                $optE['putXml'] = $prodOptXml->asXML();
+                $optE['id_group_shop'] = 1;
+                $this->ws->edit($optE);
+            }
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopProductOptions', 'error', 'Error while update product options in new shop', $e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public function updateAllProductOptionValuesWithShopGroup(){
+        try {
+            $opt['resource'] = 'product_option_values';
+            $prodOptionValues = $this->ws->get($opt)->children()->children();
+
+            $optE['resource'] = 'product_option_values';
+            foreach ($prodOptionValues->product_option_value as $prodOptVal) {
+                $pOptVId = (int)$prodOptVal->attributes();
+                $optE['id'] = $pOptVId;
+                $prodOptVXml = $this->getDataFromResource('product_option_values', $optE['id']);
+
+                $optE['putXml'] = $prodOptVXml->asXML();
+                $optE['id_group_shop'] = 1;
+                $this->ws->edit($optE);
+            }
+        } catch (\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopProductOptionValues', 'error', 'Error while update product option values in new shop', $e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
 }
