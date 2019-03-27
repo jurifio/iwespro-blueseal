@@ -13,6 +13,7 @@ use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductPhoto;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSheetActual;
+use bamboo\domain\entities\CProductSku;
 use bamboo\domain\repositories\CProductRepo;
 
 /**
@@ -422,7 +423,6 @@ class CPrestashopProduct extends APrestashopMarketplace
         /** @var CProductPublicSku $productPublicSku */
         foreach ($product->productPublicSku as $productPublicSku) {
 
-
             $resourcesCombination = null;
             $ext_stock_available = null;
 
@@ -437,6 +437,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             //add combination
             $resourcesCombinationBlank->id_product = $resourcesProduct->id;
             $resourcesCombinationBlank->reference = $resourcesProduct->reference . '-' . $productPublicSku->productSize->id;
+            $resourcesCombinationBlank->ean13 = $productPublicSku->getActualSku()->ean;
             $resourcesCombinationBlank->price = $resourcesProduct->price;
             $resourcesCombinationBlank->minimal_quantity = 1;
             $resourcesCombinationBlank->associations->product_option_values->product_option_value->id = $prestashopColorId;
