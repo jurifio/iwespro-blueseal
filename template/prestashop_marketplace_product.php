@@ -30,6 +30,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Codice prodotto</th>
+                                <th data-slug="price"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Prezzo</th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
                                     data-searchable="true"

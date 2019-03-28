@@ -19,8 +19,24 @@
 
         let bsModal = new $.bsModal('Inserisci prodotti all\'interno di un marketplace', {
             body: `
-                <p>Seleziona un marketplace</p>
-                <select id="selectMarketplace"></select>
+                <div>
+                    <p>Seleziona un marketplace</p>
+                    <select id="selectMarketplace"></select>
+                </div>
+                
+                <div id="newPrice">
+                    <p>Modifica il prezzo</p>
+                    <select id="modifyPrice">
+                        <option value="notModify">Non modificare</option>
+                        <option value="p+">Percentuale +</option>
+                        <option value="p-">Percentuale -</option>
+                        <option value="f+">Fisso +</option>
+                        <option value="f-">Fisso -</option>
+                    </select>
+                    
+                    <p>Inserisci l'importo con cui variare il prezzo</p>
+                    <input type="number" step="0.01" min="1" id="variantValue">
+                </div>
             `
         });
 
@@ -45,7 +61,9 @@
 
             const data = {
                 products: products,
-                marketplaceHasShopId: $('#selectMarketplace').val()
+                marketplaceHasShopId: $('#selectMarketplace').val(),
+                modifyType: $('#modifyPrice').val(),
+                variantValue: $('#variantValue').val()
             };
 
             $.ajax({

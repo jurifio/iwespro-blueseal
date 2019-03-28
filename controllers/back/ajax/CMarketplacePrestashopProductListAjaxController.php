@@ -5,6 +5,7 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
@@ -30,10 +31,12 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               concat(php.productId, '-', php.productVariantId) AS productCode,
               php.productId,
               php.productVariantId,
-              group_concat(concat(s.name, ' | ', m.name)) as marketplaceAssociation,
+              pps.price,
+              group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) as marketplaceAssociation,
               php.status,
               php.prestaId
             FROM PrestashopHasProduct php
+            JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
             LEFT JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
@@ -57,9 +60,10 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
 
             $associations = '';
-            /** @var CMarketplaceHasShop $marketplaceHasShop */
-            foreach ($php->marketplaceHasShop as $marketplaceHasShop){
-                $associations .= $marketplaceHasShop->shop->name . ' | ' . $marketplaceHasShop->marketplace->name . '<br>';
+
+            /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
+            foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs){
+                $associations .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
             }
             $row['marketplaceAssociation'] = $associations;
 
@@ -75,6 +79,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     break;
             }
 
+            $row['price'] = $php->product->getDisplayPrice();
             $row['prestaId'] = $php->prestaId;
 
             $datatable->setResponseDataSetRow($key,$row);

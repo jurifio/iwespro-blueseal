@@ -42,9 +42,11 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param $products
      * @param CMarketplaceHasShop $marketplaceHasShop
+     * @param $modifyType
+     * @param $variantValue
      * @return bool
      */
-    public function addNewProducts($products, CMarketplaceHasShop $marketplaceHasShop)
+    public function addNewProducts($products, CMarketplaceHasShop $marketplaceHasShop, $modifyType, $variantValue)
     {
 
         //if argument is object create objectCollection and then iterate it
@@ -69,14 +71,34 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $productPrice = $product->getDisplayPrice();
                 if (!$productPrice) continue;
 
-                $operation = $this->checkIfProductExist($product, $marketplaceHasShop->prestashopId);
+                switch ($modifyType){
+                    case 'p+':
+                        $productPrice = $productPrice + ($productPrice * $variantValue / 100);
+                        break;
+                    case 'p-':
+                        $productPrice = $productPrice - ($productPrice * $variantValue / 100);
+                        break;
+                    case 'f+':
+                        $productPrice = $productPrice + $variantValue;
+                        break;
+                    case 'f-':
+                        $productPrice = $productPrice - $variantValue;
+                        break;
+                }
+
+                if($productPrice <= 0) continue;
+
+                /** @var CPrestashopHasProduct $pHp */
+                $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId]);
+                $operation = $this->checkIfProductExist($product, $marketplaceHasShop->prestashopId, $pHp);
 
                 if($operation == 'insert'){
                     if (!$this->insertNewProduct($product, $productPrice, $marketplaceHasShop, $destDir)) continue;
                 } else if ($operation == 'exist'){
-                    continue;
+                    $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $marketplaceHasShop->prestashopId);
+                    $this->updateProductPrice($product, $productPrice, $marketplaceHasShop);
                 } else if ($operation instanceof \SimpleXMLElement){
-                    if(!$this->insertProductInNewShop($operation, $marketplaceHasShop, $product, $destDir)) continue;
+                    if(!$this->insertProductInNewShop($operation, $marketplaceHasShop, $product, $destDir, $productPrice)) continue;
                 }
 
 
@@ -146,18 +168,21 @@ class CPrestashopProduct extends APrestashopMarketplace
         $phphmhs->productId = $pHp->productId;
         $phphmhs->productVariantId = $pHp->productVariantId;
         $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
+        $phphmhs->price = $productPrice;
         $phphmhs->smartInsert();
 
         return true;
     }
 
-    private function insertProductInNewShop($productXml, $marketplaceHasShop, $product, $destDir){
+    private function insertProductInNewShop($productXml, $marketplaceHasShop, $product, $destDir, $productPrice){
 
         try {
             $resourcesProduct = $productXml->children()->children();
+            $resourcesProduct->price = $productPrice;
             unset($resourcesProduct->manufacturer_name);
             unset($resourcesProduct->quantity);
             unset($resourcesProduct->associations->combinations);
+
             $opt['resource'] = $this::PRODUCT_RESOURCE;
             $opt['putXml'] = $productXml->asXML();
             $opt['id'] = (int)$resourcesProduct->id;
@@ -188,6 +213,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->productId = $product->id;
             $phphmhs->productVariantId = $product->productVariantId;
             $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
+            $phphmhs->price = $productPrice;
             $phphmhs->smartInsert();
         } catch (\Throwable $e){
             \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert product: ' . $product->productId . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId, $e->getMessage());
@@ -195,6 +221,10 @@ class CPrestashopProduct extends APrestashopMarketplace
         }
 
         return true;
+    }
+
+    public function updateProductPrice($product, $productPrice, $marketplaceHasShop){
+
     }
 
     /**
@@ -290,14 +320,12 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param CProduct $product
      * @param $shop
-     * @return string
-     * @throws \PrestaShopWebserviceException
+     * @param CPrestashopHasProduct $pHp
+     * @return null|\SimpleXMLElement|string
      */
-    public function checkIfProductExist(CProduct $product, $shop)
+    public function checkIfProductExist(CProduct $product, $shop, CPrestashopHasProduct $pHp)
     {
         $allShops = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
-        /** @var CPrestashopHasProduct $pHp */
-        $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId]);
 
         $mhs = $pHp->marketplaceHasShop;
 

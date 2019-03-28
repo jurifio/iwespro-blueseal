@@ -60,8 +60,11 @@ class CPrestashopHasProductManage extends AAjaxController
         }
 
         $prestashopProduct = new CPrestashopProduct();
-        $prestashopProduct->addNewProducts($products, $mhs);
+        if($prestashopProduct->addNewProducts($products, $mhs, $this->data['modifyType'], $this->data['variantValue'])){
+            return 'Prodotti inseriti con successo';
+        };
 
+        return 'Errore durante l\'inserimento dei prodotti';
     }
 
     public function put(){
