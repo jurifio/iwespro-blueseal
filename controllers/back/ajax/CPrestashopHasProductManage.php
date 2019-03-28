@@ -29,14 +29,15 @@ use bamboo\domain\repositories\CProductRepo;
  */
 class CPrestashopHasProductManage extends AAjaxController
 {
-    public function get(){
+    public function get()
+    {
 
         $mhsColl = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
 
         $res = [];
         $i = 0;
         /** @var CMarketplaceHasShop $mhs */
-        foreach ($mhsColl as $mhs){
+        foreach ($mhsColl as $mhs) {
             $res[$i]['id'] = $mhs->id;
             $res[$i]['shop-marketplace'] = $mhs->shop->name . ' | ' . $mhs->marketplace->name;
             $i++;
@@ -46,32 +47,45 @@ class CPrestashopHasProductManage extends AAjaxController
 
     }
 
-    public function post(){
+    public function post()
+    {
         $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $this->data['marketplaceHasShopId']]);
 
         /** @var CProductRepo $productRepo */
         $productRepo = \Monkey::app()->repoFactory->create('Product');
 
         $products = new CObjectCollection();
-        foreach ($this->data['products'] as $productCode){
+        foreach ($this->data['products'] as $productCode) {
             /** @var CProduct $product */
             $product = $productRepo->findOneByStringId($productCode);
             $products->add($product);
         }
 
         $prestashopProduct = new CPrestashopProduct();
-        if($prestashopProduct->addNewProducts($products, $mhs, $this->data['modifyType'], $this->data['variantValue'])){
+        if ($prestashopProduct->addNewProducts($products, $mhs, $this->data['modifyType'], $this->data['variantValue'])) {
             return 'Prodotti inseriti con successo';
         };
 
         return 'Errore durante l\'inserimento dei prodotti';
     }
 
-    public function put(){
+    /**
+     * @throws \PrestaShopWebserviceException
+     */
+    public function put()
+    {
+        $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $this->data['marketplaceHasShopId']]);
 
+        $prestashopProduct = new CPrestashopProduct();
+        if($prestashopProduct->updateProductSaleDescription($this->data['productsPrestashopIds'], $mhs)){
+            return 'Tutti i prodotti sono stati messi in saldo correttamente';
+        };
+
+        return 'Non tutti i prodotti sono stati messi in saldo correttamente';
     }
 
-    public function delete(){
+    public function delete()
+    {
 
     }
 

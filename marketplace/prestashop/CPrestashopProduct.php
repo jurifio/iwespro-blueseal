@@ -96,7 +96,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     if (!$this->insertNewProduct($product, $productPrice, $marketplaceHasShop, $destDir)) continue;
                 } else if ($operation == 'exist'){
                     $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $marketplaceHasShop->prestashopId);
-                    $this->updateProductPrice($product, $productPrice, $marketplaceHasShop);
+                    $this->updateProductPrice($xml, $productPrice, $marketplaceHasShop, $product);
                 } else if ($operation instanceof \SimpleXMLElement){
                     if(!$this->insertProductInNewShop($operation, $marketplaceHasShop, $product, $destDir, $productPrice)) continue;
                 }
@@ -144,7 +144,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         $resourcesProduct = $xmlResponseProduct->children()->children();
         //add combination sizes
-        if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId)) {
+        if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId, $productPrice)) {
             $this->deleteProduct((int)$resourcesProduct->id);
             return false;
         }
@@ -178,7 +178,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         try {
             $resourcesProduct = $productXml->children()->children();
-            $resourcesProduct->price = $productPrice;
+            $resourcesProduct->price = 0;
             unset($resourcesProduct->manufacturer_name);
             unset($resourcesProduct->quantity);
             unset($resourcesProduct->associations->combinations);
@@ -189,7 +189,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id_shop'] = $marketplaceHasShop->prestashopId;
             $this->ws->edit($opt);
 
-            if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId)) {
+            if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId, $productPrice)) {
                 return false;
             }
 
@@ -223,8 +223,43 @@ class CPrestashopProduct extends APrestashopMarketplace
         return true;
     }
 
-    public function updateProductPrice($product, $productPrice, $marketplaceHasShop){
+    /**
+     * @param $productXml
+     * @param $productPrice
+     * @param $marketplaceHasShop
+     * @param $product
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function updateProductPrice($productXml, $productPrice, $marketplaceHasShop, $product){
+        $resourcesProduct = $productXml->children()->children();
 
+        foreach ($resourcesProduct->associations->combinations->combination as $combination){
+            $combinationId = (int)$combination->id;
+
+            $combinationXmlF = $this->getDataFromResource(self::COMBINATION_RESOURCE, $combinationId,[],null, null, $marketplaceHasShop->prestashopId);
+            $combinationXmlC = $combinationXmlF->children()->children();
+
+            $combinationXmlC->price = $productPrice;
+
+            $opt['resource'] = self::COMBINATION_RESOURCE;
+            $opt['putXml'] = $combinationXmlF->asXML();
+            $opt['id'] = (int)$combinationId;
+            $opt['id_shop'] = $marketplaceHasShop->prestashopId;
+            $this->ws->edit($opt);
+        }
+
+        /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
+        $phphmhs = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy([
+            'productId' => $product->id,
+            'productVariantId' => $product->productVariantId,
+            'marketplaceHasShopId' => $marketplaceHasShop->id
+        ]);
+
+        $phphmhs->price = $productPrice;
+        $phphmhs->update();
     }
 
     /**
@@ -364,24 +399,24 @@ class CPrestashopProduct extends APrestashopMarketplace
         $resourcesBlankProduct = $blankProductXml->children()->children();
         $resourcesBlankProduct->id_manufacturer = $product->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
         $resourcesBlankProduct->reference = $product->id . '-' . $product->productVariantId;
-        $resourcesBlankProduct->price = $productPrice;
+        $resourcesBlankProduct->price = 0;
         $resourcesBlankProduct->active = 1;
         $resourcesBlankProduct->available_for_order = 1;
         $resourcesBlankProduct->show_price = 1;
 
-        $node = dom_import_simplexml($resourcesBlankProduct->name->language[0][0]);
-        $no = $node->ownerDocument;
-        $node->appendChild($no->createCDATASection("cdata name"));
+        //$node = dom_import_simplexml($resourcesBlankProduct->name->language[0][0]);
+        //$no = $node->ownerDocument;
+        //$node->appendChild($no->createCDATASection("cdata name"));
         $resourcesBlankProduct->name->language[0][0] = $product->getName();
-        $resourcesBlankProduct->name->language[0][0]['id'] = 1;
-        $resourcesBlankProduct->name->language[0][0]['xlink:href'] = $this->url . '/api/languages/1';
+        //$resourcesBlankProduct->name->language[0][0]['id'] = 1;
+        //$resourcesBlankProduct->name->language[0][0]['xlink:href'] = $this->url . '/api/languages/1';
 
-        $node = dom_import_simplexml($resourcesBlankProduct->description->language[0][0]);
-        $no = $node->ownerDocument;
-        $node->appendChild($no->createCDATASection("cdata description"));
+        //$node = dom_import_simplexml($resourcesBlankProduct->description->language[0][0]);
+        //$no = $node->ownerDocument;
+        //$node->appendChild($no->createCDATASection("cdata description"));
         $resourcesBlankProduct->description->language[0][0] = $product->getDescription();
-        $resourcesBlankProduct->description->language[0][0]['id'] = 1;
-        $resourcesBlankProduct->description->language[0][0]['xlink:href'] = $this->url . '/api/languages/1';
+        //$resourcesBlankProduct->description->language[0][0]['id'] = 1;
+        //$resourcesBlankProduct->description->language[0][0]['xlink:href'] = $this->url . '/api/languages/1';
 
         $resourcesBlankProduct->state = 1;
 
@@ -441,11 +476,12 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param CProduct $product
      * @param $resourcesProduct
-     * @param $shops
+     * @param $shop
+     * @param $productPrice
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function addCombination(CProduct $product, $resourcesProduct, $shop)
+    public function addCombination(CProduct $product, $resourcesProduct, $shop, $productPrice)
     {
 
         /** @var CProductPublicSku $productPublicSku */
@@ -466,7 +502,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $resourcesCombinationBlank->id_product = $resourcesProduct->id;
             $resourcesCombinationBlank->reference = $resourcesProduct->reference . '-' . $productPublicSku->productSize->id;
             $resourcesCombinationBlank->ean13 = $productPublicSku->getActualSku()->ean;
-            $resourcesCombinationBlank->price = $resourcesProduct->price;
+            $resourcesCombinationBlank->price = $productPrice;
             $resourcesCombinationBlank->minimal_quantity = 1;
             $resourcesCombinationBlank->associations->product_option_values->product_option_value->id = $prestashopColorId;
             $resourcesCombinationBlank->associations->product_option_values->addChild('product_option_value')->addChild('id', $prestashopSizeId);
@@ -597,6 +633,57 @@ class CPrestashopProduct extends APrestashopMarketplace
                     }
                 }
 
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $productPrestashopIds
+     * @param CMarketplaceHasShop $mhs
+     * @return bool
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function updateProductSaleDescription($productPrestashopIds, CMarketplaceHasShop $mhs){
+
+        foreach ($productPrestashopIds as $productPrestashopId){
+
+            $productCode = explode('-', $productPrestashopId);
+
+            /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
+            $phphmhs = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy([
+                'productId' => $productCode[1],
+                'productVariantId' => $productCode[2],
+                'marketplaceHasShopId' => $mhs->id
+            ]);
+
+            if(is_null($phphmhs) || $phphmhs->isOnSale == 1) continue;
+
+            $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productCode[0], [], null, null, $mhs->prestashopId);
+
+            $productChildXml = $productXml->children()->children();
+            $productChildXml->name->language[0][0] = $productChildXml->name->language[0][0] . ' ON SALE!';
+            unset($productChildXml->manufacturer_name);
+            unset($productChildXml->quantity);
+            unset($productChildXml->associations->combinations);
+
+            try {
+                $opt['resource'] = self::PRODUCT_RESOURCE;
+                $opt['putXml'] = $productXml->asXML();
+                $opt['id_shop'] = $mhs->prestashopId;
+                $opt['id'] = $productPrestashopId;
+                $this->ws->edit($opt);
+
+                $phphmhs->isOnSale = 1;
+                $phphmhs->update();
+
+            } catch (\PrestaShopWebserviceException $e) {
+                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
+                return false;
             }
         }
 

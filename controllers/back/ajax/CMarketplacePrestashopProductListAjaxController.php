@@ -33,6 +33,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               php.productVariantId,
               pps.price,
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) as marketplaceAssociation,
+              group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale)) as sale,
               php.status,
               php.prestaId
             FROM PrestashopHasProduct php
@@ -60,12 +61,15 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
 
             $associations = '';
+            $onSale = '';
 
             /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs){
                 $associations .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
+                $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale === '0' ? 'No' : 'Yes') . '<br>';
             }
             $row['marketplaceAssociation'] = $associations;
+            $row['sale'] = $onSale;
 
             switch ($php->status){
                 case 1:
@@ -81,7 +85,6 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
             $row['price'] = $php->product->getDisplayPrice();
             $row['prestaId'] = $php->prestaId;
-
             $datatable->setResponseDataSetRow($key,$row);
         }
 

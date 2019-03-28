@@ -45,6 +45,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Stato</th>
+                                <th data-slug="sale"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Saldo</th>
                                 <th data-slug="prestaId"
                                     data-required="true"
                                     data-searchable="true"
@@ -78,71 +83,15 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.product.marketplace.response"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-repeat"
+            data-icon="fa-dollar"
             data-permission="/admin/product/edit"
-            data-event="bs.product.retry"
+            data-event="bs.marketplace.product.sale"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Riprova Inserimento"
+            data-title="Metti in saldo i prodotti"
             data-placement="bottom"
             data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.product.marketplace.publish.all"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Assegnazione Ean">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-barcode fa-plus"
-            data-permission="/admin/product/edit"
-            data-event="bs.ean.newRange"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Inserisci nuovo Range Ean"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-barcode fa-share"
-            data-permission="/admin/product/edit"
-            data-event="bs.product.ean"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Assegna nuovi Ean Prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Filtra">
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-filter"
-            data-permission="/admin/product/edit"
-            data-event="bs.marketplace.filter"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Filtra Tabella"
-            data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Associa Ean a Prodotti  per MarketPlace mancanti">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-barcode fa-share"
-                data-permission="/admin/product/edit"
-                data-event="bs.product.associate.to.empty.ean"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Assegna nuovi Ean Prodotti"
-                data-placement="bottom"
-                data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 
