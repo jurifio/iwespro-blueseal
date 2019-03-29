@@ -624,7 +624,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                     //modify stock_available quantity
                     if(!is_null($newQty)){
-                        $stockAvailableXmlChildren->quantity = $qty;
+                        $stockAvailableXmlChildren->quantity = $newQty;
                     } else if(!is_null($differential)){
                         $stockAvailableXmlChildren->quantity = $stockAvailableXmlChildren->quantity - $differential;
                     }
