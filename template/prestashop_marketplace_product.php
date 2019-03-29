@@ -50,6 +50,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Saldo</th>
+                                <th data-slug="pickySale"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Saldo in Picky</th>
                                 <th data-slug="prestaId"
                                     data-required="true"
                                     data-searchable="true"

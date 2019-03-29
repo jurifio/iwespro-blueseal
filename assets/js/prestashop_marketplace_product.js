@@ -102,7 +102,7 @@
             prestaIds.push(v.prestaId + '-' + v.productCode);
         });
 
-        let bsModal = new $.bsModal('Inserisci prodotti all\'interno di un marketplace', {
+        let bsModal = new $.bsModal('Metti i prodotti in saldo', {
             body: `
                 <div>
                     <p>Seleziona un marketplace</p>

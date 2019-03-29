@@ -33,11 +33,13 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               php.productVariantId,
               pps.price,
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) as marketplaceAssociation,
+              p.isOnSale as pickySale,
               group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale)) as sale,
               php.status,
               php.prestaId
             FROM PrestashopHasProduct php
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
+            JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
             LEFT JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
@@ -84,6 +86,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             }
 
             $row['price'] = $php->product->getDisplayPrice();
+            $row['pickySale'] = $php->product->isOnSale === '0' ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
             $datatable->setResponseDataSetRow($key,$row);
         }
