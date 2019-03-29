@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
-    <?php include "parts/header.php";?>
+    <?php include "parts/header.php"; ?>
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
@@ -29,37 +29,56 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Codice prodotto</th>
+                                    data-default-order="desc">Codice prodotto
+                                </th>
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Prezzo</th>
+                                    data-default-order="desc">Prezzo
+                                </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Associazioni</th>
+                                    data-default-order="desc">Associazioni
+                                </th>
                                 <th data-slug="status"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato</th>
+                                    data-default-order="desc">Stato
+                                </th>
                                 <th data-slug="sale"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Saldo</th>
+                                    data-default-order="desc">Saldo
+                                </th>
                                 <th data-slug="pickySale"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Saldo in Picky</th>
+                                    data-default-order="desc">Saldo in Picky
+                                </th>
                                 <th data-slug="prestaId"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Prestashop Id</th>
+                                    data-default-order="desc">Prestashop Id
+                                </th>
+                                <th data-slug="cronjobReservation"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Marketplace prossimo inserimento
+                                </th>
+                                <th data-slug="cronjobOperation"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Operazioni previste dal cron
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,7 +88,7 @@
                 </div>
             </div>
         </div>
-        <?php include "parts/footer.php"?>
+        <?php include "parts/footer.php" ?>
     </div>
 </div>
 <?php include "parts/bsmodal.php"; ?>
@@ -88,15 +107,26 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-dollar"
-            data-permission="/admin/product/edit"
-            data-event="bs.marketplace.product.sale"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Metti in saldo i prodotti"
-            data-placement="bottom"
-            data-toggle="modal"
+                data-tag="a"
+                data-icon="fa-dollar"
+                data-permission="/admin/product/edit"
+                data-event="bs.marketplace.product.sale"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Metti in saldo i prodotti"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-bars"
+                data-permission="/admin/product/edit"
+                data-event="bs.cron.insert.product.prestashop"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Prenota i prodotti per l'inserimento attraverso il Cron"
+                data-placement="bottom"
+                data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 
