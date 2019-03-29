@@ -49,6 +49,10 @@ class CPrestashopHasProductManage extends AAjaxController
 
     public function post()
     {
+        if(empty($this->data['marketplaceHasShopId']) || (empty($this->data['variantValue']) && $this->data['modifyType'] !== 'nf')){
+            return 'Inserisci i dati correttamente';
+        }
+
         $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $this->data['marketplaceHasShopId']]);
 
         /** @var CProductRepo $productRepo */
@@ -78,10 +82,10 @@ class CPrestashopHasProductManage extends AAjaxController
 
         $prestashopProduct = new CPrestashopProduct();
         if($prestashopProduct->updateProductSaleDescription($this->data['productsPrestashopIds'], $mhs)){
-            return 'Tutti i prodotti sono stati messi in saldo correttamente';
+            return 'Saldi aggiornati correttamente';
         };
 
-        return 'Non tutti i prodotti sono stati messi in saldo correttamente';
+        return 'Controllare se tutti i saldi sono stati inseriti correttamente';
     }
 
     public function delete()

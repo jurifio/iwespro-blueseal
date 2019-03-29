@@ -101,6 +101,9 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             /** @var CMarketplaceHasShop $mhsCron */
             $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
 
+            $row['cronjobOperation'] = '';
+            $row['cronjobReservation'] = '';
+
             if(!is_null($mhsCron)){
                 $row['cronjobReservation'] = $mhsCron->shop->name . ' | ' . $mhsCron->marketplace->name;
                 $row['cronjobOperation'] = 'Type operation: ' . $php->modifyType . ' | Operation amount: ' . $php->variantValue;

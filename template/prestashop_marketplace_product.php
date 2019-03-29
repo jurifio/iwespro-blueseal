@@ -117,17 +117,6 @@
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-bars"
-                data-permission="/admin/product/edit"
-                data-event="bs.cron.insert.product.prestashop"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Prenota i prodotti per l'inserimento attraverso il Cron"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
     </bs-toolbar-group>
 
 </bs-toolbar>

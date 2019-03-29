@@ -31,6 +31,10 @@ class CPrestashopHasProductManageWithCron extends AAjaxController
      */
     public function post()
     {
+        if(empty($this->data['marketplaceHasShopId']) || (empty($this->data['variantValue']) && $this->data['modifyType'] !== 'nf')){
+            return 'Inserisci i dati correttamente';
+        }
+
         /** @var CPrestashopHasProductRepo $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
 
@@ -42,7 +46,7 @@ class CPrestashopHasProductManageWithCron extends AAjaxController
             $php = $phpRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1]]);
             $php->marketplaceHasShopId = $this->data['marketplaceHasShopId'];
             $php->modifyType = $this->data['modifyType'];
-            $php->variantValue = $this->data['variantValue'];
+            $php->variantValue = $this->data['modifyType'] === 'nf' ? 0 : $this->data['variantValue'];
             $php->update();
         }
 

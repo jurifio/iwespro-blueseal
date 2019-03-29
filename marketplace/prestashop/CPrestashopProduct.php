@@ -661,12 +661,21 @@ class CPrestashopProduct extends APrestashopMarketplace
                 'marketplaceHasShopId' => $mhs->id
             ]);
 
-            if(is_null($phphmhs) || $phphmhs->isOnSale == 1) continue;
+            if(is_null($phphmhs)) continue;
 
+            $stringSale = ' ON SALE!';
             $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productCode[0], [], null, null, $mhs->prestashopId);
-
             $productChildXml = $productXml->children()->children();
-            $productChildXml->name->language[0][0] = $productChildXml->name->language[0][0] . ' ON SALE!';
+
+            if($phphmhs->isOnSale == 1){
+                $newSaleStatus = 0;
+                $name = str_replace($stringSale, '', $productChildXml->name->language[0][0]);
+            } else {
+                $name = $productChildXml->name->language[0][0] . $stringSale;
+                $newSaleStatus = 1;
+            }
+
+            $productChildXml->name->language[0][0] = $name;
             unset($productChildXml->manufacturer_name);
             unset($productChildXml->quantity);
             unset($productChildXml->associations->combinations);
@@ -678,7 +687,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['id'] = $productPrestashopId;
                 $this->ws->edit($opt);
 
-                $phphmhs->isOnSale = 1;
+                $phphmhs->isOnSale = $newSaleStatus;
                 $phphmhs->update();
 
             } catch (\PrestaShopWebserviceException $e) {
