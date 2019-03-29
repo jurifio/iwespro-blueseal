@@ -588,13 +588,16 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param $productId
      * @param $sizeId
-     * @param $qty
+     * @param null $newQty
+     * @param null $differential
      * @param $shops
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function updateProductQuantity($productId, $sizeId, $qty, $shops)
+    public function updateProductQuantity($productId, $sizeId, $newQty = null, $differential = null ,$shops)
     {
+
+        if(is_null($newQty) && is_null($differential)) return false;
 
         foreach ($shops as $shopId) {
             $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
@@ -620,7 +623,11 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $stockAvailableXmlChildren = $stockAvailableXmlFather->children()->children();
 
                     //modify stock_available quantity
-                    $stockAvailableXmlChildren->quantity = $qty;
+                    if(!is_null($newQty)){
+                        $stockAvailableXmlChildren->quantity = $qty;
+                    } else if(!is_null($differential)){
+                        $stockAvailableXmlChildren->quantity = $stockAvailableXmlChildren->quantity - $differential;
+                    }
 
                     try {
                         $opt['resource'] = $this::STOCK_AVAILABLES_RESOURCE;
