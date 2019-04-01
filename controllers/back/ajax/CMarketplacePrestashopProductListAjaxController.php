@@ -94,7 +94,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     break;
             }
 
-            $row['price'] = $php->product->getDisplayPrice();
+            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale === '0' ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
 

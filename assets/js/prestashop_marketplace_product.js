@@ -105,8 +105,14 @@
             return false;
         }
 
+        let products = [];
+
         $.each(selectedRows, function (k, v) {
-            prestaIds.push(v.prestaId + '-' + v.productCode);
+            products.push({
+                'prestaId': v.prestaId,
+                'productId': v.productId,
+                'productVariantId': v.productVariantId
+            });
         });
 
         let bsModal = new $.bsModal('Metti/togli i prodotti in saldo', {
@@ -114,6 +120,23 @@
                 <div>
                     <p>Seleziona un marketplace</p>
                     <select id="selectMarketplace"></select>
+                </div>
+                
+                <div>
+                    <p>Applica modifica al titolo</p>
+                    <input type="checkbox" id="useNewTitle">
+                </div>
+                
+                <div id="newSalePrice">
+                    <p>Modifica il prezzo</p>
+                    <select id="modifyPrice">
+                        <option value="nf">Non modificare</option>
+                        <option value="percentage">Percentuale -</option>
+                        <option value="amount">Fisso -</option>
+                    </select>
+                    
+                    <p>Inserisci l'importo con cui variare il prezzo</p>
+                    <input type="number" step="0.01" min="1" id="variantValue">
                 </div>
             `
         });
@@ -136,8 +159,11 @@
         bsModal.setOkEvent(function () {
 
             const data = {
-                productsPrestashopIds: prestaIds,
-                marketplaceHasShopId: $('#selectMarketplace').val()
+                products: products,
+                marketplaceHasShopId: $('#selectMarketplace').val(),
+                modifyType: $('#modifyPrice').val(),
+                titleModify: !!$('#useNewTitle').is(':checked'),
+                variantValue: $('#variantValue').val()
             };
 
             $.ajax({
@@ -146,6 +172,60 @@
                 data: data
             }).done(function (res) {
                 bsModal.writeBody('Prodotti inseriti con successo');
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
+    $(document).on('bs.delete.product', function () {
+
+        //Prendo tutti i lotti selezionati
+        let prestaIds = [];
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if (selectedRows.length == 0) {
+            new Alert({
+                type: "warning",
+                message: "Seleziona almeno un prodotto"
+            }).open();
+            return false;
+        }
+
+        let products = [];
+
+        $.each(selectedRows, function (k, v) {
+            products.push({
+                'prestaId': v.prestaId,
+                'productId': v.productId,
+                'productVariantId': v.productVariantId
+            });
+        });
+
+        let bsModal = new $.bsModal('Elimina il prodotto da prestashop', {
+            body: `Sicuro di voler eliminare il prodotto da tutti i marketplace?`
+        });
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                products: products,
+            };
+
+            $.ajax({
+                method: 'delete',
+                url: '/blueseal/xhr/PrestashopHasProductManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody('Prodotti eliminati con successo');
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {

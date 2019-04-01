@@ -94,7 +94,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Pubblica Prodotto">
+    <bs-toolbar-group data-group-label="Gestisci Prodotto">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-exchange"
@@ -114,6 +114,17 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Metti in saldo i prodotti"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-close"
+                data-permission="/admin/product/edit"
+                data-event="bs.delete.product"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Elimina il prodotto dal marketplace"
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>

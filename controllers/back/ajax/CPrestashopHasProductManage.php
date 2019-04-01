@@ -4,13 +4,17 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooInvoiceException;
 use bamboo\domain\entities\CMarketplaceHasShop;
+use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductBatch;
 use bamboo\domain\entities\CUser;
 use bamboo\domain\repositories\CDocumentRepo;
+use bamboo\domain\repositories\CPrestashopHasProductRepo;
 use bamboo\domain\repositories\CProductBatchRepo;
 use bamboo\domain\repositories\CProductRepo;
 
@@ -74,23 +78,55 @@ class CPrestashopHasProductManage extends AAjaxController
     }
 
     /**
+     * @return string
+     * @throws BambooException
      * @throws \PrestaShopWebserviceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
     public function put()
     {
         $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $this->data['marketplaceHasShopId']]);
 
         $prestashopProduct = new CPrestashopProduct();
-        if($prestashopProduct->updateProductSaleDescription($this->data['productsPrestashopIds'], $mhs)){
-            return 'Saldi aggiornati correttamente';
-        };
+
+        $updateDescription = $this->data['titleModify'] === 'true' ? true : false;
+        $prestashopProduct->insertSpecificPriceForSale($this->data['products'], $mhs, $updateDescription, $this->data['variantValue'], $this->data['modifyType']);
 
         return 'Controllare se tutti i saldi sono stati inseriti correttamente';
     }
 
+    /**
+     * @return bool
+     * @throws BambooException
+     * @throws \PrestaShopWebserviceException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
     public function delete()
     {
+        $prestashopProduct = new CPrestashopProduct();
 
+        /** @var CPrestashopHasProductRepo $phpRepo */
+        $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+        foreach ($this->data['products'] as $product){
+            if($prestashopProduct->deleteProduct($product['prestaId'], $product['productId'], $product['productVariantId'])){
+
+                /** @var CPrestashopHasProduct $php */
+                $php = $phpRepo->findOneBy(['productId'=>$product['productId'],
+                                      'productVariantId'=>$product['productVariantId']
+                                     ]);
+
+                /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
+                foreach ($php->prestashopHasProductHasMarketplaceHasShop as $phphmhs){
+                    $phphmhs->delete();
+                }
+
+                $php->delete();
+            };
+        }
+
+        return true;
     }
 
 }
