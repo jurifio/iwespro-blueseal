@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CShop;
+use bamboo\domain\entities\CAddressBook;
 
 /**
  * Class CShopListAjaxController
@@ -34,6 +35,7 @@ class CShopListAjaxController extends AAjaxController
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
+        $addressBookRepo=\Monkey::app()->repoFactory->create('AddressBook');
         /** @var CShop $shop */
         foreach($shops as $shop){
             $row = [];
@@ -42,6 +44,8 @@ class CShopListAjaxController extends AAjaxController
             $row['title'] = $shop->title;
             $row['owner'] = $shop->owner;
             $row['currentSeasonMultiplier'] = $shop->currentSeasonMultiplier;
+            $addressbook=$addressBookRepo->findOneBy(['id'=>$shop->billingAddressBookId]);
+            $row['vatNumber']=$shop->billingAddressBook ? substr($shop->billingAddressBook->vatNumber,6,13) : null ;
             $row['pastSeasonMultiplier'] = $shop->pastSeasonMultiplier;
             $row['referrerEmails'] = implode('<br />',explode(';',$shop->referrerEmails));
             $row['saleMultiplier'] = $shop->saleMultiplier;

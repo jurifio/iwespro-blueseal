@@ -2,7 +2,9 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\domain\entities\CInvoiceType;
 use bamboo\domain\repositories\CDocumentRepo;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\ecommerce\views\VBase;
 use bamboo\utils\time\STimeToolbox;
 
@@ -41,6 +43,8 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
         $data = $this->app->router->request()->getRequestData();
         $files = $this->app->router->request()->getFiles();
 
+        $emailBool = (bool) array_pop($data);
+
         /** @var CDocumentRepo $documentRepo */
         $documentRepo = \Monkey::app()->repoFactory->create('Document');
 
@@ -66,6 +70,33 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
                 true,
                 $files['invoiceBin']['name'],
                 $files['invoiceBin']['tmp_name']);
+
+            if($data['invoiceTypeId'] == CInvoiceType::CREDIT_REQUEST && $emailBool){
+
+                $shopEmail = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['billingAddressBookId'=>$data['shopRecipientId']])->amministrativeEmails;
+
+                $body = '
+                <img height="150px" src="https://www.pickyshop.com/it/assets/logoiwes.png">
+                 <br />
+                 <br />
+                 Salve,
+                <br />
+                Preghiamo prendere nota che la vostra richiesta di accredito pari a ' . $data['total'] . '€ è stata inserita nella distinta
+                n. ' . $data['number'] . ' in compensazione.
+                <br />
+                Cordialmente,<br />
+                <br />
+                <img height="40px" src="https://www.pickyshop.com/it/assets/Iwes.png">
+                <br />
+                 <br />
+                Billing Department
+                ';
+
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $emailRepo->newMail('no-reply@pickyshop.com', [$shopEmail], [], [], 'Richiesta di accredito', $body);
+
+            }
         } catch (\Throwable $e) {
             \Monkey::app()->repoFactory->rollback();
             throw $e;

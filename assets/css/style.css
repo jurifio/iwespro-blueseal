@@ -682,6 +682,10 @@ body.sidebar-visible .sidebar-logo {
     color: #009900;
 }
 
+.text-blue {
+    color: #0000ff;
+}
+
 /* tabella fattura */
 
 .invoice-table td, .invoice-table th {

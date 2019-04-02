@@ -60,6 +60,41 @@
             ]
         },
         {
+            "pattern": "/blueseal/registri(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/registri/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterManageController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/registri/registroincassi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBillingJournalListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/ordini/utenti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
@@ -233,6 +268,20 @@
             "pattern": "/blueseal/importatori/dizionari/taglie(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/importatori/dizionari/immaginidimensioni(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryImageSizeListController"
             },
             "filters": {},
             "translations": {},
@@ -964,6 +1013,22 @@
             "translations": {},
             "methods": [
                 "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/print/billingJournal(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterPrintController"
+            },
+            "filters": {
+                "id": ":?[A-Za-z0-9_-]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
             ]
         },
         {
@@ -2853,6 +2918,52 @@
                 "POST",
                 "DELETE",
                 "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/manage-fixed-page(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/manage-fixed-page/:id/:langId(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageDetailListController"
+            },
+            "filters": {
+                "id": ":?[A-Za-z0-9_-]+",
+                "langId": ":?[A-Za-z0-9_-]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/api/:endpoint(/?):resource",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"
+            },
+            "filters": {
+                "loc": "[a-z]{2}",
+                "endpoint": "[a-zA-Z]+",
+                "resource": "(:?[A-Za-z0-9_-]+)?"
+            },
+            "translations": {},
+            "methods": [
+                "POST",
+                "PUT",
+                "GET",
+                "DELETE"
+            ],
+            "hosts": [
+                "*"
             ]
         }
     ]

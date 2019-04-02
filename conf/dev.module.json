@@ -2,6 +2,7 @@
     "paths": {
         "admin-theme": "/back",
         "blueseal": "/back",
+        "api": "/back/controllers/api/conf/",
         "packed-assets": "/client/public/themes/flatize/assets/",
         "blueseal-addin": "/back/addon",
         "friend-logo": "/back/assets/img/clientLogo/",
@@ -21,8 +22,8 @@
             "ORD_WAIT_PERR": "Error in payment"
         },
         "fattureInCloud": {
-            "api_uid": "34021",
-            "api_key": "443884d05056b5f0831446538c6e840f"
+            "api_uid": "494941",
+            "api_key": "dc6ba1bdce245ae8e6251d7d1df83542"
         },
         "payPal": {
             "business": "transazioni@pickyshop.com",

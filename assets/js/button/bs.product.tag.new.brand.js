@@ -48,6 +48,9 @@ $(document).on('bs-product-tag-new-brand', function () {
 
     let bsModal = new $.bsModal("Seleziona i brand e associali ad uno special tag", {
         body: `<p>Seleziona il brand a cui associare la nuova etichetta</p>
+                <div>
+                <p id="actualSelectedBrand">Le stagioni attualmente utilizzate sono: </p>
+                </div>
                 <select id="brand">
                 <option disabled selected value>Seleziona un brand</option>
                 </select>
@@ -60,18 +63,67 @@ $(document).on('bs-product-tag-new-brand', function () {
                 <option disabled selected value>Seleziona un\'opzione</option>
                 <option id="add" value="add">Aggiungi</option>
                 <option id="del" value="del">Rimuovi</option>
-                </select>`
+                </select>
+                <div id="operation">
+                </div>`
+    });
+
+    $('#special-tags').change(function () {
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/SpecialNewBrandTagsAjaxController',
+            data: {
+                tagId: $(this).val()
+            },
+            dataType: 'json'
+        }).done(function (brandsNames) {
+            $.each(brandsNames, function (k, v) {
+                $('#actualSelectedBrand').append(`<strong>${v}</strong> | `);
+            })
+        });
+    });
+
+    $('#type').change(function() {
+        if($('#type option:selected').val() == 'add') {
+            $('#operation').append(
+                `<p>Seleziona la posizione</p>
+            <select id="selectPos"></select>    
+            `
+            );
+
+            $.ajax({
+                url: '/blueseal/xhr/getTableContent',
+                method: 'GET',
+                data: {
+                    table: 'TagPosition',
+                },
+                dataType: 'json'
+            }).done(function (resPosition) {
+                var tagPosition = $('#selectPos');
+                if(typeof (tagPosition[0].selectize) != 'undefined') tagPosition[0].selectize.destroy();
+                tagPosition.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: resPosition,
+                });
+            });
+        } else {
+            $('#operation').empty()
+        }
     });
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
 
         let type = $('#type').val();
+        let pos = $('#selectPos').val();
 
         if(type === 'add'){
             const data = {
                 brand: $('#brand').val(),
-                tag: $('#special-tags').val()
+                tag: $('#special-tags').val(),
+                pos: pos
             };
             $.ajax({
                 method: 'post',

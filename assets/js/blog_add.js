@@ -100,3 +100,24 @@ $(document).on('bs.save.post', function(a,b,c) {
 $(document).on("change", "#chooseBlog", function () {
 	$("#blogId").val($(this).val());
 });
+
+function setTargetColor(target, min, max) {
+    if ($(target).val().length < min || $(target).val().length > max) {
+        $(target).css('color', 'red')
+    } else {
+        $(target).css('color', 'green')
+    }
+}
+
+$(document).ready(function () {
+    setTargetColor('#titleTag', 50, 60);
+    setTargetColor('#metaDescription', 50, 300);
+});
+
+$('#titleTag').on('keyup', function (e) {
+    setTargetColor(this, 50, 60)
+});
+
+$('#metaDescription').on('keyup', function (e) {
+    setTargetColor(this, 50, 300)
+});

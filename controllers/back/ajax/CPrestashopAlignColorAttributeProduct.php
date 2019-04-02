@@ -232,95 +232,95 @@ ORDER BY `p`.`id`";
 // recupero id colore dalle caratteristiche
             switch($value_product['colorGroupId']){
                 case 1:
-                    $colorgroup=77226;
+                    $colorgroup=77165;
                     break;
                 case 2:
-                    $colorgroup=77227;
+                    $colorgroup=77166;
                     break;
                 case 3:
-                    $colorgroup=77228;
+                    $colorgroup=77167;
                     break;
                 case 4:
-                    $colorgroup=77229;
+                    $colorgroup=77168;
                     break;
                 case 5:
-                    $colorgroup=77230;
+                    $colorgroup=77169;
                     break;
                 case 6:
-                    $colorgroup=77231;
+                    $colorgroup=77170;
                     break;
                 case 7:
-                    $colorgroup=77232;
+                    $colorgroup=77171;
                     break;
                 case 9:
-                    $colorgroup=77233;
+                    $colorgroup=77172;
                     break;
                 case 10:
-                    $colorgroup=77234;
+                    $colorgroup=77173;
                     break;
                 case 14:
-                    $colorgroup=77235;
+                    $colorgroup=77174;
                     break;
                 case 16:
-                    $colorgroup=77236;
+                    $colorgroup=77175;
                     break;
                 case 18:
-                    $colorgroup=77237;
+                    $colorgroup=77176;
                     break;
                 case 19:
-                    $colorgroup=77238;
+                    $colorgroup=77177;
                     break;
                 case 24:
-                    $colorgroup=77239;
+                    $colorgroup=77178;
                     break;
                 case 26:
-                    $colorgroup=77240;
+                    $colorgroup=77179;
                     break;
                 case 27:
-                    $colorgroup=77241;
+                    $colorgroup=77180;
                     break;
                 case 29:
-                    $colorgroup=77242;
+                    $colorgroup=77181;
                     break;
                 case 30:
-                    $colorgroup=77243;
+                    $colorgroup=77182;
                     break;
                 case 31:
-                    $colorgroup=77244;
+                    $colorgroup=77183;
                     break;
                 case 37:
-                    $colorgroup=77245;
+                    $colorgroup=77184;
                     break;
                 case 38:
-                    $colorgroup=77246;
+                    $colorgroup=77185;
                     break;
                 case 39:
-                    $colorgroup=77247;
+                    $colorgroup=77186;
                     break;
                 case 42:
-                    $colorgroup=77248;
+                    $colorgroup=77187;
                     break;
                 case 46:
-                    $colorgroup=77249;
+                    $colorgroup=77188;
                     break;
                 case 49:
-                    $colorgroup=77250;
+                    $colorgroup=77189;
                     break;
                 case 52:
-                    $colorgroup=77251;
+                    $colorgroup=77190;
                     break;
                 case 53:
-                    $colorgroup=77252;
+                    $colorgroup=77191;
                     break;
                 case 59:
-                    $colorgroup=77253;
+                    $colorgroup=77192;
                     break;
                 case 61:
-                    $colorgroup=77254;
+                    $colorgroup=77193;
                     break;
 
             }
-                $featureId=4685;
+                $featureId=4657;
                 $id_product=$value_product['prestaId'];
                 $colorgroupName=$productColorGroupTranslationRepo->findOneBy(['productColorGroupId'=>$value_product['colorGroupId']]);
                 $colorName=$colorgroupName->name;

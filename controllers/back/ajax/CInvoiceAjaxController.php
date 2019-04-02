@@ -36,6 +36,21 @@ class CInvoiceAjaxController extends AAjaxController
 
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
+        $BillingUserAddress = CUserAddress::defrost($order->frozenBillingAddress);
+        $extraUe=$BillingUserAddress->countryId;
+        $countryRepo=\Monkey::app()->repoFactory->create('Country');
+        $findIsExtraUe=$countryRepo->findOneBy(['id'=>$extraUe]);
+        $isExtraUe=$findIsExtraUe->extraue;
+
+            if($extraUe!='110'){
+            $changelanguage="1";
+
+            }else{
+                $changelanguage="0";
+            }
+
+
+
         $hasInvoice = $order->hasInvoice;
         $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
         $invoiceNew = $invoiceRepo->getEmptyEntity();
@@ -48,14 +63,53 @@ class CInvoiceAjaxController extends AAjaxController
                 $year = (new \DateTime())->format('Y');
                 $em = $this->app->entityManagerFactory->create('Invoice');
                if($hasInvoice =='1') {
-                   $invoiceType = 'F';
-                   $invoiceTypeText = "Fattura N. :";
-                   $invoiceHeaderText = "FATTURA";
+                    if($isExtraUe=='1') {
+                        $invoiceType = 'X';
+                        $documentType='17';
+                        if($changelanguage!="1") {
+                            $invoiceTypeText = "Fattura N. :";
+                            $invoiceHeaderText = "FATTURA";
+                            $invoiceTotalDocumentText = "Totale Fattura";
+                            $documentType='18';
+                        }else{
+                            $invoiceTypeText = "Invoice N. :";
+                            $invoiceHeaderText = "INVOICE";
+                            $invoiceTotalDocumentText = "Invoice Total";
+
+
+
+                        }
+                    }else{
+                        $invoiceType ='P';
+                        $documentType='17';
+                        if($changelanguage!="1") {
+                            $invoiceTypeText = "Fattura N. :";
+                            $invoiceHeaderText = "FATTURA";
+                            $invoiceTotalDocumentText = "Totale Fattura";
+                        }else {
+                            $invoiceTypeText = "Invoice N. :";
+                            $invoiceHeaderText = "INVOICE";
+                            $invoiceTotalDocumentText = "Invoice Total";
+                        }
+                    }
                }else{
-                        $invoiceType = 'R';
-                        $invoiceTypeText = "Ricevuta N. :";
-                        $invoiceHeaderText = "RICEVUTA FISCALE";
+                   if($changelanguage!="1") {
+                       $documentType='16';
+                       $invoiceType = 'K';
+                       $invoiceTypeText = "Ricevuta N. :";
+                       $invoiceHeaderText = "RICEVUTA";
+                       $invoiceTotalDocumentText = "Totale Ricevuta";
+                   }else{
+                       $documentType='16';
+                       $invoiceType = 'K';
+                       $invoiceTypeText = "Receipt N. :";
+                       $invoiceHeaderText = "RECEIPT";
+                       $invoiceTotalDocumentText = "Receipt Total";
+
+                   }
                 }
+
+
                 $number = $em->query("SELECT ifnull(MAX(invoiceNumber),0)+1 AS new
                                       FROM Invoice
                                       WHERE
@@ -69,6 +123,25 @@ class CInvoiceAjaxController extends AAjaxController
                 $todayInvoice=$today->format('d/m/Y');
 
                 $invoiceRepo->insert($invoiceNew);
+                $sectional=$number.'/'.$invoiceType;
+                $documentRepo=\Monkey::app()->repoFactory->create('Document');
+                // codice per inserire all'interno della cartella document
+                 $checkIfDocumentExist=$documentRepo->findOneBy(['number'=>$number,'year'=>$year]);
+                if($checkIfDocumentExist == null){
+                    $insertDocument=$documentRepo->getEmptyEntity();
+                    $insertDocument->userId=$order->userId;
+                    $insertDocument->shopRecipientId=1;
+                    $insertDocument->number=$sectional;
+                    $insertDocument->date=$order->orderDate;
+                    $insertDocument->invoiceTypeId=$documentType;
+                    $insertDocument->paydAmount=$order->paidAmount;
+                    $insertDocument->paymentExpectedDate=$order->paymentDate;
+                    $insertDocument->note=$order->note;
+                    $insertDocument->creationDate=$order->orderDate;
+                    $insertDocument->totalWithVat=$order->netTotal;
+                    $insertDocument->year=$year;
+                    $insertDocument->insert();
+                }
                 $order = $orderRepo->findOneBy(['id' => $orderId]);
             } catch (\Throwable $e) {
                 throw $e;
@@ -88,16 +161,43 @@ class CInvoiceAjaxController extends AAjaxController
 
 
                 $productRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
-                if($hasInvoice ==1) {
-                    $invoiceType = 'F';
-                    $invoiceTypeText = "Fattura N. :";
-                    $invoiceHeaderText = "FATTURA";
-                    $invoiceTotalDocumentText="Totale Fattura";
+                if($hasInvoice =='1') {
+                    if($isExtraUe=='1') {
+                        $invoiceType = 'X';
+                        if($changelanguage!="1") {
+                            $invoiceTypeText = "Fattura N. :";
+                            $invoiceHeaderText = "FATTURA";
+                            $invoiceTotalDocumentText = "Totale Fattura";
+                        }else{
+                            $invoiceTypeText = "Invoice N. :";
+                            $invoiceHeaderText = "INVOICE";
+                            $invoiceTotalDocumentText = "Invoice Total";
+                        }
+                    }else{
+                        $invoiceType='P';
+                        if($changelanguage!="1") {
+                            $invoiceTypeText = "Fattura N. :";
+                            $invoiceHeaderText = "FATTURA";
+                            $invoiceTotalDocumentText = "Totale Fattura";
+                        }else {
+                            $invoiceTypeText = "Invoice N. :";
+                            $invoiceHeaderText = "INVOICE";
+                            $invoiceTotalDocumentText = "Invoice Total";
+                        }
+                    }
                 }else{
-                    $invoiceType = 'R';
-                    $invoiceTypeText = "Ricevuta N. :";
-                    $invoiceHeaderText = "RICEVUTA FISCALE";
-                    $invoiceTotalDocumentText="Totale Ricevuta";
+                    if($changelanguage!="1") {
+                        $invoiceType = 'K';
+                        $invoiceTypeText = "Ricevuta N. :";
+                        $invoiceHeaderText = "RICEVUTA";
+                        $invoiceTotalDocumentText = "Totale Ricevuta";
+                    }else{
+                        $invoiceType = 'K';
+                        $invoiceTypeText = "Receipt N. :";
+                        $invoiceHeaderText = "RECEIPT";
+                        $invoiceTotalDocumentText = "Receipt Total";
+
+                    }
                 }
                 $invoice->invoiceText = $view->render([
                     'app' => new CRestrictedAccessWidgetHelper($this->app),
@@ -112,13 +212,14 @@ class CInvoiceAjaxController extends AAjaxController
                     'invoiceType'=>$invoiceType,
                     'invoiceTypeText' => $invoiceTypeText,
                     'invoiceHeaderText' => $invoiceHeaderText,
-                    'invoiceTotalDocumentText'=> $invoiceTotalDocumentText
+                    'invoiceTotalDocumentText'=> $invoiceTotalDocumentText,
+                    'changelanguage'=>$changelanguage
                 ]);
                 try {
                     $invoiceRepo->update($invoice);
                     $api_uid = $this->app->cfg()->fetch('fattureInCloud', 'api_uid');
                     $api_key = $this->app->cfg()->fetch('fattureInCloud', 'api_key');
-                    if ($hasInvoice == 1) {
+                    if ($hasInvoice == '1' && $isExtraUe == '0') {
                         $insertJson = '{
   "api_uid": "' . $api_uid . '",
   "api_key": "' . $api_key . '",
@@ -137,7 +238,7 @@ class CInvoiceAjaxController extends AAjaxController
   "cf": "' .$userAddress->fiscalCode . '",
   "autocompila_anagrafica": false,
   "salva_anagrafica": false,
-  "numero": "'.$number.'",
+  "numero": "'.$sectional.'",
   "data": "'.$todayInvoice.'",
   "valuta": "EUR",
   "valuta_cambio": 1,
@@ -194,12 +295,13 @@ class CInvoiceAjaxController extends AAjaxController
                         $insertJson .= '"lista_articoli": ';
                         $tot = 0;
                         $i = 0;
+                        $scontotot = 0;
                         $articoli=[];
-
+                        $ordinearticolo=0;
                         foreach ($order->orderLine as $orderLine) {
                             $idlineaordine=$i+1;
                             $idOrderLine = $orderLine->id;
-
+$ordinearticolo+1;
                             $productSku = CProductSku::defrost($orderLine->frozenProduct);
                             $codice=$orderLine->orderId."-".$orderLine->id;
                             $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
@@ -210,14 +312,16 @@ class CInvoiceAjaxController extends AAjaxController
                             $categoria="";
                             $prezzo_netto=number_format($orderLine->activePrice+$orderLine->couponCharge,2);
                             $prezzo_lordo=number_format($orderLine->activePrice,2);
-                            $sconto=number_format($orderLine->couponCharge);
+                            $scontoCharge = number_format($orderLine->couponCharge,2);
+                            $sconto = abs($scontoCharge);
+                            $sconto = number_format(100*$sconto/$orderLine->activePrice,2);
                             $cod_iva="0";
                             $applica_ra_contributi="true";
-                            $ordine=$order->id;
+                            $ordine=$ordinearticolo;
                             $sconto_rosso="0";
                             $in_ddt=false;
                             $magazzino=true;
-
+                            $scontotot+=abs($scontoCharge);
                             $tot += $orderLine->activePrice;
                           /*  $insertLineJSon.='{
                                    "id": "'.$idlineaordine.'",
@@ -258,7 +362,7 @@ class CInvoiceAjaxController extends AAjaxController
                                 'magazzino'=>$magazzino
                             ];
                         }
-                        $tot = number_format($tot,2);
+                        $tot = number_format($tot,2)-number_format($scontotot,2) ;
                         $today = new \DateTime();
                         $dateInvoice = $today->format('d/m/Y');
                         $insertJson.= json_encode($articoli).',
@@ -266,7 +370,7 @@ class CInvoiceAjaxController extends AAjaxController
                 "lista_pagamenti": [
               {
                "data_scadenza":"'.$dateInvoice.'",
-               "importo": '.$tot.',
+               "importo": '.number_format($tot,2).',
                "metodo": "not",
                "data_saldo": "'.$dateInvoice.'" 
               }
@@ -300,7 +404,7 @@ class CInvoiceAjaxController extends AAjaxController
               },
               "split_payment": false
             }';
-
+                        \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'jsonfattureincloud', 'Json Fatture in Cloud fattura Numero'.$number.' data:'.$dateInvoice,$insertJson);
                         $urlInsert = "https://api.fattureincloud.it/v1/fatture/nuovo";
                         $options = array(
                             "http" => array(
@@ -311,12 +415,23 @@ class CInvoiceAjaxController extends AAjaxController
                         );
                         $context  = stream_context_create($options);
                         $result = json_decode(file_get_contents($urlInsert, false, $context), true);
-                        $fattureinCloudId=$result['new_id'];
-                        $fattureinCloudToken=$result['token'];
-                        $updateInvoice=\Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId'=>$orderId]);
-                        $updateInvoice->fattureInCloudId=$fattureinCloudId;
-                        $updateInvoice->fattureInCloudToken=$fattureinCloudToken;
-                        $updateInvoice->update();
+                        if(array_key_exists('success',$result)) {
+                            $resultApi = "Risultato=" . $result['success'] . " new_id:" . $result['new_id'] . " token:" . $result['token'];
+                        }else{
+                            $resultApi = "Errore=" . $result['error'] . " codice di errore:" . $result['error_code'];
+                        }
+                        \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'ResponseApi fatture in Cloud Numero'.$sectional.' data:'.$dateInvoice, 'Risposta FatturaincCloud',$resultApi);
+                        if(array_key_exists('new_id',$result)) {
+                            $fattureinCloudId = $result['new_id'];
+                        }
+                        if(array_key_exists('token',$result)) {
+                            $fattureinCloudToken = $result['token'];
+
+                            $updateInvoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId' => $orderId]);
+                            $updateInvoice->fattureInCloudId = $fattureinCloudId;
+                            $updateInvoice->fattureInCloudToken = $fattureinCloudToken;
+                            $updateInvoice->update();
+                        }
 
 
                     }
@@ -329,6 +444,7 @@ class CInvoiceAjaxController extends AAjaxController
 
                 }
             }
+
 
             return $invoice->invoiceText;
         }

@@ -22,6 +22,21 @@ use bamboo\domain\entities\CProductSheetModelPrototypeMacroCategoryGroup;
 class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
 {
 
+    public function get(){
+
+        $catName = \Monkey::app()->router->request()->getRequestData('cat');
+
+        $sql = 'SELECT c.id catId, c.name catN, cm.name macroCatName
+                  FROM ProductSheetModelPrototypeCategoryGroup c
+                  JOIN ProductSheetModelPrototypeMacroCategoryGroup cm ON c.macroCategoryGroupId = cm.id
+                  WHERE c.name RLIKE ?';
+
+        $ids = \Monkey::app()->dbAdapter->query($sql, [$catName])->fetchAll();
+
+        return json_encode($ids);
+
+    }
+
     /**
      * @return string
      * @throws \bamboo\core\exceptions\BambooException
@@ -30,16 +45,33 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
      */
     public function put()
     {
-
-        $ids = \Monkey::app()->router->request()->getRequestData('ids');
+        $type = \Monkey::app()->router->request()->getRequestData('type');
         $mCat = \Monkey::app()->router->request()->getRequestData('macroCat');
+        if(empty($mCat)) return 'Specifica la macrocategoria';
+
+        switch ($type){
+            case 'single':
+                $ids = \Monkey::app()->router->request()->getRequestData('ids');
+                break;
+            case 'multiple':
+                $catName = \Monkey::app()->router->request()->getRequestData('cat');
+                if(empty($catName)) return 'Specifica il nome della categoria';
+
+                $sql = 'SELECT id
+                  FROM ProductSheetModelPrototypeCategoryGroup
+                  WHERE name RLIKE ?';
+
+                $ids = \Monkey::app()->dbAdapter->query($sql, [$catName])->fetchAll();
+                if(empty($ids)) return 'Non sono state trovate categorie con il nome specificato';
+                break;
+        }
 
         /** @var CRepo $catGR */
         $catGR = \Monkey::app()->repoFactory->create('ProductSheetModelPrototypeCategoryGroup');
 
         foreach ($ids as $id){
             /** @var CProductSheetModelPrototypeCategoryGroup $catG */
-            $catG = $catGR->findOneBy(['id'=>$id]);
+            $catG = $catGR->findOneBy(['id'=> $type == 'single' ? $id : $id['id']]);
             $catG->macroCategoryGroupId = $mCat;
             $catG->update();
         }

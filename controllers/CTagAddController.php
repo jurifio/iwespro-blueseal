@@ -56,7 +56,7 @@ class CTagAddController extends ARestrictedAccessRootController
                     $lang[$key[1]] = $v;
                 } else {
                     if ($k == 'slug') {
-                        $tag->slug = $v;
+                        $tag->slug = isset($data['isSpecial']) ? 'spc-' . $v : $v;
                     }
                     if ($k == 'sortingId') {
                         $tag->sortingPriorityId = $v;

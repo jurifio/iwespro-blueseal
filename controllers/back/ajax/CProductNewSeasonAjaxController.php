@@ -5,6 +5,7 @@ use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductHasTag;
+use bamboo\domain\entities\CProductSeason;
 use bamboo\domain\entities\CTag;
 
 
@@ -24,6 +25,29 @@ use bamboo\domain\entities\CTag;
 class CProductNewSeasonAjaxController extends AAjaxController
 {
 
+    public function get(){
+
+        $tagId = \Monkey::app()->router->request()->getRequestData('tagId');
+
+        $sql = 'SELECT p.productSeasonId
+                FROM ProductHasTag pht
+                JOIN Product p ON pht.productId = p.id AND pht.productVariantId = p.productVariantId
+                WHERE pht.tagId = ?
+                GROUP BY p.productSeasonId';
+
+        $seasonIds = \Monkey::app()->dbAdapter->query($sql, [$tagId])->fetchAll();
+
+        /** @var CRepo $seasonRepo */
+        $seasonRepo = \Monkey::app()->repoFactory->create('ProductSeason');
+
+        $seasons = [];
+        foreach ($seasonIds as $seasonId){
+            $seasons[] = $seasonRepo->findOneBy(['id' => $seasonId['productSeasonId']])->name;
+        }
+
+
+        return json_encode($seasons);
+    }
 
     /**
      * @throws \bamboo\core\exceptions\BambooDBALException
@@ -32,23 +56,28 @@ class CProductNewSeasonAjaxController extends AAjaxController
     {
         $seasonId = \Monkey::app()->router->request()->getRequestData('season');
 
-        /** @var CObjectCollection $products */
-        $products = \Monkey::app()->repoFactory->create('Product')->findBy(['productSeasonId'=>$seasonId]);
+        $products = \Monkey::app()->dbAdapter->query('SELECT id, productVariantId FROM Product WHERE productSeasonId = ?', [$seasonId])->fetchAll();
+        $tag = \Monkey::app()->router->request()->getRequestData('tag');
+        $position = \Monkey::app()->router->request()->getRequestData('pos');
 
-        /** @var CRepo $phsRepo */
-        $phsRepo = \Monkey::app()->repoFactory->create('ProductHasTag');
+        if(!empty($products)) {
 
-        if($products) {
-            /** @var CProduct $product */
-            foreach ($products as $product) {
+            $string = '';
 
-                /** @var CProductHasTag $extPhs */
-                $extPhs = $phsRepo->findOneBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId, 'tagId' => CTag::NEW_SEASON]);
-
-                if (!is_null($extPhs)) continue;
-
-                \Monkey::app()->dbAdapter->insert('ProductHasTag', ['productId' => $product->id, 'productVariantId' => $product->productVariantId, 'tagId' => CTag::NEW_SEASON], false, true);
+            for ($i = 0; $i < count($products); $i++){
+                if($i != count($products) -1){
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . ',' . $tag . ',' . $position . '),';
+                } else {
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . ',' . $tag . ',' . $position . ')';
+                }
             }
+
+            $sql = '
+            INSERT INTO ProductHasTag (productId, productVariantId, tagId, position)
+              VALUES ' . $string . ' 
+              ON DUPLICATE KEY UPDATE position = ' . $position;
+
+            \Monkey::app()->dbAdapter->query($sql, []);
 
             $res = 'Etichetta stagione inserita con successo';
         } else $res = 'Nessun prodotto associato alla stagione selezionata';
@@ -63,24 +92,28 @@ class CProductNewSeasonAjaxController extends AAjaxController
     public function delete(){
 
         $seasonId = \Monkey::app()->router->request()->getRequestData('season');
+        $tag = \Monkey::app()->router->request()->getRequestData('tag');
 
-        /** @var CObjectCollection $products */
-        $products = \Monkey::app()->repoFactory->create('Product')->findBy(['productSeasonId'=>$seasonId]);
+        $products = \Monkey::app()->dbAdapter->query('SELECT id, productVariantId FROM Product WHERE productSeasonId = ?', [$seasonId])->fetchAll();
 
-        /** @var CRepo $phsRepo */
-        $phsRepo = \Monkey::app()->repoFactory->create('ProductHasTag');
 
-        if($products) {
-            /** @var CProduct $product */
-            foreach ($products as $product) {
+        if(!empty($products)) {
 
-                /** @var CProductHasTag $extPhs */
-                $extPhs = $phsRepo->findOneBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId, 'tagId' => CTag::NEW_SEASON]);
+            $string = '(';
 
-                if (is_null($extPhs)) continue;
-
-                \Monkey::app()->dbAdapter->delete('ProductHasTag', ['productId' => $product->id, 'productVariantId' => $product->productVariantId, 'tagId' => CTag::NEW_SEASON]);
+            for ($i = 0; $i < count($products); $i++){
+                if($i != count($products) -1){
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . '),';
+                } else {
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . '))';
+                }
             }
+
+            $sql = '
+               DELETE FROM ProductHasTag
+               WHERE tagId = '. $tag .' AND (productId, productVariantId) IN ' . $string;
+
+            \Monkey::app()->dbAdapter->query($sql, []);
 
             $res = 'Etichetta stagione eliminata con successo';
         } else $res = 'Nessun prodotto associato alla stagione selezionata';

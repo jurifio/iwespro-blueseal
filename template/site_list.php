@@ -90,7 +90,16 @@
                 data-remote="bs.image.update"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.colorproductprestashop.update"
+                data-remote="bs.colorproductprestashop.update"        >
+        </bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.billingjournal.insert"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.dictionarysizeimage.run"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.getfattureincloud.list"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

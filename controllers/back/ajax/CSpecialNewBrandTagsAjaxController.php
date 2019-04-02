@@ -4,6 +4,8 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CProductHasTag;
+use bamboo\domain\entities\CTag;
+use bamboo\domain\repositories\CProductBrandRepo;
 
 /**
  * Class CSpecialNewBrandTagsAjaxController
@@ -21,28 +23,57 @@ use bamboo\domain\entities\CProductHasTag;
 class CSpecialNewBrandTagsAjaxController extends AAjaxController
 {
 
+    public function get(){
+
+        $tagId = \Monkey::app()->router->request()->getRequestData('tagId');
+
+        $sql = 'SELECT p.productBrandId
+                FROM ProductHasTag pht
+                JOIN Product p ON pht.productId = p.id AND pht.productVariantId = p.productVariantId
+                WHERE pht.tagId = ?
+                GROUP BY p.productBrandId';
+
+        $brandIds = \Monkey::app()->dbAdapter->query($sql, [$tagId])->fetchAll();
+
+        /** @var CProductBrandRepo $productBrandRepo */
+        $productBrandRepo = \Monkey::app()->repoFactory->create('ProductBrand');
+
+        $brands = [];
+        foreach ($brandIds as $brandId){
+            $brands[] = $productBrandRepo->findOneBy(['id' => $brandId['productBrandId']])->name;
+        }
+
+
+        return json_encode($brands);
+    }
+
     /**
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
     public function post(){
         $brand = \Monkey::app()->router->request()->getRequestData('brand');
         $tag = \Monkey::app()->router->request()->getRequestData('tag');
+        $position = \Monkey::app()->router->request()->getRequestData('pos');
 
-        /** @var CObjectCollection $products */
-        $products = \Monkey::app()->repoFactory->create('Product')->findBy(['productBrandId'=>$brand]);
+        $products = \Monkey::app()->dbAdapter->query('SELECT id, productVariantId FROM Product WHERE productBrandId = ?', [$brand])->fetchAll();
 
-        /** @var CRepo $phtRepo */
-        $phtRepo = \Monkey::app()->repoFactory->create('ProductHasTag');
+        if(!empty($products)) {
+            $string = '';
 
-        if($products) {
-        foreach ($products as $product) {
-            /** @var CProductHasTag $extPht */
-            $extPht = $phtRepo->findOneBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId, 'tagId'=>$tag]);
+            for ($i = 0; $i < count($products); $i++){
+                if($i != count($products) -1){
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . ',' . $tag . ',' . $position . '),';
+                } else {
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . ',' . $tag . ',' . $position . ')';
+                }
+            }
 
-            if(!is_null($extPht)) continue;
+            $sql = '
+            INSERT INTO ProductHasTag (productId, productVariantId, tagId, position)
+              VALUES ' . $string . ' 
+              ON DUPLICATE KEY UPDATE position = ' . $position;
 
-            \Monkey::app()->dbAdapter->insert('ProductHasTag',['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'tagId'=>$tag],false,true);
-        }
+            \Monkey::app()->dbAdapter->query($sql, []);
             $res = 'Special tag inserito con successo';
         } else $res = 'Nessun prodotto associato al brand selezionato';
 
@@ -54,21 +85,26 @@ class CSpecialNewBrandTagsAjaxController extends AAjaxController
         $brand = \Monkey::app()->router->request()->getRequestData('brand');
         $tag = \Monkey::app()->router->request()->getRequestData('tag');
 
-        /** @var CObjectCollection $products */
-        $products = \Monkey::app()->repoFactory->create('Product')->findBy(['productBrandId'=>$brand]);
+        $products = \Monkey::app()->dbAdapter->query('SELECT id, productVariantId FROM Product WHERE productBrandId = ?', [$brand])->fetchAll();
 
-        /** @var CRepo $phtRepo */
-        $phtRepo = \Monkey::app()->repoFactory->create('ProductHasTag');
 
-        if($products) {
-            foreach ($products as $product) {
-                /** @var CProductHasTag $extPht */
-                $extPht = $phtRepo->findOneBy(['productId'=>$product->id, 'productVariantId'=>$product->productVariantId, 'tagId'=>$tag]);
+        if(!empty($products)) {
 
-                if(is_null($extPht)) continue;
+            $string = '(';
 
-                \Monkey::app()->dbAdapter->delete('ProductHasTag',['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'tagId'=>$tag]);
+            for ($i = 0; $i < count($products); $i++){
+                if($i != count($products) -1){
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . '),';
+                } else {
+                    $string .= '(' . $products[$i]['id'] . ',' . $products[$i]['productVariantId'] . '))';
+                }
             }
+
+            $sql = '
+               DELETE FROM ProductHasTag
+               WHERE tagId = '. $tag .' AND (productId, productVariantId) IN ' . $string;
+
+            \Monkey::app()->dbAdapter->query($sql, []);
             $res = 'Special tag eliminato con successo';
         } else $res = 'Nessun prodotto associato al brand selezionato';
 

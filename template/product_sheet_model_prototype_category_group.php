@@ -99,6 +99,16 @@
                 data-title="Associa a macrocategoria"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-arrows"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.massive.sheet.model.macro.category"
+                data-title="Associa a macrocategoria (massivo)"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
         <bs-toolbar-button

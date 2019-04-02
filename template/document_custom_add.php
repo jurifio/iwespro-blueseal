@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default">
-                                                <label for="number">Numero</label>
+                                                <label for="number">Numero fattura o distinta</label>
                                                 <input id="number" class="form-control"
                                                        placeholder="Numero Fattura" name="number" required="required">
                                             </div>

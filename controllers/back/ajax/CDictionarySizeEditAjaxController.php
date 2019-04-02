@@ -1,8 +1,13 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CProductSize;
+use bamboo\domain\entities\CProductSizeGroup;
+use bamboo\domain\entities\CProductSizeGroupHasProductSize;
 
 
 /**
@@ -30,16 +35,16 @@ class CDictionarySizeEditAjaxController extends AAjaxController
      */
     public function createAction($action)
     {
-        $this->app->setLang(new CLang(1,'it'));
-        $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
-        $this->urls['page'] = $this->urls['base']."importatori/dizionari/taglie";
-        $this->urls['dummy'] = $this->app->cfg()->fetch('paths','dummyUrl');
+        $this->app->setLang(new CLang(1, 'it'));
+        $this->urls['base'] = $this->app->baseUrl(false) . "/blueseal/";
+        $this->urls['page'] = $this->urls['base'] . "importatori/dizionari/taglie";
+        $this->urls['dummy'] = $this->app->cfg()->fetch('paths', 'dummyUrl');
 
         if ($this->app->getUser()->hasPermission('allShops')) {
 
-        } else{
-            $res = $this->app->dbAdapter->select('UserHasShop',['userId'=>$this->app->getUser()->getId()])->fetchAll();
-            foreach($res as $val) {
+        } else {
+            $res = $this->app->dbAdapter->select('UserHasShop', ['userId' => $this->app->getUser()->getId()])->fetchAll();
+            foreach ($res as $val) {
                 $this->authorizedShops[] = $val['shopId'];
             }
         }
@@ -99,7 +104,8 @@ class CDictionarySizeEditAjaxController extends AAjaxController
         return json_encode($response);
     }
 
-    public function put()
+    public
+    function put()
     {
         $sizeId = $this->app->router->request()->getRequestData('sizeId');
         $id = $this->app->router->request()->getRequestData('id');

@@ -62,6 +62,22 @@
                                                class="form-control"/>
                                     </div>
                                 </div>
+
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="form-group form-group-default">
+                                    <strong style="display: block">Inserisci il TAG TITLE</strong>
+                                    <input type="text" id="titleTag" placeholder="Tag title (Caratteri: min 50 | max 60)"
+                                           data-json="PostTranslation.titleTag" value="" style="width: 30%;">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="form-group form-group-default">
+                                    <strong style="display: block">Inserisci la META DESCRIPTION</strong>
+                                    <textarea id="metaDescription" placeholder="Meta Description (Caratteri: min 50 | max 300)" style="width: 30%;"
+                                              data-json="PostTranslation.metaDescription" rows="10"></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

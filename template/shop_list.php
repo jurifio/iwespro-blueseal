@@ -79,6 +79,11 @@
                                     data-orderable="true"
                                     class="center">Iban Pagamento
                                 </th>
+                                <th data-slug="vatNumber"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Partita Iva
+                                </th>
                                 <th data-slug="users"
                                     data-searchable="false"
                                     data-orderable="false"
