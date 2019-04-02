@@ -35,6 +35,7 @@ abstract class APrestashopMarketplace
     /**
      * APrestashopMarketplace constructor.
      * @throws BambooConfigException
+     * @throws \bamboo\core\exceptions\BambooException
      */
     public function __construct()
     {
@@ -77,7 +78,8 @@ abstract class APrestashopMarketplace
                 $this->ws = new \PrestaShopWebserviceTest($this->url, $this->key, $this->debug);
                 break;
             default:
-                $this->ws = new \PrestaShopWebserviceTest($this->url, $this->key, $this->debug);
+                \Monkey::app()->vendorLibraries->load('prestashop');
+                $this->ws = new \PrestaShopWebservice($this->url, $this->key, $this->debug);
                 break;
         }
     }
