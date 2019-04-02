@@ -4,11 +4,9 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
-use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
-use bamboo\domain\entities\CProduct;
 use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
 /**
@@ -37,6 +35,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale)) AS sale,
+              group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
               php.prestaId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
@@ -73,14 +72,17 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
             $associations = '';
             $onSale = '';
+            $salePrice = '';
 
             /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
                 $associations .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
                 $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale === '0' ? 'No' : 'Yes') . '<br>';
+                $salePrice .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale price: ' . $pHPHmHs->salePrice . '<br>';
             }
             $row['marketplaceAssociation'] = $associations;
             $row['sale'] = $onSale;
+            $row['salePrice'] = $salePrice;
 
             switch ($php->status) {
                 case 1:

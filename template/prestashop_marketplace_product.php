@@ -53,7 +53,13 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Saldo
+                                    data-default-order="desc">Stato saldo sui marketplace
+                                </th>
+                                <th data-slug="salePrice"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Importo saldo sui marketplace
                                 </th>
                                 <th data-slug="pickySale"
                                     data-required="true"
@@ -108,6 +114,19 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-close"
+                data-permission="/admin/product/edit"
+                data-event="bs.delete.product"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Elimina il prodotto dal marketplace"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestisci saldo">
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-dollar"
                 data-permission="/admin/product/edit"
                 data-event="bs.marketplace.product.sale"
@@ -119,12 +138,12 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-close"
+                data-icon="fa-window-close"
                 data-permission="/admin/product/edit"
-                data-event="bs.delete.product"
+                data-event="bs.marketplace.remove.sale"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Elimina il prodotto dal marketplace"
+                data-title="Togli i prodotti dal saldo i prodotti"
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>

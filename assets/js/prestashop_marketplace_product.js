@@ -1,4 +1,4 @@
-;(function () {
+(function ($) {
     $(document).on('bs.add.presta.product', function () {
 
         //Prendo tutti i lotti selezionati
@@ -115,7 +115,7 @@
             });
         });
 
-        let bsModal = new $.bsModal('Metti/togli i prodotti in saldo', {
+        let bsModal = new $.bsModal('Metti prodotti in saldo', {
             body: `
                 <div>
                     <p>Seleziona un marketplace</p>
@@ -129,14 +129,15 @@
                 
                 <div id="newSalePrice">
                     <p>Modifica il prezzo</p>
-                    <select id="modifyPrice">
+                    <select id="modifyPriceForSale">
+                        <option disabled selected value>Seleziona un'opzione</option>
                         <option value="nf">Non modificare</option>
                         <option value="percentage">Percentuale -</option>
                         <option value="amount">Fisso -</option>
                     </select>
                     
                     <p>Inserisci l'importo con cui variare il prezzo</p>
-                    <input type="number" step="0.01" min="1" id="variantValue">
+                    <input type="number" step="0.01" min="0" id="variantValue">
                 </div>
             `
         });
@@ -161,17 +162,17 @@
             const data = {
                 products: products,
                 marketplaceHasShopId: $('#selectMarketplace').val(),
-                modifyType: $('#modifyPrice').val(),
+                modifyType: $('#modifyPriceForSale').val(),
                 titleModify: !!$('#useNewTitle').is(':checked'),
                 variantValue: $('#variantValue').val()
             };
 
             $.ajax({
-                method: 'put',
-                url: '/blueseal/xhr/PrestashopHasProductManage',
+                method: 'post',
+                url: '/blueseal/xhr/PrestashopHasSaleProductManage',
                 data: data
             }).done(function (res) {
-                bsModal.writeBody('Prodotti inseriti con successo');
+                bsModal.writeBody(res);
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {
@@ -182,6 +183,14 @@
                 bsModal.showOkBtn();
             });
         });
+    });
+
+    $(document).on('change', '#modifyPriceForSale', function () {
+        if($(this).val() === 'nf'){
+            $('#variantValue').val(0).prop('disabled', true);
+        } else {
+            $('#variantValue').val('').prop('disabled', false);
+        }
     });
 
     $(document).on('bs.delete.product', function () {
@@ -225,7 +234,7 @@
                 url: '/blueseal/xhr/PrestashopHasProductManage',
                 data: data
             }).done(function (res) {
-                bsModal.writeBody('Prodotti eliminati con successo');
+                bsModal.writeBody(res);
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {
@@ -237,4 +246,78 @@
             });
         });
     });
-})();
+
+
+    $(document).on('bs.marketplace.remove.sale', function () {
+
+        //Prendo tutti i lotti selezionati
+        let prestaIds = [];
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if (selectedRows.length == 0) {
+            new Alert({
+                type: "warning",
+                message: "Seleziona almeno un prodotto"
+            }).open();
+            return false;
+        }
+
+        let products = [];
+
+        $.each(selectedRows, function (k, v) {
+            products.push({
+                'prestaId': v.prestaId,
+                'productId': v.productId,
+                'productVariantId': v.productVariantId
+            });
+        });
+
+        let bsModal = new $.bsModal('Elimina i prodotti dal saldo', {
+            body: `
+                <div>
+                    <p>Seleziona un marketplace</p>
+                    <select id="selectMarketplace"></select>
+                </div>
+            `
+        });
+
+        $.ajax({
+            url: '/blueseal/xhr/PrestashopHasProductManage',
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (res) {
+            let select = $('#selectMarketplace');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'shop-marketplace',
+                options: res
+            });
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                products: products,
+                marketplaceHasShopId: $('#selectMarketplace').val()
+            };
+
+            $.ajax({
+                method: 'delete',
+                url: '/blueseal/xhr/PrestashopHasSaleProductManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+})(jQuery);

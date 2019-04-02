@@ -14,9 +14,6 @@ use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductPhoto;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSheetActual;
-use bamboo\domain\entities\CProductSku;
-use bamboo\domain\repositories\CPrestashopHasProductRepo;
-use bamboo\domain\repositories\CProductRepo;
 
 /**
  * Class CPrestashopProduct
@@ -682,18 +679,29 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param $product
      * @param CMarketplaceHasShop $mhs
-     * @param CPrestashopHasProductHasMarketplaceHasShop $phphmhs
+     * @param string $action
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function updateProductSaleDescription($product, CMarketplaceHasShop $mhs)
+    public function updateProductSaleDescription($product, CMarketplaceHasShop $mhs, $action)
     {
 
         $stringSale = ' ON SALE!';
         $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $product['prestaId'], [], null, null, $mhs->prestashopId);
         $productChildXml = $productXml->children()->children();
 
-        $productChildXml->name->language[0][0] = $productChildXml->name->language[0][0] . $stringSale;
+        switch ($action) {
+            case 'add':
+                $name = $productChildXml->name->language[0][0] . $stringSale;
+                break;
+            case 'remove':
+                $name = str_replace($stringSale, '', $productChildXml->name->language[0][0]);
+                break;
+            default:
+                return false;
+        }
+
+        $productChildXml->name->language[0][0] = $name;
         unset($productChildXml->manufacturer_name);
         unset($productChildXml->quantity);
         unset($productChildXml->associations->combinations);
@@ -740,45 +748,69 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs = $phphmhsR->findOneBy(['productId' => $product['productId'], 'productVariantId' => $product['productVariantId'], 'marketplaceHasShopId' => $mhs->id]);
 
             if ($updateDescription) {
-                $this->updateProductSaleDescription($product, $mhs);
+                $this->updateProductSaleDescription($product, $mhs, 'add');
             }
 
-            if($reductionType === 'amount' || $reductionType === 'percentage') {
-                $specificPriceBlankXml = $this->getBlankSchema(self::SPECIFIC_PRICE_RESOURCE);
-                $specificPriceBlank = $specificPriceBlankXml->children()->children();
 
-                $specificPriceBlank->id_shop_group = 0;
-                $specificPriceBlank->id_shop = $mhs->prestashopId;
-                $specificPriceBlank->id_cart = 0;
-                $specificPriceBlank->id_product = $product['prestaId'];
-                $specificPriceBlank->id_product_attribute = 0;
-                $specificPriceBlank->id_currency = 1;
-                $specificPriceBlank->country = 0;
-                $specificPriceBlank->id_group = 0;
-                $specificPriceBlank->id_customer = 0;
-                $specificPriceBlank->id_specific_price_rule = 0;
-                $specificPriceBlank->price = $phphmhs->price;
-                $specificPriceBlank->fromQuantity = 1;
-                $specificPriceBlank->reduction = $reduction;
-                $specificPriceBlank->reduction_tax = 1;
-                $specificPriceBlank->reductionType = $reductionType;
+            $specificPriceBlankXml = $this->getBlankSchema(self::SPECIFIC_PRICE_RESOURCE);
+            $specificPriceBlank = $specificPriceBlankXml->children()->children();
 
-                if (!is_null($from)) $specificPriceBlank->from = $from;
-                if (!is_null($to)) $specificPriceBlank->to = $to;
+            $specificPriceBlank->id_shop_group = 0;
+            $specificPriceBlank->id_shop = $mhs->prestashopId;
+            $specificPriceBlank->id_cart = 0;
+            $specificPriceBlank->id_product = $product['prestaId'];
+            $specificPriceBlank->id_product_attribute = 0;
+            $specificPriceBlank->id_currency = 1;
+            $specificPriceBlank->id_country = 0;
+            $specificPriceBlank->id_group = 0;
+            $specificPriceBlank->id_customer = 0;
+            $specificPriceBlank->id_specific_price_rule = 0;
+            $specificPriceBlank->price = $phphmhs->price;
+            $specificPriceBlank->from_quantity = 1;
+            $specificPriceBlank->reduction = ($reductionType === 'amount' || $reductionType === 'nf') ? $reduction : $reduction / 100;
+            $specificPriceBlank->reduction_tax = 1;
+            $specificPriceBlank->reduction_type = $reductionType === 'nf' ? 'amount' : $reductionType;
+            $specificPriceBlank->from = is_null($from) ? '2000-01-01 00:00:00' : $from;
+            $specificPriceBlank->to = is_null($to) ? '2100-01-01 00:00:00' : $to;
 
-                try {
-                    $opt['resource'] = self::SPECIFIC_PRICE_RESOURCE;
-                    $opt['postXml'] = $specificPriceBlankXml->asXML();
-                    $opt['id_shop'] = $mhs->prestashopId;
-                    $this->ws->add($opt);
-                } catch (\PrestaShopWebserviceException $e) {
-                    \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
-                    return false;
-                }
+            try {
+                $opt['resource'] = self::SPECIFIC_PRICE_RESOURCE;
+                $opt['postXml'] = $specificPriceBlankXml->asXML();
+                $opt['id_shop'] = $mhs->prestashopId;
+                $this->ws->add($opt);
+            } catch (\PrestaShopWebserviceException $e) {
+                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
+                return false;
             }
+
+
+            $phphmhs->salePrice = ($reductionType === 'amount' || $reductionType === 'nf') ? $phphmhs->price - $reduction : $phphmhs->price * $reduction;
             $phphmhs->isOnSale = 1;
             $phphmhs->update();
         }
+
+        return true;
+    }
+
+    /**
+     * @param $product
+     * @param CMarketplaceHasShop $mhs
+     * @return bool
+     * @throws \PrestaShopWebserviceException
+     */
+    public function removeSpecificPriceForSale($product, CMarketplaceHasShop $mhs)
+    {
+        $specificPrices = $this->getDataFromResource(self::SPECIFIC_PRICE_RESOURCE, null, ['id_product' => $product['prestaId'], 'id_shop' => $mhs->prestashopId]);
+
+        try {
+            $optD['resource'] = self::SPECIFIC_PRICE_RESOURCE;
+            $optD['id'] = (int)$specificPrices->specific_prices->specific_price->attributes()->id;
+            $this->ws->delete($optD);
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage());
+            return false;
+        }
+        $this->updateProductSaleDescription($product, $mhs, 'remove');
 
         return true;
     }
