@@ -396,6 +396,15 @@ class CPrestashopProduct extends APrestashopMarketplace
      */
     public function insertProduct(CProduct $product, $productPrice, $shop)
     {
+
+        $productName = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
+            . ' ' .
+            $product->productBrand->name
+            . ' ' .
+            $product->itemno
+            . ' ' .
+            $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+
         /** @var \SimpleXMLElement $blankProductXml */
         $blankProductXml = $this->getBlankSchema($this::PRODUCT_RESOURCE);
         $resourcesBlankProduct = $blankProductXml->children()->children();
@@ -409,7 +418,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         //$node = dom_import_simplexml($resourcesBlankProduct->name->language[0][0]);
         //$no = $node->ownerDocument;
         //$node->appendChild($no->createCDATASection("cdata name"));
-        $resourcesBlankProduct->name->language[0][0] = $product->getName();
+        $resourcesBlankProduct->name->language[0][0] = $productName;
         //$resourcesBlankProduct->name->language[0][0]['id'] = 1;
         //$resourcesBlankProduct->name->language[0][0]['xlink:href'] = $this->url . '/api/languages/1';
 
@@ -679,23 +688,37 @@ class CPrestashopProduct extends APrestashopMarketplace
     /**
      * @param $product
      * @param CMarketplaceHasShop $mhs
-     * @param string $action
+     * @param $action
+     * @param null $price
+     * @param null $salePrice
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function updateProductSaleDescription($product, CMarketplaceHasShop $mhs, $action)
+    public function updateProductSaleDescription($productData, CMarketplaceHasShop $mhs, $action, $price = null, $salePrice = null)
     {
-
-        $stringSale = ' ON SALE!';
-        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $product['prestaId'], [], null, null, $mhs->prestashopId);
+        /** @var CProduct $product */
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productData['productId'], 'productVariantId'=>$productData['productVariantId']]);
+        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productData['prestaId'], [], null, null, $mhs->prestashopId);
         $productChildXml = $productXml->children()->children();
 
         switch ($action) {
             case 'add':
-                $name = $productChildXml->name->language[0][0] . $stringSale;
+                $percSc = (int)(($price - $salePrice) * 100 / $price);
+                $name = $product->productBrand->name
+                    . ' Sconto del ' . $percSc . '% da ' . $price . '€ a ' . $salePrice
+                    . '€ ' .
+                    $product->itemno
+                    . ' ' .
+                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
                 break;
             case 'remove':
-                $name = str_replace($stringSale, '', $productChildXml->name->language[0][0]);
+                $name = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
+                    . ' ' .
+                    $product->productBrand->name
+                    . ' ' .
+                    $product->itemno
+                    . ' ' .
+                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
                 break;
             default:
                 return false;
@@ -710,7 +733,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['resource'] = self::PRODUCT_RESOURCE;
             $opt['putXml'] = $productXml->asXML();
             $opt['id_shop'] = $mhs->prestashopId;
-            $opt['id'] = $product['prestaId'];
+            $opt['id'] = $productData['prestaId'];
             $this->ws->edit($opt);
 
         } catch (\PrestaShopWebserviceException $e) {
@@ -747,10 +770,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
             $phphmhs = $phphmhsR->findOneBy(['productId' => $product['productId'], 'productVariantId' => $product['productVariantId'], 'marketplaceHasShopId' => $mhs->id]);
 
-            if ($updateDescription) {
-                $this->updateProductSaleDescription($product, $mhs, 'add');
-            }
-
+            if(is_null($phphmhs) || $phphmhs->isOnSale == 1) continue;
 
             $specificPriceBlankXml = $this->getBlankSchema(self::SPECIFIC_PRICE_RESOURCE);
             $specificPriceBlank = $specificPriceBlankXml->children()->children();
@@ -777,14 +797,19 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['resource'] = self::SPECIFIC_PRICE_RESOURCE;
                 $opt['postXml'] = $specificPriceBlankXml->asXML();
                 $opt['id_shop'] = $mhs->prestashopId;
-                $this->ws->add($opt);
+               $this->ws->add($opt);
             } catch (\PrestaShopWebserviceException $e) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
                 return false;
             }
 
+            $salePrice = ($reductionType === 'amount' || $reductionType === 'nf') ? $phphmhs->price - $reduction : $phphmhs->price - ($phphmhs->price * ($reduction/100));
 
-            $phphmhs->salePrice = ($reductionType === 'amount' || $reductionType === 'nf') ? $phphmhs->price - $reduction : $phphmhs->price * $reduction;
+            if ($updateDescription) {
+                $this->updateProductSaleDescription($product, $mhs, 'add', $phphmhs->price, $salePrice);
+            }
+
+            $phphmhs->salePrice = $salePrice;
             $phphmhs->isOnSale = 1;
             $phphmhs->update();
         }
