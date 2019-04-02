@@ -58,7 +58,9 @@ class CNewsletteruserContactCsvImportAjaxController extends AAjaxController
                             $newsletterUser->isActive = 1;
                             $newsletterUser->langId = 1;
 
-                            if (strtolower($sex[0]) == 'm' || strtolower($sex[0]) == 'u') {
+                            if (empty($sex)) {
+                                $newsletterUser->genderNewsletterUser = null;
+                            } else if (strtolower($sex[0]) == 'm' || strtolower($sex[0]) == 'u') {
                                 $newsletterUser->genderNewsletterUser = 'M';
                             } else if (strtolower($sex[0]) == 'f' || strtolower($sex[0]) == 'd') {
                                 $newsletterUser->genderNewsletterUser = 'F';
