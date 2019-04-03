@@ -1,0 +1,38 @@
+{
+    "category": {
+        "url": "prestashop.iwes.shop",
+        "key": "XVWQJWZR6D8TS9F3IMFQLHURI4MD91WX",
+        "resource": "categories",
+        "debug": false
+    },
+    "manufacturer": {
+        "url": "prestashop.iwes.shop",
+        "key": "Q5TQG7ZHFJCVANGR1NHA7P5DMBIQ4AP4",
+        "resource": "manufacturers",
+        "debug": false
+    },
+    "shop": {
+        "url": "prestashop.iwes.shop",
+        "key": "CD7SD5RN261Q2578NPTSTGQED2NF6I3H",
+        "resource": "shops",
+        "debug": false
+    },
+    "product": {
+        "url": "prestashop.iwes.shop",
+        "key": "LEQA82EUA1J5RYHBMMNZA6E6FBUABWKA",
+        "resource": "",
+        "debug": false
+    },
+    "productOption": {
+        "url": "prestashop.iwes.shop",
+        "key": "9LUEDZHTTJLK19A92Q2QRC2A2UTPGZC5",
+        "resource": "product_option_values",
+        "debug": false
+    },
+    "features": {
+        "url": "prestashop.iwes.shop",
+        "key": "DPWAV7RWQED4SL3ZLFDXN2YV9QBJU5LR",
+        "resource": "",
+        "debug": false
+    }
+}
