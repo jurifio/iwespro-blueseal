@@ -74,7 +74,7 @@ class CPrestashopManufacturer extends APrestashopMarketplace
                         $resources->meta_description->language[0][0] = $productBrand->name;
                         $resources->meta_keywords->language[0][0] = $productBrand->name;
 
-                        $opt = array('resource' => $this->resource, 'id_group_shop' => $this->shopGroup);
+                        $opt = array('resource' => $this->resource, 'id_group_shop' => 1);
                         $opt['postXml'] = $blankXml->asXML();
                         $response = $this->ws->add($opt);
 
@@ -154,6 +154,7 @@ class CPrestashopManufacturer extends APrestashopMarketplace
 
             if (empty($manufacturerExist->children()->children())) {
                 \Monkey::app()->applicationLog('PrestashopManufacturer', 'Error', 'Dangerous error while try to insert manufacturer', $productBrand->id . ' on Pickyshop database but not in Prestashop database');
+
                 throw new BambooException($productBrand->id . ' on Pickyshop database but not in Prestashop database');
             }
             return true;

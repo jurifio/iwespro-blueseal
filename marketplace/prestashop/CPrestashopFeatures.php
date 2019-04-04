@@ -56,11 +56,11 @@ class CPrestashopFeatures extends APrestashopMarketplace
             $pickyDetails = $productDetailLabel->getAssociatedDetails(true);
             if(!$pickyDetails) continue;
 
-
                 try {
 
+                    $featureExt = $this->checkIfExistDetailLabel($productDetailLabel);
                     //Search feature -> if not exist insert feature and values
-                    if (!$this->checkIfExistDetailLabel($productDetailLabel)) {
+                    if ($featureExt === false) {
 
                         /** @var \SimpleXMLElement $blankFeatureXml */
                         $blankFeatureXml = $this->getBlankSchema($this::FEATURE_RESOURCE);
@@ -71,7 +71,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
                         $optFeature = array('resource' => $this::FEATURE_RESOURCE);
                         $optFeature['postXml'] = $blankFeatureXml->asXML();
-                        $optFeature['id_group_shop'] = $this->shopGroup;
+                        $optFeature['id_group_shop'] = 1;
                         $responseFeature = $this->ws->add($optFeature);
 
                         //if succesfull added then save feature
@@ -95,11 +95,15 @@ class CPrestashopFeatures extends APrestashopMarketplace
                                 $resourceFeatureValue = $blankFeatureValueXml->children()->children();
 
                                 $resourceFeatureValue->id_feature = $prestashopFeatureId;
-                                $resourceFeatureValue->value->language[0][0] = $featureValue;
+                                $resourceFeatureValue->value->language[0][0] = str_replace(['>', '='], ['', ''], $featureValue);
 
-                                $optFeatureValue = array('resource' => $this::FEATURE_VALUE_RESOURCE);
-                                $optFeatureValue['postXml'] = $blankFeatureValueXml->asXML();
-                                $responseFeatureValue = $this->ws->add($optFeatureValue);
+                                try {
+                                    $optFeatureValue = array('resource' => $this::FEATURE_VALUE_RESOURCE);
+                                    $optFeatureValue['postXml'] = $blankFeatureValueXml->asXML();
+                                    $responseFeatureValue = $this->ws->add($optFeatureValue);
+                                } catch (\Throwable $e){
+                                    throw new BambooException($pickyDetail->id . ' | ' . $e->getMessage());
+                                }
 
                                 if ($responseFeatureValue instanceof \SimpleXMLElement) {
                                     $prestashopFeatureValueId = (int)$responseFeatureValue->children()->children()->id[0];
@@ -117,6 +121,50 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
                         }
 
+                    } else {
+                        $prestashopFeatureId = (int)$featureExt->children()->children()->id[0];
+
+                        /** @var CProductDetail $pickyDetail */
+                        foreach ($pickyDetails as $pickyDetail) {
+
+                            $featureValue = $pickyDetail->productDetailTranslation->isEmpty() ? $pickyDetail->slug : $pickyDetail->getLocalizedDetail();
+                            if(empty($featureValue)) continue;
+
+                            //search if detail is already in matching table
+                            if (!$this->checkIfExistDetail($productDetailLabel, $pickyDetail)) {
+
+                                /** @var \SimpleXMLElement $blankFeatureValueXml */
+                                $blankFeatureValueXml = $this->getBlankSchema($this::FEATURE_VALUE_RESOURCE);
+
+                                $resourceFeatureValue = $blankFeatureValueXml->children()->children();
+
+                                $resourceFeatureValue->id_feature = $prestashopFeatureId;
+                                $resourceFeatureValue->value->language[0][0] = str_replace(['>', '='], ['', ''], $featureValue);
+
+                                try {
+                                    $optFeatureValue = array('resource' => $this::FEATURE_VALUE_RESOURCE);
+                                    $optFeatureValue['postXml'] = $blankFeatureValueXml->asXML();
+                                    $responseFeatureValue = $this->ws->add($optFeatureValue);
+                                } catch (\Throwable $e){
+                                    throw new BambooException($pickyDetail->id . ' | ' . $e->getMessage());
+                                }
+
+
+                                if ($responseFeatureValue instanceof \SimpleXMLElement) {
+                                    $prestashopFeatureValueId = (int)$responseFeatureValue->children()->children()->id[0];
+
+                                    /** @var CProductDetailsHasPrestashopFeatures $pdhpfNew */
+                                    $pdhpfNew = \Monkey::app()->repoFactory->create('ProductDetailsHasPrestashopFeatures')->getEmptyEntity();
+                                    $pdhpfNew->productDetailLabelId = $productDetailLabel->id;
+                                    $pdhpfNew->productDetailId = $pickyDetail->id;
+                                    $pdhpfNew->prestashopFeatureId = $prestashopFeatureId;
+                                    $pdhpfNew->prestashopFeatureValueId = $prestashopFeatureValueId;
+                                    $pdhpfNew->smartInsert();
+
+                                } else throw new BambooException('Prestashop response ProductFeatureValue error');
+                            } else continue;
+
+                        }
                     }
 
 
@@ -132,7 +180,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
 
     /**
      * @param CProductDetailLabel $productDetailLabel
-     * @return bool
+     * @return bool|\SimpleXMLElement
      * @throws BambooException
      * @throws \PrestaShopWebserviceException
      */
@@ -150,7 +198,7 @@ class CPrestashopFeatures extends APrestashopMarketplace
                 \Monkey::app()->applicationLog('ProductDetailsHasPrestashopFeatures (FEATURE)', 'Error', 'Dangerous error while try to insert feature (product detail label)', $productDetailLabel->id . ' on Pickyshop database but not in Prestashop database');
                 throw new BambooException($productDetailLabel->id . ' on Pickyshop database but not in Prestashop database');
             }
-            return true;
+            return $featureExist;
         }
 
         return false;
