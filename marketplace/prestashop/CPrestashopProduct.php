@@ -290,7 +290,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                 file_put_contents($destDir . $productPhoto->name, $imgBody);
 
-                $urlRest = '/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
+                $urlRest = 'http://prestashop.iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
 
                 //Uncomment the following line in order to update an existing image
                 //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
@@ -299,16 +299,16 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                 $request_host = $this->url;
                 //$headers = array("Host: " . $request_host);
-                $request_url = 'https://192.168.1.245';
+               //$request_url = 'https://192.168.1.245';
 
                 $data = array('image' => $image_path);
 
                 $ch = curl_init();
-                $headers = array("Content-Type:multipart/form-data", "Host: " . $request_host);
+                //$headers = array("Content-Type:multipart/form-data", "Host: " . $request_host);
                 //curl_setopt($ch, CURLOPT_HEADER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-                curl_setopt($ch, CURLOPT_URL, $request_url . $urlRest);
+                curl_setopt($ch, CURLOPT_URL, $urlRest);
                 curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
