@@ -19,13 +19,13 @@
     },
     "product": {
         "url": "prestashop.iwes.shop",
-        "key": "LEQA82EUA1J5RYHBMMNZA6E6FBUABWKA",
+        "key": "6SS993LXNX84RQN9XZ4XSTZRNZCBJLQV",
         "resource": "",
         "debug": false
     },
     "productOption": {
         "url": "prestashop.iwes.shop",
-        "key": "9LUEDZHTTJLK19A92Q2QRC2A2UTPGZC5",
+        "key": "EXH4731KYEJG6DSF3CJ9ND5P3EVR5DKI",
         "resource": "product_option_values",
         "debug": false
     },

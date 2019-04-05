@@ -26,8 +26,8 @@ use bamboo\domain\entities\CProductSize;
 class CPrestashopProductOptionValues extends APrestashopMarketplace
 {
 
-    CONST PRESTASHOP_SIZE = 1;
-    CONST PRESTASHOP_COLOR = 2;
+    CONST PRESTASHOP_SIZE = 5;
+    CONST PRESTASHOP_COLOR = 6;
 
     /**
      * @param $productColorGroups
@@ -65,7 +65,7 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
 
                         $opt = array('resource' => $this->resource);
                         $opt['postXml'] = $blankXml->asXML();
-                        $opt['id_group_shop'] = $this->shopGroup;
+                        $opt['id_group_shop'] = 1;
                         $response = $this->ws->add($opt);
 
 
@@ -186,11 +186,11 @@ class CPrestashopProductOptionValues extends APrestashopMarketplace
                         $resources = $blankXml->children()->children();
 
                         $resources->id_attribute_group = $this::PRESTASHOP_SIZE;
-                        $resources->name->language[0][0] = $productSize->name;
+                        $resources->name->language[0][0] = str_replace('=', '-', $productSize->name);
 
                         $opt = array('resource' => $this->resource);
                         $opt['postXml'] = $blankXml->asXML();
-                        $opt['id_group_shop'] = $this->shopGroup;
+                        $opt['id_group_shop'] = 1;
                         $response = $this->ws->add($opt);
 
 
