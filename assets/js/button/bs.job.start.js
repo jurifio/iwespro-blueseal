@@ -15,16 +15,21 @@ $(document).on('bs-job-start', function (e, element, button) {
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
 
+    let type = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
     if (selectedRows.length != 1) {
-        new Alert({
-            type: "warning",
-            message: "Devi selezionare un Job per Avviarlo"
-        }).open();
-        return false;
+        if(type !== 'prestashop') {
+            new Alert({
+                type: "warning",
+                message: "Devi selezionare un Job per Avviarlo"
+            }).open();
+            return false;
+        }
     }
 
     let selectedRow = dataTable.row('.selected').data();
-    let jobId = selectedRow.DT_RowId;
+
+    let jobId = (type === 'prestashop') ? 101 : selectedRow.DT_RowId;
 
     let modal = new $.bsModal('Avvia Job', {});
     modal.showLoader();
