@@ -58,7 +58,7 @@
                                 </select>
                             </div>
 
-                            <?php if ($fixedPage->fixedPageTypeId != 3): ?>
+                            <?php if ((!is_null($fixedPage) && $fixedPage->fixedPageTypeId != 3) || is_null($fixedPage)): ?>
                                 <div id="optionalPart">
                                     <div class="panel-body">
                                         <strong style="display: block">Inserisci il title</strong>
