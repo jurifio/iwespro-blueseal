@@ -28,7 +28,7 @@ class CManageFixedPageListController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/fixed_page_list.php');
 
-        $newFixedPageUrl = \Monkey::app()->baseUrl(false).'/blueseal/manage-fixed-page/:id/:langId';
+        $newFixedPageUrl = \Monkey::app()->baseUrl(false).'/blueseal/manage-fixed-page/:id/:langId/:fixedPageTypeId';
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,

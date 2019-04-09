@@ -29,7 +29,7 @@ tinymce.init({
 
     $(document).on('bs.fixedPageSave', function () {
         let params = window.location.href.split('/');
-        let fixedPageId = params[params.length - 2];
+        let fixedPageId = params[params.length - 3];
         // let fixedLangId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 
         let method = fixedPageId === ':id' ? 'post' : 'put';
@@ -41,10 +41,11 @@ tinymce.init({
         let text = encodeURIComponent($('#page-fixed-content').val());
         let titleTag = $('#titleTag').val();
         let metaDescription = $('#metaDescription').val();
+        let fixedPageTypeId = $('#fixedPageType').val();
 
         if (
-            title === "" ||
-            subTitle === "" ||
+            (title === ""  && fixedPageTypeId != 3)||
+            (subTitle === "" && fixedPageTypeId != 3) ||
             slug === "" ||
             text === "" ||
             titleTag === "" ||
@@ -60,6 +61,7 @@ tinymce.init({
         const data = {
             id: fixedPageId,
             lang: $('#lang').val(),
+            fixedPageTypeId: fixedPageTypeId,
             title: title,
             subtitle: subTitle,
             slug: slug,
@@ -81,7 +83,7 @@ tinymce.init({
                 return false;
             } else {
                 let fp = JSON.parse(res);
-                window.location.href = `/blueseal/manage-fixed-page/${fp['id']}/${fp['langId']}`;
+                window.location.href = `/blueseal/manage-fixed-page/${fp['id']}/${fp['langId']}/${fp['fixedPageTypeId']}`;
             }
         }).fail(function (res) {
             new Alert({
@@ -91,6 +93,16 @@ tinymce.init({
             return false;
         });
 
+    });
+
+    $(document).on('change', '#fixedPageType', function () {
+
+        let hideDiv = $('#optionalPart');
+        if ($('#fixedPageType').val() == 3) {
+            hideDiv.hide();
+        } else {
+            hideDiv.show();
+        }
     });
 
 })(jQuery);

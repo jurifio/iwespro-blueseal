@@ -29,12 +29,14 @@ class CManageFixedPageListAjaxController extends AAjaxController
      */
     public function get()
     {
-        $sql = "SELECT id,
-                       langId,
-                       fixedPageTypeId,
-                       title
-                FROM FixedPage
-                WHERE fixedPageTypeId = 1";
+        $sql = "SELECT fp.id,
+                       fp.langId,
+                       fp.fixedPageTypeId,
+                       fp.title,
+                       ftp.name as fixedPageType
+                FROM FixedPage fp
+                JOIN FixedPageType ftp ON fp.fixedPageTypeId = ftp.id
+                WHERE fixedPageTypeId IN (1,3)";
 
         $datatable = new CDataTables($sql, ['id', 'langId', 'fixedPageTypeId'], $_GET, true);
 
@@ -50,8 +52,9 @@ class CManageFixedPageListAjaxController extends AAjaxController
             $fP = $fixedPageRepo->findOneBy(["id"=>$row["id"], 'langId'=>$row['langId'], 'fixedPageTypeId'=>$row['fixedPageTypeId']]);
 
 
-            $row["id"] = '<a href="'. $url . $fP->id . '/' . $fP->langId . '">' . $fP->id . ' - ' . $fP->lang->name . '</a>';
+            $row["id"] = '<a href="'. $url . $fP->id . '/' . $fP->langId . '/'. $fP->fixedPageTypeId . '">' . $fP->id . ' - ' . $fP->lang->name . '</a>';
             $row['langId'] = $fP->lang->name;
+            $row['fixedPageType'] = $fP->fixedPageType->name;
             $row['title'] = $fP->title;
 
             $datatable->setResponseDataSetRow($key,$row);

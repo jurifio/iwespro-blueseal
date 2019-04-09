@@ -31,17 +31,20 @@ class CManageFixedPageDetailListController extends ARestrictedAccessRootControll
 
         $id = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $langId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('langId');
+        $fixedPageTypeId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('fixedPageTypeId');
 
         $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
 
         /** @var CFixedPage $fixedPage */
-        $fixedPage = \Monkey::app()->repoFactory->create('FixedPage')->findOneBy(['id'=>$id, 'langId'=>$langId, 'fixedPageTypeId'=>1]);
+        $fixedPage = \Monkey::app()->repoFactory->create('FixedPage')->findOneBy(['id'=>$id, 'langId'=>$langId, 'fixedPageTypeId'=>$fixedPageTypeId]);
+        $fixedPageTypes = \Monkey::app()->repoFactory->create('FixedPageType')->findAll();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
             'fixedPage' => $fixedPage,
+            'fixedPageTypes' => $fixedPageTypes,
             'langs' => $langs
         ]);
     }

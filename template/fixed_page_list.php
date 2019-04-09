@@ -54,6 +54,11 @@
                                     data-orderable="true"
                                     class="center">Titolo
                                 </th>
+                                <th data-slug="fixedPageType"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Tipo
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

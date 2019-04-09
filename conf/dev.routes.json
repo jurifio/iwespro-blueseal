@@ -2932,13 +2932,14 @@
             ]
         },
         {
-            "pattern": "/blueseal/manage-fixed-page/:id/:langId(/)?",
+            "pattern": "/blueseal/manage-fixed-page/:id/:langId/:fixedPageTypeId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageDetailListController"
             },
             "filters": {
                 "id": ":?[A-Za-z0-9_-]+",
-                "langId": ":?[A-Za-z0-9_-]+"
+                "langId": ":?[A-Za-z0-9_-]+",
+                "fixedPageTypeId": ":?[A-Za-z0-9_-]+"
             },
             "translations": {},
             "methods": [

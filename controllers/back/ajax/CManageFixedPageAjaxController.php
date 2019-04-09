@@ -34,11 +34,15 @@ class CManageFixedPageAjaxController extends AAjaxController
 
         $slugify = new CSlugify();
 
+        $title = (empty($this->data['title'])) ? null : $this->data['title'];
+        $subtitle = (empty($this->data['subtitle'])) ? null : $this->data['subtitle'];
+
         if ($fixedPageRepo->updateFixedPage(
             $this->data['id'],
+            $this->data['fixedPageTypeId'],
             $this->data['lang'],
-            $this->data['title'],
-            $this->data['subtitle'],
+            $title,
+            $subtitle,
             $slugify->slugify($this->data['slug']),
             $this->data['text'],
             $this->data['titleTag'],
@@ -59,12 +63,14 @@ class CManageFixedPageAjaxController extends AAjaxController
 
         $slugify = new CSlugify();
 
-
+        $title = (empty($this->data['title'])) ? null : $this->data['title'];
+        $subtitle = (empty($this->data['subtitle'])) ? null : $this->data['subtitle'];
         /** @var CFixedPage $fixedPage */
         $fixedPage = $fixedPageRepo->insertFixedPage(
+            $this->data['fixedPageTypeId'],
             $this->data['lang'],
-            $this->data['title'],
-            $this->data['subtitle'],
+            $title,
+            $subtitle,
             $slugify->slugify($this->data['slug']),
             urldecode($this->data['text']),
             $this->data['titleTag'],
@@ -75,6 +81,7 @@ class CManageFixedPageAjaxController extends AAjaxController
             $res = [];
             $res['id'] = $fixedPage->id;
             $res['langId'] = $fixedPage->langId;
+            $res['fixedPageTypeId'] = $fixedPage->fixedPageTypeId;
 
             return json_encode($res);
         }
