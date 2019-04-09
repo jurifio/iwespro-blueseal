@@ -290,7 +290,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                 file_put_contents($destDir . $productPhoto->name, $imgBody);
 
-                $urlRest = 'http://prestashop.iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
+                $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
 
                 //Uncomment the following line in order to update an existing image
                 //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
