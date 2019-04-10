@@ -1,6 +1,7 @@
 (function ($) {
     $(document).on('bs.add.presta.product', function () {
 
+        let loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
         //Prendo tutti i lotti selezionati
         let products = [];
         let selectedRows = $('.table').DataTable().rows('.selected').data();
@@ -72,14 +73,18 @@
                 variantValue: $('#variantValue').val()
             };
 
+            bsModal.writeBody(loaderHtml);
+            bsModal.okButton.attr("disabled", "disabled");
             $.ajax({
                 method: 'post',
                 url: '/blueseal/xhr/' + cron,
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
+                bsModal.okButton.removeAttr("disabled");
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
+                bsModal.okButton.removeAttr("disabled");
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     bsModal.hide();
