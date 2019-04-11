@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CFoison;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSizeMacroGroup;
@@ -80,7 +81,16 @@ class CFoisonDetailManage extends AAjaxController
         /** @var CUserAddressRepo $userAddressRepo */
         $userAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');
 
-        $userAddressRepo->insertUserAddressFromFoison($userId, $name, $surname, $address, $province, $city, $postalCode, $country, $phone, $iban, $fiscalCode);
+        $res = $userAddressRepo->insertUserAddressFromData($userId, $name, $surname, $address, $province, $city, $postalCode, $country, $phone, $iban, $fiscalCode, 1, true);
+
+        if($res instanceof CAddressBook) {
+            $foison->foisonAddressBookId = $res->id;
+            $foison->update();
+        } else {
+            $extAddBook = $foison->addressBook;
+            $extAddBook->iban = $iban;
+            $extAddBook->update();
+        }
 
         return true;
     }

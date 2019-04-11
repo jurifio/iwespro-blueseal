@@ -64,6 +64,9 @@ abstract class APrestashopMarketplace
             case 'CPrestashopFeatures':
                 $configSection = 'features';
                 break;
+            case 'CPrestashopOrders':
+                $configSection = 'orders';
+                break;
         }
 
         $configConstructor = $this->config->fetchAll($configSection);
@@ -130,7 +133,7 @@ abstract class APrestashopMarketplace
      * @return \SimpleXMLElement
      * @throws \PrestaShopWebserviceException
      */
-    public function getDataFromResource($resource, $id = null, array $filter = [], $display = null, $shopGroupId = null, $shopId = null)
+    public function getDataFromResource($resource, $id = null, array $filter = [], $display = null, $shopGroupId = null, $shopId = null, $date = null)
     {
 
         $opt['resource'] = $resource;
@@ -140,6 +143,7 @@ abstract class APrestashopMarketplace
         if (!is_null($display)) $opt['display'] = $display;
         if (!is_null($shopGroupId)) $opt['id_group_shop'] = $shopGroupId;
         if (!is_null($shopId)) $opt['id_shop'] = $shopId;
+        if (!is_null($date)) $opt['date'] = $date;
 
         return $this->ws->get($opt);
     }

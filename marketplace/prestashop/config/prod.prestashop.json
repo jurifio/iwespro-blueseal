@@ -34,5 +34,11 @@
         "key": "8Y943RJ5WLFG56TTLIBHXWMI3VFKV64I",
         "resource": "",
         "debug": false
+    },
+    "orders": {
+        "url": "iwes.shop",
+        "key": "5DIB4MSUY3UYEUWXKN2SLVVV9LLL79IP",
+        "resource": "",
+        "debug": false
     }
 }

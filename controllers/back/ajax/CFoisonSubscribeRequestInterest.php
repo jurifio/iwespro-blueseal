@@ -78,7 +78,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
             //User creation
             /** @var CUserRepo $userRepo */
             $userRepo = \Monkey::app()->repoFactory->create('User');
-            $user = $userRepo->insertUserFromData($request->email, $request->name, $request->surname, $request->birthday, $request->gender, $request->phone);
+            $user = $userRepo->insertUserFromData($request->email, $request->name, $request->surname, $request->birthday, $request->gender, $request->phone, 'Fason request');
 
 
             //Fason creation and rbacRole assignment

@@ -34,5 +34,11 @@
         "key": "DPWAV7RWQED4SL3ZLFDXN2YV9QBJU5LR",
         "resource": "",
         "debug": false
+    },
+    "orders": {
+        "url": "dev.prestapicky.com",
+        "key": "45F8KT2DDAN64K1EXAFUUSXZ3TI1RQ2V",
+        "resource": "",
+        "debug": false
     }
 }

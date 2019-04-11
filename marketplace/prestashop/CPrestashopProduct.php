@@ -775,6 +775,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $specificPriceBlankXml = $this->getBlankSchema(self::SPECIFIC_PRICE_RESOURCE);
             $specificPriceBlank = $specificPriceBlankXml->children()->children();
 
+
             $specificPriceBlank->id_shop_group = 0;
             $specificPriceBlank->id_shop = $mhs->prestashopId;
             $specificPriceBlank->id_cart = 0;
@@ -785,7 +786,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $specificPriceBlank->id_group = 0;
             $specificPriceBlank->id_customer = 0;
             $specificPriceBlank->id_specific_price_rule = 0;
-            $specificPriceBlank->price = $phphmhs->price;
+            $specificPriceBlank->price = 0;
             $specificPriceBlank->from_quantity = 1;
             $specificPriceBlank->reduction = ($reductionType === 'amount' || $reductionType === 'nf') ? $reduction : $reduction / 100;
             $specificPriceBlank->reduction_tax = 1;
