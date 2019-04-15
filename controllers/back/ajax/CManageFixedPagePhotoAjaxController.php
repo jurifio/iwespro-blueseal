@@ -58,7 +58,7 @@ class CManageFixedPagePhotoAjaxController extends AAjaxController
             if ($res) {
                 /** @var CFixedPagePopup $fixedPagePopup */
                 $fixedPagePopup = \Monkey::app()->repoFactory->create('FixedPagePopup')->findOneBy(['id'=>$fixedPagePopupId]);
-                $fixedPagePopup->img = $fileName['name'];
+                $fixedPagePopup->img = 'https://pickyshop.s3-eu-west-1.amazonaws.com/fixed-page/' . $fileName['name'];
                 $fixedPagePopup->update();
             }
         }
