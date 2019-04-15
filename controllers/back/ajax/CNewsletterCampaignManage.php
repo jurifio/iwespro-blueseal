@@ -53,7 +53,7 @@ class CNewsletterCampaignManage extends AAjaxController
             /** @var CNewsletterCampaign $newsletterCampaignInsert   */
             $newsletterCampaignInsert = $newsletterCampaignRepo->getEmptyEntity();
 
-            $newsletterCampaignInsert->name = $name ;
+            $newsletterCampaignInsert->name = $name;
             $newsletterCampaignInsert->dateCampaignStart = $dateCampaignStart;
             $newsletterCampaignInsert->dateCampaignFinish = $dateCampaignFinish;
             $newsletterCampaignInsert->newsletterShopId = $nameShop;

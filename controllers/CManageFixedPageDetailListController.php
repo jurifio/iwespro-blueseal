@@ -39,13 +39,19 @@ class CManageFixedPageDetailListController extends ARestrictedAccessRootControll
         $fixedPage = \Monkey::app()->repoFactory->create('FixedPage')->findOneBy(['id'=>$id, 'langId'=>$langId, 'fixedPageTypeId'=>$fixedPageTypeId]);
         $fixedPageTypes = \Monkey::app()->repoFactory->create('FixedPageType')->findAll();
 
+        $fixedPageHasPopup = false;
+        if((!is_null($fixedPage) && $fixedPage->havePopup())){
+            $fixedPageHasPopup = true;
+        }
+
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build(),
             'fixedPage' => $fixedPage,
             'fixedPageTypes' => $fixedPageTypes,
-            'langs' => $langs
+            'langs' => $langs,
+            'fixedPageHasPopup' => $fixedPageHasPopup
         ]);
     }
 }

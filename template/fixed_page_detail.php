@@ -28,19 +28,76 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="panel-body">
-                                <strong style="display: block">Tipo pagina</strong>
-                                <select id="fixedPageType">
-                                    <?php if (!is_null($fixedPage)): ?>
-                                        <option value="<?php echo $fixedPage->fixedPageTypeId ?>"> <?php echo $fixedPage->fixedPageType->name ?></option>
-                                    <?php else:
-                                        foreach ($fixedPageTypes as $fixedPageType):
-                                            ?>
-                                            <option value="<?php echo $fixedPageType->id ?>"><?php echo $fixedPageType->name; ?></option>
-                                        <?php
-                                        endforeach;
-                                    endif; ?>
-                                </select>
+                            <div id="pageType">
+                                <div class="panel-body">
+                                    <strong style="display: block">Tipo pagina</strong>
+                                    <select id="fixedPageType">
+                                        <?php if (!is_null($fixedPage)): ?>
+                                            <option value="<?php echo $fixedPage->fixedPageTypeId ?>"> <?php echo $fixedPage->fixedPageType->name ?></option>
+                                        <?php else:
+                                            foreach ($fixedPageTypes as $fixedPageType):
+                                                ?>
+                                                <option value="<?php echo $fixedPageType->id ?>"><?php echo $fixedPageType->name; ?></option>
+                                            <?php
+                                            endforeach;
+                                        endif; ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="lead-section" class="panel-body"
+                                 style="display: <?php echo (!is_null($fixedPage) && $fixedPage->fixedPageTypeId != \bamboo\domain\entities\CFixedPageType::LEAD) || is_null($fixedPage) ? 'none' : 'block' ?>;">
+                                <div class="panel-heading accordion-toggle question-toggle collapsed"
+                                     data-toggle="collapse"
+                                     data-parent="#detailsP" data-target="#lead-details">
+                                    <h4 class="panel-title">
+                                        <a href="#" class="ing">Mostra dettagli popup</a>
+                                    </h4>
+                                </div>
+
+                                <div id="lead-details" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body popupUse">
+                                        <input type="checkbox" id="popupUse"
+                                               data-idpopup="<?php echo $fixedPageHasPopup ? $fixedPage->getActivePopup()->id : '' ?>" <?php echo $fixedPageHasPopup ? 'checked' : '' ?>>
+                                        <strong>Utilizza popup</strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <strong style="display: block;">Titolo</strong>
+                                        <input type="text" id="popupTitle" placeholder="Inserisci il titolo"
+                                               value="<?php echo $fixedPageHasPopup ? $fixedPage->getActivePopup()->title : '' ?>">
+                                    </div>
+                                    <div class="panel-body">
+                                        <strong style="display: block;">Sottotitolo</strong>
+                                        <input type="text" id="popupSubTitle" placeholder="Inserisci il sottotitolo"
+                                               value="<?php echo $fixedPageHasPopup ? $fixedPage->getActivePopup()->subtitle : '' ?>">
+                                    </div>
+                                    <div class="panel-body">
+                                        <strong style="display: block;">Paragrafo</strong>
+                                        <textarea id="popupText" placeholder="Inserisci il paragrafo" rows="8"
+                                                  cols="200"><?php echo $fixedPageHasPopup ? $fixedPage->getActivePopup()->text : '' ?></textarea>
+                                    </div>
+                                    <div class="panel-body">
+                                        <strong style="display: block;">Seleziona il coupon</strong>
+                                        <select class="full-width" id="couponSelect"></select>
+                                    </div>
+                                    <div id="photoPopup" class="panel-body">
+                                        <strong style="display: block;">Inserisci l'immagine</strong>
+                                        <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
+                                              name="dropzonePhoto" action="POST">
+                                            <div class="fallback">
+                                                <input name="file" type="file" multiple/>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <?php if ($fixedPageHasPopup && $fixedPage->getActivePopup()->haveImage()): ?>
+                                        <div class="panel-body">
+                                            <strong style="display: block;">Immagine usata</strong>
+                                            <img src="<?php echo $fixedPage->getActivePopup()->img ?>"
+                                                 style="width: 200px;">
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
 
                             <div class="panel-body">
@@ -58,7 +115,7 @@
                                 </select>
                             </div>
 
-                            <?php if ((!is_null($fixedPage) && $fixedPage->fixedPageTypeId != 3) || is_null($fixedPage)): ?>
+                            <?php if ((!is_null($fixedPage) && $fixedPage->fixedPageTypeId != \bamboo\domain\entities\CFixedPageType::LEAD) || is_null($fixedPage)): ?>
                                 <div id="optionalPart">
                                     <div class="panel-body">
                                         <strong style="display: block">Inserisci il title</strong>

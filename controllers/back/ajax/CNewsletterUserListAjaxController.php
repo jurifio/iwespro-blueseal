@@ -32,7 +32,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
                  nel.name AS newsletterEmailListId, 
                  t.name AS templateName, 
                  n.subject, 
-                 nc.name AS campaignId,
+                 concat(nc.id, '-', nc.name) AS campaignId,
                  ni.name as newsletterInsertionName,
                  ne.name as eventName,
                  ni.id as newsletterInsertionId
@@ -72,7 +72,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
                 $row['subject'] = $newsletter->subject;
                 $row['newsletterInsertionName'] = $newsletter->newsletterInsertion->name;
                 $row['eventName'] = $newsletter->newsletterInsertion->newsletterEvent->name;
-                $row['campaignId'] = $newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->name;
+                $row['campaignId'] = $newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->id . '-' . $newsletter->newsletterInsertion->newsletterEvent->newsletterCampaign->name;
 
                 if ($newsletter->id == $newsletter->newsletterCloneId) {
                     $row['newsletterCloneId'] = "Newsletter Genitore";

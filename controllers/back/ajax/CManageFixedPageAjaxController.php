@@ -4,6 +4,8 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\utils\slugify\CSlugify;
 use bamboo\domain\entities\CFixedPage;
+use bamboo\domain\entities\CFixedPagePopup;
+use bamboo\domain\repositories\CFixedPagePopupRepo;
 use bamboo\domain\repositories\CFixedPageRepo;
 
 
@@ -37,7 +39,7 @@ class CManageFixedPageAjaxController extends AAjaxController
         $title = (empty($this->data['title'])) ? null : $this->data['title'];
         $subtitle = (empty($this->data['subtitle'])) ? null : $this->data['subtitle'];
 
-        if ($fixedPageRepo->updateFixedPage(
+        $fixedPage = $fixedPageRepo->updateFixedPage(
             $this->data['id'],
             $this->data['fixedPageTypeId'],
             $this->data['lang'],
@@ -47,9 +49,37 @@ class CManageFixedPageAjaxController extends AAjaxController
             $this->data['text'],
             $this->data['titleTag'],
             $this->data['metaDescription']
-        )) return 'put';
+        );
 
-        return false;
+        /** @var CFixedPagePopupRepo $fPPRepo */
+        $fPPRepo = \Monkey::app()->repoFactory->create('FixedPagePopup');
+        if ($this->data['popupUse'] === 'true') {
+
+            if (!empty($this->data['popupId'])) {
+                $fPPRepo->updateFixedPagePopup(
+                    $this->data['popupId'],
+                    $this->data['popupTitle'],
+                    $this->data['popupSubTitle'],
+                    $this->data['popupText'],
+                    $this->data['couponEvent']);
+            } else {
+                $fPPRepo->insertNewPopup(
+                    $this->data['popupTitle'],
+                    $this->data['popupSubTitle'],
+                    $this->data['popupText'],
+                    $this->data['couponEvent'],
+                    1,
+                    $fixedPage->id
+                );
+            }
+
+        } else {
+            if (!empty($this->data['popupId'])) {
+                $fPPRepo->deactivateFixedPagePopup($this->data['popupId']);
+            }
+        }
+
+        return 'put';
     }
 
     /**
@@ -76,6 +106,20 @@ class CManageFixedPageAjaxController extends AAjaxController
             $this->data['titleTag'],
             $this->data['metaDescription']
         );
+
+        if ($this->data['popupUse'] === 'true') {
+
+            /** @var CFixedPagePopupRepo $fPPRepo */
+            $fPPRepo = \Monkey::app()->repoFactory->create('FixedPagePopup');
+            $fPPRepo->insertNewPopup(
+                $this->data['popupTitle'],
+                $this->data['popupSubTitle'],
+                $this->data['popupText'],
+                $this->data['couponEvent'],
+                1,
+                $fixedPage->id
+            );
+        }
 
         if ($fixedPage) {
             $res = [];
