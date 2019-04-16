@@ -61,7 +61,10 @@ class CManageFixedPageAjaxController extends AAjaxController
                     $this->data['popupTitle'],
                     $this->data['popupSubTitle'],
                     $this->data['popupText'],
-                    $this->data['couponEvent']);
+                    $this->data['couponEvent'],
+                    $this->data['popupTitleSub'],
+                    $this->data['popupSubTitleSub'],
+                    $this->data['popupTextSub']);
             } else {
                 $fPPRepo->insertNewPopup(
                     $this->data['popupTitle'],
@@ -69,6 +72,9 @@ class CManageFixedPageAjaxController extends AAjaxController
                     $this->data['popupText'],
                     $this->data['couponEvent'],
                     1,
+                    $this->data['popupTitleSub'],
+                    $this->data['popupSubTitleSub'],
+                    $this->data['popupTextSub'],
                     $fixedPage->id
                 );
             }
@@ -117,6 +123,9 @@ class CManageFixedPageAjaxController extends AAjaxController
                 $this->data['popupText'],
                 $this->data['couponEvent'],
                 1,
+                $this->data['popupTitleSub'],
+                $this->data['popupSubTitleSub'],
+                $this->data['popupTextSub'],
                 $fixedPage->id
             );
         }

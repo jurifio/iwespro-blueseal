@@ -71,6 +71,9 @@ tinymce.init({
         let popupText = $('#popupText').val();
         let couponEvent = $('#couponSelect').val();
 
+        let popupTitleSub = $('#popupTitleSub').val();
+        let popupSubTitleSub = $('#popupSubTitleSub').val();
+        let popupTextSub = $('#popupTextSub').val();
         if (
             (title === "" && fixedPageTypeId != 3) ||
             (subTitle === "" && fixedPageTypeId != 3) ||
@@ -107,7 +110,10 @@ tinymce.init({
             popupTitle: popupTitle,
             popupText: popupText,
             couponEvent: couponEvent,
-            popupId: $('#popupUse').attr('data-idpopup')
+            popupId: $('#popupUse').attr('data-idpopup'),
+            popupTitleSub: popupTitleSub,
+            popupSubTitleSub: popupSubTitleSub,
+            popupTextSub: popupTextSub
         };
 
         $.ajax({
