@@ -72,10 +72,10 @@ class CManageFixedPageAjaxController extends AAjaxController
                     $this->data['popupText'],
                     $this->data['couponEvent'],
                     1,
+                    $fixedPage->id,
                     $this->data['popupTitleSub'],
                     $this->data['popupSubTitleSub'],
-                    $this->data['popupTextSub'],
-                    $fixedPage->id
+                    $this->data['popupTextSub']
                 );
             }
 
@@ -123,10 +123,10 @@ class CManageFixedPageAjaxController extends AAjaxController
                 $this->data['popupText'],
                 $this->data['couponEvent'],
                 1,
+                $fixedPage->id,
                 $this->data['popupTitleSub'],
                 $this->data['popupSubTitleSub'],
-                $this->data['popupTextSub'],
-                $fixedPage->id
+                $this->data['popupTextSub']
             );
         }
 
