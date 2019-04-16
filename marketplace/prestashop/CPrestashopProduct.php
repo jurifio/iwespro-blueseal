@@ -449,6 +449,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $fatherCategory->addChild('id', $prestashopCategoryObj->prestashopCategoryId);
         }
 
+        $resourcesBlankProduct->id_category_default = $prestashopCategoryObj->prestashopCategoryId;
         //add features
         $firstSheet = true;
         $productSheets = $product->productSheetActual;
