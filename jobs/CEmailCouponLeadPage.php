@@ -24,7 +24,7 @@ use bamboo\utils\time\SDateToolbox;
 use bamboo\utils\time\STimeToolbox;
 
 /**
- * Class CNewsletterLeadPage
+ * Class CEmailCouponLeadPage
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -33,10 +33,10 @@ use bamboo\utils\time\STimeToolbox;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 15/04/2019
+ * @date 17/04/2019
  * @since 1.0
  */
-class CNewsletterLeadPage extends ACronJob
+class CEmailCouponLeadPage extends ACronJob
 {
     /**
      * @param null $args
@@ -44,6 +44,9 @@ class CNewsletterLeadPage extends ACronJob
      */
     public function run($args = null)
     {
+
+        $this->report('CouponLeadPage', 'init');
+
         /** @var CFixedPageRepo $fixedPageRepo */
         $fixedPageRepo = \Monkey::app()->repoFactory->create('FixedPage');
 
@@ -91,24 +94,68 @@ class CNewsletterLeadPage extends ACronJob
                             $subscriptionDate = STimeToolbox::GetDateTime($newsletterUser->subscriptionDate);
                             $today = STimeToolbox::GetDateTime()->format('Y-m-d');
 
+                            $name = null;
+
+                            if ($user) {
+                                $name = $user->userDetails->name;
+                            } else {
+                                $name = $newsletterUser->nameNewsletter ?: null;
+                            }
+
+
                             switch ($today) {
                                 case SDateToolbox::removeOrAddDaysFromDate($subscriptionDate, 3, '+'):
-
+                                    $emailRepo->newPackagedMail(
+                                        'reminederleadcoupon',
+                                        'no-reply@pickyshop.com',
+                                        [$newsletterUser->email],
+                                        [],
+                                        [],
+                                        [
+                                            'couponCode' => $fixedPagePopup->couponEvent->name,
+                                            'name' => $name,
+                                            'reminderNumber' => 1
+                                        ]
+                                    );
+                                    break;
                                 case SDateToolbox::removeOrAddDaysFromDate($subscriptionDate, 5, '+'):
-
+                                    $emailRepo->newPackagedMail(
+                                        'reminederleadcoupon',
+                                        'no-reply@pickyshop.com',
+                                        [$newsletterUser->email],
+                                        [],
+                                        [],
+                                        [
+                                            'couponCode' => $fixedPagePopup->couponEvent->name,
+                                            'name' => $name,
+                                            'reminderNumber' => 2
+                                        ]
+                                    );
                                     break;
                                 case SDateToolbox::removeOrAddDaysFromDate($subscriptionDate, 7, '+'):
-
+                                    $emailRepo->newPackagedMail(
+                                        'reminederleadcoupon',
+                                        'no-reply@pickyshop.com',
+                                        [$newsletterUser->email],
+                                        [],
+                                        [],
+                                        [
+                                            'couponCode' => $fixedPagePopup->couponEvent->name,
+                                            'name' => $name,
+                                            'reminderNumber' => 3
+                                        ]
+                                    );
                                     break;
                             }
+
+                            $this->report('CouponLeadPage', 'Mail to: ' . $newsletterUser->email);
                         }
                     }
-
-
                 }
 
             }
         }
+        $this->report('CouponLeadPage', 'end');
     }
 
 }
