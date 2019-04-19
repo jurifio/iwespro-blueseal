@@ -91,7 +91,7 @@
                 data-remote="bs.lists.delete.asociatemarketplacehasshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Nuovo shop">
+    <!--<bs-toolbar-group data-group-label="Nuovo shop">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-floppy-o"
@@ -102,7 +102,7 @@
                 data-title="Salva"
                 data-placement="bottom"
         ></bs-toolbar-button>
-    </bs-toolbar-group>
+    </bs-toolbar-group>-->
 </bs-toolbar>
 </body>
 </html>
