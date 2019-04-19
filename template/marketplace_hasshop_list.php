@@ -91,6 +91,18 @@
                 data-remote="bs.lists.delete.asociatemarketplacehasshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Nuovo shop">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-floppy-o"
+                data-permission="/admin/marketing"
+                data-event="bs.marketplace.shop.add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Salva"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

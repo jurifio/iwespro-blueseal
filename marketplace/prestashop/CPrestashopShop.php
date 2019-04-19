@@ -3,6 +3,7 @@
 
 namespace bamboo\blueseal\marketplace\prestashop;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CMarketplaceHasShop;
 
 /**
  * Class CPrestashopShop
@@ -46,10 +47,14 @@ class CPrestashopShop extends APrestashopMarketplace
     }
 
     /**
-     * @param $name
+     * @param String $name
+     * @param int $shopId
+     * @param int $marketplaceId
      * @return bool
      */
-    public function addNewShop($name){
+    public function addNewShop(String $name, int $shopId, int $marketplaceId){
+
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'Init', '');
 
         try {
             $shopBlankXml = $this->getBlankSchema('shops');
@@ -63,28 +68,47 @@ class CPrestashopShop extends APrestashopMarketplace
 
             $opt['resource'] = $this::SHOP_RESOURCE;
             $opt['postXml'] = $shopBlankXml->asXML();
-            $this->ws->add($opt);
+            $xmlShopXml = $this->ws->add($opt);
         } catch (\Throwable $e){
             \Monkey::app()->applicationLog('CPrestashopShop', 'error', 'Error while insert new shop', $e->getMessage());
             return false;
         }
 
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'Init Category', '');
         //add category for new shop
         $prestashopCategory = new CPrestashopCategory();
         $prestashopCategory->updateAllCategoriesWithShopGroup();
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'End Category', '');
 
+
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'Init Manufacturers', '');
         //add manufacturers for new shop
         $prestashopManufacturers = new CPrestashopManufacturer();
         $prestashopManufacturers->updateAllManufacturersWithShopGroup();
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'End Manufacturers', '');
 
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'Init Attributes', '');
         //add attributes for new shop
         $prestashopOptionValues = new CPrestashopProductOptionValues();
         $prestashopOptionValues->updateAllProductOptionsWithShopGroup();
         $prestashopOptionValues->updateAllProductOptionValuesWithShopGroup();
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'End Attributes', '');
 
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'Init Features', '');
         //add features for new shop
         $prestashopFeatures = new CPrestashopFeatures();
         $prestashopFeatures->updateAllFeaturesWithShopGroup();
+        \Monkey::app()->applicationLog('CPrestashopShop', 'log', 'End Features', '');
+
+
+        $prestashopId = (int)$xmlShopXml->children()->children()->id;
+
+        /** @var CMarketplaceHasShop $mhs */
+        $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
+        $mhs->shopId = $shopId;
+        $mhs->marketplaceId = $marketplaceId;
+        $mhs->prestashopId = $prestashopId;
+        $mhs->smartInsert();
 
         return true;
     }

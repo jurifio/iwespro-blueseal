@@ -216,7 +216,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->price = $productPrice;
             $phphmhs->smartInsert();
         } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert product: ' . $product->productId . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId, $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert product: ' . $product->id . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId, $e->getMessage());
             return false;
         }
 
