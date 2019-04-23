@@ -84,7 +84,7 @@
                 data-rel="tooltip"
                 data-title="Aggiungi un nuovo prodotto"
                 data-placement="bottom"
-                data-href="blueseal/manage-fixed-page/add-fixed-page-template"
+                data-href="/blueseal/manage-fixed-page/add-fixed-page-template"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
