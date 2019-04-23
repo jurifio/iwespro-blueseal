@@ -2947,6 +2947,47 @@
             ]
         },
         {
+            "pattern": "/blueseal/manage-fixed-page/fixed-page-template-list(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "pattern": "/blueseal/manage-fixed-page/add-fixed-page-template(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/manage-fixed-page/fixed-page-template/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/api/:endpoint(/?):resource",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"

@@ -164,6 +164,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <div id="selectTemplate" style="margin-bottom: 60px;"></div>
                                 <textarea id="page-fixed-content"
                                           style="height: 300px"><?php if (!is_null($fixedPage)) echo $fixedPage->text; ?></textarea>
                             </div>
