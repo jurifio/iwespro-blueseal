@@ -65,7 +65,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione template">
-        <<bs-toolbar-button
+        <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-close"
                 data-permission="AllShops"
@@ -75,6 +75,16 @@
                 data-title="Elimina il template"
                 data-placement="bottom"
                 data-href="#"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="/admin/product/add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi un nuovo prodotto"
+                data-placement="bottom"
+                data-href="blueseal/manage-fixed-page/add-fixed-page-template"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
