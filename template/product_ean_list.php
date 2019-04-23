@@ -82,6 +82,14 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">File Importato
                                 </th>
+                                <th data-slug="qty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Quantità
+                                </th>
+                                <th data-slug="productStatus"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

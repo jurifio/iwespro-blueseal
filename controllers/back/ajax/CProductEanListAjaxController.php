@@ -39,8 +39,12 @@ class CProductEanListAjaxController extends AAjaxController
                         if(pe.brandAssociate=0,'Non Associato',pe.brandAssociate) as brandAssociate,
                         if(pe.shopId=null,'Non Associato',pe.shopId) as shopId,
                         pe.dateImport as dateImport,
-                        pe.fileImported as fileImported
+                        pe.fileImported as fileImported,
+                        p.qty,
+                        ps.name as productStatus
                         from ProductEan pe
+                        JOIN Product p ON p.id = pe.productId AND p.productVariantId = pe.productVariantId
+                        JOIN ProductStatus ps ON p.productStatusId = ps.id
                     ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
