@@ -396,22 +396,21 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $productPrice
      * @param $shop
      * @return bool|\SimpleXMLElement
-     * @throws BambooException
      * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     * @throws \bamboo\core\exceptions\RedPandaException
      */
     public function insertProduct(CProduct $product, $productPrice, $shop)
     {
         /** @var CProductEanRepo $productEanRepo */
         $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
 
+        /*
+         * //assign ean
         $assignedEan = $productEanRepo->productHasEan($product);
 
         if(is_null($assignedEan['father']) || (isset($assignedEan['children-not-assigned']) && count($assignedEan['children-not-assigned']) > 0)){
             $productEanRepo->assignEanForProduct($product);
         }
+        */
 
         $productName = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
             . ' ' .
