@@ -403,6 +403,8 @@ class CPrestashopProduct extends APrestashopMarketplace
         /** @var CProductEanRepo $productEanRepo */
         $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
 
+        /** @var CProductEan $eanFather */
+        $eanFather = $productEanRepo->getParentEanForProduct($product);
         /*
          * //assign ean
         $assignedEan = $productEanRepo->productHasEan($product);
@@ -429,7 +431,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         $resourcesBlankProduct->active = 1;
         $resourcesBlankProduct->available_for_order = 1;
         $resourcesBlankProduct->show_price = 1;
-        $resourcesBlankProduct->ean13 = $productEanRepo->getParentEanForProduct($product)->ean;
+        if(!is_null($eanFather)) $resourcesBlankProduct->ean13 = $eanFather->ean;
 
         //$node = dom_import_simplexml($resourcesBlankProduct->name->language[0][0]);
         //$no = $node->ownerDocument;
