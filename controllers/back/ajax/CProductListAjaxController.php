@@ -59,10 +59,10 @@ class CProductListAjaxController extends AAjaxController
                   p.isOnSale                                                                                        AS isOnSale,
                   psiz.name                                                                                             AS stock,
                   ifnull(p.processing, '-')                                                                         AS processing,
-                  (((if((p.isOnSale = 0), psk.price, psk.salePrice) / 1.22) - (psk.value + ((psk.value * if(
-                      (pse.isActive = 0), s.pastSeasonMultiplier,
-                      if((p.isOnSale = 1), s.saleMultiplier, s.currentSeasonMultiplier))) / 100))) /
-                   (if((p.isOnSale = 0), psk.price, psk.salePrice) / 1.22)) * 100                           AS mup,
+                  #(((if((p.isOnSale = 0), psk.price, psk.salePrice) / 1.22) - (psk.value + ((psk.value * if(
+                   #   (pse.isActive = 0), s.pastSeasonMultiplier,
+                   #   if((p.isOnSale = 1), s.saleMultiplier, s.currentSeasonMultiplier))) / 100))) /
+                   #(if((p.isOnSale = 0), psk.price, psk.salePrice) / 1.22)) * 100                           AS mup,
                   p.qty                                                                                             AS hasQty,
                   (SELECT group_concat(DISTINCT t.name)
                    FROM ProductHasTag pht
@@ -78,7 +78,7 @@ class CProductListAjaxController extends AAjaxController
                    WHERE mahp.productId = p.id AND
                          mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
                          
-                if(isnull(prHp.prestaId), 'no', 'si') inPrestashop
+                if(isnull(prHp.productId), 'no', 'si') inPrestashop
                 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
@@ -202,9 +202,10 @@ class CProductListAjaxController extends AAjaxController
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
             $row['shops'] = $val->shopHasProduct->count();
 
-            $row['mup'] = '<span class="small">';
-            $row['mup'] .= implode('<br />', $mup);
-            $row['mup'] .= '</span>';
+
+            //$row['mup'] = '<span class="small">';
+            //$row['mup'] .= implode('<br />', $mup);
+            //$row['mup'] .= '</span>';
 
             $row['friendPrices'] = [];
             $row['friendValues'] = [];
