@@ -76,12 +76,15 @@ class CProductListAjaxController extends AAjaxController
                      JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                      JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
                    WHERE mahp.productId = p.id AND
-                         mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces
+                         mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
+                         
+                if(isnull(prHp.prestaId), 'no', 'si') inPrestashop
                 FROM Product p
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
+                  LEFT JOIN PrestashopHasProduct prHp ON p.id = prHp.productId AND p.productVariantId = prHp.productVariantId
                   JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
                   JOIN Shop s ON s.id = sp.shopId
@@ -231,6 +234,8 @@ class CProductListAjaxController extends AAjaxController
             }
             $row["shooting"] = $sids;
             $row["doc_number"] = $ddtNumbers;
+            $row["inPrestashop"] = is_null($val->prestashopHasProduct) ? 'no' : 'si';
+
             $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();

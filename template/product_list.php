@@ -178,6 +178,10 @@
                                     data-searchable="true"
                                     data-orderable="true">N. DDT
                                 </th>
+                                <th data-slug="inPrestashop"
+                                    data-searchable="true"
+                                    data-orderable="true">Prestashop
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
