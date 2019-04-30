@@ -39,7 +39,11 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               php.status,
               php.prestaId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
-              concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation
+              concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
+              if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
+               concat(shop.id, '-', shop.name)                                                                     AS shop,
+               concat(pse.name, ' ', pse.year)                                                               AS season,
+               psiz.name                                                                                             AS stock
             FROM PrestashopHasProduct php
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
             JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
@@ -50,6 +54,13 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             LEFT JOIN MarketplaceHasShop mhs2 ON php.marketplaceHasShopId = mhs2.id
             LEFT JOIN Shop s2 ON mhs2.shopId = s2.id
             LEFT JOIN Marketplace m2 ON mhs2.marketplaceId = m2.id
+            JOIN ShopHasProduct sp
+                    ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
+                  JOIN Shop shop ON shop.id = sp.shopId
+                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
+                   LEFT JOIN (ProductSku psk
+                    JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
+                    ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
             GROUP BY php.productId, php.productVariantId 
         ";
 
@@ -99,6 +110,11 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
+            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
+            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
+            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->printId().'"></table>';
+
 
             /** @var CMarketplaceHasShop $mhsCron */
             $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
@@ -106,7 +122,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['cronjobOperation'] = '';
             $row['cronjobReservation'] = '';
 
-            if(!is_null($mhsCron)){
+            if (!is_null($mhsCron)) {
                 $row['cronjobReservation'] = $mhsCron->shop->name . ' | ' . $mhsCron->marketplace->name;
                 $row['cronjobOperation'] = 'Type operation: ' . $php->modifyType . ' | Operation amount: ' . $php->variantValue;
             }

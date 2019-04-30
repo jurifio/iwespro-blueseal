@@ -31,6 +31,12 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Codice prodotto
                                 </th>
+                                <th data-slug="dummy"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Dummy
+                                </th>
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
@@ -79,11 +85,17 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Marketplace prossimo inserimento
                                 </th>
-                                <th data-slug="cronjobOperation"
-                                    data-required="true"
+                                <th data-slug="shop"
                                     data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Operazioni previste dal cron
+                                    data-orderable="true" class="center">Shop
+                                </th>
+                                <th data-slug="season"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione
+                                </th>
+                                <th data-slug="stock"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stock
                                 </th>
                             </tr>
                             </thead>
