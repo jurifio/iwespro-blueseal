@@ -31,9 +31,11 @@ class CNewsletterUserEmailListAjaxController extends AAjaxController
                   ud.name,
                   ud.surname,
                   ud.gender,
-                  n.genderNewsletterUser as nuG
+                  n.genderNewsletterUser as nuG,
+                  concat(fp.id, ': ', fp.slug) as leadPage
                   FROM NewsletterUser n 
-                  LEFT JOIN UserDetails ud ON n.userId = ud.userId";
+                  LEFT JOIN UserDetails ud ON n.userId = ud.userId
+                  LEFT JOIN FixedPage fp ON fp.id = n.fixedPageId";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -56,6 +58,7 @@ class CNewsletterUserEmailListAjaxController extends AAjaxController
             $row['unsubscriptionDate'] = $newsletterUser->unsubscriptionDate;
             $row['isActive'] = $newsletterUser->isActive ? 'Attivo' : 'Non attivo';
             $row['gender'] = is_null($newsletterUser->userId) ? $newsletterUser->genderNewsletterUser : $newsletterUser->user->userDetails->gender;
+            $row['leadPage'] = is_null($newsletterUser->fixedPage) ? '' : $newsletterUser->fixedPage->id . ': ' . $newsletterUser->fixedPage->slug;
 
 
             $datatable->setResponseDataSetRow($key,$row);

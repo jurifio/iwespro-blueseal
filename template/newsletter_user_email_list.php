@@ -71,6 +71,11 @@
                                     data-orderable="true"
                                     class="center">Sesso (Lista utenti)
                                 </th>
+                                <th data-slug="leadPage"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Lead age
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
