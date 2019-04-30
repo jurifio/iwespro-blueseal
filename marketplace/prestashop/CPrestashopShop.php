@@ -51,6 +51,8 @@ class CPrestashopShop extends APrestashopMarketplace
      * @param int $shopId
      * @param int $marketplaceId
      * @return bool
+     *
+     * todo: add currency and other things to complete shop
      */
     public function addNewShop(String $name, int $shopId, int $marketplaceId){
 
