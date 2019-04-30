@@ -34,7 +34,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               pps.price,
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
-              group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale)) AS sale,
+              group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified)) AS sale,
               group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
               php.prestaId,
@@ -77,7 +77,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
                 $associations .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
-                $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Yes') . '<br>';
+                $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Yes') . ' | Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>';
                 $salePrice .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale price: ' . $pHPHmHs->salePrice . '<br>';
             }
             $row['marketplaceAssociation'] = $associations;

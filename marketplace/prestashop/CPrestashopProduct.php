@@ -832,6 +832,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
             if ($updateDescription) {
                 $this->updateProductSaleDescription($product, $mhs, 'add', $phphmhs->price, $salePrice);
+                $phphmhs->titleModified = 1;
             }
 
             $phphmhs->salePrice = $salePrice;
