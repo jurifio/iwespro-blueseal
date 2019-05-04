@@ -180,6 +180,14 @@
                 data-remote="bs.order.remote.pickup"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestisci file">
+        <bs-toolbar-button
+                data-remote="bs.customer.print.invoice"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.customer.load.document"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
