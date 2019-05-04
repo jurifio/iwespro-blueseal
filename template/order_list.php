@@ -53,6 +53,11 @@
                                     data-orderable="true"
                                     class="center">Utente
                                 </th>
+                                <th data-slug="remoteOrderId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Ordine Remoto
+                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -97,11 +102,6 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Origine
-                                </th>
-                                <th data-slug="isReturnable"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Rendibile
                                 </th>
                             </tr>
                             </thead>
@@ -176,21 +176,18 @@
         <bs-toolbar-button
                 data-remote="bs.order.filterToSend"
         ></bs-toolbar-button>
-    </bs-toolbar-group>
-
-    <bs-toolbar-group data-group-label="Gestione Resi">
         <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-hand-o-left"
-                data-permission="/admin/order/edit"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Crea un nuovo reso"
-                data-placement="bottom"
-                data-event="bs.return.create"
+                data-remote="bs.order.remote.pickup"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-
+    <bs-toolbar-group data-group-label="Gestisci file">
+        <bs-toolbar-button
+                data-remote="bs.customer.print.invoice"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.customer.load.document"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
