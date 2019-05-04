@@ -2,16 +2,12 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use bamboo\blueseal\business\CDownloadFileFromDb;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\domain\entities\CInvoiceDocument;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CProductSku;
-use bamboo\domain\entities\CUser;
 use bamboo\utils\price\SPriceToolbox;
-use bamboo\domain\entities\CUserAddress;
 
 /**
  * Class COrderListAjaxController
@@ -29,8 +25,6 @@ class COrderListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $perm = \Monkey::app()->getUser()->hasPermission('allShops');
-
         $sql = "SELECT
                   `o`.`id`                                               AS `id`,
                   concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
@@ -39,7 +33,7 @@ class COrderListAjaxController extends AAjaxController
                   `u`.`email`                                            AS `email`,
                   `o`.`orderDate`                                        AS `orderDate`,
                   `o`.`lastUpdate`                                       AS `lastUpdate`,
-                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`, ' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title` ) AS `product`,
+                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`,' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title` ) AS `product`,
                   `s`.`title`                                            AS `shop`,
                   `os`.`title`                                           AS `status`,
                   `o`.`status`                                           AS `statusCode`,
@@ -65,7 +59,7 @@ class COrderListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
-                WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
+                WHERE `o`.`status` LIKE 'ORD%' GROUP BY ol.id, ol.orderId";
 
         $critical = \Monkey::app()->router->request()->getRequestData('critical');
         $countersign = \Monkey::app()->router->request()->getRequestData('countersign');
@@ -92,18 +86,17 @@ class COrderListAjaxController extends AAjaxController
 
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
-        $countryR = \Monkey::app()->repoFactory->create('Country');
-        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
-        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q, $p);
+        $count = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
+        $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
         foreach ($orderStatuses as $orderStatus) {
             $colorStatus[$orderStatus->code] = $orderStatus->color;
         }
 
-        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
+        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
         $plainLineStatuses = [];
         $colorLineStatus = [];
         foreach ($orderLineStatuses as $orderLineStatus) {
@@ -120,7 +113,6 @@ class COrderListAjaxController extends AAjaxController
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
         $opera = $blueseal . "ordini/aggiungi?order=";
 
-        /** @var COrder $val */
         foreach ($orders as $val) {
             $row = [];
             /** ciclo le righe */
@@ -138,7 +130,7 @@ class COrderListAjaxController extends AAjaxController
                     $code = 'non trovato';
                 }
 
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
+                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</span>";
                 $row["product"] .= "<br/>";
             }
 
@@ -153,14 +145,8 @@ class COrderListAjaxController extends AAjaxController
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
-
-            if($perm){
-                $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
-                if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
-            } else {
-                $row["id"] = $val->id;
-            }
-
+            $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
+            if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
@@ -197,41 +183,10 @@ class COrderListAjaxController extends AAjaxController
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
 
+            /** @var COrder $orderReturnable */
+            $orderReturnable = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$row["DT_RowId"]]);
 
-            $row["invoice"] = ($val->invoice->count() == 0 ? "" : "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=".$val->id."'>".$val->invoice->getFirst()->invoiceNumber."/k</a>");
-
-            /** Get doc */
-            $fileName = "";
-            /** @var CInvoiceDocument $iD */
-            foreach ($val->invoiceDocument as $iD){
-                $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/".$iD->id."'>".$iD->fileName."</a></br>";
-            }
-
-            $row["documents"] = $fileName;
-
-            $addressOrder = '';
-            $address = CUserAddress::defrost($val->frozenShippingAddress);
-            $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
-            $tableAddress = $val->user->userAddress->findOneByKey('id', $address->id);
-            if(!$tableAddress){
-                $addressOrder .= "Attenzione, l'utente ha eliminato l'indirizzo in spedizione";
-            } else if($address->checkSum() != $tableAddress->checkSum()){
-                $addressOrder .= ">Attenzione, l'utente ha modificato il suo indirizzo dopo aver effettuato l'ordine";
-            }
-
-            $country = $countryR->findOneBy(['id' => $address->countryId]);
-            $phone = is_null($address->phone) ? '---' : $address->phone;
-            $addressOrder .= "
-             <span><strong>Destinatario: </strong>$address->name $address->surname</span><br>
-             <span><strong>Indirizzo: </strong>$address->address</span><br>
-             <span><strong>CAP: </strong>$address->postcode</span><br>
-             <span><strong>Città: </strong>$address->city</span><br>
-             <span><strong>Provincia: </strong>$address->province</span><br>
-             <span><strong>Paese: </strong>$country->name</span><br>
-             <span><strong>Telefono: </strong>$phone</span><br>
-            ";
-            $row["address"] = $addressOrder;
-
+            $row["isReturnable"] = ($orderReturnable->isReturnable() ? "si" : "no");
             $response['data'][] = $row;
         }
         return json_encode($response);
@@ -260,7 +215,7 @@ class COrderListAjaxController extends AAjaxController
         if (!$order) throw new BambooException('L\'id ordine fornito non corrisponde a nessun ordine');
 
         if ('ORD_CANCEL' === $order->status || 'ORD_PENDING' === $order->status) {
-            \Monkey::app()->repoFactory->beginTransaction();
+            $dba->beginTransaction();
             try {
                 $usoC = $ushoR->findBy(['orderId' => $orderId]);
                 foreach ($usoC as $uso) {
@@ -368,10 +323,10 @@ class COrderListAjaxController extends AAjaxController
                 }
                 $order->delete();
 
-                \Monkey::app()->repoFactory->commit();
+                $dba->commit();
                 return "Ordine eliminato!";
             } catch (BambooException $e) {
-                \Monkey::app()->repoFactory->rollback();
+                $dba->rollback();
                 \Monkey::app()->router->response()->raiseProcessingError();
                 return $e->getMessage();
             }

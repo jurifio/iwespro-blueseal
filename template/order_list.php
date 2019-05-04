@@ -53,11 +53,6 @@
                                     data-orderable="true"
                                     class="center">Utente
                                 </th>
-                                <th data-slug="remoteOrderId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Ordine Remoto
-                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -103,27 +98,10 @@
                                     data-orderable="true"
                                     class="center">Origine
                                 </th>
-                                <?php if($permission): ?>
-                                    <th data-slug="orderSources"
-                                        data-searchable="true"
-                                        data-orderable="true"
-                                        class="center">Origine
-                                    </th>
-                                <?php endif; ?>
-                                <th data-slug="invoice"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Fattura
-                                </th>
-                                <th data-slug="documents"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Documenti
-                                </th>
-                                <th data-slug="address"
+                                <th data-slug="isReturnable"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Indirizzi
+                                    class="center">Rendibile
                                 </th>
                             </tr>
                             </thead>
@@ -198,18 +176,21 @@
         <bs-toolbar-button
                 data-remote="bs.order.filterToSend"
         ></bs-toolbar-button>
+    </bs-toolbar-group>
+
+    <bs-toolbar-group data-group-label="Gestione Resi">
         <bs-toolbar-button
-                data-remote="bs.order.remote.pickup"
+                data-tag="a"
+                data-icon="fa-hand-o-left"
+                data-permission="/admin/order/edit"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Crea un nuovo reso"
+                data-placement="bottom"
+                data-event="bs.return.create"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestisci file">
-        <bs-toolbar-button
-                data-remote="bs.customer.print.invoice"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.customer.load.document"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
+
 </bs-toolbar>
 </body>
 </html>
