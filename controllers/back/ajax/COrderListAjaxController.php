@@ -5,7 +5,6 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\intl\CLang;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
-use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\CProductSku;
 use bamboo\utils\price\SPriceToolbox;
 
@@ -26,7 +25,8 @@ class COrderListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-                  `o`.`id`                                               AS `id`,
+                  `o`.`id` as `id`,
+                  `o`.remoteOrderId                                           as remoteOrderId,
                   concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
                   `ud`.`name`                                            AS `name`,
                   `ud`.`surname`                                         AS `surname`,
@@ -40,7 +40,7 @@ class COrderListAjaxController extends AAjaxController
                   `opm`.`name`                                           AS `payment`,
                   `ols`.`title`                                          AS `orderLineStatus`,
                   `pb`.`name`                                            AS `productBrand`,
-                  #concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
+                  concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
@@ -86,17 +86,17 @@ class COrderListAjaxController extends AAjaxController
 
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
-        $orders = $this->app->repoFactory->create('Order')->em()->findBySql($q, $p);
-        $count = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = $this->app->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
+        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
+        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $orderStatuses = $this->app->repoFactory->create('OrderStatus')->findAll();
+        $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
         foreach ($orderStatuses as $orderStatus) {
             $colorStatus[$orderStatus->code] = $orderStatus->color;
         }
 
-        $orderLineStatuses = $this->app->repoFactory->create('OrderLineStatus')->findAll();
+        $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
         $plainLineStatuses = [];
         $colorLineStatus = [];
         foreach ($orderLineStatuses as $orderLineStatus) {
@@ -145,6 +145,7 @@ class COrderListAjaxController extends AAjaxController
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
+            $row['remoteOrderId']=$val->remoteOrderId;
             $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
             if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
 
@@ -182,11 +183,6 @@ class COrderListAjaxController extends AAjaxController
                 $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost.'€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
-
-            /** @var COrder $orderReturnable */
-            $orderReturnable = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$row["DT_RowId"]]);
-
-            $row["isReturnable"] = ($orderReturnable->isReturnable() ? "si" : "no");
             $response['data'][] = $row;
         }
         return json_encode($response);
@@ -215,7 +211,7 @@ class COrderListAjaxController extends AAjaxController
         if (!$order) throw new BambooException('L\'id ordine fornito non corrisponde a nessun ordine');
 
         if ('ORD_CANCEL' === $order->status || 'ORD_PENDING' === $order->status) {
-            $dba->beginTransaction();
+            \Monkey::app()->repoFactory->beginTransaction();
             try {
                 $usoC = $ushoR->findBy(['orderId' => $orderId]);
                 foreach ($usoC as $uso) {
@@ -323,10 +319,10 @@ class COrderListAjaxController extends AAjaxController
                 }
                 $order->delete();
 
-                $dba->commit();
+                \Monkey::app()->repoFactory->commit();
                 return "Ordine eliminato!";
             } catch (BambooException $e) {
-                $dba->rollback();
+                \Monkey::app()->repoFactory->rollback();
                 \Monkey::app()->router->response()->raiseProcessingError();
                 return $e->getMessage();
             }
