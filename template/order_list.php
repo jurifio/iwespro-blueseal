@@ -103,6 +103,21 @@
                                     data-orderable="true"
                                     class="center">Origine
                                 </th>
+                                <th data-slug="invoice"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Fattura
+                                </th>
+                                <th data-slug="documents"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Documenti
+                                </th>
+                                <th data-slug="address"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Indirizzi
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
