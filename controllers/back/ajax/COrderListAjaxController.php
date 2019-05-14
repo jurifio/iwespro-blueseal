@@ -50,7 +50,7 @@ class COrderListAjaxController extends AAjaxController
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
-       o.remoteOrderId,
+                  o.remoteOrderId,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
