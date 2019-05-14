@@ -50,6 +50,7 @@ class COrderListAjaxController extends AAjaxController
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
+       o.remoteOrderId,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -153,6 +154,7 @@ class COrderListAjaxController extends AAjaxController
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
+            $row['remoteOrderId']=$val->remoteOrderId;
 
             if($perm){
                 $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
