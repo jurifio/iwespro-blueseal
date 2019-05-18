@@ -85,7 +85,6 @@ class CPrestashopUpdateProductQuantity extends ACronJob
 
             foreach ($sizes as $size => $qty){
                 $prestashopProduct->updateProductQuantity($php->prestaId, $size,  $qty,  null,  $shops);
-                $prestashopProduct->updateProductPrice($php->prestaId, $productPrice, $marketPlaceHasShop,$product);
             }
 
 

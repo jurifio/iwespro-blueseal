@@ -734,6 +734,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $product->itemno
                     . ' ' .
                     $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
+                $shopprice=$salePrice;
                 break;
             case 'remove':
                 $name = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
@@ -743,12 +744,14 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $product->itemno
                     . ' ' .
                     $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
+                $shopprice=$price;
                 break;
             default:
                 return false;
         }
 
         $productChildXml->name->language[0][0] = $name;
+        $productChildXml->price=$shopprice;
         unset($productChildXml->manufacturer_name);
         unset($productChildXml->quantity);
         unset($productChildXml->associations->combinations);
