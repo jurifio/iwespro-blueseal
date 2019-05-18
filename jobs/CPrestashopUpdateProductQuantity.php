@@ -54,16 +54,20 @@ class CPrestashopUpdateProductQuantity extends ACronJob
         foreach ($phpC as $php){
 
             $ppsC = $php->product->productPublicSku;
-            $price=$php->prestashopHasProductHasMarketplaceHasShop->price;
-            $isOnSale=$php->prestashopHasProductHasMarketplaceHasShop->isOnSale;
-            $salePrice=$php->prestashopHasProductHasMarketplaceHasShop->salePrice;
+            $price=$php->prestashopHasProductHasMarketplaceHasShop;
+
             $marketplaceHasShop=$php->marketplaceHasShop;
             $product=$php->product;
-            if($isOnSale==1){
-                $productPrice=$salePrice;
-            }else{
-                $productPrice=$isOnSale;
+
+            /** @var CPrestashopHasProductHasMarketplaceHasShop $prices */
+            foreach($price as $prices){
+                if($prices->isOnSale===1){
+                    $productPrice=$prices->salePrice;
+                }else{
+                    $productPrice=$prices->price;
+                }
             }
+
             $sizes = [];
 
             /** @var CProductPublicSku $pps */
