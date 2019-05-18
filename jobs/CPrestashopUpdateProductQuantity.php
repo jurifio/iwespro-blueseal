@@ -5,6 +5,7 @@ use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProductPublicSku;
 
 /**
@@ -53,6 +54,16 @@ class CPrestashopUpdateProductQuantity extends ACronJob
         foreach ($phpC as $php){
 
             $ppsC = $php->product->productPublicSku;
+            $price=$php->prestashopHasProductHasMarketplaceHasShop->price;
+            $isOnSale=$php->prestashopHasProductHasMarketplaceHasShop->isOnSale;
+            $salePrice=$php->prestashopHasProductHasMarketplaceHasShop->salePrice;
+            $marketplaceHasShop=$php->marketplaceHasShop;
+            $product=$php->product;
+            if($isOnSale==1){
+                $productPrice=$salePrice;
+            }else{
+                $productPrice=$isOnSale;
+            }
             $sizes = [];
 
             /** @var CProductPublicSku $pps */
@@ -60,16 +71,20 @@ class CPrestashopUpdateProductQuantity extends ACronJob
                 $sizes[$pps->productSizeId] = $pps->stockQty;
             }
 
+
             $shops = $php->getShopsForProduct();
 
             foreach ($sizes as $size => $qty){
-                $prestashopProduct->updateProductQuantity($php->prestaId, $size, $qty, null, $shops);
+                $prestashopProduct->updateProductQuantity($php->prestaId, $size,  $qty,  null,  $shops);
+                $prestashopProduct->updateProductPrice($php->prestaId, $productPrice, $marketplaceHasShop, $product);
             }
+
+
 
             $php->status = 1;
             $php->update();
         }
 
-        $this->report('Update product qty', 'End Update');
+        $this->report('Update product qty and price', 'End Update');
     }
 }
