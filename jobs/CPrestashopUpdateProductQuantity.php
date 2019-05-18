@@ -66,6 +66,8 @@ class CPrestashopUpdateProductQuantity extends ACronJob
                 }else{
                     $productPrice=$prices->price;
                 }
+                $shop=$prices->marketplaceHasShop->shopId;
+
             }
 
             $sizes = [];
@@ -78,9 +80,10 @@ class CPrestashopUpdateProductQuantity extends ACronJob
 
             $shops = $php->getShopsForProduct();
 
+
             foreach ($sizes as $size => $qty){
                 $prestashopProduct->updateProductQuantity($php->prestaId, $size,  $qty,  null,  $shops);
-                $prestashopProduct->updateProductPrice($php->prestaId, $productPrice, $price->shopId, $product);
+                $prestashopProduct->updateProductPrice($php->prestaId, $productPrice,null,null);
             }
 
 
