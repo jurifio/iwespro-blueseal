@@ -2929,6 +2929,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/prodotti-pubblicati-su-shop-friend(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductHasShopDestinationListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/api/:endpoint",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"
