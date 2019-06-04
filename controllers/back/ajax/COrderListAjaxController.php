@@ -185,7 +185,7 @@ class COrderListAjaxController extends AAjaxController
             }
             try {
                 //TODO CHECK THIS WROOOONG
-                $row['user'] .= '<br />' . $val->billingAddress->country->name;
+                $row['user'] .= '<br />'. $val->billingAddress->country->name;
             } catch (\Throwable $e) {
             }
 
