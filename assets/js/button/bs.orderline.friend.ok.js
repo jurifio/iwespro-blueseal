@@ -46,6 +46,7 @@ $(document).on('bs-orderline-friend-ok', function () {
             method: 'get',
             dataType: 'json'
         }).done(function (res) {
+            console.log(res);
             addressSelect.selectize({
                 valueField: 'id',
                 labelField: 'name',

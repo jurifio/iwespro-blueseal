@@ -50,7 +50,8 @@ class COrderListAjaxController extends AAjaxController
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
-                  o.remoteOrderId,
+                  o.remoteId,
+                  o.remoteShopId,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -93,6 +94,7 @@ class COrderListAjaxController extends AAjaxController
 
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         $countryR = \Monkey::app()->repoFactory->create('Country');
         $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
         $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -154,8 +156,15 @@ class COrderListAjaxController extends AAjaxController
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
-            $row['remoteOrderId']=$val->remoteOrderId;
 
+            $row['remoteId']=$val->remoteId;
+            $shopFind=$shopRepo->findOneBy(['id'=>$val->remoteShopId]);
+            $shopname=$shopFind->title;
+            if($val->remoteShopId==44){
+                $row['remoteShopId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">ordine PickyShop</i>";
+            }else{
+                $row['remoteShopId']=" <i style=\"color:green\"class=\"fa fa-info-circle\">ordine ".$shopname."</i>";
+            }
             if($perm){
                 $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
                 if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
