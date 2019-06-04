@@ -42,13 +42,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
         $res = "";
         /********marketplace********/
         $db_host = "localhost";
-        $db_name = "barbagalloshop_dev";
+        $db_name = "barbagallo_dev";
         $db_user = "root";
         $db_pass = "geh44fed";
         define("HOST", "localhost");
         define("USERNAME", "root");
         define("PASSWORD", "geh44fed");
-        define("DATABASE", "barbagalloshop_dev");
+        define("DATABASE", "barbagallo_dev");
         try {
 
             $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
@@ -221,6 +221,8 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 $couponTypeInsert->validForCartTotal = $rowCouponType['validForCartTotal'];
                 $couponTypeInsert->hasFreeShipping = $rowCouponType['hasFreeShipping'];
                 $couponTypeInsert->hasFreeReturn = $rowCouponType['hasFreeReturn'];
+                $couponTypeInsert->remoteId=$rowCouponType['remoteId'];
+                $couponTypeInsert->remoteShopId=51;
                 $couponTypeInsert->insert();
             } else {
                 $res .= 'Tipo Coupon Gia Esistente';
@@ -312,8 +314,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                c.billingAddressId as billingAddressId,
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
-                                               c.creationDate as creationDate,
-                                               c.hasInvoice as hasInvoice 
+                                               c.creationDate as creationDate
                                                from Cart c where c.billingAddressId IS  NOT NULL and c.shipmentAddressId  IS NOT NULL ");
         $stmtCart->execute();
         while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
@@ -328,11 +329,15 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $shipmentAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['shipmentAddressId'], 'remoteShopId' => 51]);
                         if ($shipmentAddressIdFind != null) {
                             $shipmentAddressId = $shipmentAddressIdFind->id;
-                            $couponFind=$couponRepo->findOneBy(['remoteId'=>$rowCart['couponId'],'remoteShopId'=>51]);
-                            if($couponFind!=null){
-                                $couponId=$couponFind->id;
+                            if ($rowCart['couponId'] != '') {
+                                $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => 51]);
+                                if ($FindCoupon != null) {
+                                    $insertCart->couponId = $FindCoupon->id;
+                                } else {
+                                    $insertCart->couponId = NULL;
+                                }
                             }else{
-                                $couponId='';
+                                $insertCart->couponId = NULL;
                             }
                             $insertCart = $cartRepo->getEmptyEntity();
                             $insertCart->orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
@@ -344,7 +349,6 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                             $insertCart->shipmentAddressId = $shipmentAddressId;
                             $insertCart->lastUpdate = $rowCart['lastUpdate'];
-                            $insertCart->hasInvoice = $rowCart['hasInvoice'];
                             $insertCart->remoteId = $rowCart['remoteId'];
                             $insertCart->remoteShopId = 51;
                             $insertCart->insert();

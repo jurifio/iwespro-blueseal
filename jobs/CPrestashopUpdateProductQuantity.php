@@ -68,7 +68,7 @@ class CPrestashopUpdateProductQuantity extends ACronJob
                 }else{
                     $productPrice=$prices->price;
                 }
-                $shop=$prices->shopId;
+               // $shop=$prices->shopId;
 
             }
 
