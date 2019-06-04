@@ -40,7 +40,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
         ini_set('memory_limit', '2048M');
 
         $res = "";
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findBy(['isEcommerce'=>1]);
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
         foreach ($shopRepo as $value) {
             /********marketplace********/
             $db_host = $value->dbHost;
