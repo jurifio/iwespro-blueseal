@@ -12,7 +12,7 @@ use AEntity;
 use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CSite;
 use bamboo\domain\entities\CUserHasShop;
-
+use bamboo\domain\repositories\CUserAddressRepo;
 use bamboo\domain\entities\CUser;
 
 
@@ -256,6 +256,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $couponEventInsert->insert();
                     }
                 } else {
+                    continue;
                     $res .= "Coupon Evento Già esisitente";
                 }
             }
@@ -440,11 +441,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
                                 if ($FindCoupon != null) {
                                     $insertOrder->couponId = $FindCoupon->id;
-                                } else {
-                                    $insertOrder->couponId = NULL;
                                 }
-                            } else {
-                                $insertOrder->couponId = NULL;
                             }
 
 
@@ -453,15 +450,20 @@ class CImportExternalPickySiteOrder extends AAjaxController
                             $insertOrder->status = $rowOrder['status'];
                             /* defrost indirizzo  Fatturazione remoto */
                             $remoteBillingAddressId = $rowOrder['billingAddressId'];
-
-                            $findBillingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteBillingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                            $insertOrder->frozenShippingAddress = $findBillingAddressDetails->froze();
+                            if($remoteBillingAddressId!='') {
+                                $findBillingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteBillingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
+                                $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
+                                $insertOrder->billingAddressId = $findBillingAddressDetails->id;
+                            }
                             /* defrost indirizzo Spedizione remoto */
                             $remoteShippingAddressId = $rowOrder['shipmentAddressId'];
-                            $findShippingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteShippingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                            $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
-                            $insertOrder->billingAddressId = $findBillingAddressDetails->id;
-                            $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
+                            if($remoteShippingAddressId!='') {
+                                $findShippingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteShippingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
+                                $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
+                                $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
+                            }
+
+
                             $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
                             $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
                             $insertOrder->grossTotal = $rowOrder['grossTotal'];
@@ -476,6 +478,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                             $insertOrder->paymentDate = $rowOrder['paymentDate'];
                             $insertOrder->remoteId = $rowOrder['remoteId'];
                             $insertOrder->remoteShopId = $shop;
+                            $insertOrder->hasInvoice=$rowOrder['hasInvoice'];
                             $insertOrder->insert();
                             $res .= '<br>inserimento ordine ' . $rowOrder['remoteId'];
                         }
@@ -519,7 +522,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      FROM OrderLine ol");
             $stmtOrderLine->execute();
             while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
-                $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'], 'remoteShopId' => $shop]);
+                $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'],'remoteOrderId'=>$rowOrderLine['orderId'], 'remoteShopId' => $shop]);
                 if ($checkOrderLineExist == null) {
 
                     $findOrder = $orderRepo->findOneBy(['remoteId' => $rowOrderLine['orderId'], 'remoteShopId' => $shop]);
@@ -560,6 +563,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $insertOrderLine->note = $rowOrderLine['note'];
                         $insertOrderLine->remoteId = $rowOrderLine['remoteId'];
                         $insertOrderLine->remoteShopId = $shop;
+                        $insertOrderLine->remoteOrderId=$rowOrderLine['orderId'];
                         $insertOrderLine->insert();
 
                         $res .= "Riga Ordine  inserita";
@@ -574,7 +578,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
         return $res;
 
+
     }
+
 
 
 }
