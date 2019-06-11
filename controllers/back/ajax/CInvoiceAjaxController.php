@@ -35,6 +35,7 @@ class CInvoiceAjaxController extends AAjaxController
         $orderId = $this->app->router->request()->getRequestData('orderId');
 
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
+        $shopRepo =\Monkey::app()->repoFactory->create('Shop');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
         $BillingUserAddress = CUserAddress::defrost($order->frozenBillingAddress);
         $extraUe=$BillingUserAddress->countryId;
@@ -142,7 +143,18 @@ class CInvoiceAjaxController extends AAjaxController
                     $insertDocument->year=$year;
                     $insertDocument->insert();
                 }
-                $order = $orderRepo->findOneBy(['id' => $orderId]);
+
+                $remoteShopId=$order->remoteOrderId;
+                $shopInvoices=$shopRepo->finOneBy(['id'=>$remoteShopId]);
+                $logo=$shopInvoices->logo;
+                $intestation=$shopInvoices->intestation;
+                $intestation2=$shopInvoices->intestation2;
+                $address=$shopInvoices->address;
+                $address2=$shopInvoice->address2;
+                $iva =$shopInvoices->iva;
+                $tel =$shopInvoices->tel;
+                $email =$shopInvoices->email;
+
             } catch (\Throwable $e) {
                 throw $e;
                 $this->app->router->response()->raiseProcessingError();
@@ -199,6 +211,9 @@ class CInvoiceAjaxController extends AAjaxController
 
                     }
                 }
+
+                /*'logo' => $this->app->cfg()->fetch("miscellaneous", "logo"),
+                    'fiscalData' => $this->app->cfg()->fetch("miscellaneous", "fiscalData"),*/
                 $invoice->invoiceText = $view->render([
                     'app' => new CRestrictedAccessWidgetHelper($this->app),
                     'userAddress' => $userAddress,
@@ -207,8 +222,14 @@ class CInvoiceAjaxController extends AAjaxController
                     'invoice' => $invoice,
                     'productRepo' => $productRepo,
                     'page' => $this->page,
-                    'logo' => $this->app->cfg()->fetch("miscellaneous", "logo"),
-                    'fiscalData' => $this->app->cfg()->fetch("miscellaneous", "fiscalData"),
+                    'logo' => $logo,
+                    'intestation' => $intestation,
+                    'intestation2'=> $intestation2,
+                    'address' =>$address,
+                    'address2'=>$address2,
+                    'iva' =>$iva,
+                    'tel'=>$tel,
+                    'email'=>$email,
                     'invoiceType'=>$invoiceType,
                     'invoiceTypeText' => $invoiceTypeText,
                     'invoiceHeaderText' => $invoiceHeaderText,

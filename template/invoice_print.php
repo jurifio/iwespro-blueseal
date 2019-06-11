@@ -288,13 +288,13 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                              data-src-retina=<?php echo $logo ?> data-src=<?php echo $logo ?> src=<?php echo $logo ?>>
                         <!--indirizzo negozio-->
                         <br><br>
-                        <address class="m-t-10"><b><?php echo $fiscalData['intestation'] ?>
-                                <br><?php echo $fiscalData['intestation2'] ?></b>
-                            <br><?php echo $fiscalData['address'] ?>
-                            <br><?php echo $fiscalData['address2'] ?>
-                            <br><?php echo $fiscalData['iva'] ?>
-                            <br><?php echo $fiscalData['tel'] ?>
-                            <br><?php echo $fiscalData['email'] ?>
+                        <address class="m-t-10"><b><?php echo $intestation ?>
+                                <br><?php echo $intestation2 ?></b>
+                            <br><?php echo $address ?>
+                            <br><?php echo $address2 ?>
+                            <br><?php echo $iva ?>
+                            <br><?php echo $tel ?>
+                            <br><?php echo $email ?>
                         </address>
                         <br>
                         <div>
