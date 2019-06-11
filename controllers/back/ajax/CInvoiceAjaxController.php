@@ -8,6 +8,7 @@ use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CUser;
+use PDO;
 
 /**
  * Class CChangeOrderStatus
@@ -185,8 +186,10 @@ class CInvoiceAjaxController extends AAjaxController
                                       WHERE
                                       Invoice.invoiceYear = ? AND
                                       Invoice.invoiceType='" . $invoiceType . "' AND
+                                      Invoice.invoiceShopId='".$remoteShopId."' AND
                                       Invoice.invoiceSiteChar= ?", [$year, $siteChar])->fetchAll()[0]['new'];
 
+                $invoiceNew->invoiceShopId=$remoteShopId;
                 $invoiceNew->invoiceNumber = $number;
                 $invoiceNew->invoiceType = $invoiceType;
                 $invoiceNew->invoiceDate = $today->format('Y-m-d H:i:s');
@@ -535,6 +538,51 @@ class CInvoiceAjaxController extends AAjaxController
                             }
 
 
+                        }
+                    }else{
+                        try {
+
+                            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+                            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            $stmtInvoiceExist = $db_con->prepare("SELECT 
+                                     count(*) AS counterInvoice from Invoice where orderId =".$order->remoteId);
+                            $stmtInvoiceExist->execute();
+                            while ($rowInvoiceExist = $stmtInvoiceExist->fetch(PDO::FETCH_ASSOC)) {
+
+                                if ($rowInvoiceExist['counterInvoice']) {
+                                $doQuery='1';
+                                }else{
+                                    $doQuerry='2';
+                                }
+                            }
+                            if($doquery=='2'){
+                                $insertRemoteInvoice=$invoiceRepo->findOneBy(['orderId'=>$order->id]);
+                                $stmtInvoiceInsert=$db_con->prepare("INSERT INTO  Invoice 
+                                                                               (
+                                                                               orderId,
+                                                                               invoiceYear,
+                                                                               invoiceType,
+                                                                               invoiceSiteChar,
+                                                                               invoiceNumber,
+                                                                               invoiceDate,
+                                                                               invoiceText,
+                                                                               creationDate)
+                                                                               VALUES(
+                                                                               '".$order->remoteId."',
+                                                                                '".$insertRemoteInvoice->invoiceYear."',
+                                                                                '".$insertRemoteInvoice->invoiceType."',
+                                                                                '".$insertRemoteInvoice->invoiceSiteChar."',
+                                                                                '".$insertRemoteInvoice->invoiceNumber."',
+                                                                                '".$insertRemoteInvoice->invoiceDate."',
+                                                                                '".$insertRemoteInvoice->invoiceText."',
+                                                                                '".$insertRemoteInvoice->creationDate."'
+                                                                               )
+                                                                               ");
+
+
+                            }
+                        } catch (PDOException $e) {
+                            $res .= $e->getMessage();
                         }
                     }
 
