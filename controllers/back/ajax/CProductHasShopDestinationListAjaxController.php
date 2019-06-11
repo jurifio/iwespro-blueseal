@@ -120,7 +120,10 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        //$shpoIdsFind=$shopIds->id."-".$shopids->name;
         $datatable->addCondition('shopId', $shopIds);
+        $datatable->addCondition('shopIdOrigin', $shopIds);
+        $datatable->addCondition('shopIdDestination', $shopIds);
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99', '');

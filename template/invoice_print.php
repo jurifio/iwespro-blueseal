@@ -316,7 +316,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                 <?php $date = new DateTime($order->orderDate);
                                 if ($changelanguage != 1) {
                                     echo '  ' . $invoice->orderId . ' del ' . $date->format('d-m-Y');
-                                }else{
+                                } else {
                                     echo '  ' . $invoice->orderId . ' date ' . $date->format('Y-d-m');
                                 }; ?>
 
@@ -357,10 +357,10 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                     } else {
                                         $transfiscalcode = 'VAT';
                                     } ?>
-                                    <br><?php if(!is_null($order->user->userDetails->fiscalCode)){
-                                        echo $transfiscalcode.$order->user->userDetails->fiscalCode;
-                                        }
-                                        ?>
+                                    <br><?php if (!is_null($order->user->userDetails->fiscalCode)) {
+                                        echo $transfiscalcode . $order->user->userDetails->fiscalCode;
+                                    }
+                                    ?>
                                 </strong>
                             </address>
                             <div class="clearfix"></div>
@@ -469,7 +469,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                             if ($invoiceType == 'P') {
                                 if ($changelanguage != 1) {
                                     echo 'Imponibile<br>';
-                                    }else {
+                                } else {
                                     echo 'Net Amount<br>';
                                 }
                                 $imp = ($order->netTotal * 100) / 122;
@@ -489,7 +489,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                             if ($invoiceTypeVat == 'NewP') {
                                 if ($changelanguage != 1) {
                                     echo 'IVA 22%<br>';
-                                }else {
+                                } else {
                                     echo 'VAT 22%<br>';
                                 }
                                 $iva = $order->vat;
@@ -527,6 +527,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
         </div>
     </div>
 </div><!--end-->
+
 <script type="application/javascript">
     $(document).ready(function () {
 
