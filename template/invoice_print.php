@@ -486,7 +486,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
 
                             ?></td>
                         <td class="text-left" width="25%"><?php
-                            if ($invoiceType == 'P') {
+                            if ($invoiceTypeVat == 'NewP') {
                                 if ($changelanguage != 1) {
                                     echo 'IVA 22%<br>';
                                 }else {
@@ -494,7 +494,7 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                                 }
                                 $iva = $order->vat;
                                 echo money_format('%.2n', $iva) . ' &euro;';
-                            } elseif ($invoiceType == "X") {
+                            } elseif ($invoiceTypeVat == "NewX") {
                                 echo "non imponibile ex art 8/A  D.P.R. n. 633/72";
                                 $iva = "0,00";
                                 echo "<br>";

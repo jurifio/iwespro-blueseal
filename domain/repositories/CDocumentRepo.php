@@ -949,8 +949,12 @@ class CDocumentRepo extends ARepo
 
         /** @var CDocument $doc */
         $doc = $this->findOneBy(['id'=>$friendDdt]);
+        if($doc!=null) {
 
-        $docNumber = $doc->number;
+            $docNumber = $doc->number;
+        }else{
+            $docNumber='';
+        }
 
         return $docNumber;
     }
