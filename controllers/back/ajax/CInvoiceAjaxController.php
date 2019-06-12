@@ -193,6 +193,7 @@ class CInvoiceAjaxController extends AAjaxController
 
                 $invoiceNew->invoiceShopId=$remoteShopId;
                 $invoiceNew->invoiceNumber = $number;
+                $invoiceNew->invoiceSiteChar =$siteChar;
                 $invoiceNew->invoiceType = $invoiceType;
                 $invoiceNew->invoiceDate = $today->format('Y-m-d H:i:s');
                 $todayInvoice = $today->format('d/m/Y');
@@ -219,7 +220,7 @@ class CInvoiceAjaxController extends AAjaxController
                 }
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
                 $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $stmtCheckDocumentExist =$db_con->prepare("SELECT count(*) AS counterDocument from Document WHERE orderId=".$order->remoteId);
+                $stmtCheckDocumentExist =$db_con->prepare("SELECT count(*) AS counterDocument from Document WHERE `number`='".$sectional."'");
                 $stmtCheckDocumentExist->execute();
                 while ($rowCheckDocumentExist=$stmtCheckDocumentExist->fetch(PDO::FETCH_ASSOC)){
                     if ($rowCheckDocumentExist['counterDocument']==1){
@@ -229,7 +230,7 @@ class CInvoiceAjaxController extends AAjaxController
                     }
                 }
                 if($doQuery=='2'){
-                    $remoteAddress=$userAddressRepo->findOneBy(['id'=> $order->billingAddresId]);
+                    $remoteAddress=$userAddressRepo->findOneBy(['id'=> $order->billingAddressId]);
                         if($remoteAddress != null){
                             $remoteUserAddressId=$remoteAddress->remoteUserId;
                     }else{
@@ -260,7 +261,7 @@ class CInvoiceAjaxController extends AAjaxController
                                                                       '".$documentRemoteUpdate->date."',
                                                                       '".$documentRemoteUpdate->invoiceTypeId."',
                                                                       '".$documentRemoteUpdate->paymentDate."',
-                                                                      '".$documentRemoteUpdate->paymentAmount."',
+                                                                      '".$documentRemoteUpdate->paydAmount."',
                                                                       '".$documentRemoteUpdate->paymentExpectedDate."',
                                                                       '".$documentRemoteUpdate->note."',
                                                                       '".$documentRemoteUpdate->creationDate."',
@@ -299,6 +300,7 @@ class CInvoiceAjaxController extends AAjaxController
                                                                                 '".$insertRemoteInvoice->invoiceSiteChar."',
                                                                                 '".$insertRemoteInvoice->invoiceNumber."',
                                                                                 '".$insertRemoteInvoice->invoiceDate."',
+                                                                                
                                                                                 '',
                                                                                 '".$insertRemoteInvoice->creationDate."'
                                                                                )
