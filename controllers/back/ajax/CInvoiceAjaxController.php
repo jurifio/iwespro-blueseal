@@ -40,6 +40,7 @@ class CInvoiceAjaxController extends AAjaxController
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $userAddressRepo =\Monkey::app()->repoFactory->create('UserAddress');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
+
         $billingUserAddress = $order->billingAddressId;
         $orderUserAddress=$userAddressRepo->findOneBy(['id'=>$billingUserAddress]);
 
@@ -218,6 +219,56 @@ class CInvoiceAjaxController extends AAjaxController
                 }
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
                 $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $stmtCheckDocumentExist =$db_con->prepare("SELECT count(*) AS counterDocument from Document WHERE orderId=".$order->remoteId);
+                $stmtCheckDocumentExist->execute();
+                while ($rowCheckDocumentExist=$stmtCheckDocumentExist->fetch(PDO::FETCH_ASSOC)){
+                    if ($rowCheckDocumentExist['counterDocument']==1){
+                        $doQuery=1;
+                    }else{
+                        $doQuery=2;
+                    }
+                }
+                if($doQuery=='2'){
+                    $remoteAddress=$userAddressRepo->findOneBy(['id'=> $order->billingAddresId]);
+                        if($remoteAddress != null){
+                            $remoteUserAddressId=$remoteAddress->remoteUserId;
+                    }else{
+                            $remoteUserAddressId='';
+                    }
+                    $documentRemoteUpdate=$documentRepo->findOneBy(['userId'=>$order->userId,'number'=>$sectional]);
+                    $insertRemoteDocument=$db_con->prepare("INSERT INTO Document (
+                                                                     userId,
+                                                                     userAddressRecipientId,
+                                                                     shopRecipientId,
+                                                                     `number`,
+                                                                     `date`,
+                                                                     invoiceTypeId,
+                                                                     paymentDate,
+                                                                     paydAmount,
+                                                                     paymentExpectedDate,
+                                                                     note,
+                                                                     creationDate,
+                                                                     carrierId,
+                                                                     totalWithVat,
+                                                                     year )
+                                                                    VALUES
+                                                                    ( 
+                                                                     '".$remoteUserAddressId."',
+                                                                      '".$documentRemoteUpdate->userAddressRecipientId."',
+                                                                      '".$documentRemoteUpdate->shopRecipientId."',
+                                                                      '".$documentRemoteUpdate->number."',
+                                                                      '".$documentRemoteUpdate->date."',
+                                                                      '".$documentRemoteUpdate->invoiceTypeId."',
+                                                                      '".$documentRemoteUpdate->paymentDate."',
+                                                                      '".$documentRemoteUpdate->paymentAmount."',
+                                                                      '".$documentRemoteUpdate->paymentExpectedDate."',
+                                                                      '".$documentRemoteUpdate->note."',
+                                                                      '".$documentRemoteUpdate->creationDate."',
+                                                                      '".$documentRemoteUpdate->carrierId."',
+                                                                      '".$documentRemoteUpdate->totalWithVat."',
+                                                                      '".$documentRemoteUpdate->year."'           
+                                                                                )");
+                }
                 $stmtInvoiceExist = $db_con->prepare("SELECT 
                                      count(*) AS counterInvoice from Invoice where orderId =".$order->remoteId);
                 $stmtInvoiceExist->execute();
