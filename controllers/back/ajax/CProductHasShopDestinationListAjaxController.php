@@ -120,10 +120,10 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        //$shpoIdsFind=$shopIds->id."-".$shopids->name;
         $datatable->addCondition('shopId', $shopIds);
-        $datatable->addCondition('shopIdOrigin', $shopIds);
-        $datatable->addCondition('shopIdDestination', $shopIds);
+
+
+
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99', '');
@@ -159,9 +159,9 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                 $productVariantId=$arr[1];
                 $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
                 foreach($productHasShopDestinationFind as $j){
-                    $shopNameFind=$shopRepo->findOneBy(['id'=>$j->shopIdDestination]);
+                    $shopNameFind=$shopRepo->findOneBy(['id'=> $j->ShopIdDestination]);
                     $shopName=$shopNameFind->title;
-                    $shopDestination = $shopDestination.$j->shopIdDestination."-".$shopName."<br>";
+                    $shopDestination = $shopName."<br>";
 
                 }
             $row['shopIdDestination'] = $shopDestination;
@@ -191,7 +191,8 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 
             $row['colorGroup'] = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories(" ", "<br>") . '</span>';
+            //$row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories(" ", "<br>") . '</span>';
+            $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories('<br>', '/') . '</span>';
             $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
