@@ -91,17 +91,32 @@ class CProductHasShopDestinationManageController extends AAjaxController
         return $i;
     }
 
-    /**
-     * @return int
-     */
+
     public function delete()
     {
-        $count = 0;
-        /** @var CMarketplaceAccountHasProductRepo $repo */
-        $repo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
-        foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
-            if ($repo->deleteProductFromMarketplaceAccount($mId)) $count++;
+        $shopIdDestination = $this->app->router->request()->getRequestData('shop');
+
+
+        $rows = $this->app->router->request()->getRequestData('rows');
+        $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
+        $res='';
+        foreach ($rows as $row) {
+
+                $arr = explode("-", $row);
+                $productId = $arr[0];
+                $productVariantId=$arr[1];
+
+                $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdDestination'=>$shopIdDestination]);
+                if($productHasShopDestinationFind==null){
+                    continue;
+                }else{
+
+                    $productHasShopDestinationFind->delete();
+                   $res.=$productId.'-'.$productVariantId." disassociato dallo shop <br>";
+                }
+
+
         }
-        return $count;
+        return $res;
     }
 }
