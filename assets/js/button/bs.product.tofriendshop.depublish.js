@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-down",
+    icon:"fa-arrow-down",
     permission:"/admin/product/edit&&allShops",
     event:"bs-product-tofriendshop-depublish",
     class:"btn btn-default",
