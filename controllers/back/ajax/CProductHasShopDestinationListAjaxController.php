@@ -27,7 +27,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
     public function get()
     {
 
-            $allShops=true;
+
 
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
@@ -162,15 +162,21 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                 $productId = $arr[0];
                 $productVariantId=$arr[1];
                 $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
-            foreach($productHasShopDestinationFind as $j){
-                $shopNameFind=$shopRepo->findOneBy(['id'=>$j->shopIdDestination]);
-                $shopName=$shopNameFind->title;
-                $shopDestination = $shopDestination.$j->shopIdDestination."-".$shopName."<br>";
+                foreach($productHasShopDestinationFind as $j){
+                    $shopNameFind=$shopRepo->findOneBy(['id'=> $j->ShopIdDestination]);
+                    $shopName=$shopNameFind->title;
+                    $shopDestination = $shopName."<br>";
 
             }
             $row['shopIdDestination'] = $shopDestination;
-            if($row['shopIdDestination']==""){
-                $row['shopIdDestination']='non Assegnato';
+            if($this->app->getUser()->hasPermission('allShops')) {
+                if ($row['shopIdDestination'] == "") {
+                    $row['shopIdDestination'] = 'non Assegnato';
+                }
+            }else{
+                if ($row['shopIdDestination'] == "") {
+                    $row['shopIdDestination'] = 'Prodotto Parallelo';
+                }
             }
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;

@@ -109,6 +109,32 @@ ORDER BY `p`.`creationDate` DESC";
             $row['shop'] .= $val->getShops('<br />');
             $row['shop'] .= '</span>';
 
+            $shopDestination= "";
+            $arr = explode("-", $row["DT_RowId"]);
+            $productId = $arr[0];
+            $productVariantId=$arr[1];
+            $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
+            foreach($productHasShopDestinationFind as $j){
+                $shopNameFind=$shopRepo->findOneBy(['id'=> $j->ShopIdDestination]);
+                $shopName=$shopNameFind->title;
+                $shopDestination = $shopName."<br>";
+
+            }
+            $row['shopIdDestination'] = $shopDestination;
+            if($this->app->getUser()->hasPermission('allShops')) {
+                if ($row['shopIdDestination'] == "") {
+                    $row['shopIdDestination'] = 'non Assegnato';
+                }
+            }else{
+                if ($row['shopIdDestination'] == "") {
+                    $row['shopIdDestination'] = 'non Assegnato';
+                }else{
+                    $row['shopIdDestination']=' Prodotto Parallelo';
+                }
+            }
+
+
+
             $row['details'] = $val->productSheetActual->count() ? 'Sì' : 'No';
 
             $row['externalId'] = '<span class="small">';
@@ -130,23 +156,7 @@ ORDER BY `p`.`creationDate` DESC";
             $row['season'] = '<span class="small">';
             $row['season'] .= ($val->productSeason) ? $val->productSeason->name . " " . $val->productSeason->year : '-';
             $row['season'] .= '</span>';
-            $shopDestination= "";
-            $arr = explode("-", $row['DT_RowId']);
-            $productId = $arr[0];
-            $productVariantId=$arr[1];
-            $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
-            foreach($productHasShopDestinationFind as $j){
-                $shopNameFind=$shopRepo->findOneBy(['id'=>$j->shopIdDestination]);
-                $shopName=$shopNameFind->title;
-                $shopDestination = $shopDestination.$j->shopIdDestination."-".$shopName."<br>";
 
-            }
-
-            if($shopDestination==""){
-                $row['shopIdDestination']='non Assegnato';
-            }else{
-                $row['shopIdDestination']='Prodotto Assegnato';
-            }
 
             if ($allShops) $status = $val->productStatus->name;
             else {
