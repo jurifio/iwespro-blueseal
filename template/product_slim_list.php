@@ -40,6 +40,10 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Shop</th>
                                 <?php endif; ?>
+                                <th data-slug="shopIdDestination"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">in Drop Shipping?
+                                </th>
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand</th>

@@ -29,11 +29,15 @@ class CProductSlimListAjaxController extends AAjaxController
 
         $user = \Monkey::app()->getUser();
         $allShops = $user->hasPermission('allShops');
+        $productHasShopDestination = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
+        $shopRepo= \Monkey::app()->repoFactory->create('Shop');
 
         $sql = "SELECT
   `p`.`id`                                             AS `id`,
   `p`.`productVariantId`                               AS `productVariantId`,
   concat(`p`.`id`, '-', `p`.`productVariantId`)        AS `code`,
+  phsd.shopIdOrigin                                                                             AS shopIdOrigin,
+  phsd.shopIdDestination                                                                        AS shopIdDestination,
   `pb`.`name`                                          AS `brand`,
   concat(`p`.`itemno`, ' # ', `pv`.`name`)             AS `cpf`,
   concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, ''))                                           AS `externalId`,
@@ -56,6 +60,7 @@ class CProductSlimListAjaxController extends AAjaxController
   if(count(DISTINCT ps1.ean) = count(DISTINCT ps1.productSizeId), 'si', 'no') AS ean
 FROM `Product` `p`
   JOIN ProductSku ps1 ON p.id = ps1.productId AND p.productVariantId = ps1.productVariantId
+  LEFT JOIN ProductHasShopDestination phsd ON p.id =phsd.productId  AND p.productVariantId=phsd.productVariantId
   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
   JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
@@ -125,6 +130,23 @@ ORDER BY `p`.`creationDate` DESC";
             $row['season'] = '<span class="small">';
             $row['season'] .= ($val->productSeason) ? $val->productSeason->name . " " . $val->productSeason->year : '-';
             $row['season'] .= '</span>';
+            $shopDestination= "";
+            $arr = explode("-", $row['DT_RowId']);
+            $productId = $arr[0];
+            $productVariantId=$arr[1];
+            $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
+            foreach($productHasShopDestinationFind as $j){
+                $shopNameFind=$shopRepo->findOneBy(['id'=>$j->shopIdDestination]);
+                $shopName=$shopNameFind->title;
+                $shopDestination = $shopDestination.$j->shopIdDestination."-".$shopName."<br>";
+
+            }
+
+            if($shopDestination==""){
+                $row['shopIdDestination']='non Assegnato';
+            }else{
+                $row['shopIdDestination']='Prodotto Assegnato';
+            }
 
             if ($allShops) $status = $val->productStatus->name;
             else {

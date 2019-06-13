@@ -3,6 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use function bamboo\controllers\back\ajax\getUser as getUserAlias;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductHasShopDestination;
 use bamboo\domain\entities\CShooting;
@@ -25,6 +26,9 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 {
     public function get()
     {
+
+            $allShops=true;
+
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   phsd.shopIdOrigin                                                                             AS shopIdOrigin,
@@ -111,7 +115,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId ";
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId  ";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -158,12 +162,12 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                 $productId = $arr[0];
                 $productVariantId=$arr[1];
                 $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
-                foreach($productHasShopDestinationFind as $j){
-                    $shopNameFind=$shopRepo->findOneBy(['id'=> $j->ShopIdDestination]);
-                    $shopName=$shopNameFind->title;
-                    $shopDestination = $shopName."<br>";
+            foreach($productHasShopDestinationFind as $j){
+                $shopNameFind=$shopRepo->findOneBy(['id'=>$j->shopIdDestination]);
+                $shopName=$shopNameFind->title;
+                $shopDestination = $shopDestination.$j->shopIdDestination."-".$shopName."<br>";
 
-                }
+            }
             $row['shopIdDestination'] = $shopDestination;
             if($row['shopIdDestination']==""){
                 $row['shopIdDestination']='non Assegnato';
