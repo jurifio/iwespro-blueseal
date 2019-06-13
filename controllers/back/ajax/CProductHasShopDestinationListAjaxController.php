@@ -1,9 +1,8 @@
 <?php
-
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
-use function bamboo\controllers\back\ajax\getUser as getUserAlias;
+
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductHasShopDestination;
 use bamboo\domain\entities\CShooting;
@@ -165,7 +164,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                 foreach($productHasShopDestinationFind as $j){
                     $shopNameFind=$shopRepo->findOneBy(['id'=> $j->ShopIdDestination]);
                     $shopName=$shopNameFind->title;
-                    $shopDestination = $shopName."<br>";
+                    $shopDestination = $shopNameFind->id."-".$shopName."<br>";
 
             }
             $row['shopIdDestination'] = $shopDestination;
