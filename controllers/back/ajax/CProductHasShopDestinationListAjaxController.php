@@ -128,6 +128,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 
 
 
+
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99', '');
 
@@ -161,12 +162,21 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                 $productId = $arr[0];
                 $productVariantId=$arr[1];
                 $productHasShopDestinationFind=$productHasShopDestination->findBy(['productId'=>$productId,'productVariantId'=>$productVariantId]);
-                foreach($productHasShopDestinationFind as $j){
-                    $shopNameFind=$shopRepo->findOneBy(['id'=> $j->ShopIdDestination]);
-                    $shopName=$shopNameFind->title;
-                    $shopDestination = $shopNameFind->id."-".$shopName."<br>";
+                if($productHasShopDestinationFind!=null) {
+                    foreach ($productHasShopDestinationFind as $j) {
+                        $shopNameFind = $shopRepo->findOneBy(['id' => $j->shopIdDestination]);
+                        if ($shopNameFind != null) {
+                            $shopName = $shopNameFind->title;
+                            $shopDestination = $shopNameFind->id . "-" . $shopName . "<br>";
+                        } else {
+                            $shopDestination = "";
+                        }
 
-            }
+                    }
+                }else{
+                    $shopDestination = "";
+                    }
+
             $row['shopIdDestination'] = $shopDestination;
             if($this->app->getUser()->hasPermission('allShops')) {
                 if ($row['shopIdDestination'] == "") {
