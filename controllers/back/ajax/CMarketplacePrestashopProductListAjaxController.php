@@ -31,6 +31,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               concat(php.productId, '-', php.productVariantId) AS productCode,
               php.productId,
               php.productVariantId,
+              pb.`name` as brand,
               pps.price,
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
@@ -54,6 +55,8 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             LEFT JOIN MarketplaceHasShop mhs2 ON php.marketplaceHasShopId = mhs2.id
             LEFT JOIN Shop s2 ON mhs2.shopId = s2.id
             LEFT JOIN Marketplace m2 ON mhs2.marketplaceId = m2.id
+            JOIN ProductBrand pb 
+                    ON p.productBrandId =pb.id 
             JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
                   JOIN Shop shop ON shop.id = sp.shopId

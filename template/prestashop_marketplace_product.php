@@ -37,6 +37,12 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Dummy
                                 </th>
+                                <th data-slug="brand"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Brand
+                                </th>
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
