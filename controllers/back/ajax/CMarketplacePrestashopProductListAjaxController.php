@@ -31,8 +31,8 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               concat(php.productId, '-', php.productVariantId) AS productCode,
               php.productId,
               php.productVariantId,
-              pb.`name` as brand,
               pps.price,
+              p.productBrandId as brand,
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified)) AS sale,
@@ -55,12 +55,11 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             LEFT JOIN MarketplaceHasShop mhs2 ON php.marketplaceHasShopId = mhs2.id
             LEFT JOIN Shop s2 ON mhs2.shopId = s2.id
             LEFT JOIN Marketplace m2 ON mhs2.marketplaceId = m2.id
-            JOIN ProductBrand pb 
-                    ON p.productBrandId =pb.id 
             JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
                   JOIN Shop shop ON shop.id = sp.shopId
                    JOIN ProductSeason pse ON p.productSeasonId = pse.id
+                    
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
@@ -88,7 +87,9 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $onSale = '';
             $salePrice = '';
 
-            /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
+
+
+          /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
                 $associations .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
                 $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Yes') . ' | Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>';
@@ -97,6 +98,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['marketplaceAssociation'] = $associations;
             $row['sale'] = $onSale;
             $row['salePrice'] = $salePrice;
+
 
             switch ($php->status) {
                 case 1:
@@ -109,13 +111,13 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     $row['status'] = '';
                     break;
             }
-
+            $row['brand']=$php->product->productBrand->name;
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
-            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
+            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->printId().'"></table>';
 
 
