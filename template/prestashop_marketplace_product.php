@@ -45,6 +45,7 @@
                                 </th>
 
 
+
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
