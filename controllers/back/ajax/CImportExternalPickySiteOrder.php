@@ -192,6 +192,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $userAddressInsert->remoteUserId = $rowUserAddress['remoteUserId'];
                         $userAddressInsert->remoteShopId = $shop;
                         $userAddressInsert->insert();
+                        $res.='inserito lo user address'.$userAddressInsert->printId().'<br>';
                     }
                 } else {
                     $res .= "Indirizzo esistenze<br>";
@@ -223,6 +224,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $couponTypeInsert->remoteId = $rowCouponType['remoteId'];
                     $couponTypeInsert->remoteShopId = $shop;
                     $couponTypeInsert->insert();
+                    $res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
                 } else {
                     $res .= 'Tipo Coupon Gia Esistente';
                 }
@@ -254,6 +256,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $couponEventInsert->remoteId = $rowCouponEvent['remoteId'];
                         $couponEventInsert->remoteShopId = $shop;
                         $couponEventInsert->insert();
+                        $res.='inserito il coupon evento '.$couponEventInsert->printId().'<br>';
                     }
                 } else {
                     continue;
@@ -295,6 +298,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $couponInsert->remoteId = $rowCoupon['remoteId'];
                                 $couponInsert->remoteShopId = $shop;
                                 $couponInsert->insert();
+                                $res.='inserito il coupon '.$couponInsert->printId().'<br>';
                             }
                         }
                     }
@@ -349,6 +353,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $insertCart->remoteId = $rowCart['remoteId'];
                                 $insertCart->remoteShopId = $shop;
                                 $insertCart->insert();
+                                $res.='inserito il carrello '.$userAddressInsert->printId().'<br>';
                             }
                         }
                     }
@@ -383,6 +388,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $cartLineInsert->remoteId = $rowCartLineOrder['remoteId'];
                         $cartLineInsert->remoteShopId = $shop;
                         $cartLineInsert->insert();
+                        $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
                     }
                 } else {
                     $res .= '<br>Riga Carrello  già esistente';
@@ -425,6 +431,8 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                from `Order` o");
             $stmtOrder->execute();
             while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
+
+
                 $checkOrderIfExist = $orderRepo->findOneBy(['remoteId' => $rowOrder['remoteId'], 'remoteShopId' => $shop]);
 
                 if ($checkOrderIfExist == null) {
@@ -566,7 +574,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $insertOrderLine->remoteOrderId=$rowOrderLine['orderId'];
                         $insertOrderLine->insert();
 
-                        $res .= "Riga Ordine  inserita";
+                        $res .= "Riga Ordine  inserita ".$insertOrderLine->printId();
                     }
                 } else {
                     $res .= "Riga Ordine  gia esistente";

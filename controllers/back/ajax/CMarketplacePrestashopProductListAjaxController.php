@@ -39,6 +39,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
               php.prestaId,
+             
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
@@ -50,6 +51,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
             LEFT JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
+            
             LEFT JOIN Shop s ON mhs.shopId = s.id
             LEFT JOIN Marketplace m ON mhs.marketplaceId = m.id
             LEFT JOIN MarketplaceHasShop mhs2 ON php.marketplaceHasShopId = mhs2.id
@@ -111,7 +113,9 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     $row['status'] = '';
                     break;
             }
+
             $row['brand']=$php->product->productBrand->name;
+
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
