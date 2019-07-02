@@ -32,7 +32,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               php.productId,
               php.productVariantId,
               pps.price,
-              p.productBrandId as brand,
+              pb.name  as `brand`,
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified)) AS sale,
@@ -48,6 +48,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             FROM PrestashopHasProduct php
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
             JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
+            LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
             LEFT JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
@@ -111,7 +112,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     $row['status'] = '';
                     break;
             }
-            $row['brand']='<span class="small">' .$php->product->productBrand->id.'-'.$php->product->productBrand->name. '"</span>';
+            $row['brand']=$php->product->productBrand->name;
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;

@@ -82,7 +82,7 @@ abstract class AJWTManager
         if (is_null($token)) {
             $auth = $this->authAPI();
             if ($auth["res"]) {
-                $newToken = $tClass::getToken($this->id, $this->pw, time() + 3600, 'pickyshop.com');
+                $newToken = $tClass::getToken($this->id, $this->pw, time() + 3600, 'iwes.pro');
                 $this->setCookieToken($newToken);
             } else {
                 $this->auth = $auth["mes"];
