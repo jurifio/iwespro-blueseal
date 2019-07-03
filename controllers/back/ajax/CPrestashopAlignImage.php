@@ -82,7 +82,7 @@ eseguo  il download dell'immagine con curl da amazon  e la trasferisco sul serve
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/home/pickyshop/public_html/temp-prestashop/';
+            $save_to = '/home/iwespro/public_html/temp-prestashop/';
         }
 
         /*leggo il reference dei prodotti*/

@@ -54,7 +54,7 @@ class CShootingImageRemasterJob extends ACronJob
             $save_to = '/media/sf_sites/PickyshopNew/temp-remaster/';
 
         } else {
-            $save_to = '/home/pickyshop/public_html/temp-remaster/';
+            $save_to = '/home/iwespro/public_html/temp-remaster/';
         }
 
         /*****  connessione  ftp ******/

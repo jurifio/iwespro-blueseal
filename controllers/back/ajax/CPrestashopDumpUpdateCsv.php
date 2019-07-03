@@ -71,7 +71,7 @@ class CPrestashopDumpUpdateCsv extends AAjaxController
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/home/pickyshop/public_html/temp/';
+            $save_to = '/home/iwespro/public_html/temp/';
         }
         if (file_exists($save_to . 'psz6_category.csv')) {
             unlink($save_to . 'psz6_category.csv');
@@ -131,7 +131,7 @@ class CPrestashopDumpUpdateCsv extends AAjaxController
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/home/pickyshop/public_html/temp/';
+            $save_to = '/home/iwespro/public_html/temp/';
         }
         if (file_exists($save_to . 'psz6_category_shop.csv')) {
             unlink($save_to . 'psz6_category_shop.csv');

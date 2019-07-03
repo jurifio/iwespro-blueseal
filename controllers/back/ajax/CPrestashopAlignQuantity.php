@@ -75,7 +75,7 @@ class CPrestashopAlignQuantity extends AAjaxController
             $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
         } else {
-            $save_to = '/home/pickyshop/public_html/temp-prestashop/';
+            $save_to = '/home/iwespro/public_html/temp-prestashop/';
         }
 
         $stmtGetProduct = $db_con->prepare("SELECT id_product, reference FROM psz6_product");

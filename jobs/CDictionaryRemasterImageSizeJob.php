@@ -64,9 +64,9 @@ class CDictionaryRemasterImageSizeJob extends ACronJob
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
 
         } else {
-            $pathlocal = '/home/pickyshop/public_html/temp-remaster/';
-            $save_to = '/home/pickyshop/public_html/temp-remaster/';
-            $save_to_dir = '/home/pickyshop/public_html/temp-remaster';
+            $pathlocal = '/home/iwespro/public_html/temp-remaster/';
+            $save_to = '/home/iwespro/public_html/temp-remaster/';
+            $save_to_dir = '/home/iwespro/public_html/temp-remaster';
             $path = 'shootImport/incoming';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
