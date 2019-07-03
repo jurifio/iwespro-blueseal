@@ -36,9 +36,9 @@ class CMarketplaceProductManageController extends AAjaxController
         $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if ($rows == 'all') {
-            $query = "SELECT DISTINCT concat(product,'-', variant) AS code
-                      FROM vProductSortingView v 
-                      WHERE (product, variant) NOT IN (
+            $query = "SELECT DISTINCT concat(id,'-', productVariantId) AS code
+                      FROM Product v 
+                      WHERE (id, productVariantId) NOT IN (
                         SELECT DISTINCT m.productId, m.productVariantId 
                         FROM MarketplaceAccountHasProduct m 
                         WHERE m.marketplaceId = ? AND m.marketplaceAccountId = ? )";
