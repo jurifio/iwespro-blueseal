@@ -29,7 +29,7 @@
                                data-controller="ProductHasShopDestinationListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 200, 500"
+                               data-length-menu-setup="50, 100, 200, 500,100,2000"
                                data-display-length="50">
                             <thead>
                             <tr>
@@ -37,17 +37,13 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice
                                 </th>
-                                <th data-slug="shopIdOrigin"
+                                <th data-slug="shop"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop di Origine
                                 </th>
                                 <th data-slug="shopIdDestination"
                                          data-searchable="true"
                                          data-orderable="true" class="center">Shop di Destinazione
-                                </th>
-                                <th data-slug="shop"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shop
                                 </th>
                                 <th data-slug="colorGroup"
                                     data-searchable="true"
