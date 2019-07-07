@@ -74,6 +74,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $productPrice = $product->getDisplayActivePrice();
                 */
                 $productPrice = $product->getDisplayFullPrice();
+                // full price
 
                 if (!$productPrice) continue;
 
