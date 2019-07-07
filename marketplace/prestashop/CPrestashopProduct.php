@@ -69,8 +69,12 @@ class CPrestashopProduct extends APrestashopMarketplace
         foreach ($products as $product) {
             try {
 
-                //check if price is setted
+                /*check if price is setted
+                se  utilizzo questa funzione mi prende il valore attivo ddel prezzo
                 $productPrice = $product->getDisplayActivePrice();
+                */
+                $productPrice = $product->getDisplayFullPrice();
+
                 if (!$productPrice) continue;
 
                 switch ($modifyType) {
