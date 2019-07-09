@@ -891,10 +891,10 @@ class CPrestashopProduct extends APrestashopMarketplace
           $db_name = "iwesPrestaDB";
           $db_user = "iwesprestashop";
           $db_pass = "X+]l&LEa]zSI";
-          define("HOST", "5.189.159.187");
+          /*define("HOST", "5.189.159.187");
           define("USERNAME", "iwesprestashop");
           define("PASSWORD", "X+]l&LEa]zSI");
-          define("DATABASE", "iwesPrestaDB");
+          define("DATABASE", "iwesPrestaDB");*/
           $res = "";
           $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
           if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
