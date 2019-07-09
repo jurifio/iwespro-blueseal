@@ -39,7 +39,7 @@ abstract class AJWTManager
      */
     public function __construct()
     {
-        $this->checkIp();
+       //$this->checkIp();
         $this->conf = \Monkey::app()->cfg()->fetch("cookies", "jwt");
 
         \Monkey::app()->vendorLibraries->load('carbon');
