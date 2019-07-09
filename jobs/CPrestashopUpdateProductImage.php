@@ -8,6 +8,7 @@ use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProductPublicSku;
 
+
 /**
  * Class CPrestashopUpdateProductQuantity
  * @package bamboo\blueseal\jobs

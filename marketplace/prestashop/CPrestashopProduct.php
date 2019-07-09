@@ -16,6 +16,7 @@ use bamboo\domain\entities\CProductPhoto;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\repositories\CProductEanRepo;
+use PDO;
 
 /**
  * Class CPrestashopProduct
