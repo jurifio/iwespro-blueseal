@@ -30,7 +30,7 @@ use bamboo\domain\repositories\CProductEanRepo;
  * @date 11/02/2019
  * @since 1.0
  */
-class CPrestashopProduct extends APrestashopMarketplace
+class sCPrestashopProduct extends APrestashopMarketplace
 {
 
     const PRODUCT_RESOURCE = 'products';
@@ -883,17 +883,19 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $shop
      * @return bool
      */
-    /*  public function updateProductImage($prestashopProductId,$productId,$productVariantId, $shop): bool
+      public function updateProductImage($prestashopProductId,$productId,$productVariantId, $shop): bool
       {
           $db_host = "5.189.159.187";
-          $db_name = "iwesshop_pres848";
-          $db_user = "iwesshop_pres848";
-          $db_pass = "@5pM5S)Mn8";
+          $db_name = "iwesPrestaDB";
+          $db_user = "iwesprestashop";
+          $db_pass = "X+]l&LEa]zSI";
           define("HOST", "5.189.159.187");
-          define("USERNAME", "iwesshop_pres848");
-          define("PASSWORD", "@5pM5S)Mn8");
-          define("DATABASE", "iwesshop_pres848");
+          define("USERNAME", "iwesprestashop");
+          define("PASSWORD", "X+]l&LEa]zSI");
+          define("DATABASE", "iwesPrestaDB");
           $res = "";
+          $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
+          if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
           try {
 
               $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
@@ -911,15 +913,13 @@ class CPrestashopProduct extends APrestashopMarketplace
               $save_to = '/home/iwespro/public_html/temp-prestashop/';
           }
           $cdnUrl = \Monkey::app()->cfg()->fetch("general", "product-photo-host");
-          $productHasProductPhotoRepo=\Monkey::app()->repoFactory->create('ProductHasProductPhoto');
+          $product=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productId, 'productVariantId'=>$productVariantId ]);
 
           $stmtGetCountImageProduct = $db_con->prepare("SELECT   count(*) as numberImage from ps_image where id_product ='".$prestashopProductId."'");
 
           $stmtGetCountImageProduct->execute();
           while ($rowGetCountImageProduct = $stmtGetCountImageProduct->fetch(PDO::FETCH_ASSOC)) {
               $countImage=$rowGetCountImageProduct['numberImage'];
-
-
           }
           if($countImage>0){
 
@@ -927,7 +927,7 @@ class CPrestashopProduct extends APrestashopMarketplace
           $productPhotos = $product->productPhoto;
           $productPhotos->reorder('order');
           /** @var CProductPhoto $productPhoto */
-    /*
+
           foreach ($productPhotos as $productPhoto) {
 
               try {
@@ -979,5 +979,5 @@ class CPrestashopProduct extends APrestashopMarketplace
 
           return true;
       }
-  */
+
 }
