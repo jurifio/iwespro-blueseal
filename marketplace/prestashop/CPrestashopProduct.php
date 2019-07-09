@@ -93,6 +93,7 @@ class sCPrestashopProduct extends APrestashopMarketplace
                         break;
                 }
 
+
                 if ($productPrice <= 0) continue;
 
                 /** @var CPrestashopHasProduct $pHp */
