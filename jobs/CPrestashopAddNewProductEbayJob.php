@@ -22,7 +22,7 @@ use bamboo\core\events\AEventListener;
 
 
 /**
- * Class CPrestashopCloseProductEbayJob
+ * Class CPrestashopAddNewProductEbayJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -31,10 +31,10 @@ use bamboo\core\events\AEventListener;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 04/10/2018
+ * @date 09/07/2019
  * @since 1.0
  */
-class CPrestashopCloseProductEbayJob extends ACronJob
+class CPrestashopAddNewProductEbayJob extends ACronJob
 {
     /**
      * @param null $args
@@ -50,11 +50,9 @@ class CPrestashopCloseProductEbayJob extends ACronJob
 
 
 
-        /****sezione per lancio allineamento script su server prestashop*/
 
 
-
-        $url = 'https://iwes.shop/modules/fastbay1/ajax/fastbay1SyncCron.php?s=2&mp=101&token=340d41b9bd26d96f46c1a3589e59ce2a&close=1';
+        $url = 'https://iwes.shop/modules/fastbay1/ajax/fastbay1SyncCron.php?s=2&mp=101&token=340d41b9bd26d96f46c1a3589e59ce2a&add=1';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -71,7 +69,7 @@ class CPrestashopCloseProductEbayJob extends ACronJob
 
 
 
-        $res="Cancellazione Prodotti Ebay   finito alle ore ".date('Y-m-d H:i:s');
+        $res="Aggiunta  Prodotti ebay  finito alle ore ".date('Y-m-d H:i:s');
         $this->report('Clean Prestashop Product Quantity o ',$res,$res);
 
 
