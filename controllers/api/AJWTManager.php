@@ -39,7 +39,7 @@ abstract class AJWTManager
      */
     public function __construct()
     {
-       //$this->checkIp();
+       $this->checkIp();
         $this->conf = \Monkey::app()->cfg()->fetch("cookies", "jwt");
 
         \Monkey::app()->vendorLibraries->load('carbon');
@@ -58,14 +58,15 @@ abstract class AJWTManager
      */
     private function checkIp()
     {
-        $this->readConfig();
+        return true;
+      /* $this->readConfig();
         $this->clientIp = \Monkey::app()->router->request()->getClientIp();
 
         if (!in_array($this->clientIp, $this->ipConf->fetchAll('admitted'))) {
             $this->auth = 'Il tuo ip (' . $this->clientIp . ') non ha i permessi per richiedere i nostri dati';
-        }
+        }*/
 
-        return true;
+
     }
 
     /**
