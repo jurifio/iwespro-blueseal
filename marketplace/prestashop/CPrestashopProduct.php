@@ -30,7 +30,7 @@ use bamboo\domain\repositories\CProductEanRepo;
  * @date 11/02/2019
  * @since 1.0
  */
-class sCPrestashopProduct extends APrestashopMarketplace
+class CPrestashopProduct extends APrestashopMarketplace
 {
 
     const PRODUCT_RESOURCE = 'products';
