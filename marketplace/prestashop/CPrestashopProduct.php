@@ -436,7 +436,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         $resourcesBlankProduct->active = 1;
         $resourcesBlankProduct->available_for_order = 1;
         $resourcesBlankProduct->show_price = 1;
-        if(!is_null($eanFather)) $resourcesBlankProduct->ean13 = $eanFather->ean;
+        if (!is_null($eanFather)) $resourcesBlankProduct->ean13 = $eanFather->ean;
 
         //$node = dom_import_simplexml($resourcesBlankProduct->name->language[0][0]);
         //$no = $node->ownerDocument;
@@ -739,7 +739,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $product->itemno
                     . ' ' .
                     $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
-                $shopprice=$salePrice;
+                $shopprice = $salePrice;
                 break;
             case 'remove':
                 $name = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
@@ -749,14 +749,14 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $product->itemno
                     . ' ' .
                     $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
-                $shopprice=$price;
+                $shopprice = $price;
                 break;
             default:
                 return false;
         }
 
         $productChildXml->name->language[0][0] = $name;
-        $productChildXml->price=$shopprice;
+        $productChildXml->price = $shopprice;
         unset($productChildXml->manufacturer_name);
         unset($productChildXml->quantity);
         unset($productChildXml->associations->combinations);
@@ -874,4 +874,110 @@ class CPrestashopProduct extends APrestashopMarketplace
         return true;
     }
 
+    /**
+     * @param $prestashopProductId
+     * @param $productId
+     * @param $productVariantId
+     * @param CProduct $product
+     * @param $destDir
+     * @param $shop
+     * @return bool
+     */
+    /*  public function updateProductImage($prestashopProductId,$productId,$productVariantId, $shop): bool
+      {
+          $db_host = "5.189.159.187";
+          $db_name = "iwesshop_pres848";
+          $db_user = "iwesshop_pres848";
+          $db_pass = "@5pM5S)Mn8";
+          define("HOST", "5.189.159.187");
+          define("USERNAME", "iwesshop_pres848");
+          define("PASSWORD", "@5pM5S)Mn8");
+          define("DATABASE", "iwesshop_pres848");
+          $res = "";
+          try {
+
+              $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+              $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $res .= " connessione ok <br>";
+          } catch (PDOException $e) {
+              $res .= $e->getMessage();
+          }
+
+          if (ENV == 'dev') {
+
+              $save_to = '/media/sf_sites/PickyshopNew/tmp/';
+
+          } else {
+              $save_to = '/home/iwespro/public_html/temp-prestashop/';
+          }
+          $cdnUrl = \Monkey::app()->cfg()->fetch("general", "product-photo-host");
+          $productHasProductPhotoRepo=\Monkey::app()->repoFactory->create('ProductHasProductPhoto');
+
+          $stmtGetCountImageProduct = $db_con->prepare("SELECT   count(*) as numberImage from ps_image where id_product ='".$prestashopProductId."'");
+
+          $stmtGetCountImageProduct->execute();
+          while ($rowGetCountImageProduct = $stmtGetCountImageProduct->fetch(PDO::FETCH_ASSOC)) {
+              $countImage=$rowGetCountImageProduct['numberImage'];
+
+
+          }
+          if($countImage>0){
+
+          }
+          $productPhotos = $product->productPhoto;
+          $productPhotos->reorder('order');
+          /** @var CProductPhoto $productPhoto */
+    /*
+          foreach ($productPhotos as $productPhoto) {
+
+              try {
+
+                  if ($productPhoto->size != $this::RIGHT_IMAGE_SIZE) continue;
+
+                  $url = $cdnUrl . $product->productBrand->slug . '/' . $productPhoto->name;
+
+                  //download image from aws
+                  $imgBody = file_get_contents(htmlspecialchars_decode($url));
+
+                  file_put_contents($destDir . $productPhoto->name, $imgBody);
+
+                  $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
+
+                  //Uncomment the following line in order to update an existing image
+                  //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
+
+                  $image_path = curl_file_create($destDir . $productPhoto->name, 'image/jpg');
+
+                  $request_host = $this->url;
+                  //$headers = array("Host: " . $request_host);
+                  //$request_url = 'https://192.168.1.245';
+
+                  $data = array('image' => $image_path);
+
+                  $ch = curl_init();
+                  //$headers = array("Content-Type:multipart/form-data", "Host: " . $request_host);
+                  //curl_setopt($ch, CURLOPT_HEADER, true);
+                  //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                  curl_setopt($ch, CURLOPT_URL, $urlRest);
+                  curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+                  curl_setopt($ch, CURLOPT_POST, true);
+                  curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
+                  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                  //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                  //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+                  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                  $result = curl_exec($ch);
+                  curl_close($ch);
+              } catch (\Throwable $e) {
+                  \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
+                  continue;
+              }
+          }
+
+          return true;
+      }
+  */
 }
