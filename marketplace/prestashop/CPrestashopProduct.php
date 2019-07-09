@@ -111,7 +111,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 }
 
 
-            } catch (\Throwable $e) {
+            } catch ( \Throwable $e ) {
                 \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getMessage());
                 return false;
             }
@@ -125,7 +125,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     unlink($file);
             }
             rmdir($destDir);
-        } catch (\Throwable $e) {
+        } catch ( \Throwable $e ) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while deleting photo', $e->getMessage());
         }
 
@@ -225,7 +225,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
             $phphmhs->price = $productPrice;
             $phphmhs->smartInsert();
-        } catch (\Throwable $e) {
+        } catch ( \Throwable $e ) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert product: ' . $product->id . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId, $e->getMessage());
             return false;
         }
@@ -330,7 +330,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 $result = curl_exec($ch);
                 curl_close($ch);
-            } catch (\Throwable $e) {
+            } catch ( \Throwable $e ) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
                 continue;
             }
@@ -385,7 +385,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $xml = null;
                     try {
                         $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $s->prestashopId);
-                    } catch (\Throwable $e) {
+                    } catch ( \Throwable $e ) {
                     }
 
                     if ($xml instanceof \SimpleXMLElement) {
@@ -501,7 +501,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['postXml'] = $blankProductXml->asXML();
             $opt['id_shop'] = $shop;
             $xmlResponseProduct = $this->ws->add($opt);
-        } catch (\PrestaShopWebserviceException $e) {
+        } catch ( \PrestaShopWebserviceException $e ) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert product' . $product->id . '-' . $product->productVariantId, $e->getMessage());
             return false;
         }
@@ -555,7 +555,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['postXml'] = $blankXmlCombination->asXML();
                 $opt['id_shop'] = $shop;
                 $xml_response_combination = $this->ws->add($opt);
-            } catch (\Throwable $e) {
+            } catch ( \Throwable $e ) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert combination', $e->getMessage());
                 return false;
             }
@@ -578,7 +578,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['putXml'] = $resourcesStockAvailableXml->asXML();
                 $opt['id'] = (int)$resourcesStockAvailable->id;
                 $this->ws->edit($opt);
-            } catch (\PrestaShopWebserviceException $e) {
+            } catch ( \PrestaShopWebserviceException $e ) {
                 //if fail to insert quantity delete combination
                 $this->deleteCombination((int)$resourcesCombination->id);
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert stock available', $e->getMessage());
@@ -629,7 +629,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id_shop'] = $prestashopShopsId;
             try {
                 $this->ws->delete($opt);
-            } catch (\Throwable $e) {
+            } catch ( \Throwable $e ) {
                 \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while deleting product', $e->getMessage());
             }
         }
@@ -648,7 +648,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         $opt['id'] = $combinationId;
         try {
             $this->ws->delete($opt);
-        } catch (\Throwable $e) {
+        } catch ( \Throwable $e ) {
             \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while deleting combination', $e->getMessage());
         }
 
@@ -704,7 +704,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                         $opt['putXml'] = $stockAvailableXmlFather->asXML();
                         $opt['id'] = $stockAvailableId;
                         $this->ws->edit($opt);
-                    } catch (\PrestaShopWebserviceException $e) {
+                    } catch ( \PrestaShopWebserviceException $e ) {
                         \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
                         return false;
                     }
@@ -770,7 +770,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id'] = $productData['prestaId'];
             $this->ws->edit($opt);
 
-        } catch (\PrestaShopWebserviceException $e) {
+        } catch ( \PrestaShopWebserviceException $e ) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
             return false;
         }
@@ -833,7 +833,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['postXml'] = $specificPriceBlankXml->asXML();
                 $opt['id_shop'] = $mhs->prestashopId;
                 $this->ws->add($opt);
-            } catch (\PrestaShopWebserviceException $e) {
+            } catch ( \PrestaShopWebserviceException $e ) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
                 return false;
             }
@@ -867,7 +867,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $optD['resource'] = self::SPECIFIC_PRICE_RESOURCE;
             $optD['id'] = (int)$specificPrices->specific_prices->specific_price->attributes()->id;
             $this->ws->delete($optD);
-        } catch (\Throwable $e) {
+        } catch ( \Throwable $e ) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage());
             return false;
         }
@@ -885,101 +885,101 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $shop
      * @return bool
      */
-      public function updateProductImage($prestashopProductId,$productId,$productVariantId, $shop): bool
-      {
-          $db_host = "5.189.159.187";
-          $db_name = "iwesPrestaDB";
-          $db_user = "iwesprestashop";
-          $db_pass = "X+]l&LEa]zSI";
-          /*define("HOST", "5.189.159.187");
-          define("USERNAME", "iwesprestashop");
-          define("PASSWORD", "X+]l&LEa]zSI");
-          define("DATABASE", "iwesPrestaDB");*/
-          $res = "";
-          $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
-          if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
-          try {
+    public function updateProductImage($prestashopProductId, $productId, $productVariantId, $shop): bool
+    {
+        $db_host = "5.189.159.187";
+        $db_name = "iwesPrestaDB";
+        $db_user = "iwesprestashop";
+        $db_pass = "X+]l&LEa]zSI";
+        /*define("HOST", "5.189.159.187");
+        define("USERNAME", "iwesprestashop");
+        define("PASSWORD", "X+]l&LEa]zSI");
+        define("DATABASE", "iwesPrestaDB");*/
+        $res = "";
+        $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
+        if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
+        try {
 
-              $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-              $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-              $res .= " connessione ok <br>";
-          } catch (PDOException $e) {
-              $res .= $e->getMessage();
-          }
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $res .= " connessione ok <br>";
+        } catch ( PDOException $e ) {
+            $res .= $e->getMessage();
+        }
 
-          if (ENV == 'dev') {
+        if (ENV == 'dev') {
 
-              $save_to = '/media/sf_sites/PickyshopNew/tmp/';
+            $save_to = '/media/sf_sites/PickyshopNew/tmp/';
 
-          } else {
-              $save_to = '/home/iwespro/public_html/temp-prestashop/';
-          }
-          $cdnUrl = \Monkey::app()->cfg()->fetch("general", "product-photo-host");
-          $product=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productId, 'productVariantId'=>$productVariantId ]);
+        } else {
+            $save_to = '/home/iwespro/public_html/temp-prestashop/';
+        }
+        $cdnUrl = \Monkey::app()->cfg()->fetch("general", "product-photo-host");
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productId, 'productVariantId' => $productVariantId]);
 
-          $stmtGetCountImageProduct = $db_con->prepare("SELECT   count(*) as numberImage from ps_image where id_product ='".$prestashopProductId."'");
+        $stmtGetCountImageProduct = $db_con->prepare("SELECT   count(*) as numberImage from ps_image where id_product ='" . $prestashopProductId . "'");
 
-          $stmtGetCountImageProduct->execute();
-          while ($rowGetCountImageProduct = $stmtGetCountImageProduct->fetch(PDO::FETCH_ASSOC)) {
-              $countImage=$rowGetCountImageProduct['numberImage'];
-          }
-          if($countImage>0){
+        $stmtGetCountImageProduct->execute();
+        while ($rowGetCountImageProduct = $stmtGetCountImageProduct->fetch(PDO::FETCH_ASSOC)) {
+            $countImage = $rowGetCountImageProduct['numberImage'];
+        }
+        if ($countImage == 0) {
 
-          }
-          $productPhotos = $product->productPhoto;
-          $productPhotos->reorder('order');
-          /** @var CProductPhoto $productPhoto */
 
-          foreach ($productPhotos as $productPhoto) {
+            $productPhotos = $product->productPhoto;
+            $productPhotos->reorder('order');
+            /** @var CProductPhoto $productPhoto */
 
-              try {
+            foreach ($productPhotos as $productPhoto) {
 
-                  if ($productPhoto->size != $this::RIGHT_IMAGE_SIZE) continue;
+                try {
 
-                  $url = $cdnUrl . $product->productBrand->slug . '/' . $productPhoto->name;
+                    if ($productPhoto->size != $this::RIGHT_IMAGE_SIZE) continue;
 
-                  //download image from aws
-                  $imgBody = file_get_contents(htmlspecialchars_decode($url));
+                    $url = $cdnUrl . $product->productBrand->slug . '/' . $productPhoto->name;
 
-                  file_put_contents($destDir . $productPhoto->name, $imgBody);
+                    //download image from aws
+                    $imgBody = file_get_contents(htmlspecialchars_decode($url));
 
-                  $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
+                    file_put_contents($destDir . $productPhoto->name, $imgBody);
 
-                  //Uncomment the following line in order to update an existing image
-                  //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
+                    $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
 
-                  $image_path = curl_file_create($destDir . $productPhoto->name, 'image/jpg');
+                    //Uncomment the following line in order to update an existing image
+                    //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
 
-                  $request_host = $this->url;
-                  //$headers = array("Host: " . $request_host);
-                  //$request_url = 'https://192.168.1.245';
+                    $image_path = curl_file_create($destDir . $productPhoto->name, 'image/jpg');
 
-                  $data = array('image' => $image_path);
+                    $request_host = $this->url;
+                    //$headers = array("Host: " . $request_host);
+                    //$request_url = 'https://192.168.1.245';
 
-                  $ch = curl_init();
-                  //$headers = array("Content-Type:multipart/form-data", "Host: " . $request_host);
-                  //curl_setopt($ch, CURLOPT_HEADER, true);
-                  //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    $data = array('image' => $image_path);
 
-                  curl_setopt($ch, CURLOPT_URL, $urlRest);
-                  curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-                  curl_setopt($ch, CURLOPT_POST, true);
-                  curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
-                  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $ch = curl_init();
+                    //$headers = array("Content-Type:multipart/form-data", "Host: " . $request_host);
+                    //curl_setopt($ch, CURLOPT_HEADER, true);
+                    //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-                  //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-                  //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-                  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                  $result = curl_exec($ch);
-                  curl_close($ch);
-              } catch (\Throwable $e) {
-                  \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
-                  continue;
-              }
-          }
+                    curl_setopt($ch, CURLOPT_URL, $urlRest);
+                    curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-          return true;
-      }
+                    //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                    //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                } catch ( \Throwable $e ) {
+                    \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
+                    continue;
+                }
+            }
+        }
+        return true;
+    }
 
 }
