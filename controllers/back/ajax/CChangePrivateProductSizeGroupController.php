@@ -6,6 +6,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CShopHasProduct;
 use bamboo\domain\repositories\CShopHasProductRepo;
+use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
 /**
  * Class CChangePrivateProductSizeGroupController
@@ -72,6 +73,8 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
 
     public function put()
     {
+        /** @var CPrestashopHasProductRepo $prestashopHasProductRepo */
+        $prestashopHasProductRepo =\Monkey::app()->repoFactory->create('PrestashopHasProduct');
         try {
             $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
             $forceChange = $this->app->router->request()->getRequestData('forceChange');
@@ -84,6 +87,18 @@ class CChangePrivateProductSizeGroupController extends AAjaxController
                 foreach ($productsIds as $productIds) {
                     foreach ($productRepo->findOneByStringId($productIds)->shopHasProduct as $shopHasProduct) {
                         $shopHasProductsIds[] = $shopHasProduct->printId();
+                        $productId=$shopHasProduct->productId;
+                        $productVariantId=$shopHasProduct->productVariantId;
+                        $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                            [
+                                'productId' => $productId,
+                                'productVariantId' => $productVariantId
+                            ]);
+                        if($prestashopHasProduct!==null){
+                            $prestashopHasProduct->status=2;
+                            $prestashopHasProduct->update();
+                        }
+
                     };
                 }
                 $forceChange = true;

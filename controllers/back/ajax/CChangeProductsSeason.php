@@ -47,8 +47,10 @@ class CChangeProductsSeason extends AAjaxController
                                     'productId' => $v['id'],
                                     'productVariantId' => $v['productVariantId']
                                 ]);
+                            if($prestashopHasProduct!==null){
                             $prestashopHasProduct->status=2;
                             $prestashopHasProduct->update();
+                                }
                         }
                         \Monkey::app()->repoFactory->commit();
                         return "Aggiornato lo stato di " . $count . " prodotti";

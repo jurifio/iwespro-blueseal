@@ -151,8 +151,10 @@ class CNamesManager extends AAjaxController
                         'productId' =>$id,
                         'productVariantId' =>  $productVariantId
                     ]);
-                $prestashopHasProduct->status = 2;
-                $prestashopHasProduct->update();
+                if($prestashopHasProduct!==null){
+                    $prestashopHasProduct->status=2;
+                    $prestashopHasProduct->update();
+                }
             }
             \Monkey::app()->repoFactory->commit();
             return 'Nomi aggiornati!';

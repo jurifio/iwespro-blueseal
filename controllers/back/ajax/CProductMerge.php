@@ -35,6 +35,7 @@ class CProductMerge extends AAjaxController
         $prods = $get['rows'];
 
         //controllo size group e se ci sono ordini relativi ai prodotti da unire
+        $prestashopHasProductRepo =\Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $repoPro = \Monkey::app()->repoFactory->create('Product');
         $repoOrd = \Monkey::app()->repoFactory->create('OrderLine');
         $sizeGroupCompatibility = true;
@@ -43,6 +44,15 @@ class CProductMerge extends AAjaxController
         foreach ($prods as $k => $v) {
             /** @var CProduct $product */
             $product = $repoPro->findOne($v);
+            $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                [
+                    'productId' => $v['id'],
+                    'productVariantId' => $v['productVariantId']
+                ]);
+            if($prestashopHasProduct!==null){
+                $prestashopHasProduct->status=2;
+                $prestashopHasProduct->update();
+            }
 
             if ($sizeGroupMacroGroup === false) {
                 $sizeGroupMacroGroup = $product->productSizeGroup->productSizeMacroGroup->name;

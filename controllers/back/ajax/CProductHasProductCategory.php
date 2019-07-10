@@ -67,8 +67,10 @@ class CProductHasProductCategory extends AAjaxController
                                 'productId' => $v['id'],
                                 'productVariantId' => $v['productVariantId']
                             ]);
-                        $prestashopHasProduct->status = 2;
-                        $prestashopHasProduct->update();
+                        if($prestashopHasProduct!==null){
+                            $prestashopHasProduct->status=2;
+                            $prestashopHasProduct->update();
+                        }
                     }
                     \Monkey::app()->repoFactory->commit();
                 } catch (\Throwable $e) {

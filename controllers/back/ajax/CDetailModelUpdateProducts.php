@@ -31,10 +31,25 @@ class CDetailModelUpdateProducts extends AAjaxController
             if (is_string($products)) $products = [$products];
 
             $pRepo = \Monkey::app()->repoFactory->create('Product');
+            $prestashopHasProductRepo=\Monkey::app()->repoFactory->create('PrestashopHasProduct');
             $model = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype')->findOneBy(['id' => $idModel]);
             try {
                 foreach ($products as $p) {
                     $pRepo->updateFromModel($model, $pRepo->findOneByStringId($p));
+                    $pFind=$pRepo->findOneByStringId($p);
+                    $productId=$pFind->id;
+                    $productVariantId=$pFind->productVariantId;
+                    $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                        [
+                            'productId' => $productId,
+                            'productVariantId' => $productVariantId
+                        ]);
+                    if($prestashopHasProduct!==null){
+                        $prestashopHasProduct->status=2;
+                        $prestashopHasProduct->update();
+                    }
+
+
                 }
             } catch (\Throwable $e) {
                 return 'OOPS! Errore di sistema:<br />' . $e->getMessage() . '<br />' .

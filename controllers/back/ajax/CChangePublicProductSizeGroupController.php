@@ -4,6 +4,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\repositories\CProductRepo;
+use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
 /**
  * Class CChangePublicProductSizeGroupController
@@ -46,6 +47,8 @@ class CChangePublicProductSizeGroupController extends AAjaxController
 
     public function put()
     {
+       /** @var CPrestashopHasProductRepo $prestashopHasProductRepo */
+        $prestashopHasProductRepo =\Monkey::app()->repoFactory->create('PrestashopHasProduct');
         /** @var CProductRepo $productRepo */
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         $productSizeGroupId = $this->app->router->request()->getRequestData('productSizeGroupId');
@@ -63,7 +66,19 @@ class CChangePublicProductSizeGroupController extends AAjaxController
             foreach ($productsIds as $productIds) {
                 /** @var CProduct $product */
                 $product = $productRepo->findOneByStringId($productIds);
+                $productId=$product->id;
+                $productVariantId=$product->productVariantId;
+
                 $productRepo->changeProductSizeGroup($product, $productSizeGroup);
+                $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                    [
+                        'productId' => $productId,
+                        'productVariantId' => $productVariantId
+                    ]);
+                if($prestashopHasProduct!==null){
+                    $prestashopHasProduct->status=2;
+                    $prestashopHasProduct->update();
+                }
             }
             return "Il gruppo taglie è stato assegnato alle righe selezionate.";
         }

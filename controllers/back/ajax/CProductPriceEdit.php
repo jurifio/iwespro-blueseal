@@ -68,6 +68,8 @@ class CProductPriceEdit extends AAjaxController
             $prodRepo = $this->rfc('Product');
             $shpRepo = $this->rfc('ShopHasProduct');
             $skuRepo = $this->rfc('ProductSku');
+            $prestashopHasProductRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+
 
             if (!$prod = $prodRepo->findOne([$get['id'], $get['productVariantId']])) throw new \Exception('Prodotto non trovato');
 
@@ -96,6 +98,15 @@ class CProductPriceEdit extends AAjaxController
                 }
                 //$shp->updatePrices($v['value'], $v['price'], (array_key_exists('salePrice', $v) ? $v['salePrice'] : 0));
                 $skuRepo->updateSkusPrices($shp->productId, $shp->productVariantId, $shp->shopId, $shp->value, $shp->price, $shp->salePrice);
+                $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                    [
+                        'productId' => $shp->productId,
+                        'productVariantId' => $shp->productVariantId
+                    ]);
+                if($prestashopHasProduct!==null){
+                    $prestashopHasProduct->status=2;
+                    $prestashopHasProduct->update();
+                }
             }
             \Monkey::app()->repoFactory->commit();
         } catch(\Throwable $e) {

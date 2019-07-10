@@ -21,6 +21,7 @@ class CEditVariantDescription extends AAjaxController
 {
     public function post()
     {
+        $prestashopHasProductRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $codes = \Monkey::app()->router->request()->getRequestData('codes');
         $colorNameManufacturer = \Monkey::app()->router->request()->getRequestData('colorNameManufacturer');
         $groupId = \Monkey::app()->router->request()->getRequestData('groupId');
@@ -45,8 +46,21 @@ class CEditVariantDescription extends AAjaxController
             if ($groupId) {
                 foreach ($codes as $c) {
                     $product = \Monkey::app()->repoFactory->create('Product')->findOneByStringId($c);
+                    $productId=$product->id;
+                    $productVariantId=$product->productVariantId;
+
                     $product->productColorGroupId = $groupId;
                     $product->update();
+                    $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                        [
+                            'productId' => $productId,
+                            'productVariantId' => $productVariantId
+                        ]);
+                    if($prestashopHasProduct!==null){
+                        $prestashopHasProduct->status=2;
+                        $prestashopHasProduct->update();
+                    }
+
                 }
             }
             \Monkey::app()->repoFactory->commit();
