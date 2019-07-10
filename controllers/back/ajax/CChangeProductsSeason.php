@@ -19,6 +19,7 @@ class CChangeProductsSeason extends AAjaxController
 
     public function post()
     {
+        $prestashopHasProductRepo=\Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $get = $this->app->router->request()->getRequestData();
         $act = $get['action'];
         if (array_key_exists('rows', $get)) $rows = $get['rows'];
@@ -34,8 +35,20 @@ class CChangeProductsSeason extends AAjaxController
                                     'id' => $v['id'],
                                     'productVariantId' => $v['productVariantId']
                                 ]);
+
+
+
                             $product->productSeasonId = $get['productSeasonId'];
+
                             $count += $product->update();
+
+                            $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                                [
+                                    'productId' => $v['id'],
+                                    'productVariantId' => $v['productVariantId']
+                                ]);
+                            $prestashopHasProduct->status=2;
+                            $prestashopHasProduct->update();
                         }
                         \Monkey::app()->repoFactory->commit();
                         return "Aggiornato lo stato di " . $count . " prodotti";

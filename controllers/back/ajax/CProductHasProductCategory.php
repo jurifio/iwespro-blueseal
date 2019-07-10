@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 /**
@@ -20,23 +21,25 @@ class CProductHasProductCategory extends AAjaxController
         $cache = $this->app->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
         if (!$cache) {
             $cache = $this->app->categoryManager->categories()->treeToJson(1);
-            $this->app->cacheService->getCache("misc")->add("FullCategoryTreeAsJSON",$cache,13000);
+            $this->app->cacheService->getCache("misc")->add("FullCategoryTreeAsJSON", $cache, 13000);
         }
         return $cache;
     }
-    
-    public function post() {
+
+    public function post()
+    {
+        $prestashopHasProductRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $get = $this->app->router->request()->getRequestData();
         $action = '';
-        if (array_key_exists("action", $get)) $action = $get['action'] ;
+        if (array_key_exists("action", $get)) $action = $get['action'];
 
-        switch($action) {
+        switch ($action) {
             case "updateCat":
                 $rowsId = [];
 
                 try {
                     \Monkey::app()->repoFactory->beginTransaction();
-                    foreach($get['rows'] as $k => $v) {
+                    foreach ($get['rows'] as $k => $v) {
                         $this->app->dbAdapter->delete(
                             "ProductHasProductCategory",
                             [
@@ -48,7 +51,7 @@ class CProductHasProductCategory extends AAjaxController
                         );
                     }
                     foreach ($get['rows'] as $v) {
-                        foreach($get['newCategories'] as $c) {
+                        foreach ($get['newCategories'] as $c) {
                             $this->app->dbAdapter->insert(
                                 "ProductHasProductCategory",
                                 [
@@ -57,11 +60,18 @@ class CProductHasProductCategory extends AAjaxController
                                     'productCategoryId' => $c
                                 ]
                             );
-                            if($this->app->dbAdapter->countAffectedRows() != 1) throw new \Exception('No rows Updated');
+                            if ($this->app->dbAdapter->countAffectedRows() != 1) throw new \Exception('No rows Updated');
                         }
+                        $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                            [
+                                'productId' => $v['id'],
+                                'productVariantId' => $v['productVariantId']
+                            ]);
+                        $prestashopHasProduct->status = 2;
+                        $prestashopHasProduct->update();
                     }
                     \Monkey::app()->repoFactory->commit();
-                } catch(\Throwable $e) {
+                } catch (\Throwable $e) {
                     \Monkey::app()->repoFactory->rollback();
                     return "OOPS! Errore nell'assegnazione delle categorie<br />" . $e->getMessage();
                 }

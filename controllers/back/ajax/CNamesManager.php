@@ -137,6 +137,7 @@ class CNamesManager extends AAjaxController
         $insertNameIfNew = isset($get['insertNameIfNew']);
         $old = [];
         $pntRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
+        $prestashopHasProductRepo=\Monkey::app()->repoFactory->create('PrestashopHasProduct');
         if ($insertNameIfNew) {
             $pntRepo->insertName($new);
         }
@@ -145,6 +146,13 @@ class CNamesManager extends AAjaxController
             foreach ($oldCodes as $v) {
                 list($id, $productVariantId) = explode('-', $v);
                 $pntRepo->updateProductName($id, $productVariantId, $new);
+                $prestashopHasProduct=$prestashopHasProductRepo->findOneBy(
+                    [
+                        'productId' =>$id,
+                        'productVariantId' =>  $productVariantId
+                    ]);
+                $prestashopHasProduct->status = 2;
+                $prestashopHasProduct->update();
             }
             \Monkey::app()->repoFactory->commit();
             return 'Nomi aggiornati!';
