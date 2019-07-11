@@ -39,7 +39,7 @@ class CPrestashopProduct extends APrestashopMarketplace
     const COMBINATION_RESOURCE = 'combinations';
     const SPECIFIC_PRICE_RESOURCE = 'specific_prices';
     const IMAGES_RESOURCE = 'images/products';
-
+    const PRODUCT_FEATURES_RESOURCE = 'product_features';
     const RIGHT_IMAGE_SIZE = 843;
 
     /**
@@ -111,7 +111,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 }
 
 
-            } catch ( \Throwable $e ) {
+            } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getMessage());
                 return false;
             }
@@ -125,7 +125,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     unlink($file);
             }
             rmdir($destDir);
-        } catch ( \Throwable $e ) {
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while deleting photo', $e->getMessage());
         }
 
@@ -225,7 +225,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
             $phphmhs->price = $productPrice;
             $phphmhs->smartInsert();
-        } catch ( \Throwable $e ) {
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert product: ' . $product->id . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId, $e->getMessage());
             return false;
         }
@@ -330,7 +330,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 $result = curl_exec($ch);
                 curl_close($ch);
-            } catch ( \Throwable $e ) {
+            } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
                 continue;
             }
@@ -385,7 +385,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $xml = null;
                     try {
                         $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $s->prestashopId);
-                    } catch ( \Throwable $e ) {
+                    } catch (\Throwable $e) {
                     }
 
                     if ($xml instanceof \SimpleXMLElement) {
@@ -501,7 +501,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['postXml'] = $blankProductXml->asXML();
             $opt['id_shop'] = $shop;
             $xmlResponseProduct = $this->ws->add($opt);
-        } catch ( \PrestaShopWebserviceException $e ) {
+        } catch (\PrestaShopWebserviceException $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert product' . $product->id . '-' . $product->productVariantId, $e->getMessage());
             return false;
         }
@@ -555,7 +555,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['postXml'] = $blankXmlCombination->asXML();
                 $opt['id_shop'] = $shop;
                 $xml_response_combination = $this->ws->add($opt);
-            } catch ( \Throwable $e ) {
+            } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert combination', $e->getMessage());
                 return false;
             }
@@ -578,7 +578,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['putXml'] = $resourcesStockAvailableXml->asXML();
                 $opt['id'] = (int)$resourcesStockAvailable->id;
                 $this->ws->edit($opt);
-            } catch ( \PrestaShopWebserviceException $e ) {
+            } catch (\PrestaShopWebserviceException $e) {
                 //if fail to insert quantity delete combination
                 $this->deleteCombination((int)$resourcesCombination->id);
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert stock available', $e->getMessage());
@@ -629,7 +629,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id_shop'] = $prestashopShopsId;
             try {
                 $this->ws->delete($opt);
-            } catch ( \Throwable $e ) {
+            } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while deleting product', $e->getMessage());
             }
         }
@@ -648,7 +648,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         $opt['id'] = $combinationId;
         try {
             $this->ws->delete($opt);
-        } catch ( \Throwable $e ) {
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while deleting combination', $e->getMessage());
         }
 
@@ -704,7 +704,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                         $opt['putXml'] = $stockAvailableXmlFather->asXML();
                         $opt['id'] = $stockAvailableId;
                         $this->ws->edit($opt);
-                    } catch ( \PrestaShopWebserviceException $e ) {
+                    } catch (\PrestaShopWebserviceException $e) {
                         \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
                         return false;
                     }
@@ -715,6 +715,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         return true;
     }
+
 
     /**
      * @param $product
@@ -770,7 +771,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id'] = $productData['prestaId'];
             $this->ws->edit($opt);
 
-        } catch ( \PrestaShopWebserviceException $e ) {
+        } catch (\PrestaShopWebserviceException $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
             return false;
         }
@@ -833,7 +834,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['postXml'] = $specificPriceBlankXml->asXML();
                 $opt['id_shop'] = $mhs->prestashopId;
                 $this->ws->add($opt);
-            } catch ( \PrestaShopWebserviceException $e ) {
+            } catch (\PrestaShopWebserviceException $e) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
                 return false;
             }
@@ -867,7 +868,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $optD['resource'] = self::SPECIFIC_PRICE_RESOURCE;
             $optD['id'] = (int)$specificPrices->specific_prices->specific_price->attributes()->id;
             $this->ws->delete($optD);
-        } catch ( \Throwable $e ) {
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage());
             return false;
         }
@@ -903,7 +904,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
             $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $res .= " connessione ok <br>";
-        } catch ( PDOException $e ) {
+        } catch (PDOException $e) {
             $res .= $e->getMessage();
         }
 
@@ -973,7 +974,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     $result = curl_exec($ch);
                     curl_close($ch);
-                } catch ( \Throwable $e ) {
+                } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
                     continue;
                 }
@@ -981,5 +982,6 @@ class CPrestashopProduct extends APrestashopMarketplace
         }
         return true;
     }
+
 
 }

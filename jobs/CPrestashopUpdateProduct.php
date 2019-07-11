@@ -9,7 +9,7 @@ use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProductPublicSku;
 
 /**
- * Class CPrestashopUpdateProductQuantity
+ * Class CPrestashopUpdateProduct
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,10 +18,10 @@ use bamboo\domain\entities\CProductPublicSku;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 08/04/2019
+ * @date 11/07/2019
  * @since 1.0
  */
-class CPrestashopUpdateProductQuantity extends ACronJob
+class CPrestashopUpdateProduct extends ACronJob
 {
 
     /**
@@ -33,7 +33,7 @@ class CPrestashopUpdateProductQuantity extends ACronJob
      */
     public function run($args = null)
     {
-        $this->updatePrestashopQty();
+        $this->updatePrestashopProduct();
     }
 
     /**
@@ -42,7 +42,7 @@ class CPrestashopUpdateProductQuantity extends ACronJob
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    private function updatePrestashopQty()
+    private function updatePrestashopProduct()
     {
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
 
@@ -84,9 +84,8 @@ class CPrestashopUpdateProductQuantity extends ACronJob
 
 
             foreach ($sizes as $size => $qty){
-                $prestashopProduct->updateProductQuantity($php->prestaId, $size,  $qty,  null,  $shops);
+                $prestashopProduct->updateProduct($php->prestaId, $php->productId, $php->productVariantId,$size,  $shops);
             }
-
 
 
 
