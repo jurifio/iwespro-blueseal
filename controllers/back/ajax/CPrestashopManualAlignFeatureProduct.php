@@ -52,7 +52,7 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
             $res .= " connessione ok <br>";
         } catch (PDOException $e) {
             $res .= $e->getMessage();
-
+            $this->report('Update Feature product Prestashop', 'error connection Update');
         }
         // Extraxt Value from Iwes
         $productRepo = \Monkey::app()->repoFactory->create('Product');
@@ -100,12 +100,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $name = $productDetailLabelTranslationIt->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangIt = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        ('" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
+                                                                                        (" . $id_feature . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
+                                                                                       (" . $id_feature . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureLangIt->execute();
@@ -120,12 +120,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $name = $productDetailLabelTranslationEn->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangEn = $db_con->prepare("INSERT INTO ps_feature_lang (`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        ('" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
+                                                                                        (" . $id_feature . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
+                                                                                       (" . $id_feature . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureLangEn->execute();
@@ -142,12 +142,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $name = $productDetailLabelTranslationDe->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangDe = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        ('" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
+                                                                                        (" . $id_feature . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
+                                                                                       (" . $id_feature . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureLangDe->execute();
@@ -160,12 +160,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
         foreach ($productDetail as $productDetails) {
             //insert or update Feature Value Ids in Prestashop with ids Detail Iwes
             $stmtUpdateFeatureValue = $db_con->prepare("INSERT INTO ps_feature_value (`id_feature_value`,`id_feature`,`custom`) VALUES
-                                                                                      ('" . $productDetails->id . "',
-                                                                                      ' 1 ',
+                                                                                      (" . $productDetails->id . ",
+                                                                                       1 ,
                                                                                        '0') 
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                        ('" . $productDetails->id . "',
-                                                                                      ' 1 ',
+                                                                                        (" . $productDetails->id . ",
+                                                                                       1 ,
                                                                                        '0')
 
                                             ");
@@ -181,11 +181,11 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $name = $productDetailTranslationIt->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangIt = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                        ('" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
+                                                                                        (" . $id_feature_value . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature_value . "',
+                                                                                       (" . $id_feature_value . ",
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
@@ -201,12 +201,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $name = $productDetailTranslationEn->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_value_lang (`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                          ('" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
+                                                                                          (" . $id_feature_value . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
+                                                                                       (" . $id_feature_value . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureValueLangEn->execute();
@@ -223,12 +223,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $name = $productDetailTranslationDe->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangDe = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                          ('" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
+                                                                                          (" . $id_feature_value . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
+                                                                                       (" . $id_feature_value . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureValueLangDe->execute();
@@ -246,12 +246,12 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
             $productId = $php->productId;
             $productVariantId = $php->productVariantId;
             $stmtUpdateFeatureProduct = $db_con->prepare("INSERT INTO ps_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES
-                                                                                        ('" . $php->productDetailLabelId . "',
-                                                                                        '" . $prestaId . "',
+                                                                                        (" . $php->productDetailLabelId . ",
+                                                                                        " . $prestaId . ",
                                                                                         '" . $php->productDetailId . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
+                                                                                       (" . $id_feature_value . ",
+                                                                                        " . $id_lang . ",
                                                                                         '" . $name . "')
   ");
             $stmtUpdateFeatureProduct->execute();
