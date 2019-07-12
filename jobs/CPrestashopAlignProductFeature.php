@@ -251,9 +251,9 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                        '" . $prestaId . "',
                                                                                         '" . $php->productDetailId . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                      `id_feature`= '" . $id_feature_value . "',
-                                                                                        `id_product`='" . $id_lang . "',
-                                                                                       `id_feature_value`= '" . $name . "'");
+                                                                                      `id_feature`= '" . $php->productDetailLabelId . "',
+                                                                                        `id_product`='" . $prestaId . "',
+                                                                                       `id_feature_value`= '" . $php->productDetailId . "'");
             $stmtUpdateFeatureProduct->execute();
 
 
