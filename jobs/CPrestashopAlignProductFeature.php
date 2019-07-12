@@ -75,13 +75,11 @@ class CPrestashopAlignProductFeature extends ACronJob
         foreach ($productDetailLabel as $productDetailLabels) {
             //insert or update Feature Ids in Prestashop with ids Detail Labels Iwes
             $stmtUpdateFeature = $db_con->prepare("INSERT INTO ps_feature (`id_feature`,`position`) VALUES
-                                                                                      ( '" . $productDetailLabels->id . "',
+                                                                                      ('" . $productDetailLabels->id . "',
                                                                                        '" . $positionDetail . "')
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                       '" . $productDetailLabels->id . "',
-                                                                                       '" . $positionDetail . "')
-
-                                            ");
+                                                                                       `id_feature`='" . $productDetailLabels->id . "',
+                                                                                       `position`='" . $positionDetail . "'");
             $stmtUpdateFeature->execute();
             //Collect from Pickyshop array shop in order to populate label detail from picky
             $stmtGetShop = $db_con->prepare("SELECT `id_shop` from ps_shop");
@@ -91,10 +89,8 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                       ('" . $productDetailLabels->id . "',
                                                                                        '" . $rowGetShop['id_shop'] . "')
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                       '" . $productDetailLabels->id . "',
-                                                                                       '" . $rowGetShop['id_shop'] . "')
-
-                                            ");
+                                                                                       `id_feature`= '" . $productDetailLabels->id . "',
+                                                                                       `id_shop`='" . $rowGetShop['id_shop'] . "'");
                 $stmtUpdateFeatureShop->execute();
             }
             //collect Lang Label Detail from Picky in Italian Language by productDetailLabelsId
@@ -111,10 +107,9 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       '" . $id_feature . "',
-                                                                                       '" . $id_lang . "',
-                                                                                        '" . $name . "')
-  ");
+                                                                                     `id_feature`=  '" . $id_feature . "',
+                                                                                    `id_lang`= '" . $id_lang . "',
+                                                                                        `name`='" . $name . "'");
                 $stmtUpdateFeatureLangIt->execute();
             }
             //collect Lang Label Detail from Picky in English Language by productDetailLabelsId
@@ -127,14 +122,13 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailLabelTranslationEn->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangEn = $db_con->prepare("INSERT INTO ps_feature_lang (`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        ('" . $id_feature . "',
+                                                                                         ( '" . $id_feature . "',
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       " . $id_feature . ",
-                                                                                        '" . $id_lang . "',
-                                                                                        '" . $name . "')
-  ");
+                                                                                     `id_feature`=  '" . $id_feature . "',
+                                                                                     `id_lang`= '" . $id_lang . "',
+                                                                                        `name`='" . $name . "'");
                 $stmtUpdateFeatureLangEn->execute();
 
 
@@ -149,14 +143,13 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailLabelTranslationDe->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangDe = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        ('" . $id_feature . "',
+                                                                                       ( '" . $id_feature . "',
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       '" . $id_feature . "',
-                                                                                        '" . $id_lang . "',
-                                                                                        '" . $name . "')
-  ");
+                                                                                     `id_feature`=  '" . $id_feature . "',
+                                                                                     `id_lang`= '" . $id_lang . "',
+                                                                                        `name`='" . $name . "'");
                 $stmtUpdateFeatureLangDe->execute();
 
             }
@@ -171,11 +164,9 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                        1 ,
                                                                                        '0') 
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                        '" . $productDetails->id . "',
-                                                                                       1 ,
-                                                                                       '0')
-
-                                            ");
+                                                                                      `id_feature_value`=  '" . $productDetails->id . "',
+                                                                                      `id_feature`= 1 ,
+                                                                                       `custom`='0'");
             $stmtUpdateFeatureValue->execute();
 
             //collect Lang  Detail from Picky in Italian Language by productDetailId
@@ -192,10 +183,9 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       '" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
-                                                                                        '" . $name . "')
-  ");
+                                                                                      `id_feature_value`= '" . $id_feature_value . "',
+                                                                                        `id_lang`='" . $id_lang . "',
+                                                                                       `value`= '" . $name . "'");
                 $stmtUpdateFeatureValueLangIt->execute();
             }
             //collect Lang  Detail value from Picky in English Language by productDetailId
@@ -208,14 +198,13 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailTranslationEn->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_value_lang (`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                      ('" . $id_feature_value . "',
+                                                                                        ('" . $id_feature_value . "',
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       '" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
-                                                                                        '" . $name . "')
-  ");
+                                                                                      `id_feature_value`= '" . $id_feature_value . "',
+                                                                                        `id_lang`='" . $id_lang . "',
+                                                                                       `value`= '" . $name . "'");
                 $stmtUpdateFeatureValueLangEn->execute();
 
 
@@ -234,10 +223,9 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       '" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
-                                                                                        '" . $name . "')
-  ");
+                                                                                      `id_feature_value`= '" . $id_feature_value . "',
+                                                                                        `id_lang`='" . $id_lang . "',
+                                                                                       `value`= '" . $name . "'");
                 $stmtUpdateFeatureValueLangDe->execute();
 
             }
@@ -257,9 +245,9 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                        '" . $prestaId . "',
                                                                                         '" . $php->productDetailId . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       '" . $id_feature_value . "',
-                                                                                        '" . $id_lang . "',
-                                                                                        '" . $name . "')
+                                                                                      `id_feature`= '" . $id_feature_value . "',
+                                                                                        `id_product`='" . $id_lang . "',
+                                                                                       `id_feature_value`= '" . $name . "')
   ");
             $stmtUpdateFeatureProduct->execute();
 
