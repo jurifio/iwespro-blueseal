@@ -87,7 +87,7 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $stmtUpdateFeatureShop->execute();
             }
             //collect Lang Label Detail from Picky in Italian Language by productDetailLabelsId
-            $productDetailLabelTranslationIt = $productDetailLabelTranslationRepo->findBy(['productDetailLabelId' => $productDetailLabels->id, 'langId' => 1]);
+            $productDetailLabelTranslationIt = $productDetailLabelTranslationRepo->findOneBy(['productDetailLabelId' => $productDetailLabels->id, 'langId' => 1]);
             //Verify if objectcollection is not null
             if ($productDetailLabelTranslationIt != null) {
                 //define value to insert or update feature_lang  in prestashop with Italian Language
@@ -106,7 +106,7 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $stmtUpdateFeatureLangIt->execute();
             }
             //collect Lang Label Detail from Picky in English Language by productDetailLabelsId
-            $productDetailLabelTranslationEn = $productDetailLabelTranslationRepo->findOneBy(['productDetailLabelId' => $productDetailLabel->id, 'langId' => 2]);
+            $productDetailLabelTranslationEn = $productDetailLabelTranslationRepo->findOneBy(['productDetailLabelId' => $productDetailLabels->id, 'langId' => 2]);
             //Verify if objectcollection is not null
             if ($productDetailLabelTranslationEn != null) {
                 //define value to insert or update feature_lang  in prestashop with English Language
@@ -127,7 +127,7 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
 
             }
             //collect Lang Label Detail from Picky in Deutch Language by productDetailLabelsId
-            $productDetailLabelTranslationDe = $productDetailLabelTranslationRepo->findOneBy(['productDetailLabelId' => $productDetailLabel->id, 'langId' => 3]);
+            $productDetailLabelTranslationDe = $productDetailLabelTranslationRepo->findOneBy(['productDetailLabelId' => $productDetailLabels->id, 'langId' => 3]);
             //Verify if objectcollection is not null
             if ($productDetailLabelTranslationDe != null) {
                 //define value to insert or update feature_lang  in prestashop with English Language
@@ -163,7 +163,7 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
             $stmtUpdateFeatureValue->execute();
 
             //collect Lang  Detail from Picky in Italian Language by productDetailId
-            $productDetailTranslationIt = $productDetailTranslationRepo->findBy(['productDetailId' => $productDetails->id, 'langId' => 1]);
+            $productDetailTranslationIt = $productDetailTranslationRepo->findOneBy(['productDetailId' => $productDetails->id, 'langId' => 1]);
             //Verify if objectcollection is not null
             if ($productDetailTranslationIt != null) {
                 //define value to insert or update feature_value_lang  in prestashop with Italian Language
@@ -240,11 +240,11 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                                                                                         ON DUPLICATE KEY UPDATE
                                                                                       `id_feature`= '" . $id_feature_value . "',
                                                                                         `id_product`='" . $id_lang . "',
-                                                                                       `id_feature_value`= '" . $name . "')
-  ");
+                                                                                       `id_feature_value`= '" . $name . "'");
             $stmtUpdateFeatureProduct->execute();
 
         }
+        return $res;
     }
 }
 
