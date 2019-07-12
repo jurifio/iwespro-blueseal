@@ -189,7 +189,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $stmtUpdateFeatureValueLangIt->execute();
             }
             //collect Lang  Detail value from Picky in English Language by productDetailId
-            $productDetailTranslationEn = $productDetailTranslationRepo->findOneBy(['productDetailLabelId' => $productDetailLabel->id, 'langId' => 2]);
+            $productDetailTranslationEn = $productDetailTranslationRepo->findOneBy(['productDetailLabelId' => $productDetails->id, 'langId' => 2]);
             //Verify if objectcollection is not null
             if ($productDetailTranslationEn != null) {
                 //define value to insert or update feature_value_lang  in prestashop with English Language
@@ -210,7 +210,7 @@ class CPrestashopAlignProductFeature extends ACronJob
 
             }
             //collect Lang  Detail from Picky in Deutch Language by productDetailId
-            $productDetailTranslationDe = $productDetailTranslationRepo->findOneBy(['productDetailId' => $productDetailLabel->id, 'langId' => 3]);
+            $productDetailTranslationDe = $productDetailTranslationRepo->findOneBy(['productDetailId' => $productDetails->id, 'langId' => 3]);
             //Verify if objectcollection is not null
             if ($productDetailTranslationDe != null) {
                 //define value to insert or update feature_value_lang  in prestashop with English Language
