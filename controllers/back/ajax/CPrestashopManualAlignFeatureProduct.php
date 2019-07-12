@@ -94,8 +94,10 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $id_feature = $productDetailLabels->id;
                 $id_lang = 1;
                 $name = $productDetailLabelTranslationIt->name;
-                str_replace("'","\'",$name);
-                str_replace("%","\%",$name);
+                $name= str_replace("'", "\'", $name);
+
+                $name=str_replace("!", "\!", $name);
+                $name=  str_replace(";", "\;", $name);
 
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangIt = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
@@ -116,8 +118,10 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $id_feature = $productDetailLabels->id;
                 $id_lang = 2;
                 $name = $productDetailLabelTranslationEn->name;
-                str_replace("'","\'",$name);
-                str_replace("%","\%",$name);
+                $name= str_replace("'", "\'", $name);
+
+                $name=str_replace("!", "\!", $name);
+                $name=  str_replace(";", "\;", $name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangEn = $db_con->prepare("INSERT INTO ps_feature_lang (`id_feature`,`id_lang`,`name`) VALUES
                                                                                          ( '" . $id_feature . "',
@@ -139,8 +143,10 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $id_feature = $productDetailLabels->id;
                 $id_lang = 3;
                 $name = $productDetailLabelTranslationDe->name;
-                str_replace("'","\'",$name);
-                str_replace("%","\%",$name);
+                $name= str_replace("'", "\'", $name);
+
+                $name=str_replace("!", "\!", $name);
+                $name=  str_replace(";", "\;", $name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangDe = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
                                                                                        ( '" . $id_feature . "',
@@ -177,8 +183,10 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $id_feature_value = $productDetails->id;
                 $id_lang = 1;
                 $name = $productDetailTranslationIt->name;
-                str_replace("'","\'",$name);
-                str_replace("%","\%",$name);
+                $name= str_replace("'", "\'", $name);
+
+                $name=str_replace("!", "\!", $name);
+                $name=  str_replace(";", "\;", $name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangIt = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                         ('" . $id_feature_value . "',
@@ -198,8 +206,10 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $id_feature_value = $productDetails->id;
                 $id_lang = 2;
                 $name = $productDetailTranslationEn->name;
-                str_replace("'","\'",$name);
-                str_replace("%","\%",$name);
+                $name= str_replace("'", "\'", $name);
+
+                $name=str_replace("!", "\!", $name);
+                $name=  str_replace(";", "\;", $name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_value_lang (`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                         ('" . $id_feature_value . "',
@@ -221,8 +231,10 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                 $id_feature_value = $productDetails->id;
                 $id_lang = 3;
                 $name = $productDetailTranslationDe->name;
-                str_replace("'","\'",$name);
-                str_replace("%","\%",$name);
+                $name= str_replace("'", "\'", $name);
+
+                $name=str_replace("!", "\!", $name);
+                $name=  str_replace(";", "\;", $name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangDe = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                        ('" . $id_feature_value . "',
@@ -243,10 +255,11 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
         $phpC = \Monkey::app()->repoFactory->create('ProductSheetActual')->findAll();
         foreach ($phpC as $php) {
             $findPrestaId = $prestashopHasProductRepo->findOneBy(['productId' => $php->productId, 'productVariantId' => $php->productVariantId]);
-            $prestaId = $findPrestaId->prestaId;
-            $productId = $php->productId;
-            $productVariantId = $php->productVariantId;
-            $stmtUpdateFeatureProduct = $db_con->prepare("INSERT INTO ps_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES
+            if ($findPrestaId != null) {
+                $prestaId = $findPrestaId->prestaId;
+                $productId = $php->productId;
+                $productVariantId = $php->productVariantId;
+                $stmtUpdateFeatureProduct = $db_con->prepare("INSERT INTO ps_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES
                                                                                         ('" . $php->productDetailLabelId . "',
                                                                                        '" . $prestaId . "',
                                                                                         '" . $php->productDetailId . "')
@@ -254,8 +267,9 @@ class CPrestashopManualAlignFeatureProduct extends AAjaxController
                                                                                       `id_feature`= '" . $php->productDetailLabelId . "',
                                                                                         `id_product`='" . $prestaId . "',
                                                                                        `id_feature_value`= '" . $php->productDetailId . "'");
-            $stmtUpdateFeatureProduct->execute();
+                $stmtUpdateFeatureProduct->execute();
 
+            }
         }
         return $res;
     }
