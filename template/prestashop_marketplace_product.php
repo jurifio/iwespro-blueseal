@@ -134,6 +134,17 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-recycle"
+                data-permission="/admin/product/edit"
+                data-event="bs.update.presta.product.feature"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiorna caratteristiche da PickyShop a Prestashop"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-close"
                 data-permission="/admin/product/edit"
                 data-event="bs.delete.product"

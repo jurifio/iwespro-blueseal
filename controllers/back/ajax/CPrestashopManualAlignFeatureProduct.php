@@ -1,18 +1,23 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
-use bamboo\core\base\CObjectCollection;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CPrestashopHasProduct;
-use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
-use bamboo\domain\entities\CProductPublicSku;
+
+use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
+use PrestaShopWebservice;
+use PrestaShopWebserviceException;
+use bamboo\controllers\back\ajax\CPrestashopGetImage;
 use PDO;
+use prepare;
+
+use bamboo\core\exceptions\BambooConfigException;
+use bamboo\core\base\CObjectCollection;
+use bamboo\utils\time\STimeToolbox;
+
 
 /**
- * Class CPrestashopAlignProductFeature
- * @package bamboo\blueseal\jobs
+ * Class CPrestashopManualAlignFeatureProduct
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -20,32 +25,20 @@ use PDO;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 11/07/2019
+ * @date 12/07/2019
  * @since 1.0
  */
-class CPrestashopAlignProductFeature extends ACronJob
+class CPrestashopManualAlignFeatureProduct extends AAjaxController
 {
 
-    /**
-     * @param null $args
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    public function run($args = null)
-    {
-        $this->updateFeature();
-        $this->report('Update Feature product Prestashop', 'start job Update');
-    }
 
     /**
-     * @throws \PrestaShopWebserviceException
+     * @return string
+     *
+     * @throws \bamboo\core\exceptions\BambooDBALException
      * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    private function updateFeature()
+    public function post()
     {
         $db_host = "5.189.159.187";
         $db_name = "iwesPrestaDB";
@@ -59,7 +52,7 @@ class CPrestashopAlignProductFeature extends ACronJob
             $res .= " connessione ok <br>";
         } catch (PDOException $e) {
             $res .= $e->getMessage();
-            $this->report('Update Feature product Prestashop', 'error connection Update');
+
         }
         // Extraxt Value from Iwes
         $productRepo = \Monkey::app()->repoFactory->create('Product');
@@ -75,11 +68,11 @@ class CPrestashopAlignProductFeature extends ACronJob
         foreach ($productDetailLabel as $productDetailLabels) {
             //insert or update Feature Ids in Prestashop with ids Detail Labels Iwes
             $stmtUpdateFeature = $db_con->prepare("INSERT INTO ps_feature (`id_feature`,`position`) VALUES
-                                                                                      ('" . $productDetailLabels->id . "',
-                                                                                       '" . $positionDetail . "') 
+                                                                                      (" . $productDetailLabels->id . ",
+                                                                                       " . $positionDetail . ") 
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                       ('" . $productDetailLabels->id . "',
-                                                                                       '" . $positionDetail . "')
+                                                                                       (" . $productDetailLabels->id . ",
+                                                                                       " . $positionDetail . ")
 
                                             ");
             $stmtUpdateFeature->execute();
@@ -264,7 +257,12 @@ class CPrestashopAlignProductFeature extends ACronJob
             $stmtUpdateFeatureProduct->execute();
 
 
-            $this->report('Update Feature product Prestashop', 'End Update');
         }
     }
 }
+
+
+
+
+
+

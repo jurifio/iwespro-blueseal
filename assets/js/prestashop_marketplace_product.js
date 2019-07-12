@@ -251,6 +251,41 @@
             });
         });
     });
+    $(document).on('bs.update.presta.product.feature', function () {
+
+
+    products='';
+
+
+        let bsModal = new $.bsModal('Allineamento Dettagli', {
+            body: `Allineamento Dettaglio Prodotti da Pickyshop a Iwes`
+        });
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                products: products,
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/PrestashopManualAlignFeatureProduct',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
 
 
     $(document).on('bs.marketplace.remove.sale', function () {
