@@ -36,6 +36,7 @@ class CPrestashopAlignProductFeature extends ACronJob
     public function run($args = null)
     {
         $this->updateFeature();
+        $this->report('Update Feature product Prestashop', 'start job Update');
     }
 
     /**
@@ -58,6 +59,7 @@ class CPrestashopAlignProductFeature extends ACronJob
             $res .= " connessione ok <br>";
         } catch (PDOException $e) {
             $res .= $e->getMessage();
+            $this->report('Update Feature product Prestashop', 'error connection Update');
         }
         // Extraxt Value from Iwes
         $productRepo = \Monkey::app()->repoFactory->create('Product');
@@ -72,7 +74,7 @@ class CPrestashopAlignProductFeature extends ACronJob
         $positionDetail = 0;
         foreach ($productDetailLabel as $productDetailLabels) {
             //insert or update Feature Ids in Prestashop with ids Detail Labels Iwes
-            $stmtUpdateFeature = $db_con->prepare("INSERT INTO ps_feature (`id`,`position`) VALUES
+            $stmtUpdateFeature = $db_con->prepare("INSERT INTO ps_feature (`id_feature`,`position`) VALUES
                                                                                       ('" . $productDetailLabels->id . "',
                                                                                        '" . $positionDetail . "') 
                                                                                        ON DUPLICATE KEY UPDATE
@@ -82,7 +84,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                                             ");
             $stmtUpdateFeature->execute();
             //Collect from Pickyshop array shop in order to populate label detail from picky
-            $stmtGetShop = $db_con->prepare("SELECT id_shop from ps_shop");
+            $stmtGetShop = $db_con->prepare("SELECT `id_shop` from ps_shop");
             $stmtGetShop->execute();
             while ($rowGetShop = $stmtGetShop->fetch(PDO::FETCH_ASSOC)) {
                 $stmtUpdateFeatureShop = $db_con->prepare("INSERT INTO ps_feature_shop (`id_feature`,`id_shop`) VALUES
@@ -205,7 +207,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_lang = 2;
                 $name = $productDetailTranslationEn->name;
                 //insert or update Value in Table
-                $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_lang_lang(`id_feature_value`,`id_lang`,`value`) VALUES
+                $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_value_lang (`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                           ('" . $id_feature_value . "',
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
@@ -243,13 +245,13 @@ class CPrestashopAlignProductFeature extends ACronJob
         }
 
 
-        $prestashopHasProductRepo=\Monkey::app()->repoFactory->create('PrestashopHasProduct');
+        $prestashopHasProductRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $phpC = \Monkey::app()->repoFactory->create('ProductSheetActual')->findAll();
         foreach ($phpC as $php) {
-            $findPrestaId=$prestashopHasProductRepo->findOneBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
-            $prestaId=$findPrestaId->prestaId;
-            $productId=$php->productId;
-            $productVariantId=$php->productVariantId;
+            $findPrestaId = $prestashopHasProductRepo->findOneBy(['productId' => $php->productId, 'productVariantId' => $php->productVariantId]);
+            $prestaId = $findPrestaId->prestaId;
+            $productId = $php->productId;
+            $productVariantId = $php->productVariantId;
             $stmtUpdateFeatureProduct = $db_con->prepare("INSERT INTO ps_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES
                                                                                         ('" . $php->productDetailLabelId . "',
                                                                                         '" . $prestaId . "',
@@ -259,13 +261,10 @@ class CPrestashopAlignProductFeature extends ACronJob
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
-                $stmtUpdateFeatureProduct->execute();
+            $stmtUpdateFeatureProduct->execute();
 
 
-
-
-
-
-        $this->report('Update Feature product Prestashop', 'End Update');
+            $this->report('Update Feature product Prestashop', 'End Update');
+        }
     }
 }
