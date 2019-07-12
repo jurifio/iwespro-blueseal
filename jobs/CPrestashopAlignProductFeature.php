@@ -75,11 +75,11 @@ class CPrestashopAlignProductFeature extends ACronJob
         foreach ($productDetailLabel as $productDetailLabels) {
             //insert or update Feature Ids in Prestashop with ids Detail Labels Iwes
             $stmtUpdateFeature = $db_con->prepare("INSERT INTO ps_feature (`id_feature`,`position`) VALUES
-                                                                                      (" . $productDetailLabels->id . ",
-                                                                                       " . $positionDetail . ") 
+                                                                                      ( '" . $productDetailLabels->id . "',
+                                                                                       '" . $positionDetail . "')
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                       (" . $productDetailLabels->id . ",
-                                                                                       " . $positionDetail . ")
+                                                                                       '" . $productDetailLabels->id . "',
+                                                                                       '" . $positionDetail . "')
 
                                             ");
             $stmtUpdateFeature->execute();
@@ -88,11 +88,11 @@ class CPrestashopAlignProductFeature extends ACronJob
             $stmtGetShop->execute();
             while ($rowGetShop = $stmtGetShop->fetch(PDO::FETCH_ASSOC)) {
                 $stmtUpdateFeatureShop = $db_con->prepare("INSERT INTO ps_feature_shop (`id_feature`,`id_shop`) VALUES
-                                                                                      (" . $productDetailLabels->id . ",
-                                                                                       " . $rowGetShop['id_shop'] . ") 
+                                                                                      ('" . $productDetailLabels->id . "',
+                                                                                       '" . $rowGetShop['id_shop'] . "')
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                       (" . $productDetailLabels->id . ",
-                                                                                       " . $rowGetShop['id_shop'] . ")
+                                                                                       '" . $productDetailLabels->id . "',
+                                                                                       '" . $rowGetShop['id_shop'] . "')
 
                                             ");
                 $stmtUpdateFeatureShop->execute();
@@ -107,12 +107,12 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailLabelTranslationIt->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangIt = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        (" . $id_feature . ",
-                                                                                        " . $id_lang . ",
+                                                                                        ( '" . $id_feature . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature . ",
-                                                                                        " . $id_lang . ",
+                                                                                       '" . $id_feature . "',
+                                                                                       '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureLangIt->execute();
@@ -127,12 +127,12 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailLabelTranslationEn->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangEn = $db_con->prepare("INSERT INTO ps_feature_lang (`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        (" . $id_feature . ",
-                                                                                        " . $id_lang . ",
+                                                                                        ('" . $id_feature . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature . ",
-                                                                                        " . $id_lang . ",
+                                                                                       " . $id_feature . ",
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureLangEn->execute();
@@ -149,12 +149,12 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailLabelTranslationDe->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangDe = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
-                                                                                        (" . $id_feature . ",
-                                                                                        " . $id_lang . ",
+                                                                                        ('" . $id_feature . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature . ",
-                                                                                        " . $id_lang . ",
+                                                                                       '" . $id_feature . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureLangDe->execute();
@@ -167,11 +167,11 @@ class CPrestashopAlignProductFeature extends ACronJob
         foreach ($productDetail as $productDetails) {
             //insert or update Feature Value Ids in Prestashop with ids Detail Iwes
             $stmtUpdateFeatureValue = $db_con->prepare("INSERT INTO ps_feature_value (`id_feature_value`,`id_feature`,`custom`) VALUES
-                                                                                      (" . $productDetails->id . ",
+                                                                                      ('" . $productDetails->id . "',
                                                                                        1 ,
                                                                                        '0') 
                                                                                        ON DUPLICATE KEY UPDATE
-                                                                                        (" . $productDetails->id . ",
+                                                                                        '" . $productDetails->id . "',
                                                                                        1 ,
                                                                                        '0')
 
@@ -188,11 +188,11 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailTranslationIt->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangIt = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                        (" . $id_feature_value . ",
-                                                                                        " . $id_lang . ",
+                                                                                        ('" . $id_feature_value . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature_value . ",
+                                                                                       '" . $id_feature_value . "',
                                                                                         '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
@@ -208,12 +208,12 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailTranslationEn->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_value_lang (`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                          (" . $id_feature_value . ",
-                                                                                        " . $id_lang . ",
+                                                                                      ('" . $id_feature_value . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature_value . ",
-                                                                                        " . $id_lang . ",
+                                                                                       '" . $id_feature_value . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureValueLangEn->execute();
@@ -230,12 +230,12 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $name = $productDetailTranslationDe->name;
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangDe = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
-                                                                                          (" . $id_feature_value . ",
-                                                                                        " . $id_lang . ",
+                                                                                       ('" . $id_feature_value . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature_value . ",
-                                                                                        " . $id_lang . ",
+                                                                                       '" . $id_feature_value . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
                 $stmtUpdateFeatureValueLangDe->execute();
@@ -253,12 +253,12 @@ class CPrestashopAlignProductFeature extends ACronJob
             $productId = $php->productId;
             $productVariantId = $php->productVariantId;
             $stmtUpdateFeatureProduct = $db_con->prepare("INSERT INTO ps_feature_product (`id_feature`,`id_product`,`id_feature_value`) VALUES
-                                                                                        (" . $php->productDetailLabelId . ",
-                                                                                        " . $prestaId . ",
+                                                                                        ('" . $php->productDetailLabelId . "',
+                                                                                       '" . $prestaId . "',
                                                                                         '" . $php->productDetailId . "')
                                                                                         ON DUPLICATE KEY UPDATE
-                                                                                       (" . $id_feature_value . ",
-                                                                                        " . $id_lang . ",
+                                                                                       '" . $id_feature_value . "',
+                                                                                        '" . $id_lang . "',
                                                                                         '" . $name . "')
   ");
             $stmtUpdateFeatureProduct->execute();
