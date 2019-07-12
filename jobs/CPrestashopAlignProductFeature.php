@@ -101,7 +101,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_feature = $productDetailLabels->id;
                 $id_lang = 1;
                 $name = $productDetailLabelTranslationIt->name;
-                str_replace("'","''",$name);
+                str_replace("'"," ",$name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangIt = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
                                                                                         ( '" . $id_feature . "',
@@ -121,7 +121,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_feature = $productDetailLabels->id;
                 $id_lang = 2;
                 $name = $productDetailLabelTranslationEn->name;
-                str_replace("'","''",$name);
+                str_replace("'"," ",$name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangEn = $db_con->prepare("INSERT INTO ps_feature_lang (`id_feature`,`id_lang`,`name`) VALUES
                                                                                          ( '" . $id_feature . "',
@@ -143,7 +143,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_feature = $productDetailLabels->id;
                 $id_lang = 3;
                 $name = $productDetailLabelTranslationDe->name;
-                str_replace("'","''",$name);
+                str_replace("'"," ",$name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureLangDe = $db_con->prepare("INSERT INTO ps_feature_lang(`id_feature`,`id_lang`,`name`) VALUES
                                                                                        ( '" . $id_feature . "',
@@ -180,7 +180,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_feature_value = $productDetails->id;
                 $id_lang = 1;
                 $name = $productDetailTranslationIt->name;
-                str_replace("'","''",$name);
+                str_replace("'"," ",$name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangIt = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                         ('" . $id_feature_value . "',
@@ -200,7 +200,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_feature_value = $productDetails->id;
                 $id_lang = 2;
                 $name = $productDetailTranslationEn->name;
-                str_replace("'","''",$name);
+                str_replace("'"," ",$name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangEn = $db_con->prepare("INSERT INTO ps_feature_value_lang (`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                         ('" . $id_feature_value . "',
@@ -222,7 +222,7 @@ class CPrestashopAlignProductFeature extends ACronJob
                 $id_feature_value = $productDetails->id;
                 $id_lang = 3;
                 $name = $productDetailTranslationDe->name;
-                str_replace("'","''",$name);
+                str_replace("'"," ",$name);
                 //insert or update Value in Table
                 $stmtUpdateFeatureValueLangDe = $db_con->prepare("INSERT INTO ps_feature_value_lang(`id_feature_value`,`id_lang`,`value`) VALUES
                                                                                        ('" . $id_feature_value . "',
