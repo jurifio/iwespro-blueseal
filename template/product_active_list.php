@@ -171,6 +171,14 @@
             data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Lista Prestashop">
+        <bs-toolbar-button
+                data-remote="bs.insert.product.prestashop"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.sku.insert.ean"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
