@@ -30,8 +30,9 @@ class CProductEanListAjaxController extends AAjaxController
     {
         //inserita modifica per conteggio ean disponibili
         $sql = "SELECT pe.id as id, 
-                     (select count(*)where ean is null ) as countFreeEan,
-                        pe.ean as ean,  
+                     (select count(ean)  as countFreeEan from ProductEan pc where pc.ean is null ) as countFreeEan ,
+                        pe.ean as ean, 
+                        if(pe.productId is null,'libero','occupato') as stato,
                         pe.productId as productId,
                         pe.productVariantId as productVariantId,
                         pe.productSizeId as productSizeId,

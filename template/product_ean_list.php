@@ -49,6 +49,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ean13
                                 </th>
+                                <th data-slug="stato"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stato
+                                </th>
                                 <th data-slug="productId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id Prodotto
