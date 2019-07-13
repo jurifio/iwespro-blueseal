@@ -43,8 +43,8 @@ class CProductEanListAjaxController extends AAjaxController
                         p.qty,
                         ps.name as productStatus
                         from ProductEan pe
-                        JOIN Product p ON p.id = pe.productId AND p.productVariantId = pe.productVariantId
-                        JOIN ProductStatus ps ON p.productStatusId = ps.id
+                       left outer JOIN Product p ON p.id = pe.productId AND p.productVariantId = pe.productVariantId
+                       left outer  JOIN ProductStatus ps ON p.productStatusId = ps.id
                     ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
