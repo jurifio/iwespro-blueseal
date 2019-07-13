@@ -49,9 +49,9 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ean13
                                 </th>
-                                <th data-slug="stato"
+                                <th data-slug="used"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stato
+                                    data-orderable="true" class="center">Usato
                                 </th>
                                 <th data-slug="productId"
                                     data-searchable="true"
@@ -65,10 +65,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Id Taglia
                                 </th>
-                                <th data-slug="used"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Usato
-                                </th>
+
                                 <th data-slug="usedForParent"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Usato per Prodotto Padre
