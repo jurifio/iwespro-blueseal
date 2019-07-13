@@ -28,7 +28,9 @@ class CProductEanListAjaxController extends AAjaxController
 {
     public function get()
     {
+        //inserita modifica per conteggio ean disponibili
         $sql = "SELECT pe.id as id, 
+                     (select count(*)where ean is null ) as countFreeEan,
                         pe.ean as ean,  
                         pe.productId as productId,
                         pe.productVariantId as productVariantId,
@@ -47,6 +49,7 @@ class CProductEanListAjaxController extends AAjaxController
                        left outer  JOIN ProductStatus ps ON p.productStatusId = ps.id
                     ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
 
 
         $datatable->doAllTheThings(true);

@@ -41,6 +41,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice Prodotto
                                 </th>
+                                <th data-slug="countFreeEan"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Ean Liberi
+                                </th>
                                 <th data-slug="ean"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ean13
