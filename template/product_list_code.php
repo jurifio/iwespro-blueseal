@@ -70,10 +70,7 @@
                                     data-orderable="true" class="center">CPF
                                 </th>
                                 <!--<th class="center">Gruppo Taglie</th>-->
-                                <th data-slug="details"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Dettagli
-                                </th>
+
                                 <th data-slug="dummy"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Dummy
