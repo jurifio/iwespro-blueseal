@@ -667,11 +667,13 @@ class CPrestashopProduct extends APrestashopMarketplace
     public function updateProductQuantity($productId, $sizeId, $newQty = null, $differential = null, $shops)
     {
 
-        if (is_null($newQty) && is_null($differential)) return false;
+            if (is_null($newQty) && is_null($differential)) return false;
+
 
         foreach ($shops as $shopId) {
-            $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
+            $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null,$shopId);
             $productXmlChildren = $productXmlFather->children()->children();
+
 
             foreach ($productXmlChildren->associations->combinations->combination as $association) {
                 $combinationXmlFather = $this->getDataFromResource($this::COMBINATION_RESOURCE, (int)$association->id, [], [], null, $shopId);
@@ -698,18 +700,34 @@ class CPrestashopProduct extends APrestashopMarketplace
                     } else if (!is_null($differential)) {
                         $stockAvailableXmlChildren->quantity = $stockAvailableXmlChildren->quantity + $differential;
                     }
-                    $productXmlChildren->active = 1;
+
                     try {
                         $opt['resource'] = $this::STOCK_AVAILABLES_RESOURCE;
                         $opt['putXml'] = $stockAvailableXmlFather->asXML();
                         $opt['id'] = $stockAvailableId;
                         $this->ws->edit($opt);
+
                     } catch (\PrestaShopWebserviceException $e) {
                         \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
                         return false;
                     }
                 }
 
+            }
+        }
+        foreach ($shops as $shopIds) {
+
+            $productXmlFatherProduct = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopIds);
+            $productXmlProduct = $productXmlFatherProduct->children()->children();
+            $productXmlProduct->active = 1;
+            try {
+                $opt['resource'] = $this::PRODUCT_RESOURCE;
+                $opt['putXml'] = $productXmlFatherProduct->asXML();
+                $opt['id'] = $productId;
+                $opt['active'] = 1;
+                $this->ws->edit($opt);
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while updating activation', $e->getMessage());
             }
         }
 
@@ -982,6 +1000,5 @@ class CPrestashopProduct extends APrestashopMarketplace
         }
         return true;
     }
-
 
 }
