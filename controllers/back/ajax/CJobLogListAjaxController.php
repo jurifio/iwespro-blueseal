@@ -30,7 +30,7 @@ class CJobLogListAjaxController extends AAjaxController
                     jl.subject as subject,
                     jl.content as content,
                     `jl`.`timestamp` as `timestamp`
-                FROM Job j join JobLog jl on jl.jobId =j.id WHERE `timestamp`>= CURDATE() - INTERVAL 3 DAY AND `timestamp`> <= CURDATE()";
+                FROM Job j join JobLog jl on jl.jobId =j.id WHERE `timestamp`>= CURDATE() - INTERVAL 3 DAY AND `timestamp` <= CURDATE()";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
