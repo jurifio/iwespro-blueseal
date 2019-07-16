@@ -40,7 +40,7 @@ class CManageProductSkuEan extends AAjaxController
         foreach ($psC as $ps){
             $r[$c]['sizeId'] = $ps->productSizeId;
             $r[$c]['sizeName'] = $ps->productSize->name;
-            $r[$c]['ean'] = $ps->ean;
+        $r[$c]['ean'] = $ps->ean;
             $c++;
         }
 
@@ -66,5 +66,38 @@ class CManageProductSkuEan extends AAjaxController
         }
 
         return "EAN inseriti";
+    }
+    public function put()
+    {
+        $p = \Monkey::app()->router->request()->getRequestData('p');
+        $sizes = \Monkey::app()->router->request()->getRequestData('size');
+
+        $pId = explode('-', $p)[0];
+        $pVId = explode('-', $p)[1];
+
+        /** @var CProductSkuRepo $pskRepo */
+        $pskRepo = \Monkey::app()->repoFactory->create('ProductSku');
+        $peanRepo = \Monkey::app()->repoFactory->create('ProductEan');
+
+        foreach ($sizes as $key => $val) {
+            /** @var CProductSku $psk */
+            $psk = $pskRepo->findOneBy(['productId' => $pId, 'productVariantId' => $pVId, 'productSizeId' => $val['size']]);
+            $ean = $peanRepo->findOneBy(['used' => 0]);
+            if ($ean != null) {
+                $psk->ean = $ean->ean;
+
+                //$psk->ean = $val["val"] == '' ? null : $val['val'];
+                $psk->update();
+                $ean->productId = $pId;
+                $ean->productVariantId = $pVId;
+                $ean->productSizeId = $val['size'];
+                $ean->used = 1;
+                $ean->brandAssociate = $psk->product->productBrandId;
+                $ean->shopId = $psk->shopId;
+                $ean->update();
+            }
+
+            return "EAN inseriti";
+        }
     }
 }

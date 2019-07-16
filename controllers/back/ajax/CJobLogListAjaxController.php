@@ -16,37 +16,21 @@ use bamboo\blueseal\business\CDataTables;
  * @date $date
  * @since 1.0
  */
-class CJobListAjaxController extends AAjaxController
+class CJobLogListAjaxController extends AAjaxController
 {
     public function get()
     {
         $sql = "SELECT
-                    id,
-                    scope,
-                    name,
-                    protocol,
-                    host,
-                    command,
-                    defaultArgs,
-                    if(isActive = 1, 'sì','no') as isActive,
-                    if(isRunning = 1, 'sì','no') as isRunning,
-                    if(manualStart = 1, 'sì','no') as manualStart,
-                    if(manualKill = 1, 'sì','no') as manualKill,
-                    secondsToLive,
-                    username,
-                    password,
-                    minute,
-                    hour,
-                    mday,
-                    month,
-                    wday,
-                    logFile,
-                    notificationSetup,
-                    notificationEmail,
-                    lastExecution,
-                    lastUpdate,
-                    isDebug
-                FROM Job ";
+                    j.id as id,
+                    jl.id as  `idtransaction`,
+                    j.scope as scope,
+                    j.name as name,
+                    j.lastExecution as lastExecution,
+                    jl.severity as typeReport,
+                    jl.subject as subject,
+                    jl.content as content,
+                    jl.timestamp as timestamp
+                FROM Job j join JobLog jl on jl.jobId =j.id WHERE lastExecution >= CURDATE() - INTERVAL 3 DAY AND lastExecution <= CURDATE()";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -64,9 +48,7 @@ class CJobListAjaxController extends AAjaxController
             $row = $raw;
             $job = \Monkey::app()->repoFactory->create('Job')->findOne([$raw['id']]);
             $row["DT_RowId"] = $job->printId();
-            $row["DT_RowClass"] = $job->isActive ? "" : "grey";
-            $row["DT_RowClass"] = $job->manualStart ? "yellow" : $row["DT_RowClass"];
-            $row["DT_RowClass"] = $job->isRunning ? "green" : $row["DT_RowClass"];
+
 
             $response['data'][] = $row;
         }

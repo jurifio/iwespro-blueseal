@@ -2276,6 +2276,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/jobs/log(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobLogListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/traduzioni/contenuti(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CContentTranslationController"
