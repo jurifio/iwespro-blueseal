@@ -698,7 +698,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                     } else if (!is_null($differential)) {
                         $stockAvailableXmlChildren->quantity = $stockAvailableXmlChildren->quantity + $differential;
                     }
-
+                    $productXmlChildren->active = 1;
                     try {
                         $opt['resource'] = $this::STOCK_AVAILABLES_RESOURCE;
                         $opt['putXml'] = $stockAvailableXmlFather->asXML();
