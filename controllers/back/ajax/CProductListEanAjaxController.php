@@ -31,8 +31,6 @@ class CProductListEanAjaxController extends AAjaxController
                   concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
                   pv.description                                                                                    AS colorNameManufacturer,
                   concat(s.id, '-', s.name)                                                                     AS shop,
-                  psk.barcode                                                                                   AS barcode,
-                  psk.ean                                                                                       AS ean,
                   concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
                   pb.name                                                                                           AS brand,
                   ps.name                                                                                           AS status,
@@ -41,7 +39,9 @@ class CProductListEanAjaxController extends AAjaxController
                   p.creationDate                                                                                    AS creationDate,
                   p.sortingPriorityId                                                                               AS productPriority,
                   s.id                                                                                              AS shopId,
-                  s.name                                                                                            AS row_shop,    
+                  s.name                                                                                            AS row_shop,
+                  concat(phs.shootingId)                                                             AS shooting,
+                  concat(doc.number)                                                             AS doc_number,
                   (SELECT count(*)
                    FROM ShopHasProduct
                    WHERE (ShopHasProduct.productId, ShopHasProduct.productVariantId) = (p.id, p.productVariantId))      AS shops,
@@ -127,6 +127,7 @@ class CProductListEanAjaxController extends AAjaxController
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
+        $eanRepo=\Monkey::app()->repoFactory->create('ProductEan');
 
         /** @var CDocumentRepo $docRepo */
         $docRepo = \Monkey::app()->repoFactory->create('Document');
@@ -175,9 +176,25 @@ class CProductListEanAjaxController extends AAjaxController
             $shopz = [];
             $mup = [];
             $isOnSale = $val->isOnSale();
+            $barcode="";
+            $ean="";
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
                 $iShop = $sku->shop->name;
+                $barcode.="size:".$sku->productSize->name."-Barcode:".$sku->barcode."<br>";
+                $eanProductSku=$sku->ean;
+                if($eanProductSku!=null){
+                        $ean = "size:" . $sku->productSize->name . "-Ean da Produttore:" . $sku->ean . "<br>";
+                }else {
+                    $eanProductEan = $eanRepo->findOneBy(['productId' => $sku->productId, 'productVariantId' => $sku->productVariantId, 'productSizeId' => $sku->productSizeId]);
+                    if ($eanProductEan != null) {
+                        $ean = "size:" . $sku->productSize->name . "-Ean da Pickyshop:" . $eanProductEan->ean . "<br>";
+                    } else {
+                        $ean = "size:" . $sku->productSize->name . "-Ean: Non presente per la taglia<br>";
+                    }
+                }
+
+
                 if (!in_array($iShop, $shopz)) {
                     $shopz[] = $iShop;
 
@@ -196,10 +213,11 @@ class CProductListEanAjaxController extends AAjaxController
             }
             $row['hasQty'] = $qty;
             $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
-
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
-            $row["row_shop"] = $val->getShops('|', true);
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
+            $row['barcode']=$barcode;
+            $row['ean']=$ean;
+
 
 
             //$row['mup'] = '<span class="small">';

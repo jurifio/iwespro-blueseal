@@ -154,11 +154,7 @@
                                     data-orderable="true"
                                     class="center">Prezzo Attivo
                                 </th>
-                                <th data-slug="shops"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Numero di Shops
-                                </th>
+
                                 <th data-slug="friendPrices"
                                     data-searchable="false"
                                     data-orderable="false"
