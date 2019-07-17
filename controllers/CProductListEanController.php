@@ -29,6 +29,7 @@ class CProductListEanController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_list_code.php');
 
+
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $bluesealBase . "prodotti";

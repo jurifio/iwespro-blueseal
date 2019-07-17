@@ -11,6 +11,7 @@
     <?php include "parts/header.php"; ?>
     <?php include "parts/operations.php" ?>
 
+
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
             <div class="container-fluid container-fixed-lg bg-white">
@@ -19,6 +20,8 @@
 
                     </div>
                 </div>
+
+
             </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
@@ -40,6 +43,10 @@
                                 <th data-slug="barcode"
                                     data-searchable="true"
                                     data-orderable="true" class="center">BarCode
+                                </th>
+                                <th data-slug="liberi"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">ean Liberi
                                 </th>
                                 <th data-slug="ean"
                                     data-searchable="true"

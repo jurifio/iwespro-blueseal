@@ -68,7 +68,7 @@ class CPrestashopUpdateProductQuantity extends ACronJob
                 }else{
                     $productPrice=$prices->price;
                 }
-               // $shop=$prices->shopId;
+                // $shop=$prices->shopId;
 
             }
 
@@ -80,15 +80,15 @@ class CPrestashopUpdateProductQuantity extends ACronJob
             }
 
             $shopsRepo=\Monkey::app()->repoFactory->create('prestashopHasProductHasMarketplaceHasShop')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
-           // $shops = $php->getShopsForProduct();
+            // $shops = $php->getShopsForProduct();
             $shops=[];
             foreach($shopsRepo as $shopRepos) {
                 $shops[]= $shopRepos->marketplaceHasShopId;
-                }
+            }
 
 
             foreach ($sizes as $size => $qty){
-                $this->report('Update product qty and price', print_r($shops));
+
                 $prestashopProduct->updateProductQuantity($php->prestaId, $size,  $qty,  null,  $shops);
             }
 

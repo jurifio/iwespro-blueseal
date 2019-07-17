@@ -84,6 +84,7 @@ class CProductListEanAjaxController extends AAjaxController
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
+            
                   LEFT JOIN PrestashopHasProduct prHp ON p.id = prHp.productId AND p.productVariantId = prHp.productVariantId
                   JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
@@ -105,7 +106,7 @@ class CProductListEanAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId";
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId ";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -212,6 +213,12 @@ class CProductListEanAjaxController extends AAjaxController
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
             $row['barcode']=$barcode;
             $row['ean']=$ean;
+            $liberiean=\Monkey::app()->repoFactory->create('ProductEan')->findBy(['used'=>0]);
+            $i=0;
+            foreach($liberiean as $liberi){
+                $i=$i+1;
+            }
+            $row['liberi']=$i;
 
 
 

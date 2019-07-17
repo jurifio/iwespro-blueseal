@@ -724,6 +724,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['resource'] = $this::PRODUCT_RESOURCE;
                 $opt['putXml'] = $productXmlFatherProduct->asXML();
                 $opt['id'] = $productId;
+                $opt['id_shop']=$shopIds;
                 $opt['active'] = 1;
                 $this->ws->edit($opt);
             } catch (\Throwable $e) {
