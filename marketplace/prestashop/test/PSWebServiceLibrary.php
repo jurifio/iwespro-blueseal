@@ -115,7 +115,7 @@ class PrestaShopWebserviceTest
 		$session = curl_init();
         $request_host   = $url;
         $headers = array("Host: ".$request_host);
-        $request_url    = 'https://192.168.1.245';
+        $request_url    = 'https://192.168.1.230';
 
         curl_setopt($session, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($session, CURLOPT_URL, $request_url .$urlRest);
