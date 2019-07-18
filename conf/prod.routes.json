@@ -813,6 +813,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/brand-gestione-ean(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandHasEanListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "DELETE",
+                "PUT",
+                "POST"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/brand/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandAddController"
