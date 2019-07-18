@@ -54,8 +54,8 @@ class CAssignEanToMarketPlaceProductAssociate extends AAjaxController
 					if(empty($productSkus->ean)){
                         $eanFreeSkus=\Monkey::app()->repoFactory->create('ProductEan')->findOneBy(['used'=> 0]);
                         $eanforVariant=$eanFreeSkus->ean;
-                        $eanFreeSkus->productId=$productSkus->productid;
-                        $eanFreeSkus->productVariantiId=$productSkus->productVariantId;
+                        $eanFreeSkus->productId=$productSkus->productId;
+                        $eanFreeSkus->productVariantId=$productSkus->productVariantId;
                         $eanFreeSkus->productSizeId=$productSkus->productSizeId;
                         $eanFreeSkus->used=1;
                         $eanFreeSkus->brandAssociate=$brandAssociate;
