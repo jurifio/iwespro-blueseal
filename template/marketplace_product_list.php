@@ -30,9 +30,7 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center"
                                         data-default-order="desc">Codice</th>
-                                    <th data-slug="hasEan"
-                                        data-searchable="true"
-                                        data-orderable="true" class="center">Ha Ean</th>
+
                                     <th data-slug="shop"
                                         data-searchable="true"
                                         data-orderable="true" class="center">Shop</th>

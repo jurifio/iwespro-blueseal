@@ -40,7 +40,15 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice di cui Ean Liberi <?php echo $liberiean;?>
                                 </th>
+                                <th data-slug="barcode"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">barcode
+                                </th>
 
+                                <th data-slug="ean"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Ean
+                                </th>-->
                                 <th data-slug="shop"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop
@@ -71,18 +79,12 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Dummy
                                 </th>
-                                <th data-slug="hasPhotos"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Ha Foto
-                                </th>
+
                                 <th data-slug="productName"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Nome
                                 </th>
-                                <th data-slug="hasDetails"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Ha Dett.
-                                </th>
+
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand
@@ -91,15 +93,8 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Grup.Taglie Pubblico
                                 </th>
-                                <th data-slug="categoryId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center categoryFilterType">Categorie
-                                </th>
-                                <th data-slug="tags"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-visible="false" class="center">Tags
-                                </th>
+
+
                                 <th data-slug="status"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -122,21 +117,8 @@
                                     data-orderable="true"
                                     data-default-order="desc" class="center dataFilterType">Creazione
                                 </th>
-                                <th data-slug="productPriority"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc" class="center">Priorità Prodotto
-                                </th>
-                                <th data-slug="description"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Descr.
-                                </th>
-                                <th data-slug="marketplaces"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Marketplaces
-                                </th>
+
+
                                 <th data-slug="stock"
                                     data-searchable="true"
                                     data-orderable="false"
@@ -148,16 +130,7 @@
                                     class="center">Prezzo Attivo
                                 </th>
 
-                                <th data-slug="friendPrices"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Prezzo pieno
-                                </th>
-                                <th data-slug="friendValues"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Costo al friend
-                                </th>
+
                                 <th data-slug="friendSalePrices"
                                     data-searchable="false"
                                     data-orderable="false"
