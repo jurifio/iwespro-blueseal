@@ -1,43 +1,41 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
-use bamboo\core\jobs\ACronJob;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
-use bamboo\domain\entities\CProductPublicSku;
-use bamboo\domain\entities\CProductEan;
-use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductBrand;
-use bamboo\domain\entities\CShop;
+use bamboo\domain\entities\CProductEan;
+use bamboo\domain\entities\CProductHasTag;
+use bamboo\domain\entities\CProductSku;
+use bamboo\domain\entities\CTag;
+use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
 
-class CAssignEanToMarketPlaceProductAssociateJob extends ACronJob
+/**
+ * Class CAssignEanToMarketPlaceProductAssociateAjaxController
+ * @package bamboo\controllers\back\ajax
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 19/07/2019
+ * @since 1.0
+ */
+class CAssignEanToMarketPlaceProductAssociateAjaxController extends AAjaxController
 {
-
     /**
-     * @param null $args
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     * @return bool
      */
-    public function run($args = null)
+    public function post()
     {
-        $this->assignEanToProduct();
-    }
 
-    /**
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    private function assignEanToProduct()
-    {
         /* definizione delle repo */
         /** @var CProductBrand $productBrandRepo */
         $productBrandRepo = \Monkey::app()->repoFactory->create('ProductBrand');
@@ -138,6 +136,8 @@ class CAssignEanToMarketPlaceProductAssociateJob extends ACronJob
             }
         }
 
-        $this->report('assign product  orphan ean for marketplace ', 'End Update');
+        return true;
     }
+
+
 }

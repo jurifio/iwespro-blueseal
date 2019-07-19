@@ -31,6 +31,7 @@ class CProductBrandHasEanListAjaxController extends AAjaxController
         //inserita modifica per conteggio ean disponibili
         $sql = "SELECT pb.id as id, 
                        pb.name as name,
+                        pb.hasAggregator as hasAggregatorEan,
                        pb.hasMarketplaceRights as hasMarketplaceRights,
                        pb.hasExternalEan as hasExternalEan
                         from ProductBrand pb 
@@ -51,6 +52,7 @@ class CProductBrandHasEanListAjaxController extends AAjaxController
             $row['name']="<b>".$row['name']."</b>";
             ($row['hasMarketplaceRights']==0)? $row['hasMarketplaceRights']='No' : $row['hasMarketplaceRights']='Si';
             ($row['hasExternalEan']==0)? $row['hasExternalEan']='No' : $row['hasExternalEan']='Si';
+            ($row['hasAggregatorEan']==0)? $row['hasAggregatorEan']='No' : $row['hasAggregatorEan']='Si';
 
             $datatable->setResponseDataSetRow($key,$row);
 

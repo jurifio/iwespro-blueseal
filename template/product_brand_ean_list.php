@@ -41,9 +41,13 @@
                                 <th data-slug="hasMarketplaceRights"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Diritto a Pubblicare su MarketPlace</th>
+                                <th data-slug="hasAggregatorEan"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Diritto a Pubblicare sugli Aggregatori</th>
                                 <th data-slug="hasExternalEan"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Utilizza Ean Iwes</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -60,10 +64,13 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
 
-    <bs-toolbar-group data-group-label="Gestione Aggiornamenti ">
+    <bs-toolbar-group data-group-label="Gestione Codici per brand ">
 
         <bs-toolbar-button
                 data-remote="bs.lists.manage.brandean"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.assign.brandean"
         ></bs-toolbar-button>
         </bs-toolbar-group>
 </bs-toolbar>

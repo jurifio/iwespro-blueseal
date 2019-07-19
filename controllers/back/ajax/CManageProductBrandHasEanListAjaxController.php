@@ -35,13 +35,16 @@ class CManageProductBrandHasEanListAjaxController extends AAjaxController
         $brands = \Monkey::app()->router->request()->getRequestData('brand');
         $hasMarketplaceRights = \Monkey::app()->router->request()->getRequestData('hasMarketplaceRight');
         $hasExternalEan = \Monkey::app()->router->request()->getRequestData('hasExternal');
+        $hasAggregator =\Monkey::app()->router->request()->getRequestData('hasAggregator');
 
         /** @var CProductBrand $productBrandRepo */
         $productBrandRepo=\Monkey::app()->repoFactory->create('ProductBrand');
        foreach ($brands as $brand){
+           /** @var CProductBrand $productBrand */
         $productBrand=$productBrandRepo->findOneBy(['id'=>$brand]);
         $productBrand->hasMarketplaceRights=$hasMarketplaceRights;
         $productBrand->hasExternalEan=$hasExternalEan;
+        $productBrand->hasAggregator=$hasAggregator;
         $productBrand->update();
        }
 

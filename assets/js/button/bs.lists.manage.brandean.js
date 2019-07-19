@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-lists-manage-brandean",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Gestisci i brand per nome",
+    title: "Gestisci le strategie e i codici Ean  per brand ",
     placement: "bottom",
     toggle: "modal"
 };
@@ -30,12 +30,19 @@ $(document).on('bs-lists-manage-brandean', function (e, element, button) {
 
 
         let bsModal = new $.bsModal("Gestione", {
-            body: `<p>Gestione Brand per associazione a Marketplace e Ean</p>
+            body: `<p>Gestisci le strategie e i codici Ean  per brand</p>
                 <div class="form-group form-group-default required">
                  <label for="hasMarketplaceRights">Inserisci su  MarketPlace Prestashop </label>
                  <select id="hasMarketplaceRights" name="hasMarketplaceRights">
                  <option disabled selected value>Seleziona un'opzione</option>
                 <option value="1">Si</option>
+                <option value="0">No</option>
+                 </select> 
+                 <div class="form-group form-group-default required">
+                 <label for="hasAggregator">Inserisci su  Aggregatori </label>
+                 <select id="hasAggregator" name="hasAggregator">
+                 <option disabled selected value>Seleziona un'opzione</option>
+                <option selected="selected" value="1">Si</option>
                 <option value="0">No</option>
                  </select> 
                  </div><div id="otherOptions"></div>`
@@ -47,13 +54,13 @@ $(document).on('bs-lists-manage-brandean', function (e, element, button) {
 
             if (hasMarketplaceRights === '1') {
                 html = `<div class="form-group form-group-default required">
-                 <label for="hasExternalEan">Assegna Ean </label>
-                 <select id="hasExternalEan" name="hasExternalEan">
-                 <option disabled selected value>Seleziona un'opzione</option>
+                    <label for="hasExternalEan">Assegna Ean </label>
+                <select id="hasExternalEan" name="hasExternalEan">
+                    <option disabled selected value>Seleziona un'opzione</option>
                 <option value="1" selected="selected">Si</option>
-                <option value="0">No</option>
-                 </select> 
-                 </div>`
+                    <option value="0">No</option>
+                    </select> 
+                    </div>`
             } else {
                 html = `<div class="form-group form-group-default required">
                  <label for="hasExternalEan">Assegna Ean</label>
@@ -81,6 +88,7 @@ $(document).on('bs-lists-manage-brandean', function (e, element, button) {
                 data: {
                     brand: brands,
                     hasMarketplaceRight: $('#hasMarketplaceRights').val(),
+                    hasAggregator: $('#hasAggregator').val(),
                     hasExternal: $('#hasExternalEan').val()
                 }
             }).done(function (res) {
