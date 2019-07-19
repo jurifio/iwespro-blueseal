@@ -3,6 +3,8 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductEan;
+use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\repositories\CDocumentRepo;
 
@@ -129,7 +131,10 @@ class CProductListEanAjaxController extends AAjaxController
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
-        $eanRepo=\Monkey::app()->repoFactory->create('ProductEan');
+        /** @var CProductSku $productSkuRepo */
+        $productSkuRepo=\Monkey::app()->repoFactory->create('ProductSku');
+        /** @var CProductEan $productEanRepo */
+        $productEanRepo=\Monkey::app()->repoFactory->create('ProductEan');
 
         /** @var CDocumentRepo $docRepo */
         $docRepo = \Monkey::app()->repoFactory->create('Document');
@@ -173,23 +178,13 @@ class CProductListEanAjaxController extends AAjaxController
             $shopz = [];
             $mup = [];
             $isOnSale = $val->isOnSale();
-            $barcode="";
-            $ean="";
+
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
                 $iShop = $sku->shop->name;
-                $barcode.="size:".$sku->productSize->name."-Barcode:".$sku->barcode."<br>";
-                $eanProductSku=$sku->ean;
-                if($eanProductSku!=null){
-                        $ean = "size:" . $sku->productSize->name . "-Ean da Produttore:" . $sku->ean . "<br>";
-                }else {
-                    $eanProductEan = $eanRepo->findOneBy(['productId' => $sku->productId, 'productVariantId' => $sku->productVariantId, 'productSizeId' => $sku->productSizeId]);
-                    if ($eanProductEan != null) {
-                        $ean = "size:" . $sku->productSize->name . "-Ean da Pickyshop:" . $eanProductEan->ean . "<br>";
-                    } else {
-                        $ean = "size:" . $sku->productSize->name . "-Ean: Non presente per la taglia<br>";
-                    }
-                }
+
+
+
 
 
                 if (!in_array($iShop, $shopz)) {
@@ -208,18 +203,14 @@ class CProductListEanAjaxController extends AAjaxController
                     }
                 }
             }
+
             $row['hasQty'] = $qty;
             $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
             $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
-            $row['barcode']=$barcode;
-            $row['ean']=$ean;
-            $liberiean=\Monkey::app()->repoFactory->create('ProductEan')->findBy(['used'=>0]);
-            $i=0;
-            foreach($liberiean as $liberi){
-                $i=$i+1;
-            }
-            $row['liberi']=$i;
+           /* $row['barcode']=$barcode;
+            $row['ean']=$ean;*/
+
 
 
 
@@ -246,15 +237,8 @@ class CProductListEanAjaxController extends AAjaxController
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
             $row['processing'] = ($val->processing) ? $val->processing : '-';
 
-            $sids = "";
-            $ddtNumbers = "";
-            /** @var CShooting $singleShooting */
-            foreach ($val->shooting as $singleShooting){
-                $sids .= '<br />'.$singleShooting->id;
-                $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
-            }
-            $row["shooting"] = $sids;
-            $row["doc_number"] = $ddtNumbers;
+
+
             $row["inPrestashop"] = is_null($val->prestashopHasProduct) ? 'no' : 'si';
 
             $datatable->setResponseDataSetRow($key,$row);

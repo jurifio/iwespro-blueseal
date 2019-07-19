@@ -38,20 +38,9 @@
                             <tr>
                                 <th data-slug="code"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Codice
+                                    data-orderable="true" class="center">Codice di cui Ean Liberi <?php echo $liberiean;?>
                                 </th>
-                                <th data-slug="barcode"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">BarCode
-                                </th>
-                                <th data-slug="liberi"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">ean Liberi
-                                </th>
-                                <th data-slug="ean"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Ean
-                                </th>
+
                                 <th data-slug="shop"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop

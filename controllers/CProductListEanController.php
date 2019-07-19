@@ -29,6 +29,11 @@ class CProductListEanController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_list_code.php');
 
+        $liberiean=\Monkey::app()->repoFactory->create('ProductEan')->findBy(['used'=>0]);
+        $i=0;
+        foreach($liberiean as $liberi){
+            $i=$i+1;
+        }
 
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
@@ -83,6 +88,7 @@ class CProductListEanController extends ARestrictedAccessRootController
             'pageURL' => $pageURL,
             'prodotti' => $prodotti,
             'page' => $this->page,
+            'liberiean'=>$i,
             'sidebar' => $this->sidebar->build()
         ]);
     }
