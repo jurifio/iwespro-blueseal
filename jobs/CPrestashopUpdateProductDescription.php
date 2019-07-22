@@ -70,6 +70,12 @@ class CPrestashopUpdateProductDescription extends ACronJob
                     $descriptionTranslationIt='';
                     $descriptionTranslationEn='';
                     $descriptionTranslationDe='';
+                    $labelFeatureIt='';
+                    $labelFeatureEn='';
+                    $labelFeatureDe='';
+                    $detailFeatureIt='';
+                    $detailFeatureEn='';
+                    $detailFeatureDe='';
                     foreach ($productSheetActual as $psma) {
                             $producDetailLabelId=$psma->productDetailLabelId;
                             $productDetailId=$psma->productDetailId;
@@ -78,12 +84,18 @@ class CPrestashopUpdateProductDescription extends ACronJob
                                 foreach ($productDetailLabelTranslation as $pdlt) {
                                     if ($pdlt->langId == 1) {
                                         $labelFeatureIt = $pdlt->name;
+                                    }else{
+                                        $labelFeatureIt='';
                                     }
                                     if ($pdlt->langId == 2) {
                                         $labelFeatureEn = $pdlt->name;
+                                    }else{
+                                        $labelFeatureEn='';
                                     }
                                     if ($pdlt->langId == 3) {
                                         $labelFeatureDe = $pdlt->name;
+                                    }else{
+                                        $labelFeatureDe='';
                                     }
                                 }
                             }
@@ -92,12 +104,18 @@ class CPrestashopUpdateProductDescription extends ACronJob
                                 foreach ($productDetailTranslation as $pdt) {
                                     if ($pdt->langId == 1) {
                                         $detailFeatureIt = $pdt->name;
+                                    }else{
+                                        $detailFeatureIt='';
                                     }
                                     if ($pdt->langId == 2) {
                                         $detailFeatureEn = $pdlt->name;
+                                    }else{
+                                        $detailFeatureEn='';
                                     }
                                     if ($pdlt->langId == 3) {
                                         $detailFeatureDe = $pdlt->name;
+                                    }else{
+                                        $detailFeatureDe='';
                                     }
                                 }
                             }
