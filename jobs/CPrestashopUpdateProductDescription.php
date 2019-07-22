@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\blueseal\jobs;
 
 use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
@@ -56,7 +57,7 @@ class CPrestashopUpdateProductDescription extends ACronJob
         $db_name = "iwesPrestaDB";
         $db_user = "iwesprestashop";
         $db_pass = "X+]l&LEa]zSI";
-        $res="";
+        $res = "";
         try {
 
             $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
@@ -71,85 +72,96 @@ class CPrestashopUpdateProductDescription extends ACronJob
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         $productDetailRepo = \Monkey::app()->repoFactory->create('ProductDetail');
-        $productDetailLabelRepo =\Monkey::app()->repoFactory->create('ProductDetailLabel');
+        $productDetailLabelRepo = \Monkey::app()->repoFactory->create('ProductDetailLabel');
         $productDetailTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
-        $productDetailLabelTranslationRepo =\Monkey::app()->repoFactory->create('ProductDetailLabelTranslation');
+        $productDetailLabelTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailLabelTranslation');
 
 
         $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
-        $productInPrestashop = $phpRepo ->findAll();
+        $productInPrestashop = $phpRepo->findAll();
         foreach ($productInPrestashop as $pips) {
             if ($pips->prestaId != null) {
-                $descriptionTranslationIt='';
-                $descriptionTranslationEn='';
-                $descriptionTranslationDe='';
+                $descriptionTranslationIt = '';
+                $descriptionTranslationEn = '';
+                $descriptionTranslationDe = '';
                 /** @var CProductSheetActual $productSheetModelActual */
                 $productSheetActual = $productSheetActualRepo->findBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId]);
                 if ($productSheetActual != null) {
 
-                    $labelFeatureIt='';
-                    $labelFeatureEn='';
-                    $labelFeatureDe='';
-                    $detailFeatureIt='';
-                    $detailFeatureEn='';
-                    $detailFeatureDe='';
+                    $labelFeatureIt = '';
+                    $labelFeatureEn = '';
+                    $labelFeatureDe = '';
+                    $detailFeatureIt = '';
+                    $detailFeatureEn = '';
+                    $detailFeatureDe = '';
                     foreach ($productSheetActual as $psma) {
-                            $producDetailLabelId=$psma->productDetailLabelId;
-                            $productDetailId=$psma->productDetailId;
-                            $productDetailLabelTranslation=$productDetailLabelTranslationRepo->findBy(['productDetailLabelId'=>$producDetailLabelId]);
-                            if($productDetailLabelTranslation!=null) {
-                                foreach ($productDetailLabelTranslation as $pdlt) {
-                                    if ($pdlt->langId == 1) {
-                                        $labelFeatureIt = $pdlt->name;
-                                    }else{
-                                        $labelFeatureIt='';
-                                    }
-                                    if ($pdlt->langId == 2) {
-                                        $labelFeatureEn = $pdlt->name;
-                                    }else{
-                                        $labelFeatureEn='';
-                                    }
-                                    if ($pdlt->langId == 3) {
-                                        $labelFeatureDe = $pdlt->name;
-                                    }else{
-                                        $labelFeatureDe='';
-                                    }
+                        $producDetailLabelId = $psma->productDetailLabelId;
+                        $productDetailId = $psma->productDetailId;
+                        $productDetailLabelTranslation = $productDetailLabelTranslationRepo->findBy(['productDetailLabelId' => $producDetailLabelId]);
+                        if ($productDetailLabelTranslation != null) {
+                            foreach ($productDetailLabelTranslation as $pdlt) {
+                                if ($pdlt->langId == 1) {
+                                    $labelFeatureIt = $pdlt->name;
+                                } else {
+                                    $labelFeatureIt = '';
+                                }
+                                if ($pdlt->langId == 2) {
+                                    $labelFeatureEn = $pdlt->name;
+                                } else {
+                                    $labelFeatureEn = '';
+                                }
+                                if ($pdlt->langId == 3) {
+                                    $labelFeatureDe = $pdlt->name;
+                                } else {
+                                    $labelFeatureDe = '';
                                 }
                             }
-                        $productDetailTranslation=$productDetailTranslationRepo->findBy(['productDetailId'=>$productDetailId]);
-                            if($productDetailTranslation!=null) {
-                                foreach ($productDetailTranslation as $pdt) {
-                                    if ($pdt->langId == 1) {
-                                        $detailFeatureIt = $pdt->name;
-                                    }else{
-                                        $detailFeatureIt='';
-                                    }
-                                    if ($pdt->langId == 2) {
-                                        $detailFeatureEn = $pdlt->name;
-                                    }else{
-                                        $detailFeatureEn='';
-                                    }
-                                    if ($pdlt->langId == 3) {
-                                        $detailFeatureDe = $pdlt->name;
-                                    }else{
-                                        $detailFeatureDe='';
-                                    }
+                        }
+                        $productDetailTranslation = $productDetailTranslationRepo->findBy(['productDetailId' => $productDetailId]);
+                        if ($productDetailTranslation != null) {
+                            foreach ($productDetailTranslation as $pdt) {
+                                if ($pdt->langId == 1) {
+                                    $detailFeatureIt = $pdt->name;
+                                } else {
+                                    $detailFeatureIt = '';
+                                }
+                                if ($pdt->langId == 2) {
+                                    $detailFeatureEn = $pdlt->name;
+                                } else {
+                                    $detailFeatureEn = '';
+                                }
+                                if ($pdlt->langId == 3) {
+                                    $detailFeatureDe = $pdlt->name;
+                                } else {
+                                    $detailFeatureDe = '';
                                 }
                             }
-                        $descriptionTranslationIt.=$labelFeatureIt.":".$detailFeatureIt."</br>";
-                        $descriptionTranslationEn.=$labelFeatureEn.":".$detailFeatureEn."</br>";
-                        $descriptionTranslationDe.=$labelFeatureDe.":".$detailFeatureDe."</br>";
+                        }
+                        $descriptionTranslationIt .= $labelFeatureIt . ":" . $detailFeatureIt . "</br>";
+                        $descriptionTranslationEn .= $labelFeatureEn . ":" . $detailFeatureEn . "</br>";
+                        $descriptionTranslationDe .= $labelFeatureDe . ":" . $detailFeatureDe . "</br>";
                     }
                 }
-                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationIt);
-                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationEn);
-                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationDe);
+
             }
-            $stmtUpdateProductDescriptionIt=$db_con->prepare("update ps_product_lang set Description = concat(`name`,'<br>','".$descriptionTranslationIt."') where id_lang=1 and  id_product=".$pips->prestaId);
-            $stmtUpdateProductDescriptionIt->execute();
-            $stmtUpdateProductDescriptionEn=$db_con->prepare("update ps_product_lang set Description = concat(`name`,'<br>','".$descriptionTranslationIt."') where id_lang=2 and  id_product=".$pips->prestaId);
-            $stmtUpdateProductDescriptionEn->execute();
+            try {
+
+                $stmtUpdateProductDescriptionIt = $db_con->prepare("update ps_product_lang set Description = concat(`name`,'<br>','" . $descriptionTranslationIt . "') where id_lang=1 and  id_product=" . $pips->prestaId);
+                $stmtUpdateProductDescriptionIt->execute();
+                $this->report('update  ps_product_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationIt);
+            } catch (PDOException $e) {
+                $this->report('Error update  ps_product_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationIt);
+            }
+            try {
+
+                $stmtUpdateProductDescriptionEn = $db_con->prepare("update ps_product_lang set Description = concat(`name`,'<br>','" . $descriptionTranslationEn . "') where id_lang=2 and  id_product=" . $pips->prestaId);
+                $stmtUpdateProductDescriptionEn->execute();
+                $this->report('update  ps_produc_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationEn);
+            } catch (PDOException $e) {
+                $this->report('Error update  ps_product_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationEn);
+            }
+
         }
-        $this->report('Update Feature product Prestashop', 'End Update');
+        $this->report('Update product  Description Prestashop', 'End Update');
     }
 }
