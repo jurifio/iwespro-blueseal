@@ -40,7 +40,7 @@ class CPrestashopUpdateProductDescription extends ACronJob
      */
     public function run($args = null)
     {
-        $this->updatePrestashopDescription();
+        $this->updatePrestashopProductDescription();
     }
 
     /**
@@ -54,17 +54,22 @@ class CPrestashopUpdateProductDescription extends ACronJob
         /** @var CPrestashopHasProduct $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
-        $productDetailsRepo = \Monkey::app()->repoFactory->create('ProductDetails');
+        $productDetailRepo = \Monkey::app()->repoFactory->create('ProductDetail');
+        $productDetailLabelRepo =\Monkey::app()->repoFactory->create('ProductDetailLabel');
+        $productDetailTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
+        $productDetailLabelTranslationRepo =\Monkey::app()->repoFactory->create('ProductDetailLabelTranslation');
 
-        $productSheetModelActualRepo = \Monkey::app()->repoFactory->create('ProductSheetModelActual');
+
+        $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
         $productInPrestashop = $phpRepo ->findAll();
         foreach ($productInPrestashop as $pips) {
             if ($pips->prestaId != null) {
                 /** @var CProductSheetActual $productSheetModelActual */
-                $productSheetModelActual = $productSheetModelActualRepo->findBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantid]);
-                if ($productSheetModelActual != null) {
+                $productSheetActual = $productSheetActualRepo->findBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId]);
+                if ($productSheetActual != null) {
                     $descriptionLabelTranslationIt='';
-                    foreach ($productSheetModelActual as $psma) {
+                    foreach ($productSheetActual as $psma) {
+
                         if($psma->productDetailLabel->productDetailLabelTranslation->langId==1){
                             $labelFeatureIt=$psma->productDetailLabel->name;
                         }

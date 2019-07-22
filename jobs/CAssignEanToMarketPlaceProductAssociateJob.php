@@ -54,7 +54,7 @@ class CAssignEanToMarketPlaceProductAssociateJob extends ACronJob
         /*prima estrabolo dalla tabella di ProductBrand i brand con i diritti per la pubblicazione su marketplace*/
         /** @var CProductBrand $productBrand */
         /* ciclo il  brand con il filtro delle colonne hasMarketplaceRights  */
-        $productBrands = $productBrandRepo->findBy(['hasMarketplaceRights' => 1]);
+        $productBrands = $productBrandRepo->findAll();
         /* verifico se l'array non è nullo */
         if ($productBrands != null) {
             foreach ($productBrands as $productBrand) {
