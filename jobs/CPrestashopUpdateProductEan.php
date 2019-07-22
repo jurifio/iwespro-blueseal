@@ -113,7 +113,7 @@ class CPrestashopUpdateProductEan extends ACronJob
                                     $stmtUpdateProductAttributeEan->execute();
                                     $this->report('update Ean ps_product_attribute Prestashop', 'ProductId: ' . $pips->prestaId . ' productSku: ' . $referenceCombination . ' Ean Applied: ' . $eanParent);
                                 } catch ( \PDOException $e ) {
-                                    $this->report("Error update Ean ps_product_attribute  Prestashop", "update ps_product_attribute set ean13 = '" . $eanCombination . "'
+                                    $this->report('Error update Ean ps_product_attribute  Prestashop', "update ps_product_attribute set ean13 = '" . $eanCombination . "'
                                                                           where  reference ='" . $referenceCombination . "'");
                                 }
                             }
