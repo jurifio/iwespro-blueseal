@@ -143,25 +143,26 @@ class CPrestashopUpdateProductDescription extends ACronJob
                     }
                 }
 
-            }
-            try {
 
-                $stmtUpdateProductDescriptionIt = $db_con->prepare("update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationIt . "') where id_lang=1 and  id_product=" . $pips->prestaId);
-                $stmtUpdateProductDescriptionIt->execute();
-                $this->report('update  ps_product_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationIt);
-            } catch (PDOException $e) {
-                $this->report("Error update  ps_product_lang Prestashop", "update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationIt . "') where id_lang=1 and  id_product=" . $pips->prestaId);
-            }
-            try {
+                try {
 
-                $stmtUpdateProductDescriptionEn = $db_con->prepare("update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationEn . "') where id_lang=2 and  id_product=" . $pips->prestaId);
-                $stmtUpdateProductDescriptionEn->execute();
-                $this->report('update  ps_produc_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationEn);
-            } catch (PDOException $e) {
-                $this->report("Error update  ps_product_lang Prestashop", "update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationEn . "') where id_lang=2 and  id_product=" . $pips->prestaId);
-            }
+                    $stmtUpdateProductDescriptionIt = $db_con->prepare("update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationIt . "') where id_lang=1 and  id_product=" . $pips->prestaId);
+                    $stmtUpdateProductDescriptionIt->execute();
+                    $this->report('update  ps_product_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationIt);
+                } catch (PDOException $e) {
+                    $this->report("Error update  ps_product_lang Prestashop", "update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationIt . "') where id_lang=1 and  id_product=" . $pips->prestaId);
+                }
+                try {
 
+                    $stmtUpdateProductDescriptionEn = $db_con->prepare("update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationEn . "') where id_lang=2 and  id_product=" . $pips->prestaId);
+                    $stmtUpdateProductDescriptionEn->execute();
+                    $this->report('update  ps_product_lang Prestashop', 'ProductId: ' . $pips->prestaId . ' Details: ' . $descriptionTranslationEn);
+                } catch (PDOException $e) {
+                    $this->report("Error update  ps_product_lang Prestashop", "update ps_product_lang set description = concat(`name`,'<br>','" . $descriptionTranslationEn . "') where id_lang=2 and  id_product=" . $pips->prestaId);
+                }
+
+            }
+            $this->report('Update product  Description Prestashop', 'End Update');
         }
-        $this->report('Update product  Description Prestashop', 'End Update');
     }
 }
