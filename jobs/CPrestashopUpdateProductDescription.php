@@ -67,19 +67,48 @@ class CPrestashopUpdateProductDescription extends ACronJob
                 /** @var CProductSheetActual $productSheetModelActual */
                 $productSheetActual = $productSheetActualRepo->findBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId]);
                 if ($productSheetActual != null) {
-                    $descriptionLabelTranslationIt='';
+                    $descriptionTranslationIt='';
+                    $descriptionTranslationEn='';
+                    $descriptionTranslationDe='';
                     foreach ($productSheetActual as $psma) {
-
-                        if($psma->productDetailLabel->productDetailLabelTranslation->langId==1){
-                            $labelFeatureIt=$psma->productDetailLabel->name;
-                        }
-                        if($psma->productDetail->productDetailTranslation->langId==1){
-                            $detailFeatureIt=$psma->productDetail->productDetailTranslation->name;
-                        }
-                        $descriptionLabelTranslationIt.=$labelFeatureIt.":".$detailFeatureIt."</br>";
+                            $producDetailLabelId=$psma->productDetailLabelId;
+                            $productDetailId=$psma->productDetailId;
+                            $productDetailLabelTranslation=$productDetailLabelTranslationRepo->findBy(['productDetailLabelId'=>$producDetailLabelId]);
+                            if($productDetailLabelTranslation!=null) {
+                                foreach ($productDetailLabelTranslation as $pdlt) {
+                                    if ($pdlt->langId == 1) {
+                                        $labelFeatureIt = $pdlt->name;
+                                    }
+                                    if ($pdlt->langId == 2) {
+                                        $labelFeatureEn = $pdlt->name;
+                                    }
+                                    if ($pdlt->langId == 3) {
+                                        $labelFeatureDe = $pdlt->name;
+                                    }
+                                }
+                            }
+                        $productDetailTranslation=$productDetailTranslationRepo->findBy(['productDetailId'=>$productDetailId]);
+                            if($productDetailTranslation!=null) {
+                                foreach ($productDetailTranslation as $pdt) {
+                                    if ($pdt->langId == 1) {
+                                        $detailFeatureIt = $pdt->name;
+                                    }
+                                    if ($pdt->langId == 2) {
+                                        $detailFeatureEn = $pdlt->name;
+                                    }
+                                    if ($pdlt->langId == 3) {
+                                        $detailFeatureDe = $pdlt->name;
+                                    }
+                                }
+                            }
+                        $descriptionTranslationIt.=$labelFeatureIt.":".$detailFeatureIt."</br>";
+                        $descriptionTranslationEn.=$labelFeatureEn.":".$detailFeatureEn."</br>";
+                        $descriptionTranslationDe.=$labelFeatureDe.":".$detailFeatureDe."</br>";
                     }
                 }
-                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionLabelTranslationIt);
+                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationIt);
+                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationEn);
+                $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationDe);
             }
         }
         $this->report('Update Feature product Prestashop', 'End Update');
