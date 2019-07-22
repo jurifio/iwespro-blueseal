@@ -78,7 +78,6 @@ class CPrestashopUpdateProductEan extends ACronJob
         $productDetailLabelTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailLabelTranslation');
         $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
         $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
-        $prestashopHasProductRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
 
 
         $productInPrestashop = $phpRepo->findAll();
