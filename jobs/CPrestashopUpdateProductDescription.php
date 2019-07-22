@@ -13,6 +13,7 @@ use bamboo\domain\entities\CProductDetailLabel;
 use bamboo\domain\entities\CProductDetailTranslation;
 use bamboo\domain\entities\CProductDetailLabelTranslation;
 use bamboo\domain\entities\CProduct;
+use PDO;
 
 
 /**
@@ -51,6 +52,21 @@ class CPrestashopUpdateProductDescription extends ACronJob
      */
     private function updatePrestashopProductDescription()
     {
+        $db_host = "5.189.159.187";
+        $db_name = "iwesPrestaDB";
+        $db_user = "iwesprestashop";
+        $db_pass = "X+]l&LEa]zSI";
+        $res="";
+        try {
+
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $res .= " connessione ok <br>";
+        } catch (PDOException $e) {
+            $res .= $e->getMessage();
+        }
+
+
         /** @var CPrestashopHasProduct $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
@@ -64,12 +80,13 @@ class CPrestashopUpdateProductDescription extends ACronJob
         $productInPrestashop = $phpRepo ->findAll();
         foreach ($productInPrestashop as $pips) {
             if ($pips->prestaId != null) {
+                $descriptionTranslationIt='';
+                $descriptionTranslationEn='';
+                $descriptionTranslationDe='';
                 /** @var CProductSheetActual $productSheetModelActual */
                 $productSheetActual = $productSheetActualRepo->findBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId]);
                 if ($productSheetActual != null) {
-                    $descriptionTranslationIt='';
-                    $descriptionTranslationEn='';
-                    $descriptionTranslationDe='';
+
                     $labelFeatureIt='';
                     $labelFeatureEn='';
                     $labelFeatureDe='';
@@ -128,6 +145,10 @@ class CPrestashopUpdateProductDescription extends ACronJob
                 $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationEn);
                 $this->report('update  Feature product Prestashop', 'ProductId: '.$pips->prestaId. ' Details: '.$descriptionTranslationDe);
             }
+            $stmtUpdateProductDescriptionIt=$db_con->prepare("update ps_product_lang set Description = concat(`name`,'<br>','".$descriptionTranslationIt."') where id_lang=1 and  id_product=".$pips->prestaId);
+            $stmtUpdateProductDescriptionIt->execute();
+            $stmtUpdateProductDescriptionEn=$db_con->prepare("update ps_product_lang set Description = concat(`name`,'<br>','".$descriptionTranslationIt."') where id_lang=2 and  id_product=".$pips->prestaId);
+            $stmtUpdateProductDescriptionEn->execute();
         }
         $this->report('Update Feature product Prestashop', 'End Update');
     }
