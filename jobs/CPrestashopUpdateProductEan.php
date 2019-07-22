@@ -86,7 +86,7 @@ class CPrestashopUpdateProductEan extends ACronJob
             if ($pips->prestaId != null) {
 
                 /** @var CProductEan $productEan */
-                $productEanParent = $productEanRepo->findOneBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId, 'usedForParen' => 1]);
+                $productEanParent = $productEanRepo->findOneBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId, 'usedForParent' => 1]);
                 if ($productEanParent != null) {
                     $reference = $pips->productId.'-'.$pips->productVariantId;
                     $eanParent = $productEanParent->ean;
