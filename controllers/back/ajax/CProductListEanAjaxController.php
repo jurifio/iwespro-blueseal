@@ -63,7 +63,12 @@ class CProductListEanAjaxController extends AAjaxController
                   (SELECT min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), NULL))
                    FROM ProductSku
                    WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
-                
+                 (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)), '')
+                   FROM Marketplace m
+                     JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
+                     JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
+                   WHERE mahp.productId = p.id AND
+                         mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplaces,
                          
                 if(isnull(prHp.productId), 'no', 'si') inPrestashop
                 FROM Product p
@@ -134,7 +139,7 @@ class CProductListEanAjaxController extends AAjaxController
 
 
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
-
+            $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
             $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
 

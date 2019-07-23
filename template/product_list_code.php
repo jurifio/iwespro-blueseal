@@ -73,6 +73,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">CPF
                                 </th>
+                                <th data-slug="marketplaces"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">MarketPlace
+                                </th>
                                 <!--<th class="center">Gruppo Taglie</th>-->
 
                                 <th data-slug="dummy"
