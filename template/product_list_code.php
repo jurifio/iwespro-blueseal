@@ -300,6 +300,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.sku.update.ean"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.ean.align"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

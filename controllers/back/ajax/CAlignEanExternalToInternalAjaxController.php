@@ -1,23 +1,19 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CPrestashopHasProduct;
-use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
-use bamboo\domain\entities\CProductPublicSku;
-use bamboo\domain\entities\CProductEan;
-use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductBrand;
-use bamboo\domain\entities\CShop;
+use bamboo\domain\entities\CProductEan;
+use bamboo\domain\entities\CProductSizeGroup;
+use bamboo\domain\entities\CProductSku;
+use bamboo\domain\repositories\CProductRepo;
+
 
 /**
- * Class CAlignEanExternalToInternal
- * @package bamboo\blueseal\jobs
+ * Class CAlignEanExternalToIntenalAjaxController
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -28,28 +24,11 @@ use bamboo\domain\entities\CShop;
  * @date 23/07/2019
  * @since 1.0
  */
-class CAlignEanExternalToInternal extends ACronJob
+class CAlignEanExternalToInternalAjaxController extends AAjaxController
 {
 
-    /**
-     * @param null $args
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    public function run($args = null)
-    {
-        $this->alignEanToProduct();
-    }
 
-    /**
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    private function alignEanToProduct()
+    public function post()
     {
         /* definizione delle repo */
 
@@ -80,25 +59,21 @@ class CAlignEanExternalToInternal extends ACronJob
                             $productAssign->brandAssociate = $brandAssociate;
                             $productAssign->shopId = 1;
                             $productAssign->update();
-                            $this->report('assign ean to ProductSku in productEan', 'assigned to ' . $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId);
-                            \Monkey::app()->applicationLog('CAlignEanExternalToInternal', 'log', 'assign ean to ProductSku in productEan  ', 'assigned to ' . $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId);
+                            \Monkey::app()->applicationLog('CAlignEanExternalToInternalAjaxController', 'log', 'assign ean to ProductSku in productEan  ', 'assigned to ' . $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId);
                             $skus->ean = $eanToAssign;
                             $skus->update();
                         } else {
-                            $this->report('Report','sono Finiti tutti gli ean liberi');
+                            $res = 'sono Finiti tutti gli ean liberi';
                         }
                     } else {
                         $eanToAssign = $productEan->ean;
                         $skus->ean = $eanToAssign;
                         $skus->update();
-                        $this->report('assign ean exist to ProductSku in productEan  ', 'assigned to ' . $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId);
-                        \Monkey::app()->applicationLog('CAlignEanExternalToInternal', 'log', 'assign ean exist to ProductSku in productEan  ', 'assigned to ' . $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId);
+                        \Monkey::app()->applicationLog('CAlignEanExternalToInternalAjaxController', 'log', 'assign ean exist to ProductSku in productEan  ', 'assigned to ' . $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId);
                     }
                 }
             }
         }
-
+        return $res;
     }
-
-
 }
