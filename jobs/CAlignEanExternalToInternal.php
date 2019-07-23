@@ -74,7 +74,7 @@ class CAlignEanExternalToInternal extends ACronJob
                 $eanToAssign=$skus->ean;
                 $productEan = $productEanRepo->findOneBy(['productId' => $skus->productId, 'productVariantId' => $skus->productVariantId, 'productSizeId' => $skus->productSizeId]);
                 if($productEan==null){
-                    $productEanInsert=$productEanRepo-getEmptyEntity();
+                    $productEanInsert=$productEanRepo->getEmptyEntity();
                     $productEanInsert->ean=$eanToAssign;
                     $productEanInsert->productId=$skus->productId;
                     $productEanInsert->productVariantid=$skus->productVariantId;
@@ -99,7 +99,7 @@ class CAlignEanExternalToInternal extends ACronJob
                     $productEan->shopid=0;
                     $productEan->update();
                     $this->report('clean  ean to  productEan from previous Assignment ', 'cleaned for '.$productClean);
-                    $productEanInsert=$productEanRepo-getEmptyEntity();
+                    $productEanInsert=$productEanRepo->getEmptyEntity();
                     $productEanInsert->ean=$eanToAssign;
                     $productEanInsert->productId=$skus->productId;
                     $productEanInsert->productVariantid=$skus->productVariantId;
