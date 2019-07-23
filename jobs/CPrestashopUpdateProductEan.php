@@ -98,19 +98,20 @@ class CPrestashopUpdateProductEan extends ACronJob
                         $this->report('Error update Ean ps_product  Prestashop', "update ps_product set ean13 = '" . $productEanParent . "'
                                                                           where reference='" . $reference . "' and   id_product=" . $pips->prestaId);
                     }
+                    $product=$productRepo->findBy(['id'=>$pips->productId,'productVariantId'=>$pips->productVariantId]);
                     /** @var CProductSku $productSku */
-                    $productSku = $productSkuRepo->findBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId]);
+                    $productSku = $productSkuRepo->findBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId]);
                     if ($productSku != null) {
                         foreach ($productSku as $skus) {
                             $referenceCombination = $skus->productId . "-" . $skus->productVariantId . "-" . $skus->productSizeId;
-                            $productEanCombination = $productEanRepo->findOneBy(['productId' => $pips->productId, 'productVariantId' => $pips->productVariantId, 'productSizeId' => $pips->productSizeId]);
+                            $productEanCombination = $productEanRepo->findOneBy(['productId' => $skus->productId, 'productVariantId' => $skus->productVariantId, 'productSizeId' => $skus->productSizeId]);
                             if ($productEanCombination != null) {
                                 $eanCombination = $productEanCombination->ean;
                                 try {
                                     $stmtUpdateProductAttributeEan = $db_con->prepare("update ps_product_attribute set ean13 = '" . $eanCombination . "'
                                                                           where  reference='" . $referenceCombination . "'");
                                     $stmtUpdateProductAttributeEan->execute();
-                                    $this->report('update Ean ps_product_attribute Prestashop', 'ProductId: ' . $pips->prestaId . ' productSku: ' . $referenceCombination . ' Ean Applied: ' . $eanParent);
+                                    $this->report('update Ean ps_product_attribute Prestashop', 'ProductId: ' . $pips->prestaId . ' productSku: ' . $referenceCombination . ' Ean Applied: ' . $eanCombination);
                                 } catch ( \PDOException $e ) {
                                     $this->report('Error update Ean ps_product_attribute  Prestashop', "update ps_product_attribute set ean13 = '" . $eanCombination . "'
                                                                           where  reference ='" . $referenceCombination . "'");
