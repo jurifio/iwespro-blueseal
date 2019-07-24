@@ -93,7 +93,8 @@ class CProductListEanAjaxController extends AAjaxController
                   LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
                   LEFT JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
-                    ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId) ";
+                    ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
+where p.productStatusId=6";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
@@ -165,18 +166,9 @@ class CProductListEanAjaxController extends AAjaxController
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
                 $iShop = $sku->shop->name;
-                $barcode.="size:".$sku->productSize->name."-Barcode:".$sku->barcode."<br>";
-                $eanProductSku=$sku->ean;
-                if($eanProductSku!=null){
-                    $ean = "size:" . $sku->productSize->name . "-Ean da Produttore:" . $sku->ean . "<br>";
-                }else {
-                    $eanProductEan = $eanRepo->findOneBy(['productId' => $sku->productId, 'productVariantId' => $sku->productVariantId, 'productSizeId' => $sku->productSizeId]);
-                    if ($eanProductEan != null) {
-                        $ean = "size:" . $sku->productSize->name . "-Ean da Pickyshop:" . $eanProductEan->ean . "<br>";
-                    } else {
-                        $ean = "size:" . $sku->productSize->name . "-Ean: Non presente per la taglia<br>";
-                    }
-                }
+                $barcode.=$sku->productSize->name."|".$sku->barcode."<br>";
+                $ean =  $sku->productSize->name . "|" . $sku->ean . "<br>";
+
 
 
                 if (!in_array($iShop, $shopz)) {

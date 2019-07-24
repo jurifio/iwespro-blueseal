@@ -1,20 +1,20 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-puzzle-piece",
+    icon:"fa-shower",
     permission:"/admin/product/edit",
-    event:"bs-product-ean-align",
+    event:"bs-product-eantoexternal-align",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Allinea Etichette etichette",
+    title:"Allinea ",
     placement:"bottom",
     toggle:"modal"
 };
 
-$(document).on('bs-product-ean-align', function () {
+$(document).on('bs-product-eantoexternal-align', function () {
 
 
 
-    let bsModal = new $.bsModal('Esegui l\'allineamento tra Ean picky e Ean Produttore', {
+    let bsModal = new $.bsModal('Esegui l\'allineamento tra Ean produttore e Ean Picky', {
         body: `<p>Allineamento</p>`
     });
 
@@ -30,7 +30,7 @@ $(document).on('bs-product-ean-align', function () {
         };
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/AlignEanExternalToInternalAjaxController',
+            url: '/blueseal/xhr/AlignEanInternalToExternalAjaxController',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);

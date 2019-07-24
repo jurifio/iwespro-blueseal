@@ -303,6 +303,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.ean.align"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.eantoexternal.align"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
