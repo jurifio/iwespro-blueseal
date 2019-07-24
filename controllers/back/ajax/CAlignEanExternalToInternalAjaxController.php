@@ -101,10 +101,11 @@ class CAlignEanExternalToInternalAjaxController extends AAjaxController
             $stmtUpdateEan = $db_con->prepare("select * from ProductEan where usedForParent=0 and used=1");
             $stmtUpdateEan->execute();
             while ($rowUpdateEan = $stmtUpdateEan->fetch(PDO::FETCH_ASSOC)) {
-                $productSkuUpdate=$productSkuRepo->findOneBy(['productId'=>$rowUpdateEan['productId'],'productVariantId'=>$rowUpdateEan['productVariantId'],'productSizeId'=>$rowUpdateEan['productSizeId'],'ean'=>null]);
+                $productSkuUpdate=$productSkuRepo->findBy(['productId'=>$rowUpdateEan['productId'],'productVariantId'=>$rowUpdateEan['productVariantId'],'productSizeId'=>$rowUpdateEan['productSizeId'],'ean'=>null]);
                 if($productSkuUpdate!=null){
-                    $productSkuUpdate->ean=$rowUpdateEan['ean'];
-                    $productSkuUpdate->update();
+                    foreach($productSkuUpdate as $eanu)
+                    $eanu->ean=$rowUpdateEan['ean'];
+                    $eanu->update();
                 }
             }
 
