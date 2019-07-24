@@ -167,7 +167,7 @@ where p.productStatusId=6";
                 $qty += $sku->stockQty;
                 $iShop = $sku->shop->name;
                 $barcode.=$sku->productSize->name."|".$sku->barcode."<br>";
-                $ean =  $sku->productSize->name . "|" . $sku->ean . "<br>";
+                $ean .=  $sku->productSize->name . "|" . $sku->ean . "<br>";
 
 
 
