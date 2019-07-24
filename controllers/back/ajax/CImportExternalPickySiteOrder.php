@@ -32,10 +32,15 @@ use bamboo\domain\entities\CUser;
 class CImportExternalPickySiteOrder extends AAjaxController
 {
 
-
     public function POST()
     {
+        function debug_to_console( $data ) {
+            $output = $data;
+            if ( is_array( $output ) )
+                $output = implode( ',', $output);
 
+            echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
+        }
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
@@ -143,8 +148,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res .= " inserimento utente" . $rowUser['email'] . " eseguito<br>";
                 } else {
                     $res .= "utente" . $rowUser['email'] . " già in elenco";
-                }
+                    continue;
 
+                }
+                debug_to_console( $res );
             }
 
             $stmtUserAddress = $db_con->prepare("SELECT 
@@ -196,7 +203,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
                 } else {
                     $res .= "Indirizzo esistenze<br>";
+                    continue;
+
                 }
+                debug_to_console( $res );
             }
             /** inserimento CouponType */
             $stmtCouponType = $db_con->prepare("SELECT
@@ -227,7 +237,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
                 } else {
                     $res .= 'Tipo Coupon Gia Esistente';
+                    continue;
                 }
+                debug_to_console( $res );
             }
 
             /** inserimento Coupon Event **/
@@ -259,9 +271,11 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $res.='inserito il coupon evento '.$couponEventInsert->printId().'<br>';
                     }
                 } else {
-                    continue;
+
                     $res .= "Coupon Evento Già esisitente";
+                    continue;
                 }
+                debug_to_console( $res );
             }
 
             /**inserimento Coupon **/
@@ -298,13 +312,15 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $couponInsert->remoteId = $rowCoupon['remoteId'];
                                 $couponInsert->remoteShopId = $shop;
                                 $couponInsert->insert();
-                                $res.='inserito il coupon '.$couponInsert->printId().'<br>';
+                              //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
                             }
                         }
                     }
                 } else {
                     $res .= '<br> Coupon  già esistente';
+                    continue;
                 }
+                debug_to_console( $res );
             }
 
 
@@ -353,14 +369,16 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $insertCart->remoteId = $rowCart['remoteId'];
                                 $insertCart->remoteShopId = $shop;
                                 $insertCart->insert();
-                                $res.='inserito il carrello '.$userAddressInsert->printId().'<br>';
+
                             }
                         }
                     }
 
                 } else {
                     $res .= '<br>carrello già esistente';
+                    continue;
                 }
+                debug_to_console( $res );
             }
 
             /***** inserimento righe carrello *********/
@@ -388,11 +406,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $cartLineInsert->remoteId = $rowCartLineOrder['remoteId'];
                         $cartLineInsert->remoteShopId = $shop;
                         $cartLineInsert->insert();
-                        $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
+                     //   $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
                     }
                 } else {
                     $res .= '<br>Riga Carrello  già esistente';
+                    continue;
                 }
+                debug_to_console( $res );
             }
 
 
@@ -493,8 +513,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
                 } else {
                     $res .= '<br>Ordine già esistente';
+                    continue;
 
                 }
+                debug_to_console( $res );
             }
 
 
@@ -574,12 +596,14 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $insertOrderLine->remoteOrderId=$rowOrderLine['orderId'];
                         $insertOrderLine->insert();
 
-                        $res .= "Riga Ordine  inserita ".$insertOrderLine->printId();
+                      //  $res .= "Riga Ordine  inserita ".$insertOrderLine->printId();
                     }
                 } else {
                     $res .= "Riga Ordine  gia esistente";
+                    continue;
 
                 }
+                debug_to_console( $res );
             }
         }
 
