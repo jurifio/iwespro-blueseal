@@ -9,6 +9,7 @@ use bamboo\domain\entities\CProductEan;
 use bamboo\domain\entities\CProductSizeGroup;
 use bamboo\domain\entities\CProductSku;
 use bamboo\domain\repositories\CProductRepo;
+use PDO;
 
 
 /**
@@ -73,7 +74,41 @@ class CAlignEanExternalToInternalAjaxController extends AAjaxController
                     }
                 }
             }
+
+
         }
-        return $res;
+        if (ENV == 'dev') {
+            $db_host = "localhost";
+            $db_name = "pickyshop_dev";
+            $db_user = "root";
+            $db_pass = "geh44fed";
+            $res = "";
+        }else{
+            $db_host = "5.189.159.187";
+            $db_name = "pickyshopfront";
+            $db_user = "pickyshop4";
+            $db_pass = "rrtYvg6W!";
+            $res = "";
+        }
+        try {
+
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $res .= " connessione ok <br>";
+        } catch (PDOException $e) {
+            $res .= $e->getMessage();
+            $this->report('Update Feature product Prestashop', 'error connection Update');
+            $stmtUpdateEan = $db_con->prepare("select * from ProductEan where usedForParent=0 and used=1");
+            $stmtUpdateEan->execute();
+            while ($rowUpdateEan = $stmtUpdateEan->fetch(PDO::FETCH_ASSOC)) {
+                $productSkuUpdate=$productSkuRepo->findOneBy(['productId'=>$rowUpdateEan['productId'],'productVariantId'=>$rowUpdateEan['productVariantId'],'productSizeId'=>$rowUpdateEan['productSizeId'],'ean'=>null]);
+                if($productSkuUpdate!=null){
+                    $productSkuUpdate->ean=$rowUpdateEan['ean'];
+                    $productSkuUpdate->update();
+                }
+            }
+
+        }
+        return $res='finito';
     }
 }
