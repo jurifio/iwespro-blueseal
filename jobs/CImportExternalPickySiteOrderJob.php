@@ -1,7 +1,20 @@
 <?php
 
-namespace bamboo\controllers\back\ajax;
+namespace bamboo\blueseal\jobs;
 
+use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
+use function bamboo\controllers\back\ajax\debug_to_console;
+use bamboo\core\base\CObjectCollection;
+use bamboo\core\db\pandaorm\repositories\ARepo;
+use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
+use bamboo\domain\entities\CProductPublicSku;
+use bamboo\domain\entities\CProductEan;
+use bamboo\domain\entities\CProductSku;
+use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductBrand;
+use bamboo\domain\entities\CShop;
 use bamboo\domain\entities\CUserAddress;
 use bamboo\ecommerce\views\VBase;
 use bamboo\blueseal\business\CBlueSealPage;
@@ -9,44 +22,44 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use PDO;
 use prepare;
 use AEntity;
-use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CSite;
 use bamboo\domain\entities\CUserHasShop;
 use bamboo\domain\repositories\CUserAddressRepo;
 use bamboo\domain\entities\CUser;
 
 
-/**
- * Class CImportExternalPickySiteOrder
- * @package bamboo\controllers\back\ajax
- *
- * @author Iwes Team <it@iwes.it>
- *
- * @copyright (c) Iwes  snc - All rights reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * @date 01/06/2019
- * @since 1.0
- */
-class CImportExternalPickySiteOrder extends AAjaxController
+class CImportExternalPickySiteOrderJob extends ACronJob
 {
 
-    public function POST()
+    /**
+     * @param null $args
+     * @throws \PrestaShopWebserviceException
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    public function run($args = null)
     {
-        function debug_to_console( $data ) {
-            $output = $data;
-            if ( is_array( $output ) )
-                $output = implode( ',', $output);
+        $this->importOrder();
+    }
 
-            echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
-        }
+    /**
+     * @throws \PrestaShopWebserviceException
+     * @throws \bamboo\core\exceptions\BambooException
+     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
+     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
+     */
+    private function importOrder()
+    {
+
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
         $res = "";
         $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
+
         foreach ($shopRepo as $value) {
+            $this->report('Start ImportOrder From PickySite ','Shop To Import'.$value->name);
             /********marketplace********/
             $db_host = $value->dbHost;
             $db_name = $value->dbName;
@@ -145,9 +158,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $insertUserEmail->address = $rowUser['email'];
                     $insertUserEmail->isPrimary = '1';
                     $insertUserEmail->insert();
-                    $res .= " inserimento utente" . $rowUser['email'] . " eseguito<br>";
+
                 } else {
-                    $res .= "utente" . $rowUser['email'] . " già in elenco";
+
                     continue;
 
                 }
@@ -202,8 +215,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                     }
                 } else {
-                    $res .= "Indirizzo esistenze<br>";
-                    continue;
+                                       continue;
 
                 }
                 debug_to_console( $res );
@@ -234,9 +246,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $couponTypeInsert->remoteId = $rowCouponType['remoteId'];
                     $couponTypeInsert->remoteShopId = $shop;
                     $couponTypeInsert->insert();
-                    $res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
+
                 } else {
-                    $res .= 'Tipo Coupon Gia Esistente';
+
                     continue;
                 }
                 debug_to_console( $res );
@@ -272,10 +284,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
                 } else {
 
-                    $res .= "Coupon Evento Già esisitente";
+
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
             /**inserimento Coupon **/
@@ -312,15 +324,15 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $couponInsert->remoteId = $rowCoupon['remoteId'];
                                 $couponInsert->remoteShopId = $shop;
                                 $couponInsert->insert();
-                              //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
+                                //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
                             }
                         }
                     }
                 } else {
-                    $res .= '<br> Coupon  già esistente';
+
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
 
@@ -375,10 +387,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
 
                 } else {
-                    $res .= '<br>carrello già esistente';
+
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
             /***** inserimento righe carrello *********/
@@ -406,13 +418,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $cartLineInsert->remoteId = $rowCartLineOrder['remoteId'];
                         $cartLineInsert->remoteShopId = $shop;
                         $cartLineInsert->insert();
-                     //   $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
+                        //   $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
                     }
                 } else {
-                    $res .= '<br>Riga Carrello  già esistente';
+
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
 
@@ -508,15 +520,15 @@ class CImportExternalPickySiteOrder extends AAjaxController
                             $insertOrder->remoteShopId = $shop;
                             $insertOrder->hasInvoice=$rowOrder['hasInvoice'];
                             $insertOrder->insert();
-                            
+                    $this->report('Import Order ', 'Number Remote Order'.$row['remoteId'].'from Shop '.$value->name);
                         }
                     }
                 } else {
-                    $res .= '<br>Ordine già esistente';
+
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
 
 
@@ -596,24 +608,23 @@ class CImportExternalPickySiteOrder extends AAjaxController
                         $insertOrderLine->remoteOrderId=$rowOrderLine['orderId'];
                         $insertOrderLine->insert();
 
-                      //  $res .= "Riga Ordine  inserita ".$insertOrderLine->printId();
+                        //  $res .= "Riga Ordine  inserita ".$insertOrderLine->printId();
                     }
                 } else {
-                    $res .= "Riga Ordine  gia esistente";
+
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
+            $this->report('Finish Import Order ','Shop:'.$value->name);
         }
 
 
-        return $res;
+        $this->report('Finish Procedure Order ','End Procedure');
 
 
     }
 
 
-
 }
-
