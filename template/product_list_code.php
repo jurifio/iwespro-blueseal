@@ -301,6 +301,9 @@
                 data-remote="bs.product.sku.update.ean"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.sku.update.price"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.ean.align"
         ></bs-toolbar-button>
         <bs-toolbar-button
