@@ -241,10 +241,15 @@ class COrderListAjaxController extends AAjaxController
              <span><strong>Indirizzo: </strong>$address->address</span><br>
              <span><strong>CAP: </strong>$address->postcode</span><br>
              <span><strong>Città: </strong>$address->city</span><br>
-             <span><strong>Provincia: </strong>$address->province</span><br>
-             <span><strong>Paese: </strong>$country->name</span><br>
-             <span><strong>Telefono: </strong>$phone</span><br>
-            ";
+             <span><strong>Provincia: </strong>$address->province</span><br>";
+
+             if($country->name !=null) {
+                 $addressOrder .= "<span><strong>Paese: </strong>$country->name</span><br>";
+             }else{
+                 $addressOrder .= "<span><strong>Paese: </strong></span><br>";
+             }
+            $addressOrder.= "<span><strong>Telefono: </strong>$phone</span><br>";
+
             $row["address"] = $addressOrder;
 
             $response['data'][] = $row;
