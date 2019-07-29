@@ -67,7 +67,9 @@ class COrderListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
-                WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
+                WHERE `o`.`status` LIKE 'ORD%'  GROUP BY ol.id, ol.orderId";
+
+        //      WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
 
         $critical = \Monkey::app()->router->request()->getRequestData('critical');
         $countersign = \Monkey::app()->router->request()->getRequestData('countersign');
@@ -236,9 +238,10 @@ class COrderListAjaxController extends AAjaxController
 
             $country = $countryR->findOneBy(['id' => $address->countryId]);
             if($country!=null){
-                $countryName='';
-            }else{
                 $countryName=$country->name;
+
+            }else{
+                $countryName='';
             }
             $phone = is_null($address->phone) ? '---' : $address->phone;
             $addressOrder .= "
@@ -247,7 +250,8 @@ class COrderListAjaxController extends AAjaxController
              <span><strong>CAP: </strong>$address->postcode</span><br>
              <span><strong>Città: </strong>$address->city</span><br>
              <span><strong>Provincia: </strong>$address->province</span><br>
-             <span><strong>Paese:</strong>$countryName</span><br>
+             <span><strong>Paese:</strong>";
+            $addressOrder.=$countryName."</span><br>
              <span><strong>Telefono: </strong>$phone</span><br>";
 
             $row["address"] = $addressOrder;
