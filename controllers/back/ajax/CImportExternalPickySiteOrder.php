@@ -228,7 +228,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $couponTypeInsert->remoteId = $rowCouponType['remoteId'];
                     $couponTypeInsert->remoteShopId = $shop;
                     $couponTypeInsert->insert();
-                    $res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
+                    //$res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
                 } else {
                     $res .= 'Tipo Coupon Gia Esistente';
                     continue;
