@@ -410,7 +410,9 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                         'productVariantId' => $productSkuOrderLine[0][3],
                         'productSizeId' => $productSkuOrderLine[0][4],
                         'shopId' => $productSkuOrderLine[0][5]]);
-                $insertOrderLine->frozenProduct = $skufind->froze();
+                if($skufind!=null) {
+                    $insertOrderLine->frozenProduct = $skufind->froze();
+                }
                 $findshopId=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['prestashopId'=>$rowOrderLine['siteId']]);
                 $shopId=$findshopId->shopId;
                 $insertOrderLine->shopId = $shopId;

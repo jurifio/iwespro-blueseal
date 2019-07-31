@@ -585,7 +585,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                         $insertOrderLine->orderLineFriendPaymentStatusId = $rowOrderLine['orderLineFriendPaymentStatusId'];
                         $insertOrderLine->orderLineFriendPaymentDate = $rowOrderLine['orderLineFriendPaymentDate'];
                         $insertOrderLine->warehouseShelfPositionId = $rowOrderLine['warehouseShelfPositionId'];
-                        $insertOrderLine->frozenProduct = $skufind->froze();
+                       if($skufind!=null) {
+                           $insertOrderLine->frozenProduct = $skufind->froze();
+                       }
                         $insertOrderLine->shopId = $rowOrderLine['shopId'];
                         $insertOrderLine->status = $rowOrderLine['status'];
                         $insertOrderLine->fullPrice = $rowOrderLine['fullPrice'];
