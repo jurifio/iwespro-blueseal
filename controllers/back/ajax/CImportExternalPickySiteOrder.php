@@ -34,13 +34,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
     public function POST()
     {
-        function debug_to_console( $data ) {
-            $output = $data;
-            if ( is_array( $output ) )
-                $output = implode( ',', $output);
 
-            echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
-        }
         set_time_limit(0);
         ini_set('memory_limit', '2048M');
 
@@ -151,7 +145,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
 
             $stmtUserAddress = $db_con->prepare("SELECT 
@@ -206,7 +200,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
             /** inserimento CouponType */
             $stmtCouponType = $db_con->prepare("SELECT
@@ -239,7 +233,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res .= 'Tipo Coupon Gia Esistente';
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
             /** inserimento Coupon Event **/
@@ -275,7 +269,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res .= "Coupon Evento Già esisitente";
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
             /**inserimento Coupon **/
@@ -320,7 +314,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res .= '<br> Coupon  già esistente';
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
 
@@ -378,7 +372,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res .= '<br>carrello già esistente';
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
             /***** inserimento righe carrello *********/
@@ -412,7 +406,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     $res .= '<br>Riga Carrello  già esistente';
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
 
@@ -516,7 +510,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
 
 
@@ -603,7 +597,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
         }
 

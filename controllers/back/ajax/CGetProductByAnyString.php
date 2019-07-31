@@ -55,7 +55,7 @@ class CGetProductByAnyString extends AAjaxController
         $ret = [];
         foreach($products as $v) {
             /** @var CProduct $v */
-            $row = $v->fullTreeToArray();;
+            $row = $v->fullTreeToArray();
             $row['code'] = $v->printId();
             $row['cpfVar'] = $v->printCpf();
             $row['brand'] = $v->productBrand->name;
