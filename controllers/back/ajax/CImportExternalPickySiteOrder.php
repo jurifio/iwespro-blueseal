@@ -543,7 +543,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note
-                                     FROM OrderLine ol");
+                                     FROM OrderLine ol WHERE frozenProduct IS NOT NULL");
             $stmtOrderLine->execute();
             while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
                 $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'],'remoteOrderId'=>$rowOrderLine['orderId'], 'remoteShopId' => $shop]);
@@ -562,15 +562,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
                             'productId' => $rowOrderLine['productId'],
                             'productVariantId' => $rowOrderLine['productVariantId'],
                             'productSizeId' => $rowOrderLine['productSizeId'],
-                            'shopId' => $rowOrderLine['shopId']
+                            'shopId'=>$rowOrderLine['shopId']
                         ]);
                         $insertOrderLine->orderLineFriendPaymentStatusId = $rowOrderLine['orderLineFriendPaymentStatusId'];
                         $insertOrderLine->orderLineFriendPaymentDate = $rowOrderLine['orderLineFriendPaymentDate'];
                         $insertOrderLine->warehouseShelfPositionId = $rowOrderLine['warehouseShelfPositionId'];
-                        if($skufind!=null) {
                             $insertOrderLine->frozenProduct = $skufind->froze();
-                        }
-                        $insertOrderLine->shopId = $rowOrderLine['shopId'];
+                        $insertOrderLine->shopId = $skufind->shopId;
                         $insertOrderLine->status = $rowOrderLine['status'];
                         $insertOrderLine->fullPrice = $rowOrderLine['fullPrice'];
                         $insertOrderLine->activePrice = $rowOrderLine['activePrice'];
