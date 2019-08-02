@@ -3,7 +3,6 @@
 namespace bamboo\blueseal\jobs;
 
 use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
-use function bamboo\controllers\back\ajax\debug_to_console;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\jobs\ACronJob;
@@ -68,7 +67,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             $shop =$value->id;
             try {
 
-                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+                $db_con = new PDO('mysql:host={$db_host};dbname={$db_name}', $db_user, $db_pass);
                 $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $res .= " connessione ok <br>";
             } catch (PDOException $e) {

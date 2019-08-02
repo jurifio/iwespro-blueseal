@@ -52,6 +52,7 @@ class COrderListAjaxController extends AAjaxController
                   o.note AS notes,
                   o.remoteId as remoteId,
                   o.remoteShopId as remoteShopId,
+                  #'' as orderParalel,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -133,7 +134,15 @@ class COrderListAjaxController extends AAjaxController
             $alert = false;
             $orderParal='';
             foreach ($val->orderLine as $line) {
+                if($val->remoteShopId!=44 && $val->remoteShopId!='' ) {
+                    if ($val->remoteShopId != $line->shopId) {
+                        $orderParal = 'Si';
+                    }
+                }else{
+                    $orderParal = 'No';
+                }
                 try {
+
                     /** @var CProductSku $sku */
                     $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
                     $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
@@ -145,24 +154,19 @@ class COrderListAjaxController extends AAjaxController
                     $skuParalSizeId=$line->productSizeId;
                     $skuParalShopId=$line->shopId;
                     $skuParal=$val->remoteShopId;
-                    $findParalel=$productHasShopDestinationRepo->findOneBy(['productId'=>$skuParalId,
-                                                                            'productVariantId'=>$skupParalVariantId,
-                                                                            'productSizeId'=>$skuParalSizeId,
-                                                                            'shopIdOrigin'=>$skuParalShopId,
-                                                                            'shopIdDestination'=>$skuParal]);
-                    if($findParalel!=null){
-                        $orderParal='Ordine Parallelo';
-                    }
+
+
 
                 } catch (\Throwable $e) {
                     $code = 'non trovato';
                 }
 
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>".$orderParal . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
+                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>".$orderParal . "<br>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
 
-            }
 
+            }
+           $row["orderParal"]  = $orderParal;
 
             $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
             $paidAmount = ($val->paidAmount) ? $val->paidAmount : 0;

@@ -63,6 +63,11 @@
                                     data-orderable="true"
                                     class="center">Provenienza Ordine
                                 </th>
+                                <th data-slug="orderParal"
+                                    data-searchable="false"
+                                    data-orderable="true"
+                                    class="center">Ordine Parallelo
+                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
