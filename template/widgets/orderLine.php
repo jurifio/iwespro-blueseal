@@ -10,6 +10,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 <td class="center">
     <?php if($line->isStatusManageable()): ?>
         <?php if(!is_null($line->getNextOkLineStatus())): ?>
+
         <button data-ajax="true"
                 data-method="PUT"
                 data-controller="ChangeLineStatus"
