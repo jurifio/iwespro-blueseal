@@ -30,7 +30,7 @@ class COrderListAjaxController extends AAjaxController
     public function get()
     {
         $perm = \Monkey::app()->getUser()->hasPermission('allShops');
-
+        $productHasShopDestinationRepo=\Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $sql = "SELECT
                   `o`.`id`                                               AS `id`,
                   concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
@@ -131,6 +131,7 @@ class COrderListAjaxController extends AAjaxController
             /** ciclo le righe */
             $row["product"] = "";
             $alert = false;
+            $orderParal='';
             foreach ($val->orderLine as $line) {
                 try {
                     /** @var CProductSku $sku */
@@ -139,12 +140,27 @@ class COrderListAjaxController extends AAjaxController
 
                     $code = $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
+                    $skuParalId=$line->productId;
+                    $skupParalVariantId=$line->productVariantId;
+                    $skuParalSizeId=$line->productSizeId;
+                    $skuParalShopId=$line->shopId;
+                    $skuParal=$val->remoteShopId;
+                    $findParalel=$productHasShopDestinationRepo->findOneBy(['productId'=>$skuParalId,
+                                                                            'productVariantId'=>$skupParalVariantId,
+                                                                            'productSizeId'=>$skuParalSizeId,
+                                                                            'shopIdOrigin'=>$skuParalShopId,
+                                                                            'shopIdDestination'=>$skuParal]);
+                    if($findParalel!=null){
+                        $orderParal='Ordine Parallelo';
+                    }
+
                 } catch (\Throwable $e) {
                     $code = 'non trovato';
                 }
 
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
+                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>".$orderParal . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
+
             }
 
 

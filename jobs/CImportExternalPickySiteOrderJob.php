@@ -266,7 +266,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                       FROM CouponEvent ce");
             $stmtCouponEvent->execute();
             while ($rowCouponEvent = $stmtCouponEvent->fetch(PDO::FETCH_ASSOC)) {
-                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCouponEvent['remoteId'], 'remoteShopId' => $shop]);
+                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCouponEvent['remoteId'],'name'=>$rowCouponEvent['name'], 'remoteShopId' => $shop]);
                 if ($checkCouponEventIfExist == null) {
                     $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponEvent['couponTypeId'], 'remoteShopId' => $shop]);
                     if ($checkCouponTypeIfExist != null) {
