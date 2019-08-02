@@ -561,7 +561,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note
-                                     FROM OrderLine ol");
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
             $stmtOrderLine->execute();
             while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
                 $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'],'remoteOrderId'=>$rowOrderLine['orderId'], 'remoteShopId' => $shop]);
