@@ -161,7 +161,7 @@ class COrderListAjaxController extends AAjaxController
                     $code = 'non trovato';
                 }
 
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>".$orderParal . "<br>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
+                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
 
 
