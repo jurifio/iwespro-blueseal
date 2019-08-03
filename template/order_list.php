@@ -71,7 +71,7 @@
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Contenuto
+                                    class="center">Contenuto e chi Spedisce Cosa
                                 </th>
                                 <th data-slug="status"
                                     data-searchable="true"

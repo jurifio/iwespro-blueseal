@@ -147,7 +147,7 @@ class COrderListAjaxController extends AAjaxController
                     $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
                     $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
 
-                    $code = $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
+                    $code = "spedisce ". $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
                     $skuParalId=$line->productId;
                     $skupParalVariantId=$line->productVariantId;
