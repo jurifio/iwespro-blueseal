@@ -122,10 +122,56 @@ class CUserManageController extends ARestrictedAccessRootController
     {
 	    $ids = $this->app->router->request()->getRequestData('users');
 	    foreach($ids as $id) {
-		    $user = \Monkey::app()->repoFactory->create('User')->findOne([$id]);
+            $sql = 'DELETE  from Cart where userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  from CartAbandonedEmailSend where userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM Coupon WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM Document WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM EmailAddress WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM Fidelity WHERE memberGetMemberId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM Fidelity WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM Foison WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM InvoiceSectional WHERE userAddressRecipientId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE  FROM NewsletterUser WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `Order` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `Order` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `ProductHistory` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `StorehouseOperation` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `Token` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `UserAddress` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `UserDetails` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `UserEmail` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `UserHasShop` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `UserOAuth` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `UserSession` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `WishList` WHERE userId='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+            $sql = 'DELETE FROM `User` WHERE id='.$id;
+            \Monkey::app()->dbAdapter->query($sql, []);
+		    /*$user = \Monkey::app()->repoFactory->create('User')->findOne([$id]);
 		    $user->isDeleted = 1;
 		    $user->isActive = 0;
-		    $user->update();
+		    $user->update();*/
 	    }
 
     }
