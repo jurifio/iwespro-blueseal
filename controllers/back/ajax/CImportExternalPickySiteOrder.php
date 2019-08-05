@@ -266,6 +266,8 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
                 } else {
 
+
+
                     $res .= "Coupon Evento Già esisitente";
                     continue;
                 }
@@ -543,7 +545,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note
-                                     FROM OrderLine ol WHERE frozenProduct IS NOT NULL");
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
             $stmtOrderLine->execute();
             while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
                 $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'],'remoteOrderId'=>$rowOrderLine['orderId'], 'remoteShopId' => $shop]);
