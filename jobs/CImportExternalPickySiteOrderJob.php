@@ -533,7 +533,36 @@ class CImportExternalPickySiteOrderJob extends ACronJob
 
             /**** inserimento righe Ordine*****/
 
-            $stmtOrderLine = $db_con->prepare("SELECT 
+            if($shop==1){
+                $stmtOrderLine = $db_con->prepare(" SELECT ol.id AS remoteId,
+                                     ol.orderId as orderId,
+                                     ol.productId as productId,
+                                     ol.productVariantId as productVariantId,
+                                     ol.productSizeId as productSizeId,
+                                     ol.shopId as shopId,
+                                     ol.status as status,
+                                     ol.orderLineFriendPaymentStatusId as orderLineFriendPaymentStatusId,
+                                     ol.orderLineFriendPaymentDate as  orderLineFriendPaymentDate,
+                                     NULL as warehouseShelfPositionId,
+                                     ol.frozenProduct as frozenProduct,
+                                     ol.fullPrice as fullPrice,
+                                     ol.activePrice as activePrice,
+                                     ol.vat as vat,
+                                     ol.cost as cost,
+                                     ol.shippingCharge as shippingCharge,
+                                     ol.couponCharge as couponCharge,
+                                     ol.userCharge as userCharge,
+                                     ol.paymentCharge as paymentCharge,
+                                     ol.sellingFeeCharge as sellingFeeCharge,
+                                     ol.customModifierCharge as customModifierCharge,
+                                     ol.netPrice as netPrice,
+                                     ol.friendRevenue as friendRevenue,
+                                     ol.creationDate as creationDate,
+                                     ol.lastUpdate as lastUpdate,
+                                     ol.note as note
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
+            }else {
+                $stmtOrderLine = $db_con->prepare("SELECT 
                                      ol.id AS remoteId,
                                      ol.orderId as orderId,
                                      ol.productId as productId,
@@ -561,6 +590,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
+            }
             $stmtOrderLine->execute();
             while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
                 $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'],'remoteOrderId'=>$rowOrderLine['orderId'], 'remoteShopId' => $shop]);
@@ -569,55 +599,57 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     $findOrder = $orderRepo->findOneBy(['remoteId' => $rowOrderLine['orderId'], 'remoteShopId' => $shop]);
                     if ($findOrder != null) {
 
-                        $orderId = $findOrder->id;
-                        $insertOrderLine = $orderLineRepo->getEmptyEntity();
-                        $insertOrderLine->orderId = $orderId;
-                        $insertOrderLine->productId = $rowOrderLine['productId'];
-                        $insertOrderLine->productVariantId = $rowOrderLine['productVariantId'];
-                        $insertOrderLine->productSizeId = $rowOrderLine['productSizeId'];
+
                         $skufind = $productSkuRepo->findOneBy([
                             'productId' => $rowOrderLine['productId'],
                             'productVariantId' => $rowOrderLine['productVariantId'],
                             'productSizeId' => $rowOrderLine['productSizeId'],
-                            'shopId' => $rowOrderLine['shopId']
+                            'shopId'=>$rowOrderLine['shopId']
                         ]);
-                        $insertOrderLine->orderLineFriendPaymentStatusId = $rowOrderLine['orderLineFriendPaymentStatusId'];
-                        $insertOrderLine->orderLineFriendPaymentDate = $rowOrderLine['orderLineFriendPaymentDate'];
-                        $insertOrderLine->warehouseShelfPositionId = $rowOrderLine['warehouseShelfPositionId'];
-                       if($skufind!=null) {
-                           $insertOrderLine->frozenProduct = $skufind->froze();
-                       }
-                        $insertOrderLine->shopId = $rowOrderLine['shopId'];
-                        $insertOrderLine->status = $rowOrderLine['status'];
-                        $insertOrderLine->fullPrice = $rowOrderLine['fullPrice'];
-                        $insertOrderLine->activePrice = $rowOrderLine['activePrice'];
-                        $insertOrderLine->vat = $rowOrderLine['vat'];
-                        $insertOrderLine->cost = $rowOrderLine['cost'];
-                        $insertOrderLine->shippingCharge = $rowOrderLine['shippingCharge'];
-                        $insertOrderLine->couponCharge = $rowOrderLine['couponCharge'];
-                        $insertOrderLine->userCharge = $rowOrderLine['userCharge'];
-                        $insertOrderLine->paymentCharge = $rowOrderLine['paymentCharge'];
-                        $insertOrderLine->sellingFeeCharge = $rowOrderLine['sellingFeeCharge'];
-                        $insertOrderLine->customModifierCharge = $rowOrderLine['customModifierCharge'];
-                        $insertOrderLine->netPrice = $rowOrderLine['netPrice'];
-                        $insertOrderLine->friendRevenue = $rowOrderLine['friendRevenue'];
-                        $insertOrderLine->creationDate = $rowOrderLine['creationDate'];
-                        $insertOrderLine->lastUpdate = $rowOrderLine['lastUpdate'];
-                        $insertOrderLine->note = $rowOrderLine['note'];
-                        $insertOrderLine->remoteId = $rowOrderLine['remoteId'];
-                        $insertOrderLine->remoteShopId = $shop;
-                        $insertOrderLine->remoteOrderId=$rowOrderLine['orderId'];
-                        $insertOrderLine->insert();
+                        if($skufind!=null) {
+                            $orderId = $findOrder->id;
+                            $insertOrderLine = $orderLineRepo->getEmptyEntity();
+                            $insertOrderLine->orderId = $orderId;
+                            $insertOrderLine->productId = $rowOrderLine['productId'];
+                            $insertOrderLine->productVariantId = $rowOrderLine['productVariantId'];
+                            $insertOrderLine->productSizeId = $rowOrderLine['productSizeId'];
+                            $insertOrderLine->orderLineFriendPaymentStatusId = $rowOrderLine['orderLineFriendPaymentStatusId'];
+                            $insertOrderLine->orderLineFriendPaymentDate = $rowOrderLine['orderLineFriendPaymentDate'];
+                            $insertOrderLine->warehouseShelfPositionId = $rowOrderLine['warehouseShelfPositionId'];
+                            $insertOrderLine->frozenProduct = $skufind->froze();
+                            $insertOrderLine->shopId = $skufind->shopId;
+                            $insertOrderLine->status = $rowOrderLine['status'];
+                            $insertOrderLine->fullPrice = $rowOrderLine['fullPrice'];
+                            $insertOrderLine->activePrice = $rowOrderLine['activePrice'];
+                            $insertOrderLine->vat = $rowOrderLine['vat'];
+                            $insertOrderLine->cost = $rowOrderLine['cost'];
+                            $insertOrderLine->shippingCharge = $rowOrderLine['shippingCharge'];
+                            $insertOrderLine->couponCharge = $rowOrderLine['couponCharge'];
+                            $insertOrderLine->userCharge = $rowOrderLine['userCharge'];
+                            $insertOrderLine->paymentCharge = $rowOrderLine['paymentCharge'];
+                            $insertOrderLine->sellingFeeCharge = $rowOrderLine['sellingFeeCharge'];
+                            $insertOrderLine->customModifierCharge = $rowOrderLine['customModifierCharge'];
+                            $insertOrderLine->netPrice = $rowOrderLine['netPrice'];
+                            $insertOrderLine->friendRevenue = $rowOrderLine['friendRevenue'];
+                            $insertOrderLine->creationDate = $rowOrderLine['creationDate'];
+                            $insertOrderLine->lastUpdate = $rowOrderLine['lastUpdate'];
+                            $insertOrderLine->note = $rowOrderLine['note'];
+                            $insertOrderLine->remoteId = $rowOrderLine['remoteId'];
+                            $insertOrderLine->remoteShopId = $shop;
+                            $insertOrderLine->remoteOrderId = $rowOrderLine['orderId'];
+                            $insertOrderLine->insert();
+                        }
 
                         //  $res .= "Riga Ordine  inserita ".$insertOrderLine->printId();
                     }
                 } else {
-
+                    $res .= "Riga Ordine  gia esistente";
                     continue;
 
                 }
 
             }
+
             $this->report('Finish Import Order ','Shop:'.$value->name);
         }
 
