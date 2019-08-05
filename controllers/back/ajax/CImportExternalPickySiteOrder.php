@@ -266,8 +266,6 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
                 } else {
 
-
-
                     $res .= "Coupon Evento Già esisitente";
                     continue;
                 }
