@@ -92,13 +92,13 @@ class CImportExternalPickySiteOrderJob extends ACronJob
 
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
             //ALL USER CREATION
-            $stmtUser = $db_con->prepare("SELECT 
+            $stmtUser = $db_con->prepare(sprintf("SELECT 
                                      u.id AS remoteId,
                                      u.langId AS langId,
                                      u.username as username,
                                      u.password as password,
                                      u.email AS email,
-                                     concat(u.registrationEntryPoint,'-','".$shop."') as registrationEntryPoint,
+                                     concat(u.registrationEntryPoint,'-','%s') as registrationEntryPoint,
                                      u.isActive as isActive,
                                      u.isDeleted as isDeleted,
                                      u.lastSeen as lastSeen,
@@ -114,7 +114,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ud.fiscalCode as fiscalCode,
                                      ud.note as note
                                      FROM User  u
-                                      JOIN UserDetails ud ON u.id =ud.userId");
+                                      JOIN UserDetails ud ON u.id =ud.userId", $shop));
             $stmtUser->execute();
             while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
                 $checkUserIfExist = $userRepo->findOneBy(['email' => $rowUser['email']]);

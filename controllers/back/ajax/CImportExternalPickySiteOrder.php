@@ -15,6 +15,7 @@ use bamboo\domain\entities\CSite;
 use bamboo\domain\entities\CUserHasShop;
 use bamboo\domain\repositories\CUserAddressRepo;
 use bamboo\domain\entities\CUser;
+use PDOException;
 
 
 /**
@@ -57,7 +58,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
                 $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $res .= " connessione ok <br>";
+                $res .= ' connessione ok <br>';
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
             }
@@ -80,13 +81,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
             //ALL USER CREATION
-            $stmtUser = $db_con->prepare("SELECT 
+            $stmtUser = $db_con->prepare(sprintf("SELECT 
                                      u.id AS remoteId,
                                      u.langId AS langId,
                                      u.username as username,
                                      u.password as password,
                                      u.email AS email,
-                                     concat(u.registrationEntryPoint,'-','".$shop."') as registrationEntryPoint,
+                                     concat(u.registrationEntryPoint, '-','%s') as registrationEntryPoint,
                                      u.isActive as isActive,
                                      u.isDeleted as isDeleted,
                                      u.lastSeen as lastSeen,
@@ -102,7 +103,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ud.fiscalCode as fiscalCode,
                                      ud.note as note
                                      FROM User  u
-                                      JOIN UserDetails ud ON u.id =ud.userId");
+                                      JOIN UserDetails ud ON u.id = ud.userId", $shop));
             $stmtUser->execute();
             while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
                 $checkUserIfExist = $userRepo->findOneBy(['email' => $rowUser['email']]);
@@ -154,7 +155,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
             }
 
-            $stmtUserAddress = $db_con->prepare("SELECT 
+            $stmtUserAddress = $db_con->prepare('SELECT 
                                                           us.id as remoteId,  
                                                           us.userId    as remoteUserId,
                                                           us.isBilling as isBilling,
@@ -170,7 +171,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                           us.countryId as countryId,
                                                           us.phone     as phone,
                                                           us.lastUsed  as lastUsed,
-                                                          us.fiscalCode as fiscalCode from UserAddress us");
+                                                          us.fiscalCode as fiscalCode from UserAddress us');
 
             $stmtUserAddress->execute();
             while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
