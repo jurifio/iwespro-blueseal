@@ -25,6 +25,7 @@ use bamboo\domain\entities\CSite;
 use bamboo\domain\entities\CUserHasShop;
 use bamboo\domain\repositories\CUserAddressRepo;
 use bamboo\domain\entities\CUser;
+use PDOException;
 
 
 class CImportExternalPickySiteOrderJob extends ACronJob
@@ -163,7 +164,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     continue;
 
                 }
-                debug_to_console( $res );
+
             }
 
             $stmtUserAddress = $db_con->prepare("SELECT 
@@ -217,7 +218,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                        continue;
 
                 }
-                debug_to_console( $res );
+
             }
             /** inserimento CouponType */
             $stmtCouponType = $db_con->prepare("SELECT
@@ -250,7 +251,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
 
                     continue;
                 }
-                debug_to_console( $res );
+
             }
 
             /** inserimento Coupon Event **/
