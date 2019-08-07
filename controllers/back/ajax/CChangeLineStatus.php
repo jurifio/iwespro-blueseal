@@ -48,10 +48,12 @@ class CChangeLineStatus extends AAjaxController
 
             /** @var COrderLine $line */
             $line = $repo->updateStatus($line, $ids[2]);
-            $stmtOrderLine=$db_con->prepare("UPDATE OrderLine SET `status`='".$ids[2]."' WHERE id=".$line->remoteId. " and orderId=".$line->orderId);
-            $stmtOrderLine->execute();
-            $stmtOrder=$db_con->prepare("UPDATE `Order` SET `status`='".$orderRepo->status."' WHERE id=".$orderRepo->remoteId);
-            $stmtOrder->execute();
+            if(ENV==='prod') {
+                $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $ids[2] . "' WHERE id=" . $line->remoteId . " and orderId=" . $line->orderId);
+                $stmtOrderLine->execute();
+                $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteId);
+                $stmtOrder->execute();
+            }
 
 
             $newActive = $line->orderLineStatus->isActive;

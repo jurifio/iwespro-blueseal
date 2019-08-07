@@ -49,6 +49,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
         $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
         foreach ($shopRepo as $value) {
             /********marketplace********/
+
             $db_host = $value->dbHost;
             $db_name = $value->dbName;
             $db_user = $value->dbUsername;
