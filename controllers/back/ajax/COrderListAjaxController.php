@@ -301,6 +301,36 @@ class COrderListAjaxController extends AAjaxController
         $cvhoR = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
 
         $dba = \Monkey::app()->dbAdapter;
+        $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
+        $shopId=$orderRepo->remoteShopId;
+        if($shopId==null){
+            $shopId=44;
+        }
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+        $db_host = $shopRepo->dbHost;
+        $db_name = $shopRepo->dbName;
+        $db_user = $shopRepo->dbUsername;
+        $db_pass = $shopRepo->dbPassword;
+        try {
+
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $res = ' connessione ok <br>';
+        } catch (PDOException $e) {
+            $res = $e->getMessage();
+        }
+        if(ENV==='prod') {
+            $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteId);
+            $stmtOrder->execute();
+            $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
+            foreach ($orderLineCancel as $orlc){
+                $remoteIdOrderLine=$orlc->remoteId;
+                $remoteStatusOrderLine=$orlc->status;
+                $remoteOrderId=$orlc->remoteOrderId;
+                $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
+                $stmtOrderLine->execute();
+            }
+        }
 
 
 
