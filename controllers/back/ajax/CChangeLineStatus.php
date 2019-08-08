@@ -30,30 +30,11 @@ class CChangeLineStatus extends AAjaxController
             $repo = \Monkey::app()->repoFactory->create('OrderLine');
             $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
             $oldActive = $line->orderLineStatus->isActive;
-            $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$line->remoteShopId]);
-            $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$line->orderId,'remoteShopId'=>$line->remoteShopId]);
-            $db_host = $shopRepo->dbHost;
-            $db_name = $shopRepo->dbName;
-            $db_user = $shopRepo->dbUsername;
-            $db_pass = $shopRepo->dbPassword;
-            $shop =$shopRepo->id;
-            try {
 
-                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $res = ' connessione ok <br>';
-            } catch (PDOException $e) {
-                $res = $e->getMessage();
-            }
 
             /** @var COrderLine $line */
             $line = $repo->updateStatus($line, $ids[2]);
-            if(ENV==='prod') {
-                $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $ids[2] . "' WHERE id=" . $line->remoteId . " and orderId=" . $line->orderId);
-                $stmtOrderLine->execute();
-                $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteId);
-                $stmtOrder->execute();
-            }
+
 
 
             $newActive = $line->orderLineStatus->isActive;
