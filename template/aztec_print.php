@@ -229,13 +229,21 @@
 <body class="fixed-header">
 <div class="cover"><div>Usa CTRL-P per stampare</div></div>
 
-<?php foreach ($products as $product):
+<?php
+$dirtyProductRepo=\Monkey::app()->repoFactory->create('DirtyProduct');
+$dirtySKuRepo=\Monkey::app()->repoFactory->create('DirtySku');
+foreach ($products as $product):
     /** @var \bamboo\domain\entities\CProduct $product */?>
 <div class="container newpage">
     <div class="row"
         <div class="col-md-12">
             <div class="col-md-4" style="margin-top:10px">
-                <?php if(empty($barcodeInt)): ?>
+                <?php
+                $findDirtyProductInt=$dirtyProductRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+                $dirtyProductId = $findDirtyProductInt->id;
+                $findBarcodeInt=$dirtySKuRepo->findOneBy(['dirtyProductId'=>$dirtyProductId]);
+                $barcodeInt=$findBarcodeInt->barcode;
+                 if(empty($barcodeInt)): ?>
                 <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode ; ?>" width="140" height="140"/>
                 <?php else: ?>
                 <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode.'__'.$barcodeInt ; ?>" width="140" height="140"/>
@@ -254,7 +262,7 @@
             </div>
             <div class="col-md-4">
                 <ul>
-                    <li><strong>BARCODE_INT</strong> <?php echo (!empty($product->getBarcodeInt()) ? $product->getBarcodeInt() : "---" ) ?></li>
+                    <li><strong>BARCODE_INT</strong> <?php echo (!empty($barcodeInt) ? $barcodeInt : "---" ) ?></li>
                     <li><strong>EXTID</strong> <?php echo $product->getShopExtenalIds('<br />') ?></li>
                 </ul>
             </div>
