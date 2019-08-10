@@ -239,6 +239,7 @@ foreach ($products as $product):
         <div class="col-md-12">
             <div class="col-md-4" style="margin-top:10px">
                 <?php
+
                 $findDirtyProductInt=$dirtyProductRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
                 $dirtyProductId = $findDirtyProductInt->id;
                 $findBarcodeInt=$dirtySKuRepo->findOneBy(['dirtyProductId'=>$dirtyProductId]);

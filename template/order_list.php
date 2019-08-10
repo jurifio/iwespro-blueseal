@@ -61,7 +61,7 @@
                                 <th data-slug="remoteShopId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Provenienza Ordine
+                                    class="center">Seller Shop
                                 </th>
                                 <th data-slug="orderParal"
                                     data-searchable="false"
@@ -71,7 +71,7 @@
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Contenuto e chi Spedisce Cosa
+                                    class="center">Supplier Shop
                                 </th>
                                 <th data-slug="status"
                                     data-searchable="true"

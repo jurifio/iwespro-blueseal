@@ -184,13 +184,13 @@ class COrderListAjaxController extends AAjaxController
             $row['remoteId']=$val->remoteId;
             $shopFind=$shopRepo->findOneBy(['id'=>$val->remoteShopId]);
             if ($shopFind==null){
-                $row['remoteShopId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">ordine PickyShop</i>";
+                $row['remoteShopId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
             }else {
                 $shopname = $shopFind->title;
                 if ($val->remoteShopId == 44) {
-                    $row['remoteShopId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">ordine PickyShop</i>";
+                    $row['remoteShopId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
                 } else {
-                    $row['remoteShopId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">ordine " . $shopname . "</i>";
+                    $row['remoteShopId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">" . $shopname . "</i>";
                 }
             }
             if($perm){
