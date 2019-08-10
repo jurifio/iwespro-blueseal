@@ -319,7 +319,7 @@ class COrderListAjaxController extends AAjaxController
         } catch (PDOException $e) {
             $res = $e->getMessage();
         }
-        if(ENV =='prod') {
+        if(ENV == 'prod') {
             $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteId);
             $stmtOrder->execute();
             $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
