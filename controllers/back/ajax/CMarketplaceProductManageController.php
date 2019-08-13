@@ -85,8 +85,23 @@ class CMarketplaceProductManageController extends AAjaxController
         $count = 0;
         /** @var CMarketplaceAccountHasProductRepo $repo */
         $repo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
-        foreach ($this->app->router->request()->getRequestData('ids') as $mId) {
-            if ($repo->deleteProductFromMarketplaceAccount($mId)) $count++;
+        $marketplaceAccount=explode('-', $this->app->router->request()->getRequestData('account'));
+        $marketplaceAccountId=$marketplaceAccount[0];
+        $marketplaceId = $marketplaceAccount[1];
+        $marketplaceAccountHasProductRepo=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+
+
+        foreach ($this->app->router->request()->getRequestData('rows') as $mId) {
+            $product=explode('-',$mId);
+            $productId=$product[0];
+            $productVariantId=$product[1];
+            $marketplaceAccountHasProduct=$marketplaceAccountHasProductRepo->findOneBy(['productId'=>$productId,
+                                                                                        'productVariantId'=>$productVariantId,
+                                                                                        'marketplaceId'=>$marketplaceId,
+                                                                                        'marketplaceAccountId'=>$marketplaceAccountId]);
+            if($marketplaceAccountHasProduct!=null){
+                $marketplaceAccountHasProduct->delete();
+            }
         }
         return $count;
     }
