@@ -35,9 +35,9 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
 //definisco l'ambiente di sviluppo
         if (ENV == 'dev') {
-            $pathlocal = '/media/sf_sites/PickyshopNew/temp-remaster/';
-            $save_to = '/media/sf_sites/PickyshopNew/temp-remaster/';
-            $save_to_dir = '/media/sf_sites/PickyshopNew/temp-remaster';
+            $pathlocal = '/media/sf_sites/iwespro/temp-remaster/';
+            $save_to = '/media/sf_sites/iwespro/temp-remaster/';
+            $save_to_dir = '/media/sf_sites/iwespro/temp-remaster';
             $path = 'shootImport/incoming2';
             $remotepathTodo = 'shootImport/newage2/topublish_dev/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
