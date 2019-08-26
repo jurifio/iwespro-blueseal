@@ -10,25 +10,28 @@ use bamboo\domain\entities\CProductHasShopDestination;
 
 
 /**
- * Class CProductHasShopDestinationManageController
+ * Class CProductHasShopDestinationChangeStatusManageController
  * @package bamboo\controllers\back\ajax
- * @author Iwes Team <it@iwes.it>, 24/05/2019
- * @copyright (c) Iwes snc - All rights reserved
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
+ * @date 26/08/2019
  * @since 1.0
  */
-class CProductHasShopDestinationManageController extends AAjaxController
+class CProductHasShopDestinationChangeStatusManageController extends AAjaxController
 {
     public function get()
     {
         $response = [];
         foreach (\Monkey::app()->repoFactory->create('Shop')->findAll() as $shop) {
-           if($shop->hasEcommerce==1) {
-               $response[] = ['id' => $shop->printId(), 'name' => $shop->name, 'title' => $shop->title];
-           }
-           }
+            if($shop->hasEcommerce==1) {
+                $response[] = ['id' => $shop->printId(), 'name' => $shop->name, 'title' => $shop->title];
+            }
+        }
 
         return json_encode($response);
     }
@@ -37,15 +40,12 @@ class CProductHasShopDestinationManageController extends AAjaxController
     {
 
         $shopIdDestination = $this->app->router->request()->getRequestData('shop');
-
-
         $rows = $this->app->router->request()->getRequestData('rows');
-        $status=$this->app->router->request()->getRequestData('status');
         $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
-        if($status==false){
-            $status=15;
-        }
+        $status=$this->app->router->request()->getRequestData('status');
+
+
 
 
 
@@ -63,16 +63,11 @@ class CProductHasShopDestinationManageController extends AAjaxController
                 $shopIdOrigin=$shopHasProduct->shopId;
                 /** @var  $productHasShopDestinationFind CProductHasShopDestination */
                 $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdOrigin'=>$shopIdOrigin,'shopIdDestination'=>$shopIdDestination]);
-                if($productHasShopDestinationFind){
+                if($productHasShopDestinationFind == null){
                         continue;
                 }else{
-                    $productHasShopDestination=$productHasShopDestinationRepo->getEmptyEntity();
-                    $productHasShopDestination->productId=$productId;
-                    $productHasShopDestination->productVariantId=$productVariantId;
-                    $productHasShopDestination->shopIdOrigin=$shopIdOrigin;
-                    $productHasShopDestination->shopIdDestination=$shopIdDestination;
-                    $productHasShopDestination->statusId=$status;
-                    $productHasShopDestination->smartInsert();
+                    $productHasShopDestinationFind->statusId=$status;
+                    $productHasShopDestinationFind->update();
                     $i++;
                 }
                 \Monkey::app()->repoFactory->commit();
@@ -107,18 +102,18 @@ class CProductHasShopDestinationManageController extends AAjaxController
         $res='';
         foreach ($rows as $row) {
 
-                $arr = explode("-", $row);
-                $productId = $arr[0];
-                $productVariantId=$arr[1];
+            $arr = explode("-", $row);
+            $productId = $arr[0];
+            $productVariantId=$arr[1];
 
-                $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdDestination'=>$shopIdDestination]);
-                if($productHasShopDestinationFind==null){
-                    continue;
-                }else{
+            $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdDestination'=>$shopIdDestination]);
+            if($productHasShopDestinationFind==null){
+                continue;
+            }else{
 
-                    $productHasShopDestinationFind->delete();
-                   $res.=$productId.'-'.$productVariantId." disassociato dallo shop <br>";
-                }
+                $productHasShopDestinationFind->delete();
+                $res.=$productId.'-'.$productVariantId." disassociato dallo shop <br>";
+            }
 
 
         }

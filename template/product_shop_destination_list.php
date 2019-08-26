@@ -219,6 +219,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.tofriendshop.depublish"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.tofriendshop.statuschange"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Shooting">
         <bs-toolbar-button
