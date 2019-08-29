@@ -64,12 +64,12 @@ class CShipmentManageController extends AAjaxController
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {
                 $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shipmentData['shipmentDate']);
                 // $shipment->confirmShipment(); FIXME non ha mai funzionato?
-                if ($shipment->scope == CShipment::SCOPE_SUPPLIER_TO_US) {
+                if ($shipment->scope == CShipment::SCOPE_SUPPLIER_TO_USER) {
                     /** @var COrderLineRepo $lR */
                     $olR = \Monkey::app()->repoFactory->create('OrderLine');
                     $orderLine = $shipment->orderLine;
                     foreach ($orderLine as $v) {
-                        $olR->updateStatus($v, 'ORD_FRND_ORDSNT', $shipment->shipmentDate);
+                        $olR->updateStatus($v, 'ORD_SENT', $shipment->shipmentDate);
                     }
                 }
             }
@@ -148,8 +148,9 @@ class CShipmentManageController extends AAjaxController
                             STimeToolbox::DbFormattedDate(date($newShipmentDate)),
                             $shipment->orderLine
                         );
-                        break;
+
                     }
+                        break;
                     case CShipment::SCOPE_US_TO_USER: {
                         if ($newShipmentDate) {
                             $newShipment = new \DateTime($newShipmentDate);
@@ -160,7 +161,22 @@ class CShipmentManageController extends AAjaxController
                                 $shipment->orderLine->getFirst()->order
                             );
                         }
+
                     }
+                        break;
+                    case CShipment::SCOPE_SUPPLIER_TO_USER: {
+                        if ($newShipmentDate) {
+                            $newShipment = new \DateTime($newShipmentDate);
+                            $shipmentRepo->newOrderShipmentFromSupplierToClient(
+                                $shipment->carrierId,
+                                null,
+                                STimeToolbox::DbFormattedDateTime($newShipment),
+                                $shipment->orderLine->getFirst()->order
+                            );
+                        }
+
+                    }
+                        break;
                 }
             }
 

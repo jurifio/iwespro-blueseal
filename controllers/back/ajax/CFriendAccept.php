@@ -102,7 +102,7 @@ class CFriendAccept extends AAjaxController
                 $bookingNumber = empty($bookingNumber) ? null : $bookingNumber;
                 /** @var CShipmentRepo $shipmentRepo */
                 $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
-                $shipment = $shipmentRepo->newFriendShipmentToUs($carrierId, $fromAddressBookId, $bookingNumber, $shippingDate, $orderLineCollection);
+                $shipment = $shipmentRepo->newOrderShipmentFromSupplierToClient($carrierId, $fromAddressBookId, $bookingNumber, $shippingDate, $orderLineCollection);
                 $request->getRequestData();
                 $this->app->eventManager->triggerEvent('orderLine.friend.accept', ['orderLines' => $orderLineCollection]);
 
