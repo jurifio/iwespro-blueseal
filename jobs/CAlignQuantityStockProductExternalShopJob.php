@@ -83,11 +83,15 @@ class CAlignQuantityStockProductExternalShopJob extends ACronJob
                 $productVariantId=$rowProductPublicSku['productVariantId'];
                 $productSizeId=$rowProductPublicSku['productSizeId'];
                 $pps=$productPublicSkuRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'productSizeId'=>$productSizeId]);
-                $origStockQty = $pps->stockQty;
-                $stockQty = $origStockQty - $destStockQty;
-                if ($stockQty != 0) {
-                    //echo sprintf("Quantità differente del prodotto %s-%s-%s quantità iwes:%s quantita Destinazione:%s<br>", $productId, $productVariantId, $productSizeId, $origStockQty, $destStockQty);
-                    array_push($collectRealQty, ['productId' => $productId, 'productVariantId' => $productVariantId, 'productSizeId' => $productSizeId, 'stockQty' => $origStockQty]);
+                if($pps!=null) {
+                    $origStockQty = $pps->stockQty;
+                    $stockQty = $origStockQty - $destStockQty;
+                    if ($stockQty != 0) {
+                      //  echo sprintf("Quantità differente del prodotto %s-%s-%s quantità iwes:%s quantita Destinazione:%s<br>", $productId, $productVariantId, $productSizeId, $origStockQty, $destStockQty);
+                        array_push($collectRealQty, ['productId' => $productId, 'productVariantId' => $productVariantId, 'productSizeId' => $productSizeId, 'stockQty' => $origStockQty]);
+                    }
+                }else{
+                    continue;
                 }
 
             }
