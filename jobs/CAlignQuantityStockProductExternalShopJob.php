@@ -55,6 +55,7 @@ class CAlignQuantityStockProductExternalShopJob extends ACronJob
      */
     private function alignStockExternalProduct()
     {
+        $res="";
         $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
 
         foreach ($shopRepo as $value) {
@@ -73,8 +74,8 @@ class CAlignQuantityStockProductExternalShopJob extends ACronJob
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
             }
-            $productPublicSkuRepo = \Monkey::app()->repoFactory->create('ProductPublicSku');
-            $stmtProductPublicSku = $db_con->prepare("select * from ProductPublicSku");
+            $productPublicSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
+            $stmtProductPublicSku = $db_con->prepare("select * from ProductSku");
             $stmtProductPublicSku->execute();
             $collectRealQty=[];
             while ($rowProductPublicSku = $stmtProductPublicSku->fetch(PDO::FETCH_ASSOC)) {
@@ -82,13 +83,15 @@ class CAlignQuantityStockProductExternalShopJob extends ACronJob
                 $productId=$rowProductPublicSku['productId'];
                 $productVariantId=$rowProductPublicSku['productVariantId'];
                 $productSizeId=$rowProductPublicSku['productSizeId'];
-                $pps=$productPublicSkuRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'productSizeId'=>$productSizeId]);
+                $shopDest=$rowProductPublicSku['shopId'];
+                $pps=$productPublicSkuRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'productSizeId'=>$productSizeId,'shopId'=>$shopDest]);
                 if($pps!=null) {
                     $origStockQty = $pps->stockQty;
+                    $origShop=$pps->shopId;
                     $stockQty = $origStockQty - $destStockQty;
                     if ($stockQty != 0) {
                       //  echo sprintf("Quantità differente del prodotto %s-%s-%s quantità iwes:%s quantita Destinazione:%s<br>", $productId, $productVariantId, $productSizeId, $origStockQty, $destStockQty);
-                        array_push($collectRealQty, ['productId' => $productId, 'productVariantId' => $productVariantId, 'productSizeId' => $productSizeId, 'stockQty' => $origStockQty]);
+                        array_push($collectRealQty, ['productId' => $productId, 'productVariantId' => $productVariantId, 'productSizeId' => $productSizeId, 'stockQty' => $origStockQty,'shopId'=>$origShop]);
                     }
                 }else{
                     continue;
@@ -97,11 +100,12 @@ class CAlignQuantityStockProductExternalShopJob extends ACronJob
             }
 
             foreach ($collectRealQty as $row){
-               $stmtUpdateProductPublicSku=$db_con->prepare('UPDATE ProductPublicSku 
+               $stmtUpdateProductPublicSku=$db_con->prepare('UPDATE ProductSku 
                                                                       SET stockQty='.$row['stockQty'].'
                                                                       WHERE productId='.$row['productId'].'
                                                                       AND productVariantId='.$row['productVariantId'].'
-                                                                      AND productSizeId='.$row['productSizeId']);
+                                                                      AND productSizeId='.$row['productSizeId'].'
+                                                                      AND shopId='.$row['shopId']);
                 $stmtUpdateProductPublicSku->execute();
                 $this->report("Updating StockQty", "Skus updated: " . $row['productId'] .'-'.$row['productVariantId'].'-'.$row['productSizeId']. ' with quantity: ' . $row['stockQty']. 'for shop:'.$value->name);
             }
