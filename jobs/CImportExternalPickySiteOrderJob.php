@@ -513,8 +513,11 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $insertOrder->customModifier = $rowOrder['customModifier'];
                             $insertOrder->orderDate = $rowOrder['orderDate'];
                             $insertOrder->note = $rowOrder['note'];
+                            $insertOrder->transactionNumber=$rowOrder['transactionNumber'];
+                            $insertOrder->transactionMac=$rowOrder['transactionMac'];
                             $insertOrder->paidAmount = $rowOrder['paidAmount'];
                             $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
+
                             $insertOrder->paymentDate = $rowOrder['paymentDate'];
                             $insertOrder->remoteId = $rowOrder['remoteId'];
                             $insertOrder->remoteShopId = $shop;

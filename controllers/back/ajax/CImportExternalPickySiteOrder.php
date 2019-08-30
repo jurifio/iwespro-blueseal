@@ -507,6 +507,8 @@ class CImportExternalPickySiteOrder extends AAjaxController
                             $insertOrder->note = $rowOrder['note'];
                             $insertOrder->paidAmount = $rowOrder['paidAmount'];
                             $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
+                            $insertOrder->transactionNumber=$rowOrder['transactionNumber'];
+                            $insertOrder->transactionMac=$rowOrder['transactionMac'];
                             $insertOrder->paymentDate = $rowOrder['paymentDate'];
                             $insertOrder->remoteId = $rowOrder['remoteId'];
                             $insertOrder->remoteShopId = $shop;
