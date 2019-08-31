@@ -51,7 +51,9 @@ class CDictionarySeasonListAjaxController extends AAjaxController
     public function get()
     {
         $editShopLink = $this->urls['base']."importatori/dizionari/stagioni/modifica";
-        $sql = "select `d1`.`shopId` AS `id`,`d1`.`shopId` AS `shopId`,count(0) AS `count`,(select count(0) AS `count` from `DictionarySeason` `d2` where ((`d2`.`shopId` = `d1`.`shopId`) and isnull(`d2`.`productSeasonId`))) AS `mancanti` from `DictionarySeason` `d1` group by `d1`.`shopId`";
+        $sql = "select `d1`.`shopId` AS `id`,`d1`.`shopId` AS `shopId`,count(0) AS `count`,(select count(0) AS `count` from `DictionarySeason` `d2` where ((`d2`.`shopId` = `d1`.`shopId`) and isnull(`d2`.`productSeasonId`))) AS `mancanti`
+from `DictionarySeason` `d1` join Shop s on `d1`.`shopId`  = s.id WHERE s.isVisible='1'
+group by `d1`.`shopId`";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         if (!empty($this->authorizedShops)) {

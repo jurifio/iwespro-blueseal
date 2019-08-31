@@ -57,8 +57,8 @@ class CDictionaryBrandListAjaxController extends AAjaxController
   count(0)                                                                    AS `count`,
   (SELECT count(0) AS `count`
    FROM `DictionaryBrand` `d2`
-   WHERE ((`d2`.`shopId` = `d1`.`shopId`) AND isnull(`d2`.`productBrandId`))) AS `mancanti`
-FROM `DictionaryBrand` `d1`
+   WHERE ((`d2`.`shopId` = `d1`.`shopId`) AND isnull(`d2`.`productBrandId`))) AS `mancanti`  
+FROM `DictionaryBrand` `d1` join Shop s on `d1`.`shopId`  = s.id WHERE s.isVisible='1'
 GROUP BY `d1`.`shopId`";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 

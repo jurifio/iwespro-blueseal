@@ -72,6 +72,7 @@ class CAlignQuantityStockProductCartechiniJob extends ACronJob
         } catch (PDOException $e) {
             $res .= $e->getMessage();
         }
+        //connessione a
             $productPublicSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
             $stmtProductPublicSku = $db_con->prepare("select * from ProductSku");
             $stmtProductPublicSku->execute();
