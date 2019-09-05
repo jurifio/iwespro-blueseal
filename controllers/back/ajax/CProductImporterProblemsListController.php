@@ -45,7 +45,7 @@ class CProductImporterProblemsListController extends AAjaxController
               LEFT JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
-            WHERE p.dummyPicture='bs-dummy-16-9.png' AND
+            WHERE p.dummyPicture <> 'bs-dummy-16-9.png' AND
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
