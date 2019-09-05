@@ -502,8 +502,6 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
                                 $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
                             }
-
-
                             $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
                             $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
                             $insertOrder->grossTotal = $rowOrder['grossTotal'];
@@ -517,7 +515,6 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $insertOrder->transactionMac=$rowOrder['transactionMac'];
                             $insertOrder->paidAmount = $rowOrder['paidAmount'];
                             $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
-
                             $insertOrder->paymentDate = $rowOrder['paymentDate'];
                             $insertOrder->remoteId = $rowOrder['remoteId'];
                             $insertOrder->remoteShopId = $shop;
