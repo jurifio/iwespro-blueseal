@@ -183,11 +183,11 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                           us.countryId as countryId,
                                                           us.phone     as phone,
                                                           us.lastUsed  as lastUsed,
-                                                          us.fiscalCode as fiscalCode from UserAddress us");
+                                                         us.fiscalCode as fiscalCode from UserAddress us where us.IsBilling=1");
 
             $stmtUserAddress->execute();
             while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
-                $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'isBilling' => 1, 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
                 if (null == $checkUserAddressisBillingIfExist) {
                     $findUserInsert = $userRepo->findOneBy(['remoteId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
                     if ($findUserInsert != null) {
@@ -220,6 +220,60 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                 }
 
             }
+            $stmtUserAddress = $db_con->prepare("SELECT 
+                                                          us.id as remoteId,  
+                                                          us.userId    as remoteUserId,
+                                                          us.isBilling as isBilling,
+                                                          us.isDefault as isDefault,
+                                                          us.name      as name,
+                                                          us.surname   as surname,
+                                                          us.company   as company,
+                                                          us.address   as address,
+                                                          us.extra     as extra,
+                                                          us.province  as province,
+                                                          us.city      as city,
+                                                          us.postcode  as postcode,
+                                                          us.countryId as countryId,
+                                                          us.phone     as phone,
+                                                          us.lastUsed  as lastUsed,
+                                                          us.fiscalCode as fiscalCode from UserAddress us where us.IsBilling=0");
+
+            $stmtUserAddress->execute();
+            while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
+                $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'isBilling' => 0, 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                if (null == $checkUserAddressisBillingIfExist) {
+                    $findUserInsert = $userRepo->findOneBy(['remoteId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                    if ($findUserInsert != null) {
+                        $userAddressInsert = $userAddressRepo->getEmptyEntity();
+                        $userAddressId = $findUserInsert->id;
+                        $userAddressInsert->userId = $userAddressId;
+                        $userAddressInsert->isBilling = $rowUserAddress['isBilling'];
+                        $userAddressInsert->isDefault = $rowUserAddress['isDefault'];
+                        $userAddressInsert->name = $rowUserAddress['name'];
+                        $userAddressInsert->surname = $rowUserAddress['surname'];
+                        $userAddressInsert->company = $rowUserAddress['company'];
+                        $userAddressInsert->address = $rowUserAddress['address'];
+                        $userAddressInsert->extra = $rowUserAddress['extra'];
+                        $userAddressInsert->province = $rowUserAddress['province'];
+                        $userAddressInsert->city = $rowUserAddress['city'];
+                        $userAddressInsert->postcode = $rowUserAddress['postcode'];
+                        $userAddressInsert->countryId = $rowUserAddress['countryId'];
+                        $userAddressInsert->phone = $rowUserAddress['phone'];
+                        $userAddressInsert->lastUsed = $rowUserAddress['lastUsed'];
+                        $userAddressInsert->fiscalCode = $rowUserAddress['fiscalCode'];
+                        $userAddressInsert->remoteId = $rowUserAddress['remoteId'];
+                        $userAddressInsert->remoteUserId = $rowUserAddress['remoteUserId'];
+                        $userAddressInsert->remoteShopId = $shop;
+                        $userAddressInsert->insert();
+
+                    }
+                } else {
+                    continue;
+
+                }
+
+            }
+
             /** inserimento CouponType */
             $stmtCouponType = $db_con->prepare("SELECT
                                            ct.id as remoteId,
@@ -342,33 +396,39 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.orderPaymentMethodId as orderPaymentMethodId,
                                                c.couponId as couponId,
                                                c.userId as userId,
+                                               u.email as email,
                                                c.cartTypeId as cartTypeId,
                                                c.billingAddressId as billingAddressId,
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate
-                                               from Cart c where c.billingAddressId IS  NOT NULL and c.shipmentAddressId  IS NOT NULL ");
+                                               from Cart c join User u on c.userId = u.id where c.billingAddressId IS  NOT NULL and c.shipmentAddressId  IS NOT NULL  ");
             $stmtCart->execute();
             while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
                 $checkCartIfExist = $cartRepo->findOneBy(['remoteId' => $rowCart['remoteId'], 'remoteShopId' => $shop]);
                 if (null == $checkCartIfExist) {
-                    $userFind = $userRepo->findOneBy(['remoteId' => $rowCart['userId'], 'remoteShopId' => $shop]);
+                    $userFind = $userRepo->findOneBy(['email' => $rowCart['email']]);
                     if ($userFind !== null) {
                         $userId = $userFind->id;
-                        $billingAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['billingAddressId'], 'remoteShopId' => $shop]);
+
+                        $shipmentAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                        if ($shipmentAddressIdFind != null) {
+                            $shipmentAddressId = $shipmentAddressIdFind->id;
+                        }
+                        $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
                         if ($billingAddressIdFind != null) {
                             $billingAddressId = $billingAddressIdFind->id;
-                            $shipmentAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['shipmentAddressId'], 'remoteShopId' => $shop]);
-                            if ($shipmentAddressIdFind != null) {
-                                $shipmentAddressId = $shipmentAddressIdFind->id;
-                                $insertCart = $cartRepo->getEmptyEntity();
-                                if ($rowCart['couponId'] != '') {
-                                    $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
-                                    if ($FindCoupon != null) {
-                                        $insertCart->couponId = $FindCoupon->id;
+                        }else{
+                            $billingAddressId = $shipmentAddressIdFind->id;
+                        }
+                        $insertCart = $cartRepo->getEmptyEntity();
+                        if ($rowCart['couponId'] != '') {
+                            $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
+                            if ($FindCoupon != null) {
+                                $insertCart->couponId = $FindCoupon->id;
 
-                                    }
-                                }
+                            }
+                        }
 
                                 $insertCart->orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
                                 $insertCart->userId = $userId;
@@ -383,8 +443,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertCart->insert();
 
                             }
-                        }
-                    }
+
+
 
                 } else {
 
@@ -435,6 +495,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.orderShippingMethodId as orderShippingMethodId,
                                                o.couponId as couponId,
                                                o.userId as userId,
+                                               u.email as email,
                                                o.cartId as cartId,
                                                `o`.`status` as `status`,
                                                o.frozenBillingAddress as frozenBillingAddress,
@@ -460,15 +521,12 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.lastUpdate as lastUpdate,
                                                o.creationDate as creationDate,
                                                o.hasInvoice as hasInvoice
-                                               from `Order` o");
+                                              from `Order` o join User u on o.userId = u.id ");
             $stmtOrder->execute();
             while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
-
-
                 $checkOrderIfExist = $orderRepo->findOneBy(['remoteId' => $rowOrder['remoteId'], 'remoteShopId' => $shop]);
-
                 if ($checkOrderIfExist == null) {
-                    $findUser = $userRepo->findOneBy(['remoteId' => $rowOrder['userId'], 'remoteShopId' => $shop]);
+                    $findUser = $userRepo->findOneBy(['email' => $rowOrder['email']]);
                     if ($findUser !== null) {
                         $userId = $findUser->id;
                         $findCart = $cartRepo->findOneBy(['remoteId' => $rowOrder['cartId'], 'remoteShopId' => $shop]);
@@ -488,19 +546,27 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $insertOrder->userId = $userId;
                             $insertOrder->cartId = $cartId;
                             $insertOrder->status = $rowOrder['status'];
-                            /* defrost indirizzo  Fatturazione remoto */
-                            $remoteBillingAddressId = $rowOrder['billingAddressId'];
-                            if($remoteBillingAddressId!='') {
-                                $findBillingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteBillingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                                $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
-                                $insertOrder->billingAddressId = $findBillingAddressDetails->id;
-                            }
-                            /* defrost indirizzo Spedizione remoto */
-                            $remoteShippingAddressId = $rowOrder['shipmentAddressId'];
-                            if($remoteShippingAddressId!='') {
-                                $findShippingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteShippingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
+
+
+                            $findShippingAddressDetails = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                            if($findShippingAddressDetails!=null) {
                                 $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
                                 $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
+                            }else {
+                                $findBillingAddressDetailsRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                                $insertOrder->frozenShippingAddress = $findBillingAddressDetailsRes->froze();
+                                $insertOrder->shipmentAddressId = $findBillingAddressDetailsRes->id;
+                            }
+
+
+                            $findBillingAddressDetails = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                            if($findBillingAddressDetails!=null) {
+                                $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
+                                $insertOrder->billingAddressId = $findBillingAddressDetails->id;
+                            }else{
+                                $findShippingAddressDetailsRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                                $insertOrder->frozenBillingAddress = $findShippingAddressDetailsRes->froze();
+                                $insertOrder->billingAddressId = $findShippingAddressDetailsRes->id;
                             }
                             $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
                             $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];

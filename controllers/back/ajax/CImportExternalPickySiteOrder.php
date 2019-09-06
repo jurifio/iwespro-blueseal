@@ -46,7 +46,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
         ini_set('memory_limit', '2048M');
 
         $res = "";
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
         foreach ($shopRepo as $value) {
             /********marketplace********/
 
@@ -54,7 +54,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
             $db_name = $value->dbName;
             $db_user = $value->dbUsername;
             $db_pass = $value->dbPassword;
-            $shop =$value->id;
+            $shop = $value->id;
             try {
 
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
@@ -156,12 +156,14 @@ class CImportExternalPickySiteOrder extends AAjaxController
                     }
 
                 }
-            } catch(\Throwable $e){
-                $res.=$e;
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
-try {
-    $stmtUserAddress = $db_con->prepare('SELECT 
+
+            /** indirizzzo di fatturazione */
+            try {
+                $stmtUserAddress = $db_con->prepare('SELECT 
                                                           us.id as remoteId,  
                                                           us.userId    as remoteUserId,
                                                           us.isBilling as isBilling,
@@ -177,51 +179,114 @@ try {
                                                           us.countryId as countryId,
                                                           us.phone     as phone,
                                                           us.lastUsed  as lastUsed,
-                                                          us.fiscalCode as fiscalCode from UserAddress us');
+                                                          us.fiscalCode as fiscalCode from UserAddress us where us.IsBilling=1');
 
-    $stmtUserAddress->execute();
-    while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
-        $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
-        if (null == $checkUserAddressisBillingIfExist) {
-            $findUserInsert = $userRepo->findOneBy(['remoteId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
-            if ($findUserInsert != null) {
-                $userAddressInsert = $userAddressRepo->getEmptyEntity();
-                $userAddressId = $findUserInsert->id;
-                $userAddressInsert->userId = $userAddressId;
-                $userAddressInsert->isBilling = $rowUserAddress['isBilling'];
-                $userAddressInsert->isDefault = $rowUserAddress['isDefault'];
-                $userAddressInsert->name = $rowUserAddress['name'];
-                $userAddressInsert->surname = $rowUserAddress['surname'];
-                $userAddressInsert->company = $rowUserAddress['company'];
-                $userAddressInsert->address = $rowUserAddress['address'];
-                $userAddressInsert->extra = $rowUserAddress['extra'];
-                $userAddressInsert->province = $rowUserAddress['province'];
-                $userAddressInsert->city = $rowUserAddress['city'];
-                $userAddressInsert->postcode = $rowUserAddress['postcode'];
-                $userAddressInsert->countryId = $rowUserAddress['countryId'];
-                $userAddressInsert->phone = $rowUserAddress['phone'];
-                $userAddressInsert->lastUsed = $rowUserAddress['lastUsed'];
-                $userAddressInsert->fiscalCode = $rowUserAddress['fiscalCode'];
-                $userAddressInsert->remoteId = $rowUserAddress['remoteId'];
-                $userAddressInsert->remoteUserId = $rowUserAddress['remoteUserId'];
-                $userAddressInsert->remoteShopId = $shop;
-                $userAddressInsert->insert();
+                $stmtUserAddress->execute();
+                while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
+                    $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'isBilling' => 1, 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                    if (null == $checkUserAddressisBillingIfExist) {
+                        $findUserInsert = $userRepo->findOneBy(['remoteId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                        if ($findUserInsert != null) {
+                            $userAddressInsert = $userAddressRepo->getEmptyEntity();
+                            $userAddressId = $findUserInsert->id;
+                            $userAddressInsert->userId = $userAddressId;
+                            $userAddressInsert->isBilling = $rowUserAddress['isBilling'];
+                            $userAddressInsert->isDefault = $rowUserAddress['isDefault'];
+                            $userAddressInsert->name = $rowUserAddress['name'];
+                            $userAddressInsert->surname = $rowUserAddress['surname'];
+                            $userAddressInsert->company = $rowUserAddress['company'];
+                            $userAddressInsert->address = $rowUserAddress['address'];
+                            $userAddressInsert->extra = $rowUserAddress['extra'];
+                            $userAddressInsert->province = $rowUserAddress['province'];
+                            $userAddressInsert->city = $rowUserAddress['city'];
+                            $userAddressInsert->postcode = $rowUserAddress['postcode'];
+                            $userAddressInsert->countryId = $rowUserAddress['countryId'];
+                            $userAddressInsert->phone = $rowUserAddress['phone'];
+                            $userAddressInsert->lastUsed = $rowUserAddress['lastUsed'];
+                            $userAddressInsert->fiscalCode = $rowUserAddress['fiscalCode'];
+                            $userAddressInsert->remoteId = $rowUserAddress['remoteId'];
+                            $userAddressInsert->remoteUserId = $rowUserAddress['remoteUserId'];
+                            $userAddressInsert->remoteShopId = $shop;
+                            $userAddressInsert->insert();
+
+                        }
+                    } else {
+                        $res .= "Indirizzo  Billing esistente<br>";
+                        continue;
+
+                    }
+
+                }
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
-        } else {
-            $res .= "Indirizzo esistenze<br>";
-            continue;
 
-        }
 
-    }
-}  catch(\Throwable $e){
-        $res.=$e;
+            /** indirizzo di consegna */
 
-    }
-    try{
-            /** inserimento CouponType */
-            $stmtCouponType = $db_con->prepare("SELECT
+            try {
+                $stmtUserAddress = $db_con->prepare('SELECT 
+                                                          us.id as remoteId,  
+                                                          us.userId    as remoteUserId,
+                                                          us.isBilling as isBilling,
+                                                          us.isDefault as isDefault,
+                                                          us.name      as name,
+                                                          us.surname   as surname,
+                                                          us.company   as company,
+                                                          us.address   as address,
+                                                          us.extra     as extra,
+                                                          us.province  as province,
+                                                          us.city      as city,
+                                                          us.postcode  as postcode,
+                                                          us.countryId as countryId,
+                                                          us.phone     as phone,
+                                                          us.lastUsed  as lastUsed,
+                                                          us.fiscalCode as fiscalCode from UserAddress us where us.IsBilling=0');
+
+                $stmtUserAddress->execute();
+                while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
+                    $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'isBilling' => 0, 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                    if (null == $checkUserAddressisBillingIfExist) {
+                        $findUserInsert = $userRepo->findOneBy(['remoteId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                        if ($findUserInsert != null) {
+                            $userAddressInsert = $userAddressRepo->getEmptyEntity();
+                            $userAddressId = $findUserInsert->id;
+                            $userAddressInsert->userId = $userAddressId;
+                            $userAddressInsert->isBilling = $rowUserAddress['isBilling'];
+                            $userAddressInsert->isDefault = $rowUserAddress['isDefault'];
+                            $userAddressInsert->name = $rowUserAddress['name'];
+                            $userAddressInsert->surname = $rowUserAddress['surname'];
+                            $userAddressInsert->company = $rowUserAddress['company'];
+                            $userAddressInsert->address = $rowUserAddress['address'];
+                            $userAddressInsert->extra = $rowUserAddress['extra'];
+                            $userAddressInsert->province = $rowUserAddress['province'];
+                            $userAddressInsert->city = $rowUserAddress['city'];
+                            $userAddressInsert->postcode = $rowUserAddress['postcode'];
+                            $userAddressInsert->countryId = $rowUserAddress['countryId'];
+                            $userAddressInsert->phone = $rowUserAddress['phone'];
+                            $userAddressInsert->lastUsed = $rowUserAddress['lastUsed'];
+                            $userAddressInsert->fiscalCode = $rowUserAddress['fiscalCode'];
+                            $userAddressInsert->remoteId = $rowUserAddress['remoteId'];
+                            $userAddressInsert->remoteUserId = $rowUserAddress['remoteUserId'];
+                            $userAddressInsert->remoteShopId = $shop;
+                            $userAddressInsert->insert();
+
+                        }
+                    } else {
+                        $res .= "Indirizzo  Billing esistente<br>";
+                        continue;
+
+                    }
+
+                }
+            } catch (\Throwable $e) {
+                $res .= $e;
+
+            }
+            try {
+                /** inserimento CouponType */
+                $stmtCouponType = $db_con->prepare("SELECT
                                            ct.id as remoteId,
                                            `ct`.`name`  as name,
                                            ct.amount as amount,
@@ -231,35 +296,35 @@ try {
                                            ct.hasFreeShipping as hasFreeShipping,
                                            ct.hasFreeReturn as hasFreeReturn
                                            FROM CouponType ct");
-            $stmtCouponType->execute();
-            while ($rowCouponType = $stmtCouponType->fetch(PDO::FETCH_ASSOC)) {
-                $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponType['remoteId'], 'remoteShopId' => $shop]);
-                if ($checkCouponTypeIfExist == null) {
-                    $couponTypeInsert = $couponTypeRepo->getEmptyEntity();
-                    $couponTypeInsert->name = $rowCouponType['name'];
-                    $couponTypeInsert->amount = $rowCouponType['amount'];
-                    $couponTypeInsert->amountType = $rowCouponType['amountType'];
-                    $couponTypeInsert->validity = $rowCouponType['validity'];
-                    $couponTypeInsert->validForCartTotal = $rowCouponType['validForCartTotal'];
-                    $couponTypeInsert->hasFreeShipping = $rowCouponType['hasFreeShipping'];
-                    $couponTypeInsert->hasFreeReturn = $rowCouponType['hasFreeReturn'];
-                    $couponTypeInsert->remoteId = $rowCouponType['remoteId'];
-                    $couponTypeInsert->remoteShopId = $shop;
-                    $couponTypeInsert->insert();
-                    //$res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
-                } else {
-                    $res .= 'Tipo Coupon Gia Esistente';
-                    continue;
+                $stmtCouponType->execute();
+                while ($rowCouponType = $stmtCouponType->fetch(PDO::FETCH_ASSOC)) {
+                    $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponType['remoteId'], 'remoteShopId' => $shop]);
+                    if ($checkCouponTypeIfExist == null) {
+                        $couponTypeInsert = $couponTypeRepo->getEmptyEntity();
+                        $couponTypeInsert->name = $rowCouponType['name'];
+                        $couponTypeInsert->amount = $rowCouponType['amount'];
+                        $couponTypeInsert->amountType = $rowCouponType['amountType'];
+                        $couponTypeInsert->validity = $rowCouponType['validity'];
+                        $couponTypeInsert->validForCartTotal = $rowCouponType['validForCartTotal'];
+                        $couponTypeInsert->hasFreeShipping = $rowCouponType['hasFreeShipping'];
+                        $couponTypeInsert->hasFreeReturn = $rowCouponType['hasFreeReturn'];
+                        $couponTypeInsert->remoteId = $rowCouponType['remoteId'];
+                        $couponTypeInsert->remoteShopId = $shop;
+                        $couponTypeInsert->insert();
+                        //$res.='inserito il tipo coupon'.$couponTypeInsert->printId().'<br>';
+                    } else {
+                        $res .= 'Tipo Coupon Gia Esistente';
+                        continue;
+                    }
+
                 }
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
-    } catch(\Throwable $e){
-        $res.=$e;
-
-    }
-try{
-            /** inserimento Coupon Event **/
-            $stmtCouponEvent = $db_con->prepare("SELECT
+            try {
+                /** inserimento Coupon Event **/
+                $stmtCouponEvent = $db_con->prepare("SELECT
                                                       ce.id as remoteId,
                                                       ce.couponTypeId as couponTypeId,
                                                       `ce`.`name` as `name`,
@@ -268,40 +333,39 @@ try{
                                                       ce.startDate as startDate,
                                                       ce.endDate as endDate
                                                       FROM CouponEvent ce");
-            $stmtCouponEvent->execute();
-            while ($rowCouponEvent = $stmtCouponEvent->fetch(PDO::FETCH_ASSOC)) {
-                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCouponEvent['remoteId'],'name'=>$rowCouponEvent['name'], 'remoteShopId' => $shop]);
-                if ($checkCouponEventIfExist == null) {
-                    $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponEvent['couponTypeId'], 'remoteShopId' => $shop]);
-                    if ($checkCouponTypeIfExist != null) {
-                        $couponEventInsert = $couponEventRepo->getEmptyEntity();
-                        $couponEventInsert->couponTypeId = $checkCouponTypeIfExist->id;
-                        $couponEventInsert->name = $rowCouponEvent['name'];
-                        $couponEventInsert->description = $rowCouponEvent['description'];
-                        $couponEventInsert->click = $rowCouponEvent['click'];
-                        $couponEventInsert->startDate = $rowCouponEvent['startDate'];
-                        $couponEventInsert->endDate = $rowCouponEvent['endDate'];
-                        $couponEventInsert->remoteId = $rowCouponEvent['remoteId'];
-                        $couponEventInsert->remoteShopId = $shop;
-                        $couponEventInsert->insert();
+                $stmtCouponEvent->execute();
+                while ($rowCouponEvent = $stmtCouponEvent->fetch(PDO::FETCH_ASSOC)) {
+                    $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCouponEvent['remoteId'], 'name' => $rowCouponEvent['name'], 'remoteShopId' => $shop]);
+                    if ($checkCouponEventIfExist == null) {
+                        $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponEvent['couponTypeId'], 'remoteShopId' => $shop]);
+                        if ($checkCouponTypeIfExist != null) {
+                            $couponEventInsert = $couponEventRepo->getEmptyEntity();
+                            $couponEventInsert->couponTypeId = $checkCouponTypeIfExist->id;
+                            $couponEventInsert->name = $rowCouponEvent['name'];
+                            $couponEventInsert->description = $rowCouponEvent['description'];
+                            $couponEventInsert->click = $rowCouponEvent['click'];
+                            $couponEventInsert->startDate = $rowCouponEvent['startDate'];
+                            $couponEventInsert->endDate = $rowCouponEvent['endDate'];
+                            $couponEventInsert->remoteId = $rowCouponEvent['remoteId'];
+                            $couponEventInsert->remoteShopId = $shop;
+                            $couponEventInsert->insert();
 
+                        }
+                    } else {
+
+
+                        $res .= "Coupon Evento Già esisitente";
+                        continue;
                     }
-                } else {
 
-
-
-                    $res .= "Coupon Evento Già esisitente";
-                    continue;
                 }
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
-} catch(\Throwable $e){
-    $res.=$e;
-
-}
-try{
-            /**inserimento Coupon **/
-            $stmtCoupon = $db_con->prepare(" SELECT 
+            try {
+                /**inserimento Coupon **/
+                $stmtCoupon = $db_con->prepare(" SELECT 
                                                  co.id as remoteId,
                                                  co.couponTypeId as couponTypeId,
                                                  co.code as code,
@@ -312,146 +376,151 @@ try{
                                                  co.valid as valid,
                                                  co.couponEventId as couponEventId
                                                  from Coupon co");
-            $stmtCoupon->execute();
-            while ($rowCoupon = $stmtCoupon->fetch(PDO::FETCH_ASSOC)) {
-                $checkCouponIfExist = $couponRepo->findOneBy(['remoteId' => $rowCoupon['remoteId'], 'remoteShopId' => $shop]);
-                if ($checkCouponIfExist == null) {
-                    $checkUserIfExist = $userRepo->findOneBy(['remoteId' => $rowCoupon['userId'], 'remoteShopId' => $shop]);
-                    if ($checkUserIfExist != null) {
-                        $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCoupon['couponTypeId'], 'remoteShopId' => $shop]);
-                        if ($checkCouponTypeIfExist != null) {
-                            $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCoupon['couponEventId'], 'remoteShopId' => $shop]);
-                            if ($checkCouponEventIfExist != null) {
-                                $couponInsert = $couponRepo->getEmptyEntity();
-                                $couponInsert->couponTypeId = $checkCouponTypeIfExist->id;
-                                $couponInsert->code = $rowCoupon['code'];
-                                $couponInsert->issueDate = $rowCoupon['issueDate'];
-                                $couponInsert->validThru = $rowCoupon['validThru'];
-                                $couponInsert->amount = $rowCoupon['amount'];
-                                $couponInsert->userId = $checkUserIfExist->id;
-                                $couponInsert->valid = $rowCoupon['valid'];
-                                $couponInsert->couponEventId = $checkCouponEventIfExist->id;
-                                $couponInsert->remoteId = $rowCoupon['remoteId'];
-                                $couponInsert->remoteShopId = $shop;
-                                $couponInsert->insert();
-                                //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
+                $stmtCoupon->execute();
+                while ($rowCoupon = $stmtCoupon->fetch(PDO::FETCH_ASSOC)) {
+                    $checkCouponIfExist = $couponRepo->findOneBy(['remoteId' => $rowCoupon['remoteId'], 'remoteShopId' => $shop]);
+                    if ($checkCouponIfExist == null) {
+                        $checkUserIfExist = $userRepo->findOneBy(['remoteId' => $rowCoupon['userId'], 'remoteShopId' => $shop]);
+                        if ($checkUserIfExist != null) {
+                            $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCoupon['couponTypeId'], 'remoteShopId' => $shop]);
+                            if ($checkCouponTypeIfExist != null) {
+                                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCoupon['couponEventId'], 'remoteShopId' => $shop]);
+                                if ($checkCouponEventIfExist != null) {
+                                    $couponInsert = $couponRepo->getEmptyEntity();
+                                    $couponInsert->couponTypeId = $checkCouponTypeIfExist->id;
+                                    $couponInsert->code = $rowCoupon['code'];
+                                    $couponInsert->issueDate = $rowCoupon['issueDate'];
+                                    $couponInsert->validThru = $rowCoupon['validThru'];
+                                    $couponInsert->amount = $rowCoupon['amount'];
+                                    $couponInsert->userId = $checkUserIfExist->id;
+                                    $couponInsert->valid = $rowCoupon['valid'];
+                                    $couponInsert->couponEventId = $checkCouponEventIfExist->id;
+                                    $couponInsert->remoteId = $rowCoupon['remoteId'];
+                                    $couponInsert->remoteShopId = $shop;
+                                    $couponInsert->insert();
+                                    //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
+                                }
                             }
                         }
+                    } else {
+                        $res .= '<br> Coupon  già esistente';
+                        continue;
                     }
-                } else {
-                    $res .= '<br> Coupon  già esistente';
-                    continue;
+
                 }
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
-} catch(\Throwable $e){
-    $res.=$e;
 
-}
-
-try{
-            /***** inserimento Carrello *******/
-            $stmtCart = $db_con->prepare("SELECT 
+            try {
+                /***** inserimento Carrello *******/
+                $stmtCart = $db_con->prepare("SELECT 
                                                c.id as remoteId,
                                                c.orderPaymentMethodId as orderPaymentMethodId,
                                                c.couponId as couponId,
                                                c.userId as userId,
+                                               u.email as email,
                                                c.cartTypeId as cartTypeId,
                                                c.billingAddressId as billingAddressId,
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate
-                                               from Cart c where c.billingAddressId IS  NOT NULL and c.shipmentAddressId  IS NOT NULL ");
-            $stmtCart->execute();
-            while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
-                $checkCartIfExist = $cartRepo->findOneBy(['remoteId' => $rowCart['remoteId'], 'remoteShopId' => $shop]);
-                if (null == $checkCartIfExist) {
-                    $userFind = $userRepo->findOneBy(['remoteId' => $rowCart['userId'], 'remoteShopId' => $shop]);
-                    if ($userFind !== null) {
-                        $userId = $userFind->id;
-                        $billingAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['billingAddressId'], 'remoteShopId' => $shop]);
-                        if ($billingAddressIdFind != null) {
-                            $billingAddressId = $billingAddressIdFind->id;
-                            $shipmentAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['shipmentAddressId'], 'remoteShopId' => $shop]);
+                                               from Cart c join User u on c.userId = u.id where c.billingAddressId IS  NOT NULL and c.shipmentAddressId  IS NOT NULL  ");
+                $stmtCart->execute();
+                while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
+                    $checkCartIfExist = $cartRepo->findOneBy(['remoteId' => $rowCart['remoteId'], 'remoteShopId' => $shop]);
+                    if (null == $checkCartIfExist) {
+                        $userFind = $userRepo->findOneBy(['email' => $rowCart['email']]);
+                        if ($userFind !== null) {
+                            $userId = $userFind->id;
+
+                            $shipmentAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
                             if ($shipmentAddressIdFind != null) {
                                 $shipmentAddressId = $shipmentAddressIdFind->id;
-                                $insertCart = $cartRepo->getEmptyEntity();
-                                if ($rowCart['couponId'] != '') {
-                                    $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
-                                    if ($FindCoupon != null) {
-                                        $insertCart->couponId = $FindCoupon->id;
-
-                                    }
-                                }
-
-                                $insertCart->orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
-                                $insertCart->userId = $userId;
-                                $insertCart->cartTypeId = $rowCart['cartTypeId'];
-
-                                $insertCart->billingAddressId = $billingAddressId;
-
-                                $insertCart->shipmentAddressId = $shipmentAddressId;
-                                $insertCart->lastUpdate = $rowCart['lastUpdate'];
-                                $insertCart->remoteId = $rowCart['remoteId'];
-                                $insertCart->remoteShopId = $shop;
-                                $insertCart->insert();
-
                             }
+                            $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                            if ($billingAddressIdFind != null) {
+                                $billingAddressId = $billingAddressIdFind->id;
+                            }else{
+                                $billingAddressId = $shipmentAddressIdFind->id;
+                            }
+                            $insertCart = $cartRepo->getEmptyEntity();
+                            if ($rowCart['couponId'] != '') {
+                                $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
+                                if ($FindCoupon != null) {
+                                    $insertCart->couponId = $FindCoupon->id;
+
+                                }
+                            }
+
+                            $insertCart->orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
+                            $insertCart->userId = $userId;
+                            $insertCart->cartTypeId = $rowCart['cartTypeId'];
+
+                            $insertCart->billingAddressId = $billingAddressId;
+
+                            $insertCart->shipmentAddressId = $shipmentAddressId;
+                            $insertCart->lastUpdate = $rowCart['lastUpdate'];
+                            $insertCart->remoteId = $rowCart['remoteId'];
+                            $insertCart->remoteShopId = $shop;
+                            $insertCart->insert();
+
                         }
+
+
+                    } else {
+                        $res .= '<br>carrello già esistente';
+                        continue;
                     }
 
-                } else {
-                    $res .= '<br>carrello già esistente';
-                    continue;
                 }
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
- } catch(\Throwable $e){
-        $res.=$e;
 
-    }
+            try {
+                /***** inserimento righe carrello *********/
 
-    try{
-            /***** inserimento righe carrello *********/
-
-            $stmtCartLine = $db_con->prepare("SELECT
+                $stmtCartLine = $db_con->prepare("SELECT
                                             cl.id as remoteId,
                                             cl.cartId as remoteCartId,
                                             cl.productId as productId,
                                             cl.productVariantId as productVariantId,
                                             cl.productSizeId as productSizeId
                                             from CartLine cl");
-            $stmtCartLine->execute();
-            while ($rowCartLineOrder = $stmtCartLine->fetch(PDO::FETCH_ASSOC)) {
-                $findCartLineIdIfExist = $cartLineRepo->findOneBy(['remoteId' => $rowCartLineOrder['remoteId'], 'remoteShopId' => $shop]);
+                $stmtCartLine->execute();
+                while ($rowCartLineOrder = $stmtCartLine->fetch(PDO::FETCH_ASSOC)) {
+                    $findCartLineIdIfExist = $cartLineRepo->findOneBy(['remoteId' => $rowCartLineOrder['remoteId'], 'remoteShopId' => $shop]);
 
-                if ($findCartLineIdIfExist == null) {
-                    $cartIdFind = $cartRepo->findOneBy(['remoteId' => $rowCartLineOrder['remoteCartId'], 'remoteShopId' => $shop]);
-                    if ($cartIdFind !== null) {
-                        $cartId = $cartIdFind->id;
-                        $cartLineInsert = $cartLineRepo->getEmptyEntity();
-                        $cartLineInsert->cartId = $cartId;
-                        $cartLineInsert->productId = $rowCartLineOrder['productId'];
-                        $cartLineInsert->productVariantId = $rowCartLineOrder['productVariantId'];
-                        $cartLineInsert->productSizeId = $rowCartLineOrder['productSizeId'];
-                        $cartLineInsert->remoteId = $rowCartLineOrder['remoteId'];
-                        $cartLineInsert->remoteShopId = $shop;
-                        $cartLineInsert->insert();
-                        //   $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
+                    if ($findCartLineIdIfExist == null) {
+                        $cartIdFind = $cartRepo->findOneBy(['remoteId' => $rowCartLineOrder['remoteCartId'], 'remoteShopId' => $shop]);
+                        if ($cartIdFind !== null) {
+                            $cartId = $cartIdFind->id;
+                            $cartLineInsert = $cartLineRepo->getEmptyEntity();
+                            $cartLineInsert->cartId = $cartId;
+                            $cartLineInsert->productId = $rowCartLineOrder['productId'];
+                            $cartLineInsert->productVariantId = $rowCartLineOrder['productVariantId'];
+                            $cartLineInsert->productSizeId = $rowCartLineOrder['productSizeId'];
+                            $cartLineInsert->remoteId = $rowCartLineOrder['remoteId'];
+                            $cartLineInsert->remoteShopId = $shop;
+                            $cartLineInsert->insert();
+                            //   $res.='inserita la linea cart '.$userAddressInsert->printId().'<br>';
+                        }
+                    } else {
+                        $res .= '<br>Riga Carrello  già esistente';
+                        continue;
                     }
-                } else {
-                    $res .= '<br>Riga Carrello  già esistente';
-                    continue;
+
                 }
+            } catch (\Throwable $e) {
+                $res .= $e;
 
             }
-    } catch(\Throwable $e){
-        $res.=$e;
-
-    }
-    try{
-            /***inserimento ordini */
-            $stmtOrder = $db_con->prepare("SELECT 
+            try {
+                /***inserimento ordini */
+                $stmtOrder = $db_con->prepare("SELECT 
                                                o.id as remoteId,
                                                o.orderPaymentMethodId as orderPaymentMethodId,
                                                o.orderShippingMethodId as orderShippingMethodId,
@@ -459,6 +528,7 @@ try{
                                                o.userId as userId,
                                                o.cartId as cartId,
                                                `o`.`status` as `status`,
+                                                u.email as email,
                                                o.frozenBillingAddress as frozenBillingAddress,
                                                o.frozenShippingAddress as frozenShippingAddress,
                                                o.billingAddressId as billingAddressId,
@@ -482,84 +552,91 @@ try{
                                                o.lastUpdate as lastUpdate,
                                                o.creationDate as creationDate,
                                                o.hasInvoice as hasInvoice
-                                               from `Order` o");
-            $stmtOrder->execute();
-            while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
-                $checkOrderIfExist = $orderRepo->findOneBy(['remoteId' => $rowOrder['remoteId'], 'remoteShopId' => $shop]);
-                if ($checkOrderIfExist == null) {
-                    $findUser = $userRepo->findOneBy(['remoteId' => $rowOrder['userId'], 'remoteShopId' => $shop]);
-                    if ($findUser !== null) {
-                        $userId = $findUser->id;
-                        $findCart = $cartRepo->findOneBy(['remoteId' => $rowOrder['cartId'], 'remoteShopId' => $shop]);
-                        if ($findCart != null) {
-                            $cartId = $findCart->id;
-                            $insertOrder = $orderRepo->getEmptyEntity();
-                            $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
-                            $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
-                            if ($rowOrder['couponId'] != '') {
-                                $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
-                                if ($FindCoupon != null) {
-                                    $insertOrder->couponId = $FindCoupon->id;
+                                               from `Order` o join User u on o.userId = u.id ");
+                $stmtOrder->execute();
+                while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
+                    $checkOrderIfExist = $orderRepo->findOneBy(['remoteId' => $rowOrder['remoteId'], 'remoteShopId' => $shop]);
+                    if ($checkOrderIfExist == null) {
+                        $findUser = $userRepo->findOneBy(['email' => $rowOrder['email']]);
+                        if ($findUser !== null) {
+                            $userId = $findUser->id;
+                            $findCart = $cartRepo->findOneBy(['remoteId' => $rowOrder['cartId'], 'remoteShopId' => $shop]);
+                            if ($findCart != null) {
+                                $cartId = $findCart->id;
+                                $insertOrder = $orderRepo->getEmptyEntity();
+                                $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
+                                $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
+                                if ($rowOrder['couponId'] != '') {
+                                    $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
+                                    if ($FindCoupon != null) {
+                                        $insertOrder->couponId = $FindCoupon->id;
+                                    }
                                 }
+
+
+                                $insertOrder->userId = $userId;
+                                $insertOrder->cartId = $cartId;
+                                $insertOrder->status = $rowOrder['status'];
+
+
+                                $findShippingAddressDetails = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                                if($findShippingAddressDetails!=null) {
+                                    $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
+                                    $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
+                                }else {
+                                    $findBillingAddressDetailsRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                                    $insertOrder->frozenShippingAddress = $findBillingAddressDetailsRes->froze();
+                                    $insertOrder->shipmentAddressId = $findBillingAddressDetailsRes->id;
+                                }
+
+
+                                $findBillingAddressDetails = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                                if($findBillingAddressDetails!=null) {
+                                    $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
+                                    $insertOrder->billingAddressId = $findBillingAddressDetails->id;
+                                }else{
+                                    $findShippingAddressDetailsRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                                    $insertOrder->frozenBillingAddress = $findShippingAddressDetailsRes->froze();
+                                    $insertOrder->billingAddressId = $findShippingAddressDetailsRes->id;
+                                }
+
+                                $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
+                                $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
+                                $insertOrder->grossTotal = $rowOrder['grossTotal'];
+                                $insertOrder->netTotal = $rowOrder['netTotal'];
+                                $insertOrder->vat = $rowOrder['vat'];
+                                $insertOrder->sellingFee = $rowOrder['sellingFee'];
+                                $insertOrder->customModifier = $rowOrder['customModifier'];
+                                $insertOrder->orderDate = $rowOrder['orderDate'];
+                                $insertOrder->note = $rowOrder['note'];
+                                $insertOrder->paidAmount = $rowOrder['paidAmount'];
+                                $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
+                                $insertOrder->transactionNumber = $rowOrder['transactionNumber'];
+                                $insertOrder->transactionMac = $rowOrder['transactionMac'];
+                                $insertOrder->paymentDate = $rowOrder['paymentDate'];
+                                $insertOrder->remoteId = $rowOrder['remoteId'];
+                                $insertOrder->remoteShopId = $shop;
+                                $insertOrder->hasInvoice = $rowOrder['hasInvoice'];
+                                $insertOrder->insert();
+
                             }
-
-
-                            $insertOrder->userId = $userId;
-                            $insertOrder->cartId = $cartId;
-                            $insertOrder->status = $rowOrder['status'];
-                            /* defrost indirizzo  Fatturazione remoto */
-                            $remoteBillingAddressId = $rowOrder['billingAddressId'];
-                            if ($remoteBillingAddressId != '') {
-                                $findBillingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteBillingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                                $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
-                                $insertOrder->billingAddressId = $findBillingAddressDetails->id;
-                            }
-                            /* defrost indirizzo Spedizione remoto */
-                            $remoteShippingAddressId = $rowOrder['shipmentAddressId'];
-                            if ($remoteShippingAddressId != '') {
-                                $findShippingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteShippingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                                $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
-                                $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
-
-                            }
-
-                            $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
-                            $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
-                            $insertOrder->grossTotal = $rowOrder['grossTotal'];
-                            $insertOrder->netTotal = $rowOrder['netTotal'];
-                            $insertOrder->vat = $rowOrder['vat'];
-                            $insertOrder->sellingFee = $rowOrder['sellingFee'];
-                            $insertOrder->customModifier = $rowOrder['customModifier'];
-                            $insertOrder->orderDate = $rowOrder['orderDate'];
-                            $insertOrder->note = $rowOrder['note'];
-                            $insertOrder->paidAmount = $rowOrder['paidAmount'];
-                            $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
-                            $insertOrder->transactionNumber = $rowOrder['transactionNumber'];
-                            $insertOrder->transactionMac = $rowOrder['transactionMac'];
-                            $insertOrder->paymentDate = $rowOrder['paymentDate'];
-                            $insertOrder->remoteId = $rowOrder['remoteId'];
-                            $insertOrder->remoteShopId = $shop;
-                            $insertOrder->hasInvoice = $rowOrder['hasInvoice'];
-                            $insertOrder->insert();
-
                         }
+                    } else {
+                        $res .= '<br> Ordine ' . $rowOrder['remoteId'] . 'dello shop :' . $shop . ' già esistente';
+                        continue;
+
                     }
-                } else {
-                    $res .= '<br> Ordine '.$rowOrder['remoteId']. 'dello shop'.$shop. ' già esistente';
-                    continue;
 
                 }
 
+            } catch (\Throwable $e) {
+                $res .= $e;
+
             }
-
-    } catch(\Throwable $e){
-        $res.=$e;
-
-    }
 
 
             /**** inserimento righe Ordine*****/
-            if($shop==1){
+            if ($shop == 1) {
                 $stmtOrderLine = $db_con->prepare(" SELECT ol.id AS remoteId,
                                      ol.orderId as orderId,
                                      ol.productId as productId,
@@ -587,7 +664,7 @@ try{
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
-            }else {
+            } else {
                 $stmtOrderLine = $db_con->prepare("SELECT 
                                      ol.id AS remoteId,
                                      ol.orderId as orderId,
@@ -620,7 +697,7 @@ try{
 
             $stmtOrderLine->execute();
             while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
-                $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'],'remoteOrderId'=>$rowOrderLine['orderId'], 'remoteShopId' => $shop]);
+                $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'], 'remoteOrderId' => $rowOrderLine['orderId'], 'remoteShopId' => $shop]);
                 if ($checkOrderLineExist == null) {
 
                     $findOrder = $orderRepo->findOneBy(['remoteId' => $rowOrderLine['orderId'], 'remoteShopId' => $shop]);
@@ -631,9 +708,9 @@ try{
                             'productId' => $rowOrderLine['productId'],
                             'productVariantId' => $rowOrderLine['productVariantId'],
                             'productSizeId' => $rowOrderLine['productSizeId'],
-                            'shopId'=>$rowOrderLine['shopId']
+                            'shopId' => $rowOrderLine['shopId']
                         ]);
-                        if($skufind!=null) {
+                        if ($skufind != null) {
                             $orderId = $findOrder->id;
                             $insertOrderLine = $orderLineRepo->getEmptyEntity();
                             $insertOrderLine->orderId = $orderId;
@@ -679,12 +756,10 @@ try{
         }
 
 
-
         return $res;
 
 
     }
-
 
 
 }
