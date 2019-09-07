@@ -448,14 +448,22 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $shipmentAddressId = $shipmentAddressIdFind->id;
                             }else{
                                 $billingAddressIdFindRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
-                                $shipmentAddressId=$billingAddressIdFindRes->id;
+                                if($billingAddressIdFindRes!=null) {
+                                    $shipmentAddressId = $billingAddressIdFindRes->id;
+                                }else{
+                                    $shipmentAddressId='';
+                                }
                             }
                             $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
                             if ($billingAddressIdFind != null) {
                                 $billingAddressId = $billingAddressIdFind->id;
                             } else {
                                 $shipmentAddressIdFindRes = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
-                                $billingAddressId = $shipmentAddressIdFindRes->id;
+                                if($shipmentAddressIdFindRes!=null) {
+                                    $billingAddressId = $shipmentAddressIdFindRes->id;
+                                }else{
+                                    $billingAddressId='';
+                                }
                             }
                             $insertCart = $cartRepo->getEmptyEntity();
                             if ($rowCart['couponId'] != '') {

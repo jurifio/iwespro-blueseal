@@ -431,23 +431,31 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
                     $checkCartIfExist = $cartRepo->findOneBy(['remoteId' => $rowCart['remoteId'], 'remoteShopId' => $shop]);
                     if (null == $checkCartIfExist) {
-                        $userFind = $userRepo->findOneBy(['email' => $rowCart['email']]);
+                        $userFind = $userRepo->findOneBy(['email' => $rowCart['email'], 'remoteShopId' => $shop]);
                         if ($userFind !== null) {
                             $userId = $userFind->id;
 
                             $shipmentAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
                             if ($shipmentAddressIdFind != null) {
                                 $shipmentAddressId = $shipmentAddressIdFind->id;
-                            }else{
-                                $billingAddressIdFindRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
-                                $shipmentAddressId=$billingAddressIdFindRes->id;
+                            } else {
+                                $billingAddressIdFindRes = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                                if ($billingAddressIdFindRes != null) {
+                                    $shipmentAddressId = $billingAddressIdFindRes->id;
+                                } else {
+                                    $shipmentAddressId = '';
+                                }
                             }
                             $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
                             if ($billingAddressIdFind != null) {
                                 $billingAddressId = $billingAddressIdFind->id;
                             } else {
                                 $shipmentAddressIdFindRes = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
-                                $billingAddressId = $shipmentAddressIdFindRes->id;
+                                if ($shipmentAddressIdFindRes != null) {
+                                    $billingAddressId = $shipmentAddressIdFindRes->id;
+                                } else {
+                                    $billingAddressId = '';
+                                }
                             }
                             $insertCart = $cartRepo->getEmptyEntity();
                             if ($rowCart['couponId'] != '') {
@@ -584,22 +592,22 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
 
                                 $findShippingAddressDetails = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
-                                if($findShippingAddressDetails!=null) {
+                                if ($findShippingAddressDetails != null) {
                                     $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
                                     $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
-                                }else {
-                                    $findBillingAddressDetailsRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                                } else {
+                                    $findBillingAddressDetailsRes = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
                                     $insertOrder->frozenShippingAddress = $findBillingAddressDetailsRes->froze();
                                     $insertOrder->shipmentAddressId = $findBillingAddressDetailsRes->id;
                                 }
 
 
                                 $findBillingAddressDetails = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
-                                if($findBillingAddressDetails!=null) {
+                                if ($findBillingAddressDetails != null) {
                                     $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
                                     $insertOrder->billingAddressId = $findBillingAddressDetails->id;
-                                }else{
-                                    $findShippingAddressDetailsRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                                } else {
+                                    $findShippingAddressDetailsRes = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
                                     $insertOrder->frozenBillingAddress = $findShippingAddressDetailsRes->froze();
                                     $insertOrder->billingAddressId = $findShippingAddressDetailsRes->id;
                                 }
