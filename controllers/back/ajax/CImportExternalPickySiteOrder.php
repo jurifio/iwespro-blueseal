@@ -274,7 +274,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                         }
                     } else {
-                        $res .= "Indirizzo  Billing esistente<br>";
+                        $res .= "Indirizzo  Shipping esistente<br>";
                         continue;
 
                     }
@@ -438,12 +438,16 @@ class CImportExternalPickySiteOrder extends AAjaxController
                             $shipmentAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
                             if ($shipmentAddressIdFind != null) {
                                 $shipmentAddressId = $shipmentAddressIdFind->id;
+                            }else{
+                                $billingAddressIdFindRes=$userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
+                                $shipmentAddressId=$billingAddressIdFindRes->id;
                             }
                             $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 1]);
                             if ($billingAddressIdFind != null) {
                                 $billingAddressId = $billingAddressIdFind->id;
-                            }else{
-                                $billingAddressId = $shipmentAddressIdFind->id;
+                            } else {
+                                $shipmentAddressIdFindRes = $userAddressRepo->findOneBy(['userId' => $userId, 'isBilling' => 0]);
+                                $billingAddressId = $shipmentAddressIdFindRes->id;
                             }
                             $insertCart = $cartRepo->getEmptyEntity();
                             if ($rowCart['couponId'] != '') {
@@ -665,7 +669,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ol.note as note
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
             } else {
-                $stmtOrderLine = $db_con->prepare("SELECT 
+                $stmtOrderLine = $db_con->prepare('SELECT 
                                      ol.id AS remoteId,
                                      ol.orderId as orderId,
                                      ol.productId as productId,
@@ -692,7 +696,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL");
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL');
             }
 
             $stmtOrderLine->execute();
