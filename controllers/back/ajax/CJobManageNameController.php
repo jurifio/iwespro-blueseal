@@ -27,13 +27,18 @@ class CJobManageNameController extends AAjaxController
             $data = $this->app->router->request()->getRequestData();
             $name = $data["name"];
             $id = $data['id'];
+            $priority=$data['priority'];
             $job = \Monkey::app()->repoFactory->create('Job')->findOneBy(['id' => $id]);
             $job->name = $name;
+            $job->priority=$priority;
             $job->update();
-            \Monkey::app()->applicationLog('CJobManageNameController', 'Report', 'update', 'Change name Job id :'.$id.'in '.$name );
+            \Monkey::app()->applicationLog('CJobManageNameController', 'Report', 'update', 'Change name and priority Job id :'.$id.'in '.$name );
+            $res='Aggiornamento eseguito con Successo';
         } catch(\Throwable $e) {
             \Monkey::app()->applicationLog('CJobManageNameController', 'ERROR', 'update', $e->getMessage());
+            $res='Errore tipo di errore:<br>'.$e->getMessage();
         }
+        return $res;
     }
 
     public function put()

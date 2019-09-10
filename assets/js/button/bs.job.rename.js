@@ -19,19 +19,24 @@ $(document).on('bs-job-rename', function (e, element, button) {
         var idJob = selectedRows[0].id;
         var scope = selectedRows[0].scope;
         var nameJob=selectedRows[0].name;
+        var priority=selectedRows[0].priority;
 
 
 
-        let bsModal = new $.bsModal('Rinomina il Job', {
-            body: '<div><p>Rinomina il Job n. <strong>'+ id +'</strong></p>' +
+        let bsModal = new $.bsModal('Rinomina il Job o aggiorna la priorita', {
+            body: '<div><p>Rinomina il Job n. <strong>'+ idJob +'</strong></p>' +
                 '<p><strong>ambito:</strong></p>'+ scope +'</p>' +
-                '<p><strong>nome</strong></p>' + nameJob + '</div>' +
+                '<p><strong>nome:</strong></p>' + nameJob + '</div>' +
                 '<div class="form-group form-group-default required">' +
                 '<label for="changeName">Nome da Assegnare</label>' +
                 '<input autocomplete="off" type="text" id="changeName" ' +
                 'placeholder="Nome da Assegnare" class="form-control" name="changeName" required="required">' +
+                '</div>'+
+                '<div class="form-group form-group-default required">' +
+                '<label for="priority">priorità di Visualizzazione</label>' +
+                '<input autocomplete="off" type="text" id="priority" ' +
+                'placeholder="Assegna un numero" value="'+priority+'" class="form-control" name="priority">' +
                 '</div>'
-
         });
 
         bsModal.showCancelBtn();
@@ -39,7 +44,9 @@ $(document).on('bs-job-rename', function (e, element, button) {
             const data = {
 
                 name: $('input#changeName').val(),
-                id :   idJob
+                id :   idJob,
+                priority :priority
+
             };
             $.ajax({
                 method: 'post',
