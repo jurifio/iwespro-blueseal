@@ -49,7 +49,7 @@ class CJobListAjaxController extends AAjaxController
                     lastExecutionError,
                     ifExitValue,
                     priority
-                FROM Job  order By priority asc ";
+                FROM Job  order By priority,lastExecutionError asc ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -71,6 +71,11 @@ class CJobListAjaxController extends AAjaxController
             $row["DT_RowClass"] = $job->manualStart ? "yellow" : $row["DT_RowClass"];
             $row["DT_RowClass"] = $job->isRunning ? "green" : $row["DT_RowClass"];
             $row["DT_RowClass"] = $job->lastExecutionError ? "red" : $row["DT_RowClass"];
+            if($job->lastExecutionError=='1') {
+                $row['lastExecutionError']=='Errore Jon';
+            }else{
+                $row['lastExecutionError']=='Ultima esecuzione Positiva ' ;
+            }
 
             $response['data'][] = $row;
         }

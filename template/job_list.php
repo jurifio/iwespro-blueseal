@@ -45,6 +45,10 @@
                                     data-orderable="true"
                                     class="center">Nome
                                 </th>
+                                <th data-slug="priority"
+                                    data-searchable="true"
+                                    data-default-order="asc" data-orderable="true" class="center">Priorità
+                                </th>
                                 <th data-slug="lastExecutionError"
                                     data-searchable="true"
                                     data-default-order="asc" data-orderable="true" class="center">Report Ultima Esecuzione
@@ -123,6 +127,9 @@
     <bs-toolbar-group data-group-label="Gestione Job">
         <bs-toolbar-button
                 data-remote="bs.job.start"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.job.rename"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
