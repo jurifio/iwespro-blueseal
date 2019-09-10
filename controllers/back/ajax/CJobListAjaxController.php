@@ -45,8 +45,11 @@ class CJobListAjaxController extends AAjaxController
                     notificationEmail,
                     lastExecution,
                     lastUpdate,
-                    isDebug
-                FROM Job  ";
+                    isDebug,
+                    lastExecutionError,
+                    ifExitValue,
+                    priority
+                FROM Job  order By priority asc ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
