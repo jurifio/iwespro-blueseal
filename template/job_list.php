@@ -131,6 +131,9 @@
         <bs-toolbar-button
                 data-remote="bs.job.rename"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.job.loglist"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

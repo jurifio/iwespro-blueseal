@@ -72,9 +72,9 @@ class CJobListAjaxController extends AAjaxController
             $row["DT_RowClass"] = $job->isRunning ? "green" : $row["DT_RowClass"];
             $row["DT_RowClass"] = $job->lastExecutionError ? "red" : $row["DT_RowClass"];
             if($job->lastExecutionError=='1') {
-                $row['lastExecutionError']=='Errore Jon';
+                $row['lastExecutionError']='Errore Job';
             }else{
-                $row['lastExecutionError']=='Ultima esecuzione Positiva ' ;
+                $row['lastExecutionError']='Ultima esecuzione Positiva ' ;
             }
 
             $response['data'][] = $row;

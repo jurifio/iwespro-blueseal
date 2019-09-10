@@ -1,8 +1,8 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-hand-rock-o",
+    icon: "fa-list",
     permission: "/admin/product/delete&&allShops",
-    event: "bs-job-rename",
+    event: "bs-job-loglist",
     class: "btn btn-default",
     rel: "tooltip",
     title: "Rinomina Job",
@@ -10,7 +10,7 @@ window.buttonSetup = {
     toggle: "modal"
 };
 
-$(document).on('bs-job-rename', function (e, element, button) {
+$(document).on('bs-job-loglist', function (e, element, button) {
 
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
@@ -24,19 +24,10 @@ $(document).on('bs-job-rename', function (e, element, button) {
 
 
         let bsModal = new $.bsModal('Rinomina il Job o aggiorna la priorita', {
-            body: '<div><p>Rinomina il Job n. <strong>'+ idJob +'</strong></p>' +
+            body: '<div><p>Visualizza il Log del Job n. <strong>'+ idJob +'</strong></p>' +
                 '<p><strong>ambito:</strong></p>'+ scope +'</p>' +
                 '<p><strong>nome:</strong></p>' + nameJob + '</div>' +
-                '<div class="form-group form-group-default required">' +
-                '<label for="changeName">Nome da Assegnare</label>' +
-                '<input autocomplete="off" type="text" id="changeName" ' +
-                'placeholder="Nome da Assegnare" class="form-control" name="changeName" required="required">' +
-                '</div>'+
-                '<div class="form-group form-group-default required">' +
-                '<label for="priority">priorità di Visualizzazione</label>' +
-                '<input autocomplete="off" type="text" id="priority" ' +
-                'placeholder="Assegna un numero" value="'+priority+'" class="form-control" name="priority">' +
-                '</div>'
+                '<div id="result"></div>'
         });
 
         bsModal.showCancelBtn();
@@ -49,8 +40,8 @@ $(document).on('bs-job-rename', function (e, element, button) {
 
             };
             $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/JobManageNameAjaxController',
+                method: 'get',
+                url: '/blueseal/xhr/JobManageLogListAjaxController',
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
