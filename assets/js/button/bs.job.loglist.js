@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-job-loglist",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Rinomina Job",
+    title: "Visualizza Lista Log Job",
     placement: "bottom",
     toggle: "modal"
 };
@@ -23,7 +23,7 @@ $(document).on('bs-job-loglist', function (e, element, button) {
 
 
 
-        let bsModal = new $.bsModal('Rinomina il Job o aggiorna la priorita', {
+        let bsModal = new $.bsModal('Visualizza  Il Log', {
             body: '<div><p>Visualizza il Log del Job n. <strong>'+ idJob +'</strong></p>' +
                 '<p><strong>ambito:</strong></p>'+ scope +'</p>' +
                 '<p><strong>nome:</strong></p>' + nameJob + '</div>'
