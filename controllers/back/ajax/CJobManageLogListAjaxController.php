@@ -24,7 +24,7 @@ class CJobManageLogListAjaxController extends AAjaxController
         try {
             $data = $this->app->router->request()->getRequestData();
             $id = $data['id'];
-            $jobExecution = \Monkey::app()->dbAdapter->query('SELECT max(threadId)as threadId  FROM JobExecution where jobId = ?', [$id])->fetchAll();
+            $jobExecution = \Monkey::app()->dbAdapter->query('SELECT max(id)as threadId  FROM JobExecution where jobId = ?', [$id])->fetchAll();
             if (empty($jobExecution)) {
                 $res = 'non ci sono Esecuzioni per il job: ' . $id;
                 return $res;
