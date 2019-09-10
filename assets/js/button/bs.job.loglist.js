@@ -26,11 +26,12 @@ $(document).on('bs-job-loglist', function (e, element, button) {
         let bsModal = new $.bsModal('Rinomina il Job o aggiorna la priorita', {
             body: '<div><p>Visualizza il Log del Job n. <strong>'+ idJob +'</strong></p>' +
                 '<p><strong>ambito:</strong></p>'+ scope +'</p>' +
-                '<p><strong>nome:</strong></p>' + nameJob + '</div>' +
-                '<div id="result"></div>'
+                '<p><strong>nome:</strong></p>' + nameJob + '</div>'
         });
 
         bsModal.showCancelBtn();
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.setOkEvent(function () {
             const data = {
 
@@ -49,7 +50,6 @@ $(document).on('bs-job-loglist', function (e, element, button) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
-                    $.refreshDataTable();
                     bsModal.hide();
                     //window.location.reload();
                 });

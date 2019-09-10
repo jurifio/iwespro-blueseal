@@ -21,26 +21,27 @@ class CJobManageLogListAjaxController extends AAjaxController
 {
     public function get()
     {
+        $res='';
         try {
             $data = $this->app->router->request()->getRequestData();
             $id = $data['id'];
-            $jobExecution = \Monkey::app()->dbAdapter->query('SELECT max(id)as threadId  FROM JobExecution where jobId = ?', [$id])->fetchAll();
+            $jobExecution = \Monkey::app()->dbAdapter->query('SELECT max(id)as id  FROM JobExecution where jobId = ?', [$id])->fetchAll();
             if (empty($jobExecution)) {
                 $res = 'non ci sono Esecuzioni per il job: ' . $id;
                 return $res;
             } else {
 
                 foreach ($jobExecution as $execution) {
-                    $threadId = $execution['threadId'];
+                    $threadId = $execution['id'];
                 }
                     $jobLog = \Monkey::app()->repoFactory->create('JobLog')->findBy(['jobId' => $id, 'jobExecutionId' => $threadId]);
                     if (!empty($jobLog)) {
-                        $res = '<table align="center">';
-                        $res .= '<tr><th>severity</th><th>subject</th><th>content</th><th>timestamp</th><th>context</th></tr>';
+                        $res .= '<table align="center" border="1"cellspacing=5 cellpadding=0 width=150>';
+                        $res .= '<tr><th >severity</th><th>subject</th><th>content</th><th>timestamp</th><th>context</th></tr>';
                         foreach ($jobLog as $logs) {
                             $res .= '<tr><td>' . $logs->severity . '</td><td>' . $logs->subject . '</td><td>' . $logs->content . '</td><td>' . $logs->timestamp . '</td><td>' . $logs->context . '</td></tr>';
                         }
-                        $res.'</table>';
+                        $res.='</table>';
                     }
 
                 }
