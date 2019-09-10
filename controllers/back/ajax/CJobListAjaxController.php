@@ -67,6 +67,7 @@ class CJobListAjaxController extends AAjaxController
             $row["DT_RowClass"] = $job->isActive ? "" : "grey";
             $row["DT_RowClass"] = $job->manualStart ? "yellow" : $row["DT_RowClass"];
             $row["DT_RowClass"] = $job->isRunning ? "green" : $row["DT_RowClass"];
+            $row["DT_RowClass"] = $job->lastExecutionError ? "red" : $row["DT_RowClass"];
 
             $response['data'][] = $row;
         }

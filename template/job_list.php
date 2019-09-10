@@ -45,6 +45,10 @@
                                     data-orderable="true"
                                     class="center">Nome
                                 </th>
+                                <th data-slug="lastExecutionError"
+                                    data-searchable="true"
+                                    data-default-order="asc" data-orderable="true" class="center">Report Ultima Esecuzione
+                                </th>
                                 <th data-slug="lastExecution"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Ultima Esecuzione
