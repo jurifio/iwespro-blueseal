@@ -46,7 +46,7 @@ class CJobListAjaxController extends AAjaxController
                     lastExecution,
                     lastUpdate,
                     isDebug
-                FROM Job ";
+                FROM Job  ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
