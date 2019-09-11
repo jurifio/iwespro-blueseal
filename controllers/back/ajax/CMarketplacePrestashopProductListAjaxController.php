@@ -120,6 +120,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
             $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
+            $row['totalQty'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->qty.'"></table>';
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->printId().'"></table>';
 
 
