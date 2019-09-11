@@ -101,6 +101,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione
                                 </th>
+                                <th data-slug="totalQty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">quantità Totali
+                                </th>
                                 <th data-slug="stock"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stock
