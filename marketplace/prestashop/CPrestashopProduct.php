@@ -738,6 +738,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
     /**
      * @param $product
+     * @param $productData
      * @param CMarketplaceHasShop $mhs
      * @param $action
      * @param null $price
@@ -891,8 +892,12 @@ class CPrestashopProduct extends APrestashopMarketplace
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage());
             return false;
         }
-        $this->updateProductSaleDescription($product, $mhs, 'remove');
+        try {
+            $this->updateProductSaleDescription($product, $mhs, 'remove');
 
+        } catch(\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while Remove sale Description', $e->getMessage());
+        }
         return true;
     }
 
