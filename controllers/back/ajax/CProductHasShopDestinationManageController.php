@@ -43,12 +43,6 @@ class CProductHasShopDestinationManageController extends AAjaxController
         $status=$this->app->router->request()->getRequestData('status');
         $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
-        if($status==false){
-            $status=15;
-        }
-
-
-
 
         $i = 0;
         foreach ($rows as $row) {
@@ -73,6 +67,10 @@ class CProductHasShopDestinationManageController extends AAjaxController
                     $productHasShopDestination->statusId=$status;
                     $productHasShopDestination->insert();
                     $i++;
+                }else{
+                    $productHaShopDestinationFind->statusId=$status;
+                    $productHasShopDestinationFind->update();
+
                 }
 
             } catch

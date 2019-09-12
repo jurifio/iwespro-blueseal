@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-product-tofriendshop-publish",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Pubblica prodotto sui Ecommerce dei Friend",
+    title:"Pubblica o Aggiorna prodotto sui Ecommerce di Destinazione",
     placement:"bottom",
     toggle:"modal"
 };
@@ -57,9 +57,34 @@ $(document).on('bs-product-tofriendshop-publish', function (e, element, button) 
             }
             html+='</select>';
             html+='</div>';
+            html+='<div class="form-group form-group-default">';
+            html+='<label for=statusId>stato</label>';
+            html+='<select id="statusId" name="statusId" class="full-width"></select>';
+            html+='</div>';
 
 
             body.html($(html));
+
+            Pace.ignore(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'ProductStatus'
+                    },
+                    dataType: 'json'
+                }).done(function (res2) {
+                    var select = $('select[name=\"statusId\"]');
+                    if (select.length > 0 && typeof select[0].selectize != 'undefined') select[0].selectize.destroy();
+                    select.selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        searchField: ['name'],
+                        options: res2,
+                    });
+                    select[0].selectize.setValue(1);
+                });
+            });
+
 
             Pace.ignore(function () {
                 okButton.html('Esegui').off().on('click',function () {
@@ -69,7 +94,8 @@ $(document).on('bs-product-tofriendshop-publish', function (e, element, button) 
                     });
                     let data = {
                         rows: getVarsArray,
-                        shop: $('#shopId').val()
+                        shop: $('#shopId').val(),
+                        status: $('#statusId').val()
 
                     };
                     body.html('<img src="/assets/img/ajax-loader.gif" />');
@@ -78,7 +104,7 @@ $(document).on('bs-product-tofriendshop-publish', function (e, element, button) 
                         type: "POST",
                         data: data
                     }).done(function () {
-                        body.html('Richiesta di pubblicazione inviata');
+                        body.html('Richiesta di pubblicazione o Rettifica inviata');
                     }).fail(function () {
                         body.html('Errore imprevisto');
                     }).always(function () {

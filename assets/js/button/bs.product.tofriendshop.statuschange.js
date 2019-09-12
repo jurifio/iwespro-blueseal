@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-product-tofriendshop-statuschange",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Pubblica prodotto sui Ecommerce dei Friend",
+    title:"Cambia stato su Ecommerce di Destinazione",
     placement:"bottom",
     toggle:"modal"
 };
