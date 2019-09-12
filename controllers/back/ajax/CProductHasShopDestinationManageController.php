@@ -57,7 +57,7 @@ class CProductHasShopDestinationManageController extends AAjaxController
                 $shopIdOrigin=$shopHasProduct->shopId;
                 /** @var  $productHasShopDestinationFind CProductHasShopDestination */
                 $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdOrigin'=>$shopIdOrigin,'shopIdDestination'=>$shopIdDestination]);
-                if($productHasShopDestinationFind==null){
+                if($productHasShopDestinationFind == null){
 
                     $productHasShopDestination=$productHasShopDestinationRepo->getEmptyEntity();
                     $productHasShopDestination->productId=$productId;
@@ -66,12 +66,13 @@ class CProductHasShopDestinationManageController extends AAjaxController
                     $productHasShopDestination->shopIdDestination=$shopIdDestination;
                     $productHasShopDestination->statusId=$status;
                     $productHasShopDestination->insert();
-                    $i++;
+
                 }else{
-                    $productHaShopDestinationFind->statusId=$status;
+                    $productHasShopDestinationFind->statusId=$status;
                     $productHasShopDestinationFind->update();
 
                 }
+                $i++;
 
             } catch
             (\Throwable $e) {
