@@ -49,7 +49,7 @@ class CProductHasShopDestinationManageController extends AAjaxController
 
 
 
-        \Monkey::app()->repoFactory->beginTransaction();
+
         $i = 0;
         foreach ($rows as $row) {
             try {
@@ -64,8 +64,7 @@ class CProductHasShopDestinationManageController extends AAjaxController
                 /** @var  $productHasShopDestinationFind CProductHasShopDestination */
                 $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdOrigin'=>$shopIdOrigin,'shopIdDestination'=>$shopIdDestination]);
                 if($productHasShopDestinationFind==null){
-                        continue;
-                }else{
+
                     $productHasShopDestination=$productHasShopDestinationRepo->getEmptyEntity();
                     $productHasShopDestination->productId=$productId;
                     $productHasShopDestination->productVariantId=$productVariantId;
@@ -75,10 +74,10 @@ class CProductHasShopDestinationManageController extends AAjaxController
                     $productHasShopDestination->insert();
                     $i++;
                 }
-                \Monkey::app()->repoFactory->commit();
+
             } catch
             (\Throwable $e) {
-                \Monkey::app()->repoFactory->rollback();
+
                 throw $e;
             }
         }
