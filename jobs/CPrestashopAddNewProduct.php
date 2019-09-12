@@ -73,5 +73,6 @@ class CPrestashopAddNewProduct extends ACronJob
         }
 
         $this->report('Export product', 'End Export');
+        
     }
 }
