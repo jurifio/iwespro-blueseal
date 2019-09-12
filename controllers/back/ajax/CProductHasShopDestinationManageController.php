@@ -63,7 +63,7 @@ class CProductHasShopDestinationManageController extends AAjaxController
                 $shopIdOrigin=$shopHasProduct->shopId;
                 /** @var  $productHasShopDestinationFind CProductHasShopDestination */
                 $productHasShopDestinationFind = $productHasShopDestinationRepo->findOneBy(['productId'=>$productId,'productVariantId'=>$productVariantId,'shopIdOrigin'=>$shopIdOrigin,'shopIdDestination'=>$shopIdDestination]);
-                if($productHasShopDestinationFind){
+                if($productHasShopDestinationFind==null){
                         continue;
                 }else{
                     $productHasShopDestination=$productHasShopDestinationRepo->getEmptyEntity();
@@ -72,7 +72,7 @@ class CProductHasShopDestinationManageController extends AAjaxController
                     $productHasShopDestination->shopIdOrigin=$shopIdOrigin;
                     $productHasShopDestination->shopIdDestination=$shopIdDestination;
                     $productHasShopDestination->statusId=$status;
-                    $productHasShopDestination->smartInsert();
+                    $productHasShopDestination->insert();
                     $i++;
                 }
                 \Monkey::app()->repoFactory->commit();
