@@ -59,13 +59,19 @@ class CDepublishMarketplaceProducts extends ACronJob
 
         /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
         $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        //creo il report
         $reportArray = [];
         $this->report('run', 'Starting Cycle for ' . count($res));
+        // per ogni risultato nella query
         foreach ($res as $one) {
+            // cerco il prodotto
             /** @var CProduct $product */
             $product = $productRepo->findOneBy(["id" => $one['productId'], "productVariantId" => $one['productVariantId']]);
+            //cerco la campagna che è presente nei dati
             /** @var CCampaign $campaign */
+
             $campaign = $campaingRepo->findOneBy(["id" => $one['id']]);
+            // verifico se la campagna è lincata al marketplace
             if (!$campaign->marketplaceAccount) {
                 $this->warning('Cycle', 'Campaign not linked with marketplace', $one);
             }

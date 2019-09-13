@@ -360,4 +360,53 @@
             });
         });
     });
+    $(document).on('bs.prestashop.align.quantity', function () {
+
+        let bsModal = new $.bsModal('Allinea le quantità ', {
+            body: `
+                <div>
+                    <p>Allinea le quantità sugli shop</p>
+                    <select id="selectMarketplace"></select>
+                </div>
+            `
+        });
+
+        $.ajax({
+            url: '/blueseal/xhr/PrestashopHasProductManage',
+            method: 'GET',
+            dataType: 'json'
+        }).done(function (res) {
+            let select = $('#selectMarketplace');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'shop-marketplace',
+                options: res
+            });
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                marketplaceHasShopId: $('#selectMarketplace').val()
+            };
+
+            $.ajax({
+                method: 'POST',
+                url: '/blueseal/xhr/PrestashopAlignQuantityProductManage',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
 })(jQuery);

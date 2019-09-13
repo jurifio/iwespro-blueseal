@@ -74,7 +74,8 @@ class CPrestashopProduct extends APrestashopMarketplace
                 se  utilizzo questa funzione mi prende il valore attivo ddel prezzo
                 $productPrice = $product->getDisplayActivePrice();
                 */
-                $productPrice = $product->getDisplayFullPrice();
+               $productPrice = $product->getDisplayFullPrice();
+               // $productPrice=$product->productSku->price;
                 // full price
 
                 if (!$productPrice) continue;
@@ -668,17 +669,21 @@ class CPrestashopProduct extends APrestashopMarketplace
     {
 
         if (is_null($newQty) && is_null($differential)) return false;
-
+//ciclo per ogni shop
         foreach ($shops as $shopId) {
+            //ottengo il prodotto padre
             $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
+            //setto la relazione con le tabelle
             $productXmlChildren = $productXmlFather->children()->children();
-
+        //per ogni prodotto combinazion
             foreach ($productXmlChildren->associations->combinations->combination as $association) {
+                //assegno al prodotto la relazione con la combinazione
                 $combinationXmlFather = $this->getDataFromResource($this::COMBINATION_RESOURCE, (int)$association->id, [], [], null, $shopId);
-
+                //setto  la combinazione attiva
                 $combinationXmlChildren = $combinationXmlFather->children()->children();
+                //setto la referenza Taglia  con il productSizeId
                 $productSizeOnPrestashop = explode('-', $combinationXmlChildren->reference)[2];
-
+                //se la sizeId è uguale alla variante in prestashop
                 if ($sizeId == $productSizeOnPrestashop) {
                     //size is the same
                     $idProductAttribute = (int)$combinationXmlChildren->id;

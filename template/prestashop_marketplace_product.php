@@ -186,7 +186,19 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-
+    <bs-toolbar-group data-group-label="Operazione su Quantità">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-check"
+                data-permission="/admin/product/edit"
+                data-event="bs.prestashop.align.quantity"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiorna le quantità in prestashop"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

@@ -5,7 +5,6 @@ use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\entities\CPrestashopHasProduct;
-use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProductPublicSku;
 
 /**
@@ -48,30 +47,12 @@ class CPrestashopUpdateProductQuantity extends ACronJob
 
         $prestashopProduct = new CPrestashopProduct();
         /** @var CObjectCollection $phpC */
-        $phpC = $phpRepo->findBy(['status' => 2, 'prestaId'=>!null]);
+        $phpC = $phpRepo->findBy(['status' => 2]);
 
         /** @var CPrestashopHasProduct $php */
         foreach ($phpC as $php){
 
-            $ppsC  = $php->product->productPublicSku;
-            $price = $php->prestashopHasProductHasMarketplaceHasShop;
-
-            $product =$php->product;
-            $marketPlaceHasShop=$php->marketplaceHasShop;
-
-
-
-            /** @var CPrestashopHasProductHasMarketplaceHasShop $prices */
-            foreach($price as $prices){
-                if($prices->isOnSale===1){
-                    $productPrice=$prices->salePrice;
-                }else{
-                    $productPrice=$prices->price;
-                }
-                // $shop=$prices->shopId;
-
-            }
-
+            $ppsC = $php->product->productPublicSku;
             $sizes = [];
 
             /** @var CProductPublicSku $pps */
@@ -79,26 +60,16 @@ class CPrestashopUpdateProductQuantity extends ACronJob
                 $sizes[$pps->productSizeId] = $pps->stockQty;
             }
 
-            $shopsRepo=\Monkey::app()->repoFactory->create('prestashopHasProductHasMarketplaceHasShop')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
-            // $shops = $php->getShopsForProduct();
-            $shops=[];
-            foreach($shopsRepo as $shopRepos) {
-                $shops[]= $shopRepos->marketplaceHasShopId;
-            }
-
+            $shops = $php->getShopsForProduct();
 
             foreach ($sizes as $size => $qty){
-
-                $prestashopProduct->updateProductQuantity($php->prestaId, $size,  $qty,  null,  $shops);
+                $prestashopProduct->updateProductQuantity($php->prestaId, $size, $qty, null, $shops);
             }
-
-
-
 
             $php->status = 1;
             $php->update();
         }
 
-        $this->report('Update product qty and price', 'End Update');
+        $this->report('Update product qty', 'End Update');
     }
 }
