@@ -84,8 +84,8 @@ class CPrestashopAlignQuantityProductManage extends AAjaxController
                 if ($productPresta != null) {
                     foreach ($productPresta as $p) {
                         /* ottengo la quantita totale dei prodotti;*/
-                        $qtp = $productRepo->finOneBy(['id' => $p->productId, 'productVariantId' => $p->productVariantId]);
-                        $totalQuantity = $qtp->stockQty;
+                        $qtp = $productRepo->findOneBy(['id' => $productId, 'productVariantId' => $productVariantId]);
+                        $totalQuantity = $qtp->qty;
                         /* aggiorno la quantità  totale del prodotto in base allo shop*/
                         try {
                             $stmtUpdateProductQuantityTotal = $db_con->prepare('UPDATE ps_stock_available set quantity=' . $totalQuantity . ', physical_quantity=' . $totalQuantity . ' 
@@ -93,20 +93,25 @@ class CPrestashopAlignQuantityProductManage extends AAjaxController
                                                                                    id_product_attribute=0 
                                                                                    and id_shop=' . $shop_id);
                             $stmtUpdateProductQuantityTotal->execute();
-                            $res.='<br>aggiornate le quantità per il prodotto con prestaShopId'.$idsPrestashop;
+                            $res.='<br>aggiornate le quantità per il prodotto con prestaShopId:'.$idsPrestashop;
                         }catch(\Throwable $e){
                             $res.=$e;
-                            \Monkey::app()->applicationLog('PrestashopAlignQuantityProductManage', 'Error', 'Error while update Total Quantity product '.$prestaIds, $e->getMessage());
+                            \Monkey::app()->applicationLog('PrestashopAlignQuantityProductManage', 'Error', 'Error while update Total Quantity product '.$idsPrestashop, $e);
                         }
-                        $sku = $productPublicSkuRepo->findBy(['productId' => $p->productId, 'productVariantId' => $p->productVariantId]);
+                        $sku = $productPublicSkuRepo->findBy(['productId' => $productId, 'productVariantId' =>$productVariantId]);
                         if ($sku != null) {
+
                             foreach ($sku as $skus) {
                                 $reference = $skus->productId . '-' . $skus->productVariantId . '-' . $skus->productSizeId;
                                 $qty = $skus->stockQty;
+
                                 $stmtFindProductAttribute = $db_con->prepare('SELECT pas.id_product_attribute, pa.reference 
                                                                                     FROM ps_product_attribute pa  JOIN ps_product_attribute_shop pas ON pas.id_product=pa.id_product
                                                                                     AND pas.id_product_attribute=pa.id_product_attribute WHERE pas.id_shop=' . $shop_id . '  and pa.reference=\'' . $reference . '\'');
                                 $stmtFindProductAttribute->execute();
+                                if($stmtFindProductAttribute!=null){
+                                    \Monkey::app()->applicationLog('PrestashopAlignQuantityProductManage', 'Error', 'selection '.$idsPrestashop.' reference'.$reference,'');
+                                }
                                 while ($stmtRowProductAttribute = $stmtFindProductAttribute->fetch(PDO::FETCH_ASSOC)) {
                                     $id_productAttribute = $stmtRowProductAttribute['id_product_attribute'];
                                 }
@@ -114,10 +119,11 @@ class CPrestashopAlignQuantityProductManage extends AAjaxController
                                     $stmtUpdateProductQuantity = $db_con->prepare('UPDATE ps_stock_available set quantity=' . $qty . ', physical_quantity=' . $qty . ' 
                                                                                    WHERE id_product=' . $idsPrestashop . ' and 
                                                                                    id_product_attribute=' . $id_productAttribute . ' and  
-                                                                                   and id_shop=' . $shop_id);
+                                                                                   id_shop=' . $shop_id);
                                     $stmtUpdateProductQuantity->execute();
+                                    $res.='<br>aggiornate le quantità per il prodotto con prestaShopId:'.$idsPrestashop.'e id_Attributo:'.$id_productAttribute;
                                 }catch (\Throwable $e){
-                                    \Monkey::app()->applicationLog('PrestashopAlignQuantityProductManage', 'Error', 'Error while update  Quantity product '.$prestaIds.' variant'.$id_productAttribute, $e->getMessage());
+                                    \Monkey::app()->applicationLog('PrestashopAlignQuantityProductManage', 'Error', 'Error while update  Quantity product '.$idsPrestashop.' variant'.$id_productAttribute, $e);
                                 }
 
                             }
