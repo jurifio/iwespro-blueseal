@@ -48,7 +48,7 @@ class CPrestashopUpdateProductQuantity extends ACronJob
 
         $prestashopProduct = new CPrestashopProduct();
         /** @var CObjectCollection $phpC */
-        $phpC = $phpRepo->findBy(['status' => 2]);
+        $phpC = $phpRepo->findBy(['status' => 2, 'prestaId'=>!null]);
 
         /** @var CPrestashopHasProduct $php */
         foreach ($phpC as $php){
