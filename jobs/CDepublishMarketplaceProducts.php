@@ -98,14 +98,17 @@ class CDepublishMarketplaceProducts extends ACronJob
                     )
                     * $sizeFill
                 ) * 100,2);
-
+        // costo cpc fratto il conteggio degli ordini con quel prodotto moltiplicato il prezzo attivo  moltiplicato la giacenza media moltiplicato per 100
             if ($one['orderCount'] == 0) $cos = 'NaN';
             else $cos = round($one['cost'] / $one['orderValue'] * 100,2);
+            /** costo campagna  / somma totale degli ordini per cento   */
             $this->debug('Cycle Res', 'Math Done', [
                 'cos' => $cos,
                 'nCos' => $nCos
             ]);
+            //definizione del massimo costo per giorno in base alla query
             $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 15;
+            $this->report('Cycle', "Define  cos: $nCos, and maxCos: " . $maxCos, ['product' => $product, 'campaing' => $campaign]);
             if ($nCos === 'NaN' || $nCos > $maxCos) {
                 $this->report('Cycle', "Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos, ['product' => $product, 'campaing' => $campaign]);
                 /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct */

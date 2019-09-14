@@ -53,12 +53,12 @@ $(document).on('bs-product-marketplace-publish', function (e, element, button) {
                 'data-init-plugin="selectize" title="" name="accountId" id="accountId" required>' +
                 '<option value=""></option>';
             for(let account of accounts) {
-                html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+                html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
             }
             html+='</select>';
             html+='</div>';
-            html+='<div class="form-group form-group-default"><label for="modifier">Modificatore</label><input id="modifier" type="text" value="0" aria-label="modifier"/></div>';
-            html+='<div style="display:none" class="form-group form-group-default"><label for="cpc">CPC</label><input id="cpc" type="text" value="0" aria-label="modifier"/></div>';
+            html+='<div class="form-group form-group-default"><label for="modifier">CPC Dedicato</label><input id="modifier" type="text" value="0" aria-label="modifier"/></div>';
+            html+='<div class="form-group form-group-default"><label for="cpc">CPC</label><input id="cpc" type="text" value="0" aria-label="cpc"/></div>';
 
             body.html($(html));
 
@@ -97,7 +97,8 @@ $(document).on('bs-product-marketplace-publish', function (e, element, button) {
 $(document).on('change','#accountId',function() {
     //window.x = $(this);
     $('#modifier').val($(this).find(':selected').data('modifier'));
-    if($(this).find(':selected').data('hasCpc')) {
+    $('#cpc').val($(this).find(':selected').data('cpc'));
+     if($(this).find(':selected').data('hasCpc')) {
         $("#cpc").parent().show();
     } else {
         $("#cpc").parent().hide();

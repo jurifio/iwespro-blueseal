@@ -4,16 +4,16 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
 
 /**
- * Class CMarketplaceProductManageController
- * @package bamboo\blueseal\controllers\ajax
+ * Class CMarketplaceCategoryProductManageController
+ * @package bamboo\controllers\back\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 18/07/2016
+ * @date 14/09/2019
  * @since 1.0
  */
 class CMarketplaceCategoryProductManageController extends AAjaxController
