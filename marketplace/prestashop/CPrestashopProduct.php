@@ -74,8 +74,8 @@ class CPrestashopProduct extends APrestashopMarketplace
                 se  utilizzo questa funzione mi prende il valore attivo ddel prezzo
                 $productPrice = $product->getDisplayActivePrice();
                 */
-               $productPrice = $product->getDisplayFullPrice();
-               // $productPrice=$product->productSku->price;
+                $productPrice = $product->getDisplayFullPrice();
+                // $productPrice=$product->productSku->price;
                 // full price
 
                 if (!$productPrice) continue;
@@ -675,7 +675,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
             //setto la relazione con le tabelle
             $productXmlChildren = $productXmlFather->children()->children();
-        //per ogni prodotto combinazion
+            //per ogni prodotto combinazion
             foreach ($productXmlChildren->associations->combinations->combination as $association) {
                 //assegno al prodotto la relazione con la combinazione
                 $combinationXmlFather = $this->getDataFromResource($this::COMBINATION_RESOURCE, (int)$association->id, [], [], null, $shopId);

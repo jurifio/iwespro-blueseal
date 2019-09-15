@@ -7,14 +7,12 @@ $(document).on('bs.marketplace-account.save', function () {
         "use strict";
         if(!inputs.hasOwnProperty(k)) continue;
         let v = $(inputs[k]);
-        data = readFullInput(v.attr('name'),v.val(),data);
+        if (k<5) {
+            data = readFullInput(v.attr('name'), v.val(), data);
+        }
     }
+    alert(data['config']['defaultCpc']);
 
-    data.billingAddressBook = readShipment('#billingAddress');
-    data.shippingAddresses = [];
-    $.each($('#shippingAddresses .shippingAddress'), function (k, v) {
-        data.shippingAddresses.push(readShipment(v));
-    });
 
     if (data.id.length) {
         method = "PUT";
@@ -52,13 +50,17 @@ $(document).on('bs.marketplace-account.save', function () {
             },
             dataType: "json"
         }).done(function (res) {
+
             let inputMock =
                 '<div class="row">' +
-                    '<div class="col-md-offset-{{offset}} col-md-{{colLength}}">' +
+                '<div class="col-md-12">'+
+                    //'<div class="col-md-offset-{{offset}} col-md-{{colLength}}">' +
                         '<div class="form-group form-group-default required">' +
-                            '<label for="{{field}}">{{label}}</label>' +
+                            '<label for="{{field}}" id="label_{{field}}">{{label}}</label>' +
                             '<input id="{{field}}" autocomplete="off" type="text" class="form-control" ' +
                                     'name="{{field}}" value="" required="required"/>' +
+                ' <span class="bs red corner label"><i\n' +
+                'class="fa fa-asterisk"></i></span>'+
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -87,9 +89,9 @@ function drawObject(prefix, object, inputMock, box,offset) {
 
 function drawInput(prefix,key,val,inputMock,box,offset) {
     let newInput = $(inputMock.monkeyReplaceAll('{{field}}',prefix+'_'+key).
-                                replaceAll('{{label}}',key).
-                                replaceAll('{{offset}}',offset).
-                                replaceAll('{{colLength}}',12-offset));
+    monkeyReplaceAll('{{label}}',key).
+    monkeyReplaceAll('{{offset}}',offset).
+    monkeyReplaceAll('{{colLength}}',12-offset));
     newInput.find('input').val(val);
     box.append(newInput);
 }
@@ -102,8 +104,90 @@ function readFullInput(name,value,object) {
         let firstPiece = pieces[0];
         pieces.splice(0,1);
         let newObject = {};
-        if(typeof object[firstPiece] != 'undefined') newObject = object[firstPiece];
+        if(typeof object[firstPiece] != 'undefined'){
+            newObject = object[firstPiece];
+        }
         object[firstPiece] = readFullInput(pieces.join('_'),value,newObject);
+
     }
     return object;
 }
+
+$(document).ready( function () {
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'ProductSizeGroup',
+
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#productSizeGroupId1');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        options: res2,
+    });
+
+});
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'ProductSizeGroup',
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#productSizeGroupId2');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+    $('#productSizeGroupId1').change(function () {
+        let productSizeGroupId1=$('#productSizeGroupId1').val();
+       $('#config_productSizeGroup1').val(productSizeGroupId1);
+
+
+    });
+
+});
+$(window).on('load', function() {
+    if($("#label_config_budgetMonth")) {
+        $("#label_config_budgetMonth").html("Budget di Spesa Mensile");
+    }
+    if( $("#label_config_productSizeGroup1")) {
+        $("#label_config_productSizeGroup1").html("Id Gruppo Taglia 1 Per Cambiare il Gruppo Taglia utilizzare l'apposito selettore a fine Form");
+    }
+    if( $("#label_config_productSizeGroup2")) {
+        $("#label_config_productSizeGroup2").html("Id Gruppo Taglia 2 Per Cambiare il Gruppo Taglia utilizzare l'apposito selettore a fine Form");
+    }
+    if( $("#label_config_valueexcept1")) {
+        $("#label_config_valueexcept1").html("Imposta il valore del Moltiplicatore Per il gruppo taglia 1");
+    }
+    if($("#label_config_valueexcept2")) {
+        $("#label_config_valueexcept2").html("Imposta il valore del Moltiplicatore Per il gruppo taglia 2");
+    }
+    if ($("#label_config_maxCost")) {
+        $("#label_config_maxCost").html("Costo Massimo Periodo(maxCos)");
+    }
+    if( $("#label_config_timeRange")) {
+        $("#label_config_timeRange").html("numero Giorni Periodo di Calcolo");
+    }
+    if( $("#label_config_multiplierDefault")) {
+        $("#label_config_multiplierDefault").html("Moltiplicatore di Default");
+    }
+    if( $("#label_config_priceModifier")) {
+        $("#label_config_priceModifier").html("CPC Dedicato");
+    }
+
+});
+
