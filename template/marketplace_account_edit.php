@@ -29,15 +29,17 @@
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Informazioni di base</h5>
                                 </div>
-                                <input id="shop_id" type="hidden" value="" name="shop_id">
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <input type="hidden" id="marketplace_account_id"
-                                                   name="marketplace_account_id"
+                                            <input type="hidden" id="countField"
+                                                   name="countField"
+                                                   value="<?php echo $countField; ?>">
+                                            <input type="hidden" id="marketplaceAccountId"
+                                                   name="marketplaceAccountId"
                                                    value="<?php echo $marketplaceCode[0]; ?>">
-                                            <input type="hidden" id="marketplace_account_marketplace_id"
-                                                   name="marketplace_account_marketplace_id"
+                                            <input type="hidden" id="marketplaceId"
+                                                   name="marketplaceId"
                                                    value="<?php echo $marketplaceCode[1]; ?>">
                                             <div class="form-group form-group-default required">
                                                 <label for="marketplace_account_name">Nome</label>

@@ -27,21 +27,25 @@ class CMarketplaceAccountController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/marketplace_account_edit.php');
-        $marketplaceAccountId=\Monkey::app()->router->request()->getRequestData('id');
-        $marketplaceCode=explode('-',$marketplaceAccountId);
+        $marketplaceAccountGet=\Monkey::app()->router->request()->getRequestData('id');
+        $marketplaceCode=explode('-',$marketplaceAccountGet);
 
 
         $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceCode[0],'marketplaceId'=>$marketplaceCode[1]]);
 
         $marketplaceConfig=json_encode($marketplaceAccount->config,false);
+        $countConfig=json_decode($marketplaceConfig,true);
+        $countField=count($countConfig);
+
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
-            'marketplaceAccountId' =>$marketplaceAccountId,
+            'marketplaceAccountGet' =>$marketplaceAccountGet,
             'marketplaceAccount'=>$marketplaceAccount,
             'marketplaceConfig'=>$marketplaceConfig,
             'marketplaceCode'=>$marketplaceCode,
+            'countField'=>$countField,
             'sidebar' => $this->sidebar->build()
         ]);
     }
