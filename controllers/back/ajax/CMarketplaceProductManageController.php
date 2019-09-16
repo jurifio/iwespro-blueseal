@@ -21,11 +21,12 @@ class CMarketplaceProductManageController extends AAjaxController
     {
         $response = [];
         foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
-            $modifier = isset($account->config['priceModifier']) ? $account->config['priceModificer'] : 0;
-            $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
-            if($account->marketplace->type=='cpc') {
-                $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' => $cpc];
-            }
+                $activeAutomatic=isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
+                $modifier = isset($account->config['priceModifier']) ? $account->config['priceModifier'] : 0;
+                $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
+                if ($account->marketplace->type == 'cpc') {
+                    $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' => $cpc,'activeAutomatic'=>$activeAutomatic];
+                }
         }
 
         return json_encode($response);
@@ -36,6 +37,7 @@ class CMarketplaceProductManageController extends AAjaxController
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
         $modifier = $this->app->router->request()->getRequestData('modifier');
         $cpc = $this->app->router->request()->getRequestData('cpc');
+        $activeAutomatic = $this->app->router->request()->getRequestData('activeAutomatic');
         $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if ($rows == 'all') {
@@ -57,7 +59,7 @@ class CMarketplaceProductManageController extends AAjaxController
 
                 set_time_limit(6);
                 $product = $productRepo->findOneByStringId($row);
-                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier);
+                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier,$activeAutomatic);
                 $i++;
                 \Monkey::app()->repoFactory->commit();
             } catch

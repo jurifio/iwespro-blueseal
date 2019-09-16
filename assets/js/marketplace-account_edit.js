@@ -206,6 +206,34 @@ $(window).on('load', function () {
     if ($("#labelconfig_priceModifier")) {
         $("#labelconfig_priceModifier").html("CPC Dedicato");
     }
+    if ($("#labelconfig_activeAutomatic")) {
+        $("#labelconfig_activeAutomatic").html("Pubblicazione Automatica a inizio Mese");
+    }
+    if ($("#labelconfig_priceModifierRange1")) {
+        $("#labelconfig_priceModifierRange1").html("Fascia di Prezzo 1 CPC Dedicato");
+    }
+    if ($("#labelconfig_priceModifierRange2")) {
+        $("#labelconfig_priceModifierRange2").html("Fascia di Prezzo 2 CPC Dedicato");
+    }
+    if ($("#labelconfig_priceModifierRange3")) {
+        $("#labelconfig_priceModifierRange3").html("Fascia di Prezzo 3 CPC Dedicato");
+    }
+    if ($("#labelconfig_priceModifierRange4")) {
+        $("#labelconfig_priceModifierRange4").html("Fascia di Prezzo 4 CPC Dedicato");
+    }
+    if ($("#labelconfig_range1Cpc")) {
+        $("#labelconfig_range1Cpc").html("CPC Dedicato Fascia 1 in Euro");
+    }
+    if ($("#labelconfig_range2Cpc")) {
+        $("#labelconfig_range2Cpc").html("CPC Dedicato Fascia 2 in Euro");
+    }
+    if ($("#labelconfig_range3Cpc")) {
+        $("#labelconfig_range3Cpc").html("CPC Dedicato Fascia 3 in Euro");
+    }
+    if ($("#labelconfig_range4Cpc")) {
+        $("#labelconfig_range4Cpc").html("CPC Dedicato Fascia 4 in Euro");
+    }
+
 
 });
 

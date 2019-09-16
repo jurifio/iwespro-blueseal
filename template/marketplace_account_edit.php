@@ -56,6 +56,26 @@
                                         <div class="col-md-12" id="config-list">
                                         </div>
                                     </div>
+                                    <?php if (isset($marketplaceAccount->config['activeAutomatic'])){?>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default required">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="activeAutomatic">Pubblicazione Automatica</label>
+                                                    <select id="activeAutomatic" name="activeAutomatic"
+                                                            class="full-width selectpicker"
+                                                            placeholder="Seleziona lo stato"
+                                                            data-init-plugin="selectize">
+                                                        <option value="">seleziona lo stato</option>
+                                                        <option value="1">Attivo</option>
+                                                        <option value="0">Non Attivo</option>
+                                                    </select>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                        </div>
+                                    </div>
+                                        <?php }?>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <?php if (isset($marketplaceAccount -> config['productSizeGroup1'])){ ?>
