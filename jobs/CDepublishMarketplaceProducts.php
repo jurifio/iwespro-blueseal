@@ -46,7 +46,7 @@ class CDepublishMarketplaceProducts extends ACronJob
                     CampaignVisitHasOrder cvho JOIN OrderLine ol ON cvho.orderId = ol.orderId
                   ) ON (cv.id, cv.campaignId) = (cvho.campaignVisitId, cvho.campaignId) AND 
                     (cvhp.productId,cvhp.productVariantId) = (ol.productId,ol.productVariantId)
-                WHERE cv.timestamp > (NOW() - INTERVAL 2 WEEK)
+                WHERE cv.timestamp > (NOW() - INTERVAL 1 WEEK)
                 GROUP BY c.id,cvhp.productId,cvhp.productVariantId
                 HAVING cost > 0
                 ORDER BY c.id ASC";
@@ -107,7 +107,7 @@ class CDepublishMarketplaceProducts extends ACronJob
                 'nCos' => $nCos
             ]);
             //definizione del massimo costo per giorno in base alla query
-            $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 15;
+            $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
             $this->report('Cycle', "Define  cos: $nCos, and maxCos: " . $maxCos, ['product' => $product, 'campaing' => $campaign]);
             if ($nCos === 'NaN' || $nCos > $maxCos) {
                 $this->report('Cycle', "Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos, ['product' => $product, 'campaing' => $campaign]);
