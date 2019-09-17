@@ -2,6 +2,7 @@
 namespace bamboo\controllers\back\ajax;
 use bamboo\domain\repositories\CMarketplaceHasProductAssociateRepo;
 
+
 /**
  * Class CMarketplaceProductPrestashopManageController
  * @package bamboo\controllers\back\ajax

@@ -344,7 +344,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
             }
 
             try {
-                $stmtCart = $db_con->prepare("SELECT 
+                $stmtCart = $db_con->prepare('SELECT 
                                                c.id as remoteId,
                                                c.orderPaymentMethodId as orderPaymentMethodId,
                                                c.couponId as couponId,
@@ -355,7 +355,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate
-                                               from Cart c join User U on c.userId = U.id order BY remoteId ASC   ");
+                                               from Cart c join User U on c.userId = U.id order BY remoteId ASC   ');
                 $stmtCart->execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
