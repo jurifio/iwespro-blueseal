@@ -69,7 +69,7 @@ class CDepublishMarketplaceProducts extends ACronJob
             $product = $productRepo->findOneBy(["id" => $one['productId'], "productVariantId" => $one['productVariantId']]);
             //cerco la campagna che è presente nei dati
             /** @var CCampaign $campaign */
-
+            $productSizeGroupId=$product->productSizeGroupId;
             $campaign = $campaingRepo->findOneBy(["id" => $one['id']]);
             // verifico se la campagna è lincata al marketplace
             if (!$campaign->marketplaceAccount) {
@@ -87,6 +87,16 @@ class CDepublishMarketplaceProducts extends ACronJob
                     'orderCount' => $one['orderCount'],
                     'productPrice' => $product->getDisplayActivePrice()
                 ]);
+            $checkIfProductSizeGroupId1=isset($campaign->marketplaceAccount->getConfig()['productSizeGroup1'])? $campaign->marketplaceAccount->getConfig()['productSizeGroup1']:0;
+            $checkIfProductSizeGroupId2=isset($campaign->marketplaceAccount->getConfig()['productSizeGroup2'])? $campaign->marketplaceAccount->getConfig()['productSizeGroup2']:0;
+            if($productSizeGroupId1==$productSizeGroupId){
+                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept1'];
+            }elseif($productSizeGroupId2==$productSizeGroupId){
+                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept1'];
+            }else{
+                $multiplierIs=isset($campaign->marketplaceAccount->getConfig()['multiplierDefault'])? $campaign->marketplaceAccount->getConfig()['multiplierDefault']:0.1;
+            }
+
 
             $sizeFill = $actualSizes / $iniSizes;
 
