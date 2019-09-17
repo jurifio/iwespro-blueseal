@@ -48,7 +48,6 @@ class COrderListAjaxController extends AAjaxController
                   `opm`.`name`                                           AS `payment`,
                   `ols`.`title`                                          AS `orderLineStatus`,
                   `pb`.`name`                                            AS `productBrand`,
-                  #concat(`o`.`netTotal`, '/' , `o`.`paidAmount`)         AS `dareavere`,
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
@@ -194,7 +193,7 @@ class COrderListAjaxController extends AAjaxController
                 }
             }
             if($perm){
-                $row["id"] = '<a href="' . $opera . $val->id . '" >' . $val->id . '</a>';
+                $row["id"] = '<a href="' . $opera . $val->id . '" >H-' . $val->id . '</a>';
                 if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
             } else {
                 $row["id"] = $val->id;

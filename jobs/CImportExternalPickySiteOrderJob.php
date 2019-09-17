@@ -99,7 +99,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      u.username as username,
                                      u.password as password,
                                      u.email AS email,
-                                     concat(u.registrationEntryPoint,'-','%s') as registrationEntryPoint,
+                                     concat(u.registrationEntryPoint, '-','%s') as registrationEntryPoint,
                                      u.isActive as isActive,
                                      u.isDeleted as isDeleted,
                                      u.lastSeen as lastSeen,
@@ -115,7 +115,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ud.fiscalCode as fiscalCode,
                                      ud.note as note
                                      FROM User  u
-                                      JOIN UserDetails ud ON u.id =ud.userId", $shop));
+                                      JOIN UserDetails ud ON u.id = ud.userId", $shop));
             $stmtUser->execute();
             while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
                 $checkUserIfExist = $userRepo->findOneBy(['email' => $rowUser['email']]);
@@ -347,19 +347,27 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate
-                                               from Cart c where c.billingAddressId IS  NOT NULL and c.shipmentAddressId  IS NOT NULL ");
+                                               from Cart c ");
             $stmtCart->execute();
-            while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
+            foreach ($stmtCart as $rowCart){
                 $checkCartIfExist = $cartRepo->findOneBy(['remoteId' => $rowCart['remoteId'], 'remoteShopId' => $shop]);
                 if (null == $checkCartIfExist) {
+                    $userEmailFind=$userRepo->findOneBy(['email'=>$rowCart['email']]);
+                    $userIdEmail=$userEmailFind->id;
                     $userFind = $userRepo->findOneBy(['remoteId' => $rowCart['userId'], 'remoteShopId' => $shop]);
                     if ($userFind !== null) {
                         $userId = $userFind->id;
+
                         $billingAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['billingAddressId'], 'remoteShopId' => $shop]);
                         if ($billingAddressIdFind != null) {
+                            $billingAddressIdFind->userId=$userIdEmail;
+                            $billingAddressIdFind->update();
+
                             $billingAddressId = $billingAddressIdFind->id;
                             $shipmentAddressIdFind = $userAddressRepo->findOneBy(['remoteId' => $rowCart['shipmentAddressId'], 'remoteShopId' => $shop]);
                             if ($shipmentAddressIdFind != null) {
+                                $shipmentAddressIdFind->userId=$userIdEmail;
+                                $shipmentAddressIdFind->update();
                                 $shipmentAddressId = $shipmentAddressIdFind->id;
                                 $insertCart = $cartRepo->getEmptyEntity();
                                 if ($rowCart['couponId'] != '') {
