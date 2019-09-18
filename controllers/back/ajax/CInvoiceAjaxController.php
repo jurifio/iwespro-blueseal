@@ -271,7 +271,7 @@ class CInvoiceAjaxController extends AAjaxController
                                                                                 )");
                 }
                 $stmtInvoiceExist = $db_con->prepare("SELECT 
-                                     count(*) AS counterInvoice from Invoice where orderId =".$order->remoteId);
+                                     count(*) AS counterInvoice from Invoice where orderId =".$order->remoteOrderSellerId);
                 $stmtInvoiceExist->execute();
                 while ($rowInvoiceExist = $stmtInvoiceExist->fetch(PDO::FETCH_ASSOC)) {
 
@@ -294,7 +294,7 @@ class CInvoiceAjaxController extends AAjaxController
                                                                                invoiceText,
                                                                                creationDate)
                                                                                VALUES(
-                                                                               '".$order->remoteId."',
+                                                                               '".$order->remoteOrderSellerId."',
                                                                                 '".$insertRemoteInvoice->invoiceYear."',
                                                                                 '".$insertRemoteInvoice->invoiceType."',
                                                                                 '".$insertRemoteInvoice->invoiceSiteChar."',
