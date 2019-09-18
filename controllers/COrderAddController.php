@@ -46,6 +46,7 @@ class COrderAddController extends ARestrictedAccessRootController
             $cart->orderPaymentMethodId = $data['orderPaymentMethod'];
             $cart->billingAddressId = $data['billingAddress'];
             $cart->shipmentAddressId = $data['shippingAddress'] ?? $data['billingAddress'];
+            $cart->remoteCartSellerId =$data['shopId'];
             $cart->smartInsert();
 
             foreach ($data['orderLine'] as $line) {

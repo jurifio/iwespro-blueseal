@@ -92,7 +92,19 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="orderPaymentMethod">Metodo Pagametno</label>
+                                                <label for="shopId">Su Quale Shop Vuoi Eseguire l'Ordine</label>
+                                                <select id="shopId" name="shopId"
+                                                        class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Seleziona uno shop">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="orderPaymentMethod">Metodo Pagamento</label>
                                                 <select id="orderPaymentMethod" name="orderPaymentMethod"
                                                         class="full-width selectpicker"
                                                         required="required"
