@@ -501,9 +501,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.hasInvoice as hasInvoice,
                                                o.isParallel as isParallel,
                                                o.isOrderMarketplace as isOrderMarketplace,
-                                               o.orderMarketplaceId as orderMarketplaceId,
                                                o.markeplaceId as marketplaceId,
-                                               o.markeplaceOrderId
+                                               o.markeplaceOrderId as marketplaceOrderId
                                                from `Order` o join User U on o.userId = U.id ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
