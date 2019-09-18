@@ -360,7 +360,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
 
             try {
                 $stmtCart = $db_con -> prepare('SELECT 
-                                               c.id as remoteId,
+                                               c.id as remoteCartSellerId,
                                                c.orderPaymentMethodId as orderPaymentMethodId,
                                                c.couponId as couponId,
                                                c.userId as userId,
@@ -374,7 +374,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
-                    $checkCartIfExist = $cartRepo -> findOneBy(['remoteId' => $rowCart['remoteId'], 'remoteShopId' => $shop]);
+                    $checkCartIfExist = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCart['remoteCartSellerId'], 'remoteShopSellerId' => $shop]);
                     if (null == $checkCartIfExist) {
                         $userEmailFind = $userRepo -> findOneBy(['email' => $rowCart['email']]);
                         $userIdEmail = $userEmailFind -> id;
@@ -410,8 +410,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
 
                                     $insertCart -> shipmentAddressId = $shipmentAddressId;
                                     $insertCart -> lastUpdate = $rowCart['lastUpdate'];
-                                    $insertCart -> remoteId = $rowCart['remoteId'];
-                                    $insertCart -> remoteShopId = $shop;
+                                    $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
+                                    $insertCart -> remoteShopSellerId = $shop;
                                     $insertCart -> insert();
 
                                 }
@@ -431,7 +431,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             /***** inserimento righe carrello *********/
             try {
                 $stmtCartLine = $db_con -> prepare('SELECT
-                                            cl.id as remoteId,
+                                            cl.id as remoteCartLineSellerId,
                                             cl.cartId as remoteCartId,
                                             cl.productId as productId,
                                             cl.productVariantId as productVariantId,
@@ -439,10 +439,10 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                             from CartLine cl');
                 $stmtCartLine -> execute();
                 while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
-                    $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteId' => $rowCartLineOrder['remoteId'], 'remoteShopId' => $shop]);
+                    $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
 
                     if ($findCartLineIdIfExist == null) {
-                        $cartIdFind = $cartRepo -> findOneBy(['remoteId' => $rowCartLineOrder['remoteCartId'], 'remoteShopId' => $shop]);
+                        $cartIdFind = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCartLineOrder['remoteCartId'], 'remoteShopSellerId' => $shop]);
                         if ($cartIdFind !== null) {
                             $cartId = $cartIdFind -> id;
                             $cartLineInsert = $cartLineRepo -> getEmptyEntity();
@@ -450,8 +450,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $cartLineInsert -> productId = $rowCartLineOrder['productId'];
                             $cartLineInsert -> productVariantId = $rowCartLineOrder['productVariantId'];
                             $cartLineInsert -> productSizeId = $rowCartLineOrder['productSizeId'];
-                            $cartLineInsert -> remoteId = $rowCartLineOrder['remoteId'];
-                            $cartLineInsert -> remoteShopId = $shop;
+                            $cartLineInsert -> remoteCartLineSellerId = $rowCartLineOrder['remoteCartLineSellerId'];
+                            $cartLineInsert -> remoteShopSellerId = $shop;
                             $cartLineInsert -> insert();
 
                         }
@@ -468,7 +468,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             try {
                 /***inserimento ordini */
                 $stmtOrder = $db_con->prepare('SELECT 
-                                               o.id as remoteId,
+                                               o.id as remoteOrderSellerId,
                                                o.orderPaymentMethodId as orderPaymentMethodId,
                                                o.orderShippingMethodId as orderShippingMethodId,
                                                o.couponId as couponId,
@@ -498,19 +498,24 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.paymentDate as paymentDate,
                                                o.lastUpdate as lastUpdate,
                                                o.creationDate as creationDate,
-                                               o.hasInvoice as hasInvoice
+                                               o.hasInvoice as hasInvoice,
+                                               o.isParallel as isParallel,
+                                               o.isOrderMarketplace as isOrderMarketplace,
+                                               o.orderMarketplaceId as orderMarketplaceId,
+                                               o.markeplaceId as marketplaceId,
+                                               o.markeplaceOrderId
                                                from `Order` o join User U on o.userId = U.id ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
 
 
-                    $checkOrderIfExist = $orderRepo->findOneBy(['remoteId' => $rowOrder['remoteId'], 'remoteShopId' => $shop]);
+                    $checkOrderIfExist = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrder['remoteOrderSellerId'], 'remoteShopSellerId' => $shop]);
 
                     if ($checkOrderIfExist == null) {
                         $findUser = $userRepo->findOneBy(['email' => $rowOrder['email']]);
                         if ($findUser !== null) {
                             $userId = $findUser->id;
-                            $findCart = $cartRepo->findOneBy(['remoteId' => $rowOrder['cartId'], 'remoteShopId' => $shop]);
+                            $findCart = $cartRepo->findOneBy(['remoteCartSellerId' => $rowOrder['cartId'], 'remoteShopSellerId' => $shop]);
                             if ($findCart != null) {
                                 $cartId = $findCart->id;
                                 $insertOrder = $orderRepo->getEmptyEntity();
@@ -557,11 +562,13 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder->transactionNumber = $rowOrder['transactionNumber'];
                                 $insertOrder->transactionMac = $rowOrder['transactionMac'];
                                 $insertOrder->paymentDate = $rowOrder['paymentDate'];
-                                $insertOrder->remoteId = $rowOrder['remoteId'];
-                                $insertOrder->remoteShopId = $shop;
+                                $insertOrder->remoteOrderSellerId = $rowOrder['remoteOrderSellerId'];
+                                $insertOrder->remoteShopSellerId = $shop;
                                 $insertOrder->hasInvoice = $rowOrder['hasInvoice'];
+                                $inserOrder->isParallel =$rowOrder['isParallel'];
+                                $insertOrder->isOrderMarketplace=$rowOrder['isOrderMarketplace'];
+                                $insertOrder->marketplaceOrderId=$rowOrder['marketplaceOrderId'];
                                 $insertOrder->insert();
-
                                 continue;
 
                             }
@@ -580,8 +587,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             try {
                 /**** inserimento righe Ordine*****/
                 if ($shop == 1) {
-                    $stmtOrderLine = $db_con->prepare(' SELECT ol.id AS remoteId,
-                                     ol.orderId as orderId,
+                    $stmtOrderLine = $db_con->prepare(' SELECT ol.id AS remoteOrderLineSellerId,
+                                     ol.orderId as remoteOrderSellerId,
                                      ol.productId as productId,
                                      ol.productVariantId as productVariantId,
                                      ol.productSizeId as productSizeId,
@@ -609,8 +616,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL');
                 } else {
                     $stmtOrderLine = $db_con->prepare('SELECT 
-                                     ol.id AS remoteId,
-                                     ol.orderId as orderId,
+                                     ol.id AS remoteOrderLineSellerId,
+                                     ol.orderId as remoteOrderSellerId,
                                      ol.productId as productId,
                                      ol.productVariantId as productVariantId,
                                      ol.productSizeId as productSizeId,
@@ -639,10 +646,10 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                 }
                 $stmtOrderLine->execute();
                 while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
-                    $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteId' => $rowOrderLine['remoteId'], 'remoteOrderId' => $rowOrderLine['orderId'], 'remoteShopId' => $shop]);
+                    $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteOrderLineSellerId' => $rowOrderLine['remoteOrderLineSellerId'], 'remoteOrderSellerId' => $rowOrderLine['remoteOrderSellerId'], 'remoteShopSellerId' => $shop]);
                     if ($checkOrderLineExist == null) {
 
-                        $findOrder = $orderRepo->findOneBy(['remoteId' => $rowOrderLine['orderId'], 'remoteShopId' => $shop]);
+                        $findOrder = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrderLine['remoteOrderSellerId'], 'remoteShopSellerId' => $shop]);
                         if ($findOrder != null) {
 
 
@@ -680,9 +687,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrderLine->creationDate = $rowOrderLine['creationDate'];
                                 $insertOrderLine->lastUpdate = $rowOrderLine['lastUpdate'];
                                 $insertOrderLine->note = $rowOrderLine['note'];
-                                $insertOrderLine->remoteId = $rowOrderLine['remoteId'];
-                                $insertOrderLine->remoteShopId = $shop;
-                                $insertOrderLine->remoteOrderId = $rowOrderLine['orderId'];
+                                $insertOrderLine->remoteOrderLineSellerId = $rowOrderLine['remoteOrderLineSellerId'];
+                                $insertOrderLine->remoteShopSellerId = $shop;
+                                $insertOrderLine->remoteOrderSellerId = $rowOrderLine['remoteOrderSellerId'];
                                 $insertOrderLine->insert();
 
                             }
