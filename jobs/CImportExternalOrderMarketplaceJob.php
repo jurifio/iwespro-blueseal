@@ -52,8 +52,8 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
         /********marketplace********/
         $db_host = "5.189.159.187";
         $db_name = "iwesPrestaDB";
-        $db_user = "iwesprestashop";
-        $db_pass = "X+]l&LEa]zSI";
+        $db_user = "pickyshop4";
+        $db_pass = "rrtYvg6W!";
         try {
 
             $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
@@ -62,10 +62,32 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
         } catch (PDOException $e) {
             $res.= $e->getMessage();
         }
+        $userRepo = \Monkey::app()->repoFactory->create('User');
+        $userDetailsRepo = \Monkey::app()->repoFactory->create('UserDetails');
+        $userEmailRepo = \Monkey::app()->repoFactory->create('UserEmail');
+        $getUserIdRepo = \Monkey::app()->repoFactory->create('User');
+        $userAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');
+        $findCountryRepo = \Monkey::app()->repoFactory->create('Country');
+        $cartRepo = \Monkey::app()->repoFactory->create('Cart');
+        $cartLineRepo = \Monkey::app()->repoFactory->create('CartLine');
+        $orderRepo = \Monkey::app()->repoFactory->create('Order');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
+        $couponTypeRepo = \Monkey::app()->repoFactory->create('CouponType');
+        $couponEventRepo = \Monkey::app()->repoFactory->create('CouponEvent');
+        $couponRepo = \Monkey::app()->repoFactory->create('Coupon');
+
+
+        $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
         $stmtUser = $db_con->prepare("SELECT 
                                      pc.id_customer AS remoteId,
-                                     pac.id_address AS remoteaddressId,
                                      pc.id_lang AS  langId,
+                                     pc.email as username,                              
+                                     pc.passwd as password,                             
+                                     pc.email as email,     
+                                     concat('marketplace-','%s') as registrationEntryPoint,
+                                      '1' as isActive,
+                                    '1'as isDeleted,
+                                     0 as isEmailChanged,
                                      pc.id_shop AS shopId,
                                      pc.id_shop AS siteId,
                                      pc.email AS email,
@@ -83,9 +105,9 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                      pac.phone_mobile AS phone_mobile,
                                      pac.dni AS fiscalcode,
                                      pc.date_add AS creationDate
-                                     FROM psz6_customer pc
-                                     JOIN psz6_address pac ON pc.id_customer =pac.id_customer
-                                     JOIN psz6_state pst ON pac.id_state
+                                     FROM ps_customer pc
+                                     JOIN ps_address pac ON pc.id_customer =pac.id_customer
+                                     JOIN ps_state pst ON pac.id_state WHERE email <> 'NOSEND-EBAY'
                                    GROUP BY  remoteId");
         $stmtUser->execute();
         while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
@@ -94,12 +116,11 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                 $insertUser = \Monkey::app()->repoFactory->create('User')->getEmptyEntity();
                 $insertUser->langId = $rowUser['langId'];
                 $insertUser->email = $rowUser['email'];
-                $insertUser->registrationEntryPoint = 'MarketPlace';
+                $insertUser->registrationEntryPoint = $rowUser['registrationEntryPoint'];
                 $insertUser->isActive = '1';
                 $insertUser->isDeleted = '0';
                 $insertUser->creationDate = $rowUser['creationDate'];
                 $insertUser->isEmailChanged = '0';
-                $insertUser->remoteId=$rowUser['remoteId'];
                 $insertUser->insert();
                 $insertUserAddress = \Monkey::app()->repoFactory->create('UserAddress')->getEmptyEntity();
                 $getuserId = \Monkey::app()->repoFactory->create('User')->findOneBy(['email' => $rowUser['email']]);
@@ -145,6 +166,7 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                 $insertUserDetails->regDate = $rowUser['creationDate'];
                 $insertUserDetails->fiscalcode = $rowUser['fiscalcode'];
                 $insertUserDetails->insert();
+                //userEmail Creation
                 $insertUserEmail = \Monkey::app()->repoFactory->create('UserEmail')->getEmptyEntity();
                 $insertUserEmail->userid = $userId;
                 $insertUserEmail->address = $rowUser['email'];
@@ -173,10 +195,10 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                      pcart.date_add AS creationDate,
                                      pcart.date_upd AS lastUpdate
                             
-                                     FROM psz6_cart pcart 
-                                      JOIN psz6_cart_product pcp ON pcart.id_cart = pcp.id_cart
-                                      JOIN psz6_product_attribute ppa ON pcp.id_product=ppa.id_product AND pcp.id_product_attribute =ppa.id_product_attribute
-                                      JOIN psz6_product p ON ppa.id_product=p.id_product 
+                                     FROM ps_cart pcart 
+                                      JOIN ps_cart_product pcp ON pcart.id_cart = pcp.id_cart
+                                      JOIN ps_product_attribute ppa ON pcp.id_product=ppa.id_product AND pcp.id_product_attribute =ppa.id_product_attribute
+                                      JOIN ps_product p ON ppa.id_product=p.id_product 
                                
                                   ");
         $stmtCart->execute();
