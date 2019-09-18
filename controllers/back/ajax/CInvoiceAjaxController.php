@@ -57,8 +57,8 @@ class CInvoiceAjaxController extends AAjaxController
         }
 
         // prendo l'intestazione
-        $remoteShopId = $order->remoteShopId;
-        $shopInvoices = $shopRepo->findOneBy(['id' => $remoteShopId]);
+        $remoteShopSellerId = $order->remoteShopSellerId;
+        $shopInvoices = $shopRepo->findOneBy(['id' => $remoteShopSellerId]);
 
 
         $logo = $shopInvoices->logo;
@@ -98,7 +98,7 @@ class CInvoiceAjaxController extends AAjaxController
                     //se è extracee
                     if ($isExtraUe == '1') {
                         // se è Pickyshop
-                        if ($remoteShopId = 44) {
+                        if ($remoteShopSellerId = 44) {
                             // è Pickyshop
                             $invoiceType = 'X';
                             $invoiceTypeVat = 'newX';
@@ -127,7 +127,7 @@ class CInvoiceAjaxController extends AAjaxController
                     } else {
                         // è fattura intracomunitario
                             // se è pickyshop
-                        if ($remoteShopId == '44') {
+                        if ($remoteShopSellerId == '44') {
                             // è pickyshop
                             $invoiceType = 'P';
                             $invoiceTypeVat = 'newP';
@@ -155,7 +155,7 @@ class CInvoiceAjaxController extends AAjaxController
                 } else {
                     // è ricevuta
                     // se è pickyshop
-                    if ($remoteShopId == '44') {
+                    if ($remoteShopSellerId == '44') {
                         //è pickyshop
                         $documentType = '16';
                         $invoiceType = 'K';
@@ -188,10 +188,10 @@ class CInvoiceAjaxController extends AAjaxController
                                       WHERE
                                       Invoice.invoiceYear = ? AND
                                       Invoice.invoiceType='" . $invoiceType . "' AND
-                                      Invoice.invoiceShopId='".$remoteShopId."' AND
+                                      Invoice.invoiceShopId='".$remoteShopSellerId."' AND
                                       Invoice.invoiceSiteChar= ?", [$year, $siteChar])->fetchAll()[0]['new'];
 
-                $invoiceNew->invoiceShopId=$remoteShopId;
+                $invoiceNew->invoiceShopId=$remoteShopSellerId;
                 $invoiceNew->invoiceNumber = $number;
                 $invoiceNew->invoiceSiteChar =$siteChar;
                 $invoiceNew->invoiceType = $invoiceType;
@@ -332,7 +332,7 @@ class CInvoiceAjaxController extends AAjaxController
                 $productRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
                 if ($hasInvoice == '1') {
                     if ($isExtraUe == '1') {
-                        if ($remoteShopId == '44') {
+                        if ($remoteShopSellerId == '44') {
                             $invoiceType = 'X';
                             $invoiceTypeVat = 'newX';
                         } else {
@@ -349,7 +349,7 @@ class CInvoiceAjaxController extends AAjaxController
                             $invoiceTotalDocumentText = "Invoice Total";
                         }
                     } else {
-                        if ($remoteShopId == '44') {
+                        if ($remoteShopSellerId == '44') {
                             $invoiceType = 'P';
                             $invoiceTypeVat = 'newP';
                         } else {
@@ -367,7 +367,7 @@ class CInvoiceAjaxController extends AAjaxController
                         }
                     }
                 } else {
-                    if ($remoteShopId == '44') {
+                    if ($remoteShopSellerId == '44') {
                         $invoiceType = 'K';
                         $invoiceTypeVat = 'newK';
                     } else {
@@ -418,7 +418,7 @@ class CInvoiceAjaxController extends AAjaxController
                 try {
                     $invoiceRepo->update($invoice);
 
-                    if ($remoteShopId == '44') {
+                    if ($remoteShopSellerId == '44') {
                         $api_uid = $this->app->cfg()->fetch('fattureInCloud', 'api_uid');
                         $api_key = $this->app->cfg()->fetch('fattureInCloud', 'api_key');
                         if ($hasInvoice == '1' && $isExtraUe == '0') {

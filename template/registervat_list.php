@@ -127,7 +127,7 @@
                                     data-orderable="true"
                                     class="center">Origine
                                 </th>
-                                <th data-slug="remoteOrderId"
+                                <th data-slug="remoteOrderSellerId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine Remoto

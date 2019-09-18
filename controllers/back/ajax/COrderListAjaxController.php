@@ -51,8 +51,8 @@ class COrderListAjaxController extends AAjaxController
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
-                  o.remoteId as remoteId,
-                  o.remoteShopId as remoteShopId,
+                  o.remoteOrderSellerId as remoteOrderSellerId,
+                  o.remoteShopSellerId as remoteShopSellerId,
                   #'' as orderParalel,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
@@ -135,8 +135,8 @@ class COrderListAjaxController extends AAjaxController
             $alert = false;
             $orderParal='';
             foreach ($val->orderLine as $line) {
-                if($val->remoteShopId!=44 && $val->remoteShopId!='' ) {
-                    if ($val->remoteShopId != $line->shopId) {
+                if($val->remoteShopSellerId!=44 && $val->remoteShopSellerId!='' ) {
+                    if ($val->remoteShopSellerId != $line->shopId) {
                         $orderParal = 'Si';
                     }
                 }else{
@@ -154,7 +154,7 @@ class COrderListAjaxController extends AAjaxController
                     $skupParalVariantId=$line->productVariantId;
                     $skuParalSizeId=$line->productSizeId;
                     $skuParalShopId=$line->shopId;
-                    $skuParal=$val->remoteShopId;
+                    $skuParal=$val->remoteShopSellerId;
 
 
 
@@ -180,16 +180,16 @@ class COrderListAjaxController extends AAjaxController
             }
             $row["DT_RowId"] = $val->id;
 
-            $row['remoteId']=$val->remoteId;
-            $shopFind=$shopRepo->findOneBy(['id'=>$val->remoteShopId]);
+            $row['remoteOrderSellerId']=$val->remoteOrderSellerId;
+            $shopFind=$shopRepo->findOneBy(['id'=>$val->remoteShopSellerId]);
             if ($shopFind==null){
-                $row['remoteShopId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
+                $row['remoteShopSellerId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
             }else {
                 $shopname = $shopFind->title;
-                if ($val->remoteShopId == 44) {
-                    $row['remoteShopId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
+                if ($val->remoteShopSellerId == 44) {
+                    $row['remoteShopSellerId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
                 } else {
-                    $row['remoteShopId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">" . $shopname . "</i>";
+                    $row['remoteShopSellerId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">" . $shopname . "</i>";
                 }
             }
             if($perm){
@@ -301,7 +301,7 @@ class COrderListAjaxController extends AAjaxController
 
         $dba = \Monkey::app()->dbAdapter;
         $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-        $shopId=$orderRepo->remoteShopId;
+        $shopId=$orderRepo->remoteShopSellerId;
         if($shopId==null){
             $shopId=44;
         }
@@ -319,13 +319,13 @@ class COrderListAjaxController extends AAjaxController
             $res = $e->getMessage();
         }
         if(ENV == 'prod') {
-            $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteId);
+            $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
             $stmtOrder->execute();
             $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
             foreach ($orderLineCancel as $orlc){
-                $remoteIdOrderLine=$orlc->remoteId;
+                $remoteIdOrderLine=$orlc->remoteOrderLineSellerId;
                 $remoteStatusOrderLine=$orlc->status;
-                $remoteOrderId=$orlc->remoteOrderId;
+                $remoteOrderId=$orlc->remoteOrderSellerId;
                 $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
                 $stmtOrderLine->execute();
             }
@@ -445,7 +445,7 @@ class COrderListAjaxController extends AAjaxController
                 }
                 $order->delete();
                 $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-                $shopId=$orderRepo->remoteShopId;
+                $shopId=$orderRepo->remoteShopSellerId;
                 if($shopId==null){
                     $shopId=44;
                 }
@@ -463,13 +463,13 @@ class COrderListAjaxController extends AAjaxController
                     $res = $e->getMessage();
                 }
                 if(ENV==='prod') {
-                    $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteId);
+                    $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
                     $stmtOrder->execute();
                     $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
                     foreach ($orderLineCancel as $orlc){
-                        $remoteIdOrderLine=$orlc->remoteId;
+                        $remoteIdOrderLine=$orlc->remoteOrderLineSellerId;
                         $remoteStatusOrderLine=$orlc->status;
-                        $remoteOrderId=$orlc->remoteOrderId;
+                        $remoteOrderId=$orlc->remoteOrderSellerId;
                         $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
                         $stmtOrderLine->execute();
                     }

@@ -53,12 +53,12 @@
                                     data-orderable="true"
                                     class="center">Utente
                                 </th>
-                                <th data-slug="remoteId"
+                                <th data-slug="remoteOrderSellerId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine Remoto
                                 </th>
-                                <th data-slug="remoteShopId"
+                                <th data-slug="remoteShopSellerId"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Seller Shop

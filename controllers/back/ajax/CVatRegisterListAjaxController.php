@@ -154,7 +154,7 @@ class CVatRegisterListAjaxController extends AAjaxController
             $invoiceId=$invoice->invoiceNumber.'/'.$invoice->invoiceType.'/'.$invoice->invoiceYear;
             $row['invoiceNumber']=$invoiceId;
             $row['invoiceDate']=$invoice->invoiceDate;
-            $row['remoteOrderId']=$val->remoteOrderId;
+            $row['remoteOrderSellerId']=$val->remoteOrderSellerId;
             switch ($invoice->invoiceType){
                 case 'P':
                     $row['typeDocument']='FATTURA INTRACEE';
