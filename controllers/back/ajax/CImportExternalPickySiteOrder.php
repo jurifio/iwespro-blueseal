@@ -355,7 +355,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate
-                                               from Cart c join User U on c.userId = U.id order BY remoteId ASC   ');
+                                               from Cart c join User U on c.userId = U.id order BY remoteCartSellerId ASC   ');
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
@@ -457,7 +457,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                o.orderShippingMethodId as orderShippingMethodId,
                                                o.couponId as couponId,
                                                o.userId as userId,
-                                               U.email as email, 
+                                               U.`email` as `email`, 
                                                o.cartId as cartId,
                                                `o`.`status` as `status`,
                                                o.frozenBillingAddress as frozenBillingAddress,
@@ -485,8 +485,8 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                o.hasInvoice as hasInvoice,
                                                o.isParallel as isParallel,
                                                o.isOrderMarketplace as isOrderMarketplace,
-                                               o.markeplaceId as marketplaceId,
-                                               o.markeplaceOrderId as marketplaceOrderId
+                                               o.marketplaceId as marketplaceId,
+                                               o.marketplaceOrderId as marketplaceOrderId
                                                from `Order` o join User U on o.userId = U.id ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
@@ -548,7 +548,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $insertOrder->remoteOrderSellerId = $rowOrder['remoteOrderSellerId'];
                                 $insertOrder->remoteShopSellerId = $shop;
                                 $insertOrder->hasInvoice = $rowOrder['hasInvoice'];
-                                $inserOrder->isParallel =$rowOrder['isParallel'];
+                                $insertOrder->isParallel =$rowOrder['isParallel'];
                                 $insertOrder->isOrderMarketplace=$rowOrder['isOrderMarketplace'];
                                 $insertOrder->marketplaceOrderId=$rowOrder['marketplaceOrderId'];
                                 $insertOrder->insert();
@@ -566,7 +566,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 }
 
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore Order' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore Order',$e);
             }
             try {
                 /**** inserimento righe Ordine*****/
@@ -689,7 +689,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 }
 
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore User ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore OrderLine  ',$e);
             }
 
         }
