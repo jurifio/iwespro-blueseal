@@ -655,7 +655,7 @@ class CInvoiceAjaxController extends AAjaxController
                 $stmtInvoiceUpdate = $db_con->prepare(" UPDATE Invoice SET invoiceText = :invoiceText where orderId = :remoteId");
 
             $stmtInvoiceUpdate->bindValue(':invoiceText', $invoice->invoiceText, PDO::PARAM_STR);
-            $stmtInvoiceUpdate->bindValue(':remoteId', $order->remoteId, PDO::PARAM_INT);
+            $stmtInvoiceUpdate->bindValue(':remoteId', $order->remoteOrderSellerId, PDO::PARAM_INT);
             $stmtInvoiceUpdate->execute();
 
 
