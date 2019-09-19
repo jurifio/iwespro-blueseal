@@ -49,6 +49,7 @@ class COrderAddController extends ARestrictedAccessRootController
             $cart->remoteCartSellerId =$data['shopId'];
             $cart->smartInsert();
 
+
             foreach ($data['orderLine'] as $line) {
                 /** @var CProductSku $sku */
                 $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneByStringId($line);
