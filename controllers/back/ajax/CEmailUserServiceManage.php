@@ -73,6 +73,9 @@ class CEmailUserServiceManage extends AAjaxController
             $message = $data['preCompiledTemplate'];
             $subject = $data['subject'];
             $fromEmailAddressId = $data['fromEmailAddressId'];
+            if($fromEmailAddressId=='9563'){
+                $fromEmailAddressId = '24638';
+            }
             $userRepo=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$fromEmailAddressId]);
             $from=$userRepo->email;
 
