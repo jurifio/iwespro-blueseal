@@ -41,7 +41,7 @@ class CRemindOrderToFriend extends ACronJob
 
                 if (isset($shop->referrerEmails) && count($lines) >0 ) {
                     $to = explode(';',$shop->referrerEmails);
-                    $orderGetLines=$this->buildDatas($shop->id, $lines);
+                    $orderGetLines=$this->buildDatas($shop, $lines);
                     /*$this->app->mailer->prepare('friendorderreminder','no-reply', $to,[],[],
                         ['orderLines'=>$lines]);
                     $this->app->mailer->send();*/
