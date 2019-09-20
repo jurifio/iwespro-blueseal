@@ -2,8 +2,11 @@
 namespace bamboo\blueseal\jobs;
 
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\COrderLine;
+use bamboo\domain\entities\CShop;
 use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
+use bamboo\export\order\COrderExport;
 
 /**
  * Class CRemindOrderToFriend
@@ -38,7 +41,7 @@ class CRemindOrderToFriend extends ACronJob
 
                 if (isset($shop->referrerEmails) && count($lines) >0 ) {
                     $to = explode(';',$shop->referrerEmails);
-
+                    $orderGetLines=$this->buildDatas($shop->id, $lines);
                     /*$this->app->mailer->prepare('friendorderreminder','no-reply', $to,[],[],
                         ['orderLines'=>$lines]);
                     $this->app->mailer->send();*/
@@ -46,7 +49,7 @@ class CRemindOrderToFriend extends ACronJob
                     /** @var CEmailRepo $emailRepo */
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
                     $emailRepo->newPackagedMail('friendorderreminder','no-reply@pickyshop.com', $to,[],[],
-                        ['orderLines'=>$lines]);
+                        ['lines'=>$orderGetLines]);
 
                     $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
                 }
@@ -56,4 +59,76 @@ class CRemindOrderToFriend extends ACronJob
             }
         }
     }
+    /**
+     * @param CShop $shop
+     * @param $orderLines
+     * @return array
+     */
+    public function buildDatas(CShop $shop, $orderLines)
+    {
+        $lines = [];
+        foreach ($orderLines as $line) {
+            $lines[] = $this->buildData($shop, $line);
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @param CShop $shop
+     * @param COrderLine $line
+     * @return array
+     */
+    private function buildData(CShop $shop, COrderLine $line)
+    {
+        $row = [];
+        $billing = new $shop->billingLogic($this->app);
+        $row['orderId'] = $line->orderId;
+        $row['orderLineId'] = $line->id;
+        $row['productId'] = $line->productId;
+        $row['productVariantId'] = $line->productVariantId;
+        $row['productSizeId'] = $line->productSizeId;
+        $row['shopId'] = $line->shopId;
+
+        try {
+            $dirtySku = $line->productSku->findRightDirtySku();
+            /*
+             $findIds = "SELECT itemno, extId, ds.extSkuId AS extSkuId, var, size
+                        FROM DirtyProduct dp, DirtySku ds
+                        WHERE ds.dirtyProductId = dp.id AND
+                                dp.productId = ? AND
+                                dp.productVariantId = ? AND
+                                dp.shopId = ? AND
+                                ds.productSizeId = ?";
+            $ids = $this->app->dbAdapter->query($findIds, [$line->productId, $line->productVariantId, $line->shopId, $line->productSizeId])->fetchAll()[0];
+            */
+            $row['extId'] = !empty($dirtySku->extSkuId) ? $dirtySku->extSkuId : $dirtySku->dirtyProduct->extId;
+            $row['var'] = $dirtySku->dirtyProduct->var;
+            $row['size'] = $dirtySku->size;
+            $row['itemno'] = $dirtySku->dirtyProduct->itemno;
+        } catch (\Throwable $e) {
+            $row['extId'] = $line->productSku->shopHasProduct->extId;
+            $row['itemno'] = $line->productSku->product->itemno;
+            $row['var'] = $line->productSku->product->productVariant->name;
+            $row['size'] = $line->productSku->productSize->name;
+        }
+
+        $product = $line->productSku->product;
+
+        /**  find brand name*/
+        //$findIds = "SELECT pb.name AS brand, slug  FROM ProductBrand pb, Product p WHERE p.productBrandId = pb.id AND p.id = ? AND p.productVariantId = ?";
+        //$ids = $this->app->dbAdapter->query($findIds, [$line->productId, $line->productVariantId])->fetchAll()[0];
+        $row['brand'] = $product->productBrand->name;
+        $row['brandSlug'] = $product->productBrand->slug;
+        $row['productNameTranslation'] = $product->getName();
+
+        $row['friendRevenue'] = isset($line->friendRevenue) && !is_null($line->friendRevenue) && $line->friendRevenue <> 0 ? $line->friendRevenue : $billing->calculateFriendReturn($line);
+        /** find photo */
+        //$findIds = "SELECT pp.name AS photo FROM ProductHasProductPhoto ps, ProductPhoto pp WHERE ps.productPhotoId = pp.id AND ps.productId = ? AND ps.productVariantId = ? AND pp.size = ? ";
+        //$ids = $this->app->dbAdapter->query($findIds, [$line->productId, $line->productVariantId, 281])->fetchAll()[0];
+        $row['photo'] = $product->getPhoto(1,281);
+
+        return $row;
+    }
+
 }
