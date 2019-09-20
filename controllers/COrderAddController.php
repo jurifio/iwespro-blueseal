@@ -49,10 +49,11 @@ class COrderAddController extends ARestrictedAccessRootController
             $cart->remoteCartSellerId =$data['shopId'];
             $cart->smartInsert();
 
+
             foreach ($data['orderLine'] as $line) {
                 /** @var CProductSku $sku */
                 $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneByStringId($line);
-                $cartRepo->addSku($sku->getPublicProductSku(),1,$cart);
+                $cartRepo->addSku($sku->getPublicProductSku(),1,$cart, $data['shopId']);
             }
 
             $cartRepo->setCouponCodeToCart($data['coupon'], $cart);
