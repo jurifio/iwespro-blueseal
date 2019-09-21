@@ -53,7 +53,7 @@ class CRemindOrderToFriend extends ACronJob
 
                     $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
                 }
-                
+
             } catch(\Throwable $e){
                 $this->error( 'Working Shop ' . $shop->name . ' End', 'ERROR Sending Lines',$e);
             }
