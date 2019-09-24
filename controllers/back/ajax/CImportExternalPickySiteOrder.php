@@ -515,22 +515,12 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                 $insertOrder->userId = $userId;
                                 $insertOrder->cartId = $cartId;
                                 $insertOrder->status = $rowOrder['status'];
-                                /* defrost indirizzo  Fatturazione remoto */
-                                $remoteBillingAddressId = $rowOrder['billingAddressId'];
-                                if ($remoteBillingAddressId != '') {
-                                    $findBillingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteBillingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                                    $insertOrder->frozenBillingAddress = $findBillingAddressDetails->froze();
-                                    $insertOrder->billingAddressId = $findBillingAddressDetails->id;
-                                }
-                                /* defrost indirizzo Spedizione remoto */
-                                $remoteShippingAddressId = $rowOrder['shipmentAddressId'];
-                                if ($remoteShippingAddressId != '') {
-                                    $findShippingAddressDetails = $userAddressRepo->findOneBy(['remoteId' => $remoteShippingAddressId, 'userId' => $userId, 'remoteShopId' => $shop]);
-                                    $insertOrder->frozenShippingAddress = $findShippingAddressDetails->froze();
-                                    $insertOrder->shipmentAddressId = $findShippingAddressDetails->id;
-                                }
+                                $findUserAddressId=$userAddressRepo->findOneBy(['userId'=>$userId]);
+                                $insertOrder->billingAddressId=$findUserAddressId->id;
+                                $insertOrder->shipmentAddressId=$findUserAddressId->id;
 
-
+                                $insertOrder->frozenShippingAddress = $rowOrder['frozenShippingAddress'];
+                                $insertOrder->frozenBillingAddress = $rowOrder['frozenBillingAddress'];
                                 $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
                                 $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
                                 $insertOrder->grossTotal = $rowOrder['grossTotal'];
