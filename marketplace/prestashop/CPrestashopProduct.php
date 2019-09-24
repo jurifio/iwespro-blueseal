@@ -17,7 +17,6 @@ use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\repositories\CProductEanRepo;
 use PDO;
-use PrestaShopWebserviceException;
 
 /**
  * Class CPrestashopProduct
@@ -141,7 +140,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $destDir
      * @return bool
      * @throws BambooException
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      * @throws \bamboo\core\exceptions\RedPandaException
@@ -241,7 +240,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $marketplaceHasShop
      * @param $product
      * @throws BambooException
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
@@ -347,7 +346,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param array $filter
      * @param $shopId
      * @return \SimpleXMLElement
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
     public function getStockAvaibles($stockAvailableId = null, $filter = [], $shopId): \SimpleXMLElement
     {
@@ -405,7 +404,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $productPrice
      * @param $shop
      * @return bool|\SimpleXMLElement
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
     public function insertProduct(CProduct $product, $productPrice, $shop)
     {
@@ -503,7 +502,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['postXml'] = $blankProductXml->asXML();
             $opt['id_shop'] = $shop;
             $xmlResponseProduct = $this->ws->add($opt);
-        } catch (PrestaShopWebserviceException $e) {
+        } catch (\PrestaShopWebserviceException $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert product' . $product->id . '-' . $product->productVariantId, $e->getMessage());
             return false;
         }
@@ -518,7 +517,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $shop
      * @param $productPrice
      * @return bool
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
     public function addCombination(CProduct $product, $resourcesProduct, $shop, $productPrice)
     {
@@ -580,7 +579,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['putXml'] = $resourcesStockAvailableXml->asXML();
                 $opt['id'] = (int)$resourcesStockAvailable->id;
                 $this->ws->edit($opt);
-            } catch (PrestaShopWebserviceException $e) {
+            } catch (\PrestaShopWebserviceException $e) {
                 //if fail to insert quantity delete combination
                 $this->deleteCombination((int)$resourcesCombination->id);
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert stock available', $e->getMessage());
@@ -599,7 +598,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param int $productId
      * @param int $productVariantId
      * @return bool
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
     public function deleteProduct(int $prestashopProductId, int $productId, int $productVariantId)
     {
@@ -664,9 +663,9 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param null $differential
      * @param $shops
      * @return bool
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
-    public function updateProductQuantity($productId, $sizeId, $newQty = null, $differential = null, $shops):bool
+    public function updateProductQuantity($productId, $sizeId, $newQty = null, $differential = null, $shops)
     {
 
         if (is_null($newQty) && is_null($differential)) return false;
@@ -710,7 +709,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                         $opt['putXml'] = $stockAvailableXmlFather->asXML();
                         $opt['id'] = $stockAvailableId;
                         $this->ws->edit($opt);
-                    } catch (PrestaShopWebserviceException $e) {
+                    } catch (\PrestaShopWebserviceException $e) {
                         \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
                         return false;
                     }
@@ -732,7 +731,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param null $price
      * @param null $salePrice
      * @return bool
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
     public function updateProductSaleDescription($productData, CMarketplaceHasShop $mhs, $action, $price = null, $salePrice = null)
     {
@@ -779,7 +778,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id'] = $productData['prestaId'];
             $this->ws->edit($opt);
 
-        } catch (PrestaShopWebserviceException $e) {
+        } catch (\PrestaShopWebserviceException $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
             return false;
         }
@@ -798,7 +797,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param null $to
      * @return bool
      * @throws BambooException
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
@@ -842,7 +841,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['postXml'] = $specificPriceBlankXml->asXML();
                 $opt['id_shop'] = $mhs->prestashopId;
                 $this->ws->add($opt);
-            } catch (PrestaShopWebserviceException $e) {
+            } catch (\PrestaShopWebserviceException $e) {
                 \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
                 return false;
             }
@@ -866,7 +865,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $product
      * @param CMarketplaceHasShop $mhs
      * @return bool
-     * @throws PrestaShopWebserviceException
+     * @throws \PrestaShopWebserviceException
      */
     public function removeSpecificPriceForSale($product, CMarketplaceHasShop $mhs)
     {
