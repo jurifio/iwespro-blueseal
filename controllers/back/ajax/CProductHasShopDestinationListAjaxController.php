@@ -114,12 +114,13 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId      ";
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId     ";
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
         $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
         if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
+
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
