@@ -166,14 +166,14 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                     $shopNameFind = $shopRepo->findOneBy(['id' => $j->shopIdDestination]);
                     if ($shopNameFind != null) {
                         $shopName = $shopNameFind->title;
-                        $shopDestination = $shopNameFind->id . "-" . $shopName . "<br>";
+                        $shopDestination .= $shopNameFind->id . "-" . $shopName . "<br>";
                     } else {
-                        $shopDestination = "";
+                        $shopDestination .= "";
                     }
 
                 }
             } else {
-                $shopDestination = "";
+                $shopDestination .= "";
             }
 
             $row['shopIdDestination'] = $shopDestination;
