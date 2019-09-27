@@ -64,6 +64,7 @@ class CProductHasShopDestinationListController extends ARestrictedAccessRootCont
             $statuses[$status->code] = $status->name;
         }
 
+
         //img count
         $imgs = 0;
         foreach ($this->app->theme->getImageSizes() as $v) {
