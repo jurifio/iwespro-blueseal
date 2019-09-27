@@ -6,6 +6,7 @@ use bamboo\blueseal\business\CDataTables;
 
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductHasShopDestination;
+use bamboo\domain\entities\CShop;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\repositories\CDocumentRepo;
 
@@ -29,9 +30,11 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 
 
         $sql = "SELECT
-                  concat(p.id, '-', pv.id)                                                                      AS code,
+                     concat(p.id, '-', pv.id)                                                                      AS code,
+                  phsd.id                                                                                       AS idshopDestination,										
                   phsd.shopIdOrigin                                                                             AS shopIdOrigin,
                   phsd.shopIdDestination                                                                        AS shopIdDestination,
+                  sDest.name                                                                                        AS shopDestinationName,
                   p.id                                                                                              AS id,
                   p.productVariantId                                                                                AS productVariantId,
                   concat(pse.name, ' ', pse.year)                                                               AS season,
@@ -93,6 +96,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
                   LEFT JOIN ProductHasShopDestination phsd ON p.id =phsd.productId  AND p.productVariantId=phsd.productVariantId
+                    JOIN Shop sDest on phsd.shopIdDestination = sDest.id
                   LEFT JOIN PrestashopHasProduct prHp ON p.id = prHp.productId AND p.productVariantId = prHp.productVariantId
                   JOIN ShopHasProduct sp
                     ON (p.id, p.productVariantId) = (sp.productId, sp.productVariantId)
@@ -114,14 +118,17 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId     ";
-
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId    ";
+        $shopDestinationQueryDatatable=\Monkey::app()->router->request()->getRequestData(' ');
+        if($shopDestinationQueryDatatable!=null){
+            $shopFilterDestination=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['name'=>$shopDestinationQueryDatatable]);
+            $shopFilterDestinationId=$shopFilterDestination->id;
+            $sql.=" AND  `phsd`.`shopIdDestination`= ".$shopFilterDestinationId;
+        }
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
         $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
         if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
-
-
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET, true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $datatable->addCondition('shopId', $shopIds);
@@ -165,8 +172,11 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                 foreach ($productHasShopDestinationFind as $j) {
                     $shopNameFind = $shopRepo->findOneBy(['id' => $j->shopIdDestination]);
                     if ($shopNameFind != null) {
-                        $shopName = $shopNameFind->title;
-                        $shopDestination .= $shopNameFind->id . "-" . $shopName . "<br>";
+                        $shopName = $shopNameFind->name;
+
+                        // $shopDestination .= $shopNameFind->id . "-" . $shopName . "<br>";
+                        //  $shopDestination .= $shopName . "<br>";
+                        $shopDestination.=$shopName;
                     } else {
                         $shopDestination .= "";
                     }
@@ -177,6 +187,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
             }
 
             $row['shopIdDestination'] = $shopDestination;
+
             if ($this->app->getUser()->hasPermission('allShops')) {
                 if ($row['shopIdDestination'] == "") {
                     $row['shopIdDestination'] = 'non Assegnato';
@@ -186,7 +197,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                     $row['shopIdDestination'] = 'Prodotto Parallelo';
                 }
             }
-
+            $row['shopDestinationName'].=$row['shopDestinationName'];
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
             $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
@@ -247,7 +258,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
             $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ', '<br>', true);
             $row["row_shop"] = $val->getShops('|', true);
             $row['shop'] = '<span class="small">' . $val->getShops('<br />', true) . '</span>';
-          // $row['shopIdDestination'] = '<span class="small">' . $val->getShopsIdDestination('<br />', true) . '</span>';
+            // $row['shopIdDestination'] = '<span class="small">' . $val->getShopsIdDestination('<br />', true) . '</span>';
 
             $row['shops'] = $val->shopHasProduct->count();
 

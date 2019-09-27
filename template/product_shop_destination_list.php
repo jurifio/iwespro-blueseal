@@ -37,14 +37,19 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice
                                 </th>
+                                <th data-slug="shopIdDestination"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop-Sito-Id
+                                </th>
+                                <th data-slug="shopDestinationName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop-Sito-Friend di Destinazione
+                                </th>
                                 <th data-slug="shop"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop di Origine
                                 </th>
-                                <th data-slug="shopIdDestination"
-                                         data-searchable="true"
-                                         data-orderable="true" class="center">Shop di Destinazione
-                                </th>
+
                                 <th data-slug="colorGroup"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Gruppo Colore
