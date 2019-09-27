@@ -2,8 +2,8 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
-    <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
+    <?php echo $app -> getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <title>BlueSeal - <?php echo $page -> getTitle(); ?></title>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -27,7 +27,7 @@
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_shop_destination_list"
                                data-controller="ProductHasShopDestinationListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-url="<?php echo $app -> urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500,100,2000"
                                data-display-length="50">
@@ -48,6 +48,10 @@
                                 <th data-slug="shopNameDestination"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Raggruppamento Shop-Sito-Friend di Destinazione
+                                </th>
+                                <th data-slug="ProductShopStatusDestination"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Raggruppamento Stato Shop-Sito-Friend di Destinazione
                                 </th>
 
                                 <th data-slug="season"

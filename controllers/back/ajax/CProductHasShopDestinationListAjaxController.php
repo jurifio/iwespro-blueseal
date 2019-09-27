@@ -38,6 +38,9 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
          concat(phsd.shopIdDestination,'-',sd.name) AS shopIdDestination,
     (select group_concat(distinct sidu.name) from Shop sidu join ProductHasShopDestination phsd1 on sidu.id=phsd1.shopIdDestination where phsd1.productId=p.id 
                                                                                                                                           and phsd1.productVariantId=p.productVariantId) as  shopNameDestination, 
+ (select group_concat(distinct stu.name) from ProductStatus stu join ProductHasShopDestination phsd2 on stu.id=phsd2.statusId 
+  where phsd2.productId=p.id and phsd2.productVariantId=p.productVariantId) as  ProductShopStatusDestination, 
+ 
          pst.name  AS status,
          pstd.name AS statusDestination,
          p.qty AS qty,
@@ -58,25 +61,23 @@ left JOIN Shop so ON phsd.shopIdOrigin=so.id
 JOIN ProductStatus pst ON p.productStatusId=pst.id
 left JOIN ProductStatus pstd ON phsd.statusId=pstd.id
 JOIN ProductVariant pv ON p.productVariantId = pv.id
-WHERE p.qty>0 ";
-        $productRepo = \Monkey::app()->repoFactory->create('Product');
+WHERE p.qty>0  ";
+        $productRepo = \Monkey ::app() -> repoFactory -> create('Product');
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
-        $datatable->doAllTheThings(true);
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
+        $datatable -> doAllTheThings(true);
+        foreach ($datatable -> getResponseSetData() as $key => $row) {
             /** @var $val CProduct */
-            $val = $productRepo->findOneBy($row);
-            $row["DT_RowId"] = $val->printId();
-            $row['dummyPicture'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' .$val->getDummyPictureUrl(). '" /></a>';
-            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
+            $val = $productRepo -> findOneBy($row);
+            $row["DT_RowId"] = $val -> printId();
+            $row['dummyPicture'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val -> getDummyPictureUrl() . '" /></a>';
+            $row['tags'] = '<span class="small">' . $val -> getLocalizedTags('<br>', false) . '</span>';
 
-            $datatable->setResponseDataSetRow($key,$row);
+            $datatable -> setResponseDataSetRow($key, $row);
         }
 
 
-
-
-        return $datatable->responseOut();
+        return $datatable -> responseOut();
     }
 }
