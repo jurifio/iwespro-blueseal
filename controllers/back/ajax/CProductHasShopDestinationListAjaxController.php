@@ -35,16 +35,16 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
          p.id AS productId,
          p.productVariantId AS productVariantId,
          concat(phsd.shopIdOrigin,'-',so.name ) AS shopIdOrigin,
-         concat(phsd.shopIdDestination,'-',sd.name) AS shopIdDestination,
-    (select group_concat(distinct sidu.name) from Shop sidu join ProductHasShopDestination phsd1 on sidu.id=phsd1.shopIdDestination where phsd1.productId=p.id 
+    (select group_concat(distinct concat(sidu.id,'-',sidu.name)) from Shop sidu join ProductHasShopDestination phsd1 on sidu.id=phsd1.shopIdDestination where phsd1.productId=p.id 
                                                                                                                                           and phsd1.productVariantId=p.productVariantId) as  shopNameDestination, 
- (select group_concat(distinct stu.name) from ProductStatus stu join ProductHasShopDestination phsd2 on stu.id=phsd2.statusId 
+ (select group_concat(distinct concat(su.id,'-',su.name,'-',stu.name)) from ProductStatus stu join ProductHasShopDestination phsd2 on stu.id=phsd2.statusId 
+     join Shop su on phsd2.shopIdDestination=su.id
   where phsd2.productId=p.id and phsd2.productVariantId=p.productVariantId) as  ProductShopStatusDestination, 
  
          pst.name  AS status,
-         pstd.name AS statusDestination,
          p.qty AS qty,
          ps.name AS season,
+        pb.name as brand,
         if(p.isOnSale=1,'Si','No') AS isOnSale,
           concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
          p.dummyPicture AS dummyPicture,
@@ -59,6 +59,7 @@ JOIN ProductSeason ps ON p.productSeasonId=ps.id
 left JOIN Shop sd ON phsd.shopIdDestination=sd.id
 left JOIN Shop so ON phsd.shopIdOrigin=so.id
 JOIN ProductStatus pst ON p.productStatusId=pst.id
+JOIN  ProductBrand pb ON P.productBrandId=pb.id
 left JOIN ProductStatus pstd ON phsd.statusId=pstd.id
 JOIN ProductVariant pv ON p.productVariantId = pv.id
 WHERE p.qty>0  ";

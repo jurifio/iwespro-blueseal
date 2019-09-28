@@ -37,26 +37,26 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice
                                 </th>
-                                <th data-slug="shopIdDestination"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shop-Sito-Friend di Destinazione
-                                </th>
                                 <th data-slug="shopIdOrigin"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop di Origine
                                 </th>
                                 <th data-slug="shopNameDestination"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Raggruppamento Shop-Sito-Friend di Destinazione
+                                    data-orderable="true" class="center">Shop-Sito-Friend di Destinazione
                                 </th>
                                 <th data-slug="ProductShopStatusDestination"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Raggruppamento Stato Shop-Sito-Friend di Destinazione
+                                    data-orderable="true" class="center">Stato Shop-Sito di Destinazione
                                 </th>
 
                                 <th data-slug="season"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione
+                                </th>
+                                <th data-slug="brand"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Brand
                                 </th>
                                 <th data-slug="cpf"
                                     data-searchable="true"
@@ -77,14 +77,6 @@
                                     data-orderable="true"
                                     class="center">Stato
                                 </th>
-                                <th data-slug="statusDestination"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">stato Shop-Sito di Destinazione
-                                </th>
-                                <!--<th data-slug="mup"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">M.Up-->
                                 </th>
                                 <th data-slug="qty"
                                     data-searchable="true"
