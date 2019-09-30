@@ -34,7 +34,8 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
             concat(p.id, '-', pv.id)                                                                      AS id,
          p.id AS productId,
          p.productVariantId AS productVariantId,
-         concat(phsd.shopIdOrigin,'-',so.name ) AS shopIdOrigin,
+        (select group_concat(distinct concat(siou.id,'-',siou.name)) from Shop siou join ShopHasProduct phsd3 on siou.id=phsd3.shopId where phsd3.productId=p.id 
+                                                                                                                                          and phsd3.productVariantId=p.productVariantId)   AS shopIdOrigin,
     (select group_concat(distinct concat(sidu.id,'-',sidu.name)) from Shop sidu join ProductHasShopDestination phsd1 on sidu.id=phsd1.shopIdDestination where phsd1.productId=p.id 
                                                                                                                                           and phsd1.productVariantId=p.productVariantId) as  shopNameDestination, 
  (select group_concat(distinct concat(su.id,'-',su.name,'-',stu.name)) from ProductStatus stu join ProductHasShopDestination phsd2 on stu.id=phsd2.statusId 
@@ -56,6 +57,7 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
 FROM Product p  
                   LEFT  JOIN ProductHasShopDestination phsd ON p.id=phsd.productId AND p.productVariantId=phsd.productVariantId 
 JOIN ProductSeason ps ON p.productSeasonId=ps.id
+join ShopHasProduct SHP on p.id = SHP.productId and p.productVariantId = SHP.productVariantId
 left JOIN Shop sd ON phsd.shopIdDestination=sd.id
 left JOIN Shop so ON phsd.shopIdOrigin=so.id
 JOIN ProductStatus pst ON p.productStatusId=pst.id
