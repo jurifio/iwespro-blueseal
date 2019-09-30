@@ -141,7 +141,7 @@ class CAlignPickySiteOrderPaymentsJob extends ACronJob
                                               from `Order`  WHERE  orderPaymentMethodId in (1,2)');
                 $stmtOrder->execute();
                 foreach ($stmtOrder as $rowOrder) {
-                    $updateOrder = $orderRepo->findOneBy(['remoteId' => $rowOrder['id'], 'remoteShopId' => $shop]);
+                    $updateOrder = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrder['id'], 'remoteShopSellerId' => $shop]);
 
                     if ($updateOrder != null) {
                         $updatedOrderId = $updateOrder->id;

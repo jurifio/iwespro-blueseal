@@ -59,10 +59,10 @@ JOIN ProductSeason ps ON p.productSeasonId=ps.id
 left JOIN Shop sd ON phsd.shopIdDestination=sd.id
 left JOIN Shop so ON phsd.shopIdOrigin=so.id
 JOIN ProductStatus pst ON p.productStatusId=pst.id
-JOIN  ProductBrand pb ON P.productBrandId=pb.id
+JOIN  ProductBrand pb ON p.productBrandId=pb.id
 left JOIN ProductStatus pstd ON phsd.statusId=pstd.id
 JOIN ProductVariant pv ON p.productVariantId = pv.id
-WHERE p.qty>0  ";
+WHERE p.qty>0  and p.productStatusId=6";
         $productRepo = \Monkey ::app() -> repoFactory -> create('Product');
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
