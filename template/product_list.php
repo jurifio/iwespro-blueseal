@@ -105,10 +105,6 @@
                                     data-orderable="true"
                                     class="center">Stato
                                 </th>
-                                <!--<th data-slug="mup"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">M.Up-->
-                                </th>
                                 <th data-slug="hasQty"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Quantità disp.
