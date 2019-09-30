@@ -106,10 +106,10 @@ $(document).on('change','#accountId',function() {
         $('#cpc').val($(this).find(':selected').data('cpc'));
         if($(this).find(':selected').data('activeautomatic')=='1'){
            automaticText='Si';
-            automaticActive='1';
+            activeAutomatic='1';
         }else{
             automaticText='No';
-            automaticActive='0';
+            activeAutomatic='0';
         }
         $('#pubblicazione').empty();
         $('#pubblicazione').append(automaticText);

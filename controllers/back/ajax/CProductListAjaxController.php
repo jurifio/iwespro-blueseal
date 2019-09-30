@@ -111,9 +111,7 @@ class CProductListAjaxController extends AAjaxController
         if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
         $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
         if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
-       if(ENV=='dev'){
-         $sql.='limit 1000';
-       }
+
 
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();

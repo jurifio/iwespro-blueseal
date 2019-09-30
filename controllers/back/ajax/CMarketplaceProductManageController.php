@@ -59,7 +59,7 @@ class CMarketplaceProductManageController extends AAjaxController
 
                 set_time_limit(6);
                 $product = $productRepo->findOneByStringId($row);
-                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier,$activeAutomatic);
+                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier, $activeAutomatic);
                 $i++;
                 \Monkey::app()->repoFactory->commit();
             } catch
