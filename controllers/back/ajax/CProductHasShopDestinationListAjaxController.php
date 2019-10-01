@@ -38,6 +38,9 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                                                                                                                                           and phsd3.productVariantId=p.productVariantId)   AS shopIdOrigin,
     (select group_concat(distinct concat(sidu.id,'-',sidu.name)) from Shop sidu join ProductHasShopDestination phsd1 on sidu.id=phsd1.shopIdDestination where phsd1.productId=p.id 
                                                                                                                                           and phsd1.productVariantId=p.productVariantId) as  shopNameDestination, 
+      (select group_concat(distinct concat(ma.name,' - ',mpac.name))
+     from MarketplaceAccountHasProduct mahp JOIN Marketplace ma on ma.id=mahp.marketplaceId 
+      join MarketplaceAccount mpac on mahp.marketplaceId=mpac.marketplaceId and mahp.marketplaceAccountId=mpac.id where mahp.productId=p.id and mahp.productVariantId=p.productVariantId) as marketplace,    
  (select group_concat(distinct concat(su.id,'-',su.name,'-',stu.name)) from ProductStatus stu join ProductHasShopDestination phsd2 on stu.id=phsd2.statusId 
      join Shop su on phsd2.shopIdDestination=su.id
   where phsd2.productId=p.id and phsd2.productVariantId=p.productVariantId) as  ProductShopStatusDestination, 

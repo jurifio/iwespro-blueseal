@@ -49,6 +49,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato Shop-Sito di Destinazione
                                 </th>
+                                <th data-slug="marketplace"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Marketplace
+                                </th>
 
                                 <th data-slug="season"
                                     data-searchable="true"
@@ -110,9 +114,15 @@
         <bs-toolbar-button
                 data-remote="bs.product.tofriendshop.statuschange"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.marketplace.publish"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.marketplace.unpublish"
+        ></bs-toolbar-button>
+
     </bs-toolbar-group>
     ​
-    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

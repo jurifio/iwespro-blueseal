@@ -77,7 +77,7 @@ $(document).on('bs-product-marketplace-publish', function (e, element, button) {
                         account: $('#accountId').val(),
                         modifier: $('#modifier').val(),
                         cpc: $('#cpc').val(),
-                        activeAutomatic: automaticActive
+                        activeAutomatic: activeAutomatic
                     };
                     body.html('<img src="/assets/img/ajax-loader.gif" />');
                     $.ajax({
