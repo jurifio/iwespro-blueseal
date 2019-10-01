@@ -101,7 +101,6 @@ class CFriendOrderListAjaxController extends AAjaxController
                     'ORD_PENDING',
                     'ORD_WAIT',
                     'ORD_LAB',
-                    'ORD_FRND_SNDING',
                     'ORD_ERR_SEND'
                 ],
                 true
