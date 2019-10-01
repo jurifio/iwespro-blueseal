@@ -71,7 +71,7 @@ class CProductListAjaxController extends AAjaxController
                   (SELECT min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), NULL))
                    FROM ProductSku
                    WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
-                  (SELECT ifnull(group_concat(concat(m.name, ' - ', ma.name)), '')
+                   (SELECT ifnull(group_concat(distinct ma.name), '')
                    FROM Marketplace m
                      JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
                      JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
