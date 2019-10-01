@@ -38,9 +38,12 @@ class CProductHasShopDestinationListAjaxController extends AAjaxController
                                                                                                                                           and phsd3.productVariantId=p.productVariantId)   AS shopIdOrigin,
     (select group_concat(distinct concat(sidu.id,'-',sidu.name)) from Shop sidu join ProductHasShopDestination phsd1 on sidu.id=phsd1.shopIdDestination where phsd1.productId=p.id 
                                                                                                                                           and phsd1.productVariantId=p.productVariantId) as  shopNameDestination, 
-      (select group_concat(distinct concat(ma.name,' - ',mpac.name))
-     from MarketplaceAccountHasProduct mahp JOIN Marketplace ma on ma.id=mahp.marketplaceId 
-      join MarketplaceAccount mpac on mahp.marketplaceId=mpac.marketplaceId and mahp.marketplaceAccountId=mpac.id where mahp.productId=p.id and mahp.productVariantId=p.productVariantId) as marketplace,    
+     (SELECT ifnull(group_concat(distinct ma.name), '')
+                   FROM Marketplace m
+                     JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
+                     JOIN MarketplaceAccountHasProduct mahp ON (ma.id,ma.marketplaceId) = (mahp.marketplaceAccountId,mahp.marketplaceId)
+                   WHERE mahp.productId = p.id AND
+                         mahp.productVariantId = p.productVariantId AND mahp.isDeleted != 1)                            AS marketplace,
  (select group_concat(distinct concat(su.id,'-',su.name,'-',stu.name)) from ProductStatus stu join ProductHasShopDestination phsd2 on stu.id=phsd2.statusId 
      join Shop su on phsd2.shopIdDestination=su.id
   where phsd2.productId=p.id and phsd2.productVariantId=p.productVariantId) as  ProductShopStatusDestination, 
@@ -79,6 +82,8 @@ WHERE p.qty>0  and p.productStatusId=6";
             $row["DT_RowId"] = $val -> printId();
             $row['dummyPicture'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val -> getDummyPictureUrl() . '" /></a>';
             $row['tags'] = '<span class="small">' . $val -> getLocalizedTags('<br>', false) . '</span>';
+            $row['marketplace'] = $val->getMarketplaceAccountsNameShopDestination(' - ','<br>',true);
+           // $row['shopNameDestination'] = $val->getShopIdOriginName(' - ','<br>',true);
 
             $datatable -> setResponseDataSetRow($key, $row);
         }

@@ -145,8 +145,10 @@ class COrderListAjaxController extends AAjaxController
                 try {
 
                     /** @var CProductSku $sku */
-                    $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
-                    $sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
+            //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
+
+                 $sku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId'=>$line->productId,'productVariantId'=>$line->productVariantId,'productSizeId'=>$line->productSizeId]);
+                  //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
 
                     $code = "spedisce ". $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
