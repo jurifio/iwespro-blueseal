@@ -43,10 +43,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
     {
 
         set_time_limit(0);
-        ini_set('memory_limit', '2048M');
+        ini_set('memory_limit','2048M');
 
         $res = "";
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
         foreach ($shopRepo as $value) {
             /********marketplace********/
 
@@ -57,8 +57,8 @@ class CImportExternalPickySiteOrder extends AAjaxController
             $shop = $value->id;
             try {
 
-                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
                 $res .= ' connessione ok <br>';
             } catch (PDOException $e) {
                 $res .= $e->getMessage();
@@ -105,7 +105,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ud.fiscalCode as fiscalCode,
                                      ud.note as note
                                      FROM User  u
-                                      JOIN UserDetails ud ON u.id = ud.userId ", $shop));
+                                      JOIN UserDetails ud ON u.id = ud.userId ",$shop));
                 $stmtUser->execute();
                 while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
                     $checkUserIfExist = $userRepo->findOneBy(['email' => $rowUser['email']]);
@@ -157,12 +157,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore User ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore User ' . $e);
             }
             try {
                 $stmtUserAddress = $db_con->prepare('SELECT 
                                                           us.id as remoteId,  
                                                           us.userId    as remoteUserId,
+                                                          u.email as email,
                                                           us.isBilling as isBilling,
                                                           us.isDefault as isDefault,
                                                           us.name      as name,
@@ -176,13 +177,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                           us.countryId as countryId,
                                                           us.phone     as phone,
                                                           us.lastUsed  as lastUsed,
-                                                          us.fiscalCode as fiscalCode from UserAddress us ');
+                                                          us.fiscalCode as fiscalCode  from UserAddress us join User u on us.userId=u.id  ');
 
                 $stmtUserAddress->execute();
                 while ($rowUserAddress = $stmtUserAddress->fetch(PDO::FETCH_ASSOC)) {
-                    $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'], 'remoteUserId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                    $checkUserAddressisBillingIfExist = $userAddressRepo->findOneBy(['remoteId' => $rowUserAddress['remoteId'],'remoteUserId' => $rowUserAddress['remoteUserId'],'remoteShopId' => $shop]);
                     if (null == $checkUserAddressisBillingIfExist) {
-                        $findUserInsert = $userRepo->findOneBy(['remoteId' => $rowUserAddress['remoteUserId'], 'remoteShopId' => $shop]);
+                        $findUserInsert = $userRepo->findOneBy(['email' => $rowUserAddress['email']]);
                         if ($findUserInsert != null) {
                             $userAddressInsert = $userAddressRepo->getEmptyEntity();
                             $userAddressId = $findUserInsert->id;
@@ -215,7 +216,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore UserAddress ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore UserAddress ' . $e);
             }
 
             try {
@@ -231,7 +232,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                            FROM CouponType ct");
                 $stmtCouponType->execute();
                 while ($rowCouponType = $stmtCouponType->fetch(PDO::FETCH_ASSOC)) {
-                    $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponType['remoteId'], 'remoteShopId' => $shop]);
+                    $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponType['remoteId'],'remoteShopId' => $shop]);
                     if ($checkCouponTypeIfExist == null) {
                         $couponTypeInsert = $couponTypeRepo->getEmptyEntity();
                         $couponTypeInsert->name = $rowCouponType['name'];
@@ -252,7 +253,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore CouponType ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore CouponType ' . $e);
             }
 
             try {
@@ -267,9 +268,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                       FROM CouponEvent ce");
                 $stmtCouponEvent->execute();
                 while ($rowCouponEvent = $stmtCouponEvent->fetch(PDO::FETCH_ASSOC)) {
-                    $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCouponEvent['remoteId'], 'name' => $rowCouponEvent['name'], 'remoteShopId' => $shop]);
+                    $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCouponEvent['remoteId'],'name' => $rowCouponEvent['name'],'remoteShopId' => $shop]);
                     if ($checkCouponEventIfExist == null) {
-                        $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponEvent['couponTypeId'], 'remoteShopId' => $shop]);
+                        $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCouponEvent['couponTypeId'],'remoteShopId' => $shop]);
                         if ($checkCouponTypeIfExist != null) {
                             $couponEventInsert = $couponEventRepo->getEmptyEntity();
                             $couponEventInsert->couponTypeId = $checkCouponTypeIfExist->id;
@@ -291,7 +292,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore Coupon Event ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore Coupon Event ' . $e);
             }
 
             try {
@@ -308,13 +309,13 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                  from Coupon co");
                 $stmtCoupon->execute();
                 while ($rowCoupon = $stmtCoupon->fetch(PDO::FETCH_ASSOC)) {
-                    $checkCouponIfExist = $couponRepo->findOneBy(['remoteId' => $rowCoupon['remoteId'], 'remoteShopId' => $shop]);
+                    $checkCouponIfExist = $couponRepo->findOneBy(['remoteId' => $rowCoupon['remoteId'],'remoteShopId' => $shop]);
                     if ($checkCouponIfExist == null) {
-                        $checkUserIfExist = $userRepo->findOneBy(['remoteId' => $rowCoupon['userId'], 'remoteShopId' => $shop]);
+                        $checkUserIfExist = $userRepo->findOneBy(['remoteId' => $rowCoupon['userId'],'remoteShopId' => $shop]);
                         if ($checkUserIfExist != null) {
-                            $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCoupon['couponTypeId'], 'remoteShopId' => $shop]);
+                            $checkCouponTypeIfExist = $couponTypeRepo->findOneBy(['remoteId' => $rowCoupon['couponTypeId'],'remoteShopId' => $shop]);
                             if ($checkCouponTypeIfExist != null) {
-                                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCoupon['couponEventId'], 'remoteShopId' => $shop]);
+                                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCoupon['couponEventId'],'remoteShopId' => $shop]);
                                 if ($checkCouponEventIfExist != null) {
                                     $couponInsert = $couponRepo->getEmptyEntity();
                                     $couponInsert->couponTypeId = $checkCouponTypeIfExist->id;
@@ -340,11 +341,11 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore Coupon ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore Coupon ' . $e);
             }
 
             try {
-                $stmtCart = $db_con -> prepare('SELECT 
+                $stmtCart = $db_con->prepare('SELECT 
                                                c.id as remoteCartSellerId,
                                                c.orderPaymentMethodId as orderPaymentMethodId,
                                                c.couponId as couponId,
@@ -356,52 +357,43 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate
                                                from Cart c join User U on c.userId = U.id order BY remoteCartSellerId ASC   ');
-                $stmtCart -> execute();
+                $stmtCart->execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
-                    $checkCartIfExist = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCart['remoteCartSellerId'], 'remoteShopSellerId' => $shop]);
+                    $checkCartIfExist = $cartRepo->findOneBy(['remoteCartSellerId' => $rowCart['remoteCartSellerId'],'remoteShopSellerId' => $shop]);
                     if (null == $checkCartIfExist) {
-                        $userEmailFind = $userRepo -> findOneBy(['email' => $rowCart['email']]);
-                        $userIdEmail = $userEmailFind -> id;
-                        $userFind = $userRepo -> findOneBy(['remoteId' => $rowCart['userId'], 'remoteShopId' => $shop]);
+                        $userFind = $userRepo->findOneBy(['email' => $rowCart['email']]);
                         if ($userFind !== null) {
-                            $userId = $userFind -> id;
+                            $userId = $userFind->id;
+                        }
 
-                            $billingAddressIdFind = $userAddressRepo -> findOneBy(['remoteId' => $rowCart['billingAddressId'], 'remoteShopId' => $shop]);
-                            if ($billingAddressIdFind != null) {
-                                $billingAddressIdFind -> userId = $userIdEmail;
-                                $billingAddressIdFind -> update();
-
-                                $billingAddressId = $billingAddressIdFind -> id;
-                                $shipmentAddressIdFind = $userAddressRepo -> findOneBy(['remoteId' => $rowCart['shipmentAddressId'], 'remoteShopId' => $shop]);
-                                if ($shipmentAddressIdFind != null) {
-                                    $shipmentAddressIdFind -> userId = $userIdEmail;
-                                    $shipmentAddressIdFind -> update();
-                                    $shipmentAddressId = $shipmentAddressIdFind -> id;
-                                    $insertCart = $cartRepo -> getEmptyEntity();
-                                    if ($rowCart['couponId'] != '') {
-                                        $FindCoupon = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
-                                        if ($FindCoupon != null) {
-                                            $insertCart -> couponId = $FindCoupon -> id;
-
-                                        }
-                                    }
-
-                                    $insertCart -> orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
-                                    $insertCart -> userId = $userId;
-                                    $insertCart -> cartTypeId = $rowCart['cartTypeId'];
-
-                                    $insertCart -> billingAddressId = $billingAddressId;
-
-                                    $insertCart -> shipmentAddressId = $shipmentAddressId;
-                                    $insertCart -> lastUpdate = $rowCart['lastUpdate'];
-                                    $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
-                                    $insertCart -> remoteShopSellerId = $shop;
-                                    $insertCart -> insert();
-                                    $res .= '<br>carrello inserito' . $rowCart['remoteCartSellerId'] . ' shopId ' . $shop;
-                                }
+                        $insertCart = $cartRepo->getEmptyEntity();
+                        if ($rowCart['couponId'] != '') {
+                            $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowCoupon['couponId'],'remoteShopId' => $shop]);
+                            if ($FindCoupon != null) {
+                                $insertCart->couponId = $FindCoupon->id;
                             }
                         }
+
+                        $insertCart->orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
+                        $insertCart->userId = $userId;
+                        $insertCart->cartTypeId = $rowCart['cartTypeId'];
+
+                        $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId,'remoteId' => $rowCart['billingAddressId'],'remoteShopId' => $shop]);
+                        if($billingAddressIdFind!=null) {
+                            $insertCart->billingAddressId = $billingAddressIdFind->id;
+                        }
+
+                        $shipmentAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId,'remoteId' => $rowCart['shipmentAddressId'],'remoteShopId' => $shop]);
+                        if($shipmentAddressIdFind!= null) {
+                            $insertCart->shipmentAddressId = $shipmentAddressIdFind->id;
+                        }
+                        $insertCart->shipmentAddressId = $shipmentAddressId;
+                        $insertCart->lastUpdate = $rowCart['lastUpdate'];
+                        $insertCart->remoteCartSellerId = $rowCart['remoteCartSellerId'];
+                        $insertCart->remoteShopSellerId = $shop;
+                        $insertCart->insert();
+                        $res .= '<br>carrello inserito' . $rowCart['remoteCartSellerId'] . ' shopId ' . $shop;
 
                     } else {
                         $res .= '<br>carrello già esistente' . $rowCart['remoteCartSellerId'] . ' shopId ' . $shop;
@@ -410,33 +402,33 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore Cart ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore Cart ',$e,'');
             }
             /***** inserimento righe carrello *********/
             try {
-                $stmtCartLine = $db_con -> prepare('SELECT
+                $stmtCartLine = $db_con->prepare('SELECT
                                             cl.id as remoteCartLineSellerId,
                                             cl.cartId as remoteCartId,
                                             cl.productId as productId,
                                             cl.productVariantId as productVariantId,
                                             cl.productSizeId as productSizeId
                                             from CartLine cl');
-                $stmtCartLine -> execute();
-                while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
-                    $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
+                $stmtCartLine->execute();
+                while ($rowCartLineOrder = $stmtCartLine->fetch(PDO::FETCH_ASSOC)) {
+                    $findCartLineIdIfExist = $cartLineRepo->findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'],'remoteShopSellerId' => $shop]);
 
                     if ($findCartLineIdIfExist == null) {
-                        $cartIdFind = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCartLineOrder['remoteCartId'], 'remoteShopSellerId' => $shop]);
+                        $cartIdFind = $cartRepo->findOneBy(['remoteCartSellerId' => $rowCartLineOrder['remoteCartId'],'remoteShopSellerId' => $shop]);
                         if ($cartIdFind !== null) {
-                            $cartId = $cartIdFind -> id;
-                            $cartLineInsert = $cartLineRepo -> getEmptyEntity();
-                            $cartLineInsert -> cartId = $cartId;
-                            $cartLineInsert -> productId = $rowCartLineOrder['productId'];
-                            $cartLineInsert -> productVariantId = $rowCartLineOrder['productVariantId'];
-                            $cartLineInsert -> productSizeId = $rowCartLineOrder['productSizeId'];
-                            $cartLineInsert -> remoteCartLineSellerId = $rowCartLineOrder['remoteCartLineSellerId'];
-                            $cartLineInsert -> remoteShopSellerId = $shop;
-                            $cartLineInsert -> insert();
+                            $cartId = $cartIdFind->id;
+                            $cartLineInsert = $cartLineRepo->getEmptyEntity();
+                            $cartLineInsert->cartId = $cartId;
+                            $cartLineInsert->productId = $rowCartLineOrder['productId'];
+                            $cartLineInsert->productVariantId = $rowCartLineOrder['productVariantId'];
+                            $cartLineInsert->productSizeId = $rowCartLineOrder['productSizeId'];
+                            $cartLineInsert->remoteCartLineSellerId = $rowCartLineOrder['remoteCartLineSellerId'];
+                            $cartLineInsert->remoteShopSellerId = $shop;
+                            $cartLineInsert->insert();
                             $res .= '<br>Riga Carrello inserita' . $rowCartLineOrder['remoteCartLineSellerId'] . ' shopId ' . $shop;
 
                         }
@@ -447,7 +439,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
                 }
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore cartline ' . $e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore cartline ',$e,'');
             }
             try {
                 /***inserimento ordini */
@@ -492,62 +484,72 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
 
 
-                    $checkOrderIfExist = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrder['remoteOrderSellerId'], 'remoteShopSellerId' => $shop]);
+                    $checkOrderIfExist = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrder['remoteOrderSellerId'],'remoteShopSellerId' => $shop]);
 
                     if ($checkOrderIfExist == null) {
                         $findUser = $userRepo->findOneBy(['email' => $rowOrder['email']]);
                         if ($findUser !== null) {
                             $userId = $findUser->id;
-                            $findCart = $cartRepo->findOneBy(['remoteCartSellerId' => $rowOrder['cartId'], 'remoteShopSellerId' => $shop]);
-                            if ($findCart != null) {
-                                $cartId = $findCart->id;
-                                $insertOrder = $orderRepo->getEmptyEntity();
-                                $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
-                                $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
-                                if ($rowOrder['couponId'] != '') {
-                                    $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
-                                    if ($FindCoupon != null) {
-                                        $insertOrder->couponId = $FindCoupon->id;
-                                    }
-                                }
+                        }
+                        $findCart = $cartRepo->findOneBy(['remoteCartSellerId' => $rowOrder['cartId'],'remoteShopSellerId' => $shop]);
+                        if ($findCart != null) {
+                            $cartId = $findCart->id;
+                        }
 
 
-                                $insertOrder->userId = $userId;
-                                $insertOrder->cartId = $cartId;
-                                $insertOrder->status = $rowOrder['status'];
-                                $findUserAddressId=$userAddressRepo->findOneBy(['userId'=>$userId]);
-                                $insertOrder->billingAddressId=$findUserAddressId->id;
-                                $insertOrder->shipmentAddressId=$findUserAddressId->id;
 
-                                $insertOrder->frozenShippingAddress = $rowOrder['frozenShippingAddress'];
-                                $insertOrder->frozenBillingAddress = $rowOrder['frozenBillingAddress'];
-                                $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
-                                $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
-                                $insertOrder->grossTotal = $rowOrder['grossTotal'];
-                                $insertOrder->netTotal = $rowOrder['netTotal'];
-                                $insertOrder->vat = $rowOrder['vat'];
-                                $insertOrder->sellingFee = $rowOrder['sellingFee'];
-                                $insertOrder->customModifier = $rowOrder['customModifier'];
-                                $insertOrder->orderDate = $rowOrder['orderDate'];
-                                $insertOrder->note = $rowOrder['note'];
-                                $insertOrder->paidAmount = $rowOrder['paidAmount'];
-                                $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
-                                $insertOrder->transactionNumber = $rowOrder['transactionNumber'];
-                                $insertOrder->transactionMac = $rowOrder['transactionMac'];
-                                $insertOrder->paymentDate = $rowOrder['paymentDate'];
-                                $insertOrder->remoteOrderSellerId = $rowOrder['remoteOrderSellerId'];
-                                $insertOrder->remoteShopSellerId = $shop;
-                                $insertOrder->hasInvoice = $rowOrder['hasInvoice'];
-                                $insertOrder->isParallel =$rowOrder['isParallel'];
-                                $insertOrder->isOrderMarketplace=$rowOrder['isOrderMarketplace'];
-                                $insertOrder->marketplaceOrderId=$rowOrder['marketplaceOrderId'];
-                                $insertOrder->insert();
-                                $res .= '<br>Ordine inserita' . $rowOrder['remoteOrderSellerId'] . 'shop ' . $shop;
-                                continue;
-
+                        $insertOrder = $orderRepo->getEmptyEntity();
+                        $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
+                        $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
+                        if ($rowOrder['couponId'] != '') {
+                            $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'],'remoteShopId' => $shop]);
+                            if ($FindCoupon != null) {
+                                $insertOrder->couponId = $FindCoupon->id;
                             }
                         }
+
+
+                        $insertOrder->userId = $userId;
+                        $insertOrder->cartId = $cartId;
+                        $insertOrder->status = $rowOrder['status'];
+                        $billingAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId, 'remoteId' => $rowOrder['billingAddressId'] , 'remoteShopId' => $shop]);
+                        if($billingAddressIdFind!=null){
+                            $insertOrder->billingAddressId=$billingAddressIdFind->id;
+                        }
+
+
+
+                        $shipmentAddressIdFind = $userAddressRepo->findOneBy(['userId' => $userId,'remoteId' => $rowOrder['shipmentAddressId'] , 'remoteShopId' => $shop]);
+                    if($shipmentAddressIdFind!=null) {
+                        $insertOrder->shipmentAddressId = $shipmentAddressIdFind->id;
+                    }
+                        $insertOrder->frozenShippingAddress = $rowOrder['frozenShippingAddress'];
+                        $insertOrder->frozenBillingAddress = $rowOrder['frozenBillingAddress'];
+                        $insertOrder->shippingPrice = $rowOrder['shippingPrice'];
+                        $insertOrder->paymentModifier = 0 - $rowOrder['paymentModifier'];
+                        $insertOrder->grossTotal = $rowOrder['grossTotal'];
+                        $insertOrder->netTotal = $rowOrder['netTotal'];
+                        $insertOrder->vat = $rowOrder['vat'];
+                        $insertOrder->sellingFee = $rowOrder['sellingFee'];
+                        $insertOrder->customModifier = $rowOrder['customModifier'];
+                        $insertOrder->orderDate = $rowOrder['orderDate'];
+                        $insertOrder->note = $rowOrder['note'];
+                        $insertOrder->paidAmount = $rowOrder['paidAmount'];
+                        $insertOrder->lastUpdate = $rowOrder['lastUpdate'];
+                        $insertOrder->transactionNumber = $rowOrder['transactionNumber'];
+                        $insertOrder->transactionMac = $rowOrder['transactionMac'];
+                        $insertOrder->paymentDate = $rowOrder['paymentDate'];
+                        $insertOrder->remoteOrderSellerId = $rowOrder['remoteOrderSellerId'];
+                        $insertOrder->remoteShopSellerId = $shop;
+                        $insertOrder->hasInvoice = $rowOrder['hasInvoice'];
+                        $insertOrder->isParallel = $rowOrder['isParallel'];
+                        $insertOrder->isOrderMarketplace = $rowOrder['isOrderMarketplace'];
+                        $insertOrder->marketplaceOrderId = $rowOrder['marketplaceOrderId'];
+                        $insertOrder->insert();
+                        $res .= '<br>Ordine inserita' . $rowOrder['remoteOrderSellerId'] . 'shop ' . $shop;
+
                     } else {
+
                         $res .= '<br>Ordine già esistente' . $rowOrder['remoteOrderSellerId'] . 'shop ' . $shop;
                         continue;
 
@@ -556,7 +558,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 }
 
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore Order',$e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore Order',$e,'');
             }
             try {
                 /**** inserimento righe Ordine*****/
@@ -620,10 +622,10 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 }
                 $stmtOrderLine->execute();
                 while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
-                    $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteOrderLineSellerId' => $rowOrderLine['remoteOrderLineSellerId'], 'remoteOrderSellerId' => $rowOrderLine['remoteOrderSellerId'], 'remoteShopSellerId' => $shop]);
+                    $checkOrderLineExist = $orderLineRepo->findOneBy(['remoteOrderLineSellerId' => $rowOrderLine['remoteOrderLineSellerId'],'remoteOrderSellerId' => $rowOrderLine['remoteOrderSellerId'],'remoteShopSellerId' => $shop]);
                     if ($checkOrderLineExist == null) {
 
-                        $findOrder = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrderLine['remoteOrderSellerId'], 'remoteShopSellerId' => $shop]);
+                        $findOrder = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowOrderLine['remoteOrderSellerId'],'remoteShopSellerId' => $shop]);
                         if ($findOrder != null) {
 
 
@@ -679,7 +681,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                 }
 
             } catch (\throwable $e) {
-                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder', 'error', 'Errore OrderLine  ',$e);
+                \Monkey::app()->applicationLog('CImportExternalPickysiteOrder','error','Errore OrderLine  ',$e);
             }
 
         }
@@ -688,7 +690,6 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
 
     }
-
 
 
 }
