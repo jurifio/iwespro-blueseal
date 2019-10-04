@@ -131,6 +131,7 @@ class COrderListAjaxController extends AAjaxController
         foreach ($orders as $val) {
             $row = [];
             /** ciclo le righe */
+            $row['supplier']="";
             $row["product"] = "";
             $alert = false;
             $orderParal='';
@@ -155,7 +156,7 @@ class COrderListAjaxController extends AAjaxController
 
                  $sku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId'=>$line->productId,'productVariantId'=>$line->productVariantId,'productSizeId'=>$line->productSizeId]);
                   //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
-                   if(!is_null($line->remoteOrderSupplier)){
+                   if(!is_null($line->remoteOrderSupplierId)){
                        $supplier=$sku->shop->name;
                    }else{
                        $supplier='';
