@@ -68,11 +68,16 @@
                                     data-orderable="true"
                                     class="center">Ordine Parallelo
                                 </th>
-                               <!-- <th data-slug="remoteOrderSuppllier"
+                                <th data-slug="remoteOrderSuppllier"
                                     data-searchable="false"
                                     data-orderable="true"
                                     class="center">Ordine Supplier
-                                </th>-->
+                                </th>
+                                <th data-slug="supplier"
+                                    data-searchable="false"
+                                    data-orderable="true"
+                                    class="center">Supplier
+                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"

@@ -135,11 +135,13 @@ class COrderListAjaxController extends AAjaxController
             $alert = false;
             $orderParal='';
             $remoteOrderSupplierId ='';
+            $remoteShopSupplier='';
             foreach ($val->orderLine as $line) {
                 if($val->remoteShopSellerId!=44 && $val->remoteShopSellerId!='' ) {
                     if ($val->remoteShopSellerId != $line->shopId) {
                         $orderParal = 'Si';
                         $remoteOrderSupplierId.= $line->remoteOrderSupplierId;
+
                     }
                 }else{
                     $orderParal = 'No';
@@ -153,6 +155,11 @@ class COrderListAjaxController extends AAjaxController
 
                  $sku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId'=>$line->productId,'productVariantId'=>$line->productVariantId,'productSizeId'=>$line->productSizeId]);
                   //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
+                   if(!is_null($line->remoteOrderSupplier)){
+                       $supplier=$sku->shop->name;
+                   }else{
+                       $supplier='';
+                    }
 
                     $code = "spedisce ". $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
@@ -170,10 +177,14 @@ class COrderListAjaxController extends AAjaxController
 
                 $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
-                //$row['remoteOrderSuppllier'].= $remoteOrderSupplierId;
+
+                $row["supplier"] = $supplier;
+
+
 
 
             }
+            $row['remoteOrderSuppllier'] = $remoteOrderSupplierId;
            $row["orderParal"]  = $orderParal;
 
             $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
