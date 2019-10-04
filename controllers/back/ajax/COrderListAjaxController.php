@@ -134,14 +134,18 @@ class COrderListAjaxController extends AAjaxController
             $row["product"] = "";
             $alert = false;
             $orderParal='';
+            $remoteOrderSupplierId ='';
             foreach ($val->orderLine as $line) {
                 if($val->remoteShopSellerId!=44 && $val->remoteShopSellerId!='' ) {
                     if ($val->remoteShopSellerId != $line->shopId) {
                         $orderParal = 'Si';
+                        $remoteOrderSupplierId.= $line->remoteOrderSupplierId;
                     }
                 }else{
                     $orderParal = 'No';
+                        $remoteOrderSupplierId.='';
                 }
+
                 try {
 
                     /** @var CProductSku $sku */
@@ -166,6 +170,7 @@ class COrderListAjaxController extends AAjaxController
 
                 $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
+                //$row['remoteOrderSuppllier'].= $remoteOrderSupplierId;
 
 
             }

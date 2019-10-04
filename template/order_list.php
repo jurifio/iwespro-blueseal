@@ -56,7 +56,7 @@
                                 <th data-slug="remoteOrderSellerId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Ordine Remoto
+                                    class="center">Seller Order
                                 </th>
                                 <th data-slug="remoteShopSellerId"
                                     data-searchable="true"
@@ -68,10 +68,15 @@
                                     data-orderable="true"
                                     class="center">Ordine Parallelo
                                 </th>
+                               <!-- <th data-slug="remoteOrderSuppllier"
+                                    data-searchable="false"
+                                    data-orderable="true"
+                                    class="center">Ordine Supplier
+                                </th>-->
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Supplier Shop
+                                    class="center">Dettaglio Ordine
                                 </th>
                                 <th data-slug="status"
                                     data-searchable="true"
