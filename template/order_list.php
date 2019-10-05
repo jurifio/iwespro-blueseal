@@ -64,7 +64,7 @@
                                     class="center">Seller Shop
                                 </th>
                                 <th data-slug="orderParal"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine Parallelo
                                 </th>
@@ -74,7 +74,7 @@
                                     class="center">Ordine Supplier
                                 </th>
                                 <th data-slug="supplier"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="true"
                                     class="center">Supplier
                                 </th>

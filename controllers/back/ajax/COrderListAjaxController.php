@@ -165,6 +165,11 @@ class COrderListAjaxController extends AAjaxController
                     $code = "spedisce ". $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
                     $skuParalId=$line->productId;
+
+
+
+
+                    
                     $skupParalVariantId=$line->productVariantId;
                     $skuParalSizeId=$line->productSizeId;
                     $skuParalShopId=$line->shopId;

@@ -355,8 +355,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                c.billingAddressId as billingAddressId,
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
-                                               c.creationDate as creationDate
-                                               from Cart c join User U on c.userId = U.id order BY remoteCartSellerId ASC   ');
+                                               c.creationDate as creationDate,
+                                               c.isParallel as isParallel
+                                               from Cart c join User U on c.userId = U.id WHERE c.isParallel = NULL  order BY remoteCartSellerId ASC   ');
                 $stmtCart->execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
@@ -411,8 +412,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                             cl.cartId as remoteCartId,
                                             cl.productId as productId,
                                             cl.productVariantId as productVariantId,
-                                            cl.productSizeId as productSizeId
-                                            from CartLine cl');
+                                            cl.productSizeId as productSizeId,
+                                            cl.isParallel as isParallel
+                                            from CartLine cl WHERE cl.isParallel = NULL ');
                 $stmtCartLine->execute();
                 while ($rowCartLineOrder = $stmtCartLine->fetch(PDO::FETCH_ASSOC)) {
                     $findCartLineIdIfExist = $cartLineRepo->findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'],'remoteShopSellerId' => $shop]);
@@ -479,7 +481,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                                o.isOrderMarketplace as isOrderMarketplace,
                                                o.marketplaceId as marketplaceId,
                                                o.marketplaceOrderId as marketplaceOrderId
-                                               from `Order` o join User U on o.userId = U.id ');
+                                               from `Order` o join User U on o.userId = U.id WHERE o.isParallel = NULL ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
 
@@ -588,8 +590,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ol.friendRevenue as friendRevenue,
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
-                                     ol.note as note
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL');
+                                     ol.note as note,
+                                     ol.isParallel as isParallel
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and ol.isParallel = NULL ');
                 } else {
                     $stmtOrderLine = $db_con->prepare('SELECT 
                                      ol.id AS remoteOrderLineSellerId,
@@ -617,8 +620,9 @@ class CImportExternalPickySiteOrder extends AAjaxController
                                      ol.friendRevenue as friendRevenue,
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
-                                     ol.note as note
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL');
+                                     ol.note as note,
+                                     ol.isParallel as isParallel
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and ol.isParallel = NULL ');
                 }
                 $stmtOrderLine->execute();
                 while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
