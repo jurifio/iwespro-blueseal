@@ -69,7 +69,7 @@
                                     class="center">Ordine Parallelo
                                 </th>
                                 <th data-slug="remoteOrderSuppllier"
-                                    data-searchable="false"
+                                    data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine Supplier
                                 </th>

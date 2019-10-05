@@ -371,7 +371,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate,
                                                c.isParallel as isParallel
-                                               from Cart c join User U on c.userId = U.id WHERE c.isParallel = NULL  order BY remoteCartSellerId ASC    ');
+                                               from Cart c join User U on c.userId = U.id WHERE isParallel !=1  order BY remoteCartSellerId ASC    ');
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
@@ -438,7 +438,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                             cl.productVariantId as productVariantId,
                                             cl.productSizeId as productSizeId,
                                             cl.isParallel as isParallel
-                                            from CartLine cl WHERE cl.isParallel = NULL');
+                                            from CartLine cl WHERE isParallel != 1');
                 $stmtCartLine -> execute();
                 while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
                     $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
@@ -505,7 +505,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.isOrderMarketplace as isOrderMarketplace,
                                                o.marketplaceId as marketplaceId,
                                                o.marketplaceOrderId as marketplaceOrderId
-                                               from `Order` o join User U on o.userId = U.id WHERE o.isParallel = NULL ');
+                                               from `Order` o join User U on o.userId = U.id WHERE isParallel != 1 ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
 
@@ -607,7 +607,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note,
                                      ol.isParallel as isParallel
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and ol.isParallel = NULL ');
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel !=1 ');
                 } else {
                     $stmtOrderLine = $db_con->prepare('SELECT 
                                      ol.id AS remoteOrderLineSellerId,
@@ -637,7 +637,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note,
                                      ol.isParallel as isParallel
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and ol.isParallel = NULL ');
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel !=1 ');
                 }
                 $stmtOrderLine->execute();
                 while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
