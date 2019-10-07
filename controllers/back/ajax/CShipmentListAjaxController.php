@@ -81,7 +81,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
-          $toAddress=json_decode($row['frozenBillingAddress'],true);
+          $toAddress=json_decode($row['frozenShippingAddress'],true);
           $row['toAddress']=$toAddress['name'].' '.$toAddress['surname'].' '.$toAddress['company'].'<br />'.$toAddress['address'].'<br/>'.$toAddress['postcode'].' '.$toAddress['city'].' '.$toAddress['province'];
 
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->address.'<br />'.$val->fromAddress->city) : '---';
