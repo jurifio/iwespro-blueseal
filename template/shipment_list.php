@@ -79,6 +79,9 @@
                                 <th data-slug="note"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Note</th>
+                                <th data-slug="orderId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Ordine</th>
                                 <th data-slug="orderContent"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Contenuto Ordini</th>

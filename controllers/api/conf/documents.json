@@ -1,0 +1,24 @@
+{
+    "post": {
+        "order": {
+            "requiredFields": {
+                "shop": "string || numeric",
+                "orderId": "numeric",
+                "remoteSellerId": "numeric",
+                "isParallel":"numeric"
+            }
+        }
+    },
+    "put": {
+        "intervalSecondForNextCall": null,
+        "requiredFields": {
+            "shop": "string || numeric",
+            "remoteIwesOrderId": "numeric",
+            "remoteSellerId": "numeric",
+            "remoteOrderSupplierId": "numeric",
+            "isParallel":"numeric"
+        },
+        "notRequiredFields": {
+        }
+    }
+}

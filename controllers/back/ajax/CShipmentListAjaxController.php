@@ -37,6 +37,10 @@ class CShipmentListAjaxController extends AAjaxController
                     s.cancellationdate,
                     s.note,
                     s.creationDate,
+                    O.id as orderId,
+                    O.isParallel AS isParallel,
+                    O.frozenShippingAddress as frozenShippingAddress,
+                    O.frozenBillingAddress as frozenBillingAddress,
                     concat_ws(',',f.subject,f.city) as fromAddress,
                     concat_ws(',',t.subject,t.city) as toAddress,
                     group_concat(concat_ws('-',ol.productId,ol.productVariantId)) as productContent,
@@ -51,15 +55,16 @@ class CShipmentListAjaxController extends AAjaxController
                   LEFT JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
+                      join `Order` O on ol.orderId = O.id
                      ) ON s.id = olhs.shipmentId
                   GROUP BY s.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $allShop = $this->app->getUser()->hasPermission('allShops');
-      /*  if(!$allShop) {
+        if(!$allShop) {
             $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_USER]);
-        }*/
+        }
 
         $datatable->addCondition('shopId',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
@@ -76,7 +81,9 @@ class CShipmentListAjaxController extends AAjaxController
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
-            $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->address.'<br />'.$val->toAddress->city) : '---';
+          $toAddress=json_decode($row['frozenBillingAddress'],true);
+          $row['toAddress']=$toAddress['name'].' '.$toAddress['surname'].' '.$toAddress['company'].'<br />'.$toAddress['address'].'<br/>'.$toAddress['postcode'].' '.$toAddress['city'].' '.$toAddress['province'];
+
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->address.'<br />'.$val->fromAddress->city) : '---';
             $row['predictedShipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d');
             $row['shipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d');
