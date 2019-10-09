@@ -374,7 +374,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                from Cart c join User U on c.userId = U.id WHERE isParallel is null  order BY remoteCartSellerId ASC    ');
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
-                    //while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
+                    //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
                     $checkCartIfExist = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCart['remoteCartSellerId'], 'remoteShopSellerId' => $shop]);
                     if (null == $checkCartIfExist) {
                         $userEmailFind = $userRepo -> findOneBy(['email' => $rowCart['email']]);
@@ -438,7 +438,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                             cl.productVariantId as productVariantId,
                                             cl.productSizeId as productSizeId,
                                             cl.isParallel as isParallel
-                                            from CartLine cl WHERE cl.isParallel is null');
+                                            from CartLine cl WHERE isParallel is null');
                 $stmtCartLine -> execute();
                 while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
                     $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
@@ -580,8 +580,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             try {
                 /**** inserimento righe Ordine*****/
                 if ($shop == 1) {
-                    $stmtOrderLine = $db_con->prepare(' SELECT 
-                                     ol.id AS remoteOrderLineSellerId,
+                    $stmtOrderLine = $db_con->prepare(' SELECT ol.id AS remoteOrderLineSellerId,
                                      ol.orderId as remoteOrderSellerId,
                                      ol.productId as productId,
                                      ol.productVariantId as productVariantId,

@@ -53,7 +53,8 @@ class COrderListAjaxController extends AAjaxController
                   o.note AS notes,
                   o.remoteOrderSellerId as remoteOrderSellerId,
                   o.remoteShopSellerId as remoteShopSellerId,
-                  #'' as orderParalel,
+                  mhsp.name as marketplaceName,
+                  o.marketplaceOrderId as marketplaceOrderId,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -66,6 +67,7 @@ class COrderListAjaxController extends AAjaxController
                   JOIN `OrderLineStatus` `ols` ON `ol`.`status` = `ols`.`code`
                   JOIN `Product` `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+                  LEFT JOIN  `MarketplaceHasShop` mhsp ON  o.marketplaceId=mhsp.id
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
@@ -99,6 +101,7 @@ class COrderListAjaxController extends AAjaxController
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
         $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+        $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
         $countryR = \Monkey::app()->repoFactory->create('Country');
         $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
         $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
@@ -130,6 +133,11 @@ class COrderListAjaxController extends AAjaxController
         /** @var COrder $val */
         foreach ($orders as $val) {
             $row = [];
+
+
+          /*  if( $val->markeplaceOrderId =='') {
+                $row['marketplaceOrderId'] = 'No';
+            }*/
             /** ciclo le righe */
             $row['supplier']="";
             $row["product"] = "";
@@ -223,7 +231,6 @@ class COrderListAjaxController extends AAjaxController
                 $row["id"] = $val->id;
             }
 
-
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
             $row["user"] =
@@ -258,9 +265,20 @@ class COrderListAjaxController extends AAjaxController
                 $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost.'€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
+                    $findInvoiceSeller=$invoiceRepo->findOneBy(['orderId'=>$val->id,'invoiceShopId'=>$val->remoteShopSellerId]);
+                if($findInvoiceSeller!=null) {
+                    $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id."&invoiceShopId=".$findInvoiceSeller->invoiceShopId."'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
+                }else {
+                    $row["invoice"] = "";
+                }
+                    $findInvoiceSupplier=$invoiceRepo->findOneBy(['orderId'=>$val->id,'invoiceShopId'=>$skuParalShopId]);
+                    if($findInvoiceSupplier!=null){
+                    $row["invoiceSupplier"]="<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=".$findInvoiceSupplier->id."&invoiceShopId=".$findInvoiceSupplier->invoiceShopId."'>".$findInvoiceSupplier->invoiceNumber."/".$findInvoiceSupplier->invoiceType."</a>";
+                }else{
+                        $row["invoiceSupplier"]="";
+                }
 
 
-            $row["invoice"] = ($val->invoice->count() == 0 ? "" : "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=".$val->id."'>".$val->invoice->getFirst()->invoiceNumber."/k</a>");
 
             /** Get doc */
             $fileName = "";
