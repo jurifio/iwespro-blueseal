@@ -78,6 +78,16 @@
                                     data-orderable="true"
                                     class="center">Supplier
                                 </th>
+                                <th data-slug="marketplaceOrderId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Marketplace Order
+                                </th>
+                                <th data-slug="marketplaceName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Marketplace Shop
+                                </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -126,7 +136,12 @@
                                 <th data-slug="invoice"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura
+                                    class="center">Fattura Seller
+                                </th>
+                                <th data-slug="invoiceSupplier"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Fattura Supplier
                                 </th>
                                 <th data-slug="documents"
                                     data-searchable="true"
