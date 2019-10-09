@@ -133,11 +133,9 @@ class COrderListAjaxController extends AAjaxController
         /** @var COrder $val */
         foreach ($orders as $val) {
             $row = [];
-         /*  if($val->marketplaceName =='') {
-                $row['marketplaceName'] = 'non marketplace';
-            }
 
-            if( $val->markeplaceOrderId =='') {
+
+          /*  if( $val->markeplaceOrderId =='') {
                 $row['marketplaceOrderId'] = 'No';
             }*/
             /** ciclo le righe */
