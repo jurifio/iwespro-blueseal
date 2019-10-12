@@ -53,7 +53,7 @@ class COrderListAjaxController extends AAjaxController
                   o.note AS notes,
                   o.remoteOrderSellerId as remoteOrderSellerId,
                   o.remoteShopSellerId as remoteShopSellerId,
-                  mhsp.name as marketplaceName,
+                  o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
@@ -101,6 +101,7 @@ class COrderListAjaxController extends AAjaxController
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
         $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+        $markeplaceRepo=\Monkey::app()->repoFactory->create('MarketplaceHasShop');
         $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
         $countryR = \Monkey::app()->repoFactory->create('Country');
         $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
@@ -134,7 +135,13 @@ class COrderListAjaxController extends AAjaxController
         foreach ($orders as $val) {
             $row = [];
 
-
+        $row['marketplaceOrderId']=$val->marketplaceOrderId;
+           if($val->marketplaceId!=null){
+               $findMarketplace=$markeplaceRepo->findOneBy(['prestashopId'=>$val->marketplaceId]);
+               $row['marketplaceName']=$findMarketplace->name;
+           }else{
+               $row['marketplaceName']=" ";
+           }
           /*  if( $val->markeplaceOrderId =='') {
                 $row['marketplaceOrderId'] = 'No';
             }*/
