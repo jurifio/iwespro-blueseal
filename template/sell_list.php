@@ -25,7 +25,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped" data-datatable-name="order_list"
-                               data-controller="OrderListAjaxController"
+                               data-controller="SellListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500,1000,2000"
@@ -136,17 +136,12 @@
                                 <th data-slug="invoice"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura del Seller
-                                </th>
-                                <th data-slug="invoiceToSeller"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Fattura Di Iwes su Seller
+                                    class="center">Fattura Seller
                                 </th>
                                 <th data-slug="invoiceSupplier"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura del Supplier
+                                    class="center">Fattura Supplier
                                 </th>
                                 <th data-slug="documents"
                                     data-searchable="true"
@@ -173,7 +168,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione ordini">
+    <bs-toolbar-group data-group-label="Gestione Vendite">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-file-o fa-plus"

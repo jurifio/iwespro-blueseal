@@ -378,22 +378,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     $checkCartIfExist = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCart['remoteCartSellerId'], 'remoteShopSellerId' => $shop]);
                     if (null == $checkCartIfExist) {
                         $userEmailFind = $userRepo -> findOneBy(['email' => $rowCart['email']]);
-                        $userIdEmail = $userEmailFind -> id;
-                        $userFind = $userRepo -> findOneBy(['remoteId' => $rowCart['userId'], 'remoteShopId' => $shop]);
-                        if ($userFind !== null) {
-                            $userId = $userFind -> id;
-
-                            $billingAddressIdFind = $userAddressRepo -> findOneBy(['remoteId' => $rowCart['billingAddressId'], 'remoteShopId' => $shop]);
-                            if ($billingAddressIdFind != null) {
-                                $billingAddressIdFind -> userId = $userIdEmail;
-                                $billingAddressIdFind -> update();
-
-                                $billingAddressId = $billingAddressIdFind -> id;
-                                $shipmentAddressIdFind = $userAddressRepo -> findOneBy(['remoteId' => $rowCart['shipmentAddressId'], 'remoteShopId' => $shop]);
-                                if ($shipmentAddressIdFind != null) {
-                                    $shipmentAddressIdFind -> userId = $userIdEmail;
-                                    $shipmentAddressIdFind -> update();
-                                    $shipmentAddressId = $shipmentAddressIdFind -> id;
+                        if ($userEmailFind !== null) {
+                            $userId = $userEmailFind -> id;
                                     $insertCart = $cartRepo -> getEmptyEntity();
                                     if ($rowCart['couponId'] != '') {
                                         $FindCoupon = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
@@ -402,22 +388,15 @@ class CImportExternalPickySiteOrderJob extends ACronJob
 
                                         }
                                     }
-
                                     $insertCart -> orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
                                     $insertCart -> userId = $userId;
                                     $insertCart -> cartTypeId = $rowCart['cartTypeId'];
-
-                                    $insertCart -> billingAddressId = $billingAddressId;
-
-                                    $insertCart -> shipmentAddressId = $shipmentAddressId;
                                     $insertCart -> lastUpdate = $rowCart['lastUpdate'];
                                     $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
                                     $insertCart -> remoteShopSellerId = $shop;
                                     $insertCart -> insert();
 
                                 }
-                            }
-                        }
 
                     } else {
 
