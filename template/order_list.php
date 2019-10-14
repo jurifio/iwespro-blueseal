@@ -136,12 +136,17 @@
                                 <th data-slug="invoice"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura Seller
+                                    class="center">Fattura del Seller
+                                </th>
+                                <th data-slug="invoiceToSeller"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Fattura Di Iwes su Seller
                                 </th>
                                 <th data-slug="invoiceSupplier"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura Supplier
+                                    class="center">Fattura del Supplier
                                 </th>
                                 <th data-slug="documents"
                                     data-searchable="true"

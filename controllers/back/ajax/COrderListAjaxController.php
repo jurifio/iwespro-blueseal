@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -32,7 +33,7 @@ class COrderListAjaxController extends AAjaxController
     public function get()
     {
         $perm = \Monkey::app()->getUser()->hasPermission('allShops');
-        $productHasShopDestinationRepo=\Monkey::app()->repoFactory->create('ProductHasShopDestination');
+        $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $sql = "SELECT
                   `o`.`id`                                               AS `id`,
                   concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
@@ -92,7 +93,7 @@ class COrderListAjaxController extends AAjaxController
                          OR 
                         (`o`.`paymentDate` IS NULL AND `o`.`orderPaymentMethodId` = 5)
                     ))";
-        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
         $datatable->addSearchColumn('orderLineStatus');
         $datatable->addSearchColumn('shop');
         $datatable->addSearchColumn('productBrand');
@@ -100,13 +101,13 @@ class COrderListAjaxController extends AAjaxController
 
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
-        $markeplaceRepo=\Monkey::app()->repoFactory->create('MarketplaceHasShop');
-        $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+        $markeplaceRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
+        $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
         $countryR = \Monkey::app()->repoFactory->create('Country');
-        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
-        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q,$p);
+        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true),$datatable->getParams());
+        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'),$datatable->getParams());
 
         $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
@@ -135,95 +136,89 @@ class COrderListAjaxController extends AAjaxController
         foreach ($orders as $val) {
             $row = [];
 
-        $row['marketplaceOrderId']=$val->marketplaceOrderId;
-           if($val->marketplaceId!=null){
-               $findMarketplace=$markeplaceRepo->findOneBy(['prestashopId'=>$val->marketplaceId]);
-               $row['marketplaceName']=$findMarketplace->name;
-           }else{
-               $row['marketplaceName']=" ";
-           }
-          /*  if( $val->markeplaceOrderId =='') {
-                $row['marketplaceOrderId'] = 'No';
-            }*/
+            $row['marketplaceOrderId'] = $val->marketplaceOrderId;
+            if ($val->marketplaceId != null) {
+                $findMarketplace = $markeplaceRepo->findOneBy(['prestashopId' => $val->marketplaceId]);
+                $row['marketplaceName'] = $findMarketplace->name;
+            } else {
+                $row['marketplaceName'] = " ";
+            }
+            /*  if( $val->markeplaceOrderId =='') {
+                  $row['marketplaceOrderId'] = 'No';
+              }*/
             /** ciclo le righe */
-            $row['supplier']="";
+            $row['supplier'] = "";
             $row["product"] = "";
             $alert = false;
-            $orderParal='';
-            $remoteOrderSupplierId ='';
-            $remoteShopSupplier='';
+            $orderParal = '';
+            $remoteOrderSupplierId = '';
+            $remoteShopSupplier = '';
             foreach ($val->orderLine as $line) {
-                if($val->remoteShopSellerId!=44 && $val->remoteShopSellerId!='' ) {
+                if ($val->remoteShopSellerId != 44 && $val->remoteShopSellerId != '') {
                     if ($val->remoteShopSellerId != $line->shopId) {
                         $orderParal = 'Si';
-                        $remoteOrderSupplierId.= $line->remoteOrderSupplierId;
+                        $remoteOrderSupplierId .= $line->remoteOrderSupplierId;
 
                     }
-                }else{
+                } else {
                     $orderParal = 'No';
-                        $remoteOrderSupplierId.='';
+                    $remoteOrderSupplierId .= '';
                 }
 
                 try {
 
                     /** @var CProductSku $sku */
-            //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
+                    //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 
-                 $sku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId'=>$line->productId,'productVariantId'=>$line->productVariantId,'productSizeId'=>$line->productSizeId]);
-                  //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
-                   if(!is_null($line->remoteOrderSupplierId)){
-                       $supplier=$sku->shop->name;
-                   }else{
-                       $supplier='';
+                    $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $line->productId,'productVariantId' => $line->productVariantId,'productSizeId' => $line->productSizeId]);
+                    //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
+                    if (!is_null($line->remoteOrderSupplierId)) {
+                        $supplier = $sku->shop->name;
+                    } else {
+                        $supplier = '';
                     }
 
-                    $code = "spedisce ". $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
+                    $code = "spedisce " . $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
-                    $skuParalId=$line->productId;
+                    $skuParalId = $line->productId;
 
 
-
-
-                    
-                    $skupParalVariantId=$line->productVariantId;
-                    $skuParalSizeId=$line->productSizeId;
-                    $skuParalShopId=$line->shopId;
-                    $skuParal=$val->remoteShopSellerId;
-
+                    $skupParalVariantId = $line->productVariantId;
+                    $skuParalSizeId = $line->productSizeId;
+                    $skuParalShopId = $line->shopId;
+                    $skuParal = $val->remoteShopSellerId;
 
 
                 } catch (\Throwable $e) {
                     $code = 'non trovato';
                 }
 
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
+                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: " . $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
 
                 $row["supplier"] = $supplier;
 
 
-
-
             }
             $row['remoteOrderSuppllier'] = $remoteOrderSupplierId;
-           $row["orderParal"]  = $orderParal;
+            $row["orderParal"] = $orderParal;
 
-            $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
+            $orderDate = date("D d-m-y H:i",strtotime($val->orderDate));
             $paidAmount = ($val->paidAmount) ? $val->paidAmount : 0;
             if ($val->lastUpdate != null) {
                 $timestamp = time() - strtotime($val->lastUpdate);
-                $day = date("z", $timestamp);
-                $h = date("H", $timestamp);
-                $m = date("i", $timestamp);
+                $day = date("z",$timestamp);
+                $h = date("H",$timestamp);
+                $m = date("i",$timestamp);
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
 
-            $row['remoteOrderSellerId']=$val->remoteOrderSellerId;
-            $shopFind=$shopRepo->findOneBy(['id'=>$val->remoteShopSellerId]);
-            if ($shopFind==null){
-                $row['remoteShopSellerId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
-            }else {
+            $row['remoteOrderSellerId'] = $val->remoteOrderSellerId;
+            $shopFind = $shopRepo->findOneBy(['id' => $val->remoteShopSellerId]);
+            if ($shopFind == null) {
+                $row['remoteShopSellerId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
+            } else {
                 $shopname = $shopFind->title;
                 if ($val->remoteShopSellerId == 44) {
                     $row['remoteShopSellerId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
@@ -231,7 +226,7 @@ class COrderListAjaxController extends AAjaxController
                     $row['remoteShopSellerId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">" . $shopname . "</i>";
                 }
             }
-            if($perm){
+            if ($perm) {
                 $row["id"] = '<a href="' . $opera . $val->id . '" >H-' . $val->id . '</a>';
                 if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
             } else {
@@ -250,7 +245,7 @@ class COrderListAjaxController extends AAjaxController
             }
             try {
                 //TODO CHECK THIS WROOOONG
-                $row['user'] .= '<br />'. $val->billingAddress->country->name;
+                $row['user'] .= '<br />' . $val->billingAddress->country->name;
             } catch (\Throwable $e) {
             }
 
@@ -262,36 +257,49 @@ class COrderListAjaxController extends AAjaxController
             $row['paid'] = $paid;
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
-            $row["notes"] = wordwrap($val->note, 50, '</br>');
+            $row["notes"] = wordwrap($val->note,50,'</br>');
             $userDetails = $val->user->userDetails;
-            $note = ($userDetails) ? wordwrap($val->user->userDetails->note, 50, '</br>') : '-';
+            $note = ($userDetails) ? wordwrap($val->user->userDetails->note,50,'</br>') : '-';
             $row["userNote"] = $note;
             $row["orderSources"] = [];
-            foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder)
-            {
-                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost.'€';
+            foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder) {
+                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name . ' - ' . $campaignVisitHasOrder->campaignVisit->timestamp . ' - ' . $campaignVisitHasOrder->campaignVisit->cost . '€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
-                    $findInvoiceSeller=$invoiceRepo->findOneBy(['orderId'=>$val->id,'invoiceShopId'=>$val->remoteShopSellerId]);
-                if($findInvoiceSeller!=null) {
-                    $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id."&invoiceShopId=".$findInvoiceSeller->invoiceShopId."'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
-                }else {
-                    $row["invoice"] = "";
-                }
-                    $findInvoiceSupplier=$invoiceRepo->findOneBy(['orderId'=>$val->id,'invoiceShopId'=>$skuParalShopId]);
-                    if($findInvoiceSupplier!=null){
-                    $row["invoiceSupplier"]="<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=".$findInvoiceSupplier->id."&invoiceShopId=".$findInvoiceSupplier->invoiceShopId."'>".$findInvoiceSupplier->invoiceNumber."/".$findInvoiceSupplier->invoiceType."</a>";
-                }else{
-                        $row["invoiceSupplier"]="";
-                }
+            $findInvoiceSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+            if ($findInvoiceSeller != null) {
+                $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id . "&invoiceShopId=" . $findInvoiceSeller->invoiceShopId . "'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
+            } else {
+                $row["invoice"] = "";
+            }
+            $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $skuParalShopId]);
 
+            if ($findInvoiceSupplier != null) {
+                $row['invoiceSupplier'] = "";
+
+                foreach ($findInvoiceSupplier as $invoicesSupplier) {
+                    if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
+                        $row["invoiceSupplier"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
+                    } else {
+                        $row["invoiceSupplier"] .= "<br />";
+                    }
+                }
+            } else {
+                $row['invoiceSupplier'] = "";
+            }
+            $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
+            if ($findInvoiceToSeller != null) {
+                $row['invoiceToSeller'] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
+            } else {
+                $row['invoiceToSeller'] = "";
+            }
 
 
             /** Get doc */
             $fileName = "";
             /** @var CInvoiceDocument $iD */
-            foreach ($val->invoiceDocument as $iD){
-                $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/".$iD->id."'>".$iD->fileName."</a></br>";
+            foreach ($val->invoiceDocument as $iD) {
+                $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/" . $iD->id . "'>" . $iD->fileName . "</a></br>";
             }
 
             $row["documents"] = $fileName;
@@ -299,19 +307,19 @@ class COrderListAjaxController extends AAjaxController
             $addressOrder = '';
             $address = CUserAddress::defrost($val->frozenShippingAddress);
             $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
-            $tableAddress = $val->user->userAddress->findOneByKey('id', $address->id);
-            if(!$tableAddress){
+            $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
+            if (!$tableAddress) {
                 $addressOrder .= "Attenzione, l'utente ha eliminato l'indirizzo in spedizione";
-            } else if($address->checkSum() != $tableAddress->checkSum()){
+            } else if ($address->checkSum() != $tableAddress->checkSum()) {
                 $addressOrder .= ">Attenzione, l'utente ha modificato il suo indirizzo dopo aver effettuato l'ordine";
             }
 
             $country = $countryR->findOneBy(['id' => $address->countryId]);
-            if($country!=null){
-                $countryName=$country->name;
+            if ($country != null) {
+                $countryName = $country->name;
 
-            }else{
-                $countryName='';
+            } else {
+                $countryName = '';
             }
             $phone = is_null($address->phone) ? '---' : $address->phone;
             $addressOrder .= "
@@ -321,7 +329,7 @@ class COrderListAjaxController extends AAjaxController
              <span><strong>Città: </strong>$address->city</span><br>
              <span><strong>Provincia: </strong>$address->province</span><br>
              <span><strong>Paese:</strong>";
-            $addressOrder.=$countryName."</span><br>
+            $addressOrder .= $countryName . "</span><br>
              <span><strong>Telefono: </strong>$phone</span><br>";
 
             $row["address"] = $addressOrder;
@@ -347,39 +355,39 @@ class COrderListAjaxController extends AAjaxController
         $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
         $ushoR = \Monkey::app()->repoFactory->create('UserSessionHasOrder');
         $cvhoR = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
+        $eloyoR=\Monkey::app()->repoFactory->create('EloyVoucher');
 
         $dba = \Monkey::app()->dbAdapter;
-        $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-        $shopId=$orderRepo->remoteShopSellerId;
-        if($shopId==null){
-            $shopId=44;
+        $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+        $shopId = $orderRepo->remoteShopSellerId;
+        if ($shopId == null) {
+            $shopId = 44;
         }
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
         $db_host = $shopRepo->dbHost;
         $db_name = $shopRepo->dbName;
         $db_user = $shopRepo->dbUsername;
         $db_pass = $shopRepo->dbPassword;
         try {
 
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             $res = ' connessione ok <br>';
         } catch (PDOException $e) {
             $res = $e->getMessage();
         }
-        if(ENV == 'prod') {
+        if (ENV == 'prod') {
             $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
             $stmtOrder->execute();
-            $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
-            foreach ($orderLineCancel as $orlc){
-                $remoteIdOrderLine=$orlc->remoteOrderLineSellerId;
-                $remoteStatusOrderLine=$orlc->status;
-                $remoteOrderId=$orlc->remoteOrderSellerId;
+            $orderLineCancel = \Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId' => $orderId]);
+            foreach ($orderLineCancel as $orlc) {
+                $remoteIdOrderLine = $orlc->remoteOrderLineSellerId;
+                $remoteStatusOrderLine = $orlc->status;
+                $remoteOrderId = $orlc->remoteOrderSellerId;
                 $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
                 $stmtOrderLine->execute();
             }
         }
-
 
 
         $order = $oR->findOne([$orderId]);
@@ -400,7 +408,7 @@ class COrderListAjaxController extends AAjaxController
                 $qtyToRestore = [];
                 foreach ($order->orderLine as $ol) {
 
-                    if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId, $qtyToRestore)) {
+                    if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId,$qtyToRestore)) {
                         $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] = 0;
                     }
                     $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] += 1;
@@ -426,7 +434,7 @@ class COrderListAjaxController extends AAjaxController
                               ON `s`.`id` = `sl`.`storehouseOperationId` 
                               WHERE `s`.`shopId` = ?  AND `sl`.`productId` = ? AND `sl`.`productVariantId` = ? 
                               AND `sl`.`productSizeId` = ? AND `s`.`creationDate` >= ? AND `s`.`creationDate` < ?";
-                        $res = $dba->query($query, [
+                        $res = $dba->query($query,[
                             $ol->shopId,
                             $ol->productId,
                             $ol->productVariantId,
@@ -474,7 +482,7 @@ class COrderListAjaxController extends AAjaxController
 
                 foreach ($order->orderLine as $ol) {
 
-                    $logolz = $logR->findBy(['stringId' => $ol->printId(), 'entityName' => 'OrderLine']);
+                    $logolz = $logR->findBy(['stringId' => $ol->printId(),'entityName' => 'OrderLine']);
                     foreach ($logolz as $logol) {
                         $logol->delete();
                     }
@@ -488,37 +496,44 @@ class COrderListAjaxController extends AAjaxController
                 }
 
 
-                $logOrderz = $logR->findBy(['stringId' => $orderId, 'entityName' => 'Order']);
+                $logOrderz = $logR->findBy(['stringId' => $orderId,'entityName' => 'Order']);
                 foreach ($logOrderz as $logOrd) {
                     $logOrd->delete();
                 }
-                $order->delete();
-                $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-                $shopId=$orderRepo->remoteShopSellerId;
-                if($shopId==null){
-                    $shopId=44;
+                $EloyVoucherR=$eloyoR->findBy(['stringId' => $orderId,'entityName' => 'EloyVoucher']);
+                if($EloyVoucherR1=null) {
+                    foreach ($EloyVoucherR as $eloyV) {
+                        $eloyV->delete();
+                    }
                 }
-                $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+
+                $order->delete();
+                $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+                $shopId = $orderRepo->remoteShopSellerId;
+                if ($shopId == null) {
+                    $shopId = 44;
+                }
+                $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
                 $db_host = $shopRepo->dbHost;
                 $db_name = $shopRepo->dbName;
                 $db_user = $shopRepo->dbUsername;
                 $db_pass = $shopRepo->dbPassword;
                 try {
 
-                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                    $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                    $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
                     $res = ' connessione ok <br>';
                 } catch (PDOException $e) {
                     $res = $e->getMessage();
                 }
-                if(ENV==='prod') {
+                if (ENV === 'prod') {
                     $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
                     $stmtOrder->execute();
-                    $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
-                    foreach ($orderLineCancel as $orlc){
-                        $remoteIdOrderLine=$orlc->remoteOrderLineSellerId;
-                        $remoteStatusOrderLine=$orlc->status;
-                        $remoteOrderId=$orlc->remoteOrderSellerId;
+                    $orderLineCancel = \Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId' => $orderId]);
+                    foreach ($orderLineCancel as $orlc) {
+                        $remoteIdOrderLine = $orlc->remoteOrderLineSellerId;
+                        $remoteStatusOrderLine = $orlc->status;
+                        $remoteOrderId = $orlc->remoteOrderSellerId;
                         $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
                         $stmtOrderLine->execute();
                     }
@@ -544,7 +559,7 @@ class COrderListAjaxController extends AAjaxController
             ['column' => 'o.lastUpdate']
         ];
         $dbOrderingDefault = [
-            ['column' => 'o.creationDate', 'dir' => 'desc']
+            ['column' => 'o.creationDate','dir' => 'desc']
         ];
 
         $sqlOrder = " ORDER BY ";
@@ -553,11 +568,11 @@ class COrderListAjaxController extends AAjaxController
                 $sqlOrder .= $dbOrderingColumns[$column['column']]['column'] . " " . $column['dir'] . ", ";
             }
         }
-        if (substr($sqlOrder, -1, 2) != ', ') {
+        if (substr($sqlOrder,-1,2) != ', ') {
             foreach ($dbOrderingDefault as $column) {
                 $sqlOrder .= $column['column'] . ' ' . $column['dir'] . ', ';
             }
         }
-        return rtrim($sqlOrder, ', ');
+        return rtrim($sqlOrder,', ');
     }
 }
