@@ -501,13 +501,11 @@ class COrderListAjaxController extends AAjaxController
                     $logOrd->delete();
                 }
                 $EloyVoucherR=$eloyoR->findBy(['stringId' => $orderId,'entityName' => 'EloyVoucher']);
-                if($EloyVoucherR1=null) {
+                if($EloyVoucherR1==null) {
                     foreach ($EloyVoucherR as $eloyV) {
                         $eloyV->delete();
                     }
                 }
-
-                $order->delete();
                 $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
                 $shopId = $orderRepo->remoteShopSellerId;
                 if ($shopId == null) {
@@ -538,6 +536,9 @@ class COrderListAjaxController extends AAjaxController
                         $stmtOrderLine->execute();
                     }
                 }
+
+                $order->delete();
+
 
                 \Monkey::app()->repoFactory->commit();
                 return "Ordine eliminato!";
