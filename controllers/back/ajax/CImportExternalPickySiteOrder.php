@@ -667,6 +667,7 @@ class CImportExternalPickySiteOrder extends AAjaxController
 
         }
 
+
         return $res;
 
 
