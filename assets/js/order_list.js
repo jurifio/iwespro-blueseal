@@ -25,7 +25,7 @@ $(document).on('bs.order.delete.panic', function(){
             okButtonEvent: function(){
                 $.ajax(
                     {
-                        url: '/blueseal/xhr/OrderDeleteCompleteListAjaxController',
+                        url: '/blueseal/xhr/OrderDeleteCompleteAjaxController',
                         method: 'DELETE',
                         data: {orderId: orderId}
                     }

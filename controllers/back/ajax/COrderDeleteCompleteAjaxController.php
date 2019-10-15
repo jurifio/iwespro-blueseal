@@ -257,6 +257,6 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
 
         }
         $orderRepo->delete();
-
+return $res='ok';
     }
 }
