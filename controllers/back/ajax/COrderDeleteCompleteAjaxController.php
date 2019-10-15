@@ -38,7 +38,7 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
         $orderId = \Monkey::app()->router->request()->getRequestData('orderId');
         if (!$orderId) throw new \Exception('Id ordine non pervenuto. Non posso cancellarlo');
 
-        $orderHistoryRepo = \Monkey::app()->repoFactory->create('Order');
+        $orderHistoryRepo = \Monkey::app()->repoFactory->create('OrderHistory');
         $fidelityBalanceRepo = \Monkey::app()->repoFactory->create('FidelityBalance');
         $logRepo = \Monkey::app()->repoFactory->create('Log');
         $storehouseHoperationLineRepo = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
@@ -84,10 +84,10 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
         }
         if ($shopId != null || $shopId != 44) {
             try {
-                $stmtCampaignVisitHasOrder = $db_con->prepare('DELETE FROM CampaignVisit WHERE orderId=' . $orderRepo->remoteOrderSellerId);
+                $stmtCampaignVisitHasOrder = $db_con->prepare('DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $orderRepo->remoteOrderSellerId);
                 $stmtCampaignVisitHasOrder->execute();
             } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione CampaignVisitHasOrder','DELETE FROM CampaignVisit WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
+                \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione CampaignVisitHasOrder','DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
             }
         }
         try {
@@ -168,7 +168,7 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
         }
         $orderLineCancel = \Monkey::app()->repoFactory->create('OrderLine')->findBy(['orderId' => $orderId]);
         foreach ($orderLineCancel as $orlc) {
-            if($orlc->remoteShopSupplierId!=null){
+            if($orlc->remoteOrderSupplierId!=null){
               $remoteOrderSupplierId=$orlc->remoteOrderSupplierId;
               $shopSupplierId=$orlc->shopId;
 
@@ -204,10 +204,10 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
                 }
                 if ($shopId != null || $shopId != 44) {
                     try {
-                        $stmtCampaignVisitHasOrder = $db_con->prepare('DELETE FROM CampaignVisit WHERE orderId=' . $remoteOrderSupplierId);
+                        $stmtCampaignVisitHasOrder = $db_con->prepare('DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $remoteOrderSupplierId);
                         $stmtCampaignVisitHasOrder->execute();
                     } catch (\Throwable $e) {
-                        \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione CampaignVisitHasOrder Parallel','DELETE FROM CampaignVisit WHERE orderId=' . $remoteOrderSupplierId,'');
+                        \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione CampaignVisitHasOrder Parallel','DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $remoteOrderSupplierId,'');
                     }
                 }
                 try {
