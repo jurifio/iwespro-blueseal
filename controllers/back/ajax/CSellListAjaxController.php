@@ -273,18 +273,33 @@ class CSellListAjaxController extends AAjaxController
                 $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost.'€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
-                    $findInvoiceSeller=$invoiceRepo->findOneBy(['orderId'=>$val->id,'invoiceShopId'=>$val->remoteShopSellerId]);
-                if($findInvoiceSeller!=null) {
-                    $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id."&invoiceShopId=".$findInvoiceSeller->invoiceShopId."'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
-                }else {
-                    $row["invoice"] = "";
+            $findInvoiceSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+            if ($findInvoiceSeller != null) {
+                $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id . "&invoiceShopId=" . $findInvoiceSeller->invoiceShopId . "'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
+            } else {
+                $row["invoice"] = "";
+            }
+            $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $skuParalShopId]);
+
+            if ($findInvoiceSupplier != null) {
+                $row['invoiceSupplier'] = "";
+
+                foreach ($findInvoiceSupplier as $invoicesSupplier) {
+                    if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
+                        $row["invoiceSupplier"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
+                    } else {
+                        $row["invoiceSupplier"] .= "<br />";
+                    }
                 }
-                    $findInvoiceSupplier=$invoiceRepo->findOneBy(['orderId'=>$val->id,'invoiceShopId'=>$skuParalShopId]);
-                    if($findInvoiceSupplier!=null){
-                    $row["invoiceSupplier"]="<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=".$findInvoiceSupplier->id."&invoiceShopId=".$findInvoiceSupplier->invoiceShopId."'>".$findInvoiceSupplier->invoiceNumber."/".$findInvoiceSupplier->invoiceType."</a>";
-                }else{
-                        $row["invoiceSupplier"]="";
-                }
+            } else {
+                $row['invoiceSupplier'] = "";
+            }
+            $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
+            if ($findInvoiceToSeller != null) {
+                $row['invoiceToSeller'] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
+            } else {
+                $row['invoiceToSeller'] = "";
+            }
 
 
 

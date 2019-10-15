@@ -30,7 +30,6 @@
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500,1000,2000"
                                data-display-length="50">
-                            <thead>
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
@@ -136,12 +135,17 @@
                                 <th data-slug="invoice"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura Seller
+                                    class="center">Fattura del Seller
+                                </th>
+                                <th data-slug="invoiceToSeller"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Fattura Di Iwes su Seller
                                 </th>
                                 <th data-slug="invoiceSupplier"
                                     data-searchable="true"
                                     data-orderable="false"
-                                    class="center">Fattura Supplier
+                                    class="center">Fattura del Supplier
                                 </th>
                                 <th data-slug="documents"
                                     data-searchable="true"
