@@ -71,9 +71,29 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12 col-md-12">
-                                                    <div class="form-group form-group-default">
+                                                    <div class="form-group form-group-default  ">
                                                         <label class="">Note di Spedizione</label>
                                                         <input id="shipmentNote" name="order_shipmentNote" autocomplete="off" class="full-width" value="<?php echo $order->shipmentNote ?>"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label class="">Tipo di Spedizione</label>
+                                                        <select id="isShippingToIwes" name="isShippingToIwes" class="full-width"
+                                                                placeholder="Seleziona il tipo "
+                                                                data-init-plugin="selectize" tabindex="-1"
+                                                                <?php if($order->isShippingToIwes==1){?>
+                                                        <option value="" >Seleziona</option>
+                                                        <option value="1" selected="selected">Spedizione Gestita da Iwes</option>
+                                                        <option value="">Spedizione in dropShipping</option>
+                                                                <?php } else {?>
+                                                         <option value="" >Seleziona</option>
+                                                        <option value="1" >Spedizione Gestita da Iwes</option>
+                                                        <option value="null" selected="selected">Spedizione in dropShipping</option>
+                                                                <?php }?>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>

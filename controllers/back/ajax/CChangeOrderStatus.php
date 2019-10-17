@@ -59,6 +59,7 @@ class CChangeOrderStatus extends AAjaxController
 
                 $order->note = $datas['order_note'] ?? null;
                 $order->shipmentNote = $datas['order_shipmentNote'] ?? null;
+                $order->isShippingToIwes=$datas['isShippingToIwes'] ?? null;
                 $order->update();
             }
             \Monkey::app()->repoFactory->commit();
