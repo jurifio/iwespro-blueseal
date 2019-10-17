@@ -203,7 +203,7 @@ class COrderListAjaxController extends AAjaxController
             $row['remoteOrderSuppllier'] = $remoteOrderSupplierId;
             $row["orderParal"] = $orderParal;
 
-            $orderDate = date("D d-m-y H:i",strtotime($val->orderDate));
+            $orderDate = date("d-m-y H:i",strtotime($val->orderDate));
             $paidAmount = ($val->paidAmount) ? $val->paidAmount : 0;
             if ($val->lastUpdate != null) {
                 $timestamp = time() - strtotime($val->lastUpdate);
