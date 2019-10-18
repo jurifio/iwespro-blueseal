@@ -47,11 +47,17 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
         $eloyVoucherRepo = \Monkey::app()->repoFactory->create('EloyVoucher');
         $invoiceDocumentRepo=\Monkey::app()->repoFactory->create('InvoiceDocument');
         $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
+        $orderLineHasShipmentRepo=\Monkey::app()->repoFactory->create('OrderLineHasShipment');
 
 
 
 
         $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+        iwesMail(
+            'gianluca@iwes.it','Cancellazione ordine', "Hai 
+            cancellato ha rifiutato l'ordine: " .
+             $orderId. " con remoteShopSellerId=".$orderRepo->remoteShopSellerId
+        );
         $shopId = $orderRepo->remoteShopSellerId;
         if ($shopId == null) {
             $shopId = 44;
@@ -68,6 +74,12 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
             $res = ' connessione ok <br>';
         } catch (PDOException $e) {
             $res = $e->getMessage();
+        }
+        try {
+            $stmtOrderLineStatistics = $db_con->prepare('DELETE FROM  OrderLineStatistics WHERE orderId=' . $orderRepo->remoteOrderSellerId);
+            $stmtOrderLineStatistics->execute();
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione OrderHistory','DELETE FROM  OrderLineStatistics WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
         }
 
         try {
@@ -97,7 +109,7 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
             \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione Invoice','DELETE FROM Invoice WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
         }
         try {
-            $stmtEloyVoucher = $sb_con->prepare('DELETE FROM EloyVoucher WHERE orderId=' . $orderRepo->remoteOrderSellerId);
+            $stmtEloyVoucher = $db_con->prepare('DELETE FROM EloyVoucher WHERE orderId=' . $orderRepo->remoteOrderSellerId);
             $stmtEloyVoucher->execute();
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione EloyVoucher','DELETE FROM EloyVoucher WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
@@ -105,7 +117,7 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
 
         if ($shopId != null || $shopId != 44) {
             try {
-                $stmtShopMovements = $b_con->prepare('DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId);
+                $stmtShopMovements = $db_con->prepare('DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId);
                 $stmtShopMovements->execute();
             } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione ShopMovementes','DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
@@ -116,6 +128,12 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
             $stmtInvoiceDocument->execute();
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione InvoiceDocument','DELETE FROM InvoiceDocument WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
+        }
+        try {
+            $stmtOrderLineHasShipment = $db_con->prepare('DELETE FROM OrderLineHasShipment WHERE orderId=' . $orderRepo->remoteOrderSellerId);
+            $stmtOrderLineHasShipment->execute();
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione OrderLineHasShipment','DELETE FROM OrderLineHasShipment WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
         }
         try {
             $stmtOrderLine = $db_con->prepare('DELETE FROM OrderLine WHERE orderId=' . $orderRepo->remoteOrderSellerId);
@@ -148,6 +166,12 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
                 $id->delete();
                 }
         }
+        $orderLineHasShipment=$orderLineHasShipmentRepo->findBy(['orderId' => $orderRepo->id]);
+        if ($orderLineHasShipment != null) {
+            foreach ($orderLineHasShipment as $io) {
+                $io->delete();
+            }
+        }
         $invoice=$invoiceRepo->findBy(['orderId' => $orderRepo->id]);
         if ($invoice != null) {
             foreach ($invoice as $i) {
@@ -167,6 +191,8 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
             }
         }
         $orderLineCancel = \Monkey::app()->repoFactory->create('OrderLine')->findBy(['orderId' => $orderId]);
+
+
         foreach ($orderLineCancel as $orlc) {
             if($orlc->remoteOrderSupplierId!=null){
               $remoteOrderSupplierId=$orlc->remoteOrderSupplierId;
@@ -189,62 +215,74 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
                 } catch (PDOException $e) {
                     $res1 = $e->getMessage();
                 }
+                try {
+                    $stmtOrderLineStatistics = $db_con1->prepare('DELETE FROM  OrderLineStatistics WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtOrderLineStatistics->execute();
+                } catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione OrderHistory','DELETE FROM  OrderLineStatistics WHERE orderId=' . $remoteOrderSupplierId,'');
+                }
 
                 try {
-                    $stmtOrderHistory = $db_con->prepare('DELETE FROM  OrderHistory WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtOrderHistory = $db_con1->prepare('DELETE FROM  OrderHistory WHERE orderId=' . $remoteOrderSupplierId);
                     $stmtOrderHistory->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione OrderHistory Parallel','DELETE FROM  OrderHistory WHERE orderId=' . $remoteOrderSupplierId,'');
                 }
                 try {
-                    $stmtFidelityBalance = $db_con->prepare('DELETE FROM FidelityBalance WHERE  orderId=' . $orderRepo->remoteOrderSellerId);
+                    $stmtFidelityBalance = $db_con1->prepare('DELETE FROM FidelityBalance WHERE  orderId=' . $orderRepo->remoteOrderSellerId);
                     $stmtFidelityBalance->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione fidelityBalance Parallel','DELETE FROM FidelityBalance WHERE  orderId=' .$remoteOrderSupplierId,'');
                 }
                 if ($shopId != null || $shopId != 44) {
                     try {
-                        $stmtCampaignVisitHasOrder = $db_con->prepare('DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $remoteOrderSupplierId);
+                        $stmtCampaignVisitHasOrder = $db_con1->prepare('DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $remoteOrderSupplierId);
                         $stmtCampaignVisitHasOrder->execute();
                     } catch (\Throwable $e) {
                         \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione CampaignVisitHasOrder Parallel','DELETE FROM CampaignVisitHasOrder WHERE orderId=' . $remoteOrderSupplierId,'');
                     }
                 }
                 try {
-                    $stmtInvoice = $db_con->prepare('DELETE FROM Invoice WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtInvoice = $db_con1->prepare('DELETE FROM Invoice WHERE orderId=' . $remoteOrderSupplierId);
                     $stmtInvoice->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione Invoice Parallel','DELETE FROM Invoice WHERE orderId=' . $remoteOrderSupplierId,'');
                 }
                 try {
-                    $stmtEloyVoucher = $sb_con->prepare('DELETE FROM EloyVoucher WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtEloyVoucher = $db_con1->prepare('DELETE FROM EloyVoucher WHERE orderId=' . $remoteOrderSupplierId);
                     $stmtEloyVoucher->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione EloyVoucher Parallel ','DELETE FROM EloyVoucher WHERE orderId=' . $remoteOrderSupplierId,'');
                 }
+                try {
+                    $stmtOrderLineHasShipment = $db_con1->prepare('DELETE FROM OrderLineHasShipment WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtOrderLineHasShipment->execute();
+                } catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione OrderLineHasShipment','DELETE FROM OrderLineHasShipment WHERE orderId=' . $remoteOrderSupplierId,'');
+                }
 
                 if ($shopId != null || $shopId != 44) {
                     try {
-                        $stmtShopMovements = $b_con->prepare('DELETE FROM ShopMovements WHERE orderId=' . $remoteOrderSupplierId);
+                        $stmtShopMovements = $db_con1->prepare('DELETE FROM ShopMovements WHERE orderId=' . $remoteOrderSupplierId);
                         $stmtShopMovements->execute();
                     } catch (\Throwable $e) {
                         \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione ShopMovementes Parallel ','DELETE FROM ShopMovements WHERE orderId=' . $remoteOrderSupplierId,'');
                     }
                 }
                 try {
-                    $stmtInvoiceDocument = $db_con->prepare('DELETE FROM InvoiceDocument WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtInvoiceDocument = $db_con1->prepare('DELETE FROM InvoiceDocument WHERE orderId=' . $remoteOrderSupplierId);
                     $stmtInvoiceDocument->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione InvoiceDocument Parallel','DELETE FROM InvoiceDocument WHERE orderId=' . $remoteOrderSupplierId,'');
                 }
                 try {
-                    $stmtOrderLine = $db_con->prepare('DELETE FROM OrderLine WHERE orderId=' . $remoteOrderSupplierId);
+                    $stmtOrderLine = $db_con1->prepare('DELETE FROM OrderLine WHERE orderId=' . $remoteOrderSupplierId);
                     $stmtOrderLine->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione OrderLine Parallel','DELETE FROM OrderLine WHERE orderId=' . $remoteOrderSupplierId,'');
                 }
                 try {
-                    $stmtOrder = $db_con->prepare(' DELETE FROM `Order` WHERE id=' . $remoteOrderSupplierId);
+                    $stmtOrder = $db_con1->prepare(' DELETE FROM `Order` WHERE id=' . $remoteOrderSupplierId);
                     $stmtOrder->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione Order','DELETE FROM `Order` WHERE id=' . $remoteOrderSupplierId,'');
