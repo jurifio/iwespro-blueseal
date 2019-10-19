@@ -382,7 +382,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.creationDate as creationDate,
                                                c.isParallel as isParallel,
                                                c.isImport as isImport
-                                               from Cart c join User U on c.userId = U.id WHERE isParallel is null  AND isImport is null  order BY remoteCartSellerId ASC    ');
+                                               from Cart c join User U on c.userId = U.id WHERE isParallel is null  AND c.isImport is null  order BY remoteCartSellerId ASC    ');
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
@@ -391,23 +391,23 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                         $userEmailFind = $userRepo -> findOneBy(['email' => $rowCart['email']]);
                         if ($userEmailFind !== null) {
                             $userId = $userEmailFind -> id;
-                                    $insertCart = $cartRepo -> getEmptyEntity();
-                                    if ($rowCart['couponId'] != '') {
-                                        $FindCoupon = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
-                                        if ($FindCoupon != null) {
-                                            $insertCart -> couponId = $FindCoupon -> id;
-
-                                        }
-                                    }
-                                    $insertCart -> orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
-                                    $insertCart -> userId = $userId;
-                                    $insertCart -> cartTypeId = $rowCart['cartTypeId'];
-                                    $insertCart -> lastUpdate = $rowCart['lastUpdate'];
-                                    $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
-                                    $insertCart -> remoteShopSellerId = $shop;
-                                    $insertCart -> insert();
+                            $insertCart = $cartRepo -> getEmptyEntity();
+                            if ($rowCart['couponId'] != '') {
+                                $FindCoupon = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
+                                if ($FindCoupon != null) {
+                                    $insertCart -> couponId = $FindCoupon -> id;
 
                                 }
+                            }
+                            $insertCart -> orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
+                            $insertCart -> userId = $userId;
+                            $insertCart -> cartTypeId = $rowCart['cartTypeId'];
+                            $insertCart -> lastUpdate = $rowCart['lastUpdate'];
+                            $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
+                            $insertCart -> remoteShopSellerId = $shop;
+                            $insertCart -> insert();
+
+                        }
 
                     } else {
 
@@ -431,7 +431,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                             cl.productSizeId as productSizeId,
                                             cl.isParallel as isParallel,
                                             cl.isImport as isImport 
-                                            from CartLine cl WHERE isParallel is null AND isImport is null');
+                                            from CartLine cl WHERE isParallel is null AND cl.isImport is null');
                 $stmtCartLine -> execute();
                 while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
                     $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
@@ -501,7 +501,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.marketplaceId as marketplaceId,
                                                o.marketplaceOrderId as marketplaceOrderId,
                                                o.isImport as isImport
-                                               from `Order` o join User U on o.userId = U.id WHERE isParallel is null  AND isImport is null  ');
+                                               from `Order` o join User U on o.userId = U.id WHERE isParallel is null  AND o.isImport is null  ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
 
@@ -604,8 +604,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note,
-                                     ol.isParallel as isParallel
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null');
+                                     ol.isParallel as isParallel,
+									 ol.isImport as isImport
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null and ol.isImport is null');
                 } else {
                     $stmtOrderLine = $db_con->prepare('SELECT 
                                      ol.id AS remoteOrderLineSellerId,
@@ -697,7 +698,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
-                $stmtOrderLineUpdate=$db_con->prepare('UPDATE CouponType SET isImport=1  WHERE isImport = null');
+                $stmtOrderLineUpdate=$db_con->prepare('UPDATE OrderLine SET isImport=1  WHERE isImport = null');
                 $stmtOrderLineUpdate->execute();
 
             } catch (\throwable $e) {
