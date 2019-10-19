@@ -116,7 +116,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ud.fiscalCode as fiscalCode,
                                      ud.note as note
                                      FROM User  u
-                                      JOIN UserDetails ud ON u.id = ud.userId", $shop));
+                                      JOIN UserDetails ud ON u.id = ud.userId WHERE u.isImport is null", $shop));
                 $stmtUser -> execute();
                 while ($rowUser = $stmtUser -> fetch(PDO::FETCH_ASSOC)) {
                     $checkUserIfExist = $userRepo -> findOneBy(['email' => $rowUser['email']]);
@@ -167,6 +167,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtUserUpdate=$db_con->prepare('UPDATE User SET isImport=1  WHERE isImport=null');
+                $stmtUserUpdate->execute();
             } catch (\throwable $e) {
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore User ' . $e);
             }
@@ -188,7 +190,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                           us.countryId as countryId,
                                                           us.phone     as phone,
                                                           us.lastUsed  as lastUsed,
-                                                          us.fiscalCode as fiscalCode from UserAddress us');
+                                                          us.fiscalCode as fiscalCode from UserAddress us where us.isImport is null');
 
                 $stmtUserAddress -> execute();
                 while ($rowUserAddress = $stmtUserAddress -> fetch(PDO::FETCH_ASSOC)) {
@@ -225,6 +227,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtUserUpdate=$db_con->prepare('UPDATE UserAddress SET isImport=1  WHERE isImport = null');
+                $stmtUserUpdate->execute();
             } catch (\throwable $e) {
 
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore User Address' . $e);
@@ -241,7 +245,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                            ct.validForCartTotal as validForCartTotal,
                                            ct.hasFreeShipping as hasFreeShipping,
                                            ct.hasFreeReturn as hasFreeReturn
-                                           FROM CouponType ct");
+                                           FROM CouponType ct WHERE ct.isImport is null ");
                 $stmtCouponType -> execute();
                 while ($rowCouponType = $stmtCouponType -> fetch(PDO::FETCH_ASSOC)) {
                     $checkCouponTypeIfExist = $couponTypeRepo -> findOneBy(['remoteId' => $rowCouponType['remoteId'], 'remoteShopId' => $shop]);
@@ -264,6 +268,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtCouponTypeUpdate=$db_con->prepare('UPDATE CouponType SET isImport=1  WHERE isImport = null');
+                $stmtCouponTypeUpdate->execute();
             } catch (\throwable $e) {
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Coupon Type  ' . $e);
             }
@@ -278,7 +284,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                       ce.click as click,
                                                       ce.startDate as startDate,
                                                       ce.endDate as endDate
-                                                      FROM CouponEvent ce');
+                                                      FROM CouponEvent ce WHERE ce.isImport is null');
                 $stmtCouponEvent -> execute();
                 while ($rowCouponEvent = $stmtCouponEvent -> fetch(PDO::FETCH_ASSOC)) {
                     $checkCouponEventIfExist = $couponEventRepo -> findOneBy(['remoteId' => $rowCouponEvent['remoteId'], 'name' => $rowCouponEvent['name'], 'remoteShopId' => $shop]);
@@ -304,6 +310,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtCouponEventUpdate=$db_con->prepare('UPDATE CouponEvent SET isImport=1  WHERE isImport = null');
+                $stmtCouponEventUpdate->execute();
             } catch (\throwable $e) {
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore Coupon Event ' . $e);
             }
@@ -320,7 +328,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                  co.userId as userId,
                                                  co.valid as valid,
                                                  co.couponEventId as couponEventId
-                                                 from Coupon co');
+                                                 from Coupon co WHERE co.isImport is null');
                 $stmtCoupon -> execute();
                 while ($rowCoupon = $stmtCoupon -> fetch(PDO::FETCH_ASSOC)) {
                     $checkCouponIfExist = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['remoteId'], 'remoteShopId' => $shop]);
@@ -353,6 +361,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtCouponUpdate=$db_con->prepare('UPDATE Coupon SET isImport=1  WHERE isImport = null');
+                $stmtCouponUpdate->execute();
             } catch (\throwable $e) {
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore Coupon ' . $e);
             }
@@ -370,8 +380,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
                                                c.creationDate as creationDate,
-                                               c.isParallel as isParallel
-                                               from Cart c join User U on c.userId = U.id WHERE isParallel is null  order BY remoteCartSellerId ASC    ');
+                                               c.isParallel as isParallel,
+                                               c.isImport as isImport
+                                               from Cart c join User U on c.userId = U.id WHERE isParallel is null  AND isImport is null  order BY remoteCartSellerId ASC    ');
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
@@ -404,6 +415,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtCartUpdate=$db_con->prepare('UPDATE Cart SET isImport=1  WHERE isImport = null');
+                $stmtCartUpdate->execute();
             } catch (\throwable $e) {
                 $this->report('CImportExternalPickysiteOrder', 'error', 'Errore Cart ' . $e);
             }
@@ -416,8 +429,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                             cl.productId as productId,
                                             cl.productVariantId as productVariantId,
                                             cl.productSizeId as productSizeId,
-                                            cl.isParallel as isParallel
-                                            from CartLine cl WHERE isParallel is null');
+                                            cl.isParallel as isParallel,
+                                            cl.isImport as isImport 
+                                            from CartLine cl WHERE isParallel is null AND isImport is null');
                 $stmtCartLine -> execute();
                 while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
                     $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
@@ -442,6 +456,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtCartLineUpdate=$db_con->prepare('UPDATE CartLine SET isImport=1  WHERE isImport = null');
+                $stmtCartLineUpdate->execute();
             } catch (\throwable $e) {
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore CartLine ' . $e);
             }
@@ -483,8 +499,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.isParallel as isParallel,
                                                o.isOrderMarketplace as isOrderMarketplace,
                                                o.marketplaceId as marketplaceId,
-                                               o.marketplaceOrderId as marketplaceOrderId
-                                               from `Order` o join User U on o.userId = U.id WHERE isParallel is null ');
+                                               o.marketplaceOrderId as marketplaceOrderId,
+                                               o.isImport as isImport
+                                               from `Order` o join User U on o.userId = U.id WHERE isParallel is null  AND isImport is null  ');
                 $stmtOrder->execute();
                 while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
 
@@ -552,6 +569,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtOrderUpdate=$db_con->prepare('UPDATE `Order` SET isImport=1  WHERE isImport = null');
+                $stmtOrderUpdate->execute();
 
             } catch (\throwable $e) {
                 $this->report('CImportExternalPickysiteOrderJob', 'error', 'Errore Order' . $e);
@@ -615,8 +634,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note,
-                                     ol.isParallel as isParallel
-                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null ');
+                                     ol.isParallel as isParallel,
+                                     ol.isImport as isImport   
+                                     FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null  AND isImport is null');
                 }
                 $stmtOrderLine->execute();
                 while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
@@ -677,6 +697,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
+                $stmtOrderLineUpdate=$db_con->prepare('UPDATE CouponType SET isImport=1  WHERE isImport = null');
+                $stmtOrderLineUpdate->execute();
 
             } catch (\throwable $e) {
                 $this->report('CImportExternalPickysiteOrderJob', 'error', 'Errore OrderLine ' . $e);
