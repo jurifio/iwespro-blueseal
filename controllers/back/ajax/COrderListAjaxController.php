@@ -266,12 +266,15 @@ class COrderListAjaxController extends AAjaxController
                 $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name . ' - ' . $campaignVisitHasOrder->campaignVisit->timestamp . ' - ' . $campaignVisitHasOrder->campaignVisit->cost . '€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
-            $findInvoiceSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+            $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
             if ($findInvoiceSeller != null) {
-                $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id . "&invoiceShopId=" . $findInvoiceSeller->invoiceShopId . "'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
+                foreach ($findInvoiceSeller as $invoiceSeller) {
+                    $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
+                }
             } else {
                 $row["invoice"] = "";
             }
+
             $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $skuParalShopId]);
 
             if ($findInvoiceSupplier != null) {
@@ -355,7 +358,7 @@ class COrderListAjaxController extends AAjaxController
         $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
         $ushoR = \Monkey::app()->repoFactory->create('UserSessionHasOrder');
         $cvhoR = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
-        $eloyoR=\Monkey::app()->repoFactory->create('EloyVoucher');
+        $eloyoR = \Monkey::app()->repoFactory->create('EloyVoucher');
 
         $dba = \Monkey::app()->dbAdapter;
         $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
@@ -500,8 +503,8 @@ class COrderListAjaxController extends AAjaxController
                 foreach ($logOrderz as $logOrd) {
                     $logOrd->delete();
                 }
-                $EloyVoucherR=$eloyoR->findBy(['stringId' => $orderId,'entityName' => 'EloyVoucher']);
-                if($EloyVoucherR1==null) {
+                $EloyVoucherR = $eloyoR->findBy(['stringId' => $orderId,'entityName' => 'EloyVoucher']);
+                if ($EloyVoucherR1 == null) {
                     foreach ($EloyVoucherR as $eloyV) {
                         $eloyV->delete();
                     }
