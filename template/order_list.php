@@ -73,16 +73,11 @@
                                     data-orderable="true"
                                     class="center">Ordine<br>Parallelo
                                 </th>
-
-                                <th data-slug="marketplaceOrderId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Marketplace<br>Order
-                                </th>
                                 <th data-slug="marketplaceName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Marketplace<br>Shop
+                                    class="center">Marketplace<br/>
+                                    Shop<br />Order
                                 </th>
                                 <th data-slug="notes"
                                     data-searchable="true"
@@ -94,25 +89,10 @@
                                     data-orderable="false"
                                     class="center">Note<br>Utente
                                 </th>
-                                <th data-slug="orderSources"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Origine
-                                </th>
                                 <th data-slug="invoice"
                                     data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Fattura del Seller
-                                </th>
-                                <th data-slug="invoiceToSeller"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Fattura Di Iwes su Seller
-                                </th>
-                                <th data-slug="invoiceSupplier"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Fattura del Supplier
+                                    data-orderable="true"
+                                    class="center">Fatture...................<br/>Seller<br/>Supplier<br>Iwes su Seller</br>
                                 </th>
                                 <th data-slug="documents"
                                     data-searchable="true"
@@ -128,6 +108,11 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center dataFilterType">Ultimo Aggiornamento
+                                </th>
+                                <th data-slug="orderSources"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Campagna </br>Traffico
                                 </th>
                             </tr>
                             </thead>

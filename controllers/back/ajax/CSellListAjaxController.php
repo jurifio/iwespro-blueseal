@@ -35,14 +35,14 @@ class CSellListAjaxController extends AAjaxController
         $perm = \Monkey::app()->getUser()->hasPermission('allShops');
         $productHasShopDestinationRepo=\Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $sql = "SELECT
-                  `o`.`id`                                               AS `id`,
-                  concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
+                  concat(`o`.`id`,'', `oshl`.`title` , ' ', if(`o`.`paidAmount` > 0, 'Pagato', 'Non Pagato') )                                              AS `id`,
+                  concat(`ud`.`name`, ' ', `ud`.`surname`,' ',s2.title, ' ', u.email, ' ',o.remoteOrderSellerId)               AS `user`,
                   `ud`.`name`                                            AS `name`,
                   `ud`.`surname`                                         AS `surname`,
                   `u`.`email`                                            AS `email`,
                   `o`.`orderDate`                                        AS `orderDate`,
                   `o`.`lastUpdate`                                       AS `lastUpdate`,
-                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`, ' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title` ) AS `product`,
+                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`, ' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title`, ' ',`ol`.`remoteOrderSupplierId`) AS `product`,
                   `s`.`title`                                            AS `shop`,
                   `os`.`title`                                           AS `status`,
                   `o`.`status`                                           AS `statusCode`,
@@ -52,8 +52,10 @@ class CSellListAjaxController extends AAjaxController
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
+                  ol.remoteOrderSupplierId as remoteOrderSuppllierId,
                   o.remoteOrderSellerId as remoteOrderSellerId,
-                  o.remoteShopSellerId as remoteShopSellerId,
+                  o.remoteShopSellerId as remoteShopSellerId,  
+                  `s2`.`title` as remoteShopSellerName,
                   o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
                   group_concat(c.name) as orderSources
@@ -63,8 +65,9 @@ class CSellListAjaxController extends AAjaxController
                   JOIN `OrderPaymentMethod` `opm` ON `o`.`orderPaymentMethodId` = `opm`.`id`
                   JOIN `OrderStatus` `os` ON `o`.`status` = `os`.`code`
                   JOIN `OrderStatusTranslation` `oshl` ON `oshl`.`orderStatusId` = `os`.`id`
-                  JOIN `OrderLine` `ol` ON `ol`.`orderId` = `o`.`id`
+                  LEFT JOIN `OrderLine` `ol` ON `ol`.`orderId` = `o`.`id`
                   JOIN `Shop` `s` ON `s`.`id` = `ol`.`shopId`
+                  JOIN `Shop` `s2` ON `s2`.id = `ol`.`remoteShopSellerId`  
                   JOIN `OrderLineStatus` `ols` ON `ol`.`status` = `ols`.`code`
                   JOIN `Product` `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
@@ -72,7 +75,7 @@ class CSellListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
-                WHERE `o`.`status` LIKE 'ORD%' and o.paymentDate is not null  GROUP BY ol.id, ol.orderId";
+                WHERE `o`.`status` LIKE 'ORD_SHIPPED' and o.paymentDate is not null  GROUP BY ol.id, ol.orderId";
 
         //      WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
 
@@ -136,104 +139,100 @@ class CSellListAjaxController extends AAjaxController
         foreach ($orders as $val) {
             $row = [];
 
-        $row['marketplaceOrderId']=$val->marketplaceOrderId;
-           if($val->marketplaceId!=null){
-               $findMarketplace=$markeplaceRepo->findOneBy(['prestashopId'=>$val->marketplaceId]);
-               $row['marketplaceName']=$findMarketplace->name;
-           }else{
-               $row['marketplaceName']=" ";
-           }
-          /*  if( $val->markeplaceOrderId =='') {
-                $row['marketplaceOrderId'] = 'No';
-            }*/
+            $row['marketplaceOrderId'] = $val->marketplaceOrderId;
+            if ($val->marketplaceId != null) {
+                $findMarketplace = $markeplaceRepo->findOneBy(['prestashopId' => $val->marketplaceId]);
+                $row['marketplaceName'] = $findMarketplace->name;
+            } else {
+                $row['marketplaceName'] = " ";
+            }
+            /*  if( $val->markeplaceOrderId =='') {
+                  $row['marketplaceOrderId'] = 'No';
+              }*/
             /** ciclo le righe */
-            $row['supplier']="";
+            $row['supplier'] = "";
             $row["product"] = "";
             $alert = false;
-            $orderParal='';
-            $remoteOrderSupplierId ='';
-            $remoteShopSupplier='';
+            $orderParal = '';
+            // $remoteOrderSupplierId = '';
+            // $remoteShopSupplier = '';
+            $rowOrderSupplier="";
             foreach ($val->orderLine as $line) {
-                if($val->remoteShopSellerId!=44 && $val->remoteShopSellerId!='' ) {
-                    if ($val->remoteShopSellerId != $line->shopId) {
+                if ($line->remoteShopSellerId != 44 && $line->remoteShopSellerId != '') {
+                    if ($line->remoteShopSellerId != $line->shopId) {
                         $orderParal = 'Si';
-                        $remoteOrderSupplierId.= $line->remoteOrderSupplierId;
-
+                        //    $remoteOrderSupplierId = $line->remoteOrderSupplierId;
                     }
-                }else{
+                } else {
                     $orderParal = 'No';
-                        $remoteOrderSupplierId.='';
+                    //    $remoteOrderSupplierId = '';
                 }
 
                 try {
 
                     /** @var CProductSku $sku */
-            //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
+                    //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
 
-                 $sku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId'=>$line->productId,'productVariantId'=>$line->productVariantId,'productSizeId'=>$line->productSizeId]);
-                  //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
-                   if(!is_null($line->remoteOrderSupplierId)){
-                       $supplier=$sku->shop->name;
-                   }else{
-                       $supplier='';
+                    $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $line->productId,'productVariantId' => $line->productVariantId,'productSizeId' => $line->productSizeId]);
+                    //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
+                    if (!is_null($line->remoteOrderSupplierId)) {
+                        $supplier = $sku->shop->name;
+                    } else {
+                        $supplier = '';
                     }
 
-                    $code = "spedisce ". $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
+                    $code = "spedisce " . $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
-                    $skuParalId=$line->productId;
+                    $skuParalId = $line->productId;
 
 
-
-
-                    
-                    $skupParalVariantId=$line->productVariantId;
-                    $skuParalSizeId=$line->productSizeId;
-                    $skuParalShopId=$line->shopId;
-                    $skuParal=$val->remoteShopSellerId;
-
+                    $skupParalVariantId = $line->productVariantId;
+                    $skuParalSizeId = $line->productSizeId;
+                    $skuParalShopId = $line->shopId;
+                    $skuParal = $val->remoteShopSellerId;
 
 
                 } catch (\Throwable $e) {
                     $code = 'non trovato';
                 }
+                $rowOrderSupplier.=$line->remoteOrderSupplierId;
 
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>". $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: ". $sku->productSize->name . "</span>";
+                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: " . $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
-
-                $row["supplier"] = $supplier;
+                $row["product"] .=  "<b>".$supplier." - ".$line->remoteOrderSupplierId."<b><br />";
 
 
 
 
             }
-            $row['remoteOrderSuppllier'] = $remoteOrderSupplierId;
-           $row["orderParal"]  = $orderParal;
+            $row["orderParal"] = $orderParal;
 
-            $orderDate = date("D d-m-y H:i", strtotime($val->orderDate));
+            $orderDate = date("d-m-y H:i",strtotime($val->orderDate));
             $paidAmount = ($val->paidAmount) ? $val->paidAmount : 0;
             if ($val->lastUpdate != null) {
                 $timestamp = time() - strtotime($val->lastUpdate);
-                $day = date("z", $timestamp);
-                $h = date("H", $timestamp);
-                $m = date("i", $timestamp);
+                $day = date("z",$timestamp);
+                $h = date("H",$timestamp);
+                $m = date("i",$timestamp);
                 $since = $day . ' giorni ' . $h . ":" . $m . " fa";
             }
             $row["DT_RowId"] = $val->id;
 
-            $row['remoteOrderSellerId']=$val->remoteOrderSellerId;
-            $shopFind=$shopRepo->findOneBy(['id'=>$val->remoteShopSellerId]);
-            if ($shopFind==null){
-                $row['remoteShopSellerId']=" <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
-            }else {
-                $shopname = $shopFind->title;
+            $shopFind = $shopRepo->findOneBy(['id' => $val->remoteShopSellerId]);
+
+            if ($shopFind == null) {
+
+                $sellerShopName='Pickyshop';
+            } else {
                 if ($val->remoteShopSellerId == 44) {
-                    $row['remoteShopSellerId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
-                } else {
-                    $row['remoteShopSellerId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">" . $shopname . "</i>";
+                    $sellerShopName='Pickyshop';
+                }else{
+                    $sellerShopName=$shopFind->title;
                 }
             }
-            if($perm){
-                $row["id"] = '<a href="' . $opera . $val->id . '" >H-' . $val->id . '</a>';
+            if ($perm) {
+                $paid = ($paidAmount) ? 'Pagato' : 'Non Pagato';
+                $row["id"] = '<a href="' . $opera . $val->id . '">H-' . $val->id . '</a><br/><b>'.$orderParal.'</b><br/><b><span style=\'color:' . $colorStatus[$val->status] . '\'>' . $val->orderStatus->orderStatusTranslation->getFirst()->title . '</span></b><br/><b>'.$paid.'<b><br />';
                 if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
             } else {
                 $row["id"] = $val->id;
@@ -241,9 +240,10 @@ class CSellListAjaxController extends AAjaxController
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
+
             $row["user"] =
                 '<a href="/blueseal/utente?userId=' . $val->user->printId() . '"><span>' . $val->user->getFullName()
-                . '</span><br /><span>' . $val->user->email . '</span></a>';
+                . '</span><br /><span>'. $val->user->email . '</span></a>';
             if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
                 $row["user"] .= '<i class="fa fa-diamond"></i>';
             } elseif (!empty($val->user->userDetails->note)) {
@@ -251,63 +251,73 @@ class CSellListAjaxController extends AAjaxController
             }
             try {
                 //TODO CHECK THIS WROOOONG
-                $row['user'] .= '<br />'. $val->billingAddress->country->name;
+                $row['user'] .= '<br />' . $val->billingAddress->country->name;
             } catch (\Throwable $e) {
+
             }
+
+            $row['user'].='<br/><b>'.$sellerShopName .' - '. $val->remoteOrderSellerId .'</b> ';
 
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
-            $paid = ($paidAmount) ? 'Sì' : 'No';
+
             $netTotal = SPriceToolbox::formatToEur($val->netTotal);
             $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . "</span>" : $netTotal;
-            $row['paid'] = $paid;
+            if($val->paymentDate==null){
+                $paymentDate='';
+            }else{
+                $pamentDate=$val->paymentDate;
+            }
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
-            $row["notes"] = wordwrap($val->note, 50, '</br>');
+            $row["notes"] = wordwrap($val->note,50,'</br>');
             $userDetails = $val->user->userDetails;
-            $note = ($userDetails) ? wordwrap($val->user->userDetails->note, 50, '</br>') : '-';
+            $note = ($userDetails) ? wordwrap($val->user->userDetails->note,50,'</br>') : '-';
             $row["userNote"] = $note;
             $row["orderSources"] = [];
-            foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder)
-            {
-                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name.' - '.$campaignVisitHasOrder->campaignVisit->timestamp.' - '.$campaignVisitHasOrder->campaignVisit->cost.'€';
+            foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder) {
+                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name . ' - ' . $campaignVisitHasOrder->campaignVisit->timestamp . ' - ' . $campaignVisitHasOrder->campaignVisit->cost . '€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
-            $findInvoiceSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+            $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+            $row["invoice"]="<b>Seller:       </b>";
             if ($findInvoiceSeller != null) {
-                $row["invoice"] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceSeller->id . "&invoiceShopId=" . $findInvoiceSeller->invoiceShopId . "'>" . $findInvoiceSeller->invoiceNumber . "/" . $findInvoiceSeller->invoiceType . "</a>";
+                foreach ($findInvoiceSeller as $invoiceSeller) {
+                    $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
+                }
             } else {
-                $row["invoice"] = "";
+                $row["invoice"] .= "<br/>";
             }
+
+
             $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $skuParalShopId]);
-
+            $row['invoice'] .= "</br><b>Supplier:     </b>";
             if ($findInvoiceSupplier != null) {
-                $row['invoiceSupplier'] = "";
-
                 foreach ($findInvoiceSupplier as $invoicesSupplier) {
                     if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
-                        $row["invoiceSupplier"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
+                        $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
                     } else {
-                        $row["invoiceSupplier"] .= "<br />";
+                        $row["invoice"] .= "<br />";
                     }
                 }
             } else {
-                $row['invoiceSupplier'] = "";
+                $row['invoice'] .= "<br>";
             }
             $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
+            $row['invoice'].="<br/><b>Iwes->Seller: </b>";
             if ($findInvoiceToSeller != null) {
-                $row['invoiceToSeller'] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
-            } else {
-                $row['invoiceToSeller'] = "";
-            }
 
+                $row['invoice'] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
+            } else {
+                $row['invoice'] .= "<br />";
+            }
 
 
             /** Get doc */
             $fileName = "";
             /** @var CInvoiceDocument $iD */
-            foreach ($val->invoiceDocument as $iD){
-                $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/".$iD->id."'>".$iD->fileName."</a></br>";
+            foreach ($val->invoiceDocument as $iD) {
+                $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/" . $iD->id . "'>" . $iD->fileName . "</a></br>";
             }
 
             $row["documents"] = $fileName;
@@ -315,19 +325,14 @@ class CSellListAjaxController extends AAjaxController
             $addressOrder = '';
             $address = CUserAddress::defrost($val->frozenShippingAddress);
             $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
-            $tableAddress = $val->user->userAddress->findOneByKey('id', $address->id);
-            if(!$tableAddress){
-                $addressOrder .= "Attenzione, l'utente ha eliminato l'indirizzo in spedizione";
-            } else if($address->checkSum() != $tableAddress->checkSum()){
-                $addressOrder .= ">Attenzione, l'utente ha modificato il suo indirizzo dopo aver effettuato l'ordine";
-            }
+            $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
 
             $country = $countryR->findOneBy(['id' => $address->countryId]);
-            if($country!=null){
-                $countryName=$country->name;
+            if ($country != null) {
+                $countryName = $country->name;
 
-            }else{
-                $countryName='';
+            } else {
+                $countryName = '';
             }
             $phone = is_null($address->phone) ? '---' : $address->phone;
             $addressOrder .= "
@@ -337,7 +342,7 @@ class CSellListAjaxController extends AAjaxController
              <span><strong>Città: </strong>$address->city</span><br>
              <span><strong>Provincia: </strong>$address->province</span><br>
              <span><strong>Paese:</strong>";
-            $addressOrder.=$countryName."</span><br>
+            $addressOrder .= $countryName . "</span><br>
              <span><strong>Telefono: </strong>$phone</span><br>";
 
             $row["address"] = $addressOrder;

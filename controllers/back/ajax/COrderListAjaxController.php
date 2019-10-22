@@ -280,35 +280,36 @@ class COrderListAjaxController extends AAjaxController
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
             $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+            $row["invoice"]="<b>Seller:       </b>";
             if ($findInvoiceSeller != null) {
-                $row["invoice"]="";
                 foreach ($findInvoiceSeller as $invoiceSeller) {
                     $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
                 }
             } else {
-                $row["invoice"] = "";
+                $row["invoice"] .= "<br/>";
             }
 
+
             $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $skuParalShopId]);
-
+            $row['invoice'] .= "</br><b>Supplier:     </b>";
             if ($findInvoiceSupplier != null) {
-                $row['invoiceSupplier'] = "";
-
                 foreach ($findInvoiceSupplier as $invoicesSupplier) {
                     if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
-                        $row["invoiceSupplier"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
+                        $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
                     } else {
-                        $row["invoiceSupplier"] .= "<br />";
+                        $row["invoice"] .= "<br />";
                     }
                 }
             } else {
-                $row['invoiceSupplier'] = "";
+                $row['invoice'] .= "<br>";
             }
             $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
+            $row['invoice'].="<br/><b>Iwes->Seller: </b>";
             if ($findInvoiceToSeller != null) {
-                $row['invoiceToSeller'] = "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
+
+                $row['invoice'] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
             } else {
-                $row['invoiceToSeller'] = "";
+                $row['invoice'] .= "<br />";
             }
 
 
@@ -325,11 +326,6 @@ class COrderListAjaxController extends AAjaxController
             $address = CUserAddress::defrost($val->frozenShippingAddress);
             $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
             $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
-            if (!$tableAddress) {
-                $addressOrder .= "Attenzione, l'utente ha eliminato l'indirizzo in spedizione";
-            } else if ($address->checkSum() != $tableAddress->checkSum()) {
-                $addressOrder .= ">Attenzione, l'utente ha modificato il suo indirizzo dopo aver effettuato l'ordine";
-            }
 
             $country = $countryR->findOneBy(['id' => $address->countryId]);
             if ($country != null) {
