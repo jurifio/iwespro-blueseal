@@ -43,7 +43,49 @@
             "filters": {},
             "translations": {},
             "methods": [
-                "GET"
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        }, {
+            "pattern": "/blueseal/ordini-in-lavorazione(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderWorkingListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },{
+            "pattern": "/blueseal/ordini-cancellati(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderCancelListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },{
+            "pattern": "/blueseal/ordini-resi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderReturnListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
             ]
         },
         {

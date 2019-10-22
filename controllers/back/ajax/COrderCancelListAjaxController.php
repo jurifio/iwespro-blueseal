@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -16,7 +17,7 @@ use PDO;
 use PDOException;
 
 /**
- * Class CSellListAjaxController
+ * Class COrderWorkingListAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -25,15 +26,15 @@ use PDOException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 14/10/2019
+ * @date 22/10/2019
  * @since 1.0
  */
-class CSellListAjaxController extends AAjaxController
+class COrderCancelListAjaxController extends AAjaxController
 {
     public function get()
     {
         $perm = \Monkey::app()->getUser()->hasPermission('allShops');
-        $productHasShopDestinationRepo=\Monkey::app()->repoFactory->create('ProductHasShopDestination');
+        $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $sql = "SELECT
                   concat(`o`.`id`,'', `oshl`.`title` , ' ', if(`o`.`paidAmount` > 0, 'Pagato', 'Non Pagato') )                                              AS `id`,
                   concat(`ud`.`name`, ' ', `ud`.`surname`,' ',s2.title, ' ', u.email, ' ',o.remoteOrderSellerId)               AS `user`,
@@ -75,7 +76,7 @@ class CSellListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
-                WHERE `o`.`status` LIKE 'ORD_SHIPPED' OR `o`.`status` LIKE 'ORD_DELIVERED' OR  `o`.`status` LIKE 'ORD_CLOSED'   and o.paymentDate is not null  GROUP BY ol.id, ol.orderId";
+                WHERE `o`.`status` LIKE 'ORD_CANCEL' OR `o`.`status` LIKE 'ORD_FR_CANCEL' OR `o`.`status` LIKE 'ORD_ERR_MISS'  GROUP BY ol.id, ol.orderId";
 
         //      WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
 
@@ -96,7 +97,7 @@ class CSellListAjaxController extends AAjaxController
                          OR 
                         (`o`.`paymentDate` IS NULL AND `o`.`orderPaymentMethodId` = 5)
                     ))";
-        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
         $datatable->addSearchColumn('orderLineStatus');
         $datatable->addSearchColumn('shop');
         $datatable->addSearchColumn('productBrand');
@@ -104,13 +105,13 @@ class CSellListAjaxController extends AAjaxController
 
         $q = $datatable->getQuery();
         $p = $datatable->getParams();
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
-        $markeplaceRepo=\Monkey::app()->repoFactory->create('MarketplaceHasShop');
-        $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+        $markeplaceRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
+        $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
         $countryR = \Monkey::app()->repoFactory->create('Country');
-        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q, $p);
-        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $orders = \Monkey::app()->repoFactory->create('Order')->em()->findBySql($q,$p);
+        $count = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery(true),$datatable->getParams());
+        $totlalCount = \Monkey::app()->repoFactory->create('Order')->em()->findCountBySql($datatable->getQuery('full'),$datatable->getParams());
 
         $orderStatuses = \Monkey::app()->repoFactory->create('OrderStatus')->findAll();
         $colorStatus = [];
@@ -368,39 +369,39 @@ class CSellListAjaxController extends AAjaxController
         $solR = \Monkey::app()->repoFactory->create('StorehouseOperationLine');
         $ushoR = \Monkey::app()->repoFactory->create('UserSessionHasOrder');
         $cvhoR = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
+        $eloyoR = \Monkey::app()->repoFactory->create('EloyVoucher');
 
         $dba = \Monkey::app()->dbAdapter;
-        $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-        $shopId=$orderRepo->remoteShopSellerId;
-        if($shopId==null){
-            $shopId=44;
+        $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+        $shopId = $orderRepo->remoteShopSellerId;
+        if ($shopId == null) {
+            $shopId = 44;
         }
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
         $db_host = $shopRepo->dbHost;
         $db_name = $shopRepo->dbName;
         $db_user = $shopRepo->dbUsername;
         $db_pass = $shopRepo->dbPassword;
         try {
 
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             $res = ' connessione ok <br>';
         } catch (PDOException $e) {
             $res = $e->getMessage();
         }
-        if(ENV == 'prod') {
+        if (ENV == 'prod') {
             $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
             $stmtOrder->execute();
-            $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
-            foreach ($orderLineCancel as $orlc){
-                $remoteIdOrderLine=$orlc->remoteOrderLineSellerId;
-                $remoteStatusOrderLine=$orlc->status;
-                $remoteOrderId=$orlc->remoteOrderSellerId;
+            $orderLineCancel = \Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId' => $orderId]);
+            foreach ($orderLineCancel as $orlc) {
+                $remoteIdOrderLine = $orlc->remoteOrderLineSellerId;
+                $remoteStatusOrderLine = $orlc->status;
+                $remoteOrderId = $orlc->remoteOrderSellerId;
                 $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
                 $stmtOrderLine->execute();
             }
         }
-
 
 
         $order = $oR->findOne([$orderId]);
@@ -421,7 +422,7 @@ class CSellListAjaxController extends AAjaxController
                 $qtyToRestore = [];
                 foreach ($order->orderLine as $ol) {
 
-                    if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId, $qtyToRestore)) {
+                    if (!array_key_exists($ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId,$qtyToRestore)) {
                         $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] = 0;
                     }
                     $qtyToRestore[$ol->productId . '-' . $ol->productVariantId . '-' . $ol->productSizeId . '-' . $ol->shopId] += 1;
@@ -447,7 +448,7 @@ class CSellListAjaxController extends AAjaxController
                               ON `s`.`id` = `sl`.`storehouseOperationId` 
                               WHERE `s`.`shopId` = ?  AND `sl`.`productId` = ? AND `sl`.`productVariantId` = ? 
                               AND `sl`.`productSizeId` = ? AND `s`.`creationDate` >= ? AND `s`.`creationDate` < ?";
-                        $res = $dba->query($query, [
+                        $res = $dba->query($query,[
                             $ol->shopId,
                             $ol->productId,
                             $ol->productVariantId,
@@ -495,7 +496,7 @@ class CSellListAjaxController extends AAjaxController
 
                 foreach ($order->orderLine as $ol) {
 
-                    $logolz = $logR->findBy(['stringId' => $ol->printId(), 'entityName' => 'OrderLine']);
+                    $logolz = $logR->findBy(['stringId' => $ol->printId(),'entityName' => 'OrderLine']);
                     foreach ($logolz as $logol) {
                         $logol->delete();
                     }
@@ -509,41 +510,49 @@ class CSellListAjaxController extends AAjaxController
                 }
 
 
-                $logOrderz = $logR->findBy(['stringId' => $orderId, 'entityName' => 'Order']);
+                $logOrderz = $logR->findBy(['stringId' => $orderId,'entityName' => 'Order']);
                 foreach ($logOrderz as $logOrd) {
                     $logOrd->delete();
                 }
-                $order->delete();
-                $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-                $shopId=$orderRepo->remoteShopSellerId;
-                if($shopId==null){
-                    $shopId=44;
+                $EloyVoucherR = $eloyoR->findBy(['stringId' => $orderId,'entityName' => 'EloyVoucher']);
+                if ($EloyVoucherR1 == null) {
+                    foreach ($EloyVoucherR as $eloyV) {
+                        $eloyV->delete();
+                    }
                 }
-                $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopId]);
+                $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+                $shopId = $orderRepo->remoteShopSellerId;
+                if ($shopId == null) {
+                    $shopId = 44;
+                }
+                $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
                 $db_host = $shopRepo->dbHost;
                 $db_name = $shopRepo->dbName;
                 $db_user = $shopRepo->dbUsername;
                 $db_pass = $shopRepo->dbPassword;
                 try {
 
-                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                    $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                    $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
                     $res = ' connessione ok <br>';
                 } catch (PDOException $e) {
                     $res = $e->getMessage();
                 }
-                if(ENV==='prod') {
+                if (ENV === 'prod') {
                     $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
                     $stmtOrder->execute();
-                    $orderLineCancel=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId'=>$orderId]);
-                    foreach ($orderLineCancel as $orlc){
-                        $remoteIdOrderLine=$orlc->remoteOrderLineSellerId;
-                        $remoteStatusOrderLine=$orlc->status;
-                        $remoteOrderId=$orlc->remoteOrderSellerId;
+                    $orderLineCancel = \Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId' => $orderId]);
+                    foreach ($orderLineCancel as $orlc) {
+                        $remoteIdOrderLine = $orlc->remoteOrderLineSellerId;
+                        $remoteStatusOrderLine = $orlc->status;
+                        $remoteOrderId = $orlc->remoteOrderSellerId;
                         $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $remoteStatusOrderLine . "' WHERE id=" . $remoteIdOrderLine . " and orderId=" . $remoteOrderId);
                         $stmtOrderLine->execute();
                     }
                 }
+
+                $order->delete();
+
 
                 \Monkey::app()->repoFactory->commit();
                 return "Ordine eliminato!";
@@ -565,7 +574,7 @@ class CSellListAjaxController extends AAjaxController
             ['column' => 'o.lastUpdate']
         ];
         $dbOrderingDefault = [
-            ['column' => 'o.creationDate', 'dir' => 'desc']
+            ['column' => 'o.creationDate','dir' => 'desc']
         ];
 
         $sqlOrder = " ORDER BY ";
@@ -574,11 +583,11 @@ class CSellListAjaxController extends AAjaxController
                 $sqlOrder .= $dbOrderingColumns[$column['column']]['column'] . " " . $column['dir'] . ", ";
             }
         }
-        if (substr($sqlOrder, -1, 2) != ', ') {
+        if (substr($sqlOrder,-1,2) != ', ') {
             foreach ($dbOrderingDefault as $column) {
                 $sqlOrder .= $column['column'] . ' ' . $column['dir'] . ', ';
             }
         }
-        return rtrim($sqlOrder, ', ');
+        return rtrim($sqlOrder,', ');
     }
 }
