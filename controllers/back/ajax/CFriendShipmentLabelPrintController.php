@@ -29,7 +29,7 @@ class CFriendShipmentLabelPrintController extends AAjaxController
 
         /** @var CShipment $shipment */
         $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOne([$shipmentId]);
-        if($shipment === null || $shipment->scope != CShipment::SCOPE_SUPPLIER_TO_US) {
+        if($shipment === null ) {
             \Monkey::app()->router->response()->raiseProcessingError();
             return "shipment not valid";
         }

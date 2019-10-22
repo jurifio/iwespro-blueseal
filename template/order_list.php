@@ -32,42 +32,31 @@
                                data-display-length="50">
                             <thead>
                             <tr>
-                                <th data-slug="id"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Ordine
-                                </th>
                                 <th data-slug="orderDate"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc"
                                     class="center dataFilterType">Data<br>Ordine
                                 </th>
-
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Iwes Order<br />Parallel <br /> Status
+                                </th>
                                 <th data-slug="user"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Utente
+                                    class="center">Utente<br/>Seller Shop-Order
                                 </th>
                                 <th data-slug="product"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Dettaglio<br> Ordine
-                                </th>
-                                <th data-slug="status"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Stato
+                                    class="center">Dettaglio Ordine<br/>Supplier Shop-Order
                                 </th>
                                 <th data-slug="dareavere"
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Dovuto
-                                </th>
-                                <th data-slug="paid"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Pagato
                                 </th>
                                 <th data-slug="paymentDate"
                                     data-searchable="true"
@@ -79,31 +68,12 @@
                                     data-orderable="true"
                                     class="center">Metodo<br>Pagamento
                                 </th>
-                                <th data-slug="remoteOrderSellerId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Seller<br>Order
-                                </th>
-                                <th data-slug="remoteShopSellerId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Seller<br>Shop
-                                </th>
                                 <th data-slug="orderParal"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Ordine<br>Parallelo
                                 </th>
-                                <th data-slug="remoteOrderSuppllier"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Ordine<br>Supplier
-                                </th>
-                                <th data-slug="supplier"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Supplier
-                                </th>
+
                                 <th data-slug="marketplaceOrderId"
                                     data-searchable="true"
                                     data-orderable="true"

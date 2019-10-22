@@ -35,14 +35,14 @@ class COrderListAjaxController extends AAjaxController
         $perm = \Monkey::app()->getUser()->hasPermission('allShops');
         $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $sql = "SELECT
-                  `o`.`id`                                               AS `id`,
-                  concat(`ud`.`name`, ' ', `ud`.`surname`)               AS `user`,
+                  concat(`o`.`id`,'', `oshl`.`title` , ' ', if(`o`.`paidAmount` > 0, 'Pagato', 'Non Pagato') )                                              AS `id`,
+                  concat(`ud`.`name`, ' ', `ud`.`surname`,' ',s2.title, ' ', u.email, ' ',o.remoteOrderSellerId)               AS `user`,
                   `ud`.`name`                                            AS `name`,
                   `ud`.`surname`                                         AS `surname`,
                   `u`.`email`                                            AS `email`,
                   `o`.`orderDate`                                        AS `orderDate`,
                   `o`.`lastUpdate`                                       AS `lastUpdate`,
-                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`, ' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title` ) AS `product`,
+                  concat(`ol`.`productId`, '-', `ol`.`productVariantId`, ' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title`, ' ',`ol`.`remoteOrderSupplierId`) AS `product`,
                   `s`.`title`                                            AS `shop`,
                   `os`.`title`                                           AS `status`,
                   `o`.`status`                                           AS `statusCode`,
@@ -52,8 +52,10 @@ class COrderListAjaxController extends AAjaxController
                   if(`o`.`paidAmount` > 0, 'sìsi', 'no')                 AS `paid`,
                   o.paymentDate AS paymentDate,
                   o.note AS notes,
+                  ol.remoteOrderSupplierId as remoteOrderSuppllierId,
                   o.remoteOrderSellerId as remoteOrderSellerId,
-                  o.remoteShopSellerId as remoteShopSellerId,
+                  o.remoteShopSellerId as remoteShopSellerId,  
+                  `s2`.`title` as remoteShopSellerName,
                   o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
                   group_concat(c.name) as orderSources
@@ -63,8 +65,9 @@ class COrderListAjaxController extends AAjaxController
                   JOIN `OrderPaymentMethod` `opm` ON `o`.`orderPaymentMethodId` = `opm`.`id`
                   JOIN `OrderStatus` `os` ON `o`.`status` = `os`.`code`
                   JOIN `OrderStatusTranslation` `oshl` ON `oshl`.`orderStatusId` = `os`.`id`
-                  JOIN `OrderLine` `ol` ON `ol`.`orderId` = `o`.`id`
+                  LEFT JOIN `OrderLine` `ol` ON `ol`.`orderId` = `o`.`id`
                   JOIN `Shop` `s` ON `s`.`id` = `ol`.`shopId`
+                  JOIN `Shop` `s2` ON `s2`.id = `ol`.`remoteShopSellerId`  
                   JOIN `OrderLineStatus` `ols` ON `ol`.`status` = `ols`.`code`
                   JOIN `Product` `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
@@ -151,18 +154,18 @@ class COrderListAjaxController extends AAjaxController
             $row["product"] = "";
             $alert = false;
             $orderParal = '';
-            $remoteOrderSupplierId = '';
-            $remoteShopSupplier = '';
+            // $remoteOrderSupplierId = '';
+            // $remoteShopSupplier = '';
+            $rowOrderSupplier="";
             foreach ($val->orderLine as $line) {
-                if ($val->remoteShopSellerId != 44 && $val->remoteShopSellerId != '') {
-                    if ($val->remoteShopSellerId != $line->shopId) {
+                if ($line->remoteShopSellerId != 44 && $line->remoteShopSellerId != '') {
+                    if ($line->remoteShopSellerId != $line->shopId) {
                         $orderParal = 'Si';
-                        $remoteOrderSupplierId .= $line->remoteOrderSupplierId;
-
+                        //    $remoteOrderSupplierId = $line->remoteOrderSupplierId;
                     }
                 } else {
                     $orderParal = 'No';
-                    $remoteOrderSupplierId .= '';
+                    //    $remoteOrderSupplierId = '';
                 }
 
                 try {
@@ -192,15 +195,16 @@ class COrderListAjaxController extends AAjaxController
                 } catch (\Throwable $e) {
                     $code = 'non trovato';
                 }
+                $rowOrderSupplier.=$line->remoteOrderSupplierId;
 
                 $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: " . $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
+                $row["product"] .=  "<b>".$supplier." - ".$line->remoteOrderSupplierId."<b><br />";
 
-                $row["supplier"] = $supplier;
+
 
 
             }
-            $row['remoteOrderSuppllier'] = $remoteOrderSupplierId;
             $row["orderParal"] = $orderParal;
 
             $orderDate = date("d-m-y H:i",strtotime($val->orderDate));
@@ -214,20 +218,21 @@ class COrderListAjaxController extends AAjaxController
             }
             $row["DT_RowId"] = $val->id;
 
-            $row['remoteOrderSellerId'] = $val->remoteOrderSellerId;
             $shopFind = $shopRepo->findOneBy(['id' => $val->remoteShopSellerId]);
+
             if ($shopFind == null) {
-                $row['remoteShopSellerId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
+
+                $sellerShopName='Pickyshop';
             } else {
-                $shopname = $shopFind->title;
                 if ($val->remoteShopSellerId == 44) {
-                    $row['remoteShopSellerId'] = " <i style=\"color:blue\"class=\"fa fa-info-circle\">PickyShop</i>";
-                } else {
-                    $row['remoteShopSellerId'] = " <i style=\"color:green\"class=\"fa fa-info-circle\">" . $shopname . "</i>";
+                    $sellerShopName='Pickyshop';
+                }else{
+                    $sellerShopName=$shopFind->title;
                 }
             }
             if ($perm) {
-                $row["id"] = '<a href="' . $opera . $val->id . '" >H-' . $val->id . '</a>';
+                $paid = ($paidAmount) ? 'Pagato' : 'Non Pagato';
+                $row["id"] = '<a href="' . $opera . $val->id . '">H-' . $val->id . '</a><br/><b>'.$orderParal.'</b><br/><b><span style=\'color:' . $colorStatus[$val->status] . '\'>' . $val->orderStatus->orderStatusTranslation->getFirst()->title . '</span></b><br/><b>'.$paid.'<b><br />';
                 if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
             } else {
                 $row["id"] = $val->id;
@@ -235,9 +240,10 @@ class COrderListAjaxController extends AAjaxController
 
             $row["orderDate"] = $orderDate;
             $row["lastUpdate"] = isset($since) ? $since : "Mai";
+
             $row["user"] =
                 '<a href="/blueseal/utente?userId=' . $val->user->printId() . '"><span>' . $val->user->getFullName()
-                . '</span><br /><span>' . $val->user->email . '</span></a>';
+                . '</span><br /><span>'. $val->user->email . '</span></a>';
             if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
                 $row["user"] .= '<i class="fa fa-diamond"></i>';
             } elseif (!empty($val->user->userDetails->note)) {
@@ -247,14 +253,21 @@ class COrderListAjaxController extends AAjaxController
                 //TODO CHECK THIS WROOOONG
                 $row['user'] .= '<br />' . $val->billingAddress->country->name;
             } catch (\Throwable $e) {
+
             }
+
+            $row['user'].='<br/><b>'.$sellerShopName .' - '. $val->remoteOrderSellerId .'</b> ';
 
 
             $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
-            $paid = ($paidAmount) ? 'Sì' : 'No';
+
             $netTotal = SPriceToolbox::formatToEur($val->netTotal);
             $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . "</span>" : $netTotal;
-            $row['paid'] = $paid;
+            if($val->paymentDate==null){
+                $paymentDate='';
+            }else{
+                $pamentDate=$val->paymentDate;
+            }
             $row["paymentDate"] = $val->paymentDate;
             $row["payment"] = $val->orderPaymentMethod->name;
             $row["notes"] = wordwrap($val->note,50,'</br>');

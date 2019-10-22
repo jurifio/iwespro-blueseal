@@ -20,13 +20,15 @@ use bamboo\domain\entities\CShipment;
  */
 class CDhlHandler extends ACarrierHandler
 {
-    
+
     protected $config = [
         'endpoint' => 'http://xmlpitest-ea.dhl.com/XMLShippingServlet',
-        'testSiteId' => 'MC',
-        'CodiceClienteGls' => '136887',
-        'PasswordClienteGls' => 'iwesnc',
-        'CodiceContrattoGls' => '1108'
+        'testSiteID' => 'DServiceVal',
+        'CodiceClienteDHL' => '106971439',
+        'testPasswordClienteDHL' => 'testServVal',
+        'SiteID' => 'DServiceVal',
+        'PasswordClienteDHL' => 'u7qVouSKHY',
+
     ];
 
     /**
@@ -36,16 +38,40 @@ class CDhlHandler extends ACarrierHandler
      */
     public function addDelivery(CShipment $shipment)
     {
-        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Called AddParcel');
+        \Monkey::app()->applicationReport('DHLHandler','addDelivery','Called AddParcel');
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement('Info');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceClienteGls', $this->config['CodiceClienteGls']);
-        $xml->writeElement('PasswordClienteGls', $this->config['PasswordClienteGls']);
-
+        $xml->startElement('req:ShipmentRequest');
+        $xml->writeAttribute('xmlns:req','http://www.dhl.com');
+        $xml->writeAttribute('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance');
+        $xml->writeAttribute('xsi:schemaLocation','http://www.dhl.com ship-val-global-req.xsd');
+        $xml->writeAttribute('schemaVersion','5.0');
+        $xml->startElement('Request');
+        $xml->startElement('ServiceHeader');
+        $xml->writeElement('MessageTime',date(DATE_ATOM));
+        $xml->writeElement('MessageReference',date(DATE_ATOM));
+        if (ENV=='dev') {
+            $xml -> writeElement('SiteID', $this -> config['testSiteID']);
+            $xml->writeElement('Password', $this->config['testPasswordClienteDHL']);
+        }else {
+            $xml->writeElement('SiteID',$this->config['SiteID']);
+            $xml->writeElement('Password',$this->config['PasswordClienteDHL']);
+        }
+            $xml->endElement();
+            $xml->endElement();
+            $xml->writeElement('RegionCode', 'EU');
+            $xml->writeElement('NewShipper', 'N');
+            $xml->writeElement('LanguageCode', 'en');
+            $xml->writeElement('PiecesEnabled', 'Y');
+            $xml->startElement('Billing');
+            $xml->writeElement('ShipperAccountNumber', $this->config['CodiceClienteDHL']);
+            $xml->writeElement('ShippingPaymentType', 'S');
+            $xml->writeElement('BillingAccountNumber', $this->config['CodiceClienteDHL']);
+            $xml->writeElement('DutyPaymentType', 'R');
+            $xml->endElement();
+            $xml->startElement('Consigne');
         $this->writeParcel($xml, $shipment);
 
         $xml->endDocument();
@@ -104,17 +130,14 @@ class CDhlHandler extends ACarrierHandler
      */
     protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
     {
-        $xml->startElement('Parcel');
-        $xml->writeElement('CodiceContrattoGls', $this->config['CodiceContrattoGls']);
-        if (!empty($shipment->trackingNumber)) {
-            $xml->writeElement('NumeroSpedizione', ltrim($shipment->trackingNumber, $this->config['SedeGls'] . ' '));
-        }
+        $shipment->orderLine->getFirst()->order->fronzenShippingAddress;
 
-        $xml->writeElement('Ragionesociale', $shipment->toAddress->subject);
-        $xml->writeElement('Indirizzo', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
-        $xml->writeElement('Localita', $shipment->toAddress->city);
-        $xml->writeElement('Zipcode', $shipment->toAddress->postcode);
-        $xml->writeElement('Provincia', $this->getProvinceCode($shipment->toAddress->province));
+        $xml->startElement('Consigne');
+        $xml->writeElement('CompanyName', $shipment->toAddress->subject);
+        $xml->writeElement('AddressLine', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
+        $xml->writeElement('City', $shipment->toAddress->city);
+        $xml->writeElement('PostalCode', $shipment->toAddress->postcode);
+        $xml->writeElement('CountryCode', $this->getProvinceCode($shipment->toAddress->province));
         $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
         //$xml->writeElement('Bda',$shipment->toAddress->subject);
         //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
