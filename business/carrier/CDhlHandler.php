@@ -23,10 +23,12 @@ class CDhlHandler extends ACarrierHandler
     
     protected $config = [
         'endpoint' => 'http://xmlpitest-ea.dhl.com/XMLShippingServlet',
-        'testSiteId' => 'MC',
-        'CodiceClienteGls' => '136887',
-        'PasswordClienteGls' => 'iwesnc',
-        'CodiceContrattoGls' => '1108'
+        'testSiteID' => 'DServiceVal',
+        'CodiceClienteDHL' => '106971439',
+        'testPasswordClienteDHL' => 'testServVal',
+        'SiteID' => 'DServiceVal',
+        'PasswordClienteDHL' => 'u7qVouSKHY',
+
     ];
 
     /**
@@ -36,15 +38,28 @@ class CDhlHandler extends ACarrierHandler
      */
     public function addDelivery(CShipment $shipment)
     {
-        \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Called AddParcel');
+        \Monkey::app()->applicationReport('DHLHandler','addDelivery','Called AddParcel');
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->startDocument('1.0', 'utf-8');
-        $xml->startElement('Info');
-        $xml->writeElement('SedeGls', $this->config['SedeGls']);
-        $xml->writeElement('CodiceClienteGls', $this->config['CodiceClienteGls']);
-        $xml->writeElement('PasswordClienteGls', $this->config['PasswordClienteGls']);
+        $xml->startElement('req:ShipmentRequest');
+        $xml->writeAttribute('xmlns:req','http://www.dhl.com');
+        $xml->writeAttribute('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance');
+        $xml->writeAttribute('xsi:schemaLocation','http://www.dhl.com ship-val-global-req.xsd');
+        $xml->writeAttribute('schemaVersion','5.0');
+        $xml->startElement('Request');
+        $xml->startElement('ServiceHeader');
+        $xml->writeElement('MessageTime',date(DATE_ATOM));
+        $xml->writeElement('MessageReference',date(DATE_ATOM));
+        if (ENV=='dev') {
+            $xml -> writeElement('SiteID', $this -> config['testSiteID']);
+            $xml->writeElement('Password', $this->config['testPasswordClienteDHL']);
+        }else{
+            $xml -> writeElement('SiteID', $this -> config['SiteID']);
+            $xml->writeElement('Password', $this->config['PasswordClienteDHL']);
+        }
+
 
         $this->writeParcel($xml, $shipment);
 
