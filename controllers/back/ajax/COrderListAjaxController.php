@@ -33,6 +33,7 @@ class COrderListAjaxController extends AAjaxController
     public function get()
     {
         $perm = \Monkey::app()->getUser()->hasPermission('allShops');
+
         $productHasShopDestinationRepo = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $sql = "SELECT
                   concat(`o`.`id`,'', `oshl`.`title` , ' ', if(`o`.`paidAmount` > 0, 'Pagato', 'Non Pagato') )                                              AS `id`,
@@ -75,7 +76,7 @@ class COrderListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
-                WHERE `o`.`status` LIKE 'ORD%'  GROUP BY ol.id, ol.orderId";
+                WHERE `o`.`status` LIKE 'ORD%'   GROUP BY ol.id, ol.orderId";
 
         //      WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
 

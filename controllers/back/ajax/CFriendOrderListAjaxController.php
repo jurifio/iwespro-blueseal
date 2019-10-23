@@ -24,7 +24,14 @@ class CFriendOrderListAjaxController extends AAjaxController
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
-
+        $currentUser=$this->app->getUser();
+        $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
+        $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
+        if($userHasShop!=null){
+            $filterSql=' and remoteShopSellerId <>'.$userHasShop->shopId.' ';
+        }else{
+            $filterSql=' ';
+        }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
         $DDfield = '';
         $DDThaving = '';
@@ -87,7 +94,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                       JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
-                  WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') $DDThaving";
+                  WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') $filterSql  $DDThaving  ";
 
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);

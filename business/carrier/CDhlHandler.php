@@ -51,7 +51,8 @@ class CDhlHandler extends ACarrierHandler
         $xml->startElement('Request');
         $xml->startElement('ServiceHeader');
         $xml->writeElement('MessageTime',date(DATE_ATOM));
-        $xml->writeElement('MessageReference',date(DATE_ATOM));
+        $messaggeReference='Shipment_id_'.$shipment->id.'_order_'.$shipment->orderLine->getFirst()->order->id.'';
+        $xml->writeElement('MessageReference',$messaggeReference);
         if (ENV=='dev') {
             $xml -> writeElement('SiteID', $this -> config['testSiteID']);
             $xml->writeElement('Password', $this->config['testPasswordClienteDHL']);
@@ -71,14 +72,15 @@ class CDhlHandler extends ACarrierHandler
             $xml->writeElement('BillingAccountNumber', $this->config['CodiceClienteDHL']);
             $xml->writeElement('DutyPaymentType', 'R');
             $xml->endElement();
-            $xml->startElement('Consigne');
+
+
         $this->writeParcel($xml, $shipment);
 
         $xml->endDocument();
         $rawXml = $xml->outputMemory();
 
 
-        $url = $this->config['endpoint'] . '/AddParcel';
+        $url = $this->config['endpoint'];
         $data = ['XMLInfoParcel' => $rawXml];
         \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Request AddParcel',$rawXml);
         $ch = curl_init();
@@ -130,35 +132,113 @@ class CDhlHandler extends ACarrierHandler
      */
     protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
     {
-        $shipment->orderLine->getFirst()->order->fronzenShippingAddress;
 
-        $xml->startElement('Consigne');
-        $xml->writeElement('CompanyName', $shipment->toAddress->subject);
-        $xml->writeElement('AddressLine', $shipment->toAddress->address . ' ' . $shipment->toAddress->extra);
-        $xml->writeElement('City', $shipment->toAddress->city);
-        $xml->writeElement('PostalCode', $shipment->toAddress->postcode);
-        $xml->writeElement('CountryCode', $this->getProvinceCode($shipment->toAddress->province));
-        $xml->writeElement('Bda', $shipment->orderLine->getFirst()->order->id);
-        //$xml->writeElement('Bda',$shipment->toAddress->subject);
-        //$xml->writeElement('DataDocumentoTrasporto',$shipment->toAddress->subject);
-        $xml->writeElement('Colli', 1);
-        //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
-        $xml->writeElement('PesoReale', 2.5);
+            $toAddress[]=json_decode($shipment->orderLine->getFirst()->order->fronzenShippingAddress,true);
 
-        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
-            $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
-            $xml->writeElement('ModalitaIncasso', 'CONT');
+        $xml->startElement('Consignee');
+        $xml->writeElement('CompanyName', $toAddress[0]['name'].' '.$toAddress[0]['surname'].' '.$toAddress['company']);
+        $xml->writeElement('AddressLine', $toAddress[0]['address'] . ' ' . $toAddress[0]['extra']);
+        $xml->writeElement('City', $toAddress[0]['city']);
+        $xml->writeElement('Division', $toAddress[0]['province']);
+        $xml->writeElement('PostalCode', $toAddress[0]['postcode']);
+        $countryRepo=\Monkey::app()->repoFactory->create('Country')->findOneBy(['id'=>$toAddress[0]['countryId']]);
+        $countryISOCode=$countryRepo->ISO;
+        $countryName=$countryRepo->name;
+        $xml->writeElement('Division', $toAddress[0]['province']);
+        $xml->writeElement('CountryCode',$countryISOCode);
+        $xml->writeElement('CountryName',$countryName);
+        $xml->startElement('Contact');
+
+        $xml->writeElement('PersonName', $toAddress[0]['name']. ''. $toAddress['surname']);
+        $xml->writeElement('PhoneNumber', $toAddress[0]['phone']. ''. $toAddress['surname']);
+        $xml->endElement();
+        $xml->endElement();
+        $xml->startElement('ShipmentDetails');
+        $xml->startElement('Pieces');
+        if($countryRepo->extraUe==1){
+            $isDutiable="Y";
+        }else{
+            $isDutiable="N";
         }
+       $orderId=$shipment->orderLine->getFirst()->order->id;
+       $orderLine=\Monkey::app()->repoFactory->create('OrderLine')->findBy(['orderId'=>$orderId]);
+      $numberOfPieces=0;
+      $weight=0;
+      $orderTotal=0;
+       foreach ($orderLine as $lines){
+           $xml->startElement('Piece');
+           $xml->writeElement('PieceID',$lines->id);
+           $xml->writeElement('PackageType','EE');
+           $xml->writeElement('Weight','2.5');
+           $xml->writeElement('DimWeight','1.0');
+           $xml->writeElement('Width','20.5');
+           $xml->writeElement('Depth','11.5');
+           $xml->writeElement('Height','30');
+           $xml->endElement();
+           $numberOfPieces=$numberOfPieces+1;
+           $weight=$weight+2.5;
+           $orderTotal=$orderTotal+$lines->netPrice;
+       }
+       $xml->endElement();
+       $xml->writeElement('IsDutiable',$isDutiable);
+       $xml->writeElement('NumberOfPieces',$numberOfPieces);
+       $xml->writeElement('Weight',$weight);
+       $xml->writeElement('WeightUnit','K');
 
-        $xml->writeElement('Notespedizione', $shipment->note);
-        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
-        $xml->writeElement('TipoPorto', 'F');
-        $xml->writeElement('TipoCollo', '0');
+       if($countryRepo->id==110){
+            $globalProductCode='N';
+       }else{
+           if($countryRepo->extraue==1){
+               $globalProductCode='P';
+           }else{
+               $globalProductCode='W';
+           }
 
-        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
-        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
-        $xml->writeElement('GeneraPdf', 1);
-        $xml->writeElement('ContatoreProgressivo', $shipment->id);
+       }
+       $xml->writeElement('GlobalProductCode',$globalProductCode);
+       $xml->writeElement('localProductCode',$globalProductCode);
+       $xml->writeElement('Date',$shipment->predictedShipmentDate);
+       $xml->writeElement('PackageType','EE');
+       $xml->writeElement('IsDutiable','Y');
+       $xml->writeElement('CurrencyCode','EUR');
+       $xml->endElement();
+       $xml->startElement('Shipper');
+       $xml->writeElement('ShipperID',$this->config['CodiceClienteDHL']);
+       $xml->writeElement('CompanyName','Iwes snc International Web Ecommerce Services ');
+       $xml->writeElement('AddressLine','Via Cesare Pavese, 1');
+       $xml->writeElement('City','Civitanova Marche');
+       $xml->writeElement('Division','MC');
+       $xml->writeElement('PostalCode','62012');
+       $xml->writeElement('CountryCode','IT');
+       $xml->writeElement('CountryName','Italy');
+       $xml->startElement('Contact');
+       $xml->writeElement('PersonName','delivery service');
+       $xml->writeElement('PhoneNumber','+390733471365');
+       $xml->writeElement('Email','gianluca@iwes.it');
+       $xml->endElement();
+       $xml->endElement();
+        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
+            $xml->startElement('SpecialService');
+            $xml->writeElement('SpecialServiceType', 'KB');
+            $xml->endElement();
+        }
+        $xml->startElement('Dutiable');
+        $xml->writeElement('DeclaredValue', money_format('%.2n',$orderTotal));
+        $xml->writeElement('DeclaredCurrency', 'EUR');
+        $xml->endElement();
+        $xml->startElement('Place');
+        $xml->writeElement('ResidenceOrBusiness','B');
+        $xml->writeElement('CompanyName','Iwes snc International Web Ecommerce Services ');
+        $xml->writeElement('AddressLine','Via Cesare Pavese, 1');
+        $xml->writeElement('City','Civitanova Marche');
+        $xml->writeElement('Division','MC');
+        $xml->writeElement('PostalCode','62012');
+        $xml->writeElement('CountryCode','IT');
+        $xml->writeElement('CountryName','Italy');
+        $xml->writeElement('PackageLocation','iwes');
+        $xml->endElement();
+        $xml->writeElement('EProcShip', 'N');
+        $xml->writeElement('LabelImageFormat', 'PDF');
         $xml->endElement();
         return true;
     }
