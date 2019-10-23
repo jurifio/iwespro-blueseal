@@ -136,7 +136,7 @@ class CDhlHandler extends ACarrierHandler
             $toAddress[]=json_decode($shipment->orderLine->getFirst()->order->fronzenShippingAddress,true);
 
         $xml->startElement('Consignee');
-        $xml->writeElement('CompanyName', $toAddress[0]['name'].' '.$toAddress[0]['surname'].' '.$toAddress['company']);
+        $xml->writeElement('CompanyName', $toAddress[0]['name'].' '.$toAddress[0]['surname'].' '.$toAddress[0]['company']);
         $xml->writeElement('AddressLine', $toAddress[0]['address'] . ' ' . $toAddress[0]['extra']);
         $xml->writeElement('City', $toAddress[0]['city']);
         $xml->writeElement('Division', $toAddress[0]['province']);
@@ -149,13 +149,13 @@ class CDhlHandler extends ACarrierHandler
         $xml->writeElement('CountryName',$countryName);
         $xml->startElement('Contact');
 
-        $xml->writeElement('PersonName', $toAddress[0]['name']. ''. $toAddress['surname']);
-        $xml->writeElement('PhoneNumber', $toAddress[0]['phone']. ''. $toAddress['surname']);
+        $xml->writeElement('PersonName', $toAddress[0]['name']. ''. $toAddress[0]['surname']);
+        $xml->writeElement('PhoneNumber', $toAddress[0]['phone']. ''. $toAddress[0]['surname']);
         $xml->endElement();
         $xml->endElement();
         $xml->startElement('ShipmentDetails');
         $xml->startElement('Pieces');
-        if($countryRepo->extraUe==1){
+        if($countryRepo->extraue==1){
             $isDutiable="Y";
         }else{
             $isDutiable="N";
