@@ -12,6 +12,8 @@ use bamboo\core\utils\slugify\CSlugify;
 use bamboo\domain\entities\CShopHasProduct;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
 use bamboo\core\base\CObjectCollection;
+use PDO;
+use PDOException;
 
 /**
  * Class CProductAddController
@@ -295,6 +297,54 @@ class CProductManageController extends ARestrictedAccessRootController
 
 
 
+            }
+            $shopRepo = \Monkey ::app() -> repoFactory -> create('Shop') -> findBy(['hasEcommerce' => 1]);
+
+            foreach ($shopRepo as $value) {
+                /********marketplace********/
+                $db_host = $value->dbHost;
+                $db_name = $value->dbName;
+                $db_user = $value->dbUsername;
+                $db_pass = $value->dbPassword;
+                $shop = $value->id;
+                $shopName = $value->name;
+                try {
+
+                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                    $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                    $res = " connessione ok <br>";
+                } catch (PDOException $e) {
+                    $res = $e->getMessage();
+                }
+                try {
+                    $stmtFindProduct = $db_con->prepare('SELECT count(*) as isexist from Product WHERE id=' . $productId . ' and productVariantId=' . $productVariantId);
+                    $stmtFindProduct->execute();
+                    $rowFindProduct = $stmtFindProduct->fetch(PDO::FETCH_ASSOC);
+                    if ($rowFindProduct['isexist'] > 0) {
+                        $stmtUpdateProduct = $db_con->prepare('UPDATE Product set 
+                        itemno=' . $post['Product_itemno'] . ', 
+                        productSeasonId=' . $post['Product_productSeasonId'] . ',
+                        productBrandId=' . $post['Product_productBrandId'] . ',
+                        productColorGroupId=' . $post['ProductColorGroup_id'] . ',
+                        sortingPriorityId=' . $post['Product_sortingPriorityId'] . ',
+                        productSizeGroupId=' . $post['Product_sizes'] . ',
+                        productStatusId=' . $post['Product_status'] . '  WHERE id=' . $productId . ' and productVariantId=' . $productVariantId);
+                        $stmtUpdateProduct->execute();
+                        $findProductNameTranslation = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId]);
+                        foreach ($findProductNameTranslation as $findProductNameTranslations) {
+                            $langId = $findProductNameTranslations->langId;
+                            try {
+                                $stmtUpdateProductNameTranslation = $db_con->prepare('UPDATE ProductNameTranslation SET `name`=\'' . $findProductNameTranslation->name . '\' WHERE
+                             productId=' . $productId . ' and productVariantId=' . $productVariantId . ' and langId=' . $langId);
+                                $stmtUpdateProductNameTranslation->execute();
+                            } catch (\Throwable $e) {
+                                \Monkey::app()->applicationLog('CProductManageController ','error','not Update ProductNameTranslation','cannot update' . $productId . '-' . $productVariantId . ' on ' . $shopName,'');
+                            }
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('CProductManageController ','error','not Update','cannot update' . $productId . '-' . $productVariantId . ' on ' . $shopName,'');
+                }
             }
             return json_encode($ret);
         } catch (\Throwable $e) {
