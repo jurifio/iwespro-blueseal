@@ -269,7 +269,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default" style="height: 50px">
                                                     <label for="ProductName_1_name">Nome del prodotto</label>
-                                                    <select id="ProductName_1_name" name="ProductName_1_name" class="form-control required" data-preset-name="<?php echo ((isset($productEdit)) && !is_null($productEdit->productNameTranslation->getFirst())) ? $productEdit->productNameTranslation->getFirst()->name : '' ?>"></select>
+                                                    <select id="ProductName_1_name" name="ProductName_1_name" class="form-control required" data-preset-name="<?php echo ((isset($productEdit)) && !is_null($productEdit->productNameTranslation->getFirst())) ? $productEdit->productNameTranslation->getFirst()->name : ''?>"></select>
                                                     <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>

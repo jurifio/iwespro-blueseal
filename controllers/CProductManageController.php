@@ -4,10 +4,13 @@ namespace bamboo\blueseal\controllers;
 use bamboo\core\db\pandaorm\entities\CEntityManager;
 use bamboo\core\db\pandaorm\entities\IEntity;
 use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\RedPandaAssetException;
 use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\traits\TFormInputValidate;
+use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\slugify\CSlugify;
 use bamboo\domain\entities\CShopHasProduct;
+use bamboo\core\utils\amazonPhotoManager\S3Manager;
 
 /**
  * Class CProductAddController
@@ -78,7 +81,57 @@ class CProductManageController extends ARestrictedAccessRootController
             if (!\Monkey::app()->repoFactory->beginTransaction()) throw new \Exception();
             /** UPDATE PRODUCT */
             if ($this->isValidInput("Product_productBrandId", $post)) {
+               $findOldProductBrand=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$productEdit->productBrandId]);
+               $oldFolder=$findOldProductBrand->slug;
+               $findNewProductBrand=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$post['Product_productBrandId']]);
+               $newFolder=$findNewProductBrand->slug;
 	            $productEdit->productBrandId = $post['Product_productBrandId'];
+	            $productPhotoRepo=\Monkey::app()->repoFactory->create('ProductPhoto');
+	            $productHasProductPhotoRepo=\Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId]);
+	            foreach($productHasProductPhotoRepo as $productHasProductPhoto){
+	                $photo=$productPhotoRepo->findOneBy(['id'=>$productHasProductPhoto->productPhotoId]);
+	                $urlOrigin="https://cdn.iwes.it/".$oldFolder.'/'.$photo->name;
+
+	                //salvataggio immagine da cartella ordini
+                    $local = $this->app->rootPath() . "/temp-movePhoto";
+                    $imageDownload = file_get_contents( $urlOrigin);
+                    file_put_contents($local, $imageDownload);
+
+
+
+                    // upload immagine su cartella destinazione
+
+                    \Monkey::app()->vendorLibraries->load("amazon2723");
+                    $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
+                    $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder').'-movePhoto'."/";
+
+                    $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
+
+                    $numPhoto = count($_FILES['file']['name']);
+
+                    for($i = 0; $i < $numPhoto; $i++){
+                        if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $tempFolder . $_FILES['file']['name'][$i])) {
+                            throw new RedPandaException('Cannot move the uploaded Files');
+                        }
+
+                        $fileName['name'] = explode('_', $_FILES['file']['name'][$i])[0];
+                        // $fileName['extension'] = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
+
+
+                        try{
+                            $res = $image->processImageUploadBrandPhoto($_FILES['file']['name'][$i], $fileName, $config['bucket'], $newFolder);
+                        }catch(RedPandaAssetException $e){
+                            $this->app->router->response()->raiseProcessingError();
+                            return 'Non riesco a Copiare il file';
+                        }
+
+                        //  unlink($tempFolder . $_FILES['file']['name'][$i]);
+
+                    }
+
+                }
+
+
                 //$this->app->dbAdapter->update("Product", array("productBrandId" => $post['Product_productBrandId']), $productIds);
             }
             if ($this->isValidInput("Product_productSeasonId", $post)) {
