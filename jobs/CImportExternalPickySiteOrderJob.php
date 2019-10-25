@@ -382,7 +382,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.creationDate as creationDate,
                                                c.isParallel as isParallel,
                                                c.isImport as isImport
-                                               from Cart c join User U on c.userId = U.id WHERE isParallel is null  AND c.isImport=0  order BY remoteCartSellerId ASC    ');
+                                               from Cart c join User U on c.userId = U.id WHERE isParallel is null  AND c.isImport is null  order BY remoteCartSellerId ASC    ');
                 $stmtCart -> execute();
                 foreach ($stmtCart as $rowCart) {
                     //hile ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {

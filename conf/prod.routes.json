@@ -2159,6 +2159,40 @@
             "methods": [
                 "GET"
             ]
+        },{
+            "name": "Gestione ordini spediti con i friend",
+            "pattern": "/blueseal/friend/vendite(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendSellListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
+            "name": "Gestione ordini in lavorazione con i friend",
+            "pattern": "/blueseal/friend/ordini-in-lavorazione(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderWorkingListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        }, {
+            "name": "Gestione ordini non elaborabili i friend",
+            "pattern": "/blueseal/friend/ordini-cancellati(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderCancelListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
         },
         {
             "name": "Gestione delle fatture dei Friend",
