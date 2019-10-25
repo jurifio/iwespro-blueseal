@@ -146,6 +146,9 @@
             data-remote="bs.orderline.friend.ok"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.orderline.change.status"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-tag="a"
             data-icon="fa-thumbs-down"
             data-permission="/admin/product/list"
