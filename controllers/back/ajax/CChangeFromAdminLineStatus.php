@@ -43,6 +43,7 @@ class CChangeFromAdminLineStatus extends AAjaxController
             $repo = \Monkey::app()->repoFactory->create('OrderLine');
             $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
             $oldActive = $line->orderLineStatus->isActive;
+            $oldName = $line->orderLineStatus->title;
 
 
             /** @var COrderLine $line */
@@ -52,6 +53,7 @@ class CChangeFromAdminLineStatus extends AAjaxController
 
 
             $newActive = $line->orderLineStatus->isActive;
+            $newName =$line->orderLineStatus->title;
 
             if($line->shopId == 46 AND $line->status == "ORD_WAIT") {
                 //Value for api
@@ -104,7 +106,7 @@ class CChangeFromAdminLineStatus extends AAjaxController
             \Monkey::app()->repoFactory->commit();
 
             if ($oldActive != $newActive) return 'reload';
-            else return 'don\'t do it';
+            else return 'Cambio Stato Eseguito';
         } catch (BambooException $e) {
             \Monkey::app()->repoFactory->rollback();
             \Monkey::app()->router->response()->raiseProcessingError();

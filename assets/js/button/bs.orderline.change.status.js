@@ -71,12 +71,12 @@ $(document).on('bs-orderline-change-status', function () {
         }).fail(function (res) {
             modal.writeBody(res);
         }).always(function (res) {
-            bsModal.setOkEvent(function () {
+           modal.setOkEvent(function () {
                 window.location.reload();
-                bsModal.hide();
+                modal.hide();
                 // window.location.reload();
             });
-            bsModal.showOkBtn();
+            modal.showOkBtn();
         });
 
     });
