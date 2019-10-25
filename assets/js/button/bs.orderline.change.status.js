@@ -67,14 +67,18 @@ $(document).on('bs-orderline-change-status', function () {
 
             }
         }).done(function (res) {
-            res = JSON.parse(res);
-            var x = '<p>' + res.message + '</p><br />' +
-                '<strong style="color:red">RICORDATI DI STAMPARE ED APPLICARE L\'ETICHETTA AL COLLO!</strong><br />';
-            x += typeof res.shipmentId === 'undefined' ? '' : '<a target="_blank" href="/blueseal/xhr/FriendShipmentLabelPrintController?shipmentId=' + res.shipmentId + '">Stampa Etichetta</a>';
-            modal.writeBody(x);
+           modal.writeBody(res);
         }).fail(function (res) {
-            modal.writeBody(res.responseText);
+            modal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                window.location.reload();
+                bsModal.hide();
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
         });
+
     });
 
 });
