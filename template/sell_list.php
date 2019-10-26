@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -11,12 +11,21 @@
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
 
+
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed">
-
+                    </div>
+                    <div class="col-md-4 col-md-offset-4 alert-container ">
+                        <div class="tab">
+                            <a href="/blueseal/ordini-in-lavorazione" class="btn btn-info" role="button">In
+                                lavorazione</a>
+                            <a href="/blueseal/vendite" class="btn btn-info" role="button">Spediti</a>
+                            <a href="/blueseal/ordini-cancellati" class="btn btn-info"
+                               role="button">Cancellati</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -24,7 +33,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped" data-datatable-name="order_list"
+                        <table class="table table-striped" data-datatable-name="sellist"
                                data-controller="SellListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
                                data-inner-setup="true"
@@ -41,7 +50,7 @@
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Iwes Order<br />Parallel <br /> Status
+                                    class="center">Iwes Order<br/>Parallel <br/> Status
                                 </th>
                                 <th data-slug="user"
                                     data-searchable="true"
@@ -77,7 +86,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Marketplace<br/>
-                                    Shop<br />Order
+                                    Shop<br/>Order
                                 </th>
                                 <th data-slug="notes"
                                     data-searchable="true"
@@ -92,7 +101,8 @@
                                 <th data-slug="invoice"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Fatture...................<br/>Seller<br/>Supplier<br>Iwes su Seller</br>
+                                    class="center">Fatture...................<br/>Seller<br/>Supplier<br>Iwes su
+                                    Seller</br>
                                 </th>
                                 <th data-slug="documents"
                                     data-searchable="true"
@@ -124,6 +134,7 @@
             </div>
         </div>
     </div>
+
     <?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
