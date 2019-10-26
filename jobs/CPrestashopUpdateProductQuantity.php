@@ -60,14 +60,24 @@ class CPrestashopUpdateProductQuantity extends ACronJob
                 $sizes[$pps->productSizeId] = $pps->stockQty;
             }
 
-            $shops = $php->getShopsForProduct();
+            $prestashopHasProductHasMarketplaceHasShopRepo=\Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
+            $shops = [];
+            if($prestashopHasProductHasMarketplaceHasShopRepo!=null){
+               foreach ($prestashopHasProductHasMarketplaceHasShopRepo as $collections){
+                   $shops[] =$collections->marketplaceHasShopId;
+               }
 
-            foreach ($sizes as $size => $qty){
-                $prestashopProduct->updateProductQuantity($php->prestaId, $size, $qty, null, $shops);
             }
 
-            $php->status = 1;
-            $php->update();
+           // $shops = $php->getShopsForProduct();
+            if ($shops!=null) {
+                foreach ($sizes as $size => $qty) {
+                    $prestashopProduct->updateProductQuantity($php->prestaId,$size,$qty,null,$shops);
+                }
+
+                $php->status = 1;
+                $php->update();
+            }
         }
 
         $this->report('Update product qty', 'End Update');

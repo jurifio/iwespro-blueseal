@@ -63,7 +63,7 @@ class CShipmentListAjaxController extends AAjaxController
 
         $allShop = $this->app->getUser()->hasPermission('allShops');
         if(!$allShop) {
-            $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_USER]);
+            $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_USER,CShipment::SCOPE_SUPPLIER_TO_US,CShipment::SCOPE_US_TO_USER]);
         }
 
         $datatable->addCondition('shopId',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());

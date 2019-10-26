@@ -193,6 +193,11 @@
     </bs-toolbar-group>
     <?php endif; ?>
     <?php if ($allShops) : ?>
+        <bs-toolbar-group data-group-label="Gestione Avanzamento Righe Ordini">
+            <bs-toolbar-button
+                    data-remote="bs.orderline.change.status"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
         <bs-toolbar-group data-group-label="Gestione Rimozione documenti">
             <bs-toolbar-button
                     data-tag="a"
