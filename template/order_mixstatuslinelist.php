@@ -151,6 +151,9 @@
                 data-event="bs.order.delete.panic"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.order.split"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.order.getStatusHistory"
         ></bs-toolbar-button>
         <bs-toolbar-button
