@@ -99,6 +99,19 @@
                 "POST",
                 "DELETE"
             ]
+        },{
+            "pattern": "/blueseal/ordini-con-righe-diverse(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderMixStatusLineListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
         },
         {
             "pattern": "/blueseal/vendite(/)?",
