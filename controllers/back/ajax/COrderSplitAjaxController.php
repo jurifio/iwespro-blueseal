@@ -48,7 +48,7 @@ class COrderSplitAjaxController extends AAjaxController
 
       foreach($orderLineCollect as $orderLines){
           if(in_array($orderLines->status,$orderLineCancel,true)){
-
+            $cart=$cartRepo->getEmptyEntity('Cart');
 
           }else{
               continue;
