@@ -324,33 +324,28 @@ class COrderListAjaxController extends AAjaxController
             $row["documents"] = $fileName;
 
             $addressOrder = '';
-            $address[] = json_decode($val->frozenShippingAddress,true);
-            $address = $address != false ? $address : json_decode($val->frozenBillingAddress,true);
-            if($address!=null) {
-                if($address[0]['countryId']!=null) {
-                    $country = $countryR->findOneBy(['id' => $address[0]['countryId']]);
-                    if ($country != null) {
-                        $countryName = $country->name;
+            $address = CUserAddress::defrost($val->frozenShippingAddress);
+            $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
+            $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
 
-                    } else {
-                        $countryName = '';
-                    }
-                }else{
-                    $countryName='';
-                }
-                $phone = is_null($address[0]['phone']) ? '---' : $address[0]['phone'];
-                $addressOrder .= "
-             <span><strong>Destinatario: </strong>" . $address[0]['name'] . " " . $address[0]['surname'] . " " . $address[0]['company'] . "</span><br>
-             <span><strong>Indirizzo: </strong>" . $address[0]['address'] . "</span><br>
-             <span><strong>CAP: </strong>" . $address[0]['postcode'] . "</span><br>
-             <span><strong>Città: </strong>" . $address[0]['city'] . "</span><br>
-             <span><strong>Provincia: </strong>" . $address[0]['province'] . "</span><br>
+            $country = $countryR->findOneBy(['id' => $address->countryId]);
+            if ($country != null) {
+                $countryName = $country->name;
+
+            } else {
+                $countryName = '';
+            }
+            $phone = is_null($address->phone) ? '---' : $address->phone;
+            $addressOrder .= "
+             <span><strong>Destinatario: </strong>$address->name $address->surname</span><br>
+             <span><strong>Indirizzo: </strong>$address->address</span><br>
+             <span><strong>CAP: </strong>$address->postcode</span><br>
+             <span><strong>Città: </strong>$address->city</span><br>
+             <span><strong>Provincia: </strong>$address->province</span><br>
              <span><strong>Paese:</strong>";
-                $addressOrder .= $countryName . "</span><br>
+            $addressOrder .= $countryName . "</span><br>
              <span><strong>Telefono: </strong>$phone</span><br>";
 
-
-            }
             $row["address"] = $addressOrder;
 
             $response['data'][] = $row;

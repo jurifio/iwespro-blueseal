@@ -168,7 +168,7 @@ class CDictionaryRemasterImageRenameAjaxController extends AAjaxController
 
                     $firsPart = substr($filenametoextrat,0,$firstPosition);
 
-                    $secondPart = substr($filenametoextrat,$firstPosition,$lastPosition - $firstPosition + 13);
+                    $secondPart = substr($filenametoextrat,$firstPosition,$lastPosition - $firstPosition + 14);
 
                     $prefinalName = $firsPart . '__Barbagalloshop' . $secondPart . '_00' . substr(strrchr($item, '/'), 1) . '.jpg';
 
