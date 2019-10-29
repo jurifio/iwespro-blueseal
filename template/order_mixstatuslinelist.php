@@ -9,27 +9,37 @@
 <?php include "parts/sidebar.php"; ?>
 <div class="page-container">
     <?php include "parts/header.php" ?>
-    <?php include "parts/operations.php" ?>
+    <div class="operations">
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="breadcrumb">
+                    <li><p>BlueSeal</p></li>
+                    <li><a href="<?php echo $page->getUrl(); ?>" class="active"><?php echo $page->getTitle(); ?></a></li>
+                </ul>
+            </div>
+            <div class="col-md-8">
+                <ul class="breadcrumb">
+                    <div class="tab">
+                        <a href="/blueseal/ordini" class="btn btn-light" role="button"><i class="fa fa-diamond" aria-hidden="true"></i> Tutti gli Ordini </a>
+                        <a href="/blueseal/ordini-in-lavorazione" class="btn btn-light" role="button"><i class="fa fa-folder-open" aria-hidden="true"></i> In lavorazione</a>
+                        <a href="/blueseal/vendite" class="btn btn-light" role="button"><i class="fa fa-Truck" aria-hidden="true"></i> Spediti</a>
+                        <a href="/blueseal/ordini-cancellati" class="btn btn-light" role="button"><i class="fa fa-trash" aria-hidden="true"></i> Cancellati</a>
+                        <a href="/blueseal/ordini-resi" class="btn btn-light" role="button"><i class="fa fa-ambulance" aria-hidden="true"></i> Resi</a>
+                        <a href="/blueseal/ordini-con-righe-diverse" class="btn btn-light" role="button"><i class="fa fa-indent" aria-hidden="true"></i> Con Righe Diverse</a>
+                    </div>
+                </ul>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 toolbar-container">
+                <div class="bs-toolbar"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4 alert-container closed">
-                    </div>
-                    <div class="col-md-8 col-md-offset-4 alert-container ">
-                        <div class="tab">
-                            <a href="/blueseal/ordini" class="btn btn-info" role="button">Tutti gi Ordini</a>
-                            <a href="/blueseal/ordini-in-lavorazione" class="btn btn-info" role="button">In lavorazione</a>
-                            <a href="/blueseal/vendite" class="btn btn-info" role="button">Spediti</a>
-                            <a href="/blueseal/ordini-cancellati" class="btn btn-info" role="button">Cancellati</a>
-                            <a href="/blueseal/ordini-resi" class="btn btn-info" role="button">Resi</a>
-                            <a href="/blueseal/ordini-con-righe-diverse" class="btn btn-info" role="button">Da Elaborare</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
