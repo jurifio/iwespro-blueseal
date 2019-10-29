@@ -52,14 +52,14 @@ class COrderSplitAjaxController extends AAjaxController
             if (in_array($orderLines->status,$orderLineCancel,true)) {
                 //creo il carrello
                 $cart = $cartRepo->getEmptyEntity('Cart');
-                $cart->orderPaymentMethodId = $originalCart->orderParymentmethodId;
+                $cart->orderPaymentMethodId = $originalCart->orderPaymentMethodId;
                 $cart->userId = $originalCart->userId;
                 $cart->cartTypeId = $originalCart->cartTypeId;
-                $cart->billingAddressId = $originalCart->billingAddessId;
+                $cart->billingAddressId = $originalCart->billingAddressId;
                 $cart->shipmentAddressId = $originalCart->shipmentAddressId;
                 $cart->lastUpdate = $originalCart->lastUpdate;
                 $cart->creationDate = $originalCart->creationDate;
-                if ($originalCart->hasInvoice1 = null) {
+                if ($originalCart->hasInvoice = null) {
                     $cart->hasInvoice = $originalCart->hasInvoice;
                 }
                 $cart->remoteShopSellerId = $originalCart->remoteShopSellerId;
@@ -92,7 +92,8 @@ class COrderSplitAjaxController extends AAjaxController
                         $isImport = "null";
                     }
 
-                    $insertRemoteCart = $db_con->prepare("INSERT INTO Cart (orderPaymentMethodId,
+                    $insertRemoteCart = $db_con->prepare('INSERT INTO Cart (
+                                                                          orderPaymentMethodId,
                                                                           couponId,
                                                                           userId,
                                                                           cartTypeId,  
@@ -104,17 +105,17 @@ class COrderSplitAjaxController extends AAjaxController
                                                                           isParallel,
                                                                           isImport)
                                                                            VALUES (
-                                                                          " . $rowselectRemoteCart['orderPaymentMethodId'] . ",
+                                                                          \'' . $rowselectRemoteCart['orderPaymentMethodId'] . '\',
                                                                           null,
-                                                                          " . $rowselectRemoteCart['userId'] . ",
-                                                                          " . $rowselectRemoteCart['cartTypeId'] . ",
-                                                                          " . $rowselectRemoteCart['billingAddressId'] . ",
-                                                                          " . $rowselectRemoteCart['shipmentAddressId'] . ",
-                                                                          '" . $rowselectRemoteCart['lastUpdate'] . "',
-                                                                          '" . $rowselectRemoteCart['creationDate'] . "',
-                                                                          " . $rowselectRemoteCart['hasInvoice'] . ",
-                                                                          " . $isParallel . ",
-                                                                          " . $isImport . ")");
+                                                                          \'' . $rowselectRemoteCart['userId'] . '\',
+                                                                          \''. $rowselectRemoteCart['cartTypeId'] . '\',
+                                                                          \'' . $rowselectRemoteCart['billingAddressId'] . '\',
+                                                                          \'' . $rowselectRemoteCart['shipmentAddressId'] . '\',
+                                                                          \'' . $rowselectRemoteCart['lastUpdate'] . '\',
+                                                                          \'' . $rowselectRemoteCart['creationDate'] . '\',
+                                                                          \'' . $rowselectRemoteCart['hasInvoice'] . '\',
+                                                                          ' . $isParallel . ',
+                                                                          ' . $isImport . ')');
                     $insertRemoteCart->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderSplitAjaxController','Error','select remote Cart  ' , $originalCart->remoteCartSellerId,$e);
@@ -125,7 +126,8 @@ class COrderSplitAjaxController extends AAjaxController
                 $cart->remoteCartSellerId = $newremoteCartId;
                 $cart->insert();
                 //id nuovo carrello
-                $newcartId = $cart->lastInsertId();
+                $FindLastCartId=\Monkey::app()->repoFactory->create('Cart')->findOneBy(['remoteCartSellerId'=>$newremoteCartId,'remoteShopSellerId'=>$originalCart->remoteShopSellerId]);
+                $newCartId = $FindLastCartId->id;
                 //inserimento righe carrello
                 $cartLine = $cartLineRepo->finOneBy(['cartId' => $originalOrder->cartId,'productId' => $orderLines->productId,'productVariantId' => $orderLines->productVariantId,'productSizeId' => $orderLines->productSizeId]);
                 $cartLine->cartId = $newCartId;
@@ -133,7 +135,7 @@ class COrderSplitAjaxController extends AAjaxController
                     $selectRemoteCartLine = $db_con->prepare('SELECT * FROM CartLine WHERE id=' . $cartLine->remoteCartLineSellerId . ' AND cartId=' . $cart->remoteCartSellerId);
                     $selectRemoteCartLine->execute();
                     $rowselectRemoteCartline = $selectRemoteCartLine->fetch(PDO::FETCH_ASSOC);
-                    if ($rowselectRemoteCartLine['isParallel'] != null) {
+                    if ($rowselectRemoteCartline['isParallel'] != null) {
                         $isParallel = $rowselectRemoteCartLine['isParallel'];
                     } else {
                         $isParallel = "null";
@@ -143,12 +145,11 @@ class COrderSplitAjaxController extends AAjaxController
                     } else {
                         $isImport = "null";
                     }
-                    $updateRemoteCartLine = $db_con->prepare("UPDATE CartLine  SET cartId=" . $newremoteCartId . "  where id=" . $cartLine->remoteCartLineSellerId . " 
-                                                                                           and cartId=" . $cart->remoteCartSellerId . "  
-                                                                                           and productId=" . $cartLine->productId . "
-                                                                                           and productVariantId=" . $cartLine->produtVariantId . "
-                                                                                           and productSizeId=" . $cartLine->productSizeId
-                    );
+                    $updateRemoteCartLine = $db_con->prepare('UPDATE CartLine  SET cartId=' . $newremoteCartId . '  where id=' . $cartLine->remoteCartLineSellerId . ' 
+                                                                                           and cartId=' . $cart->remoteCartSellerId . '  
+                                                                                           and productId=' . $cartLine->productId . '
+                                                                                           and productVariantId=' . $cartLine->produtVariantId . '
+                                                                                           and productSizeId='. $cartLine->productSizeId);
                     $updateRemoteCartLine->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' update remote CartLine  ' , $cartLine->remoteCartLineSellerId,$e);
@@ -283,12 +284,14 @@ class COrderSplitAjaxController extends AAjaxController
             $insertRemoteOrder->execute();
 
                 } catch (\Throwable $e) {
-                    \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' update remote CartLine  ' , $originalOrder->id,$e);
+                    \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' insert remote Order  ' , $originalOrder->id,$e);
                     return $res=$e;
                 }
                 $newremoteOrderId=$db_con->lastInsertId();
                 $newOrder->remoteOrderSellerId=$newremoteOrderId;
-                $newOrder->udpate();
+                $newOrder->insert();
+                $findLastOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['remoteOrderSellerId'=>$newremoteOrderId,'remoteShopSellerId'=>$originalOrder->remoteShopSellerId]);
+                $newOrderId=$findLastOrder->id;
                 try {
                     $stmtUpdateRemoteOrderLine = $db_con->prepare("Update OrderLine SET OrderId=" . $newremoteOrderId . " WHERE 
                                                                       id=" . $orderLines->remoteOrderLineSellerId . " 
@@ -303,9 +306,43 @@ class COrderSplitAjaxController extends AAjaxController
                     $res=$e;
                     return $res;
                 }
-            } else {
+
+                $orderLines->orderId=$newOrderId;
+                $orderLines->update();
+                $originalOrder->shippingPrice -= $orderLines->shippingCharge;
+                $originalOrder->userDiscount-=$orderLines->userCharge;
+                $originalOrder->couponDiscount-=$orderLines->couponCharge;
+                $originalOrder->grossTotal-=$orderLines->netPrice;
+                $netTotal=$orderLines->netPrice+$OrderLines->shippingCharge;
+                $originalOrder->netTotal-=$netTotal;
+                $originalOrder->vat-=$orderLines->vat;
+                $originalOrder->paidAmount-=$netTotal;
+                $originalOrder->update();
+                try{
+                $stmtUpdateRemoteOrder=$db_con->prepare('UPDATE `Order` SET shippingPrice=shippingPrice-'.$orderLines->shippingCharge.',
+                                                                                     userDiscount=userDiscount-'.$orderLines->userCharge.',       
+                                                                                     couponDiscount=couponDiscount-'.$orderLines->couponCharge.',
+                                                                                     grossTotal=grossTotal-'.$orderLines->netPrice.',
+                                                                                     netTotal=netTotal-'.$netTotal.',
+                                                                                     vat=vat-'.$orderLines->vat.',
+                                                                                     paidAmount=paidAmount-'.$netTotal.' 
+                                                                                     WHERE id='.$originalOrder->remoteOrderSellerId
+                                                                                     );
+                $stmtUpdateRemoteOrder->execute();
+                } catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' update remoteOrder  ' , $originalOrder->remoteOrderSellerId,$e);
+                    $res=$e;
+                    return $res;
+                }
+                                                                                     
+                                                                                     
+                                                                                     
+                                                                                     
+
+                            } else {
                 continue;
             }
+
 
         }
 
