@@ -16,7 +16,16 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed">
-
+                    </div>
+                    <div class="col-md-8 col-md-offset-4 alert-container ">
+                        <div class="tab">
+                            <a href="/blueseal/ordini" class="btn btn-info" role="button">Tutti gi Ordini</a>
+                            <a href="/blueseal/ordini-in-lavorazione" class="btn btn-info" role="button">In lavorazione</a>
+                            <a href="/blueseal/vendite" class="btn btn-info" role="button">Spediti</a>
+                            <a href="/blueseal/ordini-cancellati" class="btn btn-info" role="button">Cancellati</a>
+                            <a href="/blueseal/ordini-resi" class="btn btn-info" role="button">Resi</a>
+                            <a href="/blueseal/ordini-con-righe-diverse" class="btn btn-info" role="button">Da Elaborare</a>
+                        </div>
                     </div>
                 </div>
             </div>
