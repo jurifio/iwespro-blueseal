@@ -99,11 +99,6 @@
                                     data-orderable="false"
                                     class="center">Documenti
                                 </th>
-                                <th data-slug="address"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Indirizzi
-                                </th>
                                 <th data-slug="lastUpdate"
                                     data-searchable="true"
                                     data-orderable="true"

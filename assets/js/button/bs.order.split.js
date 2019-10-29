@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-list",
+    icon:"fa-indent",
     permission:"/admin/product/edit",
     event:"bs-order-split",
     class:"btn btn-default",
@@ -9,7 +9,7 @@ window.buttonSetup = {
     placement:"bottom",
     toggle:"modal"
 };
-$(document).on('bs.order.delete.panic', function(){
+$(document).on('bs-order-split', function(){
 
     var getVarsArray = [];
     var dataTable = $('.table').DataTable();

@@ -323,30 +323,6 @@ class COrderMixStatusLineListAjaxController extends AAjaxController
 
             $row["documents"] = $fileName;
 
-            $addressOrder = '';
-            $address = CUserAddress::defrost($val->frozenShippingAddress);
-            $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
-            $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
-
-            $country = $countryR->findOneBy(['id' => $address->countryId]);
-            if ($country != null) {
-                $countryName = $country->name;
-
-            } else {
-                $countryName = '';
-            }
-            $phone = is_null($address->phone) ? '---' : $address->phone;
-            $addressOrder .= "
-             <span><strong>Destinatario: </strong>$address->name $address->surname</span><br>
-             <span><strong>Indirizzo: </strong>$address->address</span><br>
-             <span><strong>CAP: </strong>$address->postcode</span><br>
-             <span><strong>Città: </strong>$address->city</span><br>
-             <span><strong>Provincia: </strong>$address->province</span><br>
-             <span><strong>Paese:</strong>";
-            $addressOrder .= $countryName . "</span><br>
-             <span><strong>Telefono: </strong>$phone</span><br>";
-
-            $row["address"] = $addressOrder;
 
             $response['data'][] = $row;
         }
