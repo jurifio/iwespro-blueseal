@@ -38,6 +38,9 @@ class COrderSplitAjaxController extends AAjaxController
         $orderId = \Monkey::app()->router->request()->getRequestData('orderId');
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
+        $invoiceLineHasOrderLineRepo=\Monkey::app()->repoFactory->create('InvoiceLineHasOrderLineRepo');
+        $orderLineStatisticsRepo=\Monkey::app()->repoFactory->create('OrderLineStatistics');
+        $orderLineHasShipmentRepo=\Monkey::app()->repoFactory->create('OrderLineStatistics');
         $cartRepo = \Monkey::app()->repoFactory->create('Cart');
         $cartLineRepo = \Monkey::app()->repoFactory->create('CartLine');
         $originalOrder = $orderRepo->findOneBy(['id' => $orderId]);
@@ -129,13 +132,13 @@ class COrderSplitAjaxController extends AAjaxController
                 $FindLastCartId=\Monkey::app()->repoFactory->create('Cart')->findOneBy(['remoteCartSellerId'=>$newremoteCartId,'remoteShopSellerId'=>$originalCart->remoteShopSellerId]);
                 $newCartId = $FindLastCartId->id;
                 //inserimento righe carrello
-                $cartLine = $cartLineRepo->finOneBy(['cartId' => $originalOrder->cartId,'productId' => $orderLines->productId,'productVariantId' => $orderLines->productVariantId,'productSizeId' => $orderLines->productSizeId]);
+                $cartLine = $cartLineRepo->findOneBy(['cartId' => $originalOrder->cartId,'productId' => $orderLines->productId,'productVariantId' => $orderLines->productVariantId,'productSizeId' => $orderLines->productSizeId]);
                 $cartLine->cartId = $newCartId;
                 try {
                     $selectRemoteCartLine = $db_con->prepare('SELECT * FROM CartLine WHERE id=' . $cartLine->remoteCartLineSellerId . ' AND cartId=' . $cart->remoteCartSellerId);
                     $selectRemoteCartLine->execute();
-                    $rowselectRemoteCartline = $selectRemoteCartLine->fetch(PDO::FETCH_ASSOC);
-                    if ($rowselectRemoteCartline['isParallel'] != null) {
+                    $rowselectRemoteCartLine = $selectRemoteCartLine->fetch(PDO::FETCH_ASSOC);
+                    if ($rowselectRemoteCartLine['isParallel'] != null) {
                         $isParallel = $rowselectRemoteCartLine['isParallel'];
                     } else {
                         $isParallel = "null";
@@ -148,7 +151,7 @@ class COrderSplitAjaxController extends AAjaxController
                     $updateRemoteCartLine = $db_con->prepare('UPDATE CartLine  SET cartId=' . $newremoteCartId . '  where id=' . $cartLine->remoteCartLineSellerId . ' 
                                                                                            and cartId=' . $cart->remoteCartSellerId . '  
                                                                                            and productId=' . $cartLine->productId . '
-                                                                                           and productVariantId=' . $cartLine->produtVariantId . '
+                                                                                           and productVariantId=' . $cartLine->productVariantId . '
                                                                                            and productSizeId='. $cartLine->productSizeId);
                     $updateRemoteCartLine->execute();
                 } catch (\Throwable $e) {
@@ -159,7 +162,7 @@ class COrderSplitAjaxController extends AAjaxController
                 $cartLine->update();
                 $newOrder = $orderRepo->getEmptyEntity();
                 $newOrder->orderPaymentMethodId = $originalOrder->orderPaymentMethodId;
-                $newOrder->orderShippingMethotdId = $originalOrder->orderShippingMethodId;
+                $newOrder->orderShippingMethodId = $originalOrder->orderShippingMethodId;
                 $newOrder->userId = $originalOrder->userId;
                 $newOrder->status = 'ORD_CANCEL';
                 $newOrder->frozenBillingAddress = $originalOrder->frozenBillingAddress;
@@ -178,7 +181,7 @@ class COrderSplitAjaxController extends AAjaxController
                 $newOrder->note = $originalOrder->note;
                 if ($originalOrder != null) {
                     $newOrder->transactionNumber = $originalOrder->transactionNumber;
-                    $newOrder->transactionMac = $originalOrder->transactinMac;
+                    $newOrder->transactionMac = $originalOrder->transactionMac;
                     $newOrder->paidAmount = $orderLines->netPrice;
                     $newOrder->paymentDate = $originalOrder->paymentDate;
                 }
@@ -188,11 +191,11 @@ class COrderSplitAjaxController extends AAjaxController
                 $newOrder->isOrderMarketplace = $originalOrder->isOrderMarketplace;
                 $newOrder->marketplaceId = $originalOrder->marketplaceId;
                 $newOrder->marketplaceOrderId = $originalOrder->marketplaceOrderId;
-                $newOrder->isShippingToIwes = $originalOrder->isShippingtoIwes;
+                $newOrder->isShippingToIwes = $originalOrder->isShippingToIwes;
                 $newOrder->orderIdFather = $originalOrder->id;
                 if ($originalOrder != null) {
                     $transactionNumber = $originalOrder->transactionNumber;
-                    $transactionMac = $originalOrder->transactinMac;
+                    $transactionMac = $originalOrder->transactionMac;
                     $paidAmount = $orderLines->netPrice;
                     $paymentDate = $originalOrder->paymentDate;
                 } else {
@@ -201,9 +204,23 @@ class COrderSplitAjaxController extends AAjaxController
                     $paidAmount = 'null';
                     $paymentDate = 'null';
                 }
+                $netTotal=$orderLines->netPrice - $orderLines->shippingCharge;
+                if($originalOrder->orderPaymentMethodId!=null){
+                    $orderPaymentMethodId=$originalOrder->orderPaymentMethodId;
+                }else{
+                    $orderPaymentMethodId='null';
+                }
+                if($originalOrder->orderShippingMethodId!=null){
+                    $orderShippingMethodId=$originalOrder->orderShippingMethodId;
+                }else{
+                    $orderShippingMethodId='null';
+                }
+
+
 
                 try {
-                    $insertRemoteOrder = $db_con->prepare("INSERT INTO `Order` (
+                    if($originalCart->remoteShopSellerId!=1) {
+                        $insertRemoteOrder = $db_con->prepare("INSERT INTO `Order` (
            orderPaymentMethodId,
            orderShippingMethodId,
            couponId,
@@ -243,22 +260,22 @@ class COrderSplitAjaxController extends AAjaxController
            isImport,
            orderIdFather          
            ) VALUES (
-           '" . $originalOrder->orderPaymentMethodId . "',   
-           '" . $originalOrder->orderShippingMethodId . "',
+           '" . $orderPaymentMethodId . "',   
+           '" . $orderShippingMethodId . "',
             null,
             '" . $originalOrder->userId . "',
             '" . $newremoteCartId . "',
             'ORD_CANCEL',
-            '" . addslashes($originalOrder->frozenBillingAddress) . "',
-            '" . addslashes($originalOrder->rozenShippingAddress) . "',
-            '" . $originalOrder->frozenBillingAddress . "',
+            '" . $originalOrder->frozenBillingAddress. "',
             '" . $originalOrder->frozenShippingAddress . "',
+            '" . $originalOrder->billingAddressId . "',
+            '" . $originalOrder->shipmentAddressId . "',
             '" . $orderLines->shippingCharge . "',
             '" . $orderLines->userCharge . "',
             '" . $orderLines->couponCharge . "',
             '" . $originalOrder->paymentModifier . "',
             '" . $orderLines->netPrice . "',
-            '" . $orderLines->netPrice - $orderLines->shippingCharge . "',
+            '" . $netTotal . "',
             '" . $orderLines->vat . "',
             0,
             0,
@@ -274,13 +291,95 @@ class COrderSplitAjaxController extends AAjaxController
             null,
             null,
             null,
-            '" . $originalOrder->remoteShopSellerId . "'
+            '" . $originalOrder->remoteShopSellerId . "',
             '" . $originalOrder->isOrderMarketplace . "',
             '" . $originalOrder->marketplaceId . "',
             '" . $originalOrder->marketplaceOrderId . "',
             '" . $originalOrder->isShippingToIwes . "',
             1,
-            '".$originalOrder->remoteOrderSellerId."')");
+            '" . $originalOrder->remoteOrderSellerId . "')");
+                    }else{
+                        $insertRemoteOrder = $db_con->prepare("INSERT INTO `Order` (
+           orderPaymentMethodId,
+           orderShippingMethodId,
+           couponId,
+           userId,
+           cartId,
+          `status`,
+           frozenBillingAddress,
+           frozenShippingAddress,
+           billingAddressId,
+           shipmentAddressId,
+           shippingPrice,
+           userDiscount,
+           couponDiscount,
+           paymentModifier,
+           grossTotal,
+           netTotal,
+           `vat`,
+           sellingFee,
+           customModifier,
+           orderDate,
+            typeOrder,
+           `note`,
+           transactionNumber,          
+           transactionMac,
+           shipmentNote,  
+           paidAmount,
+           paymentDate,
+           lastUpdate,
+           creationDate,
+           remoteIwesOrderId, 
+           hasInvoice,         
+           isParallel,
+           remoteSellerId,
+           isOrderMarketplace,
+           marketplaceId,
+           marketplaceOrderId,
+           isShippingToIwes ,
+           isImport,
+           orderIdFather          
+           ) VALUES (
+           '" . $orderPaymentMethodId . "',   
+           '" . $orderShippingMethodId . "',
+            null,
+            '" . $originalOrder->userId . "',
+            '" . $newremoteCartId . "',
+            'ORD_CANCEL',
+            '" . addslashes($originalOrder->frozenBillingAddress) . "',
+            '" . addslashes($originalOrder->frozenShippingAddress) . "',
+            '" . $originalOrder->billingAddressId . "',
+            '" . $originalOrder->shipmentAddressId . "',
+            '" . $orderLines->shippingCharge . "',
+            '" . $orderLines->userCharge . "',
+            '" . $orderLines->couponCharge . "',
+            '" . $originalOrder->paymentModifier . "',
+            '" . $orderLines->netPrice . "',
+            '" . $netTotal . "',
+            '" . $orderLines->vat . "',
+            0,
+            0,
+            '" . $originalOrder->orderDate . "',
+            null,
+            '" . $originalOrder->note . "',
+            '" . $transactionNumber . "',
+            '" . $transactionMac . "',
+             null,
+            '" . $paidAmount . "',
+            '" . $paymentDate . "',
+            '" . $originalOrder->lastUpdate . "',
+            '" . $originalOrder->creationDate . "',
+            null,
+            null,
+            null,
+            '" . $originalOrder->remoteShopSellerId . "',
+            '" . $originalOrder->isOrderMarketplace . "',
+            '" . $originalOrder->marketplaceId . "',
+            '" . $originalOrder->marketplaceOrderId . "',
+            '" . $originalOrder->isShippingToIwes . "',
+            1,
+            '" . $originalOrder->remoteOrderSellerId . "')");
+                    }
             $insertRemoteOrder->execute();
 
                 } catch (\Throwable $e) {
@@ -292,7 +391,33 @@ class COrderSplitAjaxController extends AAjaxController
                 $newOrder->insert();
                 $findLastOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['remoteOrderSellerId'=>$newremoteOrderId,'remoteShopSellerId'=>$originalOrder->remoteShopSellerId]);
                 $newOrderId=$findLastOrder->id;
+                try{
+                    $stmtDeleteinvoiceLineHasOrderLineRepo=$db_con->prepare('delete from InvoiceLineHasOrderLine where orderLineOrderId='.$originalOrder->remoteOrderSellerId.' and orderLineId='.$orderLines->id);
+                    $stmtDeleteinvoiceLineHasOrderLineRepo->execute();
+                }catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' Delete InvoiceLineHasOrderLine  ' , $orderLines->id.'-'.$orderLines->orderId,$e);
+                    $res=$e;
+                    return $res;
+                }
+                try{
+                    $stmtDeleteOrderLineStatistics=$db_con->prepare('delete from  OrderLineStatistics  WHERE orderId='. $originalOrder->remoteOrderSellerId.' and orderLineId='.$orderLines->id);
+                    $stmtDeleteOrderLineStatistics->execute();
+                }catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' Delete OrderLineStatistics   ' , $orderLines->id.'-'.$orderLines->orderId,$e);
+                    $res=$e;
+                    return $res;
+                }
+                try{
+                    $stmtDeleteOrderLineHasShipment=$db_con->prepare('delete from  OrderLineHasShipment  WHERE orderId='. $originalOrder->remoteOrderSellerId.' and orderLineId='.$orderLines->id);
+                    $stmtDeleteOrderLineHasShipment->execute();
+                }catch (\Throwable $e) {
+                    \Monkey::app()->applicationLog('COrderSplitAjaxController','Error',' Delete OrderLineStatistics   ' , $orderLines->id.'-'.$orderLines->orderId,$e);
+                    $res=$e;
+                    return $res;
+                }
+
                 try {
+
                     $stmtUpdateRemoteOrderLine = $db_con->prepare("Update OrderLine SET OrderId=" . $newremoteOrderId . " WHERE 
                                                                       id=" . $orderLines->remoteOrderLineSellerId . " 
                                                                       AND  orderId=" . $orderLines->remoteOrderSellerId . "
@@ -308,12 +433,24 @@ class COrderSplitAjaxController extends AAjaxController
                 }
 
                 $orderLines->orderId=$newOrderId;
+                $findDeleteInvoiceLineHasOrderLine=$invoiceLineHasOrderLineRepo->findOneBy(['orderLineId'=>$orderLines->id,'orderLineOrderId'=>$orderLines->orderId]);
+                if($findDeleteInvoiceLineHasOrderLine!=null){
+                    $findDeleteInvoiceLineHasOrderLine->delete();
+                }
+                $findDeleteOrderLineStatistics=$orderLineStatisticsRepo->findOneBy(['orderLineId'=>$orderLines->id,'orderId'=>$orderLines->orderId]);
+                if($findDeleteOrderLineStatistics!=null) {
+                    $findDeleteOrderLineStatistics->delete();
+                }
+                $findDeleteOrderLineHasShipment=$orderLineHasShipmentRepo->findOneBy(['orderLineId'=>$orderLines->id,'orderId'=>$orderLines->orderId]);
+                if($findDeleteOrderLineHasShipment!=null) {
+                    $findDeleteOrderLineHasShipment->delete();
+                }
                 $orderLines->update();
                 $originalOrder->shippingPrice -= $orderLines->shippingCharge;
                 $originalOrder->userDiscount-=$orderLines->userCharge;
                 $originalOrder->couponDiscount-=$orderLines->couponCharge;
                 $originalOrder->grossTotal-=$orderLines->netPrice;
-                $netTotal=$orderLines->netPrice+$OrderLines->shippingCharge;
+                $netTotal=$orderLines->netPrice+$orderLines->shippingCharge;
                 $originalOrder->netTotal-=$netTotal;
                 $originalOrder->vat-=$orderLines->vat;
                 $originalOrder->paidAmount-=$netTotal;
