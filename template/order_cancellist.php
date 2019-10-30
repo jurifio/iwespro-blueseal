@@ -22,7 +22,7 @@
                     <div class="tab">
                         <a href="/blueseal/ordini" class="btn btn-light" role="button"><i class="fa fa-diamond" aria-hidden="true"></i> Tutti gli Ordini </a>
                         <a href="/blueseal/ordini-in-lavorazione" class="btn btn-light" role="button"><i class="fa fa-folder-open" aria-hidden="true"></i> In lavorazione</a>
-                        <a href="/blueseal/vendite" class="btn btn-light" role="button"><i class="fa fa-Truck" aria-hidden="true"></i> Spediti</a>
+                        <a href="/blueseal/vendite" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i> Spediti</a>
                         <a href="/blueseal/ordini-cancellati" class="btn btn-light" role="button"><i class="fa fa-trash" aria-hidden="true"></i> Cancellati</a>
                         <a href="/blueseal/ordini-resi" class="btn btn-light" role="button"><i class="fa fa-ambulance" aria-hidden="true"></i> Resi</a>
                         <a href="/blueseal/ordini-con-righe-diverse" class="btn btn-light" role="button"><i class="fa fa-indent" aria-hidden="true"></i> Con Righe Diverse</a>
