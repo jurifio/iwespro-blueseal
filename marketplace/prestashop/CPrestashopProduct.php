@@ -874,16 +874,17 @@ class CPrestashopProduct extends APrestashopMarketplace
         try {
             $optD['resource'] = self::SPECIFIC_PRICE_RESOURCE;
             $optD['id'] = (int)$specificPrices->specific_prices->specific_price->attributes()->id;
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $optD['id'],'');
             $this->ws->delete($optD);
         } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage(),'');
             return false;
         }
         try {
             $this->updateProductSaleDescription($product, $mhs, 'remove');
 
         } catch(\Throwable $e){
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while Remove sale Description', $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while Remove sale Description', $e->getMessage(),'');
         }
         return true;
     }
