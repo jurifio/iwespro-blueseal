@@ -27,10 +27,13 @@ class CFriendOrderListAjaxController extends AAjaxController
         $currentUser=$this->app->getUser();
         $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
         $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
-        if($userHasShop!=null){
-            $filterSql=' and remoteShopSellerId <>'.$userHasShop->shopId.' ';
-        }else{
-            $filterSql=' ';
+        if(!$allShops) {
+            if ($userHasShop != null) {
+                //$filterSql = ' and remoteShopSellerId <>' . $userHasShop->shopId . ' ';
+                $filterSql = ' and remoteShopSellerId = 44 ';
+            } else {
+                $filterSql = ' ';
+            }
         }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
         $DDfield = '';
