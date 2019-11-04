@@ -36,10 +36,11 @@ class CFriendOrderWorkingListAjaxController extends AAjaxController
         $currentUser=$this->app->getUser();
         $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
         $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
-        if($userHasShop!=null){
-            $filterSql=' and remoteShopSellerId <>'.$userHasShop->shopId.' ';
-        }else{
-            $filterSql=' ';
+        $filterSql= ' ';
+        if(!$allShops) {
+            if ($userHasShop != null) {
+                $filterSql = ' and o.remoteShopSellerId = 44 ';
+            }
         }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
         $DDfield = '';
@@ -112,8 +113,8 @@ class CFriendOrderWorkingListAjaxController extends AAjaxController
                         ol.status='ORD_PCK_CLI' OR
                          ol.status='ORD_PCK_CLI' OR
                         ol.status='ORD_LAB' OR
-                        ol.status='ORD_MAIL_PREP_C'
-                        $filterSql  $DDThaving  ";
+                        ol.status='ORD_MAIL_PREP_C'".
+                        $filterSql ."  $DDThaving  ";
 
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);

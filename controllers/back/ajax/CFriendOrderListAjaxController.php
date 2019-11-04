@@ -25,14 +25,12 @@ class CFriendOrderListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
         $currentUser=$this->app->getUser();
-        $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
-        $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
+        $userHasShopRepo=\Monkey::app()->repoFactory->create('UserHasShop');
+        $userHasShop=$userHasShopRepo->findBy(['userId'=>$currentUser->id]);
+        $filterSql= ' ';
         if(!$allShops) {
             if ($userHasShop != null) {
-                //$filterSql = ' and remoteShopSellerId <>' . $userHasShop->shopId . ' ';
-                $filterSql = ' and remoteShopSellerId = 44 ';
-            } else {
-                $filterSql = ' ';
+                $filterSql = ' and o.remoteShopSellerId = 44 ';
             }
         }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
@@ -75,6 +73,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                   `ols`.title                                                   AS `orderLineStatusTitle`,
                   `olfps`.`name`                                                AS `paymentStatus`,
                   `ol`.`orderLineFriendPaymentDate`                             AS `paymentDate`,
+                  o.remoteShopSellerId as remoteShopSellerId,   
                   ifnull((SELECT l.time
                    FROM Log AS l
                    WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
@@ -97,7 +96,7 @@ class CFriendOrderListAjaxController extends AAjaxController
                       JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
-                  WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') $filterSql  $DDThaving  ";
+                  WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') ".$filterSql."  $DDThaving  ";
 
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
@@ -131,12 +130,12 @@ class CFriendOrderListAjaxController extends AAjaxController
         }
 
         $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
-	    $plainLineStatuses = [];
+        $plainLineStatuses = [];
         $colorLineStatuses = [];
-	    foreach($orderLineStatuses as $orderLineStatus){
-			$plainLineStatuses[$orderLineStatus->code] = $orderLineStatus->title;
+        foreach($orderLineStatuses as $orderLineStatus){
+            $plainLineStatuses[$orderLineStatus->code] = $orderLineStatus->title;
             $colorLineStatuses[$orderLineStatus->code] = $orderLineStatus->colore;
-	    }
+        }
 
         $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll();
         $plainLineStatuses = [];
@@ -160,7 +159,7 @@ class CFriendOrderListAjaxController extends AAjaxController
         }
         foreach ($orderLines as $v) {
             /** @var COrderLine $v */
-	        /** ciclo le righe */
+            /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
             $response['data'][$i]['orderCode'] = $v->printId();
             $response['data'][$i]['line_id'] = $v->printId();
@@ -219,10 +218,10 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['invoiceNumber'] = '-';
             $response['data'][$i]['creditNoteNumber'] = '-';
             $response['data'][$i]['transDocNumber'] = '-';
-               if ($document) {
-                   $response['data'][$i]['invoiceAll'] .= $document->number . ' (id:' . $document->id . ')<br />';
-                   $response['data'][$i]['invoiceNumber'] = $document->number . ' (id:' . $document->id . ')';
-               }
+            if ($document) {
+                $response['data'][$i]['invoiceAll'] .= $document->number . ' (id:' . $document->id . ')<br />';
+                $response['data'][$i]['invoiceNumber'] = $document->number . ' (id:' . $document->id . ')';
+            }
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) {
                 $response['data'][$i]['invoiceAll'] .= 'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
@@ -253,7 +252,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             $response['data'][$i]['friendTimes'] =
                 ($printActs) ? '<span class="small">' . $printActs . '</span>' : 'Nessun record';
             $i++;
-	    }
+        }
         return json_encode($response);
     }
 

@@ -34,12 +34,13 @@ class CFriendOrderCancelListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
         $currentUser=$this->app->getUser();
-        $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
-        $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
-        if($userHasShop!=null){
-            $filterSql=' and remoteShopSellerId <>'.$userHasShop->shopId.' ';
-        }else{
-            $filterSql=' ';
+        $userHasShopRepo=\Monkey::app()->repoFactory->create('UserHasShop');
+        $userHasShop=$userHasShopRepo->findBy(['userId'=>$currentUser->id]);
+        $filterSql= ' ';
+        if(!$allShops) {
+            if ($userHasShop != null) {
+                $filterSql = ' and o.remoteShopSellerId = 44 ';
+            }
         }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
         $DDfield = '';
@@ -106,8 +107,8 @@ class CFriendOrderCancelListAjaxController extends AAjaxController
                   WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') and ol.status='ORD_ERR_SEND' OR 
                         ol.status='ORD_FRND_CANC' OR 
                         ol.status='ORD_QLTY_KO' OR 
-                        ol.status='ORD_MISSNG' 
-                        $filterSql  $DDThaving  ";
+                        ol.status='ORD_MISSNG'".
+                        $filterSql."  $DDThaving  ";
 
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);

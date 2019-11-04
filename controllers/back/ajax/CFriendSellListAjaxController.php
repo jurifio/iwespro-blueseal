@@ -36,10 +36,11 @@ class CFriendSellListAjaxController extends AAjaxController
         $currentUser=$this->app->getUser();
         $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
         $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
-        if($userHasShop!=null){
-            $filterSql=' and remoteShopSellerId <>'.$userHasShop->shopId.' ';
-        }else{
-            $filterSql=' ';
+        $filterSql= ' ';
+        if(!$allShops) {
+            if ($userHasShop != null) {
+                $filterSql = ' and o.remoteShopSellerId = 44 ';
+            }
         }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
         $DDfield = '';
@@ -104,8 +105,8 @@ class CFriendSellListAjaxController extends AAjaxController
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
                   WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') and ol.status='ORD_SENT' 
-                        OR ol.status='ORD_FRND_ORDSNT' 
-                        $filterSql  $DDThaving  ";
+                        OR ol.status='ORD_FRND_ORDSNT' ".
+                        $filterSql."   $DDThaving  ";
 
 
         $datatable = new CDataTables($query,['id', 'orderId'],$_GET, true);
