@@ -105,7 +105,8 @@ class CFriendSellListAjaxController extends AAjaxController
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
                   WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') and ol.status='ORD_SENT' 
-                        OR ol.status='ORD_FRND_ORDSNT' ".
+                        OR ol.status='ORD_FRND_ORDSNT' 
+                        OR ol.status='ORD_FRND_PYD' ".
                         $filterSql."   $DDThaving  ";
 
 

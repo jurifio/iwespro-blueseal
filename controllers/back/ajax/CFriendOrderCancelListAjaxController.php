@@ -104,10 +104,13 @@ class CFriendOrderCancelListAjaxController extends AAjaxController
                       JOIN InvoiceType as `it` on `in`.`invoiceTypeId` = `it`.`id`)
                           ON `ol`.`orderId` = `ilhol`.orderLineOrderId AND `ol`.`id` = `ilhol`.`orderLineId`
                   LEFT JOIN `OrderLineFriendPaymentStatus` AS `olfps` ON `ol`.`orderLineFriendPaymentStatusId` = `olfps`.`id`
-                  WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') and ol.status='ORD_ERR_SEND' OR 
+                   WHERE `ols`.`code` NOT IN ('ORD_ARCH', 'CRT', 'CRT_MRG') and 
+                        ol.status='ORD_ERR_SEND' OR 
                         ol.status='ORD_FRND_CANC' OR 
                         ol.status='ORD_QLTY_KO' OR 
-                        ol.status='ORD_MISSNG'".
+                        ol.status='ORD_MISSNG' OR
+                        ol.status='ORD_CANCEL' OR
+                        ol.status='ORD_FRND_CANC'".
                         $filterSql."  $DDThaving  ";
 
 
@@ -116,13 +119,10 @@ class CFriendOrderCancelListAjaxController extends AAjaxController
         if (!$allShops) {
             $datatable->addCondition('orderLineStatusCode',
                 [
-                    'ORD_MISSING',
-                    'ORD_CANCEL',
                     'ORD_ARCH',
                     'ORD_PENDING',
                     'ORD_WAIT',
                     'ORD_LAB',
-                    'ORD_ERR_SEND'
                 ],
                 true
             );
