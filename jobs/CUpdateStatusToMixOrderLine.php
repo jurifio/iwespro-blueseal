@@ -62,24 +62,36 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                 $countOrderLine = $countOrderLine + 1;
 
             }
-            if ($countOrderLine > 1) {
+            if ($countOrderLine > 0) {
                 if ($countStatusWorking > 0 && $countStatusCancel > 0 && $countStatusShipped > 0) {
                     $orders->status = 'ORD_MIX';
                     $orders->update();
-                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ' . $orders->id . ' Order');
+                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusWorking > 0 && $countStatusCancel > 0 && $countStatusShipped==0) {
                     $orders->status = 'ORD_MIX';
                     $orders->update();
-                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ' . $orders->id . ' Order');
+                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusWorking > 0 && $countStatusShipped > 0 &&$countStatusCancel==0) {
                     $orders->status = 'ORD_MIX';
                     $orders->update();
-                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ' . $orders->id . ' Order');
+                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel > 0 && $countStatusShipped > 0 && $countStatusWorking==0 ) {
                     $orders->status = 'ORD_MIX';
                     $orders->update();
-                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ' . $orders->id . ' Order');
-                } else{
+                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
+                } elseif ($countStatusCancel > 0 && $countStatusShipped == 0 && $countStatusWorking==0 ) {
+                $orders->status = 'ORD_CANC';
+                $orders->update();
+                $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_CANC' . $orders->id . ' Order','');
+               }elseif ($countStatusCancel == 0 && $countStatusShipped > 0 && $countStatusWorking==0 ) {
+                    $orders->status = 'ORD_SHIPPED';
+                    $orders->update();
+                    $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_SHIPPED ' . $orders->id . ' Order','');
+                }elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking > 0 ) {
+                $orders->status = 'ORD_WORK';
+                $orders->update();
+                $this->report('UpdateStatusToMixOrdeLine','Updated status to ORD_WORK ' . $orders->id . ' Order','');
+            } else{
 
                 }
             }
