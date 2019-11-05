@@ -51,6 +51,7 @@ class CDispatchOrderMailToCustomer extends ACronJob
                         $row['productSizeId'] = $line->productSizeId;
                         $row['shopId'] = $line->shopId;
                         $row['netPrice'] = $line->netPrice;
+                        $row['remoteShopSellerId']=$line->remoteShopSellerId;
 
                         try {
                             $dirtySku = $line->productSku->findRightDirtySku();
