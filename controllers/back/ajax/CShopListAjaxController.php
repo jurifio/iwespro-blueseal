@@ -57,6 +57,9 @@ class CShopListAjaxController extends AAjaxController
                 foreach ($shop->user as $user) {
                     $users[] = $user->email;
                 }
+               if ($shop->hasEcommerce){
+
+               }
                 $row['users'] = implode('<br />', $users);
                 $row['iban'] = $shop->billingAddressBook ? $shop->billingAddressBook->iban : null;
 
