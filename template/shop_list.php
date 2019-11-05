@@ -89,6 +89,21 @@
                                     data-orderable="false"
                                     class="center">Utenti Attivi
                                 </th>
+                                <th data-slug="numberReceipt"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Ultima numero Ricevuta;
+                                </th>
+                                <th data-slug="numberInvoiceUe"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Ultima numero Fattura UE;
+                                </th>
+                                <th data-slug="numberInvoiceExtraUe"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Ultima numero Fattura ExtraUe;
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

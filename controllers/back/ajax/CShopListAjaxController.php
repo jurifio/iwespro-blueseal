@@ -53,12 +53,28 @@ class CShopListAjaxController extends AAjaxController
                 $row['minReleasedProducts'] = $shop->minReleasedProducts;
                 $row['releasedProducts'] = $shop->getActiveProductCount();
                 $row['isActive'] = $shop->isActive;
+
                 $users = [];
                 foreach ($shop->user as $user) {
                     $users[] = $user->email;
                 }
                if ($shop->hasEcommerce){
-
+                   $sql = 'select ifnull(MAX(invoiceNumber),0) as   invoiceNumber from Invoice WHERE  invoiceShopId=' . $shop->id.' 
+                   and invoiceType=\''.$shop->receipt.'\' AND invoiceYear=\''.date("Y").'\'';
+                   $numberReceipt =\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['invoiceNumber'];
+                   $row['numberReceipt']=$numberReceipt;
+                   $sql = 'select ifnull(MAX(invoiceNumber),0) as   invoiceNumber from Invoice WHERE  invoiceShopId=' . $shop->id.' 
+                   and invoiceType=\''.$shop->invoiceUe.'\' AND invoiceYear=\''.date("Y").'\'';
+                   $numberInvoiceUe =\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['invoiceNumber'];
+                   $row['numberInvoiceUe']=$numberInvoiceUe;
+                   $sql = 'select ifnull(MAX(invoiceNumber),0) as   invoiceNumber from Invoice WHERE  invoiceShopId=' . $shop->id.' 
+                   and invoiceType=\''.$shop->invoiceExtraUe.'\' AND invoiceYear=\''.date("Y").'\'';
+                   $numberInvoiceExtraUe =\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['invoiceNumber'];
+                   $row['numberInvoiceExtraUe']=$numberInvoiceExtraUe;
+               }else{
+                   $row['numberReceipt']='';
+                   $row['numberInvoiceUe']='';
+                   $row['numberInvoiceExtraUe']='';
                }
                 $row['users'] = implode('<br />', $users);
                 $row['iban'] = $shop->billingAddressBook ? $shop->billingAddressBook->iban : null;
