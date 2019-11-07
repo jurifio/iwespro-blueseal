@@ -86,7 +86,7 @@ class CCloseShipmentDay extends ACronJob
 
                             /** @var CEmailRepo $emailRepo */
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                            $emailRepo->newPackagedMail('shipmentclient', 'no-reply@pickyshop.com', $to, [], [], ['order' => $order, 'coupon' => $coupon, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
+                            $emailRepo->newPackagedMail('shipmentclient', 'no-reply@iwes.pro', $to, [], [], ['order' => $order, 'coupon' => $coupon, 'orderId' => $order->id, 'shipment' => $shipment, 'lang' => $order->user->lang]);
 
                             $this->report('Cycle 2', 'Sent Email for Order', $order);
                         } catch (\Throwable $e) {
