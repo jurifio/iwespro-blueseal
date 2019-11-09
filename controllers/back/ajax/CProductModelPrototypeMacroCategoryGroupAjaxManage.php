@@ -76,7 +76,7 @@ class CProductModelPrototypeMacroCategoryGroupAjaxManage extends AAjaxController
             $catG->update();
         }
 
-        return 'Macrocategorie associate';
+        return 'Macrocategorie associate aggiorna la pagina per Verificare gli inserimenti';
     }
 
 

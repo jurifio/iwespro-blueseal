@@ -215,7 +215,8 @@
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     bsModal.hide();
-                    $.refreshDataTable();
+                    //$.refreshDataTable();
+                    //commentato per accellerare il caricamento
                 });
                 bsModal.showOkBtn();
             });
