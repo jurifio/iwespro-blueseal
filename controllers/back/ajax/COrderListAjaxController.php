@@ -59,6 +59,12 @@ class COrderListAjaxController extends AAjaxController
                   `s2`.`title` as remoteShopSellerName,
                   o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
+                 sh.trackingNumber AS trackingNumber,
+                  sh.bookingNumber AS bookingNumber,
+                  sh.shipmentDate AS shipmentDate,
+                  sh.deliveryDate AS DeliveryDate,
+                  sh.predictedShipmentDate AS predictedShipmentDate,
+                  sh.predictedDeliveryDate AS predictedDeliveryDate,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -72,6 +78,8 @@ class COrderListAjaxController extends AAjaxController
                   JOIN `OrderLineStatus` `ols` ON `ol`.`status` = `ols`.`code`
                   JOIN `Product` `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+                    LEFT JOIN `OrderLineHasShipment` olhs ON olhs.orderId=o.id
+                     LEFT JOIN `Shipment` sh ON olhs.shipmentId=sh.id
                   LEFT JOIN  `MarketplaceHasShop` mhsp ON  o.marketplaceId=mhsp.id
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
