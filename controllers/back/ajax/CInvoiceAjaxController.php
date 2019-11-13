@@ -643,8 +643,6 @@ class CInvoiceAjaxController extends AAjaxController
                     throw $e;
                     $this->app->router->response()->raiseProcessingError();
                     $this->app->router->response()->sendHeaders();
-
-
                 }
             }
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
