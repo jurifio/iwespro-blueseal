@@ -307,7 +307,6 @@ class COrderListAjaxController extends AAjaxController
             $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
             $row['invoice'].="<br/><b>Iwes->Seller: </b>";
             if ($findInvoiceToSeller != null) {
-
                 $row['invoice'] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
             } else {
                 $row['invoice'] .= "<br />";
