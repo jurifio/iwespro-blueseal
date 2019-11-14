@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-eraser",
-    permission: "/admin/product/delete&&allShops",
+    permission: "allShops||worker",
     event: "bs-newsletter-delete",
     class: "btn btn-default",
     rel: "tooltip",

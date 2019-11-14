@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-pencil-square-o",
-    permission: "allShops",
+    permission: "allShops||worker",
     event: "bs-update-from-db",
     class: "btn btn-default",
     rel: "tooltip",

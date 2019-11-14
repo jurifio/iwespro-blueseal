@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-paper-plane",
-    permission: "/admin/product/edit&&allShops",
+    permission: "allShops||worker",
     event: "bs-newNewsletterUser-sendNow",
     class: "btn btn-default",
     rel: "tooltip",

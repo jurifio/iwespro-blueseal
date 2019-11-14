@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-envelope",
-    permission: "/admin/product/edit&&allShops",
+    permission: "allShops||worker",
     event: "bs-newNewsletterUser-send",
     class: "btn btn-default",
     rel: "tooltip",

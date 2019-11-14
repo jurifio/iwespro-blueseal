@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-file-o fa-plus",
-    permission: "/admin/product/delete&&allShops",
+    permission: "allShops||worker",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Aggiungi un nuova newsletter",
