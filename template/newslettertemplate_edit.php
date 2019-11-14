@@ -70,7 +70,7 @@
             <bs-toolbar-button
                     data-tag="a"
                     data-icon="fa-save"
-                    data-permission="AllShops"
+                    data-permission="allShops||worker"
                     data-class="btn btn-default"
                     data-rel="tooltip"
                     data-event="bs.newNewsletterTemplate.save"

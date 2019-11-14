@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag: "a",
     icon: "fa-pencil",
-    permission: "/admin/product/delete&&allShops",
+    permission: "allShops||worker",
     event: "bs-newsletter-insertion-modify",
     class: "btn btn-default",
     rel: "tooltip",

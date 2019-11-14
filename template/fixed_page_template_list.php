@@ -68,7 +68,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-close"
-                data-permission="AllShops"
+                data-permission="allShops||worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.delete.fixed.page"
@@ -79,7 +79,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-file-o fa-plus"
-                data-permission="/admin/product/add"
+                data-permission="allShops||worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Aggiungi un nuovo prodotto"

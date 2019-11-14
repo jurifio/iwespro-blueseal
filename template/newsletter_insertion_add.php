@@ -146,7 +146,7 @@
             <bs-toolbar-button
                     data-tag="a"
                     data-icon="fa-file-o fa-plus"
-                    data-permission="AllShops"
+                    data-permission="allShops||worker"
                     data-class="btn btn-default"
                     data-rel="tooltip"
                     data-event="bs.newNewsletterInsertion.save"

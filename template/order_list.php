@@ -108,6 +108,11 @@
                                     data-orderable="false"
                                     class="center">Note<br>Utente
                                 </th>
+                                <th data-slug="shipmentId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">sped N<br>Tracking Number
+                                </th>
                                 <th data-slug="invoice"
                                     data-searchable="true"
                                     data-orderable="true"

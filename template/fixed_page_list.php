@@ -78,7 +78,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"
-                data-permission="/admin/product/edit"
+                data-permission="allShops||worker"
                 data-event="bs-fixed-page-new"
                 data-class="btn btn-default"
                 data-rel="tooltip"

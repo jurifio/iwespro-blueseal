@@ -59,12 +59,6 @@ class COrderListAjaxController extends AAjaxController
                   `s2`.`title` as remoteShopSellerName,
                   o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
-                 sh.trackingNumber AS trackingNumber,
-                  sh.bookingNumber AS bookingNumber,
-                  sh.shipmentDate AS shipmentDate,
-                  sh.deliveryDate AS DeliveryDate,
-                  sh.predictedShipmentDate AS predictedShipmentDate,
-                  sh.predictedDeliveryDate AS predictedDeliveryDate,
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -78,8 +72,6 @@ class COrderListAjaxController extends AAjaxController
                   JOIN `OrderLineStatus` `ols` ON `ol`.`status` = `ols`.`code`
                   JOIN `Product` `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`
                   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
-                    LEFT JOIN `OrderLineHasShipment` olhs ON olhs.orderId=o.id
-                     LEFT JOIN `Shipment` sh ON olhs.shipmentId=sh.id
                   LEFT JOIN  `MarketplaceHasShop` mhsp ON  o.marketplaceId=mhsp.id
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
@@ -209,9 +201,13 @@ class COrderListAjaxController extends AAjaxController
                 $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: " . $sku->productSize->name . "</span>";
                 $row["product"] .= "<br/>";
                 $row["product"] .=  "<b>".$supplier." - ".$line->remoteOrderSupplierId."<b><br />";
-
-
-
+                $shipmentCollect="";
+            $findOrderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId'=>$line->id,'orderId'=>$line->orderId]);
+                foreach($findOrderLineHasShipment as $shipment){
+                    $findShipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id'=>$shipment->shipmentId]);
+                    $shipmentCollect.=$findShipment->trackingNumber;
+                }
+            $row['shipmentId']=$shipmentCollect;
 
             }
             $row["orderParal"] = $orderParal;
@@ -288,6 +284,7 @@ class COrderListAjaxController extends AAjaxController
                 $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name . ' - ' . $campaignVisitHasOrder->campaignVisit->timestamp . ' - ' . $campaignVisitHasOrder->campaignVisit->cost . '€';
             }
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
+
             $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
             $row["invoice"]="<b>Seller:       </b>";
             if ($findInvoiceSeller != null) {
@@ -320,7 +317,7 @@ class COrderListAjaxController extends AAjaxController
                 $row['invoice'] .= "<br />";
             }
 
-
+          //  $row['shipmentId']=$val->shipmentId;
             /** Get doc */
             $fileName = "";
             /** @var CInvoiceDocument $iD */
