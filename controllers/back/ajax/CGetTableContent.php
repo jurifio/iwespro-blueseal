@@ -51,9 +51,9 @@ class CGetTableContent extends AAjaxController
         $orderBy = $this->app->router->request()->getRequestData('orderBy');
         if(!$orderBy) $orderBy = "";
         else $orderBy = " ORDER BY ".implode(',',$orderBy);
-        if (!in_array($table,$this->publicTables) &&
+     /*   if (!in_array($table,$this->publicTables) &&
             !$this->app->getUser()->hasPermission('allShops'))
-            throw new \Exception('Solo gli eletti, appartenenti alla Gilda degli Illuminati possono effettuare questa operazione. Contatta un amministratore');
+            throw new \Exception('Solo gli eletti, appartenenti alla Gilda degli Illuminati possono effettuare questa operazione. Contatta un amministratore');*/
 
         if (!$table) throw new \Exception('la variabile "table" è obbligatoria');
         if (false !== $condition && !is_array($condition) || !count($condition)) throw new BambooException('Le condizioni devono essere passate sottoforma di array');
