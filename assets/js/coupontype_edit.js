@@ -46,4 +46,39 @@ $(document).ready(function () {
         });
         select[0].selectize.setValue(select.data('value').split(','), true);
     });
+    $.ajax({
+        method:'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Campaign'
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        var select = $('#campaignId');
+        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            options: res
+        });
+    });
+
+    $.ajax({
+        method:'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop',
+            condition :{hasEcommerce:1}
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#remoteShopId');
+        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name'],
+            options: res2,
+        });
+    });
 });

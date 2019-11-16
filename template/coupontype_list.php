@@ -53,6 +53,15 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Tags</th>
+                                <th data-slug="campaignId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Campagna Associata</th>
+                                <th data-slug="remoteShopId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop di Destinazione</th>
+
                             </tr>
                             </thead>
                             <tbody>

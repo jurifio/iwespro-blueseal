@@ -29,13 +29,19 @@ class CCouponTypeListAjaxController extends AAjaxController
                   `ct`.`amountType`        AS `amountType`,
                   `ct`.`validity`          AS `validity`,
                   `ct`.`validForCartTotal` AS `validForCartTotal`,
+                   s.title as remoteShopId,
                   if(`ct`.`hasFreeShipping` = 1, 'sisì','no') as hasFreeShipping,
                   if(`ct`.`hasFreeReturn` = 1, 'sisì','no') as hasFreeReturn,
-                  ifnull(group_concat(distinct t.slug),'') as tags
+                  ifnull(group_concat(distinct t.slug),'') as tags,
+                  C.name as campaignId
+                 
                 FROM `CouponType` ct
+                    join Shop s on ct.remoteShopId =s.id 
+                LEFT JOIN Campaign C ON ct.campaignId=C.id
                   LEFT JOIN (
                     CouponTypeHasTag ctht JOIN Tag t on ctht.tagId = t.id
                   ) on ct.id = ctht.couponTypeId
+                
                 GROUP BY ct.id";
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 

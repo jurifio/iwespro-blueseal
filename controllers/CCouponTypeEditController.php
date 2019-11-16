@@ -25,12 +25,18 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         $possValids =[];
         $possValids[0] = '1 anno';
         $possValids[1] = '1 mese';
-        $possValids[2] = '7 giorni';
+        $possValids[2] = '3 giorni';
+        $possValids[3] = '7 giorni';
+        $possValids[4] = '14 giorni';
+        $possValids[5] = '21 giorni';
 
         $possValidity = [];
         $possValidity[0] = 'P1Y';
         $possValidity[1] = 'P1M';
-        $possValidity[2] = 'P7D';
+        $possValidity[2] = 'P3D';
+        $possValidity[3] = 'P7D';
+        $possValidity[4] = 'P14D';
+        $possValidity[5] = 'P21D';
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
