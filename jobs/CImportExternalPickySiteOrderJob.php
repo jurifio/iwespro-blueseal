@@ -327,7 +327,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                  co.amount as amount,
                                                  co.userId as userId,
                                                  co.valid as valid,
-                                                 co.couponEventId as couponEventId
+                                                 co.couponEventId as couponEventId,
+                                                 co.sid as sid
                                                  from Coupon co WHERE co.isImport is null');
                 $stmtCoupon -> execute();
                 while ($rowCoupon = $stmtCoupon -> fetch(PDO::FETCH_ASSOC)) {
@@ -350,6 +351,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                     $couponInsert -> couponEventId = $checkCouponEventIfExist -> id;
                                     $couponInsert -> remoteId = $rowCoupon['remoteId'];
                                     $couponInsert -> remoteShopId = $shop;
+                                    $couponINsert -> sid=$rowCoupon['sid'];
                                     $couponInsert -> insert();
                                     //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
                                 }
