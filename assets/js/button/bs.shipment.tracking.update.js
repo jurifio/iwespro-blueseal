@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-shipment-tracking-update",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Midifica Codici Ordine",
+    title: "Modifica Codici Ordine",
     placement: "bottom",
     toggle: "modal"
 };
