@@ -31,6 +31,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'voidPackageEndpoint' => 'https://onlinetools.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://onlinetools.ups.com/rest/LBRecovery',
         'timeInTransitEndpoint' => 'https://onlinetools.ups.com/rest/TimeInTransit',
+        'trackRequest' => 'https://wwwcie.ups.com/rest/Track',
         'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
         'username' => 'iwes123',
@@ -43,12 +44,12 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'voidPackageEndpoint' => 'https://wwwcie.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://wwwcie.ups.com/rest/LBRecovery',
         'timeInTransitEndpoint' => 'https://wwwcie.ups.com/rest/TimeInTransit',
+        'trackRequest' => 'https://wwwcie.ups.com/rest/Track',
         'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
         'username' => 'iwes123',
         'password' => 'Spedizioni123'
     ];
-
     /**
      * @param CShipment $shipment
      * @return CShipment|bool
@@ -684,6 +685,65 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             } catch (\Throwable $e) {
                 throw new BambooException('Failed to recover TimeInTransit from UPS: ' . $result->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description);
             }
+        }
+    }
+    public function getTracking(CShipment $shipment, $isShippingToIwes = null, $isOrderParallel = null, $orderToShipment = null)
+    {
+        $orderLineHasShipmentRepo=\Monkey::app()->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
+        $order=$orderLineHasShipmentRepo->orderId;
+
+        $trackingRequest = [
+            'UPSSecurity' => $this -> getUpsSecurity(),
+            'TrackRequest' => [
+                'Request' => [
+                    'RequestOption' => '1',
+                    'TransactionReference' => [
+                        'CustomerContext' => 'spedizione numero:'.$shipment -> id.' ordine:'.$order]
+                ],
+                'InquiryNumber' => $shipment -> trackingNumber]
+
+        ];
+
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $this -> getConfig('trackRequest'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($trackingRequest));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
+            'Access-Control-Allow-Methods: POST',
+            'Access-Control-Allow-Origin: *',
+            'Content-type: application/json'
+        ]);
+
+        \Monkey ::app() -> applicationReport(
+            'UpsHandler',
+            'GetTracking',
+            'Called TimeInTransit to ' . $this -> getConfig('trackRequest'),
+            json_encode($trackingRequest));
+        $result = curl_exec($ch);
+        $e = curl_error($ch);
+        curl_close($ch);
+
+        \Monkey ::app() -> applicationReport(
+            'UpsHandler',
+            'GetTracking',
+            'Result Tracking ' . $this -> getConfig('trackRequest'),
+            $result);
+
+        if (!$result) {
+            throw new BambooException($e);
+        } else {
+            $result = json_decode($result);
+            try {
+                if ($result -> TrackRequest -> Response -> ResponseStatus -> Code == '1') {
+                    return $result;
+                } else throw new BambooException('Failed to recover TrackRequest');
+            } catch (\Throwable $e) {
+                throw new BambooException('Failed to recover TrackRequest from UPS: ' . $result -> Fault -> detail -> Errors -> ErrorDetail -> PrimaryErrorCode -> Description);
+            }
+
         }
     }
 }

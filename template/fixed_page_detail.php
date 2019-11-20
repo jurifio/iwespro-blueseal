@@ -195,7 +195,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-save"
-                data-permission="allShops"
+                data-permission="allShops||worker"
                 data-event="bs.fixedPageSave"
                 data-class="btn btn-default"
                 data-rel="tooltip"
