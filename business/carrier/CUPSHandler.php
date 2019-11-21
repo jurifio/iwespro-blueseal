@@ -687,7 +687,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             }
         }
     }
-    public function getTracking(CShipment $shipment, $isShippingToIwes = null, $isOrderParallel = null, $orderToShipment = null)
+    public function getTracking(CShipment $shipment)
     {
         $orderLineHasShipmentRepo=\Monkey::app()->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
         $order=$orderLineHasShipmentRepo->orderId;
