@@ -39,6 +39,7 @@ class CGetTrackingDeliveryAjaxController extends AAjaxController
         $request = \Monkey::app()->router->request();
 
         $trackingNumber = $request->getRequestData('trackingNumber');
+        $trackingNumber=trim($trackingNumber);
         $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['trackingNumber' => $trackingNumber]);
         $shipmentId = $shipment->id;
         $carrier=\Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id'=>$shipment->carrierId]);
@@ -62,7 +63,7 @@ class CGetTrackingDeliveryAjaxController extends AAjaxController
                 'Request' => [
                     'RequestOption' => '1',
                     'TransactionReference' => [
-                        'CustomerContext' => 'Richiesta Tracking'
+                        'CustomerContext' => 'Richiesta Tracking Numero Ordine'
                     ]
                 ],
 
@@ -86,32 +87,34 @@ class CGetTrackingDeliveryAjaxController extends AAjaxController
 
         $result = curl_exec($ch);
         $e = curl_error($ch);
+
         curl_close($ch);
         $track = json_decode($result);
         $trackLine = [];
         foreach ($track->TrackResponse->Shipment->Package->Activity as $activities) {
             if (!empty($activities->ActivityLocation->Address->City)) {
-                array_push($trackLine,[
-                    'orderId' => $orderId,
-                    'carrier' =>$carrierName,
-                    'customer' => $userShipping->name . ' ' . $userShipping->surname . '<br>' . $userShipping->address . '<br>' . $userShipping->postcode . ' ' . $userShipping->city . ' ' . $userShipping->province,
-                    'bookingNumber' => $shipment->bookingNumber,
-                    'trackingNumber' => $shipment->trackingNumber,
-                    'creationDate' => $shipment->creationDate,
-                    'DateTime' => $activities->Date . ' ' . $activities->Time,
-                    'Description' => $activities->Status->Description,
-                    'City' => $activities->ActivityLocation->Address->City,
-                    'CountryCode' => $activities->ActivityLocation->Address->CountryCode,
-                    'shipmentDate' => $shipment->shipmentDate,
-                    'predictedDeliveryDate' => $shipment->predictedDeliveryDate,
-                    'deliveryDate' => $shipment->deliveryDate
-                ]);
+                if (!empty($activities->ActivityLocation->Address->CountryCode)) {
+                    array_push($trackLine,[
+                        'orderId' => $orderId,
+                        'carrier' => $carrierName,
+                        'customer' => $userShipping->name . ' ' . $userShipping->surname . '<br>' . $userShipping->address . '<br>' . $userShipping->postcode . ' ' . $userShipping->city . ' ' . $userShipping->province,
+                        'bookingNumber' => $shipment->bookingNumber,
+                        'trackingNumber' => $shipment->trackingNumber,
+                        'creationDate' => $shipment->creationDate,
+                        'DateTime' => date('d/m/y H:i:s',strtotime($activities->Date.$activities->Time)),
+                        'Description' => $activities->Status->Description,
+                        'City' => $activities->ActivityLocation->Address->City,
+                        'CountryCode' => $activities->ActivityLocation->Address->CountryCode,
+                        'shipmentDate' => $shipment->shipmentDate,
+                        'predictedDeliveryDate' => $shipment->predictedDeliveryDate,
+                        'deliveryDate' => $shipment->deliveryDate
+                    ]);
+                }
             }
 
 
-            return json_encode($trackLine);
         }
 
-
+        return json_encode($trackLine);
     }
 }
