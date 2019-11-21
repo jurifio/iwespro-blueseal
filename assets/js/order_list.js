@@ -46,7 +46,7 @@ $(document).on('bs.order.delete.panic', function () {
 });
 
 function openTrackDelivery(trackingNumber) {
-    var modal = new $.bsModal('Conferma Ordine', {
+    var modal = new $.bsModal('Dettagli di Spedizione', {
         body: 'tracking Number'
     });
 
@@ -56,28 +56,29 @@ function openTrackDelivery(trackingNumber) {
             url: '/blueseal/xhr/GetTrackingDeliveryAjaxController',
             method: 'get',
             dataType: 'json',
-            data: {tracking: trackingNumber}
+            data: {trackingNumber: trackingNumber}
         }).done(function (res) {
             let bodyshipment =
                 '<table class="table">' +
                 '<thead>' +
                 '<tr>' +
-                '<td align="center">ordine</td><td align="center">Cliente </td><td align="center">Booking Number</td><td align="center">Tracking Number</td><td align="center">Data Creazione</td><td align="center">Spedizione</td><td align="center">Consegna Prevista</td><td align="center">Consegna Effettiva</td>' +
+                '<td align="center"><b>ordine</b>></td><td align="center"><b>Cliente</b></td><td align="center"><b>Booking Number</b></td><td align="center"><b>Tracking Number</b></td><td align="center"><b>Carrier</b></td<td align="center"><b>Data Creazione</b></td><td align="center"><b>Spedizione</b></td><td align="center"><b>Consegna Prevista</b></td><td align="center"><b>Consegna Effettiva</b></td>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody>';
             for (let i in res) {
-                if (i == 1) {
+                if (i == 0) {
 
-                    bodyshipment += '<tr>+' +
-                        '<td align="center">' + res[i].orderId + '</td>' +
-                        '<td align="center">' + res[i].customer + '</td>' +
-                        '<td align="center">' + res[i].bookingNumber + '</td>' +
-                        '<td align="center">' + res[i].trackingNumber + '</td>' +
-                        '<td align="center">' + res[i].creationDate + '</td>' +
-                        '<td align="center">' + res[i].shipmentDate + '</td>' +
-                        '<td align="center">' + res[i].predictedDeliveryDate + '</td>' +
-                        '<td align="center">' + res[i].deliveryDate + '</td></tr>';
+                    bodyshipment += '<tr>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].orderId + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].customer + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].bookingNumber + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].trackingNumber + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].carrier + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].creationDate + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].shipmentDate + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].predictedDeliveryDate + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].deliveryDate + '</b></font></td></tr>';
 
                 }
             }
@@ -88,16 +89,16 @@ function openTrackDelivery(trackingNumber) {
                 '<table class="table">' +
                 '<thead>' +
                 '<tr>' +
-                '<td align="center">Data</td><td align="center">Posizione</td><td align="center"></td><td align="center">Nazione</td><td align="center">Descrizione</td>' +
+                '<td align="center"><b>Data</b></td><td align="center"><b>Posizione</b></td><td align="center"><b>Nazione</b></td><td align="center"><b>Descrizione</b></td>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody>';
             for (let s in res) {
-                    bodyshipment += '<tr>+' +
-                        '<td align="center">' + res[s].DateTime + '</td>' +
-                        '<td align="center">' + res[s].City + '</td>' +
-                        '<td align="center">' + res[s].CountryCode + '</td>' +
-                        '<td align="center">' + res[s].Description + '</td></tr>';
+                    bodyshipment += '<tr>' +
+                        '<td align="center"><font color="blue"<b>' + res[s].DateTime + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[s].City + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[s].CountryCode + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[s].Description + '</b></font></td></tr>';
 
             }
             bodyshipment +=
@@ -105,6 +106,8 @@ function openTrackDelivery(trackingNumber) {
                 '</table>';
 
             modal.body.append(bodyshipment);
+            modal.addClass('modal-wide');
+            modal.addClass('modal-high');
         });
     });
 
