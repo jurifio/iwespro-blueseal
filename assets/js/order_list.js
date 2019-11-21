@@ -62,7 +62,7 @@ function openTrackDelivery(trackingNumber) {
                 '<table class="table">' +
                 '<thead>' +
                 '<tr>' +
-                '<td align="center"><b>ordine</b>></td><td align="center"><b>Cliente</b></td><td align="center"><b>Booking Number</b></td><td align="center"><b>Tracking Number</b></td><td align="center"><b>Carrier</b></td><td align="center"><b>Data Creazione</b></td><td align="center"><b>Spedizione</b></td><td align="center"><b>Consegna Prevista</b></td><td align="center"><b>Consegna Effettiva</b></td>' +
+                '<td align="center"><b>ordine</b></td><td align="center"><b>Cliente</b></td><td align="center"><b>Booking Number</b></td><td align="center"><b>Tracking Number</b></td><td align="center"><b>Carrier</b></td><td align="center"><b>Data Creazione</b></td><td align="center"><b>Spedizione</b></td><td align="center"><b>Consegna Prevista</b></td><td align="center"><b>Consegna Effettiva</b></td>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody>';

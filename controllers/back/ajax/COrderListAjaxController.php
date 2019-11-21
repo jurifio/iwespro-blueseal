@@ -205,7 +205,14 @@ class COrderListAjaxController extends AAjaxController
             $findOrderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId'=>$line->id,'orderId'=>$line->orderId]);
                 foreach($findOrderLineHasShipment as $shipment){
                     $findShipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id'=>$shipment->shipmentId]);
-                   $shipmentCollect.= '<button onclick="openTrackDelivery(\''.$findShipment->trackingNumber.'\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>'.$findShipment->trackingNumber.'</button>';
+                    $findCarrier=\Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id'=>$findShipment->carrierId]);
+                    if($findShipment->deliveryDate!=null){
+                        $fontDelivery='<font color="green">';
+                    }else{
+                        $fontDelivery='<font color="black"></font>';
+                    }
+
+                   $shipmentCollect.= 'Carrier:'.$fontDelivery.$findCarrier->name.'</font><br><button onclick="openTrackDelivery(\''.$findShipment->trackingNumber.'\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>'.$findShipment->trackingNumber.'</button>';
                   //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
                 }
             $row['shipmentId']=$shipmentCollect;
