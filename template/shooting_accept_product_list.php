@@ -42,13 +42,16 @@
                                 <th data-slug="externalId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">ID Orig.</th>
+                                <th data-slug="qty"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Disp.</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc" class="center dataFilterType">Data</th>
                                 <th data-slug="shooting"
                                     data-searchable="true"
-                                    data-orderable="false">Shooting
+                                    data-orderable="true">Shooting
                                 </th>
                                 <th data-slug="doc_number"
                                     data-searchable="true"

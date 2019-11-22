@@ -78,6 +78,8 @@ ORDER BY `p`.`creationDate` DESC
         $docRepo = \Monkey::app()->repoFactory->create('Document');
 
         $productRepo = \Monkey::app()->repoFactory->create('Product');
+        $productSkuRepo=\Monkey::app()->repoFactory->create('ProductSku');
+        $productSizeRepo=\Monkey::app()->repoFactory->create('ProductSize');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             $val = $productRepo->findOneBy($row);
@@ -111,6 +113,17 @@ ORDER BY `p`.`creationDate` DESC
                 $sids .= '<br />'.$singleShooting->id;
                 $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
             }
+            $qty='<table><tr><td>taglia</td><td>quantità</td></tr>';
+            $productSku=$productSkuRepo->findBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
+            foreach ($productSku as $skus) {
+                $stockQty = $skus->stockQty;
+                $productSize=$productSizeRepo->findOneBy(['id'=>$skus->productSizeId]);
+                $size=$productSize->name;
+            $qty.='<tr><td>'.$size.'</td><td>'.$stockQty.'</td></tr>';
+            }
+            $qty.='</table>';
+            $row['qty']=$qty;
+
 
             $row["shooting"] = $sids;
             $row["doc_number"] = $ddtNumbers;
