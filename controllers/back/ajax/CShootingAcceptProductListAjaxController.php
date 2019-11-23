@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -50,13 +51,17 @@ class CShootingAcceptProductListAjaxController extends AAjaxController
   concat(doc.number)                                   AS doc_number,
   `p`.`creationDate`                                   AS `creationDate`,
   concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
-  `pss`.`name`                                         AS `status`
+  `pss`.`name`                                         AS `status`,
+   `PS`.`name` as season,
+    `p`.id as qty  
 FROM `Product` `p`
   JOIN `ShopHasProduct` `shp` ON (`p`.`id`, `p`.`productVariantId`) = (`shp`.`productId`, `shp`.`productVariantId`)
+     JOIN `ProductSeason` `PS` on p.productSeasonId = `PS`.`id`
   LEFT JOIN (DirtyProduct dp
     JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
     ON (shp.productId,shp.productVariantId,shp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
   JOIN `ProductStatus` `pss` ON `pss`.`id` = `p`.`productStatusId`
+ 
   JOIN `ProductVariant` `pv` ON `p`.`productVariantId` = `pv`.`id`
   JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
   JOIN `Shop` `s` ON `s`.`id` = `shp`.`shopId`
@@ -68,9 +73,9 @@ FROM `Product` `p`
 ORDER BY `p`.`creationDate` DESC
                ";
 
-        $datatable = new CDataTables($sql, ['id', 'productVariantId', 'shopId'], $_GET, true);
-        $datatable->addCondition('shopId', $shopsIds);
-        if (!$allShops) $datatable->addLikeCondition('status', 'Fuso', true);
+        $datatable = new CDataTables($sql,['id','productVariantId','shopId'],$_GET,true);
+        $datatable->addCondition('shopId',$shopsIds);
+        if (!$allShops) $datatable->addLikeCondition('status','Fuso',true);
 
         $datatable->doAllTheThings();
 
@@ -78,8 +83,9 @@ ORDER BY `p`.`creationDate` DESC
         $docRepo = \Monkey::app()->repoFactory->create('Document');
 
         $productRepo = \Monkey::app()->repoFactory->create('Product');
-        $productSkuRepo=\Monkey::app()->repoFactory->create('ProductSku');
-        $productSizeRepo=\Monkey::app()->repoFactory->create('ProductSize');
+        $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
+        $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize');
+        $productSeasonRepo=\Monkey::app()->repoFactory->create('ProductSeason');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             $val = $productRepo->findOneBy($row);
@@ -88,7 +94,7 @@ ORDER BY `p`.`creationDate` DESC
             $row["DT_RowClass"] = 'colore';
             $row['code'] = $val->id . '-' . $val->productVariantId;
 
-            $row["row_shop"] = $val->getShops('|', true);
+            $row["row_shop"] = $val->getShops('|',true);
             $row['shop'] = '<span>';
             $row['shop'] .= $val->getShops('<br />');
             $row['shop'] .= '</span>';
@@ -109,25 +115,19 @@ ORDER BY `p`.`creationDate` DESC
             $ddtNumbers = "";
 
             /** @var CShooting $singleShooting */
-            foreach ($val->shooting as $singleShooting){
-                $sids .= '<br />'.$singleShooting->id;
-                $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
+            foreach ($val->shooting as $singleShooting) {
+                $sids .= '<br />' . $singleShooting->id;
+                $ddtNumbers .= '<br />' . $docRepo->findShootingFriendDdt($singleShooting);
             }
-            $qty='<table><tr><td>taglia</td><td>quantità</td></tr>';
-            $productSku=$productSkuRepo->findBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
-            foreach ($productSku as $skus) {
-                $stockQty = $skus->stockQty;
-                $productSize=$productSizeRepo->findOneBy(['id'=>$skus->productSizeId]);
-                $size=$productSize->name;
-            $qty.='<tr><td>'.$size.'</td><td>'.$stockQty.'</td></tr>';
-            }
-            $qty.='</table>';
-            $row['qty']=$qty;
 
+            $row['disp'] = '<table class="nested-table inner-size-table" data-product-id="' . $val->printId() . '"></table>';
+            $row['qty']=$val->qty;
+            $findSeason=$productSeasonRepo->findOneBy(['id'=>$val->productSeasonId]);
+            $row['season']=$findSeason->name;
 
             $row["shooting"] = $sids;
             $row["doc_number"] = $ddtNumbers;
-            $datatable->setResponseDataSetRow($key, $row);
+            $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();
     }

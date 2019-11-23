@@ -351,7 +351,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                     $couponInsert -> couponEventId = $checkCouponEventIfExist -> id;
                                     $couponInsert -> remoteId = $rowCoupon['remoteId'];
                                     $couponInsert -> remoteShopId = $shop;
-                                    $couponINsert -> sid=$rowCoupon['sid'];
+                                    $couponInsert -> sid=$rowCoupon['sid'];
                                     $couponInsert -> insert();
                                     //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
                                 }

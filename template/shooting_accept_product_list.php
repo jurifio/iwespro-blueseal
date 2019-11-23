@@ -44,7 +44,13 @@
                                     data-orderable="true" class="center">ID Orig.</th>
                                 <th data-slug="qty"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Disp.</th>
+                                    data-orderable="true" class="center">Q.Totale</th>
+                                <th data-slug="disp"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">disponibilità</th>
+                                <th data-slug="season"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true"
