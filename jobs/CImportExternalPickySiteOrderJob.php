@@ -245,6 +245,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                            ct.validForCartTotal as validForCartTotal,
                                            ct.hasFreeShipping as hasFreeShipping,
                                            ct.hasFreeReturn as hasFreeReturn
+                                
                                            FROM CouponType ct WHERE ct.isImport is null ");
                 $stmtCouponType -> execute();
                 while ($rowCouponType = $stmtCouponType -> fetch(PDO::FETCH_ASSOC)) {
@@ -394,13 +395,13 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                         if ($userEmailFind !== null) {
                             $userId = $userEmailFind -> id;
                             $insertCart = $cartRepo -> getEmptyEntity();
-                            if ($rowCart['couponId'] != '') {
+                            /*if ($rowCart['couponId'] != '') {
                                 $FindCoupon = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['couponId'], 'remoteShopId' => $shop]);
                                 if ($FindCoupon != null) {
                                     $insertCart -> couponId = $FindCoupon -> id;
 
                                 }
-                            }
+                            }*/
                             $insertCart -> orderPaymentMethodId = $rowCart['orderPaymentMethodId'];
                             $insertCart -> userId = $userId;
                             $insertCart -> cartTypeId = $rowCart['cartTypeId'];
@@ -520,12 +521,12 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder = $orderRepo->getEmptyEntity();
                                 $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
                                 $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
-                                if ($rowOrder['couponId'] != '') {
+                               /* if ($rowOrder['couponId'] != '') {
                                     $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
                                     if ($FindCoupon != null) {
                                         $insertOrder->couponId = $FindCoupon->id;
                                     }
-                                }
+                                }*/
 
 
                                 $insertOrder->userId = $userId;

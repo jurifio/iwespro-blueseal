@@ -90,7 +90,8 @@ class CRemindOrderToFriend extends ACronJob
         $row['productSizeId'] = $line->productSizeId;
         $row['shopId'] = $line->shopId;
         $row['remoteShopSellerId']=$line->remoteShopSellerId;
-
+        $row['remoteOrderSellerId']=$line->remoteOrderSellerId;
+        $row['remoteOrderLineSellerId']=$line->remoteOrderLineSellerId;
         try {
             $dirtySku = $line->productSku->findRightDirtySku();
             /*
