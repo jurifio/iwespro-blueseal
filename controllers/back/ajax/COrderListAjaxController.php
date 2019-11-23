@@ -265,6 +265,7 @@ class COrderListAjaxController extends AAjaxController
             try {
                 //TODO CHECK THIS WROOOONG
                 $row['user'] .= '<br />' . $val->billingAddress->country->name;
+                $row['user'].='<br><button onclick="openTrackDelivery(\''.$val->id.'\');" class="btn btn-light" role="button"><i class="fa fa-envelope" aria-hidden="true"></i> Comunicazioni</button>';
             } catch (\Throwable $e) {
 
             }
