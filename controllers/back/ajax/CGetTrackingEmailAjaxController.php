@@ -37,62 +37,52 @@ class CGetTrackingEmailAjaxController extends AAjaxController
 {
     public function get()
     {
+        if(ENV == 'dev') {
+            require '/media/sf_sites/vendor/mailgun/vendor/autoload.php';
+        }else{
+            require '/home/shared/vendor/mailgun/vendor/autoload.php';
+        }
 
-        require '/media/sf_sites/vendor/mailgun/vendor/autoload.php';
 
         $request = \Monkey::app()->router->request();
 
-        $trackingNumber = $request->getRequestData('trackingNumber');
-        $trackingNumber=trim($trackingNumber);
-        $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['trackingNumber' => $trackingNumber]);
-        $shipmentId = $shipment->id;
-        $carrier=\Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id'=>$shipment->carrierId]);
-        $carrierName=$carrier->name;
-        $orderLineHasShipmentRepo = \Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId' => $shipmentId]);
-        $orderId = $orderLineHasShipmentRepo->orderId;
+        $orderId = $request->getRequestData('orderId');
+        $orderId=trim($orderId);
         $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
-        $userShipping = \bamboo\domain\entities\CUserAddress::defrost($orderRepo->frozenShippingAddress);
-        $trackingRequest = [
-            'UPSSecurity' => [
-                'UsernameToken' => [
-                    'Username' => 'iwes123',
-                    'Password' => 'Spedizioni123',
-                ],
-                "ServiceAccessToken" => [
-                    'AccessLicenseNumber' =>
-                        'ED3442CCB18DBE8C'
-                ]
-            ],
-            'TrackRequest' => [
-                'Request' => [
-                    'RequestOption' => '1',
-                    'TransactionReference' => [
-                        'CustomerContext' => 'Richiesta Tracking Numero Ordine'
-                    ]
-                ],
+        $emailRepo =\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$orderRepo->userId]);
+        $email =$emailRepo->email;
+        $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
+        $domain = 'iwes.pro';
+        $queryString = array(
+            'begin'        => 'Fri, 23 November 2019 09:00:00 -0000',
+            'ascending'    => 'yes',
+            'pretty'       => 'yes',
+            'recipient'    => 'juri@iwes.it'
+        );
 
-                'InquiryNumber' => $trackingNumber
+# Make the call to the client.
+        $result = $mgClient->get("$domain/events", $queryString);
 
-            ]
-        ];
 
-        $ch = curl_init();
+        foreach ($result->http_response_body->items as $list ) {
+            echo 'oraInvio:'.$list->timestamp.'<br>';
+            if (!empty($list->envelope->sender)) {
+                echo 'sender:'.$list->envelope->sender . '<br>';
+            }
+            if (!empty($list->envelope->targets)) {
+                echo 'targets:'.$list->envelope->targets . '<br>';
+            }
+            if (!empty($list->message->headers->to)) {
+                echo 'to:'.$list->message->headers->to . '<br>';
+            }
+            if (!empty($list->message->headers->from)) {
+                echo 'from:'.$list->message->headers->from . '<br>';
+            }
+            if (!empty($list->message->headers->subject)) {
+                echo 'oggetto:'.$list->message->headers->subject . '<br>';
+            }
 
-//set the url, number of POST vars, POST data
-        curl_setopt($ch,CURLOPT_URL,'https://wwwcie.ups.com/rest/Track');
-        curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode($trackingRequest));
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-        curl_setopt($ch,CURLOPT_HTTPHEADER,[
-            'Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept',
-            'Access-Control-Allow-Methods: POST',
-            'Access-Control-Allow-Origin: *',
-            'Content-type: application/json'
-        ]);
-
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-
-        curl_close($ch);
+        }
         $track = json_decode($result);
         $trackLine = [];
         foreach ($track->TrackResponse->Shipment->Package->Activity as $activities) {

@@ -265,7 +265,7 @@ class COrderListAjaxController extends AAjaxController
             try {
                 //TODO CHECK THIS WROOOONG
                 $row['user'] .= '<br />' . $val->billingAddress->country->name;
-                $row['user'].='<br><button onclick="openTrackDelivery(\''.$val->id.'\');" class="btn btn-light" role="button"><i class="fa fa-envelope" aria-hidden="true"></i> Comunicazioni</button>';
+                $row['user'].='<br><button onclick="openTrackEmail(\''.$val->id.'\');" class="btn btn-light" role="button"><i class="fa fa-envelope" aria-hidden="true"></i> Comunicazioni</button>';
             } catch (\Throwable $e) {
 
             }
@@ -305,14 +305,12 @@ class COrderListAjaxController extends AAjaxController
             }
 
 
-            $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $skuParalShopId]);
+            $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id]);
             $row['invoice'] .= "</br><b>Supplier:     </b>";
             if ($findInvoiceSupplier != null) {
                 foreach ($findInvoiceSupplier as $invoicesSupplier) {
                     if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
                         $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
-                    } else {
-                        $row["invoice"] .= "<br />";
                     }
                 }
             } else {
