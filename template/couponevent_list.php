@@ -65,7 +65,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione evento coupon">
-        <bs-toolbar-button
+       <!-- <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
             data-permission="/admin/marketing"
@@ -85,7 +85,7 @@
             data-title="Elimina evento coupon"
             data-placement="bottom"
             data-toggle="modal"
-        ></bs-toolbar-button>
+        ></bs-toolbar-button>-->
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
