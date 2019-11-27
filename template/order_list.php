@@ -111,7 +111,7 @@
                                 <th data-slug="shipmentId"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">sped N<br>Tracking Number
+                                    class="center">spedizione<br>Tracking Number<br>Cod. Interno
                                 </th>
                                 <th data-slug="invoice"
                                     data-searchable="true"

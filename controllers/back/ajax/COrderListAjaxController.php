@@ -206,13 +206,15 @@ class COrderListAjaxController extends AAjaxController
                 foreach($findOrderLineHasShipment as $shipment){
                     $findShipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id'=>$shipment->shipmentId]);
                     $findCarrier=\Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id'=>$findShipment->carrierId]);
-                    if($findShipment->deliveryDate!=null){
-                        $fontDelivery='<font color="green">';
+                    if($findShipment->deliveryDate!=null && $findShipment->shipmentDate !=null){
+                        $btnclass='btn btn-success';
+                    }else if($findShipment->deliveryDate==null && $findShipment->shipmentDate !=null){
+                        $btnclass='btn btn-warning';
                     }else{
-                        $fontDelivery='<font color="black"></font>';
+                        $btnclass='btn btn-light';
                     }
 
-                   $shipmentCollect.= 'Carrier:'.$fontDelivery.$findCarrier->name.'</font><br><button onclick="openTrackDelivery(\''.$findShipment->trackingNumber.'\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>'.$findShipment->trackingNumber.'</button>';
+                   $shipmentCollect.= '<button style="width: 200px ; height:32px;"  onclick="openTrackDelivery(\''.$findShipment->trackingNumber.'\');" class='.$btnclass.'> <i class="fa fa-truck" aria-hidden="true"></i>->'.$findCarrier->name.'</button><br>'.$findShipment->trackingNumber.'<br><b>Id Spedizione: </b>'.$findShipment->id.'<br>';
                   //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
                 }
             $row['shipmentId']=$shipmentCollect;
