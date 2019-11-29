@@ -1,6 +1,7 @@
 <?php
 
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CDirtySku;
@@ -25,67 +26,70 @@ class CChangeLineStatus extends AAjaxController
         $dba = \Monkey::app()->dbAdapter;
         try {
             \Monkey::app()->repoFactory->beginTransaction();
-            $ids = explode('-', $this->data['value']);
+            $ids = explode('-',$this->data['value']);
             /** @var COrderLineRepo $repo */
             $repo = \Monkey::app()->repoFactory->create('OrderLine');
-            $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
+            $line = $repo->findOne(['id' => $ids[0],'orderId' => $ids[1]]);
             $oldActive = $line->orderLineStatus->isActive;
 
 
             /** @var COrderLine $line */
-            $line = $repo->updateStatus($line, $ids[2]);
-            $orderLine=$line;
-
+            $line = $repo->updateStatus($line,$ids[2]);
+            $orderLine = $line;
 
 
             $newActive = $line->orderLineStatus->isActive;
 
-            if($line->shopId == 46 AND $line->status == "ORD_WAIT") {
+            if ($line->shopId == 46 AND $line->status == "ORD_WAIT") {
                 //Value for api
+                    /** @var CObjectCollection $dirtySkus */
+                    $dirtySkus = $line->productSku->dirtySku;
 
-                /** @var CObjectCollection $dirtySkus */
-                $dirtySkus = $line->productSku->dirtySku;
+                    /*if ($dirtySkus->count() != 1) {
+                        throw new BambooException('Collezione fatta da più sku, controllare');
+                    }*/
 
-                if($dirtySkus->count() != 1) {
-                    throw new BambooException('Collezione fatta da più sku, controllare');
-                }
+                    /** @var CDirtySku $dirtySku */
+                    $dirtySku = $dirtySkus->getFirst();
 
-                /** @var CDirtySku $dirtySku */
-                $dirtySku = $dirtySkus->getFirst();
+                    $orderId = $line->orderId;
+                    $rowN = $line->id;
 
-                $orderId = $line->orderId;
-                $rowN = $line->id;
+                    $row = [
+                        "RowID" => $rowN,
+                        "SKU" => $dirtySku->extSkuId,
+                        "Value" => $line->friendRevenue,
+                        "Payment_type" => $line->order->orderPaymentMethod->name,
+                    ];
+                    IF(ENV=='prod') {
+                        $alduca = new CAlducadaostaOrderAPI($orderId,$row);
+                        $alduca->newOrder();
+                    }
 
-                $row = [
-                    "RowID" => $rowN,
-                    "SKU" => $dirtySku->extSkuId,
-                    "Value" => $line->friendRevenue,
-                    "Payment_type" => $line->order->orderPaymentMethod->name,
-                ];
-                $alduca = new CAlducadaostaOrderAPI($orderId, $row);
-                $alduca->newOrder();
             }
-            $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$orderLine->remoteShopSellerId]);
-            $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderLine->orderId,'remoteShopSellerId'=>$orderLine->remoteShopSellerId]);
-            if($orderLine->remoteOrderSellerId!=null) {
-                $db_host = $shopRepo->dbHost;
-                $db_name = $shopRepo->dbName;
-                $db_user = $shopRepo->dbUsername;
-                $db_pass = $shopRepo->dbPassword;
-                $shop = $shopRepo->id;
-                try {
+            $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $orderLine->remoteShopSellerId]);
+            $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderLine->orderId,'remoteShopSellerId' => $orderLine->remoteShopSellerId]);
+            IF(ENV=='prod') {
+                if ($orderLine->remoteOrderSellerId != null) {
+                    $db_host = $shopRepo->dbHost;
+                    $db_name = $shopRepo->dbName;
+                    $db_user = $shopRepo->dbUsername;
+                    $db_pass = $shopRepo->dbPassword;
+                    $shop = $shopRepo->id;
+                    try {
 
-                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                    $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $res = ' connessione ok <br>';
-                } catch (PDOException $e) {
-                    $res = $e->getMessage();
+                        $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                        $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                        $res = ' connessione ok <br>';
+                    } catch (PDOException $e) {
+                        $res = $e->getMessage();
+                    }
+
+                    $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $orderLine->status . "' WHERE id=" . $orderLine->remoteOrderLineSellerId . " and orderId=" . $orderLine->remoteOrderSellerId);
+                    $stmtOrderLine->execute();
+                    $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
+                    $stmtOrder->execute();
                 }
-
-                $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $orderLine->status . "' WHERE id=" . $orderLine->remoteOrderLineSellerId . " and orderId=" . $orderLine->remoteOrderSellerId);
-                $stmtOrderLine->execute();
-                $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
-                $stmtOrder->execute();
             }
 
             \Monkey::app()->repoFactory->commit();

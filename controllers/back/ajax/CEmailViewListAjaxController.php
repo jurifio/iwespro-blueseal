@@ -63,7 +63,7 @@ class CEmailViewListAjaxController extends AAjaxController
                     continue;
                 } else {
                     $htmlBody = $rowEmail['htmlBody'];
-                    break;
+
                 }
 
 
