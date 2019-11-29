@@ -42,26 +42,39 @@ class CChangeLineStatus extends AAjaxController
 
             if ($line->shopId == 46 AND $line->status == "ORD_WAIT") {
                 //Value for api
+                $currentYear=date('Y');
                     /** @var CObjectCollection $dirtySkus */
-                    $dirtySkus = $line->productSku->dirtySku;
+                  //  $dirtySkus = $line->productSku->dirtySku;
+                    $dirtyProducts=\Monkey::app()->repoFactory->create('DirtyProduct')->findBy(['productId'=>$line->productId,'productVariantId'=>$line->productVariantId]);
+                    foreach ($dirtyProducts as $dirtyProduct){
+                        $dirtyDate=strtotime($dirtyProduct->creationDate);
+                        $dirtyDate=date('Y',$dirtyDate);
+                        if($dirtyDate==$currentYear){
+                            $dirtySkus = \Monkey::app()->repoFactory->create('DirtySku')->findBy(['dirtyProductId' => $dirtyProduct->id,'productSizeId' => $line->productSizeId]);
+                            foreach($dirtySkus as $dirtySku) {
+                                $extSkuId = $dirtySku->extSkuId;
+                            }
+                        }
+                    }
 
-                    /*if ($dirtySkus->count() != 1) {
+
+                   /* if ($dirtySkus->count() != 1) {
                         throw new BambooException('Collezione fatta da più sku, controllare');
                     }*/
 
                     /** @var CDirtySku $dirtySku */
-                    $dirtySku = $dirtySkus->getFirst();
+                    //$dirtySku = $dirtySkus->getFirst();
 
                     $orderId = $line->orderId;
                     $rowN = $line->id;
 
                     $row = [
                         "RowID" => $rowN,
-                        "SKU" => $dirtySku->extSkuId,
+                        "SKU" => $extSkuId,
                         "Value" => $line->friendRevenue,
                         "Payment_type" => $line->order->orderPaymentMethod->name,
                     ];
-                    IF(ENV=='prod') {
+                    if (ENV=='prod') {
                         $alduca = new CAlducadaostaOrderAPI($orderId,$row);
                         $alduca->newOrder();
                     }
