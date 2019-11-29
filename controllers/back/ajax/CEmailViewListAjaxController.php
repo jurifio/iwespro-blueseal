@@ -55,7 +55,7 @@ class CEmailViewListAjaxController extends AAjaxController
                 } catch (PDOException $e) {
                     $res .= $e->getMessage();
                 }
-                $stmtEmail = $db_con->prepare('SELECT htmlBody FROM Email where providerEmailId=\'' . $messaggeId . '\'');
+                $stmtEmail = $db_con->prepare('SELECT htmlBody FROM Email where providerEmailId LIKE \'%' . $messaggeId . '%\'');
                 $stmtEmail->execute();
                 $rowEmail = $stmtEmail->fetch('PDO::FETCH_ASSOC');
                 if ($rowEmail == null) {
@@ -72,7 +72,6 @@ class CEmailViewListAjaxController extends AAjaxController
         }
 
 
-        $htmlBody = $email->htmlBody;
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $blueseal . "email";
 

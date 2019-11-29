@@ -103,7 +103,7 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             }
             if (!empty($list->message->headers->$messageId)) {
 
-                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "&orderId=".$orderId."'>link</a><br />";
             }else{
                 $link='';
             }
@@ -165,7 +165,7 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             }
             if (!empty($list->message->headers->$messageId)) {
 
-                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "&orderId=".$orderId."'>link</a><br />";
             }else{
                 $link='';
             }
@@ -227,7 +227,7 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             }
             if (!empty($list->message->headers->$messageId)) {
 
-                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "&orderId=".$orderId."'>link</a><br />";
             }else{
                 $link='';
             }
