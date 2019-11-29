@@ -8,6 +8,7 @@ use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CUser;
+use bamboo\domain\entities\CEmail;
 use PDO;
 use PDOException;
 
@@ -63,7 +64,7 @@ class CEmailViewListAjaxController extends AAjaxController
                     continue;
                 } else {
                     $htmlBody = $rowEmail['htmlBody'];
-
+                    break;
                 }
 
 
@@ -78,14 +79,14 @@ class CEmailViewListAjaxController extends AAjaxController
 
         $opera = $blueseal . "email-view";
         $aggiungi = $blueseal . "email-view";
-
-        return $view->render([
-            'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'pageURL' => $pageURL,
-            'operaURL' => $opera,
-            'htmlBody' => $htmlBody,
-            'page' => $this->page,
-        ]);
+        echo utf8_encode($htmlBody);
+        /* return $view->render([
+             'app' => new CRestrictedAccessWidgetHelper($this->app),
+             'pageURL' => $pageURL,
+             'operaURL' => $opera,
+             'htmlBody' => $htmlBody,
+             'page' => $this->page,
+         ]);*/
     }
 
 
