@@ -158,3 +158,12 @@ function openTrackEmail(orderId) {
     });
 
 }
+function openTrackGlsDelivery(trackingNumber){
+
+    let track=trackingNumber;
+    let url='https://www.gls-italy.com/index.php?option=com_gls&task=track_e_trace.getSpedizioneWeblabeling&format=raw&cn=MC1108&rf='+track+'&lc=ita';
+    window.open(
+        url, "Gls Tracking",
+        "height=768,width=1024,modal=yes,alwaysRaised=yes");
+
+}

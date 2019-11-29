@@ -213,9 +213,13 @@ class COrderListAjaxController extends AAjaxController
                     }else{
                         $btnclass='btn btn-light';
                     }
-
-                   $shipmentCollect.= '<button style="width: 200px ; height:32px;"  onclick="openTrackDelivery(\''.$findShipment->trackingNumber.'\');" class='.$btnclass.'> <i class="fa fa-truck" aria-hidden="true"></i>->'.$findCarrier->name.'</button><br>'.$findShipment->trackingNumber.'<br><b>Id Spedizione: </b>'.$findShipment->id.'<br>';
-                  //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
+                    //https://www.gls-italy.com/index.php?option=com_gls&task=track_e_trace.getSpedizioneWeblabeling&format=raw&cn=MC1108&rf=MC590355157&lc=ita
+                    if($findShipment->carrierId==2){
+                        $shipmentCollect .= '<button style="width: 200px ; height:32px;"  onclick="openTrackGlsDelivery(\'' . $findShipment -> trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier -> name . '</button><br>' . $findShipment -> trackingNumber . '<br><b>Id Spedizione: </b>' . $findShipment -> id . '<br>';
+                    }else {
+                        $shipmentCollect .= '<button style="width: 200px ; height:32px;"  onclick="openTrackDelivery(\'' . $findShipment -> trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier -> name . '</button><br>' . $findShipment -> trackingNumber . '<br><b>Id Spedizione: </b>' . $findShipment -> id . '<br>';
+                        //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
+                    }
                 }
             $row['shipmentId']=$shipmentCollect;
 
