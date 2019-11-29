@@ -48,16 +48,22 @@ class CGetTrackingEmailAjaxController extends AAjaxController
 
         $orderId = $request->getRequestData('orderId');
         $orderId=trim($orderId);
+        $trackLine = [];
         $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
         $emailRepo =\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$orderRepo->userId]);
         $email =$emailRepo->email;
+        $messageId='message-id';
+        $dateformat=strtotime($orderRepo->orderDate);
+        $beginDate=date("D,d M Y H:i:s -0000",$dateformat);
+        $endDate=date("D,d M Y H:i:s -0000");
         $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
         $domain = 'iwes.pro';
         $queryString = array(
-            'begin'        => 'Fri, 23 November 2019 09:00:00 -0000',
+            'begin'        => $beginDate,
+            'end'          =>$endDate,
             'ascending'    => 'yes',
             'pretty'       => 'yes',
-            'recipient'    => 'juri@iwes.it'
+            'recipient'    => 'daniele.86dc@hotmail.it'
         );
 
 # Make the call to the client.
@@ -65,49 +71,240 @@ class CGetTrackingEmailAjaxController extends AAjaxController
 
 
         foreach ($result->http_response_body->items as $list ) {
-            echo 'oraInvio:'.$list->timestamp.'<br>';
+            if(!empty($list->timestamp)) {
+                $oraInvio = $list->timestamp;
+            }else{
+                $oraInvio='';
+            }
             if (!empty($list->envelope->sender)) {
-                echo 'sender:'.$list->envelope->sender . '<br>';
+                $sender= $list->envelope->sender;
+            }else{
+                $sender='';
             }
             if (!empty($list->envelope->targets)) {
-                echo 'targets:'.$list->envelope->targets . '<br>';
+                $targets=$list->envelope->targets;
+            }else{
+                $targets='';
             }
             if (!empty($list->message->headers->to)) {
-                echo 'to:'.$list->message->headers->to . '<br>';
+                $to=$list->message->headers->to;
+            }else{
+                $to='';
             }
             if (!empty($list->message->headers->from)) {
-                echo 'from:'.$list->message->headers->from . '<br>';
+                $from=$list->message->headers->from;
+            }else{
+                $from='';
             }
             if (!empty($list->message->headers->subject)) {
-                echo 'oggetto:'.$list->message->headers->subject . '<br>';
+                $subject=$list->message->headers->subject;
+            }else{
+                $subject='';
             }
+            if (!empty($list->message->headers->$messageId)) {
+
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+            }else{
+                $link='';
+            }
+            array_push($trackLine,[
+                'oraInvio'=>date('d-m-Y H:s:i',$oraInvio),
+                'sender'=>$sender,
+                'targets'=>$targets,
+                'from'=>$from,
+                'to'=>$to,
+                'subject'=>$subject,
+                'link'=>$link
+            ]);
 
         }
-        $track = json_decode($result);
-        $trackLine = [];
-        foreach ($track->TrackResponse->Shipment->Package->Activity as $activities) {
-            if (!empty($activities->ActivityLocation->Address->City)) {
-                if (!empty($activities->ActivityLocation->Address->CountryCode)) {
-                    array_push($trackLine,[
-                        'orderId' => $orderId,
-                        'carrier' => $carrierName,
-                        'customer' => $userShipping->name . ' ' . $userShipping->surname . '<br>' . $userShipping->address . '<br>' . $userShipping->postcode . ' ' . $userShipping->city . ' ' . $userShipping->province,
-                        'bookingNumber' => $shipment->bookingNumber,
-                        'trackingNumber' => $shipment->trackingNumber,
-                        'creationDate' => $shipment->creationDate,
-                        'DateTime' => date('d/m/y H:i:s',strtotime($activities->Date.$activities->Time)),
-                        'Description' => $activities->Status->Description,
-                        'City' => $activities->ActivityLocation->Address->City,
-                        'CountryCode' => $activities->ActivityLocation->Address->CountryCode,
-                        'shipmentDate' => $shipment->shipmentDate,
-                        'predictedDeliveryDate' => $shipment->predictedDeliveryDate,
-                        'deliveryDate' => $shipment->deliveryDate
-                    ]);
-                }
-            }
+        $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
+        $domain = 'pickyshop.com';
+        $queryString = array(
+            'begin'        => $beginDate,
+            'end'          =>$endDate,
+            'ascending'    => 'yes',
+            'pretty'       => 'yes',
+            'recipient'    => 'daniele.86dc@hotmail.it'
+        );
 
+# Make the call to the client.
+        $result = $mgClient->get("$domain/events", $queryString);
+
+
+        foreach ($result->http_response_body->items as $list ) {
+            if(!empty($list->timestamp)) {
+                $oraInvio = $list->timestamp;
+            }else{
+                $oraInvio='';
+            }
+            if (!empty($list->envelope->sender)) {
+                $sender= $list->envelope->sender;
+            }else{
+                $sender='';
+            }
+            if (!empty($list->envelope->targets)) {
+                $targets=$list->envelope->targets;
+            }else{
+                $targets='';
+            }
+            if (!empty($list->message->headers->to)) {
+                $to=$list->message->headers->to;
+            }else{
+                $to='';
+            }
+            if (!empty($list->message->headers->from)) {
+                $from=$list->message->headers->from;
+            }else{
+                $from='';
+            }
+            if (!empty($list->message->headers->subject)) {
+                $subject=$list->message->headers->subject;
+            }else{
+                $subject='';
+            }
+            if (!empty($list->message->headers->$messageId)) {
+
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+            }else{
+                $link='';
+            }
+            array_push($trackLine,[
+                'oraInvio'=>date('d-m-Y H:s:i',$oraInvio),
+                'sender'=>$sender,
+                'targets'=>$targets,
+                'from'=>$from,
+                'to'=>$to,
+                'subject'=>$subject,
+                'link'=>$link
+            ]);
 
         }
+        $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
+        $domain = 'barbagalloshop.com';
+        $queryString = array(
+            'begin'        => $beginDate,
+            'end'          =>$endDate,
+            'ascending'    => 'yes',
+            'pretty'       => 'yes',
+            'recipient'    => 'daniele.86dc@hotmail.it'
+        );
+
+# Make the call to the client.
+        $result = $mgClient->get("$domain/events", $queryString);
+
+
+        foreach ($result->http_response_body->items as $list ) {
+            if(!empty($list->timestamp)) {
+                $oraInvio = $list->timestamp;
+            }else{
+                $oraInvio='';
+            }
+            if (!empty($list->envelope->sender)) {
+                $sender= $list->envelope->sender;
+            }else{
+                $sender='';
+            }
+            if (!empty($list->envelope->targets)) {
+                $targets=$list->envelope->targets;
+            }else{
+                $targets='';
+            }
+            if (!empty($list->message->headers->to)) {
+                $to=$list->message->headers->to;
+            }else{
+                $to='';
+            }
+            if (!empty($list->message->headers->from)) {
+                $from=$list->message->headers->from;
+            }else{
+                $from='';
+            }
+            if (!empty($list->message->headers->subject)) {
+                $subject=$list->message->headers->subject;
+            }else{
+                $subject='';
+            }
+            if (!empty($list->message->headers->$messageId)) {
+
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+            }else{
+                $link='';
+            }
+            array_push($trackLine,[
+                'oraInvio'=>date('d-m-Y H:s:i',$oraInvio),
+                'sender'=>$sender,
+                'targets'=>$targets,
+                'from'=>$from,
+                'to'=>$to,
+                'subject'=>$subject,
+                'link'=>$link
+            ]);
+
+        }
+        $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
+        $domain = 'cartechinishop.com';
+        $queryString = array(
+            'begin'        => $beginDate,
+            'end'          =>$endDate,
+            'ascending'    => 'yes',
+            'pretty'       => 'yes',
+            'recipient'    => 'daniele.86dc@hotmail.it'
+        );
+
+# Make the call to the client.
+        $result = $mgClient->get("$domain/events", $queryString);
+
+
+        foreach ($result->http_response_body->items as $list ) {
+            if(!empty($list->timestamp)) {
+                $oraInvio = $list->timestamp;
+            }else{
+                $oraInvio='';
+            }
+            if (!empty($list->envelope->sender)) {
+                $sender= $list->envelope->sender;
+            }else{
+                $sender='';
+            }
+            if (!empty($list->envelope->targets)) {
+                $targets=$list->envelope->targets;
+            }else{
+                $targets='';
+            }
+            if (!empty($list->message->headers->to)) {
+                $to=$list->message->headers->to;
+            }else{
+                $to='';
+            }
+            if (!empty($list->message->headers->from)) {
+                $from=$list->message->headers->from;
+            }else{
+                $from='';
+            }
+            if (!empty($list->message->headers->subject)) {
+                $subject=$list->message->headers->subject;
+            }else{
+                $subject='';
+            }
+            if (!empty($list->message->headers->$messageId)) {
+
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "'>link</a><br />";
+            }else{
+                $link='';
+            }
+            array_push($trackLine,[
+                'oraInvio'=>date('d-m-Y H:s:i',$oraInvio),
+                'sender'=>$sender,
+                'targets'=>$targets,
+                'from'=>$from,
+                'to'=>$to,
+                'subject'=>$subject,
+                'link'=>$link
+            ]);
+
+        }
+
 
         return json_encode($trackLine);
     }
