@@ -28,7 +28,7 @@ use PDOException;
 class CEmailViewListAjaxController extends AAjaxController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "invoice_print";
+    protected $pageSlug = "email_view";
 
     public function get()
     {
@@ -40,7 +40,7 @@ class CEmailViewListAjaxController extends AAjaxController
         $orderId = $this->app->router->request()->getRequestData('orderId');
         $email = \Monkey::app()->repoFactory->create('Email')->findOneBy(['providerEmailId' => $messaggeId]);
         if ($email == null) {
-            $shops = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['hasEcommerce' => 1]);
+            $shops = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
             foreach ($shops as $shop) {
                 $db_host = $shop->dbHost;
                 $db_name = $shop->dbName;
@@ -51,14 +51,15 @@ class CEmailViewListAjaxController extends AAjaxController
 
                     $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
                     $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-                    $res .= " connessione ok <br>";
+                    $res = " connessione ok <br>";
                 } catch (PDOException $e) {
-                    $res .= $e->getMessage();
+                    $res = $e->getMessage();
                 }
-                $stmtEmail = $db_con->prepare('SELECT htmlBody FROM Email where providerEmailId LIKE \'%' . $messaggeId . '%\'');
+                $stmtEmail = $db_con->prepare('SELECT count(*) as countRecord, htmlBody as htmlBody FROM `Email` where providerEmailId LIKE \'%' . $messaggeId . '%\'');
                 $stmtEmail->execute();
-                $rowEmail = $stmtEmail->fetch('PDO::FETCH_ASSOC');
-                if ($rowEmail == null) {
+
+                $rowEmail = $stmtEmail->fetch(PDO::FETCH_ASSOC);
+                if ($rowEmail['countRecord']==0) {
                     continue;
                 } else {
                     $htmlBody = $rowEmail['htmlBody'];
