@@ -63,7 +63,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             'end'          =>$endDate,
             'ascending'    => 'yes',
             'pretty'       => 'yes',
-            'recipient'    => $email
+            'recipient'    => $email,
+            'event'        => 'delivered'
         );
 
 # Make the call to the client.
@@ -107,15 +108,17 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             }else{
                 $link='';
             }
-            array_push($trackLine,[
-                'oraInvio'=>date('d-m-Y H:s:i',$oraInvio),
-                'sender'=>$sender,
-                'targets'=>$targets,
-                'from'=>$from,
-                'to'=>$to,
-                'subject'=>$subject,
-                'link'=>$link
-            ]);
+            if ($list->event=='Delivered') {
+                array_push($trackLine,[
+                    'oraInvio' => date('d-m-Y H:s:i',$oraInvio),
+                    'sender' => $sender,
+                    'targets' => $targets,
+                    'from' => $from,
+                    'to' => $to,
+                    'subject' => $subject,
+                    'link' => $link
+                ]);
+            }
 
         }
         $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
@@ -125,7 +128,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             'end'          =>$endDate,
             'ascending'    => 'yes',
             'pretty'       => 'yes',
-            'recipient'    => $email
+            'recipient'    => $email,
+            'event'        => 'delivered'
         );
 
 # Make the call to the client.
@@ -187,7 +191,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             'end'          =>$endDate,
             'ascending'    => 'yes',
             'pretty'       => 'yes',
-            'recipient'    => $email
+            'recipient'    => $email,
+            'event'        => 'delivered'
         );
 
 # Make the call to the client.
@@ -249,7 +254,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             'end'          =>$endDate,
             'ascending'    => 'yes',
             'pretty'       => 'yes',
-            'recipient'    => $email
+            'recipient'    => $email,
+            'event'        => 'delivered'
         );
 
 # Make the call to the client.
