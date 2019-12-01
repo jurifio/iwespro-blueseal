@@ -68,7 +68,7 @@ class CImportGainPlanJob extends ACronJob
                 $invoiceId = $invoice->id;
                 $seasons = $seasonRepo->findAll();
                 foreach ($seasons as $season) {
-                    $dateStart = strtotime($season->startDate);
+                    $dateStart = strtotime($season->dateStart);
                     $dateEnd = strtotime($season->dateEnd);
                     $dateInvoice = strtotime($invoiceDate);
                     if ($dateInvoice >= $dateStart && $dateInvoice <= $dateEnd) {
