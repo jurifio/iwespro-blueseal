@@ -3195,6 +3195,20 @@
             "hosts": [
                 "*"
             ]
+        },
+        {
+            "pattern": "/blueseal/registri/gainplan(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

@@ -69,9 +69,13 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura Contro Partita/Fornitore
                                 </th>
-                                <th data-slug="amount"
+                                <th data-slug="Importo"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Amount
+                                    data-orderable="true" class="center">Importo
+                                </th>
+                                <th data-slug="imp"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Imponibile
                                 </th>
                                 <th data-slug="cost"
                                          data-searchable="true"
@@ -81,9 +85,13 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Costo Di Spedizione
                                 </th>
+                                <th data-slug="paymentCommission"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Commissioni su Pagamento
+                                </th>
                                 <th data-slug="profit"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data di Creazione
+                                    data-orderable="true" class="center">Margine
                                 </th>
                             </tr>
                             </thead>
@@ -107,7 +115,7 @@
                     data-permission="allShops"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-title="Aggiungi una nuova stagione manuale"
+                    data-title="Aggiungi  un nuovo coso  manuale"
                     data-placement="bottom"
                     data-href="/blueseal/prodotti/season-aggiungi"
             ></bs-toolbar-button>
