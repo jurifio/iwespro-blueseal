@@ -49,15 +49,15 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Numero Ordine
                                 </th>
-                                <th data-slug="invoice"
+                                <th data-slug="invoiceId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura
                                 </th>
-                                <th data-slug="customer"
+                                <th data-slug="customerName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop/Cliente/Fornitore
                                 </th>
-                                <th data-slug="Nazione"
+                                <th data-slug="country"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nazione
                                 </th>
@@ -69,7 +69,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura Contro Partita/Fornitore
                                 </th>
-                                <th data-slug="Importo"
+                                <th data-slug="amount"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Importo
                                 </th>
