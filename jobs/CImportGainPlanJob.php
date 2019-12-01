@@ -75,11 +75,11 @@ class CImportGainPlanJob extends ACronJob
                         $seasonId = $season->id;
                     }
                 }
-                $gainPlanFind = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy(['invoiceId' => $invoiceId,'orderId' => $orderid]);
+                $gainPlanFind = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy(['invoiceId' => $invoiceId,'orderId' => $orderId]);
                 if ($gainPlanFind == null) {
                     $gainPlanInsert = $gainPlanRepo->getEmptyEntity();
                     $gainPlanInsert->invoiceId = $invoiceId;
-                    $gainPlanInsert->orderId = $ordeId;
+                    $gainPlanInsert->orderId = $orderId;
                     $gainPlanInsert->seasonId = $seasonId;
                     $gainPlanInsert->customerName = $customer;
                     $gainPlanInsert->typeMovement = 1;

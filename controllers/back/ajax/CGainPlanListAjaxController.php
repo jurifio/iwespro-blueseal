@@ -81,8 +81,9 @@ class CGainPlanListAjaxController extends AAjaxController
                     $orderLines = $orderLineRepo->findOneBy(['orderId' => $val->orderId]);
                     $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
                     $country=$countryRepo->findOneBy(['id'=>$userAddress->countryId]);
-                    $extraue=($country->countryId==1)? 'yes':'no';
+                    $extraue=($country->extraue==1)? 'yes':'no';
                     $customer=$userAddress->name. ' '.$userAddress->surname.' '.$userAddress->company;
+                    $typeMovement='Ordini';
 
                     foreach ($orderLines as $orderLine) {
                         if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
@@ -90,7 +91,7 @@ class CGainPlanListAjaxController extends AAjaxController
                             $paymentCommissionRate=$orderPaymentMethod->paymentCommissionRate;
                             if ($orderLine->remoteShopSellerId == 44) {
                                 $amount += $orderLine->netPrice;
-                                $imp=($country->countryId==1)?$orderLine->netPrice : $orderLine->netPrice-$orderLine->vat;
+                                $imp=($country->extraue==1)?$orderLine->netPrice : $orderLine->netPrice-$orderLine->vat;
                                 $cost += $orderLine->friendRevenue;
                                 $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
                                 $shippingCost=$orderLine->shippingCarge;
@@ -121,12 +122,14 @@ class CGainPlanListAjaxController extends AAjaxController
                         }
                     }
                     break;
-                case $val->typeMovement == 1://ordine
+                case $val->typeMovement == 2://ordine
                         $amount+=$val->amount;
                         $cost+=$val->cost;
                         $shippingCost+=$val->deliveryCost;
                         $paymentCommission+=$val->commission;
                     $customer=$val->customerName;
+                    $typeMovement='Servizi';
+
                     break;
 
             }
@@ -137,12 +140,14 @@ class CGainPlanListAjaxController extends AAjaxController
                     $row['MovementPassiveCollect'] = $rowCost;
                     $row['deliveryCost'] = $shippingCost;
                     $row['paymentCommission'] = $paymentCommission;
-                    $row['profit']=$amount-$cost-$shippingCost->paymentCommission;
+                    $row['profit']=$amount-$cost-$shippingCost-$paymentCommission;
+                    $row['typeMovement']=$typeMovement;
+                    $row['dateMovement']=$val->dateMovement;
 
 
 
-            $row['dateStart'] = $season->dateStart;
-            $row['dateEnd'] = $season->dateEnd;
+
+
             $row['isActive'] = ($season->isActive==0)? 'no' : 'si';
             $row['order'] = $season->order;
             $response['data'][] = $row;
