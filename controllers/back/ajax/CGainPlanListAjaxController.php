@@ -97,7 +97,7 @@ class CGainPlanListAjaxController extends AAjaxController
 
                 switch($val->typeMovement) {
                     case 1:
-                        $orderLines = $orderLineRepo->findOneBy(['orderId' => $val->orderId]);
+                        $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
                         $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
                         $country=$countryRepo->findOneBy(['id'=>$userAddress->countryId]);
                         $extraue=($country->extraue==1)? 'yes':'no';
@@ -115,7 +115,7 @@ class CGainPlanListAjaxController extends AAjaxController
                                     $imp=($country->extraue==1)?$orderLine->netPrice : $orderLine->netPrice-$orderLine->vat;
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
-                                    $shippingCost=$orderLine->shippingCarge;
+                                    $shippingCost=$orderLine->shippingCharge;
 
 
 
@@ -127,14 +127,14 @@ class CGainPlanListAjaxController extends AAjaxController
                                         $imp=$amount;
                                         $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
                                         $cost+=$ordeLine->friendRevenute;
-                                        $shippingCost=$orderLine->shippingCarge;
+                                        $shippingCost=$orderLine->shippingCharge;
 
                                     }else{
                                         $shop=$shopRepo->finOneBy(['id'=>$orderLine->shopId]);
                                         $paralellFee=$shop->paralellFee;
                                         $cost+=$ordeLine->friendRevenute;
                                         $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
-                                        $shippingCost=$orderLine->shippingCarge;
+                                        $shippingCost=$orderLine->shippingCharge;
                                         $imp+=round($orderLine->netPrice*0.11,2)+$paymentCommission;
                                         $amount+=round($orderLine->netPrice*0.11,2)+$paymentCommission;
 
