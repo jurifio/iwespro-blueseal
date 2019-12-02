@@ -52,15 +52,14 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     ];
     /**
      * @param CShipment $shipment
-     * @param $orderId
      * @return CShipment|bool
      * @throws \Throwable
      */
-    public function addPickUp(CShipment $shipment,$orderId = null)
+    public function addPickUp(CShipment $shipment)
     {
         \Monkey::app()->applicationReport('CUPSHandler', 'addPickup', 'Called addPickUp');
 
-        $shipment = $this->addDelivery($shipment, $orderId);
+        $shipment = $this->addDelivery($shipment);
 
         $orders = [];
 
@@ -195,35 +194,19 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
 
     /**
      * @param CShipment $shipment
-     * @param $orderId
      * @return CShipment
      * @throws BambooException
      */
-    public function addDelivery(CShipment $shipment, $orderId=null)
+    public function addDelivery(CShipment $shipment)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
-        $orders = [];
-
-        foreach ($shipment->orderLine as $orderLine) {
-            $orders[] = $orderLine->printId();
-        }
-        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
-        $shippingAddress[] = json_decode($findOrder->frozenShippingAddress,true);
-        $AttentionName =  $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'].' '.$shippingAddress[0]['company'];
-        $Name = $shippingAddress[0]['company'] . ' ' . $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'];
-        $AddressLine = $shippingAddress[0]['address'] . ' ' . $shippingAddress[0]['extra'];
-        $City = $shippingAddress[0]['city'];
-        $PostalCode = $shippingAddress[0]['postcode'];
-        $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $shippingAddress[0]['countryId']]);
-        $CountryCode = $country->ISO;
-        $Number = $shippingAddress[0]['phone'];
 
         $service = [
             'Code' => '11',
             'Description' => 'UPS Standard'
         ];
 
-        if($country->extraue==1) {
+        if($shipment->toAddress->country->continent != 'EU') {
             $service = [
                 'Code' => '65',
                 'Description' => 'UPS Saver'
@@ -265,16 +248,16 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                         ]
                     ],
                     'ShipTo' => [
-                        'AttentionName' => $AttentionName,
-                        'Name' => $Name,
+                        'AttentionName' => $shipment->toAddress->subject,
+                        'Name' => $shipment->toAddress->subject,
                         'Address' => [
-                            'AddressLine' => $AddressLine . ' ' . $shipment->toAddress->extra,
-                            'City' => $City,
-                            'PostalCode' => $PostalCode,
-                            'CountryCode' => $CountryCode
+                            'AddressLine' => $shipment->toAddress->address . ' ' . $shipment->toAddress->extra,
+                            'City' => $shipment->toAddress->city,
+                            'PostalCode' => $shipment->toAddress->postcode,
+                            'CountryCode' => $shipment->toAddress->country->ISO
                         ],
                         'Phone' => [
-                            'Number' => !empty($Number) ? $Number : '+390733471365' //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphon
+                            'Number' => !empty($shipment->toAddress->phone) ? $shipment->toAddress->phone : ($shipment->toAddress->cellphone ? $shipment->toAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
                         ]
                     ],
                     'PaymentInformation' => [

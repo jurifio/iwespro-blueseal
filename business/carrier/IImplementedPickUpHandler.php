@@ -32,10 +32,9 @@ interface IImplementedPickUpHandler {
     /**
      * Add a pick-up request
      * @param CShipment $shipment
-     * @param $orderId
      * @return CShipment|bool
      */
-    public function addPickUp(CShipment $shipment, $orderId);
+    public function addPickUp(CShipment $shipment);
 
     /**
      * @param CShipment $shipment
