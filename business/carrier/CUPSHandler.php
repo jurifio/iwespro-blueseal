@@ -202,8 +202,11 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     public function addDelivery(CShipment $shipment, $orderId=null)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
-        $orders[] = $orderLine->printId();
+        $orders = [];
 
+        foreach ($shipment->orderLine as $orderLine) {
+            $orders[] = $orderLine->printId();
+        }
         $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
         $shippingAddress[] = json_decode($findOrder->frozenShippingAddress,true);
         $AttentionName =  $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'].' '.$shippingAddress[0]['company'];
