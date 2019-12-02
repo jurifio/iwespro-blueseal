@@ -132,7 +132,7 @@ class CGainPlanListAjaxController extends AAjaxController
                                     }else{
                                         $shop=$shopRepo->findOneBy(['id'=>$orderLine->shopId]);
                                         $paralellFee=$shop->paralellFee;
-                                        $cost+=$orderLine->friendRevenute;
+                                        $cost+=$orderLine->friendRevenue;
                                         $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
                                         $shippingCost=$orderLine->shippingCharge;
                                         $imp+=round($orderLine->netPrice*0.11,2)+$paymentCommission;
@@ -157,13 +157,13 @@ class CGainPlanListAjaxController extends AAjaxController
                 }
                 $row['country']=$nation;
                 $row['customerName']=$customer;
-                $row['amount']=$amount;
-                $row['cost']=$cost;
-                $row['imp']=$imp;
+                $row['amount']=money_format('%.2n',$amount) . ' &euro;';
+                $row['cost']=money_format('%.2n',$cost) . ' &euro;';
+                $row['imp']=money_format('%.2n',$imp) . ' &euro;';
                 $row['MovementPassiveCollect'] = $rowCost;
-                $row['deliveryCost'] = $shippingCost;
-                $row['paymentCommission'] = $paymentCommission;
-                $row['profit']=$amount-$cost-$shippingCost-$paymentCommission;
+                $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
+                $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
+                $row['profit']=money_format('%.2n',$amount-$cost-$shippingCost-$paymentCommission) . ' &euro;';
                 $row['typeMovement']=$typeMovement;
                 $row['dateMovement']=$val->dateMovement;
 
