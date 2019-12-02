@@ -39,7 +39,9 @@
                                 </th>
                                 <th data-slug="dateMovement"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Movimento
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Data Movimento
                                 </th>
                                 <th data-slug="season"
                                     data-searchable="true"

@@ -121,7 +121,7 @@ class CGainPlanListAjaxController extends AAjaxController
 
                                 }else{
                                     if($orderLine->remoteOrderSupplierId!=null){
-                                        $shop=$shopRepo->finOneBy(['id'=>$orderLine->shopId]);
+                                        $shop=$shopRepo->findOneBy(['id'=>$orderLine->shopId]);
                                         $paralellFee=$shop->paralellFee;
                                         $amount+=$orderLine->activePrice-($orderLine->activePrice/100*$paralellFee) - $orderLine->friendRevenue;
                                         $imp=$amount;
@@ -130,9 +130,9 @@ class CGainPlanListAjaxController extends AAjaxController
                                         $shippingCost=$orderLine->shippingCharge;
 
                                     }else{
-                                        $shop=$shopRepo->finOneBy(['id'=>$orderLine->shopId]);
+                                        $shop=$shopRepo->findOneBy(['id'=>$orderLine->shopId]);
                                         $paralellFee=$shop->paralellFee;
-                                        $cost+=$ordeLine->friendRevenute;
+                                        $cost+=$orderLine->friendRevenute;
                                         $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
                                         $shippingCost=$orderLine->shippingCharge;
                                         $imp+=round($orderLine->netPrice*0.11,2)+$paymentCommission;
