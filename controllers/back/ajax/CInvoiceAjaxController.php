@@ -417,7 +417,7 @@ class CInvoiceAjaxController extends AAjaxController
                 ]);
                 try {
                     $invoiceRepo->update($invoice);
-
+/*
                     if ($remoteShopSellerId == '44') {
                         $api_uid = $this->app->cfg()->fetch('fattureInCloud', 'api_uid');
                         $api_key = $this->app->cfg()->fetch('fattureInCloud', 'api_key');
@@ -525,25 +525,7 @@ class CInvoiceAjaxController extends AAjaxController
                                 $magazzino = true;
                                 $scontotot += abs($scontoCharge);
                                 $tot += $orderLine->activePrice;
-                                /*  $insertLineJSon.='{
-                                         "id": "'.$idlineaordine.'",
-                                        "codice": "'.$codice.'",
-                                        "nome": "'.$descrizione.'",
-                                        "um": "",
-                                        "quantita": '.$quantity.',
-                                        "descrizione": "'.$descrizione.'",
-                                        "categoria": "",
-                                        "prezzo_netto": '.$prezzo_netto.',
-                                        "prezzo_lordo": '.$prezzo_lordo.',
-                                        "cod_iva": 0,
-                                        "tassabile": true,
-                                        "sconto": '.$sconto.',
-                                        "applica_ra_contributi": true,
-                                        "ordine": '.$ordine.',
-                                        "sconto_rosso": 0,
-                                        "in_ddt": false,
-                                        "magazzino": true},
-                                  ';*/
+
                                 $articoli[] = [
                                     'id' => $idlineaordine,
                                     'codice' => $codice,
@@ -629,7 +611,7 @@ class CInvoiceAjaxController extends AAjaxController
                             if (array_key_exists('token', $result)) {
                                 $fattureinCloudToken = $result['token'];
 
-                                $updateInvoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId' => $orderId]);
+                                $updateInvoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId' => $orderId,'remoteShopId'=>44]);
                                 $updateInvoice->fattureInCloudId = $fattureinCloudId;
                                 $updateInvoice->fattureInCloudToken = $fattureinCloudToken;
                                 $updateInvoice->update();
@@ -637,7 +619,7 @@ class CInvoiceAjaxController extends AAjaxController
 
 
                         }
-                    }
+                    }*/
 
                 } catch (\Throwable $e) {
                     throw $e;
