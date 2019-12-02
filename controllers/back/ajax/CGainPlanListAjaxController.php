@@ -39,7 +39,9 @@ class CGainPlanListAjaxController extends AAjaxController
        gp.commission as commission,
        gp.profit as profit,
        gp.dateCreate as dateCreate,
-       gp.dateMovement as dateMovement
+       gp.dateMovement as dateMovement,
+       gp.externalId as externalId,
+       gp.invoiceExternal as invoiceExternal
        from GainPlan gp ORDER BY dateMovement DESC
                 
     
@@ -74,10 +76,11 @@ class CGainPlanListAjaxController extends AAjaxController
                 $orders=$orderRepo->findOneBy(['id'=>$val->orderId]);
                 if($orders!=null){
                     $order=$orders->id;
+                }else{
+                    $order='';
                 }
                 $row['userId'] = $val->userId;
-                $invoice=$invoiceRepo->findOneBy(['id'=>$val->invoiceId]);
-                $row['invoiceId']=$invoice->invoiceType.'-'.$invoice->invoiceNumber.'/'.$invoice->invoiceDate;
+
                 $row['amount']=$val->amount;
                 $cost=0;
                 $rowCost='';
@@ -98,53 +101,64 @@ class CGainPlanListAjaxController extends AAjaxController
                 switch($val->typeMovement) {
                     case 1:
                         $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
-                        $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
-                        $country=$countryRepo->findOneBy(['id'=>$userAddress->countryId]);
-                        $extraue=($country->extraue==1)? 'yes':'no';
-                        $customer=$userAddress->name. ' '.$userAddress->surname.' '.$userAddress->company;
-                        $typeMovement='Ordini';
-                        $nation=$country->name;
+                        if($orderLines!=null) {
+                        $invoice=$invoiceRepo->findOneBy(['id'=>$val->invoiceId]);
+                        if($invoice!=null) {
+                            $findInvoice = $invoice->invoiceType . '-' . $invoice->invoiceNumber . '/' . $invoice->invoiceDate;
+                        }else{
+                            $findInvoice='';
+                        }
 
-                        foreach ($orderLines as $orderLine) {
-                            if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
-                                $orderPaymentMethod=$orderPaymentMethodRepo->findOneBy(['id'=>$orders->orderPaymentMethodId]);
-                                $paymentCommissionRate=$orderPaymentMethod->paymentCommissionRate;
+                            if($orders!=null) {
+                                $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
+                                $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
+                                $extraue = ($country->extraue == 1) ? 'yes' : 'no';
+                                $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
+                                $typeMovement = 'Ordini';
+                                $nation = $country->name;
+                            }
 
-                                if ($orderLine->remoteShopSellerId == 44) {
-                                    $amount += $orderLine->netPrice;
-                                    $imp=($country->extraue==1)?$orderLine->netPrice : $orderLine->netPrice-$orderLine->vat;
-                                    $cost += $orderLine->friendRevenue;
-                                    $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
-                                    $shippingCost=$orderLine->shippingCharge;
+                            foreach ($orderLines as $orderLine) {
+                                if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
+                                    $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
+                                    $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
+
+                                    if ($orderLine->remoteShopSellerId == 44) {
+                                        $amount += $orderLine->netPrice;
+                                        $imp = ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
+                                        $cost += $orderLine->friendRevenue;
+                                        $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                        $shippingCost = $orderLine->shippingCharge;
 
 
+                                    } else {
+                                        if ($orderLine->remoteOrderSupplierId != null) {
+                                            $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                            $paralellFee = $shop->paralellFee;
+                                            $amount += $orderLine->activePrice - ($orderLine->activePrice / 100 * $paralellFee) - $orderLine->friendRevenue;
+                                            $imp = $amount;
+                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                            $cost += $orderLine->friendRevenue;
+                                            $shippingCost = $orderLine->shippingCharge;
 
-                                }else{
-                                    if($orderLine->remoteOrderSupplierId!=null){
-                                        $shop=$shopRepo->findOneBy(['id'=>$orderLine->shopId]);
-                                        $paralellFee=$shop->paralellFee;
-                                        $amount+=$orderLine->activePrice-($orderLine->activePrice/100*$paralellFee) - $orderLine->friendRevenue;
-                                        $imp=$amount;
-                                        $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
-                                        $cost+=$ordeLine->friendRevenute;
-                                        $shippingCost=$orderLine->shippingCharge;
+                                        } else {
+                                            $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                            $paralellFee = $shop->paralellFee;
+                                            $cost += $orderLine->friendRevenue;
+                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                            $shippingCost = $orderLine->shippingCharge;
+                                            $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
+                                            $amount += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
 
-                                    }else{
-                                        $shop=$shopRepo->findOneBy(['id'=>$orderLine->shopId]);
-                                        $paralellFee=$shop->paralellFee;
-                                        $cost+=$orderLine->friendRevenue;
-                                        $paymentCommission+=($orderLine->netPrice/100)*$paymentCommissionRate;
-                                        $shippingCost=$orderLine->shippingCharge;
-                                        $imp+=round($orderLine->netPrice*0.11,2)+$paymentCommission;
-                                        $amount+=round($orderLine->netPrice*0.11,2)+$paymentCommission;
-
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                         break;
                     case 2:
+                        $findInvoice=$val->invoiceExternal;
                         $amount+=$val->amount;
                         $cost+=$val->cost;
                         $shippingCost+=$val->deliveryCost;
@@ -155,6 +169,7 @@ class CGainPlanListAjaxController extends AAjaxController
                         break;
 
                 }
+                $row['invoiceId']=$findInvoice;
                 $row['country']=$nation;
                 $row['customerName']=$customer;
                 $row['amount']=money_format('%.2n',$amount) . ' &euro;';
