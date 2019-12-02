@@ -52,14 +52,15 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     ];
     /**
      * @param CShipment $shipment
+     * @param $orderId
      * @return CShipment|bool
      * @throws \Throwable
      */
-    public function addPickUp(CShipment $shipment)
+    public function addPickUp(CShipment $shipment,$orderId = null)
     {
         \Monkey::app()->applicationReport('CUPSHandler', 'addPickup', 'Called addPickUp');
 
-        $shipment = $this->addDelivery($shipment);
+        $shipment = $this->addDelivery($shipment, $orderId);
 
         $orders = [];
 
@@ -194,15 +195,15 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
 
     /**
      * @param CShipment $shipment
+     * @param $orderId
      * @return CShipment
      * @throws BambooException
      */
-    public function addDelivery(CShipment $shipment)
+    public function addDelivery(CShipment $shipment, $orderId=null)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
-        foreach ($shipment->orderLine as $orderLine) {
-           $orderId=$orderLine->orderId;
-        }
+        $orders[] = $orderLine->printId();
+
         $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
         $shippingAddress[] = json_decode($findOrder->frozenShippingAddress,true);
         $AttentionName =  $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'].' '.$shippingAddress[0]['company'];
