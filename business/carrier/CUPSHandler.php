@@ -31,7 +31,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'voidPackageEndpoint' => 'https://onlinetools.ups.com/rest/Void',
         'labelRecoveryEndpoint' => 'https://onlinetools.ups.com/rest/LBRecovery',
         'timeInTransitEndpoint' => 'https://onlinetools.ups.com/rest/TimeInTransit',
-        'trackRequest' => 'https://wwwcie.ups.com/rest/Track',
+        'trackRequest' => 'https://onlinetools.ups.com/rest/Track',
         'ServiceAccessToken' => 'ED3442CCB18DBE8C',
         'UPSClientCode' => '463V1V',
         'username' => 'iwes123',
@@ -200,6 +200,13 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     public function addDelivery(CShipment $shipment)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
+       $orderLineHasShipments=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBY(['shipmentId'=>$shipment->id]);
+       if($orderLineHasShipments!=null) {
+           $orderId = $orderLineHasShipments->orderId;
+           }
+       $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
+
+
 
         $service = [
             'Code' => '11',

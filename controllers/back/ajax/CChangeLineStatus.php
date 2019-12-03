@@ -49,12 +49,12 @@ class CChangeLineStatus extends AAjaxController
                     foreach ($dirtyProducts as $dirtyProduct){
                         $dirtyDate=strtotime($dirtyProduct->creationDate);
                         $dirtyDate=date('Y',$dirtyDate);
-                        if($dirtyDate==$currentYear){
+                      //  if($dirtyDate==$currentYear){
                             $dirtySkus = \Monkey::app()->repoFactory->create('DirtySku')->findBy(['dirtyProductId' => $dirtyProduct->id,'productSizeId' => $line->productSizeId]);
                             foreach($dirtySkus as $dirtySku) {
                                 $extSkuId = $dirtySku->extSkuId;
                             }
-                        }
+                       // }
                     }
 
 
