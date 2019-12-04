@@ -63,10 +63,6 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Servizio
                                 </th>
-                                <th data-slug="userId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Utente collegato
-                                </th>
                                 <th data-slug="shopId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">ShopId

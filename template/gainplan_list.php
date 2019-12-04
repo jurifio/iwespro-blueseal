@@ -117,9 +117,9 @@
                     data-permission="allShops"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-title="Aggiungi  un nuovo coso  manuale"
+                    data-title="Aggiungi  un nuovo acquisto  manuale"
                     data-placement="bottom"
-                    data-href="/blueseal/prodotti/season-aggiungi"
+                    data-href="/blueseal/registri/gainplan-passivo/aggiungi"
             ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

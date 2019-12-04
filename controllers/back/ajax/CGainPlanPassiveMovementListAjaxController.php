@@ -33,10 +33,9 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
                         gppm.serviceName as serviceName,
                         gppm.isActive as isActive,
                         gppm.dateCreate as dateCreate,
-                        gppm.userId,
-                        gppm.shopId,
+                        gppm.shopId as shopId,
                         gppm.dateMovement as dateMovement
-        from GainPlanpassiveMovement gppm join GainPlan gp on gppm.gainPlanId=gp.id ORDER BY dateMovement DESC
+        from GainPlanPassiveMovement gppm join GainPlan gp on gppm.gainPlanId=gp.id ORDER BY dateMovement DESC
         ';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
         $datatable -> doAllTheThings('true');
@@ -52,34 +51,29 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
         $gpsmRepo = \Monkey ::app() -> repoFactory -> create('GainPlanPassiveMovement');
         $seasonRepo = \Monkey ::app() -> repoFactory -> create('ProductSeason');
         $orderPaymentMethodRepo = \Monkey ::app() -> repoFactory -> create('OrderPaymentMethod');
-        foreach ($datatable -> getResponseSetData() as $key => $row) {
-            /** @var $val CGainPlan */
+        foreach ($datatable->getResponseSetData() as $key => $row) {
+            /** @var $val CGainPlanPassiveMovement */
             $val = \Monkey ::app() -> repoFactory -> create('GainPlanPassiveMovement') -> findOneBy($row);
             $row['DT_RowId'] = $val -> printId();
-            $row['id'] = '<a href="/blueseal/gainplan-passivo/modifica?id=' . $val -> printId() . '">' . $val -> printId() . '</a>';
+            $row['id'] = '<a href="/blueseal/registri/gainplan-passivo/modifica/' . $val -> printId() . '">' . $val -> printId() . '</a>';
             $row['dateMovement'] = $val -> dateMovement;
             $row['gainPlanId'] = $val -> gainPlanId;
             $row['invoice'] = $val -> invoice;
             $row['amount'] = $val -> amount;
             $row['serviceName'] = $val -> serviceName;
             $row['fornitureName'] = $val -> fornitureName;
-            if ($val -> userId != null) {
-                $users = $userRepo -> findOneBy(['id' => $val -> userId]);
-                $user = $users -> id . ' ' . $users -> email;
-            } else {
-                $user = '';
-            }
-            $row['userId'] = $user;
-            if ($val -> shopId != null) {
+            $shop='';
+            if ($val -> shopId != null && $val -> shopId != 0  ) {
                 $shops = $shopRepo -> findOneBy(['id' => $val -> shopId]);
-                $shop = $shops -> id . ' ' . $shops -> email;
+                $shop = $shops -> name;
             } else {
                 $shop = '';
             }
             $row['shopId'] = $shop;
 
+            $datatable->setResponseDataSetRow($key,$row);
         }
-        $datatable -> setResponseDataSetRow($key, $row);
-        return $datatable -> responseOut();
+
+        return $datatable->responseOut();
     }
 }
