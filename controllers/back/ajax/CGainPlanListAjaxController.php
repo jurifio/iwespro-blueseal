@@ -69,7 +69,7 @@ class CGainPlanListAjaxController extends AAjaxController
             /** @var $val CGainPlan */
             $val = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy($row);
                 $row['DT_RowId'] = $val->printId();
-                $row['id'] = '<a href="/blueseal/prodotti/season-aggiungi?id='.$val->printId().'">'.$val->printId().'</a>';
+                $row['id'] = $val->printId();
                 $season=$seasonRepo->findOneBy(['id'=>$val->seasonId]);
                 $row['season']=$season->name;
                 $order="";

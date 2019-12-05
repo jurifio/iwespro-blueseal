@@ -83,16 +83,7 @@
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="shopId">Shop di riferimento</label>
-                                            <select id="shopId" name="shopId"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona dalla Lista degli Shop"
-                                                    data-init-plugin="selectize">
-                                            </select>
-                                        </div>
-                                    </div>
+
 
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
