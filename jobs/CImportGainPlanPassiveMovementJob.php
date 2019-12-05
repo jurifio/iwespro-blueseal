@@ -85,7 +85,7 @@ class CImportGainPlanPassiveMovementJob extends ACronJob
             $context = stream_context_create($options);
             $result = json_decode(file_get_contents($urlInsert,false,$context));
             foreach ($result->lista_documenti as $val) {
-                if ($val->tipo == 'fatture') {
+                if ($val->tipo == 'spesa') {
                     $gainPlanPassiveMovementFind = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement')->findOneBy(['idFattureInCloud' => $val->id]);
                     if ($gainPlanPassiveMovementFind == null) {
                         $gainPlanInsert = $gainPlanPassiveMovementRepo->getEmptyEntity();
@@ -108,8 +108,7 @@ class CImportGainPlanPassiveMovementJob extends ACronJob
                         $gainPlanInsert->amount = $val->importo_netto;
                         $gainPlanInsert->amountVat = $val->importo_iva;
                         $gainPlanInsert->amountTotal=$val->importo_totale;
-                        $gainPlanInsert->idFattureInCloud = $val->numero;
-                        $gainPlanInsert->externalId = $val->id;
+                        $gainPlanInsert->idFattureInCloud = $val->id;
                         $gainPlanInsert->TypeMovement = 2;
                         $insertJsonDet = '{
   "api_uid": "34021",
@@ -117,7 +116,7 @@ class CImportGainPlanPassiveMovementJob extends ACronJob
   "id": "'.$val->id.'"
  
 }';
-                        $urlInsertDet = "https://api.fattureincloud.it:443/v1/acquisti/lista";
+                        $urlInsertDet = "https://api.fattureincloud.it:443/v1/acquisti/dettagli";
                         $optionsDet = array(
                             "http" => array(
                                 "header" => "Content-type: text/json\r\n",
@@ -126,8 +125,8 @@ class CImportGainPlanPassiveMovementJob extends ACronJob
                             ),
                         );
                         $contextDet = stream_context_create($optionsDet);
-                        $resultDet = json_decode(file_get_contents($urlInsert,false,$contextDet));
-                        $gainPlanInsert->invoice=$resultDet->dettagli_documento->numero_fattura.'del '.$resultDet->dettagli_documento->data;
+                        $resultDet = json_decode(file_get_contents($urlInsertDet,false,$contextDet));
+                        $gainPlanInsert->invoice=$resultDet->dettagli_documento->numero_fattura.' del '.$resultDet->dettagli_documento->data;
                         $gainPlanInsert->insert();
                     }
                 }
@@ -136,7 +135,7 @@ class CImportGainPlanPassiveMovementJob extends ACronJob
             }
 
         } catch (\Throwable $e) {
-            $this->report('CImportGainPlanPassiveMovementJob','error',$e,'');
+            $this->report('CImportGainPlanPassiveMovementJob','error',$e,$val->id);
         }
 
 
