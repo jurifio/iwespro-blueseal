@@ -38,8 +38,8 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
                         gppm.dateCreate as dateCreate,
                         gppm.shopId as shopId,
                         gppm.dateMovement as dateMovement
-        from GainPlanPassiveMovement gppm join GainPlan gp on gppm.gainPlanId=gp.id 
-                                          join ProductSeason ps on  gppm.seasonId=ps.id ORDER BY dateMovement DESC
+        from GainPlanPassiveMovement gppm left join GainPlan gp on gppm.gainPlanId=gp.id 
+                                         left  join ProductSeason ps on  gppm.seasonId=ps.id ORDER BY dateMovement DESC
         ';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
         $datatable -> doAllTheThings('true');

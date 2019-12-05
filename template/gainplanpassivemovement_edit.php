@@ -50,32 +50,41 @@
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="gainPlanId">Fattura di Vendita Collegata </label>
+                                                <?php if($gppm->gainPlanId!==null) {?>
                                                 <select class="full-width" multiple="multiple"
                                                         placeholder="Seleziona la Fattura di Vendita"
                                                         data-init-plugin="selectize" title="" name="gainPlanId" id="gainPlanId"
                                                         required>
                                                     <option></option>
-                                                    <?php foreach ($gainPlans as $gainPlan) {
-                                                        if ($gainPlan->id == $gppm->gainPlanId) {
-                                                            $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId]);
-                                                            if($invoice!=null) {
-                                                                $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
-                                                            }else{
-                                                                $invoices='';
+
+<?php
+                                                        foreach ($gainPlans as $gainPlan) {
+                                                            if ($gainPlan->id == $gppm->gainPlanId) {
+                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId]);
+                                                                if ($invoice != null) {
+                                                                    $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
+                                                                } else {
+                                                                    $invoices = '';
+                                                                }
+                                                                echo '<option selected value="' . $gainPlan->id . '">' . $invoices . '</option>';
+                                                            } else {
+                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId]);
+                                                                if ($invoice != null) {
+                                                                    $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
+                                                                } else {
+                                                                    $invoices = '';
+                                                                }
+                                                                echo '<option  value="' . $gainPlan->id . '">' . $invoices . '</option>';
                                                             }
-                                                            echo '<option selected value="' . $gainPlan->id . '">' . $invoices . '</option>';
-                                                        } else {
-                                                            $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId]);
-                                                            if($invoice!=null) {
-                                                                $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
-                                                            }else{
-                                                                $invoices='';
-                                                            }
-                                                            echo '<option  value="' . $gainPlan->id . '">' . $invoices . '</option>';
                                                         }
-                                                    }
                                                     ?>
                                                 </select>
+                                                <?php }else{?>
+                                                <select id="gainPlanId" class="form-control"
+                                                        placeholder="Seleziona il documento di Vendita Collegato"
+                                                        name="gainPlanId"
+                                                        required="required"></select>
+                                              <?php  }?>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
