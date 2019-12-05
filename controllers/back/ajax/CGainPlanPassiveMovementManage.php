@@ -111,7 +111,8 @@ class CGainPlanPassiveMovementManage extends AAjaxController
      */
     public function delete()
     {
-
+        $request = \Monkey::app()->router->request();
+        $id = $request->getRequestData('id');
         try {
             $gainPlanPassiveMovement = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement')->findOneBy(['id'=>$id]);
             $gainPlanPassiveMovement->delete();

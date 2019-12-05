@@ -82,7 +82,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Stagioni">
+    <bs-toolbar-group data-group-label="Gestione documenti di Acquisto">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
@@ -91,7 +91,19 @@
             data-rel="tooltip"
             data-title="Aggiungi  un nuovo coso  manuale"
             data-placement="bottom"
-            data-href="/blueseal/prodotti/season-aggiungi"
+            data-href="/blueseal/registri/gainplan-passivo/aggiungi/"
+        ></bs-toolbar-button>
+
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eraser"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Cancella Documento (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanpassivemovement.delete"
+
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
