@@ -50,7 +50,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="gainPlanId">Fattura di Vendita Collegata </label>
-                                                <?php if($gppm->gainPlanId!==null) {?>
+                                                <?php if($gppm->gainPlanId!=null) {?>
                                                 <select class="full-width" multiple="multiple"
                                                         placeholder="Seleziona la Fattura di Vendita"
                                                         data-init-plugin="selectize" title="" name="gainPlanId" id="gainPlanId"
@@ -60,7 +60,7 @@
 <?php
                                                         foreach ($gainPlans as $gainPlan) {
                                                             if ($gainPlan->id == $gppm->gainPlanId) {
-                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId]);
+                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId, 'invoiceShopId'=>44]);
                                                                 if ($invoice != null) {
                                                                     $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
                                                                 } else {
@@ -68,7 +68,7 @@
                                                                 }
                                                                 echo '<option selected value="' . $gainPlan->id . '">' . $invoices . '</option>';
                                                             } else {
-                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId]);
+                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId, 'invoiceShopId'=>44]);
                                                                 if ($invoice != null) {
                                                                     $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
                                                                 } else {

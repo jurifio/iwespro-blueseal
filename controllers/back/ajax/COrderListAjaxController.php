@@ -301,7 +301,7 @@ class COrderListAjaxController extends AAjaxController
             $row["orderSources"] = implode(',<br>',$row["orderSources"]);
 
             $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
-            $row["invoice"]="<b>Seller:       </b>";
+            $row["invoice"]="<b>Seller->Customer:       </b>";
             if ($findInvoiceSeller != null) {
                 foreach ($findInvoiceSeller as $invoiceSeller) {
                     $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
@@ -310,9 +310,8 @@ class COrderListAjaxController extends AAjaxController
                 $row["invoice"] .= "<br/>";
             }
 
-
             $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id]);
-            $row['invoice'] .= "</br><b>Supplier:     </b>";
+            $row['invoice'] .= "</br><b>Supplier->Iwes:     </b>";
             if ($findInvoiceSupplier != null) {
                 foreach ($findInvoiceSupplier as $invoicesSupplier) {
                     if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
