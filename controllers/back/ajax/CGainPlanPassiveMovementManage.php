@@ -38,16 +38,40 @@ class CGainPlanPassiveMovementManage extends AAjaxController
         $serviceName = $request->getRequestData('serviceName');
         $shopId = $request->getRequestData('shop');
         $amount = $request->getRequestData('amount');
+        $iva=$request->getRequestData('iva');
+        if($iva!=1) {
+            $amountVat = $amount / 100 * $iva;
+            $amountTotal = $amount + $amountVat;
+        } else{
+            $amountVat=0;
+            $amountTotal = $amount ;
+        }
+        $seasonRepo = \Monkey::app()->repoFactory->create('ProductSeason');
+        $seasons = $seasonRepo->findAll();
+        foreach ($seasons as $season) {
+            $dateStart = strtotime($season->dateStart);
+            $dateEnd = strtotime($season->dateEnd);
+            if ($dateMovement >= $dateStart && $dateMovement <= $dateEnd) {
+                $seasonId = $season->id;
+            }
+        }
+
+
+
         $gainPlanPassiveMovement = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement')->getEmptyEntity();
         try {
             $gainPlanPassiveMovement->invoice = $invoice;
             $gainPlanPassiveMovement->amount = $amount;
             $gainPlanPassiveMovement->gainPlanId = $gainPlanId;
             $gainPlanPassiveMovement->shopId = $shopId;
+            $gainPlanPassiveMovement->seasonId=$seasonId;
             $gainPlanPassiveMovement->fornitureName = $fornitureName;
             $gainPlanPassiveMovement->serviceName = $serviceName;
             $gainPlanPassiveMovement->dateMovement = $newdate;
             $gainPlanPassiveMovement->isActive = $checked;
+            $gainPlanPassiveMovement->amountVat=$amountVat;
+            $gainPlanPassiveMovement->amountTotal=$amountTotal;
+            $gainPlanPassiveMovement->typeMovement=1;
             $gainPlanPassiveMovement->insert();
             $res = 'inserimento Eseguito con Successo';
 
@@ -81,16 +105,36 @@ class CGainPlanPassiveMovementManage extends AAjaxController
         $shopId = $request->getRequestData('shop');
         $shop=$shopId[0];
         $amount = $request->getRequestData('amount');
+        $iva=$request->getRequestData('iva');
+        if($iva!=1) {
+            $amountVat = $amount / 100 * $iva;
+            $amountTotal = $amount + $amountVat;
+        } else{
+            $amountVat=0;
+            $amountTotal = $amount ;
+        }
+        $seasonRepo = \Monkey::app()->repoFactory->create('ProductSeason');
+        $seasons = $seasonRepo->findAll();
+        foreach ($seasons as $season) {
+            $dateStart = strtotime($season->dateStart);
+            $dateEnd = strtotime($season->dateEnd);
+            if ($dateMovement >= $dateStart && $dateMovement <= $dateEnd) {
+                $seasonId = $season->id;
+            }
+        }
         try {
             $gainPlanPassiveMovement = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement')->findOneBy(['id'=>$id]);
             $gainPlanPassiveMovement->invoice = $invoice;
             $gainPlanPassiveMovement->amount = $amount;
             $gainPlanPassiveMovement->gainPlanId = $gainPlan;
             $gainPlanPassiveMovement->shopId = $shop;
+            $gainPlanPassiveMovement->seasonId=$seasonId;
             $gainPlanPassiveMovement->fornitureName = $fornitureName;
             $gainPlanPassiveMovement->serviceName = $serviceName;
             $gainPlanPassiveMovement->dateMovement = $newdate;
             $gainPlanPassiveMovement->isActive = $checked;
+            $gainPlanPassiveMovement->amountVat=$amountVat;
+            $gainPlanPassiveMovement->amountTotal=$amountTotal;
             $gainPlanPassiveMovement->update();
             $res = 'aggiornamento Eseguito con Successo';
 

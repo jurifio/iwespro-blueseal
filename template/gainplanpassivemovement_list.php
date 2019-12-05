@@ -43,6 +43,10 @@
                                     data-default-order="desc"
                                     class="center dataFilterType">Data Movimento
                                 </th>
+                                <th data-slug="seasonName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stagione
+                                </th>
                                 <th data-slug="gainPlanId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Contro Partiva Attiva
@@ -53,7 +57,15 @@
                                 </th>
                                 <th data-slug="amount"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Importo
+                                    data-orderable="true" class="center">Imponibile
+                                </th>
+                                <th data-slug="amountVat"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">IVA
+                                </th>
+                                <th data-slug="amountTotal"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Iotale
                                 </th>
                                 <th data-slug="fornitureName"
                                     data-searchable="true"

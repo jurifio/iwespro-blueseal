@@ -65,7 +65,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="fornitureName">Fornitore</label>
                                             <input id="fornitureName" class="form-control"
@@ -74,7 +74,7 @@
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="serviceName">Servizio</label>
                                             <input id="serviceName" class="form-control"
@@ -83,7 +83,7 @@
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="shopId">Shop di riferimento</label>
                                             <select id="shopId" name="shopId"
@@ -101,6 +101,19 @@
                                                    placeholder="inseriri il numero Fattura" name="amount"
                                                    required="required">
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="iva">iva</label>
+                                            <select class="full-width"
+                                                    placeholder="Seleziona Aliquota"
+                                                    data-init-plugin="selectize" title="" name="iva" id="iva"
+                                                    required>
+                                                <option></option>
+                                                <option value="22">iva 22%</option>
+                                                <option value="1">Esente Iva</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

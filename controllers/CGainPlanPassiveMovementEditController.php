@@ -41,6 +41,7 @@ class CGainPlanPassiveMovementEditController extends ARestrictedAccessRootContro
         $fornitureName=$gppm->fornitureName;
         $serviceName=$gppm->serviceName;
         $check=$gppm->isActive;
+        $iva=$gppm->amountVat;
         $shops=\Monkey::app()->repoFactory->create('Shop')->findAll();
         $gainPlans=\Monkey::app()->repoFactory->create('GainPlan')->findAll();
         return $view->render([
@@ -51,6 +52,7 @@ class CGainPlanPassiveMovementEditController extends ARestrictedAccessRootContro
             'dateMovement'=>$dateMovement,
             'fornitureName'=>$fornitureName,
             'serviceName'=>$serviceName,
+            'iva'=>$iva,
             'check'=>$check,
             'gppm'=>$gppm,
             'shops'=>$shops,

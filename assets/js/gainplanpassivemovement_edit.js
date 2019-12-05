@@ -76,6 +76,7 @@ $(document).on('bs.gainplan.passivemovement.save', function () {
             fornitureName:$('#fornitureName').val(),
             serviceName:$('#serviceName').val(),
             shop:$('#shopId').val(),
+            iva:$('#iva').val()
         };
         $.ajax({
             method: 'put',

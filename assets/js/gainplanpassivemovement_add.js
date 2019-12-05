@@ -74,6 +74,7 @@
                     fornitureName:$('#fornitureName').val(),
                     serviceName:$('#serviceName').val(),
                     shop:$('#shopId').val(),
+                    iva:$('#iva').val()
                 };
                 $.ajax({
                     method: 'post',

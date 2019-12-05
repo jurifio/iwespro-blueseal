@@ -27,7 +27,10 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
 
         $sql = 'SELECT  gppm.id as id,
                         gppm.invoice as invoice,
+                        ps.name as seasonName,
                         gppm.amount as amount,
+                        gppm.amountVat as amountVat,
+                        gppm.amountTotal as amountTotal,
                         gppm.gainPlanId as gainPlanId,
                         gppm .fornitureName as fornitureName,
                         gppm.serviceName as serviceName,
@@ -35,7 +38,8 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
                         gppm.dateCreate as dateCreate,
                         gppm.shopId as shopId,
                         gppm.dateMovement as dateMovement
-        from GainPlanPassiveMovement gppm join GainPlan gp on gppm.gainPlanId=gp.id ORDER BY dateMovement DESC
+        from GainPlanPassiveMovement gppm join GainPlan gp on gppm.gainPlanId=gp.id 
+                                          join ProductSeason ps on  gppm.seasonId=ps.id ORDER BY dateMovement DESC
         ';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
         $datatable -> doAllTheThings('true');
@@ -60,6 +64,8 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
             $row['gainPlanId'] = $val -> gainPlanId;
             $row['invoice'] = $val -> invoice;
             $row['amount'] = $val -> amount;
+            $row['amountVat']=$val->amountVat;
+            $row['amountTotal']=$val->amountTotal;
             $row['serviceName'] = $val -> serviceName;
             $row['fornitureName'] = $val -> fornitureName;
             $shop='';

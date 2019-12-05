@@ -89,7 +89,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="fornitureName">Fornitore</label>
                                                 <input id="fornitureName" class="form-control"
@@ -98,7 +98,7 @@
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="serviceName">Servizio</label>
                                                 <input id="serviceName" class="form-control"
@@ -108,7 +108,7 @@
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="shopId">Shop di riferimento</label>
                                                 <select class="full-width" multiple="multiple"
@@ -136,6 +136,25 @@
                                                        value="<?php echo $amount ?>"
                                                        required="required">
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="iva">iva</label>
+                                                <select class="full-width"
+                                                        placeholder="Seleziona Aliquota"
+                                                        data-init-plugin="selectize" title="" name="iva" id="iva"
+                                                        required>
+                                                    <?php if ($iva!=0){
+                                                    echo '<option></option>';
+                                                    echo '<option selected value="22">iva 22%</option>';
+                                                    echo'<option value="1">Esente Iva</option>';
+                                                    }else{
+                                                        echo '<option></option>';
+                                                        echo '<option  value="22">iva 22%</option>';
+                                                        echo'<option  selected value="1">Esente Iva</option>';
+                                                    }?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
