@@ -24,26 +24,26 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Modifica Fattura</h5>
+                                    <h5 class="m-t-10">Modifica Acquisto</h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <input type="hidden" id="idMovement" name="idMovement" value="<?php echo $gppm->id?>"/>
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="invoiceNumber">Fattura </label>
-                                                <input id="invoiceNumber" class="form-control" type="text"
-                                                       value="<?php echo $invoice->invoiceNumber ?>"
-                                                       placeholder="Modifica il numero Fattura di Acquisto"
-                                                       name="invoiceNumber"
+                                                <label for="invoice">Fattura </label>
+                                                <input id="invoice" class="form-control" type="text"
+                                                       value="<?php echo $invoice ?>"
+                                                       placeholder="inserici il numero Fattura di Acquisto"
+                                                       name="invoice"
                                                        required="required">
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="invoiceDate">Data Fattura</label>
-                                                <input type="datetime-local" class="form-control" id="invoiceDate" name="invoiceDate" value="<?php echo str_replace(" ", "T", $invoice->invoiceDate) ?>" />
+                                                <label for="dateMovement">Data Movimento</label>
+                                                <input type="datetime-local" class="form-control" id="dateMovement" name="dateMovement" value="<?php echo str_replace(" ", "T", $dateMovement) ?>" />
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
