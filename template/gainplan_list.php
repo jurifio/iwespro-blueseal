@@ -57,7 +57,11 @@
                                 </th>
                                 <th data-slug="customerName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Shop/Cliente/Fornitore
+                                    data-orderable="true" class="center">Cliente/Fornitore
+                                </th>
+                                <th data-slug="shopId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop Name
                                 </th>
                                 <th data-slug="country"
                                     data-searchable="true"

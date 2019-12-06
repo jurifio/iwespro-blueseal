@@ -66,6 +66,7 @@ class CImportGainPlanJob extends ACronJob
                 $userAddress = \bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
                 $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
                 $invoiceId = $invoice->id;
+                $shopId=$invoice->invoiceShopId;
                 $seasons = $seasonRepo->findAll();
                 foreach ($seasons as $season) {
                     $dateStart = strtotime($season->dateStart);
@@ -84,6 +85,8 @@ class CImportGainPlanJob extends ACronJob
                     $gainPlanInsert->customerName = $customer;
                     $gainPlanInsert->typeMovement = 1;
                     $gainPlanInsert->dateMovement = $invoiceDate;
+                    $gainPlanInsert->shopId=$shopId;
+                    $gainPlanInsert->isVisible=1;
                     $gainPlanInsert->insert();
                 }
 

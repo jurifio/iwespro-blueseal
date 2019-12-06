@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -46,146 +47,154 @@ class CGainPlanListAjaxController extends AAjaxController
                 
     
         ';
-        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         $datatable->doAllTheThings('true');
 
 
         $gainPlans = \Monkey::app()->repoFactory->create('GainPlan')->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = \Monkey::app()->repoFactory->create('GainPlan')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = \Monkey::app()->repoFactory->create('GainPlan')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-        $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
-        $orderRepo=\Monkey::app()->repoFactory->create('Order');
-        $orderLineRepo=\Monkey::app()->repoFactory->create('OrderLine');
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
-        $userRepo=\Monkey::app()->repoFactory->create('User');
-        $countryRepo=\Monkey::app()->repoFactory->create('Country');
-        $gpsmRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
-        $seasonRepo=\Monkey::app()->repoFactory->create('ProductSeason');
-        $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+        $count = \Monkey::app()->repoFactory->create('GainPlan')->em()->findCountBySql($datatable->getQuery(true),$datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('GainPlan')->em()->findCountBySql($datatable->getQuery('full'),$datatable->getParams());
+        $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
+        $orderRepo = \Monkey::app()->repoFactory->create('Order');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+        $userRepo = \Monkey::app()->repoFactory->create('User');
+        $countryRepo = \Monkey::app()->repoFactory->create('Country');
+        $gpsmRepo = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+        $seasonRepo = \Monkey::app()->repoFactory->create('ProductSeason');
+        $orderPaymentMethodRepo = \Monkey::app()->repoFactory->create('OrderPaymentMethod');
 
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $val CGainPlan */
             $val = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy($row);
-                $row['DT_RowId'] = $val->printId();
-                $row['id'] = $val->printId();
-                $season=$seasonRepo->findOneBy(['id'=>$val->seasonId]);
-                $row['season']=$season->name;
-                $order="";
-                $orders=$orderRepo->findOneBy(['id'=>$val->orderId]);
-                if($orders!=null){
-                    $order=$orders->id;
-                }else{
-                    $order='';
-                }
-                $row['userId'] = $val->userId;
+            $row['DT_RowId'] = $val->printId();
+            $row['id'] = $val->printId();
+            $season = $seasonRepo->findOneBy(['id' => $val->seasonId]);
+            $row['season'] = $season->name;
+            $order = "";
+            $orders = $orderRepo->findOneBy(['id' => $val->orderId]);
+            if ($val->shopId != 0) {
+                $findShopOrder = \Monkey::app()->repoFactory->create('Shop')->finOneBy(['id' => $val->shopId]);
+                $shopOrder = $findShopOrder->name;
+            } else {
+                $shopOrder='';
+            }
+            if ($orders != null) {
+                $order = $orders->id;
+            } else {
+                $order = '';
+            }
+            $row['userId'] = $val->userId;
 
-                $row['amount']=$val->amount;
-                $cost=0;
-                $rowCost='';
-                $collectCost=$gpsmRepo->findBy(['gainPlanId'=>$val->id]);
-                foreach($collectCost as $costs){
-                    $cost+=$costs->amount;
-                    $rowCost.='id:'.$costs->id. ' fattura:'.$costs->invoice.'dataMovivento:'.$costs->dateMovement.' Fornitore'.$costs->fornitureName.'<br>';
+            $row['amount'] = $val->amount;
+            $cost = 0;
+            $rowCost = '';
+            $collectCost = $gpsmRepo->findBy(['gainPlanId' => $val->id]);
+            foreach ($collectCost as $costs) {
+                $cost += $costs->amount;
+                $rowCost .= 'id:' . $costs->id . ' fattura:' . $costs->invoice . 'dataMovivento:' . $costs->dateMovement . ' Fornitore' . $costs->fornitureName . '<br>';
 
-                }
+            }
 
-                $amount=0;
-                $paymentCommission=0;
-                $shippingCost=0;
-                $imp=0;
-                $customer='';
-                $nation='';
+            $amount = 0;
+            $paymentCommission = 0;
+            $shippingCost = 0;
+            $imp = 0;
+            $customer = '';
+            $nation = '';
 
-                switch($val->typeMovement) {
-                    case 1:
-                        $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
-                        if($orderLines!=null) {
-                        $invoice=$invoiceRepo->findOneBy(['id'=>$val->invoiceId]);
-                        if($invoice!=null) {
+            switch ($val->typeMovement) {
+                case 1:
+                    $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
+                    if ($orderLines != null) {
+                        $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
+                        if ($invoice != null) {
                             $findInvoice = $invoice->invoiceType . '-' . $invoice->invoiceNumber . '/' . $invoice->invoiceDate;
-                        }else{
-                            $findInvoice='';
+                        } else {
+                            $findInvoice = '';
                         }
 
-                            if($orders!=null) {
-                                $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
-                                $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
-                                $extraue = ($country->extraue == 1) ? 'yes' : 'no';
-                                $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-                                $typeMovement = 'Ordini';
-                                $nation = $country->name;
-                            }
+                        if ($orders != null) {
+                            $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
+                            $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
+                            $extraue = ($country->extraue == 1) ? 'yes' : 'no';
+                            $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
+                            $typeMovement = 'Ordini';
+                            $nation = $country->name;
+                        }
 
-                            foreach ($orderLines as $orderLine) {
-                                if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
-                                    $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
-                                    $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
+                        foreach ($orderLines as $orderLine) {
+                            if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
+                                $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
+                                $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
 
-                                    if ($orderLine->remoteShopSellerId == 44) {
-                                        $amount += $orderLine->netPrice;
-                                        $imp = ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
+                                if ($orderLine->remoteShopSellerId == 44) {
+                                    $typeOrder = 'dettaglio Prodotto Diretto';
+                                    $amount += $orderLine->netPrice;
+                                    $imp = ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
+                                    $cost += $orderLine->friendRevenue;
+                                    $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                    $shippingCost = $orderLine->shippingCharge;
+
+
+                                } else {
+                                    if ($orderLine->remoteOrderSupplierId != null) {
+                                        $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                        $paralellFee = $shop->paralellFee;
+                                        $amount += $orderLine->activePrice - ($orderLine->activePrice / 100 * $paralellFee) - $orderLine->friendRevenue;
+                                        $imp = $amount;
+                                        $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                        $cost += $orderLine->friendRevenue;
+                                        $shippingCost = $orderLine->shippingCharge;
+
+                                    } else {
+                                        $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                        $paralellFee = $shop->paralellFee;
                                         $cost += $orderLine->friendRevenue;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $shippingCost = $orderLine->shippingCharge;
+                                        $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
+                                        $amount += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
 
-
-                                    } else {
-                                        if ($orderLine->remoteOrderSupplierId != null) {
-                                            $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                            $paralellFee = $shop->paralellFee;
-                                            $amount += $orderLine->activePrice - ($orderLine->activePrice / 100 * $paralellFee) - $orderLine->friendRevenue;
-                                            $imp = $amount;
-                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                            $cost += $orderLine->friendRevenue;
-                                            $shippingCost = $orderLine->shippingCharge;
-
-                                        } else {
-                                            $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                            $paralellFee = $shop->paralellFee;
-                                            $cost += $orderLine->friendRevenue;
-                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                            $shippingCost = $orderLine->shippingCharge;
-                                            $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
-                                            $amount += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
-
-                                        }
                                     }
-
                                 }
+
                             }
                         }
-                        break;
-                    case 2:
-                        $findInvoice=$val->invoiceExternal;
-                        $amount+=$val->amount;
-                        $cost+=$val->cost;
-                        $shippingCost+=$val->deliveryCost;
-                        $paymentCommission+=$val->commission;
-                        $customer=$val->customerName;
-                        $typeMovement='Servizi';
+                    }
+                    break;
+                case 2:
+                    $findInvoice = $val->invoiceExternal;
+                    $amount += $val->amount;
+                    $cost += $val->cost;
+                    $shippingCost += $val->deliveryCost;
+                    $paymentCommission += $val->commission;
+                    $customer = $val->customerName;
+                    $typeMovement = 'Servizi';
 
-                        break;
+                    break;
 
-                }
-                $row['invoiceId']=$findInvoice;
-                $row['country']=$nation;
-                $row['customerName']=$customer;
-                $row['amount']=money_format('%.2n',$amount) . ' &euro;';
-                $row['cost']=money_format('%.2n',$cost) . ' &euro;';
-                $row['imp']=money_format('%.2n',$imp) . ' &euro;';
-                $row['MovementPassiveCollect'] = $rowCost;
-                $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
-                $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
-                $row['profit']=money_format('%.2n',$amount-$cost-$shippingCost-$paymentCommission) . ' &euro;';
-                $row['typeMovement']=$typeMovement;
-                $row['dateMovement']=$val->dateMovement;
-
-                $row['orderId'] = $order;
-                $datatable->setResponseDataSetRow($key,$row);
             }
+            $row['invoiceId'] = $findInvoice;
+            $row['shoId']=$shopOrder;
+            $row['country'] = $nation;
+            $row['customerName'] = $customer;
+            $row['amount'] = money_format('%.2n',$amount) . ' &euro;';
+            $row['cost'] = money_format('%.2n',$cost) . ' &euro;';
+            $row['imp'] = money_format('%.2n',$imp) . ' &euro;';
+            $row['MovementPassiveCollect'] = $rowCost;
+            $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
+            $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
+            $row['profit'] = money_format('%.2n',$amount - $cost - $shippingCost - $paymentCommission) . ' &euro;';
+            $row['typeMovement'] = $typeMovement;
+            $row['dateMovement'] = $val->dateMovement;
 
-            return $datatable->responseOut();
+            $row['orderId'] = $order;
+            $datatable->setResponseDataSetRow($key,$row);
         }
+
+        return $datatable->responseOut();
     }
+}
