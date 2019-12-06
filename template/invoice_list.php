@@ -84,16 +84,16 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Fatture">
-        <!--<bs-toolbar-button
-                    data-tag="a"
-                    data-icon="fa-file-o fa-plus"
-                    data-permission="allShops"
-                    data-class="btn btn-default"
-                    data-rel="tooltip"
-                    data-title="Aggiungi  un nuovo acquisto  manuale"
-                    data-placement="bottom"
-                    data-href="/blueseal/registri/gainplan-passivo/aggiungi"
-            ></bs-toolbar-button>-->
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eraser"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Cancella Fattura (!!!)"
+                data-placement="bottom"
+                data-event="bs.invoice.delete"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

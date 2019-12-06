@@ -28,92 +28,57 @@
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <input type="hidden" id="idMovement" name="idMovement" value="<?php echo $gppm->id?>"/>
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="invoice">Fattura </label>
-                                                <input id="invoice" class="form-control" type="text"
-                                                       value="<?php echo $invoice ?>"
-                                                       placeholder="inserici il numero Fattura di Acquisto"
-                                                       name="invoice"
-                                                       required="required">
-                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="dateMovement">Data Movimento</label>
-                                                <input type="datetime-local" class="form-control" id="dateMovement" name="dateMovement" value="<?php echo str_replace(" ", "T", $dateMovement) ?>" />
-                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="gainPlanId">Fattura di Vendita Collegata </label>
-                                                <?php if($gppm->gainPlanId!=null) {?>
-                                                <select class="full-width" multiple="multiple"
-                                                        placeholder="Seleziona la Fattura di Vendita"
-                                                        data-init-plugin="selectize" title="" name="gainPlanId" id="gainPlanId"
-                                                        required>
-                                                    <option></option>
-
-<?php
-                                                        foreach ($gainPlans as $gainPlan) {
-                                                            if ($gainPlan->id == $gppm->gainPlanId) {
-                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId, 'invoiceShopId'=>44]);
-                                                                if ($invoice != null) {
-                                                                    $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
-                                                                } else {
-                                                                    $invoices = '';
-                                                                }
-                                                                echo '<option selected value="' . $gainPlan->id . '">' . $invoices . '</option>';
-                                                            } else {
-                                                                $invoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['id' => $gainPlan->invoiceId, 'invoiceShopId'=>44]);
-                                                                if ($invoice != null) {
-                                                                    $invoices = $invoice->invoiceType . '-' . $invoice->invoiceNumber . ' ' . $invoice->invoiceDate;
-                                                                } else {
-                                                                    $invoices = '';
-                                                                }
-                                                                echo '<option  value="' . $gainPlan->id . '">' . $invoices . '</option>';
-                                                            }
-                                                        }
-                                                    ?>
-                                                </select>
-                                                <?php }else{?>
-                                                <select id="gainPlanId" class="form-control"
-                                                        placeholder="Seleziona il documento di Vendita Collegato"
-                                                        name="gainPlanId"
-                                                        required="required"></select>
-                                              <?php  }?>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isActive">Attivo </label>
-                                                <?php ($check == 1) ? $checked = 'checked' : $checked = '' ?>
-                                                <input id="isActive" class="form-control"
-                                                       type="checkbox"<?php echo $checked ?>
-                                                       placeholder="seleziona se è attivo" name="isActive">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-2">
+                                            <input type="hidden" id="invoiceId" name="invoiceId" value="<?php echo $invoice->id?>"/>
+                                            <input type="hidden" id="headInvoiceText" name="headInvoiceText" value="<?php echo htmlentities($headInvoiceText);?>"/>
+                                            <input type="hidden" id="footerInvoiceText" name="footerInvoiceText" value="<?php echo htmlentities($footerInvoiceText);?>"/>
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="fornitureName">Fornitore</label>
-                                                <input id="fornitureName" class="form-control"
-                                                       placeholder="inserisci il Fornitore" name="fornitureName"
-                                                       required="required" value="<?php echo $fornitureName ?>">
+                                                <label for="invoiceType">Sezionale</label>
+                                                <input id="invoiceType" class="form-control" type="text"
+                                                       value="<?php echo $invoice->invoiceType ?>"
+                                                       placeholder="Inserisci il tipo di Fattura invoiceSiteChar "
+                                                       name="invoiceType"
+                                                       required="required">
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="serviceName">Servizio</label>
-                                                <input id="serviceName" class="form-control"
-                                                       placeholder="inserisci il numero Fattura" name="serviceName"
-                                                       value="<?php echo $serviceName ?>"
+                                                <label for="invoiceSiteChar">Sezionale Sito</label>
+                                                <input id="invoiceSiteChar" class="form-control" type="text"
+                                                       value="<?php echo $invoice->invoiceSiteChar ?>"
+                                                       placeholder="inserici il tipo di Fattura Sito "
+                                                       name="invoiceSiteChar"
                                                        required="required">
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="invoiceNumber">Numero Fattura </label>
+                                                <input id="invoiceNumber" class="form-control" type="text"
+                                                       value="<?php echo $invoice->invoiceNumber ?>"
+                                                       placeholder="inserici il numero Fattura "
+                                                       name="invoiceNumber"
+                                                       required="required">
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="invoiceYear">Anno Fattura </label>
+                                                <input id="invoiceYear" class="form-control" type="text"
+                                                       value="<?php echo $invoice->invoiceYear ?>"
+                                                       placeholder="inserici l'\anno di Fatturazione"
+                                                       name="invoiceYear"
+                                                       required="required">
+                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="invoiceDate">Data Fattura</label>
+                                                <input type="datetime-local" class="form-control" id="invoiceDate" name="invoiceDate" value="<?php echo str_replace(" ", "T", $invoice->invoiceDate) ?>" />
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                             </div>
                                         </div>
@@ -124,9 +89,8 @@
                                                         placeholder="Seleziona lo shop"
                                                         data-init-plugin="selectize" title="" name="shopId" id="shopId"
                                                         required>
-                                                    <option></option>
                                                     <?php foreach ($shops as $shop) {
-                                                        if ($shop->id == $gppm->shopId) {
+                                                        if ($shop->id == $invoice->invoiceShopId) {
                                                             echo '<option selected value="' . $shop->id . '">' . $shop->title . '</option>';
                                                         } else {
                                                             echo '<option  value="' . $shop->id . '">' . $shop->title . '</option>';
@@ -136,35 +100,13 @@
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="amount">Importo</label>
-                                                <input id="amount" class="form-control"
-                                                       placeholder="inseriri il numero Fattura" name="amount"
-                                                       value="<?php echo $amount ?>"
-                                                       required="required">
-                                                <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="iva">iva</label>
-                                                <select class="full-width"
-                                                        placeholder="Seleziona Aliquota"
-                                                        data-init-plugin="selectize" title="" name="iva" id="iva"
-                                                        required>
-                                                    <?php if ($iva!=0){
-                                                    echo '<option></option>';
-                                                    echo '<option selected value="22">iva 22%</option>';
-                                                    echo'<option value="1">Esente Iva</option>';
-                                                    }else{
-                                                        echo '<option></option>';
-                                                        echo '<option  value="22">iva 22%</option>';
-                                                        echo'<option  selected value="1">Esente Iva</option>';
-                                                    }?>
-                                                </select>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div align="center"
+                                            <label for="invoiceText">Testo Fattura</label>
+                                            <textarea id="invoiceText" name="invoiceText" data-json="PostTranslation.content"><?php echo  $bodyInvoiceText;?>
+                                        </textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -178,16 +120,18 @@
         <?php include "parts/footer.php"; ?>
     </div>
     <?php include "parts/bsmodal.php"; ?>
-    <?php include "parts/alert.php"; ?>
     <bs-toolbar class="toolbar-definition">
         <bs-toolbar-group data-group-label="Salva il Movimento">
             <bs-toolbar-button
                     data-tag="a"
-                    data-icon="fa-save"
-                    data-permission="allShops"
+                    data-icon="fa-floppy-o"
+                    data-permission="allShops||worker"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-event="bs.gainplan.passivemovement.save"
+                    data-event="bs.invoiceText.save"
+                    data-title="Salva la Fattura"
+                    data-placement="bottom"
+                    data-href="#"
             ></bs-toolbar-button>
         </bs-toolbar-group>
     </bs-toolbar>

@@ -38,14 +38,23 @@ class CInvoiceEditController extends ARestrictedAccessRootController
         $id =  \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $invoice=$invoiceRepo->findOneBy(['id'=>$id]);
         $order=$orderRepo->findOneBy(['id'=>$invoice->orderId]);
-        $shop=$shopRepo->findOneBy(['id'=>$invoice->invoiceShopId]);
-
+        $shops=$shopRepo->findAll();
+        $positionStart=strpos($invoice->invoiceText,'<!--start-->');
+        $positionEnd=strpos($invoice->invoiceText,'<!--end-->');
+        $bodyTextLength=$positionEnd-$positionStart;
+        $bodyInvoiceText=substr($invoice->invoiceText,$positionStart,$bodyTextLength);
+        $headInvoiceText=substr($invoice->invoiceText,0,$positionStart);
+        $footerTextLength=strlen($invoice->invoiceText)-$positionEnd;
+        $footerInvoiceText=substr($invoice->invoiceText,$positionEnd,$footerTextLength);
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'invoice'=>$invoice,
+            'bodyInvoiceText'=>$bodyInvoiceText,
+            'headInvoiceText'=>$headInvoiceText,
+            'footerInvoiceText'=>$footerInvoiceText,
             'order'=>$order,
-            'shop'=>$shop,
+            'shops'=>$shops,
             'sidebar' => $this->sidebar->build()
         ]);
 
