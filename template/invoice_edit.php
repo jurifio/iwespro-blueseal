@@ -89,14 +89,9 @@
                                                         placeholder="Seleziona lo shop"
                                                         data-init-plugin="selectize" title="" name="shopId" id="shopId"
                                                         required>
-                                                    <?php foreach ($shops as $shop) {
-                                                        if ($shop->id == $invoice->invoiceShopId) {
-                                                            echo '<option selected value="' . $shop->id . '">' . $shop->title . '</option>';
-                                                        } else {
-                                                            echo '<option  value="' . $shop->id . '">' . $shop->title . '</option>';
-                                                        }
-                                                    }
-                                                    ?>
+
+                                                    <?php echo'<option  value="' . $shops->id . '">' . $shops->title . '</option>';?>
+
                                                 </select>
                                             </div>
                                         </div>

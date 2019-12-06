@@ -51,7 +51,7 @@
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="gainPlanId">Fattura di Vendita Collegata </label>
                                                 <?php if($gppm->gainPlanId!=null) {?>
-                                                    <select class="full-width" multiple="multiple"
+                                                    <select class="full-width"
                                                             placeholder="Seleziona la Fattura di Vendita"
                                                             data-init-plugin="selectize" title="" name="gainPlanId" id="gainPlanId"
                                                             required>
@@ -120,7 +120,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="shopId">Shop di riferimento</label>
-                                                <select class="full-width" multiple="multiple"
+                                                <select class="full-width"
                                                         placeholder="Seleziona lo shop"
                                                         data-init-plugin="selectize" title="" name="shopId" id="shopId"
                                                         required>

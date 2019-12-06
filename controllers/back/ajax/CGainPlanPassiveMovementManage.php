@@ -103,7 +103,7 @@ class CGainPlanPassiveMovementManage extends AAjaxController
         $fornitureName = $request->getRequestData('fornitureName');
         $serviceName = $request->getRequestData('serviceName');
         $shopId = $request->getRequestData('shop');
-        $shop=$shopId[0];
+        $shop=$shopId;
         $amount = $request->getRequestData('amount');
         $iva=$request->getRequestData('iva');
         if($iva!=1) {
