@@ -85,7 +85,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="shopId">Shop di riferimento</label>
-                                                <select class="full-width" multiple="multiple"
+                                                <select class="full-width"
                                                         placeholder="Seleziona lo shop"
                                                         data-init-plugin="selectize" title="" name="shopId" id="shopId"
                                                         required>
