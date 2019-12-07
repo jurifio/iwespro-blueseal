@@ -128,7 +128,7 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
                         }
                     }
                 } catch (\Throwable $e) {
-                    $this->report('CImportGainPlanJob','error',$e,'');
+                    $this->report('CImportGainExternalInvoiceJob','error',$e,'');
                 }
 
 
