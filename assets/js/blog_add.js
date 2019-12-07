@@ -19,6 +19,11 @@ summer.summernote({
 		'Times New Roman',
 		'Verdana'
 	],
+	image: [
+		['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+		['float', ['floatLeft', 'floatRight', 'floatNone']],
+		['remove', ['removeMedia']]
+	],
 	onImageUpload: function() {},
 	fontNamesIgnoreCheck: ['Raleway']
 });

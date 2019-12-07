@@ -3,6 +3,8 @@
 namespace bamboo\blueseal\jobs;
 
 use bamboo\core\jobs\ACronJob;
+use PDO;
+use PDOException;
 
 /**
  * Class CUpdateStatusToMixOrderLine
@@ -66,30 +68,37 @@ class CUpdateStatusToMixOrderLine extends ACronJob
             if ($countOrderLine > 1) {
                 if ($countStatusWorking > 0 && $countStatusCancel > 0 && $countStatusShipped > 0) {
                     $orders->status = 'ORD_MIX';
+                    $statusForRemote='ORD_MIX';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusWorking > 0 && $countStatusCancel > 0 && $countStatusShipped == 0) {
                     $orders->status = 'ORD_MIX';
+                    $statusForRemote='ORD_MIX';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusWorking > 0 && $countStatusShipped > 0 && $countStatusCancel == 0) {
                     $orders->status = 'ORD_MIX';
+                    $statusForRemote='ORD_MIX';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel > 0 && $countStatusShipped > 0 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_MIX';
+                    $statusForRemote='ORD_MIX';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel > 0 && $countStatusShipped == 0 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_CANC';
+                    $statusForRemote='CANC';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_CANC' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel == 0 && $countStatusShipped > 0 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_SHIPPED';
+                    $statusForRemote='ORD_SHIPPED';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_SHIPPED ' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking > 0) {
                     $orders->status = 'ORD_WORK';
+                    $statusForRemote='ORD_WORK';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_WORK ' . $orders->id . ' Order','');
                 } else {
@@ -98,14 +107,17 @@ class CUpdateStatusToMixOrderLine extends ACronJob
             } else {
                 if ($countStatusCancel > 0 && $countStatusShipped == 0 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_CANC';
+                    $statusForRemote='ORD_CANC';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_CANC' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel == 0 && $countStatusShipped > 0 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_SHIPPED';
+                    $statusForRemote='ORD_SHIPPED';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_SHIPPED ' . $orders->id . ' Order','');
                 } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking > 0) {
                     $orders->status = 'ORD_WORK';
+                    $statusForRemote='ORD_WORK';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_WORK ' . $orders->id . ' Order','');
                 } else {
@@ -113,6 +125,30 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                 }
 
             }
+            $remoteShopSellerId=$orders->remoteShopSellerId;
+            $remoteOrderId=$orders->remoteOrderSellerId;
+            $shopRepo = \Monkey ::app() -> repoFactory -> create('Shop') -> findOneBy(['id' => $remoteShopSellerId]);
+            $db_host = $shopRepo -> dbHost;
+            $db_name = $shopRepo -> dbName;
+            $db_user = $shopRepo -> dbUsername;
+            $db_pass = $shopRepo -> dbPassword;
+            try {
+
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+                $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $res .= " connessione ok <br>";
+            } catch (PDOException $e) {
+                $res .= $e -> getMessage();
+            }
+            try{
+                $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$statusForRemote.'\' WHERE id='.$remoteOrderId);
+                $stmtUpdateOrder->execute();
+            }catch (\Throwable $e){
+                $this->report('CUpdateStatusToMixOrderLine', 'error',$e);
+
+            }
+
+
         }
 
     }

@@ -33,11 +33,18 @@ class CBlogPostPhotoUploadAjaxController extends AAjaxController
 		$tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
 
 		$files = $this->app->router->request()->getFiles();
+// Open the file to get existing content
+        $current = file_get_contents($files);
+// Append a new person to the file
+
+// Write the contents back to the file
+        file_put_contents($current, $tempFolder.$files['file']['name']);
 		$image = new S3Manager($config['credential']);
 
 		$s = new CSlugify();
 		$fileName = pathinfo($files['file']['name'], PATHINFO_FILENAME) .'-'. crc32(rand(0,10010010101));
 		$fileName = $s->slugify($fileName).'.'.pathinfo($files['file']['name'], PATHINFO_EXTENSION);
+        rename($files['file']['tmp_name'], $tempFolder . $fileName);
 		if (!rename($files['file']['tmp_name'], $tempFolder . $fileName)) {
 			throw new BambooException('Cannot move the uploaded Files');
 		}

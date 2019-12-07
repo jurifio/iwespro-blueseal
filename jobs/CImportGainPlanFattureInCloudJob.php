@@ -106,15 +106,16 @@ class CImportGainPlanFattureInCloudJob extends ACronJob
                         $gainPlanInsert = $gainPlanRepo->getEmptyEntity();
 
                         $gainPlanInsert->customerName = $val->nome;
-
-                        $date = strtotime($val->data);
+                        $dateCheck=strtotime($val->data);
+                        $newdate=str_replace('/','-',$val->data);
+                        $date = new \DateTime($newdate);
                         $seasons = $seasonRepo->findAll();
                         foreach ($seasons as $season) {
                             $dateStart = strtotime($season->dateStart);
                             $dateEnd = strtotime($season->dateEnd);
-                            if ($date >= $dateStart && $date <= $dateEnd) {
+                            if ($dateCheck >= $dateStart && $dateCheck <= $dateEnd) {
                                 $seasonId = $season->id;
-                                $dateInvoice = date('Y-m-d H:i:s',$date);
+                                $dateInvoice =$date->format('Y-m-d H:i:s');
                             }
                         }
                         $gainPlanInsert->seasonId=$seasonId;
