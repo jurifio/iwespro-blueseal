@@ -93,8 +93,10 @@ class CGainPlanListAjaxController extends AAjaxController
             $rowCost = '';
             $collectCost = $gpsmRepo->findBy(['gainPlanId' => $val->id]);
             foreach ($collectCost as $costs) {
-                $cost += $costs->amount;
-                $rowCost .= 'id:' . $costs->id . ' fattura:' . $costs->invoice . 'dataMovivento:' . $costs->dateMovement . ' Fornitore' . $costs->fornitureName . '<br>';
+                if($costs->typeMovement==2) {
+                    $cost += $costs->amount;
+                }
+                $rowCost .= ' fattura:' . $costs->invoice . ' -' . $costs->fornitureName . '<br>';
 
             }
 
@@ -111,7 +113,7 @@ class CGainPlanListAjaxController extends AAjaxController
                     if ($orderLines != null) {
                         $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
                         if ($invoice != null) {
-                            $findInvoice = $invoice->invoiceType . '-' . $invoice->invoiceNumber . '/' . $invoice->invoiceDate;
+                            $findInvoice = $invoice->invoiceNumber . '/' . $invoice->invoiceType;
                         } else {
                             $findInvoice = '';
                         }
@@ -143,11 +145,10 @@ class CGainPlanListAjaxController extends AAjaxController
                                     if ($orderLine->remoteOrderSupplierId != null) {
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                         $paralellFee = $shop->paralellFee;
-                                        $amount += $orderLine->activePrice - ($orderLine->activePrice / 100 * $paralellFee) - $orderLine->friendRevenue;
-                                        $imp = $amount;
+                                        $amount += $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
+                                        $imp+= $amount*100/122;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $cost += $orderLine->friendRevenue;
-                                        $shippingCost = $orderLine->shippingCharge;
 
                                     } else {
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
@@ -156,7 +157,7 @@ class CGainPlanListAjaxController extends AAjaxController
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $shippingCost = $orderLine->shippingCharge;
                                         $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
-                                        $amount += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
+                                        $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
 
                                     }
                                 }
@@ -187,9 +188,11 @@ class CGainPlanListAjaxController extends AAjaxController
             $row['MovementPassiveCollect'] = $rowCost;
             $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
             $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
-            $row['profit'] = money_format('%.2n',$amount - $cost - $shippingCost - $paymentCommission) . ' &euro;';
+            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission) . ' &euro;';
             $row['typeMovement'] = $typeMovement;
-            $row['dateMovement'] = $val->dateMovement;
+            $dateMovement=strtotime($val->dateMovement);
+            $dateMovement=date('d/m/Y',$dateMovement);
+            $row['dateMovement'] =$dateMovement;
 
             $row['orderId'] = $order;
             $datatable->setResponseDataSetRow($key,$row);

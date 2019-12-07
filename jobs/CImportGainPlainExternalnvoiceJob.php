@@ -99,7 +99,7 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
                         $amountVat = $amountTotal - $amount;
                         $dateInvoice = strtotime($dateMovement);
                         $newdateInvoice = date('d/m/Y',$dateInvoice);
-                        $invoiceNumber = $rowOrder['invoiceType'] . '-' . $rowOrder['invoiceNumber'] . ' del ' . $newdateInvoice;
+                        $invoiceNumber = $rowOrder['invoiceNumber'] . '/' . $rowOrder['invoiceType'];
                         $gppm = $gainPlanPassiveMovementRepo->findOneBy(['invoice' => $invoiceNumber]);
                         if ($gppm == null) {
                             try {
