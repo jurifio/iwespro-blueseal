@@ -76,7 +76,7 @@ class CGainPlanListAjaxController extends AAjaxController
             $order = "";
             $orders = $orderRepo->findOneBy(['id' => $val->orderId]);
             if ($val->shopId != 0) {
-                $findShopOrder = \Monkey::app()->repoFactory->create('Shop')->finOneBy(['id' => $val->shopId]);
+                $findShopOrder = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $val->shopId]);
                 $shopOrder = $findShopOrder->name;
             } else {
                 $shopOrder='';

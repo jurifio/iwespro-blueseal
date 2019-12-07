@@ -53,7 +53,7 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
         $gainPlanPassiveMovementRepo = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
 
         foreach ($shopRepo as $value) {
-            if ($svalue->id != 44) {
+            if ($value->id != 44) {
                 $this->report('Start ImportOrder Gain Plan Passive From PickySite ','Shop To Import' . $value->name);
                 /********marketplace********/
                 $db_host = $value->dbHost;
@@ -67,7 +67,7 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
                     $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
                 } catch (PDOException $e) {
-
+                    $this -> report('CImportGainPlainExternalInvoiceJob','connection error',$e);
                 }
 
                 $shopName = $value->title;
@@ -93,45 +93,49 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
                     while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
                         $dateMovement = $rowOrder['invoiceDate'];
                         $remoteIwesOrderId = $rowOrder['remoteIwesOrderId'];
+                        $serviceName=$rowOrder['serviceName'];
                         $amountTotal = $rowOrder['amount'];
                         $amount = ($amountTotal * 100) / 122;
                         $amountVat = $amountTotal - $amount;
                         $dateInvoice = strtotime($dateMovement);
-                        $newdateInvoice = $date('d/m/Y',$dateInvoice);
+                        $newdateInvoice = date('d/m/Y',$dateInvoice);
                         $invoiceNumber = $rowOrder['invoiceType'] . '-' . $rowOrder['invoiceNumber'] . ' del ' . $newdateInvoice;
                         $gppm = $gainPlanPassiveMovementRepo->findOneBy(['invoice' => $invoiceNumber]);
                         if ($gppm == null) {
-                            $gppmi = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement')->getEmptyEntity();
-                            $gppmi->invoice = $invoiceNunmber;
-                            $gppmi->amount = $amount;
-                            $gainPlanFind = $gp->finOneBy(['orderId' => $remoteIwesOrderId]);
-                            if ($gainPlanFind != null) {
-                                $gppmi->gainPlanId = $gainPlanFind->id;
-                            }
-                            $gppmi->shopId = $shopId;
-                            $gppmi->fornitureName = $shopName;
-                            $seasons = $seasonRepo->findAll();
-                            foreach ($seasons as $season) {
-                                $dateStart = strtotime($season->dateStart);
-                                $dateEnd = strtotime($season->dateEnd);
-                                if ($dateInvoice >= $dateStart && $dateInvoice <= $dateEnd) {
-                                    $gppmi->seasonId = $season->id;
+                            try {
+                                $gppmi = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement')->getEmptyEntity();
+                                $gppmi->invoice = $invoiceNumber;
+                                $gppmi->amount = $amount;
+                                $gainPlanFind = $gp->findOneBy(['orderId' => $remoteIwesOrderId]);
+                                if ($gainPlanFind != null) {
+                                    $gppmi->gainPlanId = $gainPlanFind->id;
                                 }
-                            }
+                                $gppmi->shopId = $shopId;
+                                $gppmi->fornitureName = $shopName;
+                                $seasons = $seasonRepo->findAll();
+                                foreach ($seasons as $season) {
+                                    $dateStart = strtotime($season->dateStart);
+                                    $dateEnd = strtotime($season->dateEnd);
+                                    if ($dateInvoice >= $dateStart && $dateInvoice <= $dateEnd) {
+                                        $gppmi->seasonId = $season->id;
+                                    }
+                                }
 
-                            $gppmi->isActive = 1;
-                            $gppmi->dateMovement = $dateMovement;
-                            $gppmi->typeMovement = 1;
-                            $gppmi->amountVar = $amountVat;
-                            $gppmi->amountTotal = $amountTotal;
-                            $gppmi->insert();
+                                $gppmi->isActive = 1;
+                                $gppmi->serviceName=$serviceName;
+                                $gppmi->dateMovement = $dateMovement;
+                                $gppmi->typeMovement = 1;
+                                $gppmi->amountVat = $amountVat;
+                                $gppmi->amountTotal = $amountTotal;
+                                $gppmi->insert();
+                            } catch (\Throwable $e) {
+                                $this -> report('CImportGainExternalInvoiceJob',' Error insert Passive',$e);
+                            }
                         }
                     }
                 } catch (\Throwable $e) {
-                    $this->report('CImportGainExternalInvoiceJob','error',$e,'');
+                    $this -> report('CImportGainExternalInvoiceJob',' Error Import external Invoice',$e);
                 }
-
-
             }
 
 
