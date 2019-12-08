@@ -49,7 +49,8 @@ class CBlueSealSidebar
                             'title' => $page->pageTranslation->getFirst()->title,
                             'url' => $page->url,
                             'icon' => $page->icon,
-                            'permission' => $page->permission
+                            'permission' => $page->permission,
+                            'postId' => $page->postId
                         ];
                     }
                 }

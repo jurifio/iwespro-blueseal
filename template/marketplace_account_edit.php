@@ -61,7 +61,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="activeAutomatic">Pubblicazione Automatica</label>
+                                                    <label for="activeAutomatic">Attivazione CPC Specifici</label>
                                                     <select id="activeAutomatic" name="activeAutomatic"
                                                             class="full-width selectpicker"
                                                             placeholder="Seleziona lo stato"

@@ -21,6 +21,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 
         $cats = \Monkey::app()->repoFactory->create('PostCategory')->findAll();
         $tags = \Monkey::app()->repoFactory->create('PostTag')->findAll();
+        $pageTranslationRepo=\Monkey::app()->repoFactory->create('PageTranslation');
         $statuses = [];
         foreach(\Monkey::app()->repoFactory->create('PostStatus')->findAll() as $status) {
             if ($status->show) $statuses[$status->id] = $status->name;
@@ -30,12 +31,22 @@ class CBlogPostAddController extends ARestrictedAccessRootController
         foreach (\Monkey::app()->repoFactory->create('Blog')->findAll() as $blog){
             $blogs[$blog->id] = $blog->name;
         }
+        $pag = [];
+        foreach (\Monkey::app()->repoFactory->create('Page')->findAll() as $pagg){
+            $pageTranslation=$pageTranslationRepo->findOneBy(['pageId'=>$pagg->id,'langId'=>1]);
+            if($pageTranslation!=null) {
+                $pag[$pagg->id] = $pageTranslation->title;
+            }else{
+                continue;
+            }
+        }
 
 	    $defaultImage = '/assets/bs-dummy-16-9.png';
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'blogs' => $blogs,
+            'pag'=> $pag,
             'page'=>$this->page,
             'user'=>$this->app->getUser(),
             'cats'=>$cats,
@@ -54,13 +65,16 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 
         $postRepo = \Monkey::app()->repoFactory->create('Post');
         $postTranslationRepo = \Monkey::app()->repoFactory->create('PostTranslation');
+        $pageRepo=\Monkey::app()->repoFactory->create('Page');
+
+
 
         $PostTranslation = $postTranslationRepo->getEmptyEntity();
         $Post = $postRepo->getEmptyEntity();
 
         foreach ($newPostData as $k => $v) {
             $tableField = explode('.',$k);
-            if (is_int(stripos($k,'PostHasPostCategory')) || is_int(stripos($k,'PostHasPostTag'))) {
+            if (is_int(stripos($k,'PostHasPostCategory')) ||is_int(stripos($k,'PostPage')) || is_int(stripos($k,'PostHasPostTag'))) {
                 continue;
             }
             ${$tableField[0]}->{$tableField[1]} = $v;
@@ -70,6 +84,15 @@ class CBlogPostAddController extends ARestrictedAccessRootController
 	        $postId = $postRepo->insert($Post);
 	        $PostTranslation->postId = $postId;
 	        $PostTranslation->blogId = $newPostData['Post.blogId'];
+	        $valuePostId=$newPostData['PostPage.pageId'];
+	        if($newPostData['Post.blogId']==3){
+	            if($newPostData['PostPage.pageId']!=null){
+	                $page=$pageRepo->findOneBy(['id'=>$valuePostId]);
+	                $page->postId = $postId;
+	                $page->update();
+                }
+
+            }
 
 	        if(!empty($coverImageData) && isset($coverImageData['PostTranslation.coverImage'])) {
 		        $s = new CSlugify();

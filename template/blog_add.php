@@ -3,7 +3,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -26,9 +26,25 @@
                                 </select>
                                 <h5>Nuovo post</h5>
                                 <input type="hidden" id="blogId" data-json="Post.blogId" value="1"/>
+                                <input type="hidden" id="pageId" data-json="PostPage.pageId" value=""/>
                                 <input type="hidden" data-json="PostTranslation.langId" value="1"/>
                             </div>
                             <div class="panel-body clearfix">
+                                <div id="divPage" class="hide">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="choosePage">Procedura di Riferimento</label>
+                                                <select id="choosePage">
+                                                    <option value="">seleziona una Procedura</option>
+                                                    <?php foreach ($pag as $key => $val) : ?>
+                                                        <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="form-group form-group-default required">
@@ -65,17 +81,20 @@
 
                                 <div class="col-sm-12 col-xs-12">
                                     <div class="form-group form-group-default">
-                                    <strong style="display: block">Inserisci il TAG TITLE</strong>
-                                    <input type="text" id="titleTag" placeholder="Tag title (Caratteri: min 50 | max 60)"
-                                           data-json="PostTranslation.titleTag" value="" style="width: 30%;">
+                                        <strong style="display: block">Inserisci il TAG TITLE</strong>
+                                        <input type="text" id="titleTag"
+                                               placeholder="Tag title (Caratteri: min 50 | max 60)"
+                                               data-json="PostTranslation.titleTag" value="" style="width: 30%;">
                                     </div>
                                 </div>
 
                                 <div class="col-sm-12 col-xs-12">
                                     <div class="form-group form-group-default">
-                                    <strong style="display: block">Inserisci la META DESCRIPTION</strong>
-                                    <textarea id="metaDescription" placeholder="Meta Description (Caratteri: min 50 | max 300)" style="width: 30%;"
-                                              data-json="PostTranslation.metaDescription" rows="10"></textarea>
+                                        <strong style="display: block">Inserisci la META DESCRIPTION</strong>
+                                        <textarea id="metaDescription"
+                                                  placeholder="Meta Description (Caratteri: min 50 | max 300)"
+                                                  style="width: 30%;"
+                                                  data-json="PostTranslation.metaDescription" rows="10"></textarea>
                                     </div>
                                 </div>
                             </div>
