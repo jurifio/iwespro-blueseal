@@ -25,7 +25,7 @@
                    value="<?php echo $cartAbandonedEmailParam->id; ?>"/>
             <input type="hidden" id="coupon1TypeId" name="coupon1TypeId"
                    value="<?php echo $cartAbandonedEmailParam->coupon1TypeId; ?>"/>
-            <input type="hidden" id="couponType2Id" name="coupon2TypeId"
+            <input type="hidden" id="coupon2TypeId" name="coupon2TypeId"
                    value="<?php echo $cartAbandonedEmailParam->coupon2TypeId; ?>"/>
             <input type="hidden" id="coupon3TypeId" name="coupon3TypeId"
                    value="<?php echo $cartAbandonedEmailParam->coupon3TypeId; ?>"/>

@@ -900,9 +900,9 @@ $(document).on('bs.newPlanSendEmail.save', function () {
         var hasFreeReturn2 = $('#freeReturn2').val();
         var hasFreeReturn3 = $('#freeReturn3').val();
         var cartIdEmailParam1 = $('#cartIdEmailParam1').val();
-        var couponType1Id = $('#couponType1Id').val();
-        var couponType2Id = $('#couponType2Id').val();
-        var couponType3Id = $('#couponType3Id').val();
+        var coupon1TypeId = $('#coupon1TypeId').val();
+        var coupon2TypeId = $('#coupon2TypeId').val();
+        var coupon3TypeId = $('#coupon3TypeId').val();
         var shopId=$('#shopId').val();
 
         const data = {
@@ -938,11 +938,9 @@ $(document).on('bs.newPlanSendEmail.save', function () {
             hasFreeReturn2: hasFreeReturn2,
             hasFreeReturn3: hasFreeReturn3,
             cartIdEmailParam1: cartIdEmailParam1,
-            cartIdEmailParam2: cartIdEmailParam2,
-            cartIdEmailParam3: cartIdEmailParam3,
-            couponType1Id: couponType1Id,
-            couponType2Id: couponType2Id,
-            couponType3Id: couponType3Id,
+            coupon1TypeId: coupon1TypeId,
+            coupon2TypeId: coupon2TypeId,
+            coupon3TypeId: coupon3TypeId,
             shopId:shopId
 
         };

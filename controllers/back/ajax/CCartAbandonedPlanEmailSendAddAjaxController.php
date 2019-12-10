@@ -238,14 +238,15 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
         //prendo i dati passati in input
         $data = \Monkey::app()->router->request()->getRequestData();
         $res = "";
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $id1 = $data['cartIdEmailParam1'];
         $shopId=$data['shopId'];
         $generateCoupon = $data['generateCoupon'];
         $generateCoupon2 = $data['generateCoupon2'];
         $generateCoupon3 = $data['generateCoupon3'];
-        $coupon1TypeId = $data['couponType1Id'];
-        $coupon2TypeId = $data['couponType2Id'];
-        $coupon3TypeId = $data['couponType3Id'];
+        $coupon1TypeId = $data['coupon1TypeId'];
+        $coupon2TypeId = $data['coupon2TypeId'];
+        $coupon3TypeId = $data['coupon3TypeId'];
         $firstTemplateId = $data['firstTemplateId'];
         $firstTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $firstTemplateId]);
         $firstTemplate = $firstTemplateRepo->template;
@@ -300,7 +301,7 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
             $stmtUpdateRemoteCoupounType=$db_con->prepare("Update CouponType set 
                                         `name`='".$nameCoupon."',
                                         amount='".$amount."',
-                                        amountType='".$amountType."',
+                                        amountType='".$typeCoupon."',
                                         validity='".$validity."',
                                         validForCartTotal='".$validForCartTotal."',
                                         hasFreeShipping='".$hasFreeShipping."',
@@ -334,7 +335,7 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
             $stmtUpdateRemoteCoupounType=$db_con->prepare("Update CouponType set 
                                         `name`='".$nameCoupon2."',
                                         amount='".$amount."',
-                                        amountType='".$amountType."',
+                                        amountType='".$typeCoupon."',
                                         validity='".$validity."',
                                         validForCartTotal='".$validForCartTotal."',
                                         hasFreeShipping='".$hasFreeShipping."',
@@ -367,7 +368,7 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
             $stmtUpdateRemoteCoupounType=$db_con->prepare("Update CouponType set 
                                         `name`='".$nameCoupon3."',
                                         amount='".$amount."',
-                                        amountType='".$amountType."',
+                                        amountType='".$typeCoupon."',
                                         validity='".$validity."',
                                         validForCartTotal='".$validForCartTotal."',
                                         hasFreeShipping='".$hasFreeShipping."',
