@@ -214,9 +214,9 @@
                                             <option></option>
                                             <?php foreach ($shops as $shop) {
                                                 if ($shop->id == $cartAbandonedEmailParam->shopId) {
-                                                    echo '<option selected value="' . $shop->id . '">' . $shop->title . '</option>';
+                                                    echo '<option selected value="' . $shop->id . '">' . $shop->name . '</option>';
                                                 } else {
-                                                    echo '<option  value="' . $shop->id . '">' . $shop->title . '</option>';
+                                                    echo '<option  value="' . $shop->id . '">' . $shop->name . '</option>';
                                                 }
                                             }
                                             ?>
