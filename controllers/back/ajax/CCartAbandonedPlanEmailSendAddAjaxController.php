@@ -225,6 +225,9 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
         $cartAbandonedSendEmailParam->thirdTimeEmailSendDay = $thirdTimeEmailSendDay;
         $cartAbandonedSendEmailParam->thirdTimeEmailSendHour = $thirdTimeEmailSendHour;
         $cartAbandonedSendEmailParam->selectMailCouponSend = $selectEmail;
+        $cartAbandonedSendEmailParam->coupon1TypeId=$coupon1TypeId;
+        $cartAbandonedSendEmailParam->coupon2TypeId=$coupon2TypeId;
+        $cartAbandonedSendEmailParam->coupon3TypeId=$coupon3TypeId;
         $cartAbandonedSendEmailParam->smartInsert();
         $res='Inserimento Regole Carrelli Abbandonati per lo shop '.$shopName;
 
