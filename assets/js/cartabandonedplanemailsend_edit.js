@@ -69,22 +69,46 @@ $(document).ready(function () {
         var P1Y1 = '';
         var P1M1 = '';
         var P7D1 = '';
+        var P3D1 = '';
+        var P14D1 = '';
         var validity1 = $('#validity1').val();
         switch (validity1) {
             case 'P1Y':
                 P1Y1 = 'selected="selected"';
                 P1M1 = '';
                 P7D1 = '';
+                P3D1 = '';
+                P14D1 = '';
+
+
                 break;
             case  'P1M':
                 P1Y1 = '';
                 P1M1 = 'selected="selected"';
                 P7D1 = '';
+                P3D1 = '';
+                P14D1 = '';
                 break;
             case  'P7D':
                 P1Y1 = '';
                 P1M1 = '';
                 P7D1 = 'selected="selected"';
+                P3D1 = '';
+                P14D1 = '';
+                break;
+            case  'P3D':
+                P1Y1 = '';
+                P1M1 = '';
+                P7D1 = '';
+                P3D1 = 'selected="selected"';
+                P14D1 = '';
+                break;
+            case  'P3D':
+                P1Y1 = '';
+                P1M1 = '';
+                P7D1 = '';
+                P3D1 = '';
+                P14D1 = 'selected="selected"';
                 break;
         }
         var validForCartTotal1 = $('#validForCartTotal1').val();
@@ -147,6 +171,8 @@ $(document).ready(function () {
                                                 <option value="P1Y"${P1Y1}>Un Anno</option>
                                                 <option value="P1M"${P1M1}>Un Mese</option>
                                                 <option value="P7D"${P7D1}>Una settimana</option>
+                                                 <option value="P3D"${P3D1}>3 Giorni</option>
+                                                 <option value="P14D"${P14D1}>14 Giorni</option>
                                                 data-init-plugin="selectize"
                                                 </select>
                                             </div>
@@ -216,22 +242,44 @@ $(document).ready(function () {
         var P1Y2 = '';
         var P1M2 = '';
         var P7D2 = '';
+        var P3D2 = '';
+        var P14D2 = '';
         var validity2 = $('#validity2').val();
         switch (validity2) {
             case 'P1Y':
                 P1Y2 = 'selected="selected"';
                 P1M2 = '';
                 P7D2 = '';
+                P14D2 = '';
+                P3D2 = '';
                 break;
             case  'P1M':
                 P1Y2 = '';
                 P1M2 = 'selected="selected"';
                 P7D2 = '';
+                P14D2 = '';
+                P3D2 = '';
                 break;
             case  'P7D':
                 P1Y2 = '';
                 P1M2 = '';
                 P7D2 = 'selected="selected"';
+                P14D2 = '';
+                P3D2 = '';
+                break;
+            case  'P14D':
+                P1Y2 = '';
+                P1M2 = '';
+                P7D2 = '';
+                P14D2 = 'selected="selected"';
+                P3D2 = '';
+                break;
+            case  'P3D':
+                P1Y2 = '';
+                P1M2 = '';
+                P7D2 = '';
+                P14D2 = '';
+                P3D2 = 'selected="selected"';
                 break;
         }
         var validForCartTotal2 = $('#validForCartTotal2').val();
@@ -294,6 +342,8 @@ $(document).ready(function () {
                                                 <option value="P1Y"${P1Y2}>Un Anno</option>
                                                 <option value="P1M"${P1M2}>Un Mese</option>
                                                 <option value="P7D"${P7D2}>Una settimana</option>
+                                                <option value="P3D"${P3D2}>3 Giorni</option>
+                                                 <option value="P14D"${P14D2}>14 Giorni</option>
                                                 data-init-plugin="selectize"
                                                 </select>
                                             </div>
@@ -363,22 +413,44 @@ $(document).ready(function () {
         var P1Y3 = '';
         var P1M3 = '';
         var P7D3 = '';
+        var P3D3 = '';
+        var P14D3 = '';
         var validity3 = $('#validity3').val();
         switch (validity3) {
             case 'P1Y':
                 P1Y3 = 'selected="selected"';
                 P1M3 = '';
                 P7D3 = '';
+                P3D3 = '';
+                P14D3 = '';
                 break;
             case  'P1M':
                 P1Y3 = '';
                 P1M3 = 'selected="selected"';
                 P7D3 = '';
+                P3D3 = '';
+                P14D3 = '';
                 break;
             case  'P7D':
                 P1Y3 = '';
                 P1M3 = '';
                 P7D3 = 'selected="selected"';
+                P3D3 = '';
+                P14D3 = '';
+                break;
+            case  'P3D':
+                P1Y3 = '';
+                P1M3 = '';
+                P7D3 = '';
+                P3D3 = 'selected="selected"';
+                P14D3 = '';
+                break;
+            case  'P14D':
+                P1Y3 = '';
+                P1M3 = '';
+                P7D3 = '';
+                P3D3 = '';
+                P14D3 = 'selected="selected"';
                 break;
         }
         var validForCartTotal3 = $('#validForCartTotal3').val();
@@ -442,6 +514,8 @@ $(document).ready(function () {
                                                 <option value="P1Y"${P1Y3}>Un Anno</option>
                                                 <option value="P1M"${P1M3}>Un Mese</option>
                                                 <option value="P7D"${P7D3}>Una settimana</option>
+                                                 <option value="P3D"${P3D3}>3 Giorni</option>
+                                                 <option value="P14D"${P14D3}>14 Giorni</option>
                                                 data-init-plugin="selectize"
                                                 </select>
                                             </div>
@@ -539,6 +613,8 @@ $("#generateCoupon").change(function () {
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
+                                                 <option value="P3D">3 Giorni</option>
+                                                  <option value="P14D">Due settimane</option>
                                                 data-init-plugin="selectize"
                                                 </select>
                                             </div>
@@ -633,6 +709,8 @@ $("#generateCoupon2").change(function () {
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
+                                                  <option value="P3D">3 Giorni</option>
+                                                  <option value="P14D">Due settimane</option>
                                                 data-init-plugin="selectize"
                                                 </select>
                                             </div>
@@ -727,6 +805,8 @@ $("#generateCoupon3").change(function () {
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
+                                                  <option value="P3D">3 Giorni</option>
+                                                  <option value="P14D">Due settimane</option>
                                                 data-init-plugin="selectize"
                                                 </select>
                                             </div>
@@ -783,7 +863,7 @@ $("#generateCoupon3").change(function () {
 $(document).on('bs.newPlanSendEmail.save', function () {
     let bsModal = new $.bsModal('Salva La Pianificazione', {
         body: '<div><p>Conferma' +
-        '</div>'
+            '</div>'
     });
 
     bsModal.showCancelBtn();
@@ -820,11 +900,10 @@ $(document).on('bs.newPlanSendEmail.save', function () {
         var hasFreeReturn2 = $('#freeReturn2').val();
         var hasFreeReturn3 = $('#freeReturn3').val();
         var cartIdEmailParam1 = $('#cartIdEmailParam1').val();
-        var cartIdEmailParam2 = $('#cartIdEmailParam2').val();
-        var cartIdEmailParam3 = $('#cartIdEmailParam3').val();
-        var couponTypeId1 = $('#couponTypeId1').val();
-        var couponTypeId2 = $('#couponTypeId2').val();
-        var couponTypeId3 = $('#couponTypeId3').val();
+        var couponType1Id = $('#couponType1Id').val();
+        var couponType2Id = $('#couponType2Id').val();
+        var couponType3Id = $('#couponType3Id').val();
+        var shopId=$('#shopId').val();
 
         const data = {
             generateCoupon: generateCoupon,
@@ -861,9 +940,10 @@ $(document).on('bs.newPlanSendEmail.save', function () {
             cartIdEmailParam1: cartIdEmailParam1,
             cartIdEmailParam2: cartIdEmailParam2,
             cartIdEmailParam3: cartIdEmailParam3,
-            couponTypeId1: couponTypeId1,
-            couponTypeId2: couponTypeId2,
-            couponTypeId3: couponTypeId3
+            couponType1Id: couponType1Id,
+            couponType2Id: couponType2Id,
+            couponType3Id: couponType3Id,
+            shopId:shopId
 
         };
         $.ajax({

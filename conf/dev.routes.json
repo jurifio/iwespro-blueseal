@@ -3053,11 +3053,13 @@
             ]
         },
         {
-            "pattern": "/blueseal/cartabandoned/edit-plan(/)?",
+            "pattern": "/blueseal/cartabandoned/edit-plan/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendEditController"
             },
-            "filters": {},
+            "filters": {
+                "id": "[0-9]+"
+            },
             "translations": {},
             "methods": [
                 "GET",

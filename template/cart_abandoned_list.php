@@ -60,9 +60,14 @@
                                     class="center">Importo
                                 </th>
                                 <th data-slug="lastUpdate"
+                                          data-searchable="true"
+                                          data-orderable="true"
+                                          class="center">Data Aggiornamento
+                                </th>
+                                <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Data Aggiornamento
+                                    class="center">Shop
                                 </th>
 
                             </tr>

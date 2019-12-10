@@ -14,13 +14,13 @@ $(document).on('bs-listscartabandonedemailparam-add', function () {
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.data().count();
 
-    if (selectedRows == 1) {
+  /*  if (selectedRows == 1) {
         new Alert({
             type: "warning",
             message: "Regola Già Esistente Non Puoi Aggiungere una nuova"
         }).open();
         return false;
-    }
+    }*/
     let bsModal = new $.bsModal('Aggiungi Regola', {
         body: '<div><p>Conferma'+
         '</div>'

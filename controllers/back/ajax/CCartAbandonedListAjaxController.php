@@ -37,12 +37,14 @@ class CCartAbandonedListAjaxController extends AAjaxController
   C.creationDate                                         AS creationDate,
   U.email                                                AS email,
   C.cartTypeId                                           AS carTypeId,
-  C.lastUpdate                                           AS lastUpdate
+  C.lastUpdate                                           AS lastUpdate,
+  s.name                                                AS shopName     
 FROM Cart C
   INNER JOIN User U ON C.userId = U.id
   INNER JOIN CartLine Cl ON C.id = Cl.cartId
   INNER JOIN ProductPublicSku pps ON Cl.productId = pps.productId AND Cl.productVariantId = pps.productVariantId
   INNER JOIN Product p ON Cl.productId = p.id AND Cl.productVariantId = p.productVariantId
+    INNER JOIN Shop s on c.remoteShopId=s.id
 WHERE C.userId <> ''
       AND C.cartTypeId = 1
 GROUP BY C.id";

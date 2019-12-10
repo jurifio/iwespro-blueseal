@@ -22,39 +22,35 @@
                 </div>
             </div>
             <input type="hidden" id="cartIdEmailParam1" name="cartIdEmailParam1"
-                   value="<?php echo $collectCartAbandonedEmailParam[1]['id']; ?>"/>
-            <input type="hidden" id="cartIdEmailParam2" name="cartIdEmailParam2"
-                   value="<?php echo $collectCartAbandonedEmailParam[2]['id']; ?>"/>
-            <input type="hidden" id="cartIdEmailParam3" name="cartIdEmailParam3"
-                   value="<?php echo $collectCartAbandonedEmailParam[3]['id']; ?>"/>
-            <input type="hidden" id="couponTypeId1" name="couponTypeId1"
-                   value="<?php echo $collectCartAbandonedEmailParam[1]['couponTypeId']; ?>"/>
-            <input type="hidden" id="couponTypeId2" name="couponTypeId2"
-                   value="<?php echo $collectCartAbandonedEmailParam[2]['couponTypeId']; ?>"/>
-            <input type="hidden" id="couponTypeId3" name="couponTypeId3"
-                   value="<?php echo $collectCartAbandonedEmailParam[3]['couponTypeId']; ?>"/>
+                   value="<?php echo $cartAbandonedEmailParam->id; ?>"/>
+            <input type="hidden" id="coupon1TypeId" name="coupon1TypeId"
+                   value="<?php echo $cartAbandonedEmailParam->coupon1TypeId; ?>"/>
+            <input type="hidden" id="couponType2Id" name="coupon2TypeId"
+                   value="<?php echo $cartAbandonedEmailParam->coupon2TypeId; ?>"/>
+            <input type="hidden" id="coupon3TypeId" name="coupon3TypeId"
+                   value="<?php echo $cartAbandonedEmailParam->coupon3TypeId; ?>"/>
 
 
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['amount'])) {
-                $amount1 = $collectCartAbandonedEmailParam[1]['amount'];
+            <?php if (!empty($collectCoupon1Type->amount)) {
+                $amount1 =$collectCoupon1Type->amount;
             } else {
                 $amount1 = "";
             } ?>
             <input type="hidden" id="amount1" name="amount1" value="<?php echo $amount1; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[2]['amount'])) {
-                $amount2 = $collectCartAbandonedEmailParam[2]['amount'];
+            <?php if (!empty($collectCoupon2Type->amount)) {
+                $amount2 = $collectCoupon2Type->amount;
             } else {
                 $amount2 = "";
             } ?>
             <input type="hidden" id="amount2" name="amount2" value="<?php echo $amount2; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[3]['amount'])) {
-                $amount3 = $collectCartAbandonedEmailParam[3]['amount'];
+            <?php if (!empty($collectCoupon3Type->amount)) {
+                $amount3 = $collectCoupon3Type->amount;
             } else {
                 $amount3 = "";
             } ?>
             <input type="hidden" id="amount3" name="amount3" value="<?php echo $amount3; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['amountType'])) {
-                if ($collectCartAbandonedEmailParam[1]['amountType'] == "P") {
+            <?php if (!empty($collectCoupon1Type->amountType)) {
+                if ($collectCoupon1Type->amountType == "P") {
                     $amountType1 = 'P';
                 } else {
                     $amountType1 = 'F';
@@ -64,19 +60,9 @@
                 $amountType1 = "";
             } ?>
 
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['amountType'])) {
-                if ($collectCartAbandonedEmailParam[1]['amountType'] == "P") {
-                    $amountType1 = 'P';
-                } else {
-                    $amountType1 = 'F';
-                }
-
-            } else {
-                $amountType1 = "";
-            } ?>
             <input type="hidden" id="amountType1" name="amountType1" value="<?php echo $amountType1; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[2]['amountType'])) {
-                if ($collectCartAbandonedEmailParam[1]['amountType'] == "P") {
+            <?php if (!empty($collectCoupon2Type->amountType)) {
+                if ($collectCoupon2Type->amountType == "P") {
                     $amountType2 = 'P';
                 } else {
                     $amountType2 = 'F';
@@ -86,8 +72,8 @@
                 $amountType2 = "";
             } ?>
             <input type="hidden" id="amountType2" name="amountType2" value="<?php echo $amountType2; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[3]['amountType'])) {
-                if ($collectCartAbandonedEmailParam[1]['amountType'] == "P") {
+            <?php if (!empty($collectCoupon3Type->amountType)) {
+                if ($collectCoupon3Type->amountType == "P") {
                     $amountType3 = 'P';
                 } else {
                     $amountType3 = 'F';
@@ -97,50 +83,50 @@
                 $amountType3 = "";
             } ?>
             <input type="hidden" id="amountType3" name="amountType3" value="<?php echo $amountType3; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['validity'])) {
-                $validity1 = $collectCartAbandonedEmailParam[1]['validity'];
+            <?php if (!empty($collectCoupon1Type->validity)) {
+                $validity1 = $collectCoupon1Type->validity;
 
             } else {
                 $validity1 = '';
             } ?>
             <input type="hidden" id="validity1" name="validity1" value="<?php echo $validity1; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[2]['validity'])) {
-                $validity2 = $collectCartAbandonedEmailParam[2]['validity'];
+            <?php if (!empty($collectCoupon2Type->validity)) {
+                $validity2 = $collectCoupon2Type->validity;
 
             } else {
                 $validity2 = '';
             } ?>
             <input type="hidden" id="validity2" name="validity2" value="<?php echo $validity2; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[3]['validity'])) {
-                $validity3 = $collectCartAbandonedEmailParam[3]['validity'];
+            <?php if (!empty($collectCoupon3Type->validity)) {
+                $validity3 = $collectCoupon3Type->validity;
 
             } else {
                 $validity3 = "";
             } ?>
             <input type="hidden" id="validity3" name="validity3" value="<?php echo $validity3; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['validForCartTotal'])) {
-                $validForCartTotal1 = $collectCartAbandonedEmailParam[1]['validForCartTotal'];
+            <?php if (!empty($collectCoupon1Type->validForCartTotal)) {
+                $validForCartTotal1 = $collectCoupon1Type->validForCartTotal;
             } else {
                 $validForCartTotal1 = "";
             } ?>
             <input type="hidden" id="validForCartTotal1" name="validForCartTotal1"
                    value="<?php echo $validForCartTotal1; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[2]['validForCartTotal'])) {
-                $validForCartTotal2 = $collectCartAbandonedEmailParam[2]['validForCartTotal'];
+            <?php if (!empty($collectCoupon2Type->validForCartTotal)) {
+                $validForCartTotal2 = $collectCoupon2Type->validForCartTotal;
             } else {
                 $validForCartTotal2 = "";
             } ?>
             <input type="hidden" id="validForCartTotal2" name="validForCartTotal2"
                    value="<?php echo $validForCartTotal2; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[3]['validForCartTotal'])) {
-                $validForCartTotal3 = $collectCartAbandonedEmailParam[3]['amount'];
+            <?php if (!empty($collectCoupon3Type->validForCartTotal)) {
+                $validForCartTotal3 = $collectCoupon3Type->validForCartTotal;
             } else {
                 $validForCartTotal3 = "";
             } ?>
             <input type="hidden" id="validForCartTotal3" name="validForCartTotal3"
                    value="<?php echo $validForCartTotal3; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['hasFreeShipping'])) {
-                if ($collectCartAbandonedEmailParam[1]['hasFreeShipping'] == "1") {
+            <?php if (!empty($collectCoupon1Type->hasFreeShipping)) {
+                if ($collectCoupon1Type->hasFreeShipping == "1") {
                     $hasFreeShipping1 = '1';
                 } else {
                     $hasFreeShipping1 = '0';
@@ -151,8 +137,8 @@
             } ?>
             <input type="hidden" id="hasFreeShipping1" name="hasFreeShipping1"
                    value="<?php echo $hasFreeShipping1; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[2]['hasFreeShipping'])) {
-                if ($collectCartAbandonedEmailParam[1]['hasFreeShipping'] == "1") {
+            <?php if (!empty($collectCoupon2Type->hasFreeShipping)) {
+                if ($collectCoupon2Type->hasFreeShipping == "1") {
                     $hasFreeShipping2 = '1';
                 } else {
                     $hasFreeShippinge2 = '0';
@@ -163,8 +149,8 @@
             } ?>
             <input type="hidden" id="hasFreeShipping2" name="hasFreeShipping2"
                    value="<?php echo $hasFreeShipping2; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[3]['hasFreeShipping'])) {
-                if ($collectCartAbandonedEmailParam[1]['hasFreeShipping'] == "1") {
+            <?php if (!empty($collectCoupon3Type->hasFreeShipping)) {
+                if ($collectCoupon3Type->hasFreeShipping == "1") {
                     $hasFreeShipping3 = '1';
                 } else {
                     $hasFreeShipping3 = '0';
@@ -175,8 +161,8 @@
             } ?>
             <input type="hidden" id="hasFreeShipping3" name="hasFreeShipping3"
                    value="<?php echo $hasFreeShipping3; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[1]['hasFreeReturn'])) {
-                if ($collectCartAbandonedEmailParam[1]['hasFreeReturn'] == "1") {
+            <?php if (!empty($collectCoupon1Type->hasFreeReturn)) {
+                if ($collectCoupon1Type->hasFreeReturn == "1") {
                     $hasFreeReturn1 = '1';
                 } else {
                     $hasFreeReturn1 = '0';
@@ -186,8 +172,8 @@
                 $hasFreeReturn1 = "";
             } ?>
             <input type="hidden" id="hasFreeReturn1" name="hasFreeReturn1" value="<?php echo $hasFreeReturn1; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[2]['hasFreeReturn'])) {
-                if ($collectCartAbandonedEmailParam[1]['hasFreeReturn'] == "1") {
+            <?php if (!empty($collectCoupon2Type->hasFreeReturn)) {
+                if ($collectCoupon2Type->hasFreeReturn == "1") {
                     $hasFreeReturn2 = '1';
                 } else {
                     $hasFreeReturn2 = '0';
@@ -197,8 +183,8 @@
                 $hasFreeReturn2 = "";
             } ?>
             <input type="hidden" id="hasFreeReturn2" name="hasFreeReturn2" value="<?php echo $hasFreeReturn2; ?>"/>
-            <?php if (!empty($collectCartAbandonedEmailParam[3]['hasFreeReturn'])) {
-                if ($collectCartAbandonedEmailParam[1]['hasFreeReturn'] == "1") {
+            <?php if (!empty($collectCoupon3Type->hasFreeReturn)) {
+                if ($collectCoupon3Type->hasFreeReturn == "1") {
                     $hasFreeReturn3 = '1';
                 } else {
                     $hasFreeReturn3 = '0';
@@ -218,6 +204,27 @@
                                 <div class="panel-heading clearfix">
                                     <h5 class="m-t-10">Pianificazione Mail per Clienti con Carelli Abbandonati</h5>
                                 </div>
+                                <div class="panel-heading clearfix">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="shopId">Shop di riferimento</label>
+                                        <select class="full-width"
+                                                placeholder="Seleziona lo shop"
+                                                data-init-plugin="selectize" title="" name="shopId" id="shopId"
+                                                required>
+                                            <option></option>
+                                            <?php foreach ($shops as $shop) {
+                                                if ($shop->id == $cartAbandonedEmailParam->shopId) {
+                                                    echo '<option selected value="' . $shop->id . '">' . $shop->title . '</option>';
+                                                } else {
+                                                    echo '<option  value="' . $shop->id . '">' . $shop->title . '</option>';
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="panel-heading clearfix">
+                                </div>
                                 <div class="panel-body clearfix">
                                     <div class="row col-md-4">
                                         <div class="col-md-5">
@@ -228,7 +235,7 @@
                                                         placeholder="Seleziona la Lista"
 
                                                 <?php foreach ($template as $templates): ?>
-                                                    <option <?php if ($collectCartAbandonedEmailParam[1]['firstTemplateId'] == $templates->id) echo 'selected="selected"'; ?>
+                                                    <option <?php if ($cartAbandonedEmailParam->firstTemplateId == $templates->id) echo 'selected="selected"'; ?>
                                                             value="<?php echo $templates->id ?>"> <?php echo $templates->name; ?></option>
                                                 <?php endforeach; ?>>
                                                 </select>
@@ -240,7 +247,7 @@
                                                 <input id="firstTimeEmailSendDay" class="form-control"
                                                        placeholder="Inserisci dopo quanti giorni deve essere inviata la  prima mail"
                                                        name="firstTimeEmailSendDay" required="required"
-                                                       value="<?php echo $collectCartAbandonedEmailParam[1]['firstTimeEmailSendDay']; ?>">
+                                                       value="<?php echo$cartAbandonedEmailParam->firstTimeEmailSendDay; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -249,7 +256,7 @@
                                                 <input id="firstTimeEmailSendHour" class="form-control"
                                                        placeholder="Inserisci dopo quante ore deve essere inviata la  prima mail name="
                                                        firstTimeEmailSendHour" required="required"
-                                                value="<?php echo $collectCartAbandonedEmailParam[1]['firstTimeEmailSendHour']; ?>
+                                                value="<?php echo $cartAbandonedEmailParam->firstTimeEmailSendHour; ?>
                                                 ">
                                             </div>
                                         </div>
@@ -259,7 +266,7 @@
                                                 <select id="generateCoupon" name="generateCoupon"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
-                                                <?php if ($collectCartAbandonedEmailParam[1]['couponTypeId'] != 0) {
+                                                <?php if ($cartAbandonedEmailParam->coupon1TypeId != 0) {
                                                     $selectedYes = "selected=\"selected\"";
                                                     $selectedNo = "";
                                                 } else {
@@ -293,7 +300,7 @@
                                                         placeholder="Seleziona la Lista"
 
                                                 <?php foreach ($template as $templates): ?>
-                                                    <option <?php if ($templates->id == $collectCartAbandonedEmailParam[1]['secondTemplateId']) echo 'selected="selected"'; ?>
+                                                    <option <?php if ($templates->id == $cartAbandonedEmailParam->secondTemplateId) echo 'selected="selected"'; ?>
                                                             value="<?php echo $templates->id ?>"> <?php echo $templates->name; ?></option>
                                                 <?php endforeach; ?>>
                                                 </select>
@@ -305,7 +312,7 @@
                                                 <input id="secondTimeEmailSendDay" class="form-control"
                                                        placeholder="Inserisci dopo quanti giorni deve essere inviata la  secondas mail"
                                                        name="secondTimeEmailSendDay" required="required"
-                                                       value="<?php echo $collectCartAbandonedEmailParam[1]['secondTimeEmailSendDay']; ?>">
+                                                       value="<?php echo $cartAbandonedEmailParam->secondTimeEmailSendDay; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -314,7 +321,7 @@
                                                 <input id="secondTimeEmailSendHour" class="form-control"
                                                        placeholder="Inserisci dopo quante ore deve essere inviata la  seconda mail name="
                                                        secondTimeEmailSendHour" required="required"
-                                                value="<?php echo $collectCartAbandonedEmailParam[1]['secondTimeEmailSendDay']; ?>
+                                                value="<?php echo $cartAbandonedEmailParam->secondTimeEmailSendDay; ?>
                                                 ">
                                             </div>
                                         </div>
@@ -324,7 +331,7 @@
                                                 <select id="generateCoupon2" name="generateCoupon2"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
-                                                <?php if ($collectCartAbandonedEmailParam[2]['couponTypeId'] != 0) {
+                                                <?php if ($cartAbandonedEmailParam->coupon2TypeId != 0) {
                                                     $selectedYes2 = "selected=\"selected\"";
                                                     $selectedNo2 = "";
                                                 } else {
@@ -356,7 +363,7 @@
                                                         placeholder="Seleziona la Lista"
 
                                                 <?php foreach ($template as $templates): ?>
-                                                    <option <?php if ($templates->id == $collectCartAbandonedEmailParam[1]['thirdTemplateId']) echo 'selected="selected"'; ?>
+                                                    <option <?php if ($templates->id == $cartAbandonedEmailParam->thirdTemplateId) echo 'selected="selected"'; ?>
                                                             value="<?php echo $templates->id ?>"> <?php echo $templates->name; ?></option>
                                                 <?php endforeach; ?>>
                                                 </select>
@@ -368,7 +375,7 @@
                                                 <input id="thirdTimeEmailSendDay" class="form-control"
                                                        placeholder="Inserisci dopo quanti giorni deve essere inviata la terza mail"
                                                        name="thirdTimeEmailSendDay" required="required"
-                                                       value="<?php echo $collectCartAbandonedEmailParam[1]['thirdTimeEmailSendDay']; ?>">
+                                                       value="<?php echo $cartAbandonedEmailParam->thirdTimeEmailSendDay; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -377,7 +384,7 @@
                                                 <input id="thirdTimeEmailSendHour" class="form-control"
                                                        placeholder="Inserisci dopo quante ore deve essere inviata la  terza mail name="
                                                        thirdTimeEmailSendHour" required="required"
-                                                value="<?php echo $collectCartAbandonedEmailParam[1]['thirdTimeEmailSendHour']; ?>
+                                                value="<?php echo $cartAbandonedEmailParam->thirdTimeEmailSendHour; ?>
                                                 ">
                                             </div>
                                         </div>
@@ -387,7 +394,7 @@
                                                 <select id="generateCoupon3" name="generateCoupon3"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
-                                                <?php if ($collectCartAbandonedEmailParam[3]['couponTypeId'] != 0) {
+                                                <?php if ($cartAbandonedEmailParam->coupon3TypeId!= 0) {
                                                     $selectedYes3 = "selected=\"selected\"";
                                                     $selectedNo3 = "";
                                                 } else {

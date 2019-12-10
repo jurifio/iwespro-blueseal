@@ -33,6 +33,18 @@
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="shopId">Seleziona lo shop su cui applicare al Regola</label>
+                                                <select id="shopId" name="shopId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="firstTemplateId">Seleziona Il Template da Utilizzare per il
@@ -117,7 +129,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="generateCoupon2">Vuoi Genera il Coupon per il Secondo Invio</label>
+                                                <label for="generateCoupon2">Vuoi Generare il Coupon per il Secondo Invio</label>
                                                 <select id="generateCoupon2" name="generateCoupon2"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona"
@@ -168,7 +180,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="generateCoupon3">Vuoi Genera il Coupon per il Terzo Invio</label>
+                                                <label for="generateCoupon3">Vuoi Generare il Coupon per il Terzo Invio</label>
                                                 <select id="generateCoupon3" name="generateCoupon3"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"

@@ -49,6 +49,9 @@ FROM CartAbandonedEmailParam C
         $datatable->doAllTheThings(true);
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
+            $val = \Monkey ::app() -> repoFactory -> create('CartAbandonedEmailParam') -> findOneBy($row);
+            $row['DT_RowId'] = $val -> printId();
+            $row['id'] = '<a href="/blueseal/cartabandoned/edit-plan/' . $val -> printId() . '">' . $val -> printId() . '</a>';
 
 
 

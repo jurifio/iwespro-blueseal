@@ -2,6 +2,24 @@ $.ajax({
     method:'GET',
     url: '/blueseal/xhr/GetTableContent',
     data: {
+        table: 'Shop',
+        condition :{hasEcommerce:1}
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#shopId');
+    if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        options: res2,
+    });
+});
+$.ajax({
+    method:'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
         table: 'NewsletterTemplate',
 
     },
@@ -391,7 +409,9 @@ $(document).on('bs.newPlanSendEmail.save', function () {
         var hasFreeReturn =$('#freeReturn').val();
         var hasFreeReturn2 =$('#freeReturn2').val();
         var hasFreeReturn3 =$('#freeReturn3').val();
+        var shopId=$('#shopId').val();
         const data = {
+            shopId:shopId,
             generateCoupon:generateCoupon,
             generateCoupon2:generateCoupon2,
             generateCoupon3:generateCoupon3,
