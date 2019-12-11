@@ -450,6 +450,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $cartLineInsert -> productSizeId = $rowCartLineOrder['productSizeId'];
                             $cartLineInsert -> remoteCartLineSellerId = $rowCartLineOrder['remoteCartLineSellerId'];
                             $cartLineInsert -> remoteShopSellerId = $shop;
+                            $cartLineInsert ->remoteCartSellerId=$rowCartLineOrder['remoteCartId'];
                             $cartLineInsert -> insert();
 
                         }
