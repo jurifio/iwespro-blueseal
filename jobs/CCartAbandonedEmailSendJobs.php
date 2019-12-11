@@ -55,7 +55,7 @@ class CCartAbandonedEmailSendJobs extends ACronJob
   C.remoteShopSellerId                                   as remoteShopSellerId
 FROM Cart C 
 WHERE C.userId <>''
-      AND C.cartTypeId = 1 AND creationDate > (NOW()- INTERVAL 7 DAY) AND C.couponId IS NULL 
+      AND C.cartTypeId IN(1,2) AND creationDate > (NOW()- INTERVAL 7 DAY) AND C.couponId IS NULL 
 GROUP BY C.id";
 //estraggo tutti i carrelli abbandonati
         /** @var CCartRepo $cartRepo */
@@ -71,7 +71,7 @@ GROUP BY C.id";
 
             $cartDate = new \DateTime($cartDate);
             $defDate = $cartDate->format('Y-m-d H:i:s');
-            $remoteShopSellerId = $cart->shopId;
+            $remoteShopSellerId = $cart->remoteShopSellerId;
 
 
 //seleziono tutti i parametri per la generazione delle email

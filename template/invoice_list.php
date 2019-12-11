@@ -16,12 +16,21 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed">
-
                     </div>
                 </div>
             </div>
 
+
+
+
             <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <?php foreach ($shopsList as $shopList ){
+                            echo '<b>Sezionali</b>  :'.$shopList->name. ' <b>fatture intracee:</b> '.$shopList->invoiceUe.' <b>ricevute:</b> '.$shopList->receipt.' <b>fatture extracee:</b> '.$shopList->invoiceExtraUe.'<br>';
+                        }?>
+                    </div>
+                </div>
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
@@ -37,37 +46,33 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">id
                                 </th>
-                                <th data-slug="invoiceType"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">invoiceType
-                                </th>
-                                <th data-slug="invoiceSiteChar"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">invoice Sito
-                                </th>
-                                <th data-slug="invoiceNumber"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero Fattura
-                                </th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc"
                                     class="center dataFilterType">Data Fattura
                                 </th>
+                                <th data-slug="invoiceShopId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop
+                                </th>
+                                <th data-slug="invoiceType"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Sezionale
+                                </th>
+                                <th data-slug="invoiceNumber"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Fattura/Ricevuta
+                                </th>
                                 <th data-slug="orderId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Numero Ordine
+                                    data-orderable="true" class="center">Ordine
                                 </th>
                                 <th data-slug="customerName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cliente
                                 </th>
 
-                                <th data-slug="invoiceShopId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shop
-                                </th>
                             </tr>
                             </thead>
                             <tbody>

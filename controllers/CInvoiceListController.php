@@ -23,6 +23,7 @@ class CInvoiceListController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/invoice_list.php');
 
         $permission = \Monkey::app()->getUser()->hasPermission('allShops');
+        $shopsList=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
 
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
@@ -37,6 +38,7 @@ class CInvoiceListController extends ARestrictedAccessRootController
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
+            'shopsList'=>$shopsList,
             'sidebar' => $this->sidebar->build(),
             'permission' => $permission
         ]);

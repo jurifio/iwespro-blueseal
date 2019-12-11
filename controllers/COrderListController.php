@@ -27,7 +27,7 @@ class COrderListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/order_list.php');
-
+        $shopsList=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $pageURL = $blueseal."orders";
@@ -40,6 +40,7 @@ class COrderListController extends ARestrictedAccessRootController
             'pageURL' =>$pageURL,
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
+            'shopsList'=>$shopsList,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);

@@ -32,8 +32,15 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 toolbar-container">
+            <div class="col-md-8 toolbar-container">
                 <div class="bs-toolbar"></div>
+            </div>
+            <div class="col-md-4 toolbar-container">
+                <div><?php foreach ($shopsList as $shopList ){
+                    echo '<b>Sezionali</b>  :'.$shopList->name. ' <b>fatture intracee:</b> '.$shopList->invoiceUe.' <b>ricevute:</b> '.$shopList->receipt.' <b>fatture extracee:</b> '.$shopList->invoiceExtraUe.'<br>';
+                }?>
+
+                </div>
             </div>
         </div>
     </div>

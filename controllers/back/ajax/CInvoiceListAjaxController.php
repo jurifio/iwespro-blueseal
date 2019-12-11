@@ -51,7 +51,6 @@ class CInvoiceListAjaxController extends AAjaxController
                 $row['DT_RowId'] = $val->printId();
                 $row['id'] = '<a href="/blueseal/fatture/modifica/' . $val -> printId() . '">' . $val -> printId() . '</a>';
                 $row['invoiceYear']=$val->invoiceYear;
-                $row['invoiceSiteChar']=$val->invoiceSiteChar;
                 $row['invoiceType']=$val->invoiceType;
                 $row['invoiceNumber']=$val->invoiceNumber;
                 $row['invoiceDate']=$val->invoiceDate;
