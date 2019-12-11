@@ -287,6 +287,9 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
             $typeCoupon = $data['typeCoupon'];
             $amount = $data['amount'];
             $validity = $data['validity'];
+            
+
+
             $validForCartTotal = $data['validForCartTotal'];
             $hasFreeShipping = $data['hasFreeShipping'];
             $hasFreeReturn = $data['hasFreeReturn'];
