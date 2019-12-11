@@ -28,7 +28,7 @@ use bamboo\domain\entities\CUser;
 use PDOException;
 
 /**
- * Class CAlignPickySiteOrderPaymentsJob
+ * Class CAlignRemoteIwesOrderIdToFrontJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -37,10 +37,10 @@ use PDOException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 18/09/2019
+ * @date 11/12/2019
  * @since 1.0
  */
-class CAlignPickySiteOrderPaymentsJob extends ACronJob
+class CAlignRemoteIwesOrderIdToFrontJob extends ACronJob
 {
 
     /**
