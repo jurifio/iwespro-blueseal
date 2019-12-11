@@ -115,7 +115,11 @@ $("#generateCoupon").change(function () {
                                                           <option value=""></option>
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
-                                                <option value="P7D">Una settimana</option>
+                                                <option value="P7D">Una settimana</option> 
+                                                <option value="P3D">3 Giorni</option>
+                                                <option value="P14D">14 Giorni</option>
+                                                
+                                                
                                                 
                                                 </select>
                                             </div>
@@ -215,6 +219,8 @@ $("#generateCoupon2").change(function () {
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
+                                                <option value="P3D">3 Giorni</option>
+                                                <option value="P14D">14 Giorni</option>
                                                
                                                 </select>
                                             </div>
@@ -314,6 +320,8 @@ $("#generateCoupon3").change(function () {
                                                 <option value="P1Y">Un Anno</option>
                                                 <option value="P1M">Un Mese</option>
                                                 <option value="P7D">Una settimana</option>
+                                                <option value="P3D">3 Giorni</option>
+                                                <option value="P14D">14 Giorni</option>
                                                 
                                                 </select>
                                             </div>

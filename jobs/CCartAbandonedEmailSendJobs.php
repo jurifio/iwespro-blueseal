@@ -123,6 +123,7 @@ GROUP BY C.id";
                 $thirdTimeEmailSendHour = $cartAbandonedEmailParam->thirdTimeEmailSendHour;
                 $couponTypeId = $cartAbandonedEmailParam->couponTypeId;
                 $selectMailCouponSend = $cartAbandonedEmailParam->selectMailCouponSend;
+                $shopId=$cartAbandonedEmailParam->shopId;
                 /* @var CCartAbandonedSendEmailIfExist $cartAbandonedSendEmailIfExist */
                 $cartAbandonedSendEmailIfExist = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId' => $cartId, 'couponTypeId' => $couponTypeId]);
                 if (empty($cartAbandonedSendEmailIfExist)) {
