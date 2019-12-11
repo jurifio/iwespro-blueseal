@@ -43,7 +43,7 @@ class CAlignRemoteCartIdToCartLine extends ACronJob
      */
     public function run($args = null)
     {
-        $this->alignCartLine();
+        $this -> alignCartLine();
     }
 
     /**
@@ -56,13 +56,12 @@ class CAlignRemoteCartIdToCartLine extends ACronJob
     {
 
         set_time_limit(0);
-        ini_set('memory_limit','2048M');
+        ini_set('memory_limit', '2048M');
 
         $res = "";
-        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
-        $orderRepo = \Monkey::app()->repoFactory->create('Order');
-        $cartRepo=\Monkey::app()->repoFactory->create('Order');
-        $cartLineRepo=\Monkey::app()->repoFactory->create('OrdeLine');
+        $shopRepo = \Monkey ::app() -> repoFactory -> create('Shop') -> findBy(['hasEcommerce' => 1]);
+        $cartRepo = \Monkey ::app() -> repoFactory -> create('Cart');
+        $cartLineRepo = \Monkey ::app() -> repoFactory -> create('CartLine');
         foreach ($shopRepo as $value) {
             $this -> report('Start ImportOrder From PickySite ', 'Shop To Import' . $value -> name);
             /********marketplace********/
@@ -82,22 +81,18 @@ class CAlignRemoteCartIdToCartLine extends ACronJob
 
             $carts = $cartRepo -> findBy(['remoteShopSellerId' => $shop]);
             foreach ($carts as $cart) {
-                $stmtSelectCartLine = $db_con -> prepare("select id, productId,productVariantId,productSizeId  from CartLine where cartId=" . $cart -> remoteCartSellerId . " and isParallel is null");
+                if($shop!=44) {
+                    $stmtSelectCartLine = $db_con -> prepare("select id, productId,productVariantId,productSizeId  from CartLine where cartId=" . $cart -> remoteCartSellerId . " and isParallel is null");
+                }else{
+                    $stmtSelectCartLine = $db_con -> prepare("select id, productId,productVariantId,productSizeId  from CartLine where cartId=" . $cart -> remoteCartSellerId);
+                }
                 $stmtSelectCartLine -> execute();
                 while ($rowSelectCartLine = $stmtSelectCartLine -> fetch(PDO::FETCH_ASSOC)) {
                     $cartLine = $cartLineRepo -> findOneBy(['productId' => $rowSelectCartLine['productId'],
                         'productVariantId' => $rowSelectCartLine['productVariantId'],
                         'productSizeId' => $rowSelectCartLine['productSizeId'],
                         'cartId' => $cart -> id, 'remoteShopSellerId' => $shop]);
-                    if ($cartLine == null) {
-                        $cartLineInsert = \Monkey ::app() -> repoFactory -> create('CartLine') -> getEmptyEntity();
-                        $cartLineInsert -> productId = $rowSelectCartLine['productId'];
-                        $cartLineInsert -> productVariantId = $rowSelectCartLine['productVariantId'];
-                        $cartLineInsert -> productSizeId = $rowSelectCartLine['productSizeId'];
-                        $cartLineInsert -> remoteCartLineSellerId = $rowSelectCartLine['id'];
-                        $cartLineInsert -> remoteCartSellerId = $cart -> remoteCartSellerId;
-                        $cartLineInsert -> insert();
-                    } else {
+                    if ($cartLine != null) {
                         $cartLine -> remoteCartSellerId = $cart -> remoteCartSellerId;
                         $cartLine -> update();
 
