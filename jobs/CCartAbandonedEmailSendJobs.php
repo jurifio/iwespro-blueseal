@@ -132,6 +132,13 @@ GROUP BY C.id";
 // se non esiste controllo su quale fase si trova
                     // se non esiste la inserisco e e la setto con la fase 0
                     // se esiste invece controllo la relativa fase ed eseguo le operazioni di invio e aggiornamento tabella e popolamento template
+                    /*nello specifico seleziono tutti carelli con fase 0
+                    prendo i prodotti del carrello
+                    prendo l'utente e la mail
+                    genero il coupon se è previsto  in questa fase
+                    controllo se oggi si trova nella data prestabilita per l'invio e compila il coupon
+
+                    */
                     if ($couponTypeId <> '0') {
                         /** var CCouponType $couponType */
                         $couponType = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id' => $couponTypeId]);
