@@ -121,13 +121,17 @@ GROUP BY C.id";
                 $thirdEmailTemplate = $cartAbandonedEmailParam->thirdEmailTemplate;
                 $thirdTimeEmailSendDay = $cartAbandonedEmailParam->thirdTimeEmailSendDay;
                 $thirdTimeEmailSendHour = $cartAbandonedEmailParam->thirdTimeEmailSendHour;
-                $couponTypeId = $cartAbandonedEmailParam->couponTypeId;
+                $coupon1TypeId = $cartAbandonedEmailParam->coupon1TypeId;
+                $coupon2TypeId = $cartAbandonedEmailParam->coupon2TypeId;
+                $coupon3TypeId = $cartAbandonedEmailParam->coupon3TypeId;
                 $selectMailCouponSend = $cartAbandonedEmailParam->selectMailCouponSend;
                 $shopId=$cartAbandonedEmailParam->shopId;
                 /* @var CCartAbandonedSendEmailIfExist $cartAbandonedSendEmailIfExist */
                 $cartAbandonedSendEmailIfExist = \Monkey::app()->repoFactory->create('CartAbandonedEmailSend')->findOneBy(['cartId' => $cartId, 'couponTypeId' => $couponTypeId]);
                 if (empty($cartAbandonedSendEmailIfExist)) {
-
+// se non esiste controllo su quale fase si trova
+                    // se non esiste la inserisco e e la setto con la fase 0
+                    // se esiste invece controllo la relativa fase ed eseguo le operazioni di invio e aggiornamento tabella e popolamento template
                     if ($couponTypeId <> '0') {
                         /** var CCouponType $couponType */
                         $couponType = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id' => $couponTypeId]);
