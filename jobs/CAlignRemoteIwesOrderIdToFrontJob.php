@@ -91,7 +91,7 @@ class CAlignRemoteIwesOrderIdToFrontJob extends ACronJob
             foreach ($orders as $order) {
                 try {
                     $stmtUpdateRemoteOrder = $db_con->prepare('UPDATE `Order`set remoteIwesOrderId=' . $order->id . ' WHERE 
-                remoteOrderSellerId=' . $order->remoteOrderSellerId);
+                id=' . $order->remoteOrderSellerId);
                     $stmtUpdateRemoteOrder->execute();
                 } catch (\Throwable $e) {
                     \Monkey::app()->applicationLog('CAlignRemoteIwesOrderIdToFrontJob','error','Insert remoteIwesOrderId',$e,'');
