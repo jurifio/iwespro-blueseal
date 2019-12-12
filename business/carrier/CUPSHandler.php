@@ -200,11 +200,31 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     public function addDelivery(CShipment $shipment)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
-       $orderLineHasShipments=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBY(['shipmentId'=>$shipment->id]);
+       $orderLineHasShipments=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
+        $valuePrice=0;
        if($orderLineHasShipments!=null) {
            $orderId = $orderLineHasShipments->orderId;
            }
+        foreach ($shipment->orderLine as $orderLine) {
+            $orders[] = $orderLine->printId();
+            $valuePrice+=$orderLine->netPrice;
+        }
        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
+        if($findOrder->orderPaymentMethodId==5){
+
+            $shipmentServiceOptions=[
+                'COD'=>[
+                    'CODAmount'=>[
+                        'MonetaryValue'=>$valuePrice,
+                        'CurrencyCode'=>'EUR'
+                    ]
+                ]
+            ];
+
+        }else{
+            $shipmentServiceOptions='';
+        }
+
 
 
 
@@ -276,6 +296,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                         ]
                     ],
                     'Service' => $service,
+                    'ShipMentServiceOptions'=>$shipmentServiceOptions,
                     'Package' => [
                         'Description' => 'Scatola di Cartone',
                         'Packaging' => [

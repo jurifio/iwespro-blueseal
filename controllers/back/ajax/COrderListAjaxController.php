@@ -139,233 +139,241 @@ class COrderListAjaxController extends AAjaxController
         /** @var COrder $val */
         foreach ($orders as $val) {
             $row = [];
-
-            $row['marketplaceOrderId'] = $val->marketplaceOrderId;
-            if ($val->marketplaceId != null) {
-                $findMarketplace = $markeplaceRepo->findOneBy(['prestashopId' => $val->marketplaceId]);
-                $row['marketplaceName'] = $findMarketplace->name;
-            } else {
-                $row['marketplaceName'] = " ";
+            if(!$perm) {
+                if ($val->status == 'ORD_PENDING' || $val->status == 'ORD_WAIT') {
+                    continue;
+                }
             }
-            /*  if( $val->markeplaceOrderId =='') {
-                  $row['marketplaceOrderId'] = 'No';
-              }*/
-            /** ciclo le righe */
-            $row['supplier'] = "";
-            $row["product"] = "";
-            $alert = false;
-            $orderParal = '';
-            // $remoteOrderSupplierId = '';
-            // $remoteShopSupplier = '';
-            $rowOrderSupplier="";
-            foreach ($val->orderLine as $line) {
-                if ($line->remoteShopSellerId != 44 && $line->remoteShopSellerId != '') {
-                    if ($line->remoteShopSellerId != $line->shopId) {
-                        $orderParal = 'Si';
-                        //    $remoteOrderSupplierId = $line->remoteOrderSupplierId;
+
+
+                $row['marketplaceOrderId'] = $val->marketplaceOrderId;
+                if ($val->marketplaceId != null) {
+                    $findMarketplace = $markeplaceRepo->findOneBy(['prestashopId' => $val->marketplaceId]);
+                    $row['marketplaceName'] = $findMarketplace->name;
+                } else {
+                    $row['marketplaceName'] = " ";
+                }
+                /*  if( $val->markeplaceOrderId =='') {
+                      $row['marketplaceOrderId'] = 'No';
+                  }*/
+                /** ciclo le righe */
+                $row['supplier'] = "";
+                $row["product"] = "";
+                $alert = false;
+                $orderParal = '';
+                // $remoteOrderSupplierId = '';
+                // $remoteShopSupplier = '';
+                $rowOrderSupplier = "";
+                foreach ($val->orderLine as $line) {
+                    if ($line->remoteShopSellerId != 44 && $line->remoteShopSellerId != '') {
+                        if ($line->remoteShopSellerId != $line->shopId) {
+                            $orderParal = 'Si';
+                            //    $remoteOrderSupplierId = $line->remoteOrderSupplierId;
+                        }
+                    } else {
+                        $orderParal = 'No';
+                        //    $remoteOrderSupplierId = '';
+                    }
+
+                    try {
+
+                        /** @var CProductSku $sku */
+                        //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
+
+                        $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $line->productId,'productVariantId' => $line->productVariantId,'productSizeId' => $line->productSizeId]);
+                        //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
+                        if (!is_null($line->remoteOrderSupplierId)) {
+                            $supplier = $sku->shop->name;
+                        } else {
+                            $supplier = '';
+                        }
+
+                        $code = "spedisce " . $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
+                        if ($line->orderLineStatus->notify === 1) $alert = true;
+                        $skuParalId = $line->productId;
+
+
+                        $skupParalVariantId = $line->productVariantId;
+                        $skuParalSizeId = $line->productSizeId;
+                        $skuParalShopId = $line->shopId;
+                        $skuParal = $val->remoteShopSellerId;
+
+
+                    } catch (\Throwable $e) {
+                        $code = 'non trovato';
+                    }
+                    $rowOrderSupplier .= $line->remoteOrderSupplierId;
+
+                    $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: " . $sku->productSize->name . "</span>";
+                    $row["product"] .= "<br/>";
+                    $row["product"] .= "<b>" . $supplier . " - " . $line->remoteOrderSupplierId . "<b><br />";
+                    $shipmentCollect = "";
+                    $findOrderLineHasShipment = \Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId' => $line->id,'orderId' => $line->orderId]);
+                    foreach ($findOrderLineHasShipment as $shipment) {
+                        $findShipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id' => $shipment->shipmentId]);
+                        $findCarrier = \Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id' => $findShipment->carrierId]);
+                        if ($findShipment->deliveryDate != null && $findShipment->shipmentDate != null) {
+                            $btnclass = 'btn btn-success';
+                        } else if ($findShipment->deliveryDate == null && $findShipment->shipmentDate != null) {
+                            $btnclass = 'btn btn-warning';
+                        } else {
+                            $btnclass = 'btn btn-light';
+                        }
+                        //https://www.gls-italy.com/index.php?option=com_gls&task=track_e_trace.getSpedizioneWeblabeling&format=raw&cn=MC1108&rf=MC590355157&lc=ita
+                        if ($findShipment->carrierId == 2) {
+                            $shipmentCollect .= '<button style="width: 200px ; height:32px;"  onclick="openTrackGlsDelivery(\'' . $findShipment->trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier->name . '</button><br>' . $findShipment->trackingNumber . '<br><b>Id Spedizione: </b>' . $findShipment->id . '<br>';
+                        } else {
+                            $shipmentCollect .= '<button style="width: 200px ; height:32px;"  onclick="openTrackDelivery(\'' . $findShipment->trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier->name . '</button><br>' . $findShipment->trackingNumber . '<br><b>Id Spedizione: </b>' . $findShipment->id . '<br>';
+                            //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
+                        }
+                    }
+                    $row['shipmentId'] = $shipmentCollect;
+
+                }
+                $row["orderParal"] = $orderParal;
+
+                $orderDate = date("d-m-y H:i",strtotime($val->orderDate));
+                $paidAmount = ($val->paidAmount) ? $val->paidAmount : 0;
+                if ($val->lastUpdate != null) {
+                    $timestamp = time() - strtotime($val->lastUpdate);
+                    $day = date("z",$timestamp);
+                    $h = date("H",$timestamp);
+                    $m = date("i",$timestamp);
+                    $since = $day . ' giorni ' . $h . ":" . $m . " fa";
+                }
+                $row["DT_RowId"] = $val->id;
+
+                $shopFind = $shopRepo->findOneBy(['id' => $val->remoteShopSellerId]);
+
+                if ($shopFind == null) {
+
+                    $sellerShopName = 'Pickyshop';
+                } else {
+                    if ($val->remoteShopSellerId == 44) {
+                        $sellerShopName = 'Pickyshop';
+                    } else {
+                        $sellerShopName = $shopFind->title;
+                    }
+                }
+                if ($perm) {
+                    $paid = ($paidAmount) ? 'Pagato' : 'Non Pagato';
+                    $row["id"] = '<a href="' . $opera . $val->id . '">H-' . $val->id . '</a><br/><b>' . $orderParal . '</b><br/><b><span style=\'color:' . $colorStatus[$val->status] . '\'>' . $val->orderStatus->orderStatusTranslation->getFirst()->title . '</span></b><br/><b>' . $paid . '<b><br />';
+                    if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
+                } else {
+                    $row["id"] = $val->id;
+                }
+
+                $row["orderDate"] = $orderDate;
+                $row["lastUpdate"] = isset($since) ? $since : "Mai";
+
+                $row["user"] =
+                    '<a href="/blueseal/utente?userId=' . $val->user->printId() . '"><span>' . $val->user->getFullName()
+                    . '</span><br /><span>' . $val->user->email . '</span></a>';
+                if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
+                    $row["user"] .= '<i class="fa fa-diamond"></i>';
+                } elseif (!empty($val->user->userDetails->note)) {
+                    $row["user"] .= '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>';
+                }
+                try {
+                    //TODO CHECK THIS WROOOONG
+                    $row['user'] .= '<br />' . $val->billingAddress->country->name;
+                    $row['user'] .= '<br><button onclick="openTrackEmail(\'' . $val->id . '\');" class="btn btn-light" role="button"><i class="fa fa-envelope" aria-hidden="true"></i> Comunicazioni</button>';
+                } catch (\Throwable $e) {
+
+                }
+
+                $row['user'] .= '<br/><b>' . $sellerShopName . ' - ' . $val->remoteOrderSellerId . '</b> ';
+
+
+                $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
+
+                $netTotal = SPriceToolbox::formatToEur($val->netTotal);
+                $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . "</span>" : $netTotal;
+                if ($val->paymentDate == null) {
+                    $paymentDate = '';
+                } else {
+                    $pamentDate = $val->paymentDate;
+                }
+                $row["paymentDate"] = $val->paymentDate;
+                $row["payment"] = $val->orderPaymentMethod->name;
+                $row["notes"] = wordwrap($val->note,50,'</br>');
+                $userDetails = $val->user->userDetails;
+                $note = ($userDetails) ? wordwrap($val->user->userDetails->note,50,'</br>') : '-';
+                $row["userNote"] = $note;
+                $row["orderSources"] = [];
+                foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder) {
+                    $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name . ' - ' . $campaignVisitHasOrder->campaignVisit->timestamp . ' - ' . $campaignVisitHasOrder->campaignVisit->cost . '€';
+                }
+                $row["orderSources"] = implode(',<br>',$row["orderSources"]);
+
+                $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
+                $row["invoice"] = "<b>Seller->Customer:       </b>";
+                if ($findInvoiceSeller != null) {
+                    foreach ($findInvoiceSeller as $invoiceSeller) {
+                        $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
                     }
                 } else {
-                    $orderParal = 'No';
-                    //    $remoteOrderSupplierId = '';
+                    $row["invoice"] .= "<br/>";
                 }
 
-                try {
-
-                    /** @var CProductSku $sku */
-                    //        $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
-
-                    $sku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $line->productId,'productVariantId' => $line->productVariantId,'productSizeId' => $line->productSizeId]);
-                    //$sku->setEntityManager($this->app->entityManagerFactory->create('ProductSku'));
-                    if (!is_null($line->remoteOrderSupplierId)) {
-                        $supplier = $sku->shop->name;
-                    } else {
-                        $supplier = '';
+                $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id]);
+                $row['invoice'] .= "</br><b>Supplier->Iwes:     </b>";
+                if ($findInvoiceSupplier != null) {
+                    foreach ($findInvoiceSupplier as $invoicesSupplier) {
+                        if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
+                            $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
+                        }
                     }
-
-                    $code = "spedisce " . $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
-                    if ($line->orderLineStatus->notify === 1) $alert = true;
-                    $skuParalId = $line->productId;
-
-
-                    $skupParalVariantId = $line->productVariantId;
-                    $skuParalSizeId = $line->productSizeId;
-                    $skuParalShopId = $line->shopId;
-                    $skuParal = $val->remoteShopSellerId;
-
-
-                } catch (\Throwable $e) {
-                    $code = 'non trovato';
+                } else {
+                    $row['invoice'] .= "<br>";
                 }
-                $rowOrderSupplier.=$line->remoteOrderSupplierId;
-
-                $row["product"] .= "<span style='color:" . $colorLineStatus[$line->status] . "'>" . $code . " - " . $plainLineStatuses[$line->status] . "</br>Taglia: " . $sku->productSize->name . "</span>";
-                $row["product"] .= "<br/>";
-                $row["product"] .=  "<b>".$supplier." - ".$line->remoteOrderSupplierId."<b><br />";
-                $shipmentCollect="";
-            $findOrderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId'=>$line->id,'orderId'=>$line->orderId]);
-                foreach($findOrderLineHasShipment as $shipment){
-                    $findShipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id'=>$shipment->shipmentId]);
-                    $findCarrier=\Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id'=>$findShipment->carrierId]);
-                    if($findShipment->deliveryDate!=null && $findShipment->shipmentDate !=null){
-                        $btnclass='btn btn-success';
-                    }else if($findShipment->deliveryDate==null && $findShipment->shipmentDate !=null){
-                        $btnclass='btn btn-warning';
-                    }else{
-                        $btnclass='btn btn-light';
-                    }
-                    //https://www.gls-italy.com/index.php?option=com_gls&task=track_e_trace.getSpedizioneWeblabeling&format=raw&cn=MC1108&rf=MC590355157&lc=ita
-                    if($findShipment->carrierId==2){
-                        $shipmentCollect .= '<button style="width: 200px ; height:32px;"  onclick="openTrackGlsDelivery(\'' . $findShipment -> trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier -> name . '</button><br>' . $findShipment -> trackingNumber . '<br><b>Id Spedizione: </b>' . $findShipment -> id . '<br>';
-                    }else {
-                        $shipmentCollect .= '<button style="width: 200px ; height:32px;"  onclick="openTrackDelivery(\'' . $findShipment -> trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier -> name . '</button><br>' . $findShipment -> trackingNumber . '<br><b>Id Spedizione: </b>' . $findShipment -> id . '<br>';
-                        //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
-                    }
+                $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
+                $row['invoice'] .= "<br/><b>Iwes->Seller: </b>";
+                if ($findInvoiceToSeller != null) {
+                    $row['invoice'] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
+                } else {
+                    $row['invoice'] .= "<br />";
                 }
-            $row['shipmentId']=$shipmentCollect;
 
-            }
-            $row["orderParal"] = $orderParal;
-
-            $orderDate = date("d-m-y H:i",strtotime($val->orderDate));
-            $paidAmount = ($val->paidAmount) ? $val->paidAmount : 0;
-            if ($val->lastUpdate != null) {
-                $timestamp = time() - strtotime($val->lastUpdate);
-                $day = date("z",$timestamp);
-                $h = date("H",$timestamp);
-                $m = date("i",$timestamp);
-                $since = $day . ' giorni ' . $h . ":" . $m . " fa";
-            }
-            $row["DT_RowId"] = $val->id;
-
-            $shopFind = $shopRepo->findOneBy(['id' => $val->remoteShopSellerId]);
-
-            if ($shopFind == null) {
-
-                $sellerShopName='Pickyshop';
-            } else {
-                if ($val->remoteShopSellerId == 44) {
-                    $sellerShopName='Pickyshop';
-                }else{
-                    $sellerShopName=$shopFind->title;
+                //  $row['shipmentId']=$val->shipmentId;
+                /** Get doc */
+                $fileName = "";
+                /** @var CInvoiceDocument $iD */
+                foreach ($val->invoiceDocument as $iD) {
+                    $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/" . $iD->id . "'>" . $iD->fileName . "</a></br>";
                 }
-            }
-            if ($perm) {
-                $paid = ($paidAmount) ? 'Pagato' : 'Non Pagato';
-                $row["id"] = '<a href="' . $opera . $val->id . '">H-' . $val->id . '</a><br/><b>'.$orderParal.'</b><br/><b><span style=\'color:' . $colorStatus[$val->status] . '\'>' . $val->orderStatus->orderStatusTranslation->getFirst()->title . '</span></b><br/><b>'.$paid.'<b><br />';
-                if ($alert) $row["id"] .= " <i style=\"color:red\"class=\"fa fa-exclamation-triangle\"></i>";
-            } else {
-                $row["id"] = $val->id;
-            }
 
-            $row["orderDate"] = $orderDate;
-            $row["lastUpdate"] = isset($since) ? $since : "Mai";
+                $row["documents"] = $fileName;
 
-            $row["user"] =
-                '<a href="/blueseal/utente?userId=' . $val->user->printId() . '"><span>' . $val->user->getFullName()
-                . '</span><br /><span>'. $val->user->email . '</span></a>';
-            if (isset($val->user->rbacRole) && count($val->user->rbacRole) > 0) {
-                $row["user"] .= '<i class="fa fa-diamond"></i>';
-            } elseif (!empty($val->user->userDetails->note)) {
-                $row["user"] .= '<i class="fa fa-sticky-note-o" aria-hidden="true"></i>';
-            }
-            try {
-                //TODO CHECK THIS WROOOONG
-                $row['user'] .= '<br />' . $val->billingAddress->country->name;
-                $row['user'].='<br><button onclick="openTrackEmail(\''.$val->id.'\');" class="btn btn-light" role="button"><i class="fa fa-envelope" aria-hidden="true"></i> Comunicazioni</button>';
-            } catch (\Throwable $e) {
+                $addressOrder = '';
+                $address = CUserAddress::defrost($val->frozenShippingAddress);
+                $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
+                $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
 
-            }
+                $country = $countryR->findOneBy(['id' => $address->countryId]);
+                if ($country != null) {
+                    $countryName = $country->name;
 
-            $row['user'].='<br/><b>'.$sellerShopName .' - '. $val->remoteOrderSellerId .'</b> ';
-
-
-            $row["status"] = "<span style='color:" . $colorStatus[$val->status] . "'>" . $val->orderStatus->orderStatusTranslation->getFirst()->title . "</span>";
-
-            $netTotal = SPriceToolbox::formatToEur($val->netTotal);
-            $row["dareavere"] = (($val->netTotal !== $paidAmount) && ($val->orderPaymentMethodId !== 5)) ? "<span style='color:#FF0000'>" . $netTotal . "</span>" : $netTotal;
-            if($val->paymentDate==null){
-                $paymentDate='';
-            }else{
-                $pamentDate=$val->paymentDate;
-            }
-            $row["paymentDate"] = $val->paymentDate;
-            $row["payment"] = $val->orderPaymentMethod->name;
-            $row["notes"] = wordwrap($val->note,50,'</br>');
-            $userDetails = $val->user->userDetails;
-            $note = ($userDetails) ? wordwrap($val->user->userDetails->note,50,'</br>') : '-';
-            $row["userNote"] = $note;
-            $row["orderSources"] = [];
-            foreach ($val->campaignVisitHasOrder as $campaignVisitHasOrder) {
-                $row["orderSources"][] = $campaignVisitHasOrder->campaignVisit->campaign->name . ' - ' . $campaignVisitHasOrder->campaignVisit->timestamp . ' - ' . $campaignVisitHasOrder->campaignVisit->cost . '€';
-            }
-            $row["orderSources"] = implode(',<br>',$row["orderSources"]);
-
-            $findInvoiceSeller = $invoiceRepo->findBy(['orderId' => $val->id,'invoiceShopId' => $val->remoteShopSellerId]);
-            $row["invoice"]="<b>Seller->Customer:       </b>";
-            if ($findInvoiceSeller != null) {
-                foreach ($findInvoiceSeller as $invoiceSeller) {
-                    $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
+                } else {
+                    $countryName = '';
                 }
-            } else {
-                $row["invoice"] .= "<br/>";
-            }
-
-            $findInvoiceSupplier = $invoiceRepo->findBy(['orderId' => $val->id]);
-            $row['invoice'] .= "</br><b>Supplier->Iwes:     </b>";
-            if ($findInvoiceSupplier != null) {
-                foreach ($findInvoiceSupplier as $invoicesSupplier) {
-                    if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
-                        $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
-                    }
-                }
-            } else {
-                $row['invoice'] .= "<br>";
-            }
-            $findInvoiceToSeller = $invoiceRepo->findOneBy(['orderId' => $val->id,'invoiceShopId' => 44]);
-            $row['invoice'].="<br/><b>Iwes->Seller: </b>";
-            if ($findInvoiceToSeller != null) {
-                $row['invoice'] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $findInvoiceToSeller->id . "&invoiceShopId=44'>" . $findInvoiceToSeller->invoiceNumber . "/" . $findInvoiceToSeller->invoiceType . "</a><br />";
-            } else {
-                $row['invoice'] .= "<br />";
-            }
-
-          //  $row['shipmentId']=$val->shipmentId;
-            /** Get doc */
-            $fileName = "";
-            /** @var CInvoiceDocument $iD */
-            foreach ($val->invoiceDocument as $iD) {
-                $fileName .= "<a target='_blank' href='/blueseal/download-customer-documents/" . $iD->id . "'>" . $iD->fileName . "</a></br>";
-            }
-
-            $row["documents"] = $fileName;
-
-            $addressOrder = '';
-            $address = CUserAddress::defrost($val->frozenShippingAddress);
-            $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
-            $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
-
-            $country = $countryR->findOneBy(['id' => $address->countryId]);
-            if ($country != null) {
-                $countryName = $country->name;
-
-            } else {
-                $countryName = '';
-            }
-            $phone = is_null($address->phone) ? '---' : $address->phone;
-            $addressOrder .= "
+                $phone = is_null($address->phone) ? '---' : $address->phone;
+                $addressOrder .= "
              <span><strong>Destinatario: </strong>$address->name $address->surname</span><br>
              <span><strong>Indirizzo: </strong>$address->address</span><br>
              <span><strong>CAP: </strong>$address->postcode</span><br>
              <span><strong>Città: </strong>$address->city</span><br>
              <span><strong>Provincia: </strong>$address->province</span><br>
              <span><strong>Paese:</strong>";
-            $addressOrder .= $countryName . "</span><br>
+                $addressOrder .= $countryName . "</span><br>
              <span><strong>Telefono: </strong>$phone</span><br>";
 
-            $row["address"] = $addressOrder;
+                $row["address"] = $addressOrder;
 
-            $response['data'][] = $row;
-        }
+                $response['data'][] = $row;
+            }
+
+
         return json_encode($response);
     }
 
