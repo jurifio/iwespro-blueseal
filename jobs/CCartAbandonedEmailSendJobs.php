@@ -343,28 +343,36 @@ GROUP BY C.id";
                                     $cartRow = $cartRow . $cartRowLine;
                                 }
                                 if ($coupon1TypeId != null) {
-                                    $couponTypeFind = \Monkey ::app() -> repoFactory -> create('CouponType') -> findOneBy(['id' => $coupon1TypeId]);
-                                    $amountType = $couponTypeFind -> amountType;
-                                    $amount = $couponTypeFind -> amount;
-                                    $hasFreeShipping = $couponTypeFind -> hasFreeShipping;
+                                    $couponTypeFind = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id' => $coupon1TypeId]);
+                                    $amountType = $couponTypeFind->amountType;
+                                    $amount = $couponTypeFind->amount;
+                                    $hasFreeShipping = $couponTypeFind->hasFreeShipping;
                                     if ($hasFreeShipping == "1") {
-                                        $cartTotalAmount = number_format($cartAmount, 2) . " + SPEDIZIONE GRATUITA";
+                                        $cartTotalAmount = number_format($cartAmount,2) . " + SPEDIZIONE GRATUITA";
                                     } else {
-                                        $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
+                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
                                     }
-                                    $couponFind = \Monkey ::app() -> repoFactory -> create('Coupon') -> findOneBy(['id' => $idCoupon]);
-                                    $code = $couponFind -> code;
-                                    if ($amountType == "P") {
-                                        $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
-                                    } else {
-                                        $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
-                                    }
-                                    $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
+                                    if ($idCoupon != null) {
+                                        $couponFind = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['id' => $idCoupon]);
+                                        $code = $couponFind->code;
+                                        if ($amountType == "P") {
+                                            $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
+                                        } else {
+                                            $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
+                                        }
+                                        $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                                    $cartAmount = number_format($cartAmount, 2);
-                                } else {
-                                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
-                                    $cartAmount = number_format($cartAmount, 2);
+                                        $cartAmount = number_format($cartAmount,2);
+                                    } else {
+                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                        $cartAmount = number_format($cartAmount,2);
+                                        $couponFirstRow = '';
+                                        $couponLastRow = '';
+                                        $code = '';
+                                    }
+                                }else{
+                                    $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                    $cartAmount = number_format($cartAmount,2);
                                     $couponFirstRow = '';
                                     $couponLastRow = '';
                                     $code = '';
@@ -541,19 +549,28 @@ GROUP BY C.id";
                                     } else {
                                         $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
                                     }
-                                    $couponFind = \Monkey ::app() -> repoFactory -> create('Coupon') -> findOneBy(['id' => $idCoupon]);
-                                    $code = $couponFind -> code;
-                                    if ($amountType == "P") {
-                                        $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
-                                    } else {
-                                        $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
-                                    }
-                                    $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                                    $cartAmount = number_format($cartAmount, 2);
-                                } else {
-                                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
-                                    $cartAmount = number_format($cartAmount, 2);
+                                    if ($idCoupon != null) {
+                                        $couponFind = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['id' => $idCoupon]);
+                                        $code = $couponFind->code;
+                                        if ($amountType == "P") {
+                                            $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
+                                        } else {
+                                            $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
+                                        }
+                                        $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
+
+                                        $cartAmount = number_format($cartAmount,2);
+                                    } else {
+                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                        $cartAmount = number_format($cartAmount,2);
+                                        $couponFirstRow = '';
+                                        $couponLastRow = '';
+                                        $code = '';
+                                    }
+                                }else{
+                                    $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                    $cartAmount = number_format($cartAmount,2);
                                     $couponFirstRow = '';
                                     $couponLastRow = '';
                                     $code = '';
@@ -729,19 +746,27 @@ GROUP BY C.id";
                                     } else {
                                         $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
                                     }
-                                    $couponFind = \Monkey ::app() -> repoFactory -> create('Coupon') -> findOneBy(['id' => $idCoupon]);
-                                    $code = $couponFind -> code;
-                                    if ($amountType == "P") {
-                                        $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
-                                    } else {
-                                        $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
-                                    }
-                                    $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
+                                    if ($idCoupon != null) {
+                                        $couponFind = \Monkey::app()->repoFactory->create('Coupon')->findOneBy(['id' => $idCoupon]);
+                                        $code = $couponFind->code;
+                                        if ($amountType == "P") {
+                                            $couponFirstRow = "Abbiamo riservato Per TE un Coupon del " . $amount . "% di sconto che potrai utilizzare per completare l'ordine!";
+                                        } else {
+                                            $couponFirstRow = "Abbiamo riservato Per TE un Coupon del valore di " . $amount . "€ di  sconto che potrai utilizzare per completare l'ordine!";
+                                        }
+                                        $couponLastRow = "Inserisci il coupon nell'area riservata del tuo carrello.";
 
-                                    $cartAmount = number_format($cartAmount, 2);
-                                } else {
-                                    $cartTotalAmount = number_format($cartAmount, 2) . "+ SPESE SPEDIZIONE";
-                                    $cartAmount = number_format($cartAmount, 2);
+                                        $cartAmount = number_format($cartAmount,2);
+                                    } else {
+                                        $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                        $cartAmount = number_format($cartAmount,2);
+                                        $couponFirstRow = '';
+                                        $couponLastRow = '';
+                                        $code = '';
+                                    }
+                                }else{
+                                    $cartTotalAmount = number_format($cartAmount,2) . "+ SPESE SPEDIZIONE";
+                                    $cartAmount = number_format($cartAmount,2);
                                     $couponFirstRow = '';
                                     $couponLastRow = '';
                                     $code = '';
