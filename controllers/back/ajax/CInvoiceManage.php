@@ -138,36 +138,36 @@ class CInvoiceManage extends AAjaxController
             \Monkey::app()->applicationLog('CInvoiceManage','error','modify invoice',$e,'');
             $res .= 'Fattura numero'.$invoiceType.'-'.$invoiceNumber.'/'.$invoiceYear.' in  Iwes non Cancellata<br>';
         }
-        $findShopId = $shopRepo->findOneBy(['id' => $remoteShopSellerId]);
-        if ($findShopId->hasEcommerce == '1' && $findShopId->id != '44') {
-            /* find  orderId*/
-            $db_host = $findShopId->dbHost;
-            $db_name = $findShopId->dbName;
-            $db_user = $findShopId->dbUsername;
-            $db_pass = $findShopId->dbPassword;
-            try {
-
-                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
-                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                throw new BambooException('fail to connect');
-
-            }
-            if (ENV == 'prod') {
+        $findShopsId = $shopRepo->findBy(['HasEcommerce' => 1]);
+        foreach($findShopsId as $findShopId ) {
+            if ($findShopId->id != '44') {
+                /* find  orderId*/
+                $db_host = $findShopId->dbHost;
+                $db_name = $findShopId->dbName;
+                $db_user = $findShopId->dbUsername;
+                $db_pass = $findShopId->dbPassword;
                 try {
-                    $stmtDeleteInvoice = $db_con->prepare('DELETE Invoice WHERE
+
+                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                    $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                } catch (PDOException $e) {
+                    throw new BambooException('fail to connect');
+
+                }
+                if (ENV == 'prod') {
+                    try {
+                        $stmtDeleteInvoice = $db_con->prepare('DELETE Invoice WHERE
                                                 invoiceYear= \'' . $invoiceYear . '\' AND
                                                 invoiceType=\'' . $invoiceType . '\' AND 
                                                 invoiceSiteChar=\'' . $invoiceSiteChar . '\' AND
-                                                invoiceNumber=\'' . $invoiceNumber . '\' AND
-                                              
-                                                orderId =\'' . $remoteOrderSellerId . '\'
+                                                invoiceNumber=\'' . $invoiceNumber . '\'
                                                  ');
-                    $stmtDeleteInvoice->execute();
-                    $res .= 'Fattura Remota numero ' . $invoiceType . '-' . $invoiceNumber . '/' . $invoiceYear . ' Cancellata Correttamente<br>';
-                } catch (\Throwable $e) {
-                    \Monkey::app()->applicationLog('CInvoiceManage','error','modify Remote Seller invoice',$e,'');
-                    $res .= 'Fattura Remota numero ' . $invoiceType . '-' . $invoiceNumber . '/' . $invoiceYear . ' non Cancellata <br>';
+                        $stmtDeleteInvoice->execute();
+                        $res .= 'Fattura Remota numero ' . $invoiceType . '-' . $invoiceNumber . '/' . $invoiceYear . ' Cancellata Correttamente<br>';
+                    } catch (\Throwable $e) {
+                        \Monkey::app()->applicationLog('CInvoiceManage','error','modify Remote Seller invoice',$e,'');
+                        $res .= 'Fattura Remota numero ' . $invoiceType . '-' . $invoiceNumber . '/' . $invoiceYear . ' non Cancellata <br>';
+                    }
                 }
             }
         }

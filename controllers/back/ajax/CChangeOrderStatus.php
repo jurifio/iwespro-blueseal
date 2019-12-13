@@ -61,7 +61,7 @@ class CChangeOrderStatus extends AAjaxController
                 $orderStatus=\Monkey::app()->repoFactory->create('OrderStatus')->findOneBy(['id'=>$datas['order_status']]);
                 $codeStatus=$orderStatus->code;
                 $remoteShopSellerId=$order->remoteShopSellerId;
-                $remoteOrderSellerId=$orde->remoteOrderSellerId;
+                $remoteOrderSellerId=$order->remoteOrderSellerId;
                 $shop = \Monkey ::app() -> repoFactory -> create('Shop') -> findOneBy(['id' => $remoteShopSellerId]);
                 $db_host = $shop -> dbHost;
                 $db_name = $shop -> dbName;
@@ -71,9 +71,9 @@ class CChangeOrderStatus extends AAjaxController
 
                     $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
                     $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $res .= " connessione ok <br>";
+                    $res = " connessione ok <br>";
                 } catch (PDOException $e) {
-                    $res .= $e -> getMessage();
+                    $res = $e -> getMessage();
                 }
                 try{
                     $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$codeStatus.'\' WHERE id='.$remoteOrderSellerId);
