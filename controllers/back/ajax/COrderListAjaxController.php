@@ -324,7 +324,11 @@ class COrderListAjaxController extends AAjaxController
                     foreach ($findInvoiceSupplier as $invoicesSupplier) {
                         if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
                             $shops=$shopRepo->findOneBy(['id'=>$invoicesSupplier->invoiceShopId]);
-                            $shopInvoiceName='('.$shops->title.')';
+                            if($shops!==null) {
+                                $shopInvoiceName = '(' . $shops->title . ')';
+                            }else{
+                                $shopInvoiceName='';
+                            }
                             $row["invoice"] .= $shopInvoiceName."<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
                         }
                     }
