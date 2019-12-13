@@ -167,7 +167,7 @@ class COrderListAjaxController extends AAjaxController
                 foreach ($val->orderLine as $line) {
                     if ($line->remoteShopSellerId != 44 && $line->remoteShopSellerId != '') {
                         if ($line->remoteShopSellerId != $line->shopId) {
-                            $orderParal = 'Si';
+                            $orderParal = '<i style="color:green"><b>PARALLELO</b><i>';
                             //    $remoteOrderSupplierId = $line->remoteOrderSupplierId;
                         }
                     } else {
@@ -310,7 +310,9 @@ class COrderListAjaxController extends AAjaxController
                 $row["invoice"] = "<b>Seller->Customer:       </b>";
                 if ($findInvoiceSeller != null) {
                     foreach ($findInvoiceSeller as $invoiceSeller) {
-                        $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
+                        $shops=$shopRepo->findOneBy(['id'=>$invoiceSeller->invoiceShopId]);
+                        $shopInvoiceName='('.$shops->title.')';
+                        $row["invoice"] .= $shopInvoiceName."<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoiceSeller->id . "&invoiceShopId=" . $invoiceSeller->invoiceShopId . "'>" . $invoiceSeller->invoiceNumber . "/" . $invoiceSeller->invoiceType . "</a><br />";
                     }
                 } else {
                     $row["invoice"] .= "<br/>";
@@ -321,7 +323,9 @@ class COrderListAjaxController extends AAjaxController
                 if ($findInvoiceSupplier != null) {
                     foreach ($findInvoiceSupplier as $invoicesSupplier) {
                         if ($invoicesSupplier->invoiceShopId != $val->remoteShopSellerId && $invoicesSupplier->invoiceShopId != 44) {
-                            $row["invoice"] .= "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
+                            $shops=$shopRepo->findOneBy(['id'=>$invoicesSupplier->invoiceShopId]);
+                            $shopInvoiceName='('.$shops->title.')';
+                            $row["invoice"] .= $shopInvoiceName."<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoicesSupplier->id . "&invoiceShopId=" . $invoicesSupplier->invoiceShopId . "'>" . $invoicesSupplier->invoiceNumber . "/" . $invoicesSupplier->invoiceType . "</a><br />";
                         }
                     }
                 } else {

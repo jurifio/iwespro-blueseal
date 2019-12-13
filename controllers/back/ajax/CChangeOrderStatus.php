@@ -3,6 +3,8 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\repositories\COrderRepo;
+use PDO;
+use PDOException;
 
 /**
  * Class CChangeOrderStatus
@@ -56,6 +58,33 @@ class CChangeOrderStatus extends AAjaxController
 
             foreach($orders as $order) {
                 $oR->updateStatus($order, $datas['order_status']);
+                $orderStatus=\Monkey::app()->repoFactory->create('OrderStatus')->findOneBy(['id'=>$datas['order_status']]);
+                $codeStatus=$orderStatus->code;
+                $remoteShopSellerId=$order->remoteShopSellerId;
+                $remoteOrderSellerId=$orde->remoteOrderSellerId;
+                $shop = \Monkey ::app() -> repoFactory -> create('Shop') -> findOneBy(['id' => $remoteShopSellerId]);
+                $db_host = $shop -> dbHost;
+                $db_name = $shop -> dbName;
+                $db_user = $shop -> dbUsername;
+                $db_pass = $shop -> dbPassword;
+                try {
+
+                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+                    $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $res .= " connessione ok <br>";
+                } catch (PDOException $e) {
+                    $res .= $e -> getMessage();
+                }
+                try{
+                    $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$codeStatus.'\' WHERE id='.$remoteOrderSellerId);
+                    $stmtUpdateOrder->execute();
+                }catch (\Throwable $e){
+                    $this->report('CChangeStatusOrder', 'error change Status  remote Order',$e);
+
+                }
+
+
+
 
                 $order->note = $datas['order_note'] ?? null;
                 $order->shipmentNote = $datas['order_shipmentNote'] ?? null;
