@@ -36,6 +36,9 @@ class CShipmentListAjaxController extends AAjaxController
                     s.shipmentDate,
                     s.cancellationdate,
                     s.note,
+                    s.remoteShipmentId as remoteShipmentId,
+                    `sh2`.`name` as  remoteShopName,
+            
                     s.creationDate,
                     O.id as orderId,
                     O.isParallel AS isParallel,
@@ -52,6 +55,7 @@ class CShipmentListAjaxController extends AAjaxController
                   left join ShopHasShippingAddressBook shabf on f.id = shabf.addressBookId
                   left join Shop sh on sh.id = shabf.shopId
                   left join ShopHasShippingAddressBook shabt on t.id = shabt.addressBookId
+                  left join Shop sh2 on s.remoteShopShipmentId = sh2.id
                   LEFT JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
@@ -81,6 +85,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
+            $row['remoteShipmentId']=$val->remoteShipmentId;
           $toAddress=json_decode($row['frozenShippingAddress'],true);
           $row['toAddress']=$toAddress['name'].' '.$toAddress['surname'].' '.$toAddress['company'].'<br />'.$toAddress['address'].'<br/>'.$toAddress['postcode'].' '.$toAddress['city'].' '.$toAddress['province'];
 

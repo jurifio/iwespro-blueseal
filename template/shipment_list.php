@@ -40,6 +40,12 @@
                                         data-searchable="true"
                                         data-orderable="true" class="center">Shop</th>
                                 <?php endif; ?>
+                                <th data-slug="remoteShipmentId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Id Spedizione Shop </th>
+                                <th data-slug="remoteShopName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop Che Spedisce</th>
                                 <th data-slug="carrier"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Carrier</th>
