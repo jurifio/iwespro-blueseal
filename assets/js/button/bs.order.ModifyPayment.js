@@ -53,16 +53,14 @@ $(document).on('bs-order-ModifyPayment', function () {
 
 
     modal.setOkEvent(function () {
-        modal.showLoader();
-        orderPaymentMethodId = $('#orderPaymentMethodId').val();
-
+       let  orderPaymentMethod = $('#orderPaymentMethodId').val();
 
         $.ajax({
             url: '/blueseal/xhr/ChangeOrderPaymentMethodAjaxController',
             method: 'POST',
             data: {
                 orderId: orderId,
-                orderPaymentMethodId: orderPaymentMethodId
+                orderPaymentMethod: orderPaymentMethod
             }
         }).done(function (res) {
             modal.writeBody(res);

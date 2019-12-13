@@ -53,7 +53,7 @@ class CChangeOrderPaymentMethodAjaxController extends AAjaxController
 
         $request = \Monkey ::app() -> router -> request();
         $orderId = $request -> getRequestData('orderId');
-        $orderPaymentMethodId = $request -> getRequestData('orderPaymentMethodId');
+        $orderPaymentMethodId = $request -> getRequestData('orderPaymentMethod');
         try {
             $order = \Monkey ::app() -> repoFactory -> create('Order') -> findOneBy(['id' => $orderId]);
             $order -> orderPaymentMethodId = $orderPaymentMethodId;
