@@ -142,6 +142,9 @@
         <bs-toolbar-button
                 data-remote="bs.shipment.cancel"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.shipment.erase"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione fatturazione spedizione">
         <bs-toolbar-button
