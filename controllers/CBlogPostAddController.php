@@ -35,7 +35,7 @@ class CBlogPostAddController extends ARestrictedAccessRootController
         foreach (\Monkey::app()->repoFactory->create('Page')->findAll() as $pagg){
             $pageTranslation=$pageTranslationRepo->findOneBy(['pageId'=>$pagg->id,'langId'=>1]);
             if($pageTranslation!=null) {
-                $pag[$pagg->id] = $pageTranslation->title;
+                $pag[$pagg->id] = $pageTranslation->title.'-'.$pagg->url;
             }else{
                 continue;
             }

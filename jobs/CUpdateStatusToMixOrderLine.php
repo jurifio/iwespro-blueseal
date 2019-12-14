@@ -105,17 +105,17 @@ class CUpdateStatusToMixOrderLine extends ACronJob
 
                 }
             } else {
-                if ($countStatusCancel > 0 && $countStatusShipped == 0 && $countStatusWorking == 0) {
+                if ($countStatusCancel ==1 && $countStatusShipped == 0 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_CANC';
                     $statusForRemote='ORD_CANC';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_CANC' . $orders->id . ' Order','');
-                } elseif ($countStatusCancel == 0 && $countStatusShipped > 0 && $countStatusWorking == 0) {
+                } elseif ($countStatusCancel == 0 && $countStatusShipped == 1 && $countStatusWorking == 0) {
                     $orders->status = 'ORD_SHIPPED';
                     $statusForRemote='ORD_SHIPPED';
                     $orders->update();
                     $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_SHIPPED ' . $orders->id . ' Order','');
-                } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking > 0) {
+                } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking ==1) {
                     $orders->status = 'ORD_WORK';
                     $statusForRemote='ORD_WORK';
                     $orders->update();
@@ -136,9 +136,9 @@ class CUpdateStatusToMixOrderLine extends ACronJob
 
                 $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
                 $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $res .= " connessione ok <br>";
+                $res = " connessione ok <br>";
             } catch (PDOException $e) {
-                $res .= $e -> getMessage();
+                $res = $e -> getMessage();
             }
             try{
                 $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$statusForRemote.'\' WHERE id='.$remoteOrderId);
