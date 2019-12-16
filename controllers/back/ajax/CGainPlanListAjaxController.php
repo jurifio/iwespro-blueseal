@@ -42,7 +42,8 @@ class CGainPlanListAjaxController extends AAjaxController
        gp.dateCreate as dateCreate,
        gp.dateMovement as dateMovement,
        gp.externalId as externalId,
-       gp.invoiceExternal as invoiceExternal
+       gp.invoiceExternal as invoiceExternal,
+       gp.isVisible as isVisible
        from GainPlan gp ORDER BY dateMovement DESC
                 
     
@@ -93,11 +94,12 @@ class CGainPlanListAjaxController extends AAjaxController
             $rowCost = '';
             $collectCost = $gpsmRepo->findBy(['gainPlanId' => $val->id]);
             foreach ($collectCost as $costs) {
-                if($costs->typeMovement==2) {
-                    $cost += $costs->amount;
+                if($costs->isActive==1) {
+                    if ($costs->typeMovement == 2) {
+                        $cost += $costs->amount;
+                    }
+                    $rowCost .= ' fattura:' . $costs->invoice . ' -' . $costs->fornitureName . '<br>';
                 }
-                $rowCost .= ' fattura:' . $costs->invoice . ' -' . $costs->fornitureName . '<br>';
-
             }
 
             $amount = 0;

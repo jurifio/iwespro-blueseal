@@ -99,6 +99,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Margine
                                 </th>
+                                <th data-slug="isVisible"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Attivo
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

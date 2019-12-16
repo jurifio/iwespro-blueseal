@@ -65,7 +65,7 @@
                                 </th>
                                 <th data-slug="amountTotal"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Iotale
+                                    data-orderable="true" class="center">Totale
                                 </th>
                                 <th data-slug="fornitureName"
                                     data-searchable="true"

@@ -37,9 +37,14 @@ class CUpdateStatusToMixOrderLine extends ACronJob
     {
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
-        $orderLineWorking = ['ORD_WAIT' , 'ORD_PENDING', 'ORD_LAB', 'ORD_FRND_OK', 'ORD_FRND_SENT', 'ORD_CHK_IN', 'ORD_PCK_CLI','ORD_FRND_SNDING','ORD_MAIL_PREP_C','ORD_FRND_ORDSNT'];
-        $orderLineShipped = ['ORD_ARCH','ORD_SENT','ORD_FRND_PYD'];
-        $orderLineCancel = ['ORD_FRND_CANC','ORD_MISSNG','ORD_CANCEL','ORD_QLTY_KO','ORD_ERR_SEND'];
+        $orderLinePending=['ORD_WAIT' , 'ORD_PENDING'];
+        $orderLineCart=['CRT','CRT_MRG'];
+        $orderLineWorking = [ 'ORD_LAB','ORD_FRND_SENT','ORD_FRND_SNDING'];
+        $orderLinePacking=['ORD_FRND_OK','ORD_MAIL_PREP_C','ORD_FRND_ORDSNT' , 'ORD_CHK_IN', 'ORD_PCK_CLI','ORD_ERR_SEND'];
+        $orderLineShipped = ['ORD_FRND_PYD','ORD_SENT'];
+        $OrderLineDelivered =['ORD_DELIVERED'];
+        $orderLineCancel = ['ORD_FRND_CANC','ORD_MISSNG','ORD_CANCEL','ORD_QLTY_KO'];
+        $orderLineReturn =['ORD_RETURN'];
         $query = "SELECT * from `Order`";
         $order = $orderRepo->findBySql($query,[]);
         foreach ($order as $orders) {
@@ -47,6 +52,11 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                 $countStatusWorking = 0;
                 $countStatusShipped = 0;
                 $countStatusCancel = 0;
+                $countStatusPending=0;
+                $countStatusCart=0;
+                $countStatusDelivered=0;
+                $countStatusReturn=0;
+                $countStatusPacking=0;
                 $countOrderLine = 0;
 
                 $orderLine = $orderLineRepo->findBy(['orderId' => $orders->id]);
@@ -61,6 +71,15 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                             break;
                         case in_array($orderLines->status,$orderLineCancel,true):
                             ++$countStatusCancel;
+                            break;
+                        case in_array($orderLines->status,$orderLinePending,true):
+                            ++$countStatusPending;
+                            break;
+                        case in_array($orderLines->status,$orderLinePacking,true):
+                            ++$countStatusCart;
+                            break;
+                        case in_array($orderLines->status,$orderLineCart,true):
+                            ++$countStatusCart;
                             break;
 
                     }

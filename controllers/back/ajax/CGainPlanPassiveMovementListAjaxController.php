@@ -63,9 +63,9 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
             $row['dateMovement'] = $val -> dateMovement;
             $row['gainPlanId'] = $val -> gainPlanId;
             $row['invoice'] = $val -> invoice;
-            $row['amount'] = $val -> amount;
-            $row['amountVat']=$val->amountVat;
-            $row['amountTotal']=$val->amountTotal;
+            $row['amount'] = money_format('%.2n',$val -> amount) . ' &euro;';
+            $row['amountVat']= money_format('%.2n',$val->amountVat) . ' &euro;';
+            $row['amountTotal']= money_format('%.2n',$val->amountTotal) . ' &euro;';
             $row['serviceName'] = $val -> serviceName;
             $row['fornitureName'] = $val -> fornitureName;
             $shop='';
