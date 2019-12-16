@@ -30,9 +30,9 @@ $(document).on('bs-shipment-erase', function (e, element, button) {
     });
 
 
-    modal.writeBody(body);
-    modal.setOkEvent(function () {
 
+    modal.setOkEvent(function () {
+        modal.writeBody();
         $.ajax({
             method: "delete",
             url: "/blueseal/xhr/ShipmentDeleteAjaxController",

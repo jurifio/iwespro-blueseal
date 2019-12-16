@@ -54,7 +54,7 @@ class CShipmentDeleteAjaxController extends AAjaxController
             \Monkey::app()->applicationLog('CShipmentDeleteAjaxController','error','cannot delete OrderLinesHasShipment',$e,'');
         }
         try {
-            $shipmentDelete = $$shipmentRepo->findOneBy(['id' => $shipmentId]);
+            $shipmentDelete = $shipmentRepo->findOneBy(['id' => $shipmentId]);
             $remoteShipmentId = $shipmentDelete->remoteShipmentId;
             $remoteShopShipmentId = $shipmentDelete->remoteShopShipmentId;
             if ($remoteShopShipmentId != 44) {

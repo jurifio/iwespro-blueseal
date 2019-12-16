@@ -23,12 +23,14 @@ $(document).on('bs-newNewsletterUser-sendNow', function () {
                 body: '<p>Invia La Newsletter selezionata</p>' +
                 '<div class="form-group form-group-default required">' +
                 '<label for="deleteMacroGroup">Invio</label>' +
-                '<div><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p></div>' +
+                '<div id="messageGenereateHide" class="hide"><p>Premere ok per confermare l\'invio con id:'+ idNewsletterUser +' e attendere il messaggio di generazione completata</p>' +
                 '</div>'
             });
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            $('#messageGenereateHide').removeClass('hide');
+            $('#messageGenereateHide').addClass('show');
             const data = {
                 id: idNewsletterUser,
             };
