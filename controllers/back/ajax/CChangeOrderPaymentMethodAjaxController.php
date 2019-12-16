@@ -57,7 +57,31 @@ class CChangeOrderPaymentMethodAjaxController extends AAjaxController
         try {
             $order = \Monkey ::app() -> repoFactory -> create('Order') -> findOneBy(['id' => $orderId]);
             $order -> orderPaymentMethodId = $orderPaymentMethodId;
+            $remoteOrderSellerId=$order->remoteOrderSellerId;
+            $remoteShopSellerId=$order->remoteShopSellerId;
             $order -> update();
+            $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopSellerId]);
+            $db_host = $shopRepo->dbHost;
+            $db_name = $shopRepo->dbName;
+            $db_user = $shopRepo->dbUsername;
+            $db_pass = $shopRepo->dbPassword;
+            try {
+
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res = ' connessione ok <br>';
+            } catch (PDOException $e) {
+                $res = $e->getMessage();
+            }
+            try {
+                if (ENV === 'prod') {
+                    $stmtOrder = $db_con->prepare("UPDATE `Order` SET `orderPaymentMethodId`='" . $orderPaymentMethodId . "' WHERE id=" . $remoteOrderSellerId);
+                    $stmtOrder->execute();
+                    \Monkey::app()->applicationLog('CChangeOrderPaymentMethodAjaxController','Report', 'Change Order Payment Method '.$remoteOrderSellerId ,'','');
+                }
+            }catch (\Throwable $e){
+                \Monkey::app()->applicationLog('CChangeOrderPaymentMethodAjaxController','Error', 'Change Order Remote  Payment Method '.$remoteOrderSellerId ,$e,'');
+            }
             \Monkey::app()->applicationLog('CChangeOrderPaymentMethodAjaxController','Report', 'Change Order Payment Method '.$orderId ,'','');
             $res='Ordine' .$orderId.' aggiornato con il nuvo metodo di pagamento';
         }catch (\Throwable $e){
