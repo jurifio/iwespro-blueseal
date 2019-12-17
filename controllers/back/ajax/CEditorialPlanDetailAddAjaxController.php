@@ -41,7 +41,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-        $photoUrl = $data['photoUrl'];
+
+        $photoUrl = (array_key_exists('photoUrl',$data))? $data['photoUrl' ]: '';
         $unlinkphoto =[];
         $status = $data['status'];
         $socialId = $data['socialId'];
@@ -64,14 +65,19 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
 
         }*/
-        foreach ($photoUrl as &$jpg) {
+        if($photoUrl!='') {
+            foreach ($photoUrl as &$jpg) {
 
-            $jpg =$jpg;
+                $jpg = $jpg;
 
+            }
+
+            /** @var array $groupimage */
+            $groupimage = implode(",",$photoUrl);
+        }else{
+           // $groupimage='https://www.iwes.pro/assets/bs-dummy-16-9.png';
+            $groupimage='';
         }
-
-        /** @var array $groupimage */
-        $groupimage = implode(",", $photoUrl);
 
         /** @var CRepo $editorialPlanDetailRepo */
         $editorialPlanDetailRepo = \Monkey::app()->repoFactory->create('EditorialPlanDetail');

@@ -65,7 +65,13 @@
                             <tr>
                                 <th data-slug="orderCode"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Codice Ordine</th>
+                                    data-orderable="true" class="center">Codice Ordine Iwes</th>
+                                <th data-slug="remoteOrderSellerId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Codice Ordine Seller</th>
+                                <th data-slug="remoteShopName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop Seller</th>
                                 <th data-slug="orderDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -91,7 +97,7 @@
                                 <?php if (\Monkey::app()->getUser()->getAuthorizedShops()->count() > 1) : ?>
                                 <th data-slug="shopName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Shop</th>
+                                    data-orderable="true" class="center">Shop Prodotto</th>
                                 <?php endif; ?>
                                 <th data-slug="dummyPicture"
                                     data-searchable="false"

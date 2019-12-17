@@ -73,23 +73,28 @@ class CFriendOrderListAjaxController extends AAjaxController
                   `ols`.title                                                   AS `orderLineStatusTitle`,
                   `olfps`.`name`                                                AS `paymentStatus`,
                   `ol`.`orderLineFriendPaymentDate`                             AS `paymentDate`,
-                  o.remoteShopSellerId as remoteShopSellerId,   
+                   ol.remoteShopSellerId                                        as remoteShopSellerId,   
+                  `ol`.remoteOrderSellerId as remoteOrderSellerId,
+                   s2.name as remoteShopName,  
                   ifnull((SELECT l.time
                    FROM Log AS l
                    WHERE concat(`ol`.`id`, '-', `ol`.`orderId`) = l.stringId and l.actionName = 'ShippedByFriend' 
                    LIMIT 1),'Non Spedito')                                                     AS 'friendShipmentTime'
                 FROM
-                  ((((((((`Order` AS `o`
+                  (((((((((`Order` AS `o`
+                  
                     JOIN `OrderLine` AS `ol` ON `o`.`id` = `ol`.`orderId`)
                     JOIN `Shop` AS `s` ON `ol`.`shopId` = `s`.`id`)
                     JOIN `OrderStatus` AS `os` ON `o`.`status` = `os`.`code`)
                     JOIN `OrderLineStatus` AS `ols` ON `ol`.`status` = `ols`.`code`)
                     JOIN `User` AS `u` ON `u`.`id` = `o`.`userId`)
                     JOIN `Product` AS `p` ON `ol`.`productId` = `p`.`id` AND `ol`.`productVariantId` = `p`.`productVariantId`)
+                     JOIN Shop AS s2 on ol.remoteShopSellerId = s2.id)
                     #JOIN `Log` as l ON l.stringId = concat(ol.id, '-', o.id)
                     JOIN `ProductVariant` AS `pv` ON `p`.`productVariantId` = `pv`.`id`
                     JOIN `ProductSize` AS `ps` ON `ol`.`productSizeId` = `ps`.`id`)
                     JOIN `ProductBrand` AS `pb` ON `p`.`productBrandId` = `pb`.`id`)
+                      
                   JOIN `ProductSeason` AS `pse` ON `p`.`productSeasonId` = `pse`.`id`
                   LEFT JOIN (`InvoiceLineHasOrderLine` AS `ilhol`
                       JOIN Document AS `in` ON `in`.`id` = `ilhol`.`invoiceLineInvoiceId`
@@ -161,6 +166,9 @@ class CFriendOrderListAjaxController extends AAjaxController
             /** @var COrderLine $v */
             /** ciclo le righe */
             $response['data'][$i]['id'] = $v->id;
+            $findRemoteShopSeller=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$v->remoteShopSellerId]);
+            $response['data'][$i]['remoteOrderSellerId']=$v->remoteOrderSellerId;
+            $response['data'][$i]['remoteShopName']=$findRemoteShopSeller->name;
             $response['data'][$i]['orderCode'] = $v->printId();
             $response['data'][$i]['line_id'] = $v->printId();
             $response['data'][$i]['orderId'] = $v->orderId;

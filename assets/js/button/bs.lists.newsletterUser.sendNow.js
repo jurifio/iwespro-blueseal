@@ -31,6 +31,7 @@ $(document).on('bs-newNewsletterUser-sendNow', function () {
         bsModal.setOkEvent(function () {
             $('#messageGenereateHide').removeClass('hide');
             $('#messageGenereateHide').addClass('show');
+            bsModal.hideOkBtn();
             const data = {
                 id: idNewsletterUser,
             };
@@ -40,15 +41,18 @@ $(document).on('bs-newNewsletterUser-sendNow', function () {
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
+                bsModal.hideOkBtn();
             }).fail(function (res) {
                 bsModal.writeBody(res);
+                bsModal.hideOkBtn();
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     window.location.reload();
                     bsModal.hide();
                     // window.location.reload();
                 });
-                bsModal.showOkBtn();
+
+                bsModal.hideOkBtn();
             });
 
         });

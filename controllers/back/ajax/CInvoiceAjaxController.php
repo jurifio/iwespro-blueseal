@@ -165,7 +165,7 @@ class CInvoiceAjaxController extends AAjaxController
                         $invoiceType = $receipt;
                         $documentType = '22';
                         $invoiceTypeVat = 'newK';
-                    }
+                        }
                     // se non è inglese
                     if ($changelanguage != "1") {
 
@@ -185,7 +185,8 @@ class CInvoiceAjaxController extends AAjaxController
 
                 $number = $em->query("SELECT ifnull(MAX(invoiceNumber),0)+1 AS new
                                       FROM Invoice
-                                      WHERE
+                                      JOIN ShopHasCounter ShopHasCounter ON Invoice.id = ShopHasCounter.shopId
+                                      WHERE       
                                       Invoice.invoiceYear = ? AND
                                       Invoice.invoiceType='" . $invoiceType . "' AND
                                       Invoice.invoiceShopId='".$remoteShopSellerId."' AND
