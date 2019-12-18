@@ -103,11 +103,13 @@ class CInvoiceAjaxController extends AAjaxController
                             $invoiceType = 'X';
                             $invoiceTypeVat = 'newX';
                             $documentType = '17';
+                            $invoiceTypeDocument=3;
                         } else {
                             //è Ecommerce Parallelo
                             $invoiceType = $invoiceExtraUe;
                             $invoiceTypeVat = 'newX';
                             $documentType = '20';
+                            $invoiceTypeDocument=3;
                         }
                         //se è non è inglese
                         if ($changelanguage != "1") {
@@ -132,11 +134,13 @@ class CInvoiceAjaxController extends AAjaxController
                             $invoiceType = 'P';
                             $invoiceTypeVat = 'newP';
                             $documentType = '17';
+                            $invoiceTypeDocument=2;
                         } else {
                             // è fattura Ecommerce Parallelo
                             $invoiceType = $invoiceUe;
                             $documentType = '21';
                             $invoiceTypeVat = 'newP';
+                            $invoiceTypeDocument=2;
                         }
                         // se non è inglese
                         if ($changelanguage != "1") {
@@ -160,11 +164,13 @@ class CInvoiceAjaxController extends AAjaxController
                         $documentType = '16';
                         $invoiceType = 'K';
                         $invoiceTypeVat = 'newK';
+                        $invoiceTypeDocument=1;
                     } else {
                         // non è pickyshop
                         $invoiceType = $receipt;
                         $documentType = '22';
                         $invoiceTypeVat = 'newK';
+                        $invoiceTypeDocument=1;
                         }
                     // se non è inglese
                     if ($changelanguage != "1") {
@@ -182,7 +188,22 @@ class CInvoiceAjaxController extends AAjaxController
                     }
                 }
 
+                switch($invoiceDocument){
+                    case 1:
+                        $number=$em->query("SELECT (shc.receiptCounter+1) as number,s.receipt as invoiceType  from ShopHasCounter shc
+                                            join Shop s where s.invoiceSiteChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
+                        break;
 
+                    case 2:
+                        $number=$em->query("SELECT (shc.invoiceCounter+1) as number,s.receipt as invoiceType  from ShopHasCounter shc
+                                            join Shop s where s.invoiceSiteChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
+                        break;
+
+                    case 3:
+                        $number=$em->query("SELECT (shc.invoiceCounter+1) as number,s.receipt as invoiceType  from ShopHasCounter shc
+                                            join Shop s where s.invoiceSiteChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
+                        break;
+                }
                 $number = $em->query("SELECT ifnull(MAX(invoiceNumber),0)+1 AS new
                                       FROM Invoice
                                       JOIN ShopHasCounter ShopHasCounter ON Invoice.id = ShopHasCounter.shopId
