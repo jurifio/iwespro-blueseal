@@ -17,10 +17,22 @@ class CCouponListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/coupon_list.php');
+        $isChkActive = \Monkey::app()->router->request()->getRequestData('isActive');
+        if($isChkActive==null) {
+            $isChkActive = '';
+        }
+            $isChkUser= \Monkey::app()->router->request()->getRequestData('isUser');
+        if ($isChkUser==null){
+            $isChkUser='';
+        }
+        //$isChkActive=1;
+        //$isChkUser=1;
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'isChkUser'=>$isChkUser,
+            'isChkActive' =>$isChkActive,
             'sidebar' => $this->sidebar->build()
         ]);
     }

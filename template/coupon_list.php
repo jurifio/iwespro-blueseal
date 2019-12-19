@@ -13,7 +13,34 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row">
+                        <div class="col-md-1">
+                            <div class="form-group form-group-default required">
+                                <label for="ischkActive">Solo Attivi</label>
+                               <?php if($isChkActive==1){
+                                echo'<input id="ischkActive" autocomplete="off" type="checkbox" class="form-control" name="ischkActive" checked="checked" value="" />';
+                                }else{
+                                   echo'<input id="ischkActive" autocomplete="off" type="checkbox" class="form-control" name="ischkActive"  value="" />';
+                                }?>
+                            </div>
+                           </div>
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default required">
+                                    <label for="isChkUser">Solo utenti</label>
+                                    <?php if($isChkUser==1){
+                                        echo'<input id="isChkUser" autocomplete="off" type="checkbox" class="form-control" name="isChkUser" checked="checked" value="" />';
+                                    }else{
+                                        echo'<input id="isChkUser" autocomplete="off" type="checkbox" class="form-control" name="isChkUser"  value="" />';
+                                    }?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
@@ -23,13 +50,19 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500"
-                               data-display-length="50">
+                               data-display-length="50"
+                               data-isActive="<?php echo $isChkActive; ?>"
+                                data-isUser="<?php echo $isChkUser; ?>">
                             <thead>
                             <tr>
                                 <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="false"
                                     class="center">Codice</th>
+                                <th data-slug="remoteShopName"
+                                    data-searchable="true"
+                                    data-orderable="false"
+                                    class="center">Shop Seller</th>
                                 <th data-slug="couponType"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -55,6 +88,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Utilizzatore</th>
+                                <th data-slug="newsletterUserEmail"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Assegnazione Utente </th>
                                 <th data-slug="orderId"
                                     data-searchable="false"
                                     data-orderable="false"
@@ -63,6 +100,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Valido</th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Attivo</th>
                                 <th data-slug="couponEvent"
                                     data-searchable="true"
                                     data-orderable="true"

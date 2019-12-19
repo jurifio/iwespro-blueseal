@@ -37,6 +37,7 @@ class CInvoiceAjaxController extends AAjaxController
         $orderId = $this->app->router->request()->getRequestData('orderId');
 
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
+        $orderDate=$orderRepo->orderDate;
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $userAddressRepo =\Monkey::app()->repoFactory->create('UserAddress');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
@@ -188,37 +189,42 @@ class CInvoiceAjaxController extends AAjaxController
                     }
                 }
 
-                switch($invoiceDocument){
+                switch($invoiceTypeDocument){
                     case 1:
-                        $number=$em->query("SELECT (shc.receiptCounter+1) as number,s.receipt as invoiceType  from ShopHasCounter shc
-                                            join Shop s where s.invoiceSiteChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
+                        $number=$em->query("SELECT (shc.receiptCounter+1) as number, s.receipt as invoiceType  from ShopHasCounter shc
+                                            join Shop s ON shc.shopId=s.id where s.siteInvoiceChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
                         break;
 
                     case 2:
-                        $number=$em->query("SELECT (shc.invoiceCounter+1) as number,s.receipt as invoiceType  from ShopHasCounter shc
-                                            join Shop s where s.invoiceSiteChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
+                        $number=$em->query("SELECT (shc.invoiceCounter+1) as number,s.invoiceUeas invoiceType  from ShopHasCounter shc
+                                            join Shop s ON shc.shopId=s.id where s.siteInvoiceChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
                         break;
 
                     case 3:
-                        $number=$em->query("SELECT (shc.invoiceCounter+1) as number,s.receipt as invoiceType  from ShopHasCounter shc
-                                            join Shop s where s.invoiceSiteChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
+                        $number=$em->query("SELECT (shc.invoiceExtraUeCounter+1) as number,s.invoiceExtraUe as invoiceType  from ShopHasCounter shc
+                                            join Shop s ON shc.shopId=s.id where s.siteInvoiceChar='".$siteChar."' and shc.invoiceYear='".$year."'")->fetchAll()[0]['new'];
                         break;
                 }
-                $number = $em->query("SELECT ifnull(MAX(invoiceNumber),0)+1 AS new
+                /*$number = $em->query("SELECT ifnull(MAX(invoiceNumber),0)+1 AS new
                                       FROM Invoice
                                       JOIN ShopHasCounter ShopHasCounter ON Invoice.id = ShopHasCounter.shopId
                                       WHERE       
                                       Invoice.invoiceYear = ? AND
                                       Invoice.invoiceType='" . $invoiceType . "' AND
                                       Invoice.invoiceShopId='".$remoteShopSellerId."' AND
-                                      Invoice.invoiceSiteChar= ?", [$year, $siteChar])->fetchAll()[0]['new'];
+                                      Invoice.invoiceSiteChar= ?", [$year, $siteChar])->fetchAll()[0]['new'];*/
 
                 $invoiceNew->invoiceShopId=$remoteShopSellerId;
                 $invoiceNew->invoiceNumber = $number;
                 $invoiceNew->invoiceSiteChar =$siteChar;
                 $invoiceNew->invoiceType = $invoiceType;
-                $invoiceNew->invoiceDate = $today->format('Y-m-d H:i:s');
-                $todayInvoice = $today->format('d/m/Y');
+                $dateInvoice = strtotime($order->orderDate);
+                $newdateInvoice = date('Y-m-d H:i:s',$dateInvoice);
+                $invoiceNew->invoiceDate=$newdateInvoice;
+                $invoiceDate=date('d/m-Y',$dateInvoice);
+                //$invoiceNew -> invoiceDate = $today -> format('Y-m-d H:i:s');
+                // $dateForRemote = $today -> format('Y-m-d H:i:s');
+                $dateForRemote=$newdateInvoice;
 
                 $invoiceRepo->insert($invoiceNew);
                 $sectional = $number . '/' . $invoiceType;
@@ -292,6 +298,7 @@ class CInvoiceAjaxController extends AAjaxController
                                                                       '".$documentRemoteUpdate->year."'           
                                                                                 )");
                 }
+                $insertRemoteDocument->execute();
                 $stmtInvoiceExist = $db_con->prepare("SELECT 
                                      count(*) AS counterInvoice from Invoice where orderId =".$order->remoteOrderSellerId);
                 $stmtInvoiceExist->execute();

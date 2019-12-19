@@ -98,3 +98,31 @@ $(document).on('bs.coupon.del', function() {
 $(document).on('bs.tipocoupon', function() {
     window.location = '/blueseal/tipocoupon';
 });
+
+$(document).ready(function() {
+    //set initial state.
+    $('#ischkActive').val(this.checked);
+
+    $('#ischkActive').change(function() {
+        if(this.checked) {
+            var $t = $('table[data-datatable-name]');
+            $t.data('isActive', 'Attivo');
+            var dt = $t.DataTable();
+            dt.draw();
+            $(this).prop("checked");
+        }
+
+    });
+    $('#isChkUser').val(this.checked);
+
+    $('#isChkUser').change(function() {
+        if(this.checked) {
+            var $t = $('table[data-datatable-name]');
+            $t.data('isUser', 'Attivo');
+            var dt = $t.DataTable();
+            dt.draw();
+            $(this).prop("checked");
+        }
+
+    });
+});

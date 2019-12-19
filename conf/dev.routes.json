@@ -1296,7 +1296,8 @@
             "filters": {},
             "translations": {},
             "methods": [
-                "GET"
+                "GET",
+                "PUT"
             ]
         },
         {

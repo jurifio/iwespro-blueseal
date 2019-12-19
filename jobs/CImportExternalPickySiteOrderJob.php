@@ -100,6 +100,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      u.username as username,
                                      u.password as password,
                                      u.email AS email,
+                                     u.ip as ip,
                                      concat(u.registrationEntryPoint, '-','%s') as registrationEntryPoint,
                                      u.isActive as isActive,
                                      u.isDeleted as isDeleted,
@@ -133,6 +134,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                         $insertUser -> isEmailChanged = $rowUser['isEmailChanged'];
                         $insertUser -> remoteId = $rowUser['remoteId'];
                         $insertUser -> remoteShopId = $shop;
+                        $insertUser -> ip =$rowUser['ip'];
                         $insertUser -> insert();
                         $getuserId = $userRepo -> findOneBy(['email' => $rowUser['email']]);
                         $userId = $getuserId -> id;
