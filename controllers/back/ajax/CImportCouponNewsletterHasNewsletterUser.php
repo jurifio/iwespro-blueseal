@@ -38,7 +38,6 @@ class CImportCouponNewsletterHasNewsletterUser extends AAjaxController
 
 
         foreach ($shopRepo as $value) {
-            $this->report('Start ImportOrder From PickySite ','Shop To Import' . $value->name);
             /********marketplace********/
             $db_host = $value->dbHost;
             $db_name = $value->dbName;
