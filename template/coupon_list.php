@@ -156,6 +156,17 @@
             data-placement="bottom"
             data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-download"
+                data-permission="/admin/marketing"
+                data-event="bs.align.newsletteruser"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Donwload Utenti Newsletter con coupon"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
