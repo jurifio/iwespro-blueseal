@@ -33,8 +33,8 @@ class CImportCouponNewsletterHasNewsletterUser extends AAjaxController
         $res = "";
         $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
         $couponHasNewsLetterUserRepo = \Monkey::app()->repoFactory->create('CouponHasNewsletterUser');
-        $newsletterUserRepo=\Monkey::app()->repoFactory->create('NewsletterUser');
-        $couponRepo=\Monkey::app()->repoFactory->create('Coupon');
+        $newsletterUserRepo = \Monkey::app()->repoFactory->create('NewsletterUser');
+        $couponRepo = \Monkey::app()->repoFactory->create('Coupon');
 
 
         foreach ($shopRepo as $value) {
@@ -68,34 +68,34 @@ class CImportCouponNewsletterHasNewsletterUser extends AAjaxController
                     if ($newsletterUserIdFind != null) {
                         $newsletterUserId = $newsletterUserIdFind->id;
                     }
-                    $couponIdFind=$couponRepo->findOneBy(['code'=>$rowCouponHasNewsletterUser,'remoteShopId'=>$shop]);
-                    if($couponIdFind!=null){
-                        $couponId=$couponIdFind->id;
+                    $couponIdFind = $couponRepo->findOneBy(['code' => $rowCouponHasNewsletterUser,'remoteShopId' => $shop]);
+                    if ($couponIdFind != null) {
+                        $couponId = $couponIdFind->id;
                     }
-                    if($couponId!=null && $newsletterUserId!=null) {
+                    if ($couponId != null && $newsletterUserId != null) {
                         $couponHasNewsletterUser = $couponHasNewsLetterUserRepo->getEmptyEntity();
-                        $couponHasNewsletterUser->couponId=$couponId;
-                        $couponHasNewsletterUser->newsletterUserId=$newsletterUserId;
-                        $couponHasNewsletterUser->remoteId=$rowCouponHasNewsletterUser['remoteId'];
-                        $couponHasNewsletterUser->remoteCouponId=$rowCouponHasNewsletterUser['remoteCouponId'];
-                        $couponHasNewsletterUser->remoteNewsletterUserId=$rowCouponHasNewsletterUser['remoteNewsletterUserId'];
-                        $couponHasNewsletterUser->remoteShopId=$rowCouponHasNewsletterUser['remoteShopId'];
+                        $couponHasNewsletterUser->couponId = $couponId;
+                        $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
+                        $couponHasNewsletterUser->remoteId = $rowCouponHasNewsletterUser['remoteId'];
+                        $couponHasNewsletterUser->remoteCouponId = $rowCouponHasNewsletterUser['remoteCouponId'];
+                        $couponHasNewsletterUser->remoteNewsletterUserId = $rowCouponHasNewsletterUser['remoteNewsletterUserId'];
+                        $couponHasNewsletterUser->remoteShopId = $rowCouponHasNewsletterUser['remoteShopId'];
                         $couponHasNewsletterUser->insert();
                     }
                 }
-                $stmtCouponHasNewsletterUserUpdate=$db_con->prepare('UPDATE CouponHasNewsletterUser SET isImport=1');
+                $stmtCouponHasNewsletterUserUpdate = $db_con->prepare('UPDATE CouponHasNewsletterUser SET isImport=1');
                 $stmtCouponHasNewsletterUserUpdate->execute();
 
+            } catch
+            (\throwable $e) {
+                \Monkey::app()->ApplicationLog('CImportCouponNewsLetterHasNewsletterUser','error','','Errore import shop  ' . $shop,$e);
+                return 'errore in allineamento da shop ' . $shop;
             }
-    catch
-        (\throwable $e) {
-        \Monkey::app()->ApplicationLog('CImportCouponNewsLetterHasNewsletterUser','error','','Errore import shop  ' .$shop ,$e);
-        return 'errore in allineamento da shop '.$shop;
-    }
 
 
-        return 'allineamento eseguito';
+            return 'allineamento eseguito';
+
+        }
 
     }
-
 }
