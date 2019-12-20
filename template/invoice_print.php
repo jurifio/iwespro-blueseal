@@ -417,6 +417,8 @@ $invoiceDate = new DateTime($invoice->invoiceDate);
                             <td class="">
 
                                 <?php $productSku = \bamboo\domain\entities\CProductSku::defrost($orderLine->frozenProduct);
+                                //$productSku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $orderLine->productId , 'productVariantId '=> $orderLine->productVariantId , 'productSizeId' => $orderLine->productSizeId]);
+
 
                                 $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
                                 echo (($productNameTranslation) ? $productNameTranslation->name : '') . ($orderLine->warehouseShelfPosition ? ' / ' . $orderLine->warehouseShelfPosition->printPosition() : '') . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId; ?>
