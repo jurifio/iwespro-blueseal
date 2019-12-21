@@ -49,6 +49,8 @@ class CShopListAjaxController extends AAjaxController
                 $row['vatNumber'] = $shop->billingAddressBook ? substr($shop->billingAddressBook->vatNumber, 6, 13) : null;
                 $row['pastSeasonMultiplier'] = $shop->pastSeasonMultiplier;
                 $row['referrerEmails'] = implode('<br />', explode(';', $shop->referrerEmails));
+                $row['billingEmails'] = implode('<br />', explode(';', $shop->billingEmails));
+                $row['billingContact']=$shop->billingContact;
                 $row['saleMultiplier'] = $shop->saleMultiplier;
                 $row['minReleasedProducts'] = $shop->minReleasedProducts;
                 $row['releasedProducts'] = $shop->getActiveProductCount();
@@ -59,17 +61,12 @@ class CShopListAjaxController extends AAjaxController
                     $users[] = $user->email;
                 }
                if ($shop->hasEcommerce){
-                   $sql = 'select ifnull(MAX(invoiceNumber),0) as   invoiceNumber from Invoice WHERE  invoiceShopId=' . $shop->id.' 
-                   and invoiceType=\''.$shop->receipt.'\' AND invoiceYear=\''.date("Y").'\'';
-                   $numberReceipt =\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['invoiceNumber'];
+                   $shopHasCounter=\Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId'=>$shop->id]);
+                   $numberReceipt=$shop->receipt.'-'.$shopHasCounter->receiptCounter;
                    $row['numberReceipt']=$numberReceipt;
-                   $sql = 'select ifnull(MAX(invoiceNumber),0) as   invoiceNumber from Invoice WHERE  invoiceShopId=' . $shop->id.' 
-                   and invoiceType=\''.$shop->invoiceUe.'\' AND invoiceYear=\''.date("Y").'\'';
-                   $numberInvoiceUe =\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['invoiceNumber'];
+                   $numberInvoiceUe =$shop->invoiceUe.'-'.$shopHasCounter->invoiceCounter;
                    $row['numberInvoiceUe']=$numberInvoiceUe;
-                   $sql = 'select ifnull(MAX(invoiceNumber),0) as   invoiceNumber from Invoice WHERE  invoiceShopId=' . $shop->id.' 
-                   and invoiceType=\''.$shop->invoiceExtraUe.'\' AND invoiceYear=\''.date("Y").'\'';
-                   $numberInvoiceExtraUe =\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['invoiceNumber'];
+                   $numberInvoiceExtraUe =$shop->invoiceExtraUe.'-'.$shopHasCounter->invoiceExtraUeCounter;
                    $row['numberInvoiceExtraUe']=$numberInvoiceExtraUe;
                }else{
                    $row['numberReceipt']='';

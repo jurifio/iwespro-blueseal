@@ -48,7 +48,12 @@ class CShopHasCounterListAjaxController extends AAjaxController
                 $row['DT_RowId'] = $shopHasCounter->printId();
                 $row['id'] =  $shopHasCounter->printId();
                 $shopFind = $shopRepo->findOneBy(['id' => $shopHasCounter->shopId]);
-                $row['title'] = $shopFind->title;
+                if($shopFind->id==44){
+                    $shopTitle=$shopFind->title.'-'.'Iwes';
+                }else{
+                    $shopTitle=$shopFind->title;
+                }
+                $row['title'] = $shopTitle;
                 $row['receipt'] = $shopFind->receipt;
                 $row['receiptCounter'] = $shopHasCounter->receiptCounter;
                 $row['invoiceUe'] = $shopFind->invoiceUe;

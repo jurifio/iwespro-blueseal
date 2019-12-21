@@ -59,6 +59,17 @@
                                     data-orderable="false"
                                     class="center">Email Notifica
                                 </th>
+                                <th data-slug="billingEmails"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Email Invio Fatture
+                                </th>
+                                <th data-slug="billingContact"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Contatto  Invio Fatture
+                                </th>
+
                                 <th data-slug="minReleasedProducts"
                                     data-searchable="true"
                                     data-orderable="true"

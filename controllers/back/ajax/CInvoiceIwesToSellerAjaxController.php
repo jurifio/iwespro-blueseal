@@ -12,24 +12,26 @@ use PDO;
 use PDOException;
 
 /**
- * Class CChangeOrderStatus
- * @package bamboo\blueseal\controllers\ajax
+ * Class CInvoiceIwesToSellerAjaxController
+ * @package bamboo\controllers\back\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date 21/12/2019
+ * @since 1.0
  */
-class CInvoiceAjaxController extends AAjaxController
+class CInvoiceIwesToSellerAjaxController extends AAjaxController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "invoice_print";
 
-    public function get()
+    public function post()
     {
+
         $view = new VBase(array());
         $this->page = new CBlueSealPage($this->pageSlug, $this->app);
         $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'blueseal') . '/template/invoice_print.php');
