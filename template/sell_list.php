@@ -163,7 +163,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-fighter-jet"
+                data-icon="fa-pencil"
                 data-permission="/admin/order/edit"
                 data-class="btn btn-default"
                 data-rel="tooltip"
