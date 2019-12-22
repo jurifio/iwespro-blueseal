@@ -8,6 +8,8 @@ use bamboo\blueseal\business\CBlueSealPage;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\domain\entities\CProductSku;
 use bamboo\domain\entities\CUser;
+use DateTime;
+use Monkey;
 use PDO;
 use PDOException;
 
@@ -33,623 +35,731 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
     {
 
         $view = new VBase(array());
-        $this->page = new CBlueSealPage($this->pageSlug, $this->app);
-        $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths', 'blueseal') . '/template/invoice_print.php');
+        $this->page = new CBlueSealPage($this->pageSlug,$this->app);
+        $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths','blueseal') . '/template/invoice_print.php');
 
         $orderId = $this->app->router->request()->getRequestData('orderId');
 
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
-
+        $ordeLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
-        $userAddressRepo =\Monkey::app()->repoFactory->create('UserAddress');
+        $userAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
-        $orderDate=$order->orderDate;
-        $isUserBilling[] = json_decode($order -> frozenBillingAddress, true);
+        $orderDate = $order->orderDate;
+        $isUserBilling[] = json_decode($order->frozenBillingAddress,true);
         $countryFind = $isUserBilling[0]['countryId'];
-        $isFindExtraUe = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $countryFind]);
-        $isExtraUe = $isFindExtraUe -> extraue;
+        $isFindExtraUe = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $countryFind]);
+        $isExtraUe = $isFindExtraUe->extraue;
+        $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
+        $remoteShopSellerId=$order->remoteShopSelleId;
+        if ($remoteShopSellerId != 44) {
 
-       /* $billingUserAddress = $order->billingAddressId;
-        $orderUserAddress=$userAddressRepo->findOneBy(['id'=>$billingUserAddress]);*/
+            $findShopEcommerce = $shopRepo->findOneBy(['id' => $remoteShopSellerId]);
+            if ($findShopEcommerce->hasEcommerce == 1) {
+                $db_hostSeller = $findShopEcommerce->dbHost;
+                $db_nameSeller = $findShopEcommerce->dbName;
+                $db_userSeller = $findShopEcommerce->dbUsername;
+                $db_passSeller = $findShopEcommerce->dbPassword;
+                $fee=$findShopEcommerce->paralellFee;
+                $userAddress=$userAddressRepo->findOneBy(['id'=>$findShopEcommerce->billingAddressBookId]);
+                $shippingAddress[] = json_decode($rowFindUserAddress['frozenShippingAddress'], true);
+
+                $findShopHeadInvoice=$shopRepo->findOneBy(['id'=>44]);
+                $logo = $findShopHeadInvoice->logo;
+                $intestation = $findShopHeadInvoice->intestation;
+                $intestation2 =$findShopHeadInvoice->intestation2;
+                $address = $findShopHeadInvoice->address;
+                $address2 = $findShopHeadInvoice->address2;
+                $iva = $findShopHeadInvoice->iva;
+                $tel = $findShopHeadInvoice->tel;
+                $email = $findShopHeadInvoice->email;
 
 
-
-
-        if ($countryFind != '110') {
-            $changelanguage = "1";
-
-        } else {
-            $changelanguage = "0";
-        }
-
-        // prendo l'intestazione
-        $remoteShopSellerId = $order->remoteShopSellerId;
-        $shopInvoices = $shopRepo->findOneBy(['id' => $remoteShopSellerId]);
-        if($remoteShopSellerId==44){
-            $logo = $shopInvoices->logo;
-            $intestation = $shopInvoices->intestation;
-            $intestation2 = $shopInvoices->intestation2;
-            $address = $shopInvoices->address;
-            $address2 = $shopInvoices->address2;
-            $iva = $shopInvoices->iva;
-            $tel = $shopInvoices->tel;
-            $email = $shopInvoices->email;
-
-            /***sezionali*/
-            $receipt = $shopInvoices->receipt;
-            $invoiceUe = $shopInvoices->invoiceUe;
-            $invoiceExtraUe = $shopInvoices->invoiceExtraUe;
-            $siteInvoiceChar = $shopInvoices->siteInvoiceChar;
-            /*** dati db esterno ***/
-            $db_host = $shopInvoices->dbHost;
-            $db_name = $shopInvoices->dbName;
-            $db_user = $shopInvoices->dbUsername;
-            $db_pass = $shopInvoices->dbPassword;
-
-            if($isExtraUe=='1'){
-                $hasInvoice=1;
-            }else {
-                $hasInvoice = $order->hasInvoice;
-            }
-            $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
-            $invoiceNew = $invoiceRepo->getEmptyEntity();
-            $siteChar = $siteInvoiceChar;
-            if ($order->invoice->isEmpty()) {
                 try {
-                    $invoiceNew->orderId = $orderId;
-                    $today = new \DateTime();
-                    $invoiceNew->invoiceYear = $today->format('Y-m-d H:i:s');
-                    $year = (new \DateTime())->format('Y');
-                    $em = $this->app->entityManagerFactory->create('Invoice');
-                    // se è fattura
+
+                    $db_con = new PDO("mysql:host={$db_hostSeller};dbname={$db_nameSeller}",$db_userSeller,$db_passSeller);
+                    $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                    $res = ' connessione ok <br>';
+                } catch (PDOException $e) {
+                    $res = $e->getMessage();
+                }
+                $remoteOrderSellerId=$order->remoteOrderSelleId;
 
 
 
-                    if ($hasInvoice == 1) {
-                        if ($isExtraUe == '1') {
-                            $invoiceType = 'X';
-                            $invoiceTypeVat = 'newX';
-                            $documentType = '17';
-                            $invoiceTypeDocument=3;
-
-                        } else {
-                            $invoiceType = 'P';
-                            $invoiceTypeVat = 'newP';
-                            $documentType = '21';
-                            $invoiceTypeDocument=2;
-                        }
-                        if ($changelanguage != "1") {
-                            // è inglese
-                            $invoiceTypeText = "Fattura Proforma N. :";
-                            $invoiceHeaderText = "FATTURA";
-                            $invoiceTotalDocumentText = "Totale Fattura";
-                        } else {
-                            //è italiano
-                            $invoiceTypeText = "Proforma Invoice N. :";
-                            $invoiceHeaderText = "INVOICE";
-                            $invoiceTotalDocumentText = "Invoice Total";
-
-
-                        }
-
-                    } else {
-                        $invoiceType = 'K';
-                        $invoiceTypeDocument=1;
-                        $invoiceTypeVat = 'newX';
-                        $documentType = '16';
-                        if ($changelanguage != "1") {
-
-                            // è italiano
-                            $invoiceTypeText = "Ricevuta N. :";
-                            $invoiceHeaderText = "RICEVUTA";
-                            $invoiceTotalDocumentText = "Totale Ricevuta";
-                        } else {
-//è inglese
-                            $invoiceTypeText = "Receipt N. :";
-                            $invoiceHeaderText = "RECEIPT";
-                            $invoiceTotalDocumentText = "Receipt Total";
-
-                        }
-                    }
-
-                    switch($invoiceTypeDocument){
-                        case 1:
-                            $number=$em->query("SELECT (shc.receiptCounter+1) as `new` from ShopHasCounter shc
-                                            join Shop s ON shc.shopId=s.id where shc.shopId=? and  s.siteInvoiceChar=? and shc.invoiceYear=?", [$remoteShopSellerId,$siteChar,$year])->fetchAll()[0]['new'];
-                            break;
-
-                        case 2:
-                            $number=$em->query("SELECT (shc.invoiceCounter+1) as `new` from ShopHasCounter shc
+                        $number=$em->query("SELECT (shc.invoiceCounter+1) as `new` from ShopHasCounter shc
                                             join Shop s ON shc.shopId=s.id where shc.shopId=? and s.siteInvoiceChar=? and shc.invoiceYear=?", [$remoteShopSellerId,$siteChar,$year])->fetchAll()[0]['new'];
-                            break;
-
-                        case 3:
-                            $number=$em->query("SELECT (shc.invoiceExtraUeCounter+1) as `new`  from ShopHasCounter shc
-                                            join Shop s ON shc.shopId=s.id where shc.shopId=? and s.siteInvoiceChar= ? and shc.invoiceYear= ?", [$remoteShopSellerId,$siteChar,$year])->fetchAll()[0]['new'];
-                            break;
-                    }
-                    /*$number = $em->query("SELECT ifnull(MAX(invoiceNumber),0)+1 AS new
-                                          FROM Invoice
-                                          JOIN ShopHasCounter ShopHasCounter ON Invoice.id = ShopHasCounter.shopId
-                                          WHERE
-                                          Invoice.invoiceYear = ? AND
-                                          Invoice.invoiceType='" . $invoiceType . "' AND
-                                          Invoice.invoiceShopId='".$remoteShopSellerId."' AND
-                                          Invoice.invoiceSiteChar= ?", [$year, $siteChar])->fetchAll()[0]['new'];*/
-
-                    $invoiceNew->invoiceShopId=$remoteShopSellerId;
-                    $invoiceNew->invoiceNumber = $number;
-                    $invoiceNew->invoiceSiteChar =$siteChar;
-                    $invoiceNew->invoiceType = $invoiceType;
-                    $dateInvoice = strtotime($order->orderDate);
-                    $newdateInvoice = date('Y-m-d H:i:s',$dateInvoice);
-                    $invoiceNew->invoiceDate=$newdateInvoice;
-                    $invoiceDate=date('d/m-Y',$dateInvoice);
-                    //$invoiceNew -> invoiceDate = $today -> format('Y-m-d H:i:s');
-                    // $dateForRemote = $today -> format('Y-m-d H:i:s');
-                    $dateForRemote=$newdateInvoice;
-
-                    $invoiceRepo->insert($invoiceNew);
-                    $shopHasCounter=\Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId'=>44,'invoiceYear'=>$year]);
-                    switch($invoiceTypeDocument){
-                        case 1:
-                            $shopHasCounter->receiptCounter=$number;
-                            $shopHasCounter->update();
-                            break;
-
-                        case 2:
-                            $shopHasCounter->invoiceCounter=$number;
-                            $shopHasCounter->update();
-                            break;
-
-                        case 3:
-                            $shopHasCounter->invoiceextraUeCounter=$number;
-                            $shopHasCounter->update();
-                            break;
-                    }
-
-                    $sectional = $number . '/' . $invoiceType;
-                    $documentRepo = \Monkey::app()->repoFactory->create('Document');
-                    // codice per inserire all'interno della cartella document
-                    $checkIfDocumentExist = $documentRepo->findOneBy(['number' => $number, 'year' => $year]);
-                    if ($checkIfDocumentExist == null) {
-                        $insertDocument = $documentRepo->getEmptyEntity();
-                        $insertDocument->userId = $order->userId;
-                        $insertDocument->shopRecipientId = 1;
-                        $insertDocument->number = $sectional;
-                        $insertDocument->date = $order->orderDate;
-                        $insertDocument->invoiceTypeId = $documentType;
-                        $insertDocument->paydAmount = $order->paidAmount;
-                        $insertDocument->paymentExpectedDate = $order->paymentDate;
-                        $insertDocument->note = $order->note;
-                        $insertDocument->creationDate = $order->orderDate;
-                        $insertDocument->totalWithVat = $order->netTotal;
-                        $insertDocument->year = $year;
-                        $insertDocument->insert();
-                    }
-                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                    $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $stmtCheckDocumentExist =$db_con->prepare("SELECT count(*) AS counterDocument from Document WHERE `number`='".$sectional."'");
-                    $stmtCheckDocumentExist->execute();
-                    while ($rowCheckDocumentExist=$stmtCheckDocumentExist->fetch(PDO::FETCH_ASSOC)){
-                        if ($rowCheckDocumentExist['counterDocument']==1){
-                            $doQuery=1;
-                        }else{
-                            $doQuery=2;
-                        }
-                    }
-                    if($doQuery=='2'){
-                        $remoteAddress=$userAddressRepo->findOneBy(['id'=> $order->billingAddressId]);
-                        if($remoteAddress != null){
-                            $remoteUserAddressId=$remoteAddress->remoteUserId;
-                        }else{
-                            $remoteUserAddressId='';
-                        }
-                        $documentRemoteUpdate=$documentRepo->findOneBy(['userId'=>$order->userId,'number'=>$sectional]);
-                        $insertRemoteDocument=$db_con->prepare("INSERT INTO Document (
-                                                                     userId,
-                                                                     userAddressRecipientId,
-                                                                     shopRecipientId,
-                                                                     `number`,
-                                                                     `date`,
-                                                                     invoiceTypeId,
-                                                                     paymentDate,
-                                                                     paydAmount,
-                                                                     paymentExpectedDate,
-                                                                     note,
-                                                                     creationDate,
-                                                                     carrierId,
-                                                                     totalWithVat,
-                                                                     year )
-                                                                    VALUES
-                                                                    ( 
-                                                                     '".$remoteUserAddressId."',
-                                                                      '".$documentRemoteUpdate->userAddressRecipientId."',
-                                                                      '".$documentRemoteUpdate->shopRecipientId."',
-                                                                      '".$documentRemoteUpdate->number."',
-                                                                      '".$documentRemoteUpdate->date."',
-                                                                      '".$documentRemoteUpdate->invoiceTypeId."',
-                                                                      '".$documentRemoteUpdate->paymentDate."',
-                                                                      '".$documentRemoteUpdate->paydAmount."',
-                                                                      '".$documentRemoteUpdate->paymentExpectedDate."',
-                                                                      '".$documentRemoteUpdate->note."',
-                                                                      '".$documentRemoteUpdate->creationDate."',
-                                                                      '".$documentRemoteUpdate->carrierId."',
-                                                                      '".$documentRemoteUpdate->totalWithVat."',
-                                                                      '".$documentRemoteUpdate->year."'           
-                                                                                )");
-                        $insertRemoteDocument->execute();
-                    }
-
-                    $stmtInvoiceExist = $db_con->prepare("SELECT 
-                                     count(*) AS counterInvoice from Invoice where orderId =".$order->remoteOrderSellerId);
-                    $stmtInvoiceExist->execute();
-                    while ($rowInvoiceExist = $stmtInvoiceExist->fetch(PDO::FETCH_ASSOC)) {
-
-                        if ($rowInvoiceExist['counterInvoice']=='1') {
-                            $doQuery='1';
-                        }else{
-                            $doQuery='2';
-                        }
-                    }
-                    if($doQuery=='2'){
-                        $insertRemoteInvoice=$invoiceRepo->findOneBy(['orderId'=>$order->id]);
-                        $stmtInvoiceInsert=$db_con->prepare("INSERT INTO  Invoice 
-                                                                               (
-                                                                               orderId,
-                                                                               invoiceYear,
-                                                                               invoiceType,
-                                                                               invoiceSiteChar,
-                                                                               invoiceNumber,
-                                                                               invoiceDate,
-                                                                               invoiceText,
-                                                                               creationDate)
-                                                                               VALUES(
-                                                                               '".$order->remoteOrderSellerId."',
-                                                                                '".$insertRemoteInvoice->invoiceYear."',
-                                                                                '".$insertRemoteInvoice->invoiceType."',
-                                                                                '".$insertRemoteInvoice->invoiceSiteChar."',
-                                                                                '".$insertRemoteInvoice->invoiceNumber."',
-                                                                                '".$insertRemoteInvoice->invoiceDate."',
-                                                                                
-                                                                                '',
-                                                                                '".$insertRemoteInvoice->creationDate."'
-                                                                               )
-                                                                               ");
-                        $stmtInvoiceInsert->execute();
 
 
-                    }
+                        $invoiceNew = $invoiceRepo->getEmptyEntity();
+                $invoiceNew->orderId=$orderId;
+                $invoiceNew->invoiceShopId=$remoteShopSellerId;
+                $invoiceNew->invoiceNumber = $number;
+                $invoiceNew->invoiceSiteChar ='P';
+                $invoiceNew->invoiceType = 'P';
+                $dateInvoice = strtotime($order->orderDate);
+                $invoiceYear=date('Y',$dateInvoice);
+                $newdateInvoice = date('Y-m-d H:i:s',$dateInvoice);
+                $invoiceNew->invoiceDate=$newdateInvoice;
+                $invoiceNew->invoiceYear=$invoiceYear;
+                $invoiceDate=date('d/m-Y',$dateInvoice);
+                //$invoiceNew -> invoiceDate = $today -> format('Y-m-d H:i:s');
+                // $dateForRemote = $today -> format('Y-m-d H:i:s');
+                $dateForRemote=$newdateInvoice;
+
+                $invoiceText = '';
+                    $invoiceText .= '
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>';
+                    $invoiceText .= '<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<link rel="icon" type="image/x-icon" sizes="32x32" href="/assets/img/favicon32.png"/>
+<link rel="icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
+<link rel="icon" type="image/x-icon" sizes="16x16" href="/assets/img/favicon16.png"/>
+<link rel="apple-touch-icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<script>
+    paceOptions = {
+        ajax: {ignoreURLs: [\'/blueseal/xhr/TemplateFetchController\', \'/blueseal/xhr/CheckPermission\']}
+    }
+</script>
+    <link type="text/css" href="https://www.iwes.pro/assets/css/pace.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/flick/jquery-ui.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://s3-eu-west-1.amazonaws.com/bamboo-css/jquery.scrollbar.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://s3-eu-west-1.amazonaws.com/bamboo-css/bootstrap-colorpicker.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://github.com/mar10/fancytree/blob/master/dist/skin-common.less" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/skin-bootstrap/ui.fancytree.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/basic.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/ui.dynatree.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/summernote.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://raw.githubusercontent.com/kleinejan/titatoggle/master/dist/titatoggle-dist-min.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/pages-icons.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/pages.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/style.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/fullcalendar.css" rel="stylesheet" media="screen,print"/>
+<script  type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+<script  type="application/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script  type="application/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script  type="application/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/pages.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.prototype.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.ui.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script defer type="application/javascript" src="https://cdn.jsdelivr.net/jquery.bez/1.0.11/jquery.bez.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/unveil/1.3.0/jquery.unveil.min.js"></script>
+<script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/jquery.scrollbar.min.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/Sortable.min.js"></script>
+<script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/bootstrap-colorpicker.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/jquery.fancytree-all.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone-amd-module.min.js"></script>
+<script defer type="application/javascript" src="https://cdn.jsdelivr.net/jquery.dynatree/1.2.4/jquery.dynatree.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/summernote.min.js"></script>
+<script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/summernote-it-IT.js"></script>
+<script defer type="application/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+<script defer type="application/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.kickstart.js"></script>
+<script  type="application/javascript" src="https://www.iwes.pro/assets/js/monkeyUtil.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/invoice_print.js"></script>
+<script defer async type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.common.js"></script>
+    <title>BlueSeal - Stampa fattura</title>
+    <style type="text/css">';
 
 
-
-                } catch (\Throwable $e) {
-                    throw $e;
-                    $this->app->router->response()->raiseProcessingError();
-                    $this->app->router->response()->sendHeaders();
-                }
-            }
-
-            foreach ($order->invoice as $invoice) {
-                if (is_null($invoice->invoiceText)) {
-                    $userAddress = $userAddressRepo->findOneBy(['id'=>$order->billingAddressId]);
-                    if (!is_null($order->shipmentAddressId)) {
-                        $userShipping = $userAddressRepo->findOneBy(['id'=>$order->shipmentAddressId]);
-                    } else {
-                        $userShipping = $userAddress;
-                    }
-
-
-                    $productRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
-                    if ($hasInvoice == '1') {
-                        if ($isExtraUe == '1') {
-                            if ($remoteShopSellerId == '44') {
-                                $invoiceType = 'X';
-                                $invoiceTypeVat = 'newX';
-                            }
-                            if ($changelanguage != "1") {
-                                $invoiceTypeText = "Fattura N. :";
-                                $invoiceHeaderText = "FATTURA";
-                                $invoiceTotalDocumentText = "Totale Fattura";
-                            } else {
-                                $invoiceTypeText = "Invoice N. :";
-                                $invoiceHeaderText = "INVOICE";
-                                $invoiceTotalDocumentText = "Invoice Total";
-                            }
-                        } else {
-                            if ($remoteShopSellerId == '44') {
-                                $invoiceType = 'P';
-                                $invoiceTypeVat = 'newP';
-                            }
-                            if ($changelanguage != "1") {
-                                $invoiceTypeText = "Fattura N. :";
-                                $invoiceHeaderText = "FATTURA";
-                                $invoiceTotalDocumentText = "Totale Fattura";
-                            } else {
-                                $invoiceTypeText = "Invoice N. :";
-                                $invoiceHeaderText = "INVOICE";
-                                $invoiceTotalDocumentText = "Invoice Total";
-                            }
-                        }
-                    } else {
-                        if ($remoteShopSellerId == '44') {
-                            $invoiceType = 'K';
-                            $invoiceTypeVat = 'newK';
-                        }
-                        if ($changelanguage != "1") {
-
-                            $invoiceTypeText = "Ricevuta N. :";
-                            $invoiceHeaderText = "RICEVUTA";
-                            $invoiceTotalDocumentText = "Totale Ricevuta";
-                        } else {
-
-                            $invoiceTypeText = "Receipt N. :";
-                            $invoiceHeaderText = "RECEIPT";
-                            $invoiceTotalDocumentText = "Receipt Total";
-
-                        }
-                    }
-
-
-
-                    /*'logo' => $this->app->cfg()->fetch("miscellaneous", "logo"),
-                        'fiscalData' => $this->app->cfg()->fetch("miscellaneous", "fiscalData"),*/
-                    $invoice->invoiceText = $view->render([
-                        'app' => new CRestrictedAccessWidgetHelper($this->app),
-                        'userAddress' => $userAddress,
-                        'userShipping' => $userShipping,
-                        'order' => $order,
-                        'invoice' => $invoice,
-                        'productRepo' => $productRepo,
-                        'page' => $this->page,
-                        'logo' => $logo,
-                        'intestation' => $intestation,
-                        'intestation2' => $intestation2,
-                        'address' => $address,
-                        'address2' => $address2,
-                        'iva' => $iva,
-                        'tel' => $tel,
-                        'email' => $email,
-                        'invoiceType' => $invoiceType,
-                        'invoiceTypeVat' => $invoiceTypeVat,
-                        'invoiceTypeText' => $invoiceTypeText,
-                        'invoiceHeaderText' => $invoiceHeaderText,
-                        'invoiceTotalDocumentText' => $invoiceTotalDocumentText,
-                        'changelanguage' => $changelanguage
-                    ]);
-                    try {
-                        $invoiceRepo->update($invoice);
-                        /*
-                                            if ($remoteShopSellerId == '44') {
-                                                $api_uid = $this->app->cfg()->fetch('fattureInCloud', 'api_uid');
-                                                $api_key = $this->app->cfg()->fetch('fattureInCloud', 'api_key');
-                                                if ($hasInvoice == '1' && $isExtraUe == '0') {
-                                                    $insertJson = '{
-                          "api_uid": "' . $api_uid . '",
-                          "api_key": "' . $api_key . '",
-                          "id_cliente": "0",
-                          "id_fornitore": "0",
-                          "nome": "' . $userAddress->surname . ' ' . $userAddress->name . ' ' . $userAddress->company . '",
-                          "indirizzo_via": "' . $userAddress->address . '",
-                          "indirizzo_cap": "' . $userAddress->postcode . '",
-                          "indirizzo_citta": "' . $userAddress->city . '",
-                          "indirizzo_provincia": "' . $userAddress->province . '",
-                          "indirizzo_extra": "",
-                          "paese": "Italia",
-                          "paese_iso": "' . $userAddress->country->ISO . '",
-                          "lingua": "it",
-                          "piva": "' . $userAddress->fiscalCode . '",
-                          "cf": "' . $userAddress->fiscalCode . '",
-                          "autocompila_anagrafica": false,
-                          "salva_anagrafica": false,
-                          "numero": "' . $sectional . '",
-                          "data": "' . $todayInvoice . '",
-                          "valuta": "EUR",
-                          "valuta_cambio": 1,
-                          "prezzi_ivati": true,
-                          "rivalsa": 0,
-                          "cassa": 0,
-                          "rit_acconto": 0,
-                          "imponibile_ritenuta": 0,
-                          "rit_altra": 0,
-                          "marca_bollo": 0,
-                          "oggetto_visibile": "",
-                          "oggetto_interno": "",
-                          "centro_ricavo": "",
-                          "centro_costo": "",
-                          "note": "",
-                          "nascondi_scadenza": false,
-                          "ddt": false,
-                          "ftacc": false,
-                          "id_template": "0",
-                          "ddt_id_template": "0",
-                          "ftacc_id_template": "0",
-                          "mostra_info_pagamento": false,';
-                                                    $orderPaymentMethodId = $order->orderPaymentMethodId;
-                                                    $orderPaymentMethodTranslation = \Monkey::app()->repoFactory->create('OrderPaymentMethodTranslation')->findOneBy(['orderPaymentMethodId' => $orderPaymentMethodId, 'langId' => 1]);
-                                                    $metodo_pagamento = $orderPaymentMethodTranslation->name;
-                                                    switch ($orderPaymentMethodId) {
-                                                        case 1:
-                                                            $metodo_titoloN = 'Merchant Paypal';
-                                                            $metodo_descN = $api_uid = $this->app->cfg()->fetch('payPal', 'business');
-                                                            break;
-                                                        case 2:
-                                                            $metodo_titoloN = 'Merchant Nexi';
-                                                            $metodo_descN = '';
-                                                            break;
-                                                        case 3:
-                                                            $metodo_titoloN = 'IBAN';
-                                                            $metodo_descN = 'IT54O0521613400000000002345';
-                                                            break;
-                                                        case 5:
-                                                            $metodo_titoloN = '';
-                                                            $metodo_descN = '';
-                                                            break;
-
-                                                    }
-
-
-                                                    $insertJson .= '"metodo_pagamento": "' . $metodo_pagamento . '",
-                          "metodo_titoloN": "' . $metodo_titoloN . '",
-                          "metodo_descN": "' . $metodo_descN . '",
-                          "mostra_totali": "tutti",
-                          "mostra_bottone_paypal": false,
-                          "mostra_bottone_bonifico": false,
-                          "mostra_bottone_notifica": false,';
-                                                    $insertJson .= '"lista_articoli": ';
-                                                    $tot = 0;
-                                                    $i = 0;
-                                                    $scontotot = 0;
-                                                    $articoli = [];
-                                                    $ordinearticolo = 0;
-                                                    foreach ($order->orderLine as $orderLine) {
-                                                        $idlineaordine = $i + 1;
-                                                        $idOrderLine = $orderLine->id;
-                                                        $ordinearticolo + 1;
-                                                        $productSku = CProductSku::defrost($orderLine->frozenProduct);
-                                                        $codice = $orderLine->orderId . "-" . $orderLine->id;
-                                                        $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
-                                                        $nome = $productSku->productId . "-" . $productSku->productVariantId . "-" . $productSku->productSizeId;
-                                                        $um = "";
-                                                        $quantity = $productSku->stockQty;
-                                                        $descrizione = (($productNameTranslation) ? $productNameTranslation->name : '') . ($orderLine->warehouseShelfPosition ? ' / ' . $orderLine->warehouseShelfPosition->printPosition() : '') . ' ' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId . " " . $productSku->getPublicSize()->name;
-                                                        $categoria = "";
-                                                        $prezzo_netto = number_format($orderLine->activePrice + $orderLine->couponCharge, 2);
-                                                        $prezzo_lordo = number_format($orderLine->activePrice, 2);
-                                                        $scontoCharge = number_format($orderLine->couponCharge, 2);
-                                                        $sconto = abs($scontoCharge);
-                                                        $sconto = number_format(100 * $sconto / $orderLine->activePrice, 2);
-                                                        $cod_iva = "0";
-                                                        $applica_ra_contributi = "true";
-                                                        $ordine = $ordinearticolo;
-                                                        $sconto_rosso = "0";
-                                                        $in_ddt = false;
-                                                        $magazzino = true;
-                                                        $scontotot += abs($scontoCharge);
-                                                        $tot += $orderLine->activePrice;
-
-                                                        $articoli[] = [
-                                                            'id' => $idlineaordine,
-                                                            'codice' => $codice,
-                                                            'nome' => $nome,
-                                                            'um' => $um,
-                                                            'quantita' => 1,
-                                                            'descrizione' => $descrizione,
-                                                            'categoria' => $categoria,
-                                                            'prezzo_netto' => $prezzo_netto,
-                                                            'prezzo_lordo' => $prezzo_lordo,
-                                                            'cod_iva' => $cod_iva,
-                                                            'tassabile' => true,
-                                                            'sconto' => $sconto,
-                                                            'applica_ra_contributi' => $applica_ra_contributi,
-                                                            'ordine' => $ordine,
-                                                            'sconto_rosso' => $sconto_rosso,
-                                                            'in_ddt' => $in_ddt,
-                                                            'magazzino' => $magazzino
-                                                        ];
-                                                    }
-                                                    $tot = number_format($tot, 2) - number_format($scontotot, 2);
-                                                    $today = new \DateTime();
-                                                    $dateInvoice = $today->format('d/m/Y');
-                                                    $insertJson .= json_encode($articoli) . ',
-
-                                        "lista_pagamenti": [
-                                      {
-                                       "data_scadenza":"' . $dateInvoice . '",
-                                       "importo": ' . number_format($tot, 2) . ',
-                                       "metodo": "not",
-                                       "data_saldo": "' . $dateInvoice . '"
-                                      }
-                                      ],
-                                      "ddt_numero": "",
-                                      "ddt_data": "' . $dateInvoice . '",
-                                      "ddt_colli": "",
-                                      "ddt_peso": "",
-                                      "ddt_causale": "",
-                                      "ddt_luogo": "",
-                                      "ddt_trasportatore": "",
-                                      "ddt_annotazioni": "",
-                                      "PA": false,
-                                      "PA_tipo_cliente": "B2B",
-                                      "PA_tipo": "nessuno",
-                                      "PA_numero": "",
-                                      "PA_data": "' . $dateInvoice . '",
-                                      "PA_cup": "",
-                                      "PA_cig": "",
-                                      "PA_codice": "",
-                                      "PA_pec": "",
-                                      "PA_esigibilita": "N",
-                                      "PA_modalita_pagamento": "MP01",
-                                      "PA_istituto_credito": "",
-                                      "PA_iban": "",
-                                      "PA_beneficiario": "",
-                                      "extra_anagrafica": {
-                                        "mail": "",
-                                        "tel": "",
-                                        "fax": ""
-                                      },
-                                      "split_payment": false
-                                    }';
-                                                    \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'jsonfattureincloud', 'Json Fatture in Cloud fattura Numero' . $number . ' data:' . $dateInvoice, $insertJson);
-                                                    $urlInsert = "https://api.fattureincloud.it/v1/fatture/nuovo";
-                                                    $options = array(
-                                                        "http" => array(
-                                                            "header" => "Content-type: text/json\r\n",
-                                                            "method" => "POST",
-                                                            "content" => $insertJson
-                                                        ),
-                                                    );
-                                                    $context = stream_context_create($options);
-                                                    $result = json_decode(file_get_contents($urlInsert, false, $context), true);
-                                                    if (array_key_exists('success', $result)) {
-                                                        $resultApi = "Risultato=" . $result['success'] . " new_id:" . $result['new_id'] . " token:" . $result['token'];
-                                                    } else {
-                                                        $resultApi = "Errore=" . $result['error'] . " codice di errore:" . $result['error_code'];
-                                                    }
-                                                    \Monkey::app()->applicationLog('InvoiceAjaxController', 'Report', 'ResponseApi fatture in Cloud Numero' . $sectional . ' data:' . $dateInvoice, 'Risposta FatturaincCloud', $resultApi);
-                                                    if (array_key_exists('new_id', $result)) {
-                                                        $fattureinCloudId = $result['new_id'];
-                                                    }
-                                                    if (array_key_exists('token', $result)) {
-                                                        $fattureinCloudToken = $result['token'];
-
-                                                        $updateInvoice = \Monkey::app()->repoFactory->create('Invoice')->findOneBy(['orderId' => $orderId,'remoteShopId'=>44]);
-                                                        $updateInvoice->fattureInCloudId = $fattureinCloudId;
-                                                        $updateInvoice->fattureInCloudToken = $fattureinCloudToken;
-                                                        $updateInvoice->update();
-                                                    }
-
-
-                                                }
-                                            }*/
-
-                    } catch (\Throwable $e) {
-                        throw $e;
-                        $this->app->router->response()->raiseProcessingError();
-                        $this->app->router->response()->sendHeaders();
-                    }
-                }
-                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                $updateRemoteInvoice = $invoiceRepo->findOneBy(['orderId' => $order->id]);
-                $invoiceTextUpdate = $updateRemoteInvoice->invoiceText;
-                $stmtInvoiceUpdate = $db_con->prepare(" UPDATE Invoice SET invoiceText = :invoiceText where orderId = :remoteId");
-
-                $stmtInvoiceUpdate->bindValue(':invoiceText', $invoice->invoiceText, PDO::PARAM_STR);
-                $stmtInvoiceUpdate->bindValue(':remoteId', $order->remoteOrderSellerId, PDO::PARAM_INT);
-                $stmtInvoiceUpdate->execute();
-
-
-
-
-
-                return $invoice->invoiceText;
-            }
-        }else{
-            return 'non puoi fattura un ordine parallelo per altri shop';
+                    $invoiceText .= '
+        @page {
+            size: A4;
+            margin: 5mm 0mm 0mm 0mm;
         }
 
+        @media print {
+            body {
+                zoom: 100%;
+                width: 800px;
+                height: 1100px;
+                overflow: hidden;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .newpage {
+                page-break-before: always;
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+
+            @page {
+                size: A4;
+                margin: 5mm 0mm 0mm 0mm;
+            }
+
+            .cover {
+                display: none;
+            }
+
+            .page-container {
+                display: block;
+            }
+
+            /*remove chrome links*/
+            a[href]:after {
+                content: none !important;
+            }
+
+            .col-md-1,
+            .col-md-2,
+            .col-md-3,
+            .col-md-4,
+            .col-md-5,
+            .col-md-6,
+            .col-md-7,
+            .col-md-8,
+            .col-md-9,
+            .col-md-10,
+            .col-md-11,
+            .col-md-12 {
+                float: left;
+            }
+
+            .col-md-12 {
+                width: 100%;
+            }
+
+            .col-md-11 {
+                width: 91.66666666666666%;
+            }
+
+            .col-md-10 {
+                width: 83.33333333333334%;
+            }
+
+            .col-md-9 {
+                width: 75%;
+            }
+
+            .col-md-8 {
+                width: 66.66666666666666%;
+            }
+
+            .col-md-7 {
+                width: 58.333333333333336%;
+            }
+
+            .col-md-6 {
+                width: 50%;
+            }
+
+            .col-md-5 {
+                width: 41.66666666666667%;
+            }
+
+            .col-md-4 {
+                width: 33.33333333333333%;
+            }
+
+            .col-md-3 {
+                width: 25%;
+            }
+
+            .col-md-2 {
+                width: 16.666666666666664%;
+            }
+
+            .col-md-1 {
+                width: 8.333333333333332%;
+            }
+
+            .col-md-pull-12 {
+                right: 100%;
+            }
+
+            .col-md-pull-11 {
+                right: 91.66666666666666%;
+            }
+
+            .col-md-pull-10 {
+                right: 83.33333333333334%;
+            }
+
+            .col-md-pull-9 {
+                right: 75%;
+            }
+
+            .col-md-pull-8 {
+                right: 66.66666666666666%;
+            }
+
+            .col-md-pull-7 {
+                right: 58.333333333333336%;
+            }
+
+            .col-md-pull-6 {
+                right: 50%;
+            }
+
+            .col-md-pull-5 {
+                right: 41.66666666666667%;
+            }
+
+            .col-md-pull-4 {
+                right: 33.33333333333333%;
+            }
+
+            .col-md-pull-3 {
+                right: 25%;
+            }
+
+            .col-md-pull-2 {
+                right: 16.666666666666664%;
+            }
+
+            .col-md-pull-1 {
+                right: 8.333333333333332%;
+            }
+
+            .col-md-pull-0 {
+                right: 0;
+            }
+
+            .col-md-push-12 {
+                left: 100%;
+            }
+
+            .col-md-push-11 {
+                left: 91.66666666666666%;
+            }
+
+            .col-md-push-10 {
+                left: 83.33333333333334%;
+            }
+
+            .col-md-push-9 {
+                left: 75%;
+            }
+
+            .col-md-push-8 {
+                left: 66.66666666666666%;
+            }
+
+            .col-md-push-7 {
+                left: 58.333333333333336%;
+            }
+
+            .col-md-push-6 {
+                left: 50%;
+            }
+
+            .col-md-push-5 {
+                left: 41.66666666666667%;
+            }
+
+            .col-md-push-4 {
+                left: 33.33333333333333%;
+            }
+
+            .col-md-push-3 {
+                left: 25%;
+            }
+
+            .col-md-push-2 {
+                left: 16.666666666666664%;
+            }
+
+            .col-md-push-1 {
+                left: 8.333333333333332%;
+            }
+
+            .col-md-push-0 {
+                left: 0;
+            }
+
+            .col-md-offset-12 {
+                margin-left: 100%;
+            }
+
+            .col-md-offset-11 {
+                margin-left: 91.66666666666666%;
+            }
+
+            .col-md-offset-10 {
+                margin-left: 83.33333333333334%;
+            }
+
+            .col-md-offset-9 {
+                margin-left: 75%;
+            }
+
+            .col-md-offset-8 {
+                margin-left: 66.66666666666666%;
+            }
+
+            .col-md-offset-7 {
+                margin-left: 58.333333333333336%;
+            }
+
+            .col-md-offset-6 {
+                margin-left: 50%;
+            }
+
+            .col-md-offset-5 {
+                margin-left: 41.66666666666667%;
+            }
+
+            .col-md-offset-4 {
+                margin-left: 33.33333333333333%;
+            }
+
+            .col-md-offset-3 {
+                margin-left: 25%;
+            }
+
+            .col-md-offset-2 {
+                margin-left: 16.666666666666664%;
+            }
+
+            .col-md-offset-1 {
+                margin-left: 8.333333333333332%;
+            }
+
+            .col-md-offset-0 {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="fixed-header">
+
+<!--start-->
+<div class="container container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="invoice padding-50 sm-padding-10">
+                <div>
+                    <div class="pull-left">
+                        <!--logo negozio-->
+                        <img width="235" height="47" alt="" class="invoice-logo"
+                             data-src-retina=' . $logo . ' data-src=' . $logo . ' src=' . $logo . '>
+                        <!--indirizzo negozio-->
+                        <br><br>
+                        <address class="m-t-10"><b>' . $intestation . '
+                                <br>' . $intestation2 . '</b>
+                            <br>' . $address . '
+                            <br>' . $address2 . '
+                            <br>' . $iva . '
+                            <br>' . $tel . '
+                            <br>' . $email . '
+                        </address>
+                        <br>
+                        <div>
+                            <div class="pull-left font-montserrat all-caps small">
+                                <strong>' . $invoiceTypeText . '</strong>  ' . $number . "/" . $invoiceType . '<strong> del </strong>' . $invoiceDate . '
+                            </div>
+
+                        </div>
+                        <br>
+                        <div>
+                            <div class="pull-left font-montserrat small"><strong>';
+
+                    if ($changelanguage != 1) {
+                        $referOrder = 'Rif. ordine N. ';
+                    } else {
+                        $referOrder = 'Order Reference N:';
+                    }
+                    $invoiceText .= $referOrder;
+                    $invoiceText .= '</strong>';
+                    $date = new DateTime($rowFindUserAddress['orderDate']);
+                    if ($changelanguage != 1) {
+                        $refertOrderIdandDate = '  ' . $remoteOrderSellerId . '-' . $remoteOrderLineSellerId . ' del ' . $invoiceDate;
+                    } else {
+                        $refertOrderIdandDate = '  ' . $remoteOrderSellerId . '-' . $remoteOrderLineSellerId . ' date ' . $invoiceDate;
+                    };
+                    $invoiceText .= $refertOrderIdandDate . '</div>
+                        </div>
+                        <div><br>
+                            <div class="pull-left font-montserrat small"><strong>';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Metodo di pagamento';
+                    } else {
+                        $invoiceText .= 'Payment Method';
+                    }
+                    $invoiceText .= '</strong>';
+                    $invoiceText .= ' ' . $paymentMethod . '</div>
+
+                        </div>
+                    </div>
+                    <div class="pull-right sm-m-t-0">
+                        <h2 class="font-montserrat all-caps hint-text"><?php echo $invoiceHeaderText; ?></h2>
+
+                        <div class="col-md-12 col-sm-height sm-padding-20">
+                            <p class="small no-margin">';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Intestata a';
+                    } else {
+                        $invoiceText .= 'Invoice Address';
+                    }
+                    $invoiceText .= '</p>';
+                    $invoiceText .= '<h5 class="semi-bold m-t-0 no-margin">' . $userAddress->name . ' ' . $userAddress->subject . '</h5>';
+                    $invoiceText .= '<address>';
+                    $invoiceText .= '<strong>';
+                    $invoiceText .= $userAddress->address . ' ' . $userAddress->extra;
+                    $invoiceText .= '<br>' . $userAddress->postcode . ' ' . $userAddress->city . ' (' . $userAddress->province . ')';
+                    $countryRepo = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $userAddress->countryId]);
+                    $invoiceText .= '<br>' . $countryRepo -> name;
+                    if ($changelanguage != 1) {
+                        $transfiscalcode = 'C.FISC. o P.IVA: ';
+                    } else {
+                        $transfiscalcode = 'VAT';
+                    }
+                    $invoiceText .= '<br>';
+
+                    $invoiceText .= $transfiscalcode . $userAddress -> vatNumber;
+
+
+                    $invoiceText .= '</strong>';
+                    $invoiceText .= '</address>';
+                    $invoiceText .= '<div class="clearfix"></div><br><p class="small no-margin">';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Indirizzo di Spedizione';
+                    } else {
+                        $invoiceText .= 'Shipping Address';
+                    }
+
+                    $invoiceText .= '</p><address>';
+                    $invoiceText .= '<strong>' . $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['name'];
+                    $invoiceText .= '<br>' . $shippingAddress[0]['address'];
+                    $invoiceText .= '<br>' . $shippingAddress[0]['postcode'] . ' ' . $shippingAddress[0]['city'] . ' (' . $shippingAddress[0]['province'] . ')';
+                    $countryRepo = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $userAddress[0]['countryId']]);
+                    $invoiceText .= '<br>' . $countryRepo -> name . '</strong>';
+                    $invoiceText .= '</address>';
+                    $invoiceText .= '</div>';
+                    $invoiceText .= '</div>';
+                    $invoiceText .= '</div>';
+                    $invoiceText .= '<table class="table invoice-table m-t-0">';
+                    $invoiceText .= '<thead>
+                    <!--tabella prodotti-->
+                    <tr>';
+                    $invoiceText .= '<th class="small">';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Descrizione Prodotto';
+                    } else {
+                        $invoiceText .= 'Description';
+                    }
+                    $invoiceText .= '</th>';
+                    $invoiceText .= '<th class="text-center small">';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Taglia';
+
+                    } else {
+                        $invoiceText .= 'Size';
+                    }
+                    $invoiceText .= '</th>';
+                    $invoiceText .= '<th></th>';
+                    $invoiceText .= '<th class="text-center small">';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Importo';
+                    } else {
+                        $invoiceText .= 'Amount';
+                    }
+                    $invoiceText .= '</th>';
+
+                    $invoiceText .= '</tr></thead><tbody>';
+                    $discount = 0;
+                    $shippingCharge = 0;
+                    $imponibile = 0;
+                    $vat = 0;
+                    $tot = 0;
+                $orderLine=$orderLineRepo->findBy(['orderId'=>$orderId]);
+                    foreach($orderLine as $ol){
+                        if ($ol -> status != 'ORD_FRND_CANC') {
+
+                            $invoiceText .= '<tr>';
+                            $invoiceText .= '<td class="">';
+
+                            $productSku = \bamboo\domain\entities\CProductSku::defrost($ol->frozenProduct);
+                            $productRepo = \Monkey::app()->repoFactory->create('Product');
+                            $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId,'productVariantId' => $productSku->productVariantId,'langId' => '1']);
+                            $invoiceText .= (($productNameTranslation) ? $productNameTranslation->name : '') . ($ol->warehouseShelfPosition ? ' / ' . $ol->warehouseShelfPosition->printPosition() : '') . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId;
+                            $invoiceText .= '</td>';
+                            $productSize = \Monkey::app()->repoFactory->create('ProductSize')->findOneBy(['id' => $productSku->productSizeId]);
+                            $invoiceText .= '<td class="text-center">' . $productSize->name;
+                            $invoiceText .= '<td></td>';
+                            $invoiceText .= '</td>';
+                            $invoiceText .= '<td class="text-center">';
+
+                            $tot += $ol->activePrice;
+                            $discount += $ol->couponCharge;
+                            $tot+=$discount;
+                            $shippingCharge += $ol->shippingCharge;
+                            $tot+=$shippingCharge;
+                            $invoiceText .= money_format('%.2n', $ol->activePrice+$ol->couponCharge+$ol->shippingCharge) . ' &euro;' . '</td></tr>';
+
+                            $feeSeller = ($ol->activePrice+$ol->couponCharge+$ol->shippingCharge) / 100 * $fee;
+                            $tot -= $feeSeller;
+                            $invoiceText .= '<tr><td colspan="2" class="text-center">Commissione di Vendita</td><td class="text-center">-' . money_format('%.2n', $feeSeller) . ' &euro;' . '</td></tr>';
+                        }
+                    }
+
+                    $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px">
+                            <strong>';
+                    if ($changelanguage != 1) {
+                        $invoiceText .= 'Totale della Merce';
+                    } else {
+                        $invoiceText .= 'Total Amount ';
+                    }
+                    $invoiceText .= '</strong></td>
+                        <td style="border: 0px"
+                            class="text-center">' . money_format('%.2n', $tot) . ' &euro;' . '</td>
+                    </tr>';
+
+                    ($changelanguage != 1) ? $transdiscount = 'Sconto' : $transdiscount = 'Discount';
+                    ($changelanguage != 1) ? $transmethodpayment = 'Modifica di pagamento' : $transmethodpayment = 'Transaction Discount';
+                    ($changelanguage != 1) ? $transdeliveryprice = 'Spese di Spedizione' : $transdeliveryprice = 'Shipping Cost';
+                    $invoiceText .= ((!is_null($discount)) && ($discount != 0)) ? '<tr class="text-left font-montserrat small">
+                            <td style="border: 0px"></td>
+                            <td style="border: 0px"></td>
+                            <td style="border: 0px">' . $transdiscount . '<strong></strong></td>
+                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $discount) . ' &euro; </td></tr>' : null;
+                    $invoiceText .= ((!is_null($order->paymentModifier)) && ($order->paymentModifier != 0)) ? '<tr class="text-left font-montserrat small">
+                            <td style="border: 0px"></td>
+                            <td style="border: 0px"></td><td style="border: 0px"><strong>' . $transmethodpayment . '</strong></td>
+                            <td style="border: 0px" class="text-center">' . money_format('%.2n', $order->paymentModifier) . ' &euro; </td></tr>' : null;
+                    $invoiceText .= '<tr class="text-left font-montserrat small">
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px"></td>
+                        <td class="separate"><strong>' . $transdeliveryprice . '</strong></td>
+                        <td class="separate text-center">0.00 &euro;</td>
+                    </tr>
+                    <tr style="border: 0px" class="text-left font-montserrat small hint-text">
+                        <td class="text-left" width="30%">';
+
+
+                $invoiceText .= 'Imponibile<br>';
+
+                $imp = ($tot * 100) / 122;
+                $invoiceText .= money_format('%.2n', $imp) . ' &euro;';
+
+                $invoiceText .= '<br>';
+
+
+                $invoiceText .= '</td>
+                        <td class="text-left" width="25%">';
+
+
+                $invoiceText .= 'IVA 22%<br>';
+
+                $iva = ($imp / 100) * 22;
+                $invoiceText .= money_format('%.2n', $iva) . ' &euro;';
+
+                $invoiceText .= '<br>';
+
+
+                $invoiceText .= '<br></td>';
+                $invoiceText .= '<td class="semi-bold"><h4>Totale Fattura</h4></td>';
+                $invoiceText .= '<td class="semi-bold text-center">
+                            <h2>' . money_format('%.2n', $tot) . ' &euro; </h2></td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div>
+                <center><img alt="" class="invoice-thank" data-src-retina="/assets/img/invoicethankyou.jpg"
+                             data-src="/assets/img/invoicethankyou.jpg" src="/assets/img/invoicethankyou.jpg">
+                </center>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+</div><!--end-->';
+
+                    $invoiceText .= '<script type="application/javascript">
+    $(document).ready(function () {
+
+        Pace.on(\'done\', function () {
+
+            setTimeout(function () {
+                window.print();
+
+                setTimeout(function () {
+                    window.close();
+                }, 1);
+
+            }, 200);
+
+        });
+    });
+</script>
+</body>
+</html>';
+                    $invoiceNew->invoiceText=$invoiceText;
+                    $invoiceNew->insert();
+                try {
+                    $stmtInsertRemoteInvoiceSeller = $db_con -> prepare('INSERT INTO Invoice
+    (orderId,invoiceYear,invoiceType,invoiceSiteChar,invoiceNumber,invoiceDate,invoiceText,creationDate,remoteIwesOrderId,remoteOrderSupplierId) 
+    VALUES ( 
+    \'' . $remoteOrderSellerId . '\',
+    \'' . $invoiceYear . '\',
+     \'P\',
+    \'P\',
+    \'' . $number . '\',
+    \'' . $dateForRemote . '\',
+    \'' . $invoiceText . '\',
+    now(),
+    \'' . $orderId . '\',
+   null)');
+                    $stmtInsertRemoteInvoiceSeller -> execute();
+                    $res='Inserimento Fattura su Seller Eseguita Correttamente';
+
+                } catch (\Throwable $exception) {
+                    $sql = 'INSERT INTO Invoice
+    (orderId,invoiceYear,invoiceType,invoiceSiteChar,invoiceNumber,invoiceDate,invoiceText,creationDate,remoteIwesOrderId,remoteOrderSupplierId) 
+    VALUES ( 
+    \'' . $remoteOrderSellerId . '\',
+    \'' . $invoiceYear . '\',
+     \'P\',
+    \'P\',
+    \'' . $number . '\',
+    \'' . date('Y-m-d H:i:s') . '\',
+    \'' . $invoiceText . '\',
+    now(),
+    \'' . $orderId . '\',
+    null)';
+
+                    \Monkey ::app() -> applicationLog('CInvoiceIwesToSellerAjaxController.php', 'error', 'query remota', $sql, $exception);
+                    $res=$exception;
+
+                }
+
+
+            }
+
+            return $res;
+        }else{
+            return 'L\'ordine  appartine alla piattaforma Pickyshop';
+        }
 
 
     }

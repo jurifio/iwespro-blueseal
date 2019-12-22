@@ -669,7 +669,7 @@ class CFriendAccept extends AAjaxController
                     }
                     $invoiceText .= '<br>';
 
-                    $invoiceText .= $transfiscalcode . $userAddress -> vatNumber;
+                    $invoiceText .= $transfiscalcode . $userAddress[0]['vatNumber'];
 
 
                     $invoiceText .= '</strong>';

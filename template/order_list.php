@@ -240,6 +240,16 @@
         <bs-toolbar-button
                 data-remote="bs.customer.load.document"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-wheelchair-alt"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Genera Fattura verso il Seller(!!!)"
+                data-placement="bottom"
+                data-event="bs.generate.invoice.toseller"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
