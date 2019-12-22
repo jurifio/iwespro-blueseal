@@ -61,15 +61,14 @@ $(document).on('bs.generate.invoice.toseller', function () {
 
     var orderId = selectedRows[0].DT_RowId;
 
-    modal = new $.bsModal('Elimina fisicamente e in modo permanente l\'ordine!',
+    modal = new $.bsModal('Genera Fattura Seller!',
         {
-            body: 'Proseguendo sarà eliminato per sempre l\'ordine <strong>' + orderId + '</strong>!<br />' +
-                'Pensaci un momento prima di proseguire!',
+            body: 'Proseguendo saranno generati i documenti verso il Seller per  l\'ordine <strong>' + orderId + '</strong>!<br />',
             okButtonEvent: function () {
                 $.ajax(
                     {
-                        url: '/blueseal/xhr/OrderDeleteCompleteAjaxController',
-                        method: 'DELETE',
+                        url: '/blueseal/xhr/InvoiceIwesToSellerAjaxController',
+                        method: 'POST',
                         data: {orderId: orderId}
                     }
                 ).done(function (res) {

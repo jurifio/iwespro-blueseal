@@ -98,7 +98,7 @@ class CInvoiceAjaxController extends AAjaxController
                     $today = new \DateTime();
                     $invoiceNew->invoiceYear = $today->format('Y-m-d H:i:s');
                     $year = (new \DateTime())->format('Y');
-                    $em = $this->app->entityManagerFactory->create('Invoice');
+                    $em = $this->app->entityManagerFactory->create('ShopHasCounter');
                     // se è fattura
 
 

@@ -28,22 +28,19 @@ use PDOException;
  */
 class CInvoiceIwesToSellerAjaxController extends AAjaxController
 {
-    protected $fallBack = "blueseal";
-    protected $pageSlug = "invoice_print";
+
 
     public function post()
     {
 
-        $view = new VBase(array());
-        $this->page = new CBlueSealPage($this->pageSlug,$this->app);
-        $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths','blueseal') . '/template/invoice_print.php');
+
 
         $orderId = $this->app->router->request()->getRequestData('orderId');
 
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
-        $ordeLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
+        $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
-        $userAddressRepo = \Monkey::app()->repoFactory->create('UserAddress');
+        $userAddressRepo = \Monkey::app()->repoFactory->create('AddressBook');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
         $orderDate = $order->orderDate;
         $isUserBilling[] = json_decode($order->frozenBillingAddress,true);
@@ -51,7 +48,11 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
         $isFindExtraUe = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $countryFind]);
         $isExtraUe = $isFindExtraUe->extraue;
         $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
-        $remoteShopSellerId=$order->remoteShopSelleId;
+        $remoteShopSellerId=$order->remoteShopSellerId;
+        $invoiceTypeText = "Fattura Proforma N. :";
+        $invoiceHeaderText = "FATTURA";
+        $invoiceTotalDocumentText = "Totale Fattura";
+        $invoiceType='P';
         if ($remoteShopSellerId != 44) {
 
             $findShopEcommerce = $shopRepo->findOneBy(['id' => $remoteShopSellerId]);
@@ -62,7 +63,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                 $db_passSeller = $findShopEcommerce->dbPassword;
                 $fee=$findShopEcommerce->paralellFee;
                 $userAddress=$userAddressRepo->findOneBy(['id'=>$findShopEcommerce->billingAddressBookId]);
-                $shippingAddress[] = json_decode($rowFindUserAddress['frozenShippingAddress'], true);
+                $shippingAddress[] = json_decode($order->frozenShippingAddress, true);
 
                 $findShopHeadInvoice=$shopRepo->findOneBy(['id'=>44]);
                 $logo = $findShopHeadInvoice->logo;
@@ -83,22 +84,23 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                 } catch (PDOException $e) {
                     $res = $e->getMessage();
                 }
-                $remoteOrderSellerId=$order->remoteOrderSelleId;
-
-
+                $changelanguage=0;
+                $remoteOrderSellerId=$order->remoteOrderSellerId;
+                $dateInvoice = strtotime($order->orderDate);
+                $invoiceYear=date('Y',$dateInvoice);
+                $em = $this->app->entityManagerFactory->create('ShopHasCounter');
 
                         $number=$em->query("SELECT (shc.invoiceCounter+1) as `new` from ShopHasCounter shc
-                                            join Shop s ON shc.shopId=s.id where shc.shopId=? and s.siteInvoiceChar=? and shc.invoiceYear=?", [$remoteShopSellerId,$siteChar,$year])->fetchAll()[0]['new'];
+                                            join Shop s ON shc.shopId=s.id where shc.shopId=? and s.siteInvoiceChar=? and shc.invoiceYear=?", [44,'P',$invoiceYear])->fetchAll()[0]['new'];
 
 
                         $invoiceNew = $invoiceRepo->getEmptyEntity();
                 $invoiceNew->orderId=$orderId;
-                $invoiceNew->invoiceShopId=$remoteShopSellerId;
+                $invoiceNew->invoiceShopId=44;
                 $invoiceNew->invoiceNumber = $number;
                 $invoiceNew->invoiceSiteChar ='P';
                 $invoiceNew->invoiceType = 'P';
-                $dateInvoice = strtotime($order->orderDate);
-                $invoiceYear=date('Y',$dateInvoice);
+
                 $newdateInvoice = date('Y-m-d H:i:s',$dateInvoice);
                 $invoiceNew->invoiceDate=$newdateInvoice;
                 $invoiceNew->invoiceYear=$invoiceYear;
@@ -483,11 +485,11 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                     }
                     $invoiceText .= $referOrder;
                     $invoiceText .= '</strong>';
-                    $date = new DateTime($rowFindUserAddress['orderDate']);
+                    $date = new DateTime($order->orderDate);
                     if ($changelanguage != 1) {
-                        $refertOrderIdandDate = '  ' . $remoteOrderSellerId . '-' . $remoteOrderLineSellerId . ' del ' . $invoiceDate;
+                        $refertOrderIdandDate = '  ' . $remoteOrderSellerId . '-' . $orderId . ' del ' . $invoiceDate;
                     } else {
-                        $refertOrderIdandDate = '  ' . $remoteOrderSellerId . '-' . $remoteOrderLineSellerId . ' date ' . $invoiceDate;
+                        $refertOrderIdandDate = '  ' . $remoteOrderSellerId . '-' . $orderId . ' date ' . $invoiceDate;
                     };
                     $invoiceText .= $refertOrderIdandDate . '</div>
                         </div>
@@ -499,7 +501,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                         $invoiceText .= 'Payment Method';
                     }
                     $invoiceText .= '</strong>';
-                    $invoiceText .= ' ' . $paymentMethod . '</div>
+                    $invoiceText .= ' Wallet </div>
 
                         </div>
                     </div>
@@ -544,7 +546,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                     $invoiceText .= '<strong>' . $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['name'];
                     $invoiceText .= '<br>' . $shippingAddress[0]['address'];
                     $invoiceText .= '<br>' . $shippingAddress[0]['postcode'] . ' ' . $shippingAddress[0]['city'] . ' (' . $shippingAddress[0]['province'] . ')';
-                    $countryRepo = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $userAddress[0]['countryId']]);
+                    $countryRepo = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $shippingAddress[0]['countryId']]);
                     $invoiceText .= '<br>' . $countryRepo -> name . '</strong>';
                     $invoiceText .= '</address>';
                     $invoiceText .= '</div>';
@@ -593,10 +595,11 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
 
                             $productSku = \bamboo\domain\entities\CProductSku::defrost($ol->frozenProduct);
                             $productRepo = \Monkey::app()->repoFactory->create('Product');
-                            $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId,'productVariantId' => $productSku->productVariantId,'langId' => '1']);
+                            $productNameTranslationRepo=\Monkey::app()->repoFactory->create('ProductNameTranslation');
+                            $productNameTranslation = $productNameTranslationRepo->findOneBy(['productId' => $ol->productId,'productVariantId' => $ol->productVariantId,'langId' => '1']);
                             $invoiceText .= (($productNameTranslation) ? $productNameTranslation->name : '') . ($ol->warehouseShelfPosition ? ' / ' . $ol->warehouseShelfPosition->printPosition() : '') . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId;
                             $invoiceText .= '</td>';
-                            $productSize = \Monkey::app()->repoFactory->create('ProductSize')->findOneBy(['id' => $productSku->productSizeId]);
+                            $productSize = \Monkey::app()->repoFactory->create('ProductSize')->findOneBy(['id' => $ol->productSizeId]);
                             $invoiceText .= '<td class="text-center">' . $productSize->name;
                             $invoiceText .= '<td></td>';
                             $invoiceText .= '</td>';
