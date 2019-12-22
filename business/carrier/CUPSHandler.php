@@ -217,7 +217,9 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                     'CODAmount'=>[
                         'MonetaryValue'=>$valuePrice,
                         'CurrencyCode'=>'EUR'
-                    ]
+                    ],
+                    'CODFundsCode ' => '1',
+                    'CODCode'=>'3'
                 ]
             ];
 
