@@ -3265,6 +3265,51 @@
                 "DELETE",
                 "PUT"
             ]
+        },
+        {
+            "pattern": "/blueseal/email/email-template-lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/email/email-template-modifica/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/email/email-template-aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateAddController"
+            },
+            "filters": {}
+        ,
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
