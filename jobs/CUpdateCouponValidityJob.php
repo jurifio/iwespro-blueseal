@@ -45,6 +45,7 @@ class CUpdateCouponValidityJob extends ACronJob
     public function run($args = null)
     {
         $dateNow = date_create('now')->format('Y-m-d H:i:s');
+        $dateNow=strtotime($dateNow);
         $coupons = \Monkey::app()->repoFactory->create('Coupon')->findAll();
 
 
