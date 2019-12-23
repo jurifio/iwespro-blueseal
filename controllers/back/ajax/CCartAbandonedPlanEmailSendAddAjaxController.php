@@ -5,7 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CCart;
-use bamboo\domain\entities\CCoupon;
+use bamboo\domain\entities\CEmailTemplate;
 use bamboo\domain\entities\CCouponType;
 use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CProduct;
@@ -18,7 +18,7 @@ use PDO;
 use PDOException;
 
 /**
- * Class CNewsletterTemplateManage
+ * Class CCartAbandonedPlanEmailSendAddAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -27,7 +27,7 @@ use PDOException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 10/07/2018
+ * @date 23/12/2019
  * @since 1.0
  */
 class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
@@ -47,13 +47,13 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
         $generateCoupon2 = $data['generateCoupon2'];
         $generateCoupon3 = $data['generateCoupon3'];
         $firstTemplateId = $data['firstTemplateId'];
-        $firstTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $firstTemplateId]);
+        $firstTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id' => $firstTemplateId]);
         $firstTemplate = $firstTemplateRepo->template;
         $secondTemplateId = $data['secondTemplateId'];
-        $secondTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $secondTemplateId]);
+        $secondTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id' => $secondTemplateId]);
         $secondTemplate = $secondTemplateRepo->template;
         $thirdTemplateId = $data['thirdTemplateId'];
-        $thirdTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $thirdTemplateId]);
+        $thirdTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id' => $thirdTemplateId]);
         $thirdTemplate = $thirdTemplateRepo->template;
         $firstTimeEmailSendDay = $data['firstTimeEmailSendDay'];
         $secondTimeEmailSendDay = $data['secondTimeEmailSendDay'];
@@ -252,13 +252,13 @@ class CCartAbandonedPlanEmailSendAddAjaxController extends AAjaxController
         $coupon2TypeId = $data['coupon2TypeId'];
         $coupon3TypeId = $data['coupon3TypeId'];
         $firstTemplateId = $data['firstTemplateId'];
-        $firstTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $firstTemplateId]);
+        $firstTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id' => $firstTemplateId]);
         $firstTemplate = $firstTemplateRepo->template;
         $secondTemplateId = $data['secondTemplateId'];
-        $secondTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $secondTemplateId]);
+        $secondTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id' => $secondTemplateId]);
         $secondTemplate = $secondTemplateRepo->template;
         $thirdTemplateId = $data['thirdTemplateId'];
-        $thirdTemplateRepo = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOneBy(['id' => $thirdTemplateId]);
+        $thirdTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id' => $thirdTemplateId]);
         $thirdTemplate = $thirdTemplateRepo->template;
         $firstTimeEmailSendDay = $data['firstTimeEmailSendDay'];
         $secondTimeEmailSendDay = $data['secondTimeEmailSendDay'];

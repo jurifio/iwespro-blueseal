@@ -20,7 +20,7 @@ $.ajax({
     method:'GET',
     url: '/blueseal/xhr/GetTableContent',
     data: {
-        table: 'NewsletterTemplate',
+        table: 'EmailTemplate',
 
     },
     dataType: 'json'
@@ -38,7 +38,7 @@ $.ajax({
     method:'GET',
     url: '/blueseal/xhr/GetTableContent',
     data: {
-        table: 'NewsletterTemplate',
+        table: 'EmailTemplate',
 
     },
     dataType: 'json'
@@ -56,7 +56,7 @@ $.ajax({
     method:'GET',
     url: '/blueseal/xhr/GetTableContent',
     data: {
-        table: 'NewsletterTemplate',
+        table: 'EmailTemplate',
 
     },
     dataType: 'json'
