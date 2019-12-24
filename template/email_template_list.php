@@ -32,7 +32,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="newsletter_template_list"
-                               data-controller="NewsletterTemplateListAjaxController"
+                               data-controller="EmailTemplateListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -48,6 +48,11 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Nome Template
+                                </th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop
                                 </th>
                                 <th data-slug="oldTemplatephp"
                                     data-searchable="true"

@@ -37,7 +37,7 @@ class CEmailTemplateListAjaxController extends AAjaxController
                 n.scope,
                 n.description,
                 n.subject,
-                if(n.isActive=1,'si','no'),
+                if(n.isActive=1,'si','no') as isActive,
                 n.template,
                 s.name as shopName
                 FROM 
@@ -55,7 +55,7 @@ class CEmailTemplateListAjaxController extends AAjaxController
 
             /** @var CEmailTemplate $emailTemplate */
             $emailTemplate = $emailTemplateRepo->findOneBy(['id' => $row['id']]);
-            $row['id']=$emailTemplate->id;
+            $row["DT_RowId"] = $emailTemplate->id;
 
 
             $row['id'] = '<a href="' . $opera . $emailTemplate->id . '">' . $emailTemplate->id . '</a>';
