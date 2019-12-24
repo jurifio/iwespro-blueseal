@@ -112,6 +112,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Indirizzo Ip</th>
+                                <th data-slug="ipFilter"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">filtro</th>
                             </tr>
                             </thead>
                             <tbody>
