@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="name">Nome template</label>
                                                 <input id="name" class="form-control"
@@ -36,15 +36,76 @@
                                                        required="required">
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="shopId">Seleziona lo shop dove il template deve essere utilizzato</label>
+                                                <select id="shopId" name="shopId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="scope">Utilizzo Template</label>
+                                                <input id="scope" class="form-control"
+                                                       placeholder="Inserisci lo scopo " name="scope"
+                                                       required="required">
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="subject">Oggetto Email</label>
+                                                <input id="subject" class="form-control"
+                                                       placeholder="Inserisci la descrizione del file  template" name="subject"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isActive">Seleziona se attivo</label>
+                                                <select id="isActive" name="isActive"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona"
+                                                        data-init-plugin="selectize"
+                                                <option value=""></option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
 
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="description">Descrizione</label>
+                                                <input id="description" class="form-control"
+                                                       placeholder="Inserisci la descrizione del file  template" name="description"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
 
-                                            <label for="template">Template </label>
+                                            <label for="template">Template Default</label>
                                             <textarea id="template" name="template" data-json="PostTranslation.content"
                                                       rows="50"></textarea>
                                         </div>
+                                    </div>
+                                    <div id="templateLanguage">
+                                        <?php
+                                        foreach($languages as $lang){
+                                            echo '<div class="row">';
+                                            echo '<div class="col-md-12">';
+                                            echo '<label for="template_'.$lang['id'].'">'.$lang['name'].'</label>';
+                                            echo '<textarea id="template_'.$lang->lang.'" name="template_'.$lang->lang.'" data-json="PostTranslation.content" rows="50"></textarea>';
+                                            echo '</div>';
+                                            echo '</div>';
+
+                                        }?>
 
                                     </div>
                                 </div>
@@ -61,14 +122,14 @@
     <?php include "parts/bsmodal.php"; ?>
     <?php include "parts/alert.php"; ?>
     <bs-toolbar class="toolbar-definition">
-        <bs-toolbar-group data-group-label="Gestione NewsletterTemplate">
+        <bs-toolbar-group data-group-label="Gestione Email Template">
             <bs-toolbar-button
                     data-tag="a"
                     data-icon="fa-file-o fa-plus"
                     data-permission="allShops||worker"
                     data-class="btn btn-default"
                     data-rel="tooltip"
-                    data-event="bs.newNewsletterTemplate.save"
+                    data-event="bs.newEmailTemplate.save"
                     data-title="Salva il Template"
                     data-placement="bottom"
                     data-href="#"

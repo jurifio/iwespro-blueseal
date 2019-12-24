@@ -37,7 +37,7 @@ class CEmailTemplateListAjaxController extends AAjaxController
                 n.scope,
                 n.description,
                 n.subject,
-                if(n.isActive=1,'si','no') as isActive,
+                if(n.isActive=1,'si','no') isActive,
                 n.template,
                 s.name as shopName
                 FROM 
@@ -46,7 +46,7 @@ class CEmailTemplateListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(true);
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $opera = $blueseal . "email/email-template-modifica?id=";
+        $opera = $blueseal . "email/email-template-modifica/";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
@@ -54,8 +54,10 @@ class CEmailTemplateListAjaxController extends AAjaxController
             $emailTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate');
 
             /** @var CEmailTemplate $emailTemplate */
+
             $emailTemplate = $emailTemplateRepo->findOneBy(['id' => $row['id']]);
-            $row["DT_RowId"] = $emailTemplate->id;
+            $row["DT_RowId"] = $emailTemplate->printId();
+            $row['id']=$emailTemplate->id;
 
 
             $row['id'] = '<a href="' . $opera . $emailTemplate->id . '">' . $emailTemplate->id . '</a>';

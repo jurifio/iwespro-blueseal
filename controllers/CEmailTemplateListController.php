@@ -14,7 +14,7 @@ use bamboo\ecommerce\views\VBase;
 class CEmailTemplateListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "newsletter_template_list";
+    protected $pageSlug = "email_template_list";
 
     /**
      * @return string
