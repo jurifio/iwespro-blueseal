@@ -38,12 +38,15 @@ class CEmailTemplateManage extends AAjaxController
         $subject=$data['subject'];
         $scope=$data['scope'];
         $description=$data['description'];
+        $arrayTemplate=$data['arraytemplate'];
 
 
 
 
         /** @var CRepo $emailTemplateRepo */
         $emailTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate');
+        $emailTemplateTranslationRepo=\Monkey::app()->repoFactory->create('EmailTemplateTranslation');
+        $langRepo=\Monkey::app()->repoFactory->create('Lang');
 
         /** @var CemailTemplate $emailTemplate */
         $emailTemplate = $emailTemplateRepo->findOneBy(['name' => $name,'shopId'=>$shopId]);
@@ -64,9 +67,23 @@ class CEmailTemplateManage extends AAjaxController
             $emailTemplateInsert->isActive=$isActive;
             $emailTemplateInsert->description=$description;
 
+
             // eseguo la commit sulla tabella;
 
             $emailTemplateInsert->smartInsert();
+           $findId= \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['name'=>$name,'shopId'=>$shopId,'scope'=>$scope]);
+            foreach($arrayTemplate as $key => $row){
+                $emailTemplateTranslation=$emailTemplateTranslationRepo->getEmptyEntity();
+                $langTemplate=$row['id'];
+                $lang=$langRepo->findOneBy(['lang'=>$langTemplate]);
+                $langId=$lang->id;
+                $langText=$row['template'];
+                $emailTemplateTranslation->langId=$langId;
+                $emailTemplateTranslation->emailTemplateId=$findId->id;
+                $emailTemplateTranslation->templateTranslation=$langText;
+                $emailTemplateTranslation->smartInsert();
+
+            }
 
             $res = "Template inserito con successo!";
 
