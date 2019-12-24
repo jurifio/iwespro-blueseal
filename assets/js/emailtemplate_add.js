@@ -163,6 +163,8 @@ $(document).on('bs.newEmailTemplate.save', function () {
 
         tinyMCE.triggerSave();
        var template= $('#template').val();
+        var langarray=$('#langarray').val();
+
         const data = {
             name : $('#name').val(),
             shopId:$('#shopId').val(),
@@ -170,6 +172,7 @@ $(document).on('bs.newEmailTemplate.save', function () {
             subject:$('#subject').val(),
             scope:$('#scope').val(),
             isActive:$('#isActive').val(),
+            larray:$
             template: template,
         };
         $.ajax({

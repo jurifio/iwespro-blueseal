@@ -96,15 +96,15 @@
                                         </div>
                                     </div>
                                     <div id="templateLanguage">
+                                        <input type="hidden" id="langarray" name="langarray" value="<?php echo $arrayl;?>"/>
                                         <?php
-                                        foreach($languages as $lang){
+                                        foreach($languages as $key => $row){
                                             echo '<div class="row">';
                                             echo '<div class="col-md-12">';
-                                            echo '<label for="template_'.$lang['id'].'">'.$lang['name'].'</label>';
-                                            echo '<textarea id="template_'.$lang->lang.'" name="template_'.$lang->lang.'" data-json="PostTranslation.content" rows="50"></textarea>';
+                                            echo '<label for="'.$row['lang'].'">'.$row['name'].'</label>';
+                                            echo '<textarea id="'.$row['lang'].'" name="'.$row['lang'].'" data-json="PostTranslation.content" rows="50"></textarea>';
                                             echo '</div>';
                                             echo '</div>';
-
                                         }?>
 
                                     </div>

@@ -36,17 +36,21 @@ class CEmailTemplateAddController extends ARestrictedAccessRootController
         $langs=\Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]);
         $languages=[];
         $i=0;
+        $larray=[];
         foreach($langs as $lang){
-            $lg=['id'=>$lang->id,'lang'=>$lang->name];
+            $lg=['id'=>$lang->id,'lang'=>$lang->lang,'name'=>$lang->name];
             array_push($languages,$lg);
             $i++;
+            array_push($larray,$lang->lang);
         }
+        $arrayl=implode('-',$larray);
 
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'languages'=>$languages,
+            'arrayl'=>$arrayl,
             'sidebar' => $this->sidebar->build()
         ]);
 
