@@ -3,7 +3,7 @@ tinymce.init({
     selector: "textarea",
     entity_encoding : "raw",
     relative_urls : false,
-    document_base_url : "https://www.pickyshop.com/",
+    document_base_url : "https://www.iwes.pro/",
     convert_urls: false,
     allow_script_urls: true,
     height: 450,
@@ -89,27 +89,27 @@ summer.summernote({
         'Times New Roman',
         'Verdana'
     ],
-    onImageUpload: function() {},
+    onImageUpload: function(files, editor, welEditable) {
+        sendFile(files[0], editor, welEditable);
+    },
     fontNamesIgnoreCheck: ['Raleway']
 });
-
-summer.on('summernote.image.upload', function(we, files) {
-    we.preventDefault();
-    we.stopPropagation();
-    var data = new FormData();
-    data.append("file", files[0]);
-    $.ajaxForm({
+function sendFile(file, editor, welEditable) {
+    data = new FormData();
+    data.append("file", file);
+    $.ajax({
+        data: data,
+        type: "POST",
         url: '/blueseal/xhr/BlogPostPhotoUploadAjaxController',
-        type: 'POST',
-        formAutofill: false
-    },data).done(function (result) {
-        var i = new Image;
-        i.src = result;
-        summer.summernote('insertNode', i);
-    }).fail(function (result) {
-        console.log('fail');
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(url) {
+            //summer.summernote.editor.insertImage(welEditable, url);
+            summer.summernote('pasteHTML', '<p><img src="'+url+'"></p>');
+        }
     });
-});
+}
 
 $('[data-toggle="popover"]').popover();
 
@@ -134,25 +134,30 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 })
 (jQuery);
 
-$(document).on('bs.newNewsletterTemplate.save', function () {
+$(document).on('bs.newEmailTemplate.save', function () {
     let bsModal = new $.bsModal('Salva Template', {
         body: '<div><p>Premere ok per Salvare il Template'+
-        '</div>'
+            '</div>'
     });
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
 
         tinymce.activeEditor.save();
-       var template= $('#template').val();
+        var template= $('#template').val();
         const data = {
-            id: $('#newsletterTemplateId').val(),
+            id: $('#emailTemplateId').val(),
             name : $('#name').val(),
+            shopId:$('#shopId').val(),
+            description:$('#description').val(),
+            subject:$('#subject').val(),
+            scope:$('#scope').val(),
+            isActive:$('#isActive').val(),
             template: template,
         };
         $.ajax({
             method: 'put',
-            url: '/blueseal/xhr/NewsletterTemplateManage',
+            url: '/blueseal/xhr/EmailTemplateManage',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);

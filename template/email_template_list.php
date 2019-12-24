@@ -31,8 +31,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="newsletter_template_list"
-                               data-controller="NewsletterTemplateListAjaxController"
+                               data-datatable-name="email_template_list"
+                               data-controller="EmailTemplateListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -49,6 +49,12 @@
                                     data-orderable="true"
                                     class="center">Nome Template
                                 </th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop
+                                </th>
+
                                 <th data-slug="oldTemplatephp"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -100,13 +106,10 @@
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.lists.create.newslettertemplate"
+                data-remote="bs.lists.create.emailtemplate"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.lists.modify.newslettertemplate"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.delete.newslettertemplate"
+                data-remote="bs.lists.modify.emailtemplate"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -92,6 +92,24 @@ summer.summernote({
     onImageUpload: function() {},
     fontNamesIgnoreCheck: ['Raleway']
 });
+$.ajax({
+    method:'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'Shop',
+        condition :{hasEcommerce:1}
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#shopId');
+    if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        options: res2,
+    });
+});
 
 summer.on('summernote.image.upload', function(we, files) {
     we.preventDefault();
@@ -134,7 +152,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
 })
 (jQuery);
 
-$(document).on('bs.newNewsletterTemplate.save', function () {
+$(document).on('bs.newEmailTemplate.save', function () {
     let bsModal = new $.bsModal('Salva Template', {
         body: '<div><p>Premere ok per Salvare il Template'+
         '</div>'
@@ -147,11 +165,16 @@ $(document).on('bs.newNewsletterTemplate.save', function () {
        var template= $('#template').val();
         const data = {
             name : $('#name').val(),
+            shopId:$('#shopId').val(),
+            description:$('#description').val(),
+            subject:$('#subject').val(),
+            scope:$('#scope').val(),
+            isActive:$('#isActive').val(),
             template: template,
         };
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/NewsletterTemplateManage',
+            url: '/blueseal/xhr/EmailTemplateManage',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);

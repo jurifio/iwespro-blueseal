@@ -94,7 +94,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                                             join Shop s ON shc.shopId=s.id where shc.shopId=? and s.siteInvoiceChar=? and shc.invoiceYear=?", [44,'P',$invoiceYear])->fetchAll()[0]['new'];
 
 
-                        $invoiceNew = $invoiceRepo->getEmptyEntity();
+                $invoiceNew = $invoiceRepo->getEmptyEntity();
                 $invoiceNew->orderId=$orderId;
                 $invoiceNew->invoiceShopId=44;
                 $invoiceNew->invoiceNumber = $number;
@@ -110,7 +110,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                 $dateForRemote=$newdateInvoice;
 
                 $invoiceText = '';
-                    $invoiceText .= '
+                    $invoiceText .='
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>';
@@ -126,12 +126,14 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta content="" name="description"/>
 <meta content="" name="author"/>
-<script>
-    paceOptions = {
+<script>';
+
+                    $invoiceText.=addslashes('paceOptions = {
         ajax: {ignoreURLs: [\'/blueseal/xhr/TemplateFetchController\', \'/blueseal/xhr/CheckPermission\']}
     }
-</script>
-    <link type="text/css" href="https://www.iwes.pro/assets/css/pace.css" rel="stylesheet" media="screen"/>
+                   
+</script>');
+    $invoiceText='<link type="text/css" href="https://www.iwes.pro/assets/css/pace.css" rel="stylesheet" media="screen"/>
 <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen,print"/>
 <link type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="screen,print"/>
 <link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/flick/jquery-ui.css" rel="stylesheet" media="screen"/>
@@ -456,7 +458,7 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
                     <div class="pull-left">
                         <!--logo negozio-->
                         <img width="235" height="47" alt="" class="invoice-logo"
-                             data-src-retina=' . $logo . ' data-src=' . $logo . ' src=' . $logo . '>
+                             data-src-retina="/assets/img/logoiwes.png" data-src="/assets/img/logoiwes.png" src="/assets/img/logoiwes.png"/>
                         <!--indirizzo negozio-->
                         <br><br>
                         <address class="m-t-10"><b>' . $intestation . '
@@ -687,18 +689,14 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
             <br>
             <br>
             <br>
-            <div>
-                <center><img alt="" class="invoice-thank" data-src-retina="/assets/img/invoicethankyou.jpg"
-                             data-src="/assets/img/invoicethankyou.jpg" src="/assets/img/invoicethankyou.jpg">
-                </center>
-            </div>
+           
             <br>
             <br>
         </div>
     </div>
 </div><!--end-->';
 
-                    $invoiceText .= '<script type="application/javascript">
+                    $invoiceText .= addslashes('<script type="application/javascript">
     $(document).ready(function () {
 
         Pace.on(\'done\', function () {
@@ -716,9 +714,14 @@ class CInvoiceIwesToSellerAjaxController extends AAjaxController
     });
 </script>
 </body>
-</html>';
+</html>');
                     $invoiceNew->invoiceText=$invoiceText;
                     $invoiceNew->insert();
+                    $ShopHasCounter=Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId'=>44]);
+                $ShopHasCounter->invoiceCounter=$number;
+                $ShopHasCounter->update();
+
+
                 try {
                     $stmtInsertRemoteInvoiceSeller = $db_con -> prepare('INSERT INTO Invoice
     (orderId,invoiceYear,invoiceType,invoiceSiteChar,invoiceNumber,invoiceDate,invoiceText,creationDate,remoteIwesOrderId,remoteOrderSupplierId) 

@@ -50,6 +50,7 @@ class CCouponListAjaxController extends AAjaxController
                   `Coupon`.`validThru`                                       AS `validThru`,
                   `Coupon`.`amount`                                          AS `amount`,
                   `Coupon`.`userId`                                          AS `userId`,
+                   if(`Coupon`.`sid`is null,'No','Si'                                        AS `ip`   
                   if(`Coupon`.`valid`=1,'Valido','Non Valido')                                           AS `valid`,
                        if(`Coupon`.`validThru` >now(),'Attivo','Scaduto')                                       AS `isActive`,
                    `Coupon`.`sid`                                        As `ipCoupon`,

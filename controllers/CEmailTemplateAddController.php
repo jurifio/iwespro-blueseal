@@ -7,7 +7,7 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 
 /**
- * Class CNewsletterTemplateAddController
+ * Class CEmailTemplateAddController
  * @package bamboo\blueseal\controllers
  *
  * @author Iwes Team <it@iwes.it>
@@ -16,13 +16,13 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 19/12/2017
+ * @date 24/12/2019
  * @since 1.0
  */
-class CNewsletterTemplateAddController extends ARestrictedAccessRootController
+class CEmailTemplateAddController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "newslettertemplate_add";
+    protected $pageSlug = "emailtemplate_add";
 
     /**
      * @return string
@@ -32,11 +32,21 @@ class CNewsletterTemplateAddController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/newslettertemplate_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/emailtemplate_add.php');
+        $langs=\Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]);
+        $languages=[];
+        $i=0;
+        foreach($langs as $lang){
+            $lg=['id'=>$lang->id,'lang'=>$lang->name];
+            array_push($languages,$lg);
+            $i++;
+        }
+
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
+            'languages'=>$languages,
             'sidebar' => $this->sidebar->build()
         ]);
 

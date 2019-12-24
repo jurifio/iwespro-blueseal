@@ -7,38 +7,49 @@ use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
- * Class COrderManageController
+ * Class CEmailTemplateEditController
  * @package bamboo\blueseal\controllers
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 24/12/2019
+ * @since 1.0
  */
-class CNewsletterTemplateEditController extends ARestrictedAccessRootController
+class CEmailTemplateEditController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "newslettertemplate_edit";
+    protected $pageSlug = "emailtemplate_edit";
 
     public function get()
     {
 
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/newslettertemplate_edit.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/emailtemplate_edit.php');
         $this->urls['base'] = $this->app->baseUrl(false)."/blueseal/";
 
 
             // recupero la newsletter
 
-        $id =  $this->app->router->request()->getRequestData('id');
-        $newsletterTemplate = \Monkey::app()->repoFactory->create('NewsletterTemplate')->findOne([$id]);
+        $id =   \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
+        $emailTemplate = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id'=>$id]);
+        $shops=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
 
         //recupero l'evento newsletter
-        $newsletterTemplateId =$newsletterTemplate->id;
-        $newsletterTemplateName = $newsletterTemplate->name;
-        $newsletteTemplateModel = $newsletterTemplate->template;
+        $emailTemplateId =$emailTemplate->id;
+        $emailTemplateName = $emailTemplate->name;
+        $emailTemplateModel = $emailTemplate->template;
 
 
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
-            'newsletterTemplate' => $newsletterTemplate,
+            'emailTemplate' => $emailTemplate,
             'page'=>$this->page,
+            'shops'=>$shops,
             'sidebar'=> $this->sidebar->build(),
 
         ]);

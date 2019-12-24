@@ -108,6 +108,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Coupon Multiplo</th>
+                                <th data-slug="ip"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Indirizzo Ip</th>
                             </tr>
                             </thead>
                             <tbody>
