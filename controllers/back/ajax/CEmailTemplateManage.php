@@ -107,10 +107,14 @@ class CEmailTemplateManage extends AAjaxController
         $subject=$data['subject'];
         $scope=$data['scope'];
         $description=$data['description'];
+        $arrayTemplate=$data['arraytemplate'];
 
 
         /** @var CRepo $emailTemplateRepo */
         $emailTemplateRepo = \Monkey::app()->repoFactory->create('EmailTemplate');
+
+        $emailTemplateTranslationRepo=\Monkey::app()->repoFactory->create('EmailTemplateTranslation');
+        $langRepo=\Monkey::app()->repoFactory->create('Lang');
 
         /** @var CEmailTemplate $emailTemplate */
         $emailTemplate = $emailTemplateRepo->findOneBy(['id' => $id]);
@@ -120,7 +124,7 @@ class CEmailTemplateManage extends AAjaxController
             //se la variabile non è istanziata inserisci in db
 
             $emailTemplate->name = $name ;
-            $emailTemplate->template = htmlentities($template);
+            $emailTemplate->template =$template;
             $emailTemplate->subject=$subject;
             $emailTemplate->scope=$scope;
             $emailTemplate->shopId=$shopId;
@@ -131,7 +135,14 @@ class CEmailTemplateManage extends AAjaxController
             // eseguo la commit sulla tabella;
 
             $emailTemplate->update();
+            $findId= \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['name'=>$name,'shopId'=>$shopId,'scope'=>$scope]);
 
+            foreach($arrayTemplate as $key => $row) {
+                $emailTemplateTranslation = $emailTemplateTranslationRepo->findOneBy(['id' => $row['id']]);
+                $langText = $row['template'];
+                $emailTemplateTranslation->templateTranslation = $langText;
+                $emailTemplateTranslation->update();
+            }
             $res = "Template Modifcato con successo!";
 
         }else{

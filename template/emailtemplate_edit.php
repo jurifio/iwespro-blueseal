@@ -130,6 +130,19 @@
                                     </div>
 
                                 </div>
+                                <div id="templateLanguage">
+                                    <input type="hidden" id="langarray" name="langarray" value="<?php echo $arrayl;?>"/>
+                                    <?php
+                                    foreach($languages as $key => $row){
+                                        echo '<div class="row">';
+                                        echo '<div class="col-md-12">';
+                                        echo '<label for="'.$row['id'].'">'.$row['name'].'</label>';
+                                        echo '<textarea id="'.$row['id'].'" name="'.$row['id'].'" data-json="PostTranslation.content" rows="50">'.$row['value'].'</textarea>';
+                                        echo '</div>';
+                                        echo '</div>';
+                                    }?>
+
+                                </div>
                             </div>
                         </div>
                     </div>

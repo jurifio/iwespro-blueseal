@@ -37,11 +37,24 @@ class CEmailTemplateEditController extends ARestrictedAccessRootController
         $id =   \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $emailTemplate = \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['id'=>$id]);
         $shops=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
-
+        $emailTemplateTranslation=\Monkey::app()->repoFactory->create('EmailTemplateTranslation')->findBy(['templateEmailId'=>$id]);
         //recupero l'evento newsletter
         $emailTemplateId =$emailTemplate->id;
         $emailTemplateName = $emailTemplate->name;
         $emailTemplateModel = $emailTemplate->template;
+        $languages=[];
+        $i=0;
+        $larray=[];
+        foreach($emailTemplateTranslation as $ett) {
+            $langs = \Monkey::app()->repoFactory->create('Lang')->findOneBy(['id' => $ett->langId]);
+
+            $lg = ['id' => $ett->id, 'lang' => $langs->lang,'name' => $langs->name,'value' => $ett->template];
+            array_push($languages,$lg);
+            $i++;
+            array_push($larray,$ett->id);
+        }
+
+        $arrayl=implode('-',$larray);
 
 
 
@@ -50,6 +63,8 @@ class CEmailTemplateEditController extends ARestrictedAccessRootController
             'emailTemplate' => $emailTemplate,
             'page'=>$this->page,
             'shops'=>$shops,
+            'languages'=>$languages,
+            'arrayl'=>$arrayl,
             'sidebar'=> $this->sidebar->build(),
 
         ]);

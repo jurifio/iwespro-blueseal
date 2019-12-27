@@ -145,6 +145,14 @@ $(document).on('bs.newEmailTemplate.save', function () {
 
         tinymce.activeEditor.save();
         var template= $('#template').val();
+        var langarray=$('#langarray').val();
+        var arraytemplate=[];
+        var larray = langarray.split("-");
+        $.each(larray, function( index, value ) {
+            var field='#'+value;
+            arraytemplate.push({id:value,template:$(field).val()});
+
+        });
         const data = {
             id: $('#emailTemplateId').val(),
             name : $('#name').val(),
@@ -153,6 +161,7 @@ $(document).on('bs.newEmailTemplate.save', function () {
             subject:$('#subject').val(),
             scope:$('#scope').val(),
             isActive:$('#isActive').val(),
+            arraytemplate:arraytemplate,
             template: template,
         };
         $.ajax({
