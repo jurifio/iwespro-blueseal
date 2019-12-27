@@ -64,7 +64,7 @@ class CEmailTemplateListAjaxController extends AAjaxController
 
             $row['name'] = $emailTemplate->name;
         //var_dump($newsLetterTemplate);
-
+            //$row['template']='<div class="hide">'.$emailTemplate->template.'</div>';
             $datatable->setResponseDataSetRow($key,$row);
         }
 

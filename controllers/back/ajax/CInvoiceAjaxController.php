@@ -41,10 +41,15 @@ class CInvoiceAjaxController extends AAjaxController
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $userAddressRepo =\Monkey::app()->repoFactory->create('UserAddress');
         $order = $orderRepo->findOneBy(['id' => $orderId]);
+        \Monkey::app()->applicationLog('CInvoiceAjaxController','Log','OrderToPrint',$orderId,'');
         $orderDate=$order->orderDate;
-        $isUserBilling[] = json_decode($order -> frozenBillingAddress, true);
-        $countryFind = $isUserBilling[0]['countryId'];
-        $isFindExtraUe = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $countryFind]);
+        $isUserBilling = json_decode($order -> frozenBillingAddress);
+        if(empty($isUserBilling)){
+            $countryFind=110;
+        }else{
+            $countryFind = $isUserBilling->countryId;
+        }
+        $isFindExtraUe =\Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $countryFind]);
         $isExtraUe = $isFindExtraUe -> extraue;
 
        /* $billingUserAddress = $order->billingAddressId;
