@@ -5,6 +5,8 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CEmailTemplate;
+use PDO;
+use PDOException;
 
 
 /**
@@ -51,7 +53,6 @@ class CEmailTemplateManage extends AAjaxController
         /** @var CemailTemplate $emailTemplate */
         $emailTemplate = $emailTemplateRepo->findOneBy(['name' => $name,'shopId'=>$shopId]);
 
-
         if (empty($emailTemplate)){
             //se la variabile non è istanziata inserisci in db
 
@@ -70,7 +71,41 @@ class CEmailTemplateManage extends AAjaxController
 
             // eseguo la commit sulla tabella;
 
-            $emailTemplateInsert->smartInsert();
+
+
+            //inserimento remoto
+            $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
+            $db_host = $shopRepo->dbHost;
+            $db_name = $shopRepo->dbName;
+            $db_user = $shopRepo->dbUsername;
+            $db_pass = $shopRepo->dbPassword;
+            try {
+
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res = ' connessione ok <br>';
+            } catch (PDOException $e) {
+                $res = $e->getMessage();
+            }
+
+                $stmtInsertEmailTemplate = $db_con->prepare("INSERT INTO EmailTemplate(`name`,`oldTemplatephp`,`scope`,`description`,`shopId`,`subject`,`isActive`,`template`)
+                    VALUES (
+                            '".$name."',
+                            null,
+                            '".$scope."',
+                            '".$description."',
+                            '".$shopId."',
+                            '".$subject."',
+                            '".$isActive."',
+                            '".$template."'   
+                    )");
+                $stmtInsertEmailTemplate->execute();
+                $remoteId = $db_con -> lastInsertId();
+                $emailTemplateInsert->remoteId=$remoteId;
+                $emailTemplateInsert->smartInsert();
+            
+            
+            
            $findId= \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['name'=>$name,'shopId'=>$shopId,'scope'=>$scope]);
             foreach($arrayTemplate as $key => $row){
                 $emailTemplateTranslation=$emailTemplateTranslationRepo->getEmptyEntity();
@@ -81,8 +116,15 @@ class CEmailTemplateManage extends AAjaxController
                 $emailTemplateTranslation->langId=$langId;
                 $emailTemplateTranslation->emailTemplateId=$findId->id;
                 $emailTemplateTranslation->templateTranslation=$langText;
+            $stmtInsertEmailTemplateTranslation=$db_con->prepare("INSERT INTO EmailTemplateTranslation (`langId`,`templateEmailId`,`template`) VALUES 
+                '".$langId.",
+                '".$remoteId.",
+                '".$langText.",
+                '");
+            $stmtInsertEmailTemplateTranslation->execute();
+            $lastEmailTemplateTranslationId=$db_con->lastInsertId();
+                $emailTemplateTranslation->remoteId=$lastEmailTemplateTranslationId;
                 $emailTemplateTranslation->smartInsert();
-
             }
 
             $res = "Template inserito con successo!";
@@ -130,17 +172,39 @@ class CEmailTemplateManage extends AAjaxController
             $emailTemplate->shopId=$shopId;
             $emailTemplate->isActive=$isActive;
             $emailTemplate->description=$description;
+            $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
+            $db_host = $shopRepo->dbHost;
+            $db_name = $shopRepo->dbName;
+            $db_user = $shopRepo->dbUsername;
+            $db_pass = $shopRepo->dbPassword;
+            try {
 
-
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res = ' connessione ok <br>';
+            } catch (PDOException $e) {
+                $res = $e->getMessage();
+            }
+            $stmtUpdateEmailTemplate=$db_con->prepare("UPDATE EmailTemplate SET 
+                                                                `name`='".$name."',
+                                                                `oldTemplatephp`=null,
+                                                                 `scope`='".$scope."',
+                                                                 `description`='".$description."',
+                                                                 `shopId`='".$shopId."',
+                                                                 `subject`='".$subject."',
+                                                                 `isActive`='".$isActive."',
+                                                                 `template`='".$template."'
+                                                                  where id=".$emailTemplate->remoteId);
+            $stmtUpdateEmailTemplate->execute();
             // eseguo la commit sulla tabella;
-
             $emailTemplate->update();
-            $findId= \Monkey::app()->repoFactory->create('EmailTemplate')->findOneBy(['name'=>$name,'shopId'=>$shopId,'scope'=>$scope]);
 
             foreach($arrayTemplate as $key => $row) {
                 $emailTemplateTranslation = $emailTemplateTranslationRepo->findOneBy(['id' => $row['id']]);
                 $langText = $row['template'];
                 $emailTemplateTranslation->templateTranslation = $langText;
+                $stmtUpdateEmailTemplateTranslation=$db_con->prepare("UPDATE EmailTemplateTranslation SET template='".$langText."' WHERE id=".$emailTemplateTranslation->remoteId);
+                $stmtUpdateEmailTemplateTranslation->execute();
                 $emailTemplateTranslation->update();
             }
             $res = "Template Modifcato con successo!";
