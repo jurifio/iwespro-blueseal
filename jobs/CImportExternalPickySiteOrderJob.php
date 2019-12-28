@@ -332,36 +332,41 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                  co.valid as valid,
                                                  co.couponEventId as couponEventId,
                                                  co.sid as sid,
-                                                 co.isExtended as isExtended
-                                                 from Coupon co WHERE co.isImport is null');
+                                                 co.isExtended as isExtended,
+                                                  u.email as email 
+                                                 from Coupon co left join User u on co.userId=u.id  WHERE co.isImport is null');
                 $stmtCoupon -> execute();
                 while ($rowCoupon = $stmtCoupon -> fetch(PDO::FETCH_ASSOC)) {
                     $checkCouponIfExist = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['remoteId'], 'remoteShopId' => $shop]);
                     if ($checkCouponIfExist == null) {
-                        $checkUserIfExist = $userRepo -> findOneBy(['remoteId' => $rowCoupon['userId'], 'remoteShopId' => $shop]);
-                        if ($checkUserIfExist != null) {
+                        $couponInsert = $couponRepo -> getEmptyEntity();
+                        if($rowCoupon['userId']!=null) {
+                            $checkUserIfExist = $userRepo->findOneBy(['email' => $rowCoupon['email']]);
+                            $couponInsert -> userId = $checkUserIfExist->id;
+                        }
                             $checkCouponTypeIfExist = $couponTypeRepo -> findOneBy(['remoteId' => $rowCoupon['couponTypeId'], 'remoteShopId' => $shop]);
-                            if ($checkCouponTypeIfExist != null) {
-                                $checkCouponEventIfExist = $couponEventRepo -> findOneBy(['remoteId' => $rowCoupon['couponEventId'], 'remoteShopId' => $shop]);
-                                if ($checkCouponEventIfExist != null) {
-                                    $couponInsert = $couponRepo -> getEmptyEntity();
+                           if($rowCoupon['couponEventId']!=null) {
+                               $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCoupon['couponEventId'],'remoteShopId' => $shop]);
+                               $couponInsert->couponEventId = $checkCouponEventIfExist->id;
+                           }
+
                                     $couponInsert -> couponTypeId = $checkCouponTypeIfExist -> id;
                                     $couponInsert -> code = $rowCoupon['code'];
                                     $couponInsert -> issueDate = $rowCoupon['issueDate'];
                                     $couponInsert -> validThru = $rowCoupon['validThru'];
                                     $couponInsert -> amount = $rowCoupon['amount'];
-                                    $couponInsert -> userId = $checkUserIfExist -> id;
+
                                     $couponInsert -> valid = $rowCoupon['valid'];
-                                    $couponInsert -> couponEventId = $checkCouponEventIfExist -> id;
+
                                     $couponInsert -> remoteId = $rowCoupon['remoteId'];
                                     $couponInsert -> remoteShopId = $shop;
                                     $couponInsert -> sid=$rowCoupon['sid'];
-                                    $couponInsert ->isExtended['isExtended'];
+                                    $couponInsert ->isExtended=$rowCoupon['isExtended'];
                                     $couponInsert -> insert();
                                     //  $res.='inserito il coupon '.$couponInsert->printId().'<br>';
-                                }
-                            }
-                        }
+
+
+
                     } else {
 
                         continue;
