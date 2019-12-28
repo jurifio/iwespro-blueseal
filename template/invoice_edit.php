@@ -96,6 +96,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <?php $i=0;
+                                     foreach ($orderLines as $orderLine){
+                                        echo '<div class="row">';
+                                        echo '<div class="col-md-4">';
+                                        echo '<div align="center">';
+                                        $productSku = \bamboo\domain\entities\CProductSku::defrost($orderLine->frozenProduct);
+                                //$productSku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $orderLine->productId , 'productVariantId '=> $orderLine->productVariantId , 'productSizeId' => $orderLine->productSizeId]);
+
+
+                                $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
+                                echo (($productNameTranslation) ? $productNameTranslation->name : '') . ($orderLine->warehouseShelfPosition ? ' / ' . $orderLine->warehouseShelfPosition->printPosition() : '') . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId;
+
+                                    echo '</div>';
+                                    echo '</div>';
+                                    echo '<div class="col-md-4">';
+                                    echo '<div align="center">';
+                                    }
+                                     ?>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div align="center"
