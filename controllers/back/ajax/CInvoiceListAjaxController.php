@@ -57,8 +57,28 @@ class CInvoiceListAjaxController extends AAjaxController
 
                 $row['orderId'] = $val->orderId;
                 $order=$orderRepo->findOneBy(['id'=>$val->orderId]);
-                $customerName=\bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
-                $row['customerName']=$customerName->name.' '.$customerName->surname.'<br>'.$customerName->company;
+                $customerName=json_decode($order->frozenBillingAddress,false);
+                if($customerName!=null) {
+                    if ($customerName->name != null) {
+                        $name = $customerName->name;
+                    } else {
+                        $name = '';
+                    }
+                    if ($customerName->surname != null) {
+                        $surname = $customerName->surname;
+                    } else {
+                        $surname = '';
+                    }
+                    if ($customerName->company != null) {
+                        $company = $customerName->company;
+                    } else {
+                        $company = '';
+                    }
+                    $row['customerName']=$name.' '.$surname.'<br>'.$company;
+                }else{
+                    $row['customerName']= 'non stampabile';
+                }
+
                 $datatable->setResponseDataSetRow($key,$row);
             }
 

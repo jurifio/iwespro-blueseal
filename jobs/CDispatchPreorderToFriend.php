@@ -28,7 +28,7 @@ class CDispatchPreorderToFriend extends ACronJob
      */
     public function run($args = null)
     {
-        $shops = \Monkey::app()->repoFactory->create('Shop')->findbY(['isActive' => 1]);
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findBy(['isActive' => 1]);
         $query = "SELECT * from OrderLine where `status` in ('ORD_FRND_SNDING', 'ORD_ERR_SEND') AND shopId = ? ";
         $orderExport = new COrderExport($this->app);
         /** @var COrderLineRepo $orderLineRepo */
