@@ -84,7 +84,7 @@ class CImportCouponNewsletterHasNewsletterUserJob extends ACronJob
                         $newsletterUserId = $newsletterUserIdFind->id;
                         $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
                     }
-                    $couponIdFind = $couponRepo->findOneBy(['code' => $rowCouponHasNewsletterUser,'remoteShopId' => $shop]);
+                    $couponIdFind = $couponRepo->findOneBy(['code' => $rowCouponHasNewsletterUser['code'],'remoteShopId' => $shop]);
                     if ($couponIdFind != null) {
                         $couponId = $couponIdFind->id;
                     }
@@ -95,7 +95,7 @@ class CImportCouponNewsletterHasNewsletterUserJob extends ACronJob
                         $couponHasNewsletterUser->remoteId = $rowCouponHasNewsletterUser['remoteId'];
                         $couponHasNewsletterUser->remoteCouponId = $rowCouponHasNewsletterUser['remoteCouponId'];
                         $couponHasNewsletterUser->remoteNewsletterUserId = $rowCouponHasNewsletterUser['remoteNewsletterUserId'];
-                        $couponHasNewsletterUser->remoteShopId = $rowCouponHasNewsletterUser['remoteShopId'];
+                        $couponHasNewsletterUser->remoteShopId = $shop;
                         $couponHasNewsletterUser->insert();
                     }
                 }
