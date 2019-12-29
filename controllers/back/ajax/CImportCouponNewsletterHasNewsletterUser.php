@@ -59,22 +59,24 @@ class CImportCouponNewsletterHasNewsletterUser extends AAjaxController
                                                                             `c`.`id` as remoteCouponId,
                                                                             `nu`.`id` as remoteNewsletterUserId
        
-            FROM  CouponHasNewsletterUser chnu JOIN Coupon c ON chnu.couponId=c.id JOIN NewsletterUser nu ON chnu.newsletterUserId=nu.id where isImport is null');
+            FROM  CouponHasNewsletterUser chnu JOIN Coupon c ON chnu.couponId=c.id JOIN NewsletterUser nu ON chnu.newsletterUserId=nu.id where chnu.isImport is null');
                 $stmtCouponHasNewsletterUser->execute();
                 while ($rowCouponHasNewsletterUser = $stmtCouponHasNewsletterUser->fetch(PDO::FETCH_ASSOC)) {
 
                     $newsletterUserIdFind = $newsletterUserRepo->findOneBy(['email' => $rowCouponHasNewsletterUser['email']]);
+                    $couponHasNewsletterUser = $couponHasNewsLetterUserRepo->getEmptyEntity();
                     if ($newsletterUserIdFind != null) {
                         $newsletterUserId = $newsletterUserIdFind->id;
+                        $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
                     }
                     $couponIdFind = $couponRepo->findOneBy(['code' => $rowCouponHasNewsletterUser,'remoteShopId' => $shop]);
                     if ($couponIdFind != null) {
                         $couponId = $couponIdFind->id;
                     }
                     if ($couponId != null && $newsletterUserId != null) {
-                        $couponHasNewsletterUser = $couponHasNewsLetterUserRepo->getEmptyEntity();
+
                         $couponHasNewsletterUser->couponId = $couponId;
-                        $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
+
                         $couponHasNewsletterUser->remoteId = $rowCouponHasNewsletterUser['remoteId'];
                         $couponHasNewsletterUser->remoteCouponId = $rowCouponHasNewsletterUser['remoteCouponId'];
                         $couponHasNewsletterUser->remoteNewsletterUserId = $rowCouponHasNewsletterUser['remoteNewsletterUserId'];

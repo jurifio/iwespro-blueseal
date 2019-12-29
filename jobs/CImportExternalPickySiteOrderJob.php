@@ -89,6 +89,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             $couponTypeRepo = \Monkey ::app() -> repoFactory -> create('CouponType');
             $couponEventRepo = \Monkey ::app() -> repoFactory -> create('CouponEvent');
             $couponRepo = \Monkey ::app() -> repoFactory -> create('Coupon');
+            $newsletterUserRepo=\Monkey::app()->repoFactory->create('NewsletterUser');
 
 
             $productSkuRepo = \Monkey ::app() -> repoFactory -> create('ProductSku');
@@ -236,6 +237,53 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore User Address' . $e);
 
             }
+            /** inserimento newsletterUser */
+            try {
+                $stmtNewsletterUser = $db_con->prepare('SELECT id as remoteId, 
+                                                                      email as email,
+                                                                      isActive as isActive,
+                                                                      subscriptionDate as subscriptionDate,
+                                                                      unsubscriptionDate as unsubscriptionDate,  
+                                                                      userId as remoteUserId,
+                                                                      langId as langId,
+                                                                      genderNewsletterUser as genderNewsletterUser,
+                                                                      nameNewsletter as nameNewsletter,
+                                                                      surnameNewsletter as surnameNewsletter
+                                                                      FROM NewsletterUser where isImport is null
+                                                                    ');
+                $stmtNewsletterUser->execute();
+                while ($rowNewsletterUser = $stmtNewsletterUser->fetch(PDO::FETCH_ASSOC)) {
+                    $checkIfNewsletterUserExist = $newsletterUserRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
+                    if ($checkIfNewsletterUserExist == null) {
+                        $newsletterUseInsert = $newsletterUserRepo->getEmptyEntity();
+                        $newsletterUseInsert->email = $rowNewsletterUser['email'];
+                        $newsletterUseInsert->isActive = $rowNewsletterUser['isActive'];
+                        $newsletterUseInsert->langId = $rowNewsletterUser['langId'];
+                        $newsletterUseInsert->subscriptionDate = $rowNewsletterUser['subscriptionDate'];
+                        if ($rowNewsletterUser['remoteUserId'] != null) {
+                            $user = $userRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
+                            $userId = $user->id;
+                            $newsletterUseInsert->userId = $userId;
+                        }
+                        $newsletterUseInsert->unsubscriptionDate = $rowNewsletterUser['unsubscriptionDate'];
+                        $newsletterUseInsert->genderNewsletterUser = $rowNewsletterUser['genderNewsletterUser'];
+                        $newsletterUseInsert->nameNewsletter = $rowNewsletterUser['nameNewsletter'];
+                        $newsletterUseInsert->surnameNewsletter = $rowNewsletterUser['surnameNewsletter'];
+                        $newsletterUseInsert->remoteId = $rowNewsletterUser['remoteId'];
+                        $newsletterUseInsert->remoteShopId = $shop;
+                        $newsletterUseInsert->insert();
+                    } else {
+                        continue;
+                    }
+
+                }
+                $stmtUpdateNewsletterUser=$db_con->prepare("UPDATE NewsletterUser set isImport=1 WhERE isImport is null");
+                $stmtUpdateNewsletterUser->execute();
+            }catch (\Throwable $e){
+                $this -> report('CImportExternalPickySiteOrderJob', 'error', 'NewsletterUser  ' . $e);
+            }
+
+
             /** inserimento CouponType */
             try {
                 $stmtCouponType = $db_con -> prepare("SELECT

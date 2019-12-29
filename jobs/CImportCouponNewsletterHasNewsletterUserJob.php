@@ -61,16 +61,13 @@ class CImportCouponNewsletterHasNewsletterUserJob extends ACronJob
             $shop = $value->id;
             try {
 
-                $db_con = new PDO("mysql:host={$db_host}
-
-;dbname={
-    $db_name}
-",$db_user,$db_pass);
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
                 $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-                $res = " connessione ok <br>";
+                $res .= " connessione ok <br>";
             } catch (PDOException $e) {
-                $res = $e->getMessage();
+                $res .= $e->getMessage();
             }
+
             try {
                 $stmtCouponHasNewsletterUser = $db_con->prepare('SELECT `chnu`.`id` as remoteId,
                                                                            `c`.`code` AS `code`,
@@ -78,22 +75,23 @@ class CImportCouponNewsletterHasNewsletterUserJob extends ACronJob
                                                                             `c`.`id` as remoteCouponId,
                                                                             `nu`.`id` as remoteNewsletterUserId
        
-            FROM  CouponHasNewsletterUser chnu JOIN Coupon c ON chnu.couponId=c.id JOIN NewsletterUser nu ON chnu.newsletterUserId=nu.id where isImport is null');
+            FROM  CouponHasNewsletterUser chnu JOIN Coupon c ON chnu.couponId=c.id JOIN NewsletterUser nu ON chnu.newsletterUserId=nu.id where chnu.isImport is null');
                 $stmtCouponHasNewsletterUser->execute();
                 while ($rowCouponHasNewsletterUser = $stmtCouponHasNewsletterUser->fetch(PDO::FETCH_ASSOC)) {
-
+                    $couponHasNewsletterUser = $couponHasNewsLetterUserRepo->getEmptyEntity();
                     $newsletterUserIdFind = $newsletterUserRepo->findOneBy(['email' => $rowCouponHasNewsletterUser['email']]);
                     if ($newsletterUserIdFind != null) {
                         $newsletterUserId = $newsletterUserIdFind->id;
+                        $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
                     }
                     $couponIdFind = $couponRepo->findOneBy(['code' => $rowCouponHasNewsletterUser,'remoteShopId' => $shop]);
                     if ($couponIdFind != null) {
                         $couponId = $couponIdFind->id;
                     }
-                    if ($couponId != null && $newsletterUserId != null) {
-                        $couponHasNewsletterUser = $couponHasNewsLetterUserRepo->getEmptyEntity();
+                    if ($couponIdFind != null && $newsletterUserIdFind != null) {
+
                         $couponHasNewsletterUser->couponId = $couponId;
-                        $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
+
                         $couponHasNewsletterUser->remoteId = $rowCouponHasNewsletterUser['remoteId'];
                         $couponHasNewsletterUser->remoteCouponId = $rowCouponHasNewsletterUser['remoteCouponId'];
                         $couponHasNewsletterUser->remoteNewsletterUserId = $rowCouponHasNewsletterUser['remoteNewsletterUserId'];
