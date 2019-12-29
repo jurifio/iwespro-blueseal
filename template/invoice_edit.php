@@ -112,7 +112,17 @@
                                     echo '</div>';
                                     echo '<div class="col-md-4">';
                                     echo '<div align="center">';
-                                    }
+                                         echo $productSku -> getPublicSize() -> name;
+                                         echo '</div>';
+                                         echo '</div>';
+                                         echo '</div>';
+                                         echo '</div>';
+                                         echo '<div class="col-md-4">';
+                                         echo '<div align="center">';
+                                         echo money_format('%.2n', $orderLine->activePrice) . ' &euro;';
+                                         echo '</div>';
+                                         echo '</div>';
+                                     }
                                      ?>
                                     <div class="row">
                                         <div class="col-md-12">
