@@ -215,8 +215,8 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             $shipmentServiceOptions=[
                 'COD'=>[
                     'CODAmount'=>[
-                        'MonetaryValue'=>$valuePrice,
-                        'CurrencyCode'=>'EUR'
+                        'MonetaryValue'=>money_format('%.2n', $valuePrice),
+                        'CurrencyCode'=> 'EUR'
                     ],
                     'CODFundsCode ' => '1',
                     'CODCode'=>'3'
@@ -298,7 +298,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                         ]
                     ],
                     'Service' => $service,
-                    'ShipMentServiceOptions'=>$shipmentServiceOptions,
+                    'ShipmentServiceOptions'=>$shipmentServiceOptions,
                     'Package' => [
                         'Description' => 'Scatola di Cartone',
                         'Packaging' => [
