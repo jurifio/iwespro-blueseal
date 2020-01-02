@@ -32,7 +32,7 @@ class COrderRecallClient extends AAjaxController
 
             /** @var CEmailRepo $emailRepo */
             $emailRepo = \Monkey::app()->repoFactory->create('Email');
-            $res = $emailRepo->newPackagedMail('remindmailclient','no-reply@pickyshop.com', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
+            $res = $emailRepo->newPackagedTemplateMail('remindmailclient','no-reply@pickyshop.com', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
 
             //$this->app->mailer->newPackagedMail('remindmailclient','no-reply', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
 

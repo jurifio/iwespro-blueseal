@@ -34,7 +34,7 @@ class COrderWireTransferMailClient extends AAjaxController
 
             /** @var CEmailRepo $mailRepo */
             $mailRepo = \Monkey::app()->repoFactory->create('Email');
-            $res = $mailRepo->newPackagedMail('wiretransfermailclient','no-reply@pickyshop.com', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
+            $res = $mailRepo->newPackagedTemplateMail('wiretransfermailclient','no-reply@pickyshop.com', $to,[],[],['order'=>$order,'orderId'=>$orderId,'lang'=>$lang->lang]);
 
            /* if($this->app->mailer->send()) {
                 $order->note = $order->note." BonificoMail: ".date('Y-m-d');
