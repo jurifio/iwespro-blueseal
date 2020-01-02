@@ -184,8 +184,8 @@ class COrderWorkingListAjaxController extends AAjaxController
                     } else {
                         $supplier = '';
                     }
-
-                    $code = "spedisce " . $sku->shop->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
+                    $findSupplier=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$line->shopId]);
+                    $code = "spedisce " . $findSupplier->name . ' ' . $sku->printPublicSku() . " (" . $sku->product->productBrand->name . ")";
                     if ($line->orderLineStatus->notify === 1) $alert = true;
                     $skuParalId = $line->productId;
 

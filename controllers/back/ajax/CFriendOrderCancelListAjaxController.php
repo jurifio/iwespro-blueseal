@@ -39,7 +39,7 @@ class CFriendOrderCancelListAjaxController extends AAjaxController
         $filterSql= ' ';
         if(!$allShops) {
             if ($userHasShop != null) {
-                $filterSql = ' and o.remoteShopSellerId = 44 ';
+                $filterSql = ' and o.remoteShopSellerId in(44,51,1) ';
             }
         }
         $DDTAndNoCreditNote = \Monkey::app()->router->request()->getRequestData('ddtWithoutNcd');
