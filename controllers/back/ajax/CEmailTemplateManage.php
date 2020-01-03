@@ -143,6 +143,7 @@ class CEmailTemplateManage extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $name = $data['name'];
         $template = $data['template'];
+        $oldTemplatephp=$data['oldTemplatephp'];
         $id = $data['id'];
         $shopId =$data['shopId'];
         $isActive=$data['isActive'];
@@ -168,6 +169,7 @@ class CEmailTemplateManage extends AAjaxController
             $emailTemplate->name = $name ;
             $emailTemplate->template =$template;
             $emailTemplate->subject=$subject;
+            $emailTemplate->oldTemplatephp=$oldTemplatephp;
             $emailTemplate->scope=$scope;
             $emailTemplate->shopId=$shopId;
             $emailTemplate->isActive=$isActive;
@@ -186,8 +188,8 @@ class CEmailTemplateManage extends AAjaxController
                 $res = $e->getMessage();
             }
             $stmtUpdateEmailTemplate=$db_con->prepare("UPDATE EmailTemplate SET 
-                                                                `name`='".$name."',
-                                                                `oldTemplatephp`=null,
+                                                                  `name`='".$name."',
+                                                                  `oldTemplatephp`='".$oldTemplatephp."',
                                                                  `scope`='".$scope."',
                                                                  `description`='".$description."',
                                                                  `shopId`='".$shopId."',

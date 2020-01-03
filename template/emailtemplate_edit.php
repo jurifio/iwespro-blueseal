@@ -4,8 +4,6 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-    <!--<script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
-    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=z3tiwzxrspg36g21tiusdfsqt9f27isw6547l88aw19e0qej"></script>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -28,6 +26,9 @@
                                     <input type="hidden" name="emailTemplateId"
                                            id="emailTemplateId"
                                            value="<?php echo $emailTemplate->id; ?>"/>
+                                    <input type="hidden" name="oldTemplatephp"
+                                           id="oldTemplatephp"
+                                           value="<?php echo $emailTemplate->oldTemplatephp; ?>"/>
                                 </div>
                             </div>
                             <div class="panel-body clearfix">
@@ -125,7 +126,7 @@
                                     <div class="col-md-12">
 
                                         <label for="template">Template </label>
-                                        <textarea id="template" name="template" data-json="PostTranslation.content"
+                                        <textarea id="template" class="summer" name="template" data-json="PostTranslation.content"
                                                   rows="50"><?php echo $emailTemplate->template; ?></textarea>
                                     </div>
 
@@ -137,7 +138,7 @@
                                         echo '<div class="row">';
                                         echo '<div class="col-md-12">';
                                         echo '<label for="'.$row['id'].'">'.$row['name'].'</label>';
-                                        echo '<textarea id="'.$row['id'].'" name="'.$row['id'].'" data-json="PostTranslation.content" rows="50">'.$row['value'].'</textarea>';
+                                        echo '<textarea class="summer" id="'.$row['id'].'" name="'.$row['id'].'"  rows="50">'.$row['value'].'</textarea>';
                                         echo '</div>';
                                         echo '</div>';
                                     }?>

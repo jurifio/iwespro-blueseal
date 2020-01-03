@@ -4,8 +4,6 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-    <!--<script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>-->
-    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=z3tiwzxrspg36g21tiusdfsqt9f27isw6547l88aw19e0qej"></script>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -91,7 +89,7 @@
                                         <div class="col-md-12">
 
                                             <label for="template">Template Default</label>
-                                            <textarea id="template" name="template" data-json="PostTranslation.content"
+                                            <textarea class="summer" id="template" name="template" data-json="PostTranslation.content"
                                                       rows="50"></textarea>
                                         </div>
                                     </div>
@@ -102,7 +100,7 @@
                                             echo '<div class="row">';
                                             echo '<div class="col-md-12">';
                                             echo '<label for="'.$row['lang'].'">'.$row['name'].'</label>';
-                                            echo '<textarea id="'.$row['lang'].'" name="'.$row['lang'].'" data-json="PostTranslation.content" rows="50"></textarea>';
+                                            echo '<textarea class="summer" id="'.$row['lang'].'" name="'.$row['lang'].'" data-json="PostTranslation.content" rows="50"></textarea>';
                                             echo '</div>';
                                             echo '</div>';
                                         }?>
