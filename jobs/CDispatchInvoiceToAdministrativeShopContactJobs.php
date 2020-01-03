@@ -37,6 +37,7 @@ class CDispatchInvoiceToAdministrativeShopContactJobs extends ACronJob
         $today = new \DateTime();
         $dateStart = $today->format('Y-m-d 00:00:00');
         $dateEnd  =  $today->format('Y-m-d 23:59:59');
+        $dateSend=$today->format('d-m-Y');
         $dateStart=strtotime($dateStart);
         $dateEnd=strtotime($dateEnd);
 
@@ -44,6 +45,7 @@ class CDispatchInvoiceToAdministrativeShopContactJobs extends ACronJob
             try {
                 $bodyMail = 'Invio Elenco Documenti  Emessi per il giorno ' . $dateSend.'<br>';
                 $bodyInvoice = '';
+                $bodyList='';
                 $bodyLog='';
                 $to = [$shop->billingContact];
                 $invoices = $invoiceRepo->findBy(['invoiceShopId' => $shop->id]);
@@ -53,8 +55,18 @@ class CDispatchInvoiceToAdministrativeShopContactJobs extends ACronJob
                     if ($dateCheck >= $dateStart && $dateCheck <= $dateEnd) {
                         $invoiceDate = new \DateTime($invoice->invoiceDate);
                         $dateInvoice=$invoiceDate->format('d-m-Y');
-                        $bodyInvoice .= '<b>documento N:' . $invoice->invoiceNumber . '/' . $invoice->invoiceType . ' data: ' . $dateInvoice . '</b>';
-                        $bodyInvoice .= $invoice->invoiceText;
+                        $bodyList .= '<b>documento N:' . $invoice->invoiceNumber . '/' . $invoice->invoiceType . ' data: ' . $dateInvoice . '</b><br>';
+                        $positionStart=strpos($invoice->invoiceText,'<!--start-->');
+                        $positionEnd=strpos($invoice->invoiceText,'<!--end-->');
+                        $bodyTextLength=$positionEnd-$positionStart;
+                        $bodyInvoiceText=substr($invoice->invoiceText,$positionStart,$bodyTextLength);
+                        $headInvoiceText=substr($invoice->invoiceText,0,$positionStart);
+                        $footerTextLength=strlen($invoice->invoiceText)-$positionEnd;
+                        $footerInvoiceText='</body>
+</html>';
+                        $bodyInvoice.=$headInvoiceText;
+                        $bodyInvoice.=$bodyInvoiceText;
+                        $bodyInvoice.=$footerInvoiceText;
                         $bodyInvoice .= '<br>';
                         $bodyLog='documento N:' . $invoice->invoiceNumber . '/' . $invoice->invoiceType . ' data: ' . $dateInvoice . '<br>';
                     }
@@ -62,7 +74,7 @@ class CDispatchInvoiceToAdministrativeShopContactJobs extends ACronJob
 
                 /** @var CEmailRepo $emailRepo */
                 $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                $emailRepo->newPackagedTemplateMail('sendinvoicetoshop','no-reply@iwes.pro',$to,[],[],['shopName'=>$shopName,'bodyInvoice' => $bodyInvoice,'bodyMail' => $bodyMail]);
+                $emailRepo->newPackagedTemplateMail('sendinvoicetoshop','no-reply@iwes.pro',$to,[],[],['shopName'=>$shopName,'bodyList' => $bodyList,'bodyInvoice' => $bodyInvoice,'bodyMail' => $bodyMail]);
                 $this->report('CDispatchInvoiceToAdministrativeShopContactJobs', $bodyLog,'');
             }catch(\Throwable $e){
                 $this->report('CDispatchInvoiceToAdministrativeShopContactJobs', 'Error',$e);

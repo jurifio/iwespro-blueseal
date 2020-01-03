@@ -255,23 +255,23 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                 while ($rowNewsletterUser = $stmtNewsletterUser->fetch(PDO::FETCH_ASSOC)) {
                     $checkIfNewsletterUserExist = $newsletterUserRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
                     if ($checkIfNewsletterUserExist == null) {
-                        $newsletterUseInsert = $newsletterUserRepo->getEmptyEntity();
-                        $newsletterUseInsert->email = $rowNewsletterUser['email'];
-                        $newsletterUseInsert->isActive = $rowNewsletterUser['isActive'];
-                        $newsletterUseInsert->langId = $rowNewsletterUser['langId'];
-                        $newsletterUseInsert->subscriptionDate = $rowNewsletterUser['subscriptionDate'];
+                        $newsletterUserInsert = $newsletterUserRepo->getEmptyEntity();
+                        $newsletterUserInsert->email = $rowNewsletterUser['email'];
+                        $newsletterUserInsert->isActive = $rowNewsletterUser['isActive'];
+                        $newsletterUserInsert->langId = $rowNewsletterUser['langId'];
+                        $newsletterUserInsert->subscriptionDate = $rowNewsletterUser['subscriptionDate'];
                         if ($rowNewsletterUser['remoteUserId'] != null) {
                             $user = $userRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
                             $userId = $user->id;
-                            $newsletterUseInsert->userId = $userId;
+                            $newsletterUserInsert->userId = $userId;
                         }
-                        $newsletterUseInsert->unsubscriptionDate = $rowNewsletterUser['unsubscriptionDate'];
-                        $newsletterUseInsert->genderNewsletterUser = $rowNewsletterUser['genderNewsletterUser'];
-                        $newsletterUseInsert->nameNewsletter = $rowNewsletterUser['nameNewsletter'];
-                        $newsletterUseInsert->surnameNewsletter = $rowNewsletterUser['surnameNewsletter'];
-                        $newsletterUseInsert->remoteId = $rowNewsletterUser['remoteId'];
-                        $newsletterUseInsert->remoteShopId = $shop;
-                        $newsletterUseInsert->insert();
+                        $newsletterUserInsert->unsubscriptionDate = $rowNewsletterUser['unsubscriptionDate'];
+                        $newsletterUserInsert->genderNewsletterUser = $rowNewsletterUser['genderNewsletterUser'];
+                        $newsletterUserInsert->nameNewsletter = $rowNewsletterUser['nameNewsletter'];
+                        $newsletterUserInsert->surnameNewsletter = $rowNewsletterUser['surnameNewsletter'];
+                        $newsletterUserInsert->remoteId = $rowNewsletterUser['remoteId'];
+                        $newsletterUserInsert->remoteShopId = $shop;
+                        $newsletterUserInsert->insert();
                     } else {
                         continue;
                     }

@@ -57,7 +57,15 @@ class CImportCouponNewsletterHasNewsletterUser extends AAjaxController
                                                                            `c`.`code` AS `code`,
                                                                             `nu`.`email` AS email,
                                                                             `c`.`id` as remoteCouponId,
-                                                                            `nu`.`id` as remoteNewsletterUserId
+                                                                            `nu`.`id` as remoteNewsletterUserId,
+                                                                            `nu`.`isActive` as isActive,
+                                                                            `nu`.`subscriptionDate` as `subscriptionDate`,
+                                                                            `nu`.`unsubscriptionDate` as `unsubscriptionDate`,
+                                                                            `nu`.`langId` as `langId`,
+                                                                            `nu`.`genderNewsletterUser` as genderNewsletteruser,
+                                                                            `nu`.`nameNewsletter` as nameNewsletter,
+                                                                            `nu`.`surnameNewsletter` as surnameNewsletter
+                                                                          
        
             FROM  CouponHasNewsletterUser chnu JOIN Coupon c ON chnu.couponId=c.id JOIN NewsletterUser nu ON chnu.newsletterUserId=nu.id where chnu.isImport is null');
                 $stmtCouponHasNewsletterUser->execute();
@@ -68,6 +76,25 @@ class CImportCouponNewsletterHasNewsletterUser extends AAjaxController
                     if ($newsletterUserIdFind != null) {
                         $newsletterUserId = $newsletterUserIdFind->id;
                         $couponHasNewsletterUser->newsletterUserId = $newsletterUserId;
+                    }else{
+                        $newsletterUserInsert=$newsletterUserRepo->getEmptyEntity();
+                        $newsletterUserInsert->email=$rowCouponHasNewsletterUser['email'];
+                        $newletterUserInsert->isActive=$rowCouponHasNewsletterUser['isActive'];
+                        $newsletterUserInsert->subscriptionDate=$rowCouponHasNewsletterUser['subscriptionDate'];
+                        $newsletterUserInsert->unsubscriptionDate=$rowCouponHasNewsletterUser['unsubscriptionDate'];
+                        $newsletterUserInsert->langId=$rowCouponHasNewsletterUser['langId'];
+                        $user=\Monkey::app()->repoFactory->create('User')->findOneBy(['email'=>$rowCouponHasNewsletterUser['email']]);
+                        if($user!=null){
+                            $newsletterUserInsert->userId=$user->id;
+                        }
+                        $newsletterUserInsert->genderNewsletterUser=$rowCouponHasNewsletterUser['genderNewsletterUser'];
+                        $newsletterUserInsert->nameNewsletter=$rowCouponHasNewsletterUser['nameNewsletter'];
+                        $newsletterUserInsert->surnameNewsletter=$rowCouponHasNewsletterUser['surnameNewsletter'];
+                        $newsletterUserInsert->remoteId=$rowCouponHasNewsletterUser['remoteNewsletterUserId'];
+                        $newsletterUserInsert->remoteShopid=$shop;
+                        $newsletterUserInsert->insert();
+                        $newsletterUserIdFind=$newsletterUserRepo->findOneBy(['email'=>$rowCouponHasNewsletterUser['email']]);
+                        $couponHasNewsletterUser->newsletterUserId=$newsletterUserIdFind->id;
                     }
                     $couponIdFind = $couponRepo->findOneBy(['code' => $rowCouponHasNewsletterUser['code'],'remoteShopId' => $shop]);
                     if ($couponIdFind != null) {
