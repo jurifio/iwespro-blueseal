@@ -24,6 +24,7 @@ summer.summernote({
     },
     fontNamesIgnoreCheck: ['Raleway']
 });
+
 function sendFile(file, editor, welEditable) {
     data = new FormData();
     data.append("file", file);
