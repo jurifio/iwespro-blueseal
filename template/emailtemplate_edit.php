@@ -170,6 +170,17 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-tags"
+                data-permission="allShops||worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.emailTemplateTag.insert"
+                data-title="Inserisci Tag Dinamico"
+                data-placement="bottom"
+                data-href="#"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
