@@ -35,12 +35,38 @@ class CDispatchInvoiceToAdministrativeShopContactJobs extends ACronJob
         $shops = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
       $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
         $today = new \DateTime();
-        $dateSend = $today->format('d-m-Y');
+        $dateStart = $today->format('Y-m-d 00:00:00');
+        $dateEnd  =  $today->format('Y-m-d 23:59:59');
+        $dateStart=strtotime($dateStart);
+        $dateEnd=strtotime($dateEnd);
 
         foreach($shops as $shop){
-            $bodyMail='Invio Elenco Documenti  Emessi per il giorno '.$dateSend;
-            $to=[$shop->billingContact];
-            $invoice=$invoiceRepo
+            try {
+                $bodyMail = 'Invio Elenco Documenti  Emessi per il giorno ' . $dateSend.'<br>';
+                $bodyInvoice = '';
+                $bodyLog='';
+                $to = [$shop->billingContact];
+                $invoices = $invoiceRepo->findBy(['invoiceShopId' => $shop->id]);
+                $shopName=$shop->title;
+                foreach ($invoices as $invoice) {
+                    $dateCheck = strtotime($invoice->invoiceDate);
+                    if ($dateCheck >= $dateStart && $dateCheck <= $dateEnd) {
+                        $invoiceDate = new \DateTime($invoice->invoiceDate);
+                        $dateInvoice=$invoiceDate->format('d-m-Y');
+                        $bodyInvoice .= '<b>documento N:' . $invoice->invoiceNumber . '/' . $invoice->invoiceType . ' data: ' . $dateInvoice . '</b>';
+                        $bodyInvoice .= $invoice->invoiceText;
+                        $bodyInvoice .= '<br>';
+                        $bodyLog='documento N:' . $invoice->invoiceNumber . '/' . $invoice->invoiceType . ' data: ' . $dateInvoice . '<br>';
+                    }
+                }
+
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $emailRepo->newPackagedTemplateMail('sendinvoicetoshop','no-reply@iwes.pro',$to,[],[],['shopName'=>$shopName,'bodyInvoice' => $bodyInvoice,'bodyMail' => $bodyMail]);
+                $this->report('CDispatchInvoiceToAdministrativeShopContactJobs', $bodyLog,'');
+            }catch(\Throwable $e){
+                $this->report('CDispatchInvoiceToAdministrativeShopContactJobs', 'Error',$e);
+            }
         }
     }
 }

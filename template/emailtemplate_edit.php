@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isActive">Coupon</label>
+                                            <label for="isActive">Attivo</label>
                                             <select id="isActive" name="isActive"
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona la Lista"
