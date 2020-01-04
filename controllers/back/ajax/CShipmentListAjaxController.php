@@ -38,9 +38,8 @@ class CShipmentListAjaxController extends AAjaxController
                     s.note,
                     s.remoteShipmentId as remoteShipmentId,
                     `sh2`.`name` as  remoteShopName,
-                     s.shipmentCost as shipmentCost,
                      s.dateInvoice as dateInvoice,
-                    s.invoiceCarrier as invoiceCarrier,
+                
                     if(s.isBilling=0,'No','Si') as isBilling,
                     s.creationDate,
                     O.id as orderId,
