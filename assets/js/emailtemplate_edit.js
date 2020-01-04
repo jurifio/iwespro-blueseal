@@ -163,7 +163,7 @@ $(document).on('bs.emailTemplateTag.insert', function () {
     $(document).on('change', "select[name=\"tagSelection\"]", function () {
         summer.summernote('editor.restoreRange');
         summer.summernote('editor.focus');
-        summer.summernote('editor.insertText', $('select[name=\"tagSelection\"]').val());
+        summer.summernote('editor.insertText', '<?php echo '+$('select[name=\"tagSelection\"]').val()+';>');
         modal('hide');
 
     });

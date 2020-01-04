@@ -187,6 +187,7 @@ class CEmailTemplateManage extends AAjaxController
             } catch (PDOException $e) {
                 $res = $e->getMessage();
             }
+
             $stmtUpdateEmailTemplate=$db_con->prepare("UPDATE EmailTemplate SET 
                                                                   `name`='".$name."',
                                                                   `oldTemplatephp`='".$oldTemplatephp."',
@@ -197,7 +198,9 @@ class CEmailTemplateManage extends AAjaxController
                                                                  `isActive`='".$isActive."',
                                                                  `template`='".$template."'
                                                                   where id=".$emailTemplate->remoteId);
-            $stmtUpdateEmailTemplate->execute();
+            if(ENV=='prod') {
+                $stmtUpdateEmailTemplate->execute();
+            }
             // eseguo la commit sulla tabella;
             $emailTemplate->update();
 
@@ -206,7 +209,9 @@ class CEmailTemplateManage extends AAjaxController
                 $langText = $row['template'];
                 $emailTemplateTranslation->templateTranslation = $langText;
                 $stmtUpdateEmailTemplateTranslation=$db_con->prepare("UPDATE EmailTemplateTranslation SET template='".$langText."' WHERE id=".$emailTemplateTranslation->remoteId);
-                $stmtUpdateEmailTemplateTranslation->execute();
+                if(ENV=='prod') {
+                    $stmtUpdateEmailTemplateTranslation->execute();
+                }
                 $emailTemplateTranslation->update();
             }
             $res = "Template Modifcato con successo!";

@@ -32,10 +32,23 @@ $(document).on('bs-add-invoice-shipping-info', function () {
             'placeholder="Numero di fattura della spedizione" class="form-control" name="shipmentInvoiceNumber" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
+            '<label for="invoiceDate">Data Fattura Carrier</label>' +
+            '<input autocomplete="off" type="datetime-local" id="invoiceDate" ' +
+            'placeholder="Data Fattura" class="form-control" name="invoiceDate" required="required">' +
+            '</div>'+
+             '<div class="form-group form-group-default required">' +
             '<label for="realShipmentPrice">Spesa effettiva della spedizione</label>' +
             '<input autocomplete="off" type="text" id="realShipmentPrice" ' +
             'placeholder="Spesa effettiva" class="form-control" name="realShipmentPrice" required="required">' +
-            '</div>'
+             '</div>'+
+             '<div class="form-group form-group-default required">' +
+             '<label for="isBilling">Rifatturata</label>' +
+                '<select name="isBilling"  placeholder="seleziona se rifatturata" id="isBilling">' +
+                '<option value="">Seleziona</option>' +
+                '<option value="1">Si</option>' +
+                '<option value="0">No</option>' +
+                '</select>' +
+                '</div>'
         });
 
         bsModal.showCancelBtn();
@@ -44,6 +57,8 @@ $(document).on('bs-add-invoice-shipping-info', function () {
                 idShipment: idShipment,
                 shipmentInvoiceNumber: $('input#shipmentInvoiceNumber').val(),
                 realShipmentPrice: $('input#realShipmentPrice').val().replace(/,/g, '.'),
+                invoiceDate :$('input#invoiceDate').val(),
+                isBilling : $('input#isBilling').val(),
                 trackingNumber: trackingNumber
             };
             $.ajax({

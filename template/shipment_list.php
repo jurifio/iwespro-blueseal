@@ -111,7 +111,20 @@
                                     data-is-visible="false"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Margine sulla spedizione</th>
+                                <th data-slug="shipmentCost"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Costo Spedizione</th>
+                                <th data-slug="dateInvoice"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data Fattura Spedizioniere</th>
+                                <th data-slug="invoiceCarrier"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Fattura Spedizioniere</th>
+                                <th data-slug="isBilling"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Rifatturata</th>
                             </tr>
+
                             </thead>
                             <tbody>
                             </tbody>

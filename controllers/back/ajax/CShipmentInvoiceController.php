@@ -42,6 +42,8 @@ class CShipmentInvoiceController extends AAjaxController
         $shipmentInvoiceNumber = $data['shipmentInvoiceNumber'];
         $realShipmentPrice = $data['realShipmentPrice'];
         $trackingNumber = $data['trackingNumber'];
+        $invoiceDate =$data['invoiceDate'];
+        $isBilling =$data['isBilling'];
 
         if (empty($shipmentInvoiceNumber) || empty($realShipmentPrice)){
             $res = "Non hai inserito le informazioni di fatturazizone in merito alla spedizione";
@@ -55,8 +57,10 @@ class CShipmentInvoiceController extends AAjaxController
 
             $shipment->shipmentInvoiceNumber = $shipmentInvoiceNumber;
             $shipment->realShipmentPrice = $realShipmentPrice;
+            $shipment->invoiceDate =$invoiceDate;
+            $shipment->isBilling =$isBilling;
             $shipment->update();
-            $res = "Sunto della spedizione:</br>"."Numero fattura: <strong>".$shipmentInvoiceNumber."</strong></br>".
+            $res = "Sunto della spedizione:</br>"."Numero fattura: <strong>".$shipmentInvoiceNumber."/".$invoiceDate."</strong></br>".
                 "Costo reale di spedizione: <strong>".$realShipmentPrice."</strong></br>"."Tracking Number: <strong>".$trackingNumber."</strong>";
             return $res;
         }
