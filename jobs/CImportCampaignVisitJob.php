@@ -122,7 +122,12 @@ class CImportCampaignVisitJob extends ACronJob
                     }
                     $stmtUpdateRemoteCampaignVisitHasOrder = $db_con->prepare('UPDATE CampaignVisitHasOrder set isImport=1 where isImport is null');
                     $stmtUpdateRemoteCampaignVisitHasOrder->execute();
-                    $stmtRemoteCampaignVisitHasProduct = $db_con->prepare("SELECT campaignVisitId as remoteCampaignVisitId, campaignId as remoteCampaignId ,productId as productId, productVariantid as productVariantId from CampaignVisitHasProduct where campaignId=".$remoteCampaignId." and  isImport is null ");
+                    $stmtRemoteCampaignVisitHasProduct = $db_con->prepare("SELECT 
+                    campaignVisitId as remoteCampaignVisitId,
+                    campaignId as remoteCampaignId,
+                    productId as productId,
+                    productVariantId as productVariantId,
+                    from CampaignVisitHasProduct where campaignId=".$remoteCampaignId." and  isImport is null ");
                     $stmtRemoteCampaignVisitHasProduct->execute();
                     while ($rowRemoteCampaignVisitHasProduct = $stmtRemoteCampaignVisitHasProduct->fetch(PDO::FETCH_ASSOC)) {
                         try {
