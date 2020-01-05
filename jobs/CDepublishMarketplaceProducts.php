@@ -92,7 +92,7 @@ class CDepublishMarketplaceProducts extends ACronJob
             if($checkIfProductSizeGroupId1==$productSizeGroupId){
                 $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept1'];
             }elseif($checkIfProductSizeGroupId2==$productSizeGroupId){
-                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept1'];
+                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept2'];
             }else{
                 $multiplierIs=isset($campaign->marketplaceAccount->getConfig()['multiplierDefault'])? $campaign->marketplaceAccount->getConfig()['multiplierDefault']:0.1;
             }

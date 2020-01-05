@@ -1,0 +1,150 @@
+<?php
+
+namespace bamboo\blueseal\jobs;
+
+use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CCampaign;
+use bamboo\domain\entities\CCampaignVisitHasOrder;
+use bamboo\domain\entities\CCampaignVisit;
+use bamboo\domain\entities\CCampaignVisitHasProduct;
+use bamboo\domain\entities\COrder;
+use bamboo\domain\entities\CProduct;
+use bamboo\domain\repositories\CCampaignRepo;
+use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
+use bamboo\domain\repositories\CProductRepo;
+use PDO;
+use PDOException;
+
+/**
+ * Class CImportCampaignVisitJob
+ * @package bamboo\blueseal\jobs
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 05/01/2020
+ * @since 1.0
+ */
+class CImportCampaignVisitJob extends ACronJob
+{
+    /**
+     * @param null $args
+     */
+    public function run($args = null)
+    {
+        $config = json_decode($args);
+        $this->report('run','Starting with config' . $args);
+        $campaignRepo = \Monkey::app()->repoFactory->create('Campaign');
+        $campaignVisitRepo = \Monkey::app()->repoFactory->create('CampaignVisit');
+        $campaignVisitHasOrderRepo = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
+        $campaignVisitHasProductRepo = \Monkey::app()->repoFactory->create('CampaignVisitHasProduct');
+        $orderRepo = \Monkey::app()->repoFactory->create('Order');
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+        $shops = $shopRepo->findBy(['hasEcommerce' => 1]);
+        $res = "";
+
+
+        foreach ($shops as $value) {
+            $this->report('Start ImportOrder From PickySite ','Shop To Import' . $value->name);
+            /********marketplace********/
+            $db_host = $value->dbHost;
+            $db_name = $value->dbName;
+            $db_user = $value->dbUsername;
+            $db_pass = $value->dbPassword;
+            $shop = $value->id;
+            try {
+
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res .= " connessione ok <br>";
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
+
+            $campaigns = $campaignRepo->findAll();
+            foreach ($campaigns as $campaign) {
+
+                $remoteCampaignId = $campaign->remoteCampaignId;
+                if ($remoteCampaignId != null) {
+                    try {
+                        $stmtRemoteCampaignVisit = $db_con->prepare('SELECT id as remoteVisitId,timestamp as timestamp,cost as cost, campaignId as remoteCampaignId from campaignId WHERE id=' . $remoteCampaignId . ' and isImport is null');
+                        $stmtRemoteCampaignVisit->execute();
+                        while ($rowRemoteCampaignVisit = $stmtRemoteCampaignVisit->fetch(PDO::FETCH_ASSOC)) {
+                            $campaignVisitInsert = $campaignVisitRepo->getEmptyEntity();
+                            $campaignVisitInsert->campaignId = $campaign->id;
+                            $campaignVisitInsert->timestamp = $rowRemoteCampaignVisit['timestamp'];
+                            $campaignVisitInsert->cost = $rowRemoteCampaignVisit['cost'];
+                            $campaignVisitInsert->remoteVisitId = $rowRemoteCampaignVisit['remoteVisitId'];
+                            $campaignVisitInsert->remoteCampaignId = $rowRemoteCampaignVisit['remoteCampaignId'];
+                            $campaignVisitInsert->remoteShopId = $shop;
+                            $campaignVisitInsert->insert();
+                        }
+                        $stmtUpdateRemoteCampaignVisit = $db_con->prepare('UPDATE CampaignVisit set isImport=1 where isImport is  null');
+                        $stmtUpdateRemoteCampaignVisit->execute();
+                    } catch (\Throwable $e) {
+                        $this->report('CImportCampaignVisitJob','error','Errore campaignVisitInsert ' . $e);
+                    }
+                    $stmtRemoteCampaignVisitHasOrder = $db_con->prepare('SELECT  campaignVisitId as remoteCampaignVisitId ,
+                                                                                         campaignId as remoteCampaignId,
+                                                                                         orderId as remoteOrderId from CampaignVisitHasOrder 
+                                                                                         where isImport is null');
+                    $stmtRemoteCampaignVisitHasOrder->execute();
+                    while ($rowRemoteCampaignVisitHasOrder = $stmtRemoteCampaignVisitHasOrder->fetch(PDO::FETCH_ASSOC)) {
+                        $order = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowRemoteCampaignVisitHasOrder['remoteOrderId'],'remoteShopSellerId' => $shop]);
+                        if ($order != null) {
+                            try {
+                                $campaignVisitHasOrderInsert = $campaignVisitHasOrderRepo->getEmptyEntity();
+                                $findCampaignVisitId = $campaignVisitRepo->findOneBy(['remoteCampaignVisitId' => $rowRemoteCampaignVisitHasOrder['remoteCampaignVisitId']]);
+                                $campaignVisitHasOrderInsert->campaignVisitId = $findCampaignVisitId->id;
+                                $campaignVisitHasOrderInsert->campaignId = $campaign->id;
+                                $campaignVisitHasOrderInsert->orderId = $order->id;
+                                $campaignVisitHasOrderInsert->remoteCampaignVisitId = $rowRemoteCampaignVisitHasOrder['remoteCampaignVisitId'];
+                                $campaignVisitHasOrderInsert->remoteCampaignId = $rowRemoteCampaignVisitHasOrder['remoteCampaignId'];
+                                $campaignVisitHasOrderInsert->remoteOrderId = $rowRemoteCampaignVisitHasOrder['remoteOrderId'];
+                                $campaignVisitHasOrderInsert->remoteShopId = $shop;
+                                $campaignVisitHasOrderInsert->insert();
+                                $stmtUpdateRemoteCampaignVisitHasOrder = $db_con->prepare('UPDATE CampaignVisitHasOrder set isImport=1 where isImport is null');
+                                $stmtUpdateRemoteCampaignVisitHasOrder->execute();
+
+                            } catch (\Throwable $e) {
+                                $this->report('CImportCampaignVisitJob','error','Error campaignVisitHasOrderInsert ' . $e);
+                            }
+
+                        } else {
+                            continue;
+                        }
+                    }
+                    $stmtRemoteCampaignVisitHasProduct = $db_con->prepare("SELECT campaignVisitId as remoteCampaignVisitId, campaignId as remoteCampaignId ,productId as productId, productVariantid as productVariantId from CampaignVisitHasProduct where isImport is null ");
+                    $stmtRemoteCampaignVisitHasProduct->execute();
+                    while ($rowRemoteCampaignVisitHasProduct = $stmtRemoteCampaignVisitHasProduct->fetch(PDO::FETCH_ASSOC)) {
+                        try {
+                            $campaignVisitHasProductInsert = $campaignVisitHasProductRepo->getEmptyEntity();
+                            $findCampaignVisitId = $campaignVisitRepo->findOneBy(['remoteCampaignVisitId' => $rowRemoteCampaignVisitHasProduct['remoteCampaignVisitId']]);
+                            $campaignVisitHasProductInsert->campaignVisitId = $findCampaignVisitId->id;
+                            $campaignVisitHasProductInsert->campaignId=$campaign->id;
+                            $campaignVisitHasProductInsert->productId=$rowRemoteCampaignVisitHasProduct['productId'];
+                            $campaignVisitHasProductInsert->productVariantId=$rowRemoteCampaignVisitHasProduct['productVariantId'];
+                            $campaignVisitHasproductInsert->remoteCampaignVisitId = $rowRemoteCampaignVisitHasProduct['remoteCampaignVisitId'];
+                            $campaignVisitHasProductInsert->remoteCampaignId = $rowRemoteCampaignVisitHasProduct['remoteCampaignId'];
+                            $campaignVisitHasProductInsert->remoteShopId = $shop;
+                            $campaignVisitHasProductInsert->execute();
+                            $stmtUpdateRemoteCampaignVisitHasProduct = $db_con->prepare('UPDATE CampaignVisitHasProduct set isImport=1 where isImport is null');
+                            $stmtUpdateRemoteCampaignVisitHasProduct->execute();
+
+                        } catch (\Throwable $e) {
+                            $this->report('CImportCampaignVisitJob','error','Error campaignVisitHasProductInsert ' . $e);
+
+                        }
+                    }
+
+
+                }
+
+
+            }
+        }
+    }
+}
