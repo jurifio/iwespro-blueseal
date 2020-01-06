@@ -9,7 +9,7 @@ use bamboo\core\db\pandaorm\entities\CEntityManager;
  * Class CCampaignVisitController
  * @package bamboo\blueseal\controllers
  */
-class CCampaignVisitController extends ARestrictedAccessRootController
+class CCampaignVisitListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "campaignvisit_list";

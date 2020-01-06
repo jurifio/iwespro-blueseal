@@ -65,11 +65,9 @@ class CCampaignVisitListAjaxController extends AAjaxController
 
         /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
         $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
-
-        $campaigns = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($queryParameters, $datatable->getParams()))->fetchAll();
+        $campaigns = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($datatable->getParams()))->fetchAll();
         $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
         $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
-        $reportArray = [];
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
@@ -113,35 +111,35 @@ class CCampaignVisitListAjaxController extends AAjaxController
             if ($campaignData['orderCount'] == 0) $cos = 'NaN';
             else $cos = round($campaignData['cost'] / $campaignData['orderValue'] * 100,2);
             /** costo campagna  / somma totale degli ordini per cento   */
-
+           
             //definizione del massimo costo per giorno in base alla query
             $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
             if ($nCos === 'NaN' || $nCos > $maxCos) {
                 $messageDelete="Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos;
-
+               
             }else{
                 $messageDelete='';
             }
-
-
-
+            
+            
+            
 
             $row['id'] = $campaignData['id'];
             $row['campaignCode'] = $campaignData['campaignCode'];
             $row['campaignName'] = $campaignData['campaignName'];
             $row['codeProduct'] = $campaignData['codeProduct'];
-            $row['defaultCpc'] = $campaignData['defautCpc'];
+            $row['defaultCpc'] = $campaignData['defaultCpc'];
             $row['shopName'] = $campaignData['shopName'];
             $row['visits'] = $campaignData['visits'];
             $row['cost'] = $campaignData['cost'];
             $row['orderCount'] = $campaignData['orderCount'];
             $row['orderValue'] = $campaignData['orderValue'];
             $row['priceModifier'] = $campaignData['priceModifier'];
-            $row['multiplierIs']=$multiplierIs;
             $row['cos']=$cos;
             $row['maxCos']=$maxCos;
             $row['sizeFill']=$sizeFill;
             $row['messageDelete']=$messageDelete;
+            $row['multiplierIs']=$multiplierIs;
 
             $response['data'][] = $row;
         }

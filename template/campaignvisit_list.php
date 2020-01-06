@@ -78,7 +78,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Giacenza Media</th>
-                                <th data-slug="messaggeDelete"
+                                <th data-slug="messageDelete"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Stato</th>
@@ -97,11 +97,6 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Filtra">
-        <bs-toolbar-button
-            data-remote="btn.datatable.date.filter"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"

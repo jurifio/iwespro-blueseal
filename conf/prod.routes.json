@@ -3314,7 +3314,7 @@
         {
             "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignVisitController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignVisitListController"
             },
             "filters": {}
         ,
