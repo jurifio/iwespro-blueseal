@@ -91,10 +91,10 @@ class CImportCampaignVisitJob extends ACronJob
                     } catch (\Throwable $e) {
                         $this->report('CImportCampaignVisitJob','error','Errore campaignVisitInsert ' . $e);
                     }
-                    $stmtRemoteCampaignVisitHasOrder = $db_con->prepare("SELECT  campaignVisitId as remoteCampaignVisitId ,
+                    $stmtRemoteCampaignVisitHasOrder = $db_con->prepare('SELECT  campaignVisitId as remoteCampaignVisitId ,
                                                                                          campaignId as remoteCampaignId,
                                                                                          orderId as remoteOrderId from CampaignVisitHasOrder 
-                                                                                         where campaignId=".$remoteCampaignId." and  isImport is null");
+                                                                                         where campaignId=\''.$remoteCampaignId.'\' and  isImport is null');
                     $stmtRemoteCampaignVisitHasOrder->execute();
                     while ($rowRemoteCampaignVisitHasOrder = $stmtRemoteCampaignVisitHasOrder->fetch(PDO::FETCH_ASSOC)) {
                         $order = $orderRepo->findOneBy(['remoteOrderSellerId' => $rowRemoteCampaignVisitHasOrder['remoteOrderId'],'remoteShopSellerId' => $shop]);
@@ -132,13 +132,14 @@ class CImportCampaignVisitJob extends ACronJob
                     $stmtRemoteCampaignVisitHasProduct->execute();
                     while ($rowRemoteCampaignVisitHasProduct = $stmtRemoteCampaignVisitHasProduct->fetch(PDO::FETCH_ASSOC)) {
                         try {
+                            $findCampaignVisitId = $campaignVisitRepo->findOneBy(['remoteCampaignVisitId' => $rowRemoteCampaignVisitHasProduct['remoteCampaignVisitId'],'remoteCampaignId'=>$rowRemoteCampaignVisitHasProduct['remoteCampaignId'],'remoteShopId'=>$shop]);
                             $campaignVisitHasProductInsert = $campaignVisitHasProductRepo->getEmptyEntity();
-                            $findCampaignVisitId = $campaignVisitRepo->findOneBy(['remoteCampaignVisitId' => $rowRemoteCampaignVisitHasProduct['remoteCampaignVisitId'],'remoteShopId'=>$shop]);
+
                             $campaignVisitHasProductInsert->campaignVisitId = $findCampaignVisitId->id;
                             $campaignVisitHasProductInsert->campaignId=$campaign->id;
                             $campaignVisitHasProductInsert->productId=$rowRemoteCampaignVisitHasProduct['productId'];
                             $campaignVisitHasProductInsert->productVariantId=$rowRemoteCampaignVisitHasProduct['productVariantId'];
-                            $campaignVisitHasproductInsert->remoteCampaignVisitId = $rowRemoteCampaignVisitHasProduct['remoteCampaignVisitId'];
+                            $campaignVisitHasproductInsert->remoteCampaignVisitId = $findCampaignVisitId->remoteCampaignVisitId;
                             $campaignVisitHasProductInsert->remoteCampaignId = $rowRemoteCampaignVisitHasProduct['remoteCampaignId'];
                             $campaignVisitHasProductInsert->remoteShopId = $shop;
                             $campaignVisitHasProductInsert->insert();
