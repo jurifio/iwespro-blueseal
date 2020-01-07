@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -20,13 +21,15 @@ class CCampaignVisitListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sample = \Monkey::app()->repoFactory->create('Campaign')->getEmptyEntity();
+        $sample = \Monkey::app()->repoFactory->create('CampaignVisitHasProduct')->getEmptyEntity();
 
         $query = "SELECT c.id,
+                         cvhp.remoteShopId as remoteShopId,
                         c.name as campaignName,
                         c.code as campaignCode,
-						cvhp.campaignVisitId as CampaignVisitId,
+                        cv.campaignId as campaignId,
                         cv.timestamp as campaignVisit,
+						cvhp.campaignVisitId as CampaignVisitId,
                         cvhp.productId as productId,
                         cvhp.productVariantId as productVariantId,
                         concat(cvhp.productId, '-',cvhp.productVariantId) as codeProduct,
@@ -37,39 +40,47 @@ class CCampaignVisitListAjaxController extends AAjaxController
                         count(DISTINCT cvho.orderId) AS orderCount,
                         ifnull(sum(DISTINCT ol.netPrice),0) AS orderValue,
                         mahp.priceModifier as priceModifier
-                FROM Campaign c
-                  JOIN CampaignVisit cv ON c.id = cv.campaignId
-                    left join Shop s on c.remoteShopId =s.id
-                  JOIN CampaignVisitHasProduct cvhp ON (cv.id, cv.campaignId) = (cvhp.campaignVisitId, cvhp.campaignId)
+                FROM CampaignVisitHasProduct cvhp
+                    JOIN Campaign c  ON c.id = cvhp.campaignId
+                  JOIN CampaignVisit cv ON (cvhp.campaignVisitId, cvhp.campaignId) =  (cv.id, cv.campaignId)  
+                
+                      left join Shop s on cvhp.remoteShopId =s.id
                   JOIN MarketplaceAccountHasProduct mahp on (cvhp.productId=mahp.productId and cvhp.productVariantId=mahp.productVariantId)
                   
-                  LEFT JOIN (
+                  LEFT JOIN 
                     CampaignVisitHasOrder cvho JOIN OrderLine ol ON cvho.orderId = ol.orderId
-                  ) ON (cv.id, cv.campaignId) = (cvho.campaignVisitId, cvho.campaignId) AND 
+                   ON (cv.id, cv.campaignId) = (cvho.campaignVisitId, cvho.campaignId) AND 
                     (cvhp.productId,cvhp.productVariantId) = (ol.productId,ol.productVariantId)
                 WHERE cv.timestamp > (NOW() - INTERVAL 1 WEEK)
-                GROUP BY c.id,cvhp.productId,cvhp.productVariantId
+                GROUP BY cvhp.productId,cvhp.productVariantId
                 HAVING cost > 0
                 ORDER BY c.id ASC";
 
 
-
-        $timeFrom = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('startDate'));
-        $timeTo = \DateTime::createFromFormat('Y-m-d', $this->app->router->request()->getRequestData('endDate'));
+        $timeFrom = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('startDate'));
+        $timeTo = \DateTime::createFromFormat('Y-m-d',$this->app->router->request()->getRequestData('endDate'));
         $timeFrom = $timeFrom ? $timeFrom->format('Y-m-d') : null;
         $timeTo = $timeTo ? $timeTo->format('Y-m-d') : null;
-        $queryParameters = [$timeFrom, $timeTo];
+        $queryParameters = [$timeFrom,$timeTo];
+        /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
+        $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        /** @var CRepo $campaignVisitHasProductRepo */
+        $campaignVisitHasProductRepo = \Monkey::app()->repoFactory->create('CampaignVisitHasProduct');
+        /** @var CRepo $campaignVisitHasOrderRepo */
+        $campaignVisitHasOrderRepo = \Monkey::app()->repoFactory->create('CampaignVisitHasOrder');
+        /** @var CRepo $campaignVisitRepo */
+        $campaignVisitRepo = \Monkey::app()->repoFactory->create('CampaignVisit');
 
-        $datatable = new CDataTables($query, $sample->getPrimaryKeys(), $_GET, true);
+
+        $datatable = new CDataTables($query,$sample->getPrimaryKeys(),$_GET,true);
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         /** @var CCampaignRepo $campaingRepo */
         $campaingRepo = \Monkey::app()->repoFactory->create('Campaign');
 
-        /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
-        $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
-        $campaigns = $this->app->dbAdapter->query($datatable->getQuery(false, true), array_merge($datatable->getParams()))->fetchAll();
-        $count = $sample->em()->findCountBySql($datatable->getQuery(true), array_merge($queryParameters, $datatable->getParams()));
-        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'), array_merge($queryParameters, $datatable->getParams()));
+        $campaigns = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
+        // $campaigns = $this->app->dbAdapter->query($datatable->getQuery(false,true),array_merge($datatable->getParams()))->fetchAll();
+        $count = $sample->em()->findCountBySql($datatable->getQuery(true),$datatable->getParams());
+        $totalCount = $sample->em()->findCountBySql($datatable->getQuery('full'),($datatable->getParams()));
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
@@ -77,25 +88,37 @@ class CCampaignVisitListAjaxController extends AAjaxController
         $response ['data'] = [];
 
         foreach ($campaigns as $campaignData) {
+
             // cerco il prodotto
             /** @var CProduct $product */
-            $product = $productRepo->findOneBy(["id" => $campaignData['productId'], "productVariantId" => $campaignData['productVariantId']]);
+            $product = $productRepo->findOneBy(["id" => $campaignData['productId'],"productVariantId" => $campaignData['productVariantId']]);
             //cerco la campagna che è presente nei dati
             /** @var CCampaign $campaign */
-            $productSizeGroupId=$product->productSizeGroupId;
-            $campaign = $campaingRepo->findOneBy(["id" => $campaignData['id']]);
+            $productSizeGroupId = $product->productSizeGroupId;
+            $campaign = $campaingRepo->findOneBy(["id" => $campaignData['campaignId']]);
             // verifico se la campagna è lincata al marketplace
             $iniSizes = $product->productSku->count();
             $actualSizes = 0;
-            foreach ($product->productSku as $sku) if ($sku->stockQty > 0) $actualSizes++;
-            $checkIfProductSizeGroupId1=isset($campaign->marketplaceAccount->getConfig()['productSizeGroup1'])? $campaign->marketplaceAccount->getConfig()['productSizeGroup1']:0;
-            $checkIfProductSizeGroupId2=isset($campaign->marketplaceAccount->getConfig()['productSizeGroup2'])? $campaign->marketplaceAccount->getConfig()['productSizeGroup2']:0;
-            if($checkIfProductSizeGroupId1==$productSizeGroupId){
-                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept1'];
-            }elseif($checkIfProductSizeGroupId2==$productSizeGroupId){
-                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept2'];
-            }else{
-                $multiplierIs=isset($campaign->marketplaceAccount->getConfig()['multiplierDefault'])? $campaign->marketplaceAccount->getConfig()['multiplierDefault']:0.1;
+            foreach ($product->productSku as $sku) {
+                if ($sku->stockQty > 0) $actualSizes++;
+            }
+            $checkIfProductSizeGroupId1 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup1']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup1'] : 0;
+            $checkIfProductSizeGroupId2 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup2']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup2'] : 0;
+            $checkIfProductSizeGroupId3 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup3']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup3'] : 0;
+            $checkIfProductSizeGroupId4 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup4'] : 0;
+            $checkIfProductSizeGroupId5 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup5'] : 0;
+            if ($checkIfProductSizeGroupId1 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept1'];
+            } elseif ($checkIfProductSizeGroupId2 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept2'];
+            } elseif ($checkIfProductSizeGroupId3 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept3'];
+            } elseif ($checkIfProductSizeGroupId4 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept4'];
+            } elseif ($checkIfProductSizeGroupId5 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept5'];
+            } else {
+                $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
             }
 
 
@@ -105,7 +128,7 @@ class CCampaignVisitListAjaxController extends AAjaxController
             else $nCos = round((
                     $campaignData['cost'] /
                     (
-                        ($campaignData['orderCount'] == 0 ? 0.1 : $one['orderCount']) * $product->getDisplayActivePrice()
+                        ($campaignData['orderCount'] == 0 ? 0.1 : $campaignData['orderCount']) * $product->getDisplayActivePrice()
                     )
                     * $sizeFill
                 ) * 100,2);
@@ -115,22 +138,39 @@ class CCampaignVisitListAjaxController extends AAjaxController
             /** costo campagna  / somma totale degli ordini per cento   */
 
             //definizione del massimo costo per giorno in base alla query
-            $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
-            if ($nCos === 'NaN' || $nCos > $maxCos) {
-                $messageDelete="Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos;
+         //   $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
+            $priceModifierRange1 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange1']);
+            $priceModifierRange2 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange2']);
+            $priceModifierRange3 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange3']);
+            $priceModifierRange4 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange4']);
+            switch (true) {
+                case ($product->getDisplayActivePrice() >= $priceModifierRange1[0] && $product->getDisplayActivePrice() <= $priceModifierRange1[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos1'] ?? 7;
+                    break;
+                case ($product->getDisplayActivePrice() >= $priceModifierRange2[0] && $product->getDisplayActivePrice() <= $priceModifierRange2[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos2'] ?? 7;
+                    break;
+                case ($product->getDisplayActivePrice() >= $priceModifierRange3[0] && $product->getDisplayActivePrice() <= $priceModifierRange3[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos3'] ?? 7;
+                    break;
+                case ($product->getDisplayActivePrice() >= $priceModifierRange4[0] && $product->getDisplayActivePrice() <= $priceModifierRange4[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos4'] ?? 7;
+                    break;
 
-            }else{
-                $messageDelete='';
             }
+            if ($nCos === 'NaN' || $nCos > $maxCos) {
+                $messageDelete = "Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos;
 
-
+            } else {
+                $messageDelete = '';
+            }
 
 
             $row['id'] = $campaignData['id'];
             $row['campaignCode'] = $campaignData['campaignCode'];
             $row['campaignName'] = $campaignData['campaignName'];
-            $row['campaignVisit'] = $campaignData['campaignVisit'];
             $row['codeProduct'] = $campaignData['codeProduct'];
+            $row['campaignVisit'] = $campaignData['campaignVisit'];
             $row['defaultCpc'] = $campaignData['defaultCpc'];
             $row['shopName'] = $campaignData['shopName'];
             $row['visits'] = $campaignData['visits'];
@@ -138,14 +178,15 @@ class CCampaignVisitListAjaxController extends AAjaxController
             $row['orderCount'] = $campaignData['orderCount'];
             $row['orderValue'] = $campaignData['orderValue'];
             $row['priceModifier'] = $campaignData['priceModifier'];
-            $row['cos']=$cos;
-            $row['maxCos']=$maxCos;
-            $row['sizeFill']=$sizeFill;
-            $row['messageDelete']=$messageDelete;
-            $row['multiplierIs']=$multiplierIs;
+            $row['cos'] = $cos;
+            $row['maxCos'] = $maxCos;
+            $row['sizeFill'] = $sizeFill;
+            $row['messageDelete'] = $messageDelete;
+            $row['multiplierIs'] = $multiplierIs;
 
             $response['data'][] = $row;
         }
+
 
         return json_encode($response);
     }

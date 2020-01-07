@@ -87,14 +87,23 @@ class CDepublishMarketplaceProducts extends ACronJob
                     'orderCount' => $one['orderCount'],
                     'productPrice' => $product->getDisplayActivePrice()
                 ]);
-            $checkIfProductSizeGroupId1=isset($campaign->marketplaceAccount->getConfig()['productSizeGroup1'])? $campaign->marketplaceAccount->getConfig()['productSizeGroup1']:0;
-            $checkIfProductSizeGroupId2=isset($campaign->marketplaceAccount->getConfig()['productSizeGroup2'])? $campaign->marketplaceAccount->getConfig()['productSizeGroup2']:0;
-            if($checkIfProductSizeGroupId1==$productSizeGroupId){
-                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept1'];
-            }elseif($checkIfProductSizeGroupId2==$productSizeGroupId){
-                $multiplierIs=$campaign->marketplaceAccount->getConfig()['valueexcept2'];
-            }else{
-                $multiplierIs=isset($campaign->marketplaceAccount->getConfig()['multiplierDefault'])? $campaign->marketplaceAccount->getConfig()['multiplierDefault']:0.1;
+            $checkIfProductSizeGroupId1 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup1']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup1'] : 0;
+            $checkIfProductSizeGroupId2 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup2']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup2'] : 0;
+            $checkIfProductSizeGroupId3 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup3']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup3'] : 0;
+            $checkIfProductSizeGroupId4 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup4'] : 0;
+            $checkIfProductSizeGroupId5 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup5'] : 0;
+            if ($checkIfProductSizeGroupId1 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept1'];
+            } elseif ($checkIfProductSizeGroupId2 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept2'];
+            } elseif ($checkIfProductSizeGroupId3 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept3'];
+            } elseif ($checkIfProductSizeGroupId4 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept4'];
+            } elseif ($checkIfProductSizeGroupId5 == $productSizeGroupId) {
+                $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept5'];
+            } else {
+                $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
             }
 
 
@@ -117,7 +126,26 @@ class CDepublishMarketplaceProducts extends ACronJob
                 'nCos' => $nCos
             ]);
             //definizione del massimo costo per giorno in base alla query
-            $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
+            //   $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
+            $priceModifierRange1 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange1']);
+            $priceModifierRange2 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange2']);
+            $priceModifierRange3 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange3']);
+            $priceModifierRange4 = explode('-',$campaign->marketplaceAccount->getConfig()['priceModifierRange4']);
+            switch (true) {
+                case ($product->getDisplayActivePrice() >= $priceModifierRange1[0] && $product->getDisplayActivePrice() <= $priceModifierRange1[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos1'] ?? 7;
+                    break;
+                case ($product->getDisplayActivePrice() >= $priceModifierRange2[0] && $product->getDisplayActivePrice() <= $priceModifierRange2[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos2'] ?? 7;
+                    break;
+                case ($product->getDisplayActivePrice() >= $priceModifierRange3[0] && $product->getDisplayActivePrice() <= $priceModifierRange3[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos3'] ?? 7;
+                    break;
+                case ($product->getDisplayActivePrice() >= $priceModifierRange4[0] && $product->getDisplayActivePrice() <= $priceModifierRange4[1]):
+                    $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos4'] ?? 7;
+                    break;
+
+            }
             $this->report('Cycle', "Define  cos: $nCos, and maxCos: " . $maxCos, ['product' => $product, 'campaing' => $campaign]);
             if ($nCos === 'NaN' || $nCos > $maxCos) {
                 $this->report('Cycle', "Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos, ['product' => $product, 'campaing' => $campaign]);
