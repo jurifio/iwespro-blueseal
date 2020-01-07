@@ -13,7 +13,24 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="campaignId">Campagna Associata</label>
+                                    <select id="campaignId" name="campaignId"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
@@ -27,21 +44,18 @@
                                data-controller="CampaignVisitListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 200, 500, 1000">
+                               data-length-menu-setup="50, 100, 200, 500, 1000"
+                               data-campagnId="<?php echo $campaignId ?>">
                             <thead>
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">id</th>
-                                <th data-slug="campaignCode"
+                                <th data-slug="campaignName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Codice Campagna</th>
-                                <th data-slug="campaignVisit"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Data Visita</th>
                                 <th data-slug="codeProduct"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -70,10 +84,6 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Moltiplicatore</th>
-                                <th data-slug="cos"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Costo Minimo</th>
                                 <th data-slug="maxCos"
                                     data-searchable="true"
                                     data-orderable="true"

@@ -21,7 +21,18 @@ class CCampaignVisitListAjaxController extends AAjaxController
 {
     public function get()
     {
+        $campaignId = isset($this->data['campaignId'])?$this->data['campaignId']:'';
+        if ($campaignId != '') {
+            $sqlCampaignId = '  AND cvhp.campaignId='.$campaignId;
+        }else{
+            $sqlCampaignId= ' ';
+        }
+
+
         $sample = \Monkey::app()->repoFactory->create('CampaignVisitHasProduct')->getEmptyEntity();
+
+
+
 
         $query = "SELECT c.id,
                          cvhp.remoteShopId as remoteShopId,
@@ -51,7 +62,7 @@ class CCampaignVisitListAjaxController extends AAjaxController
                     CampaignVisitHasOrder cvho JOIN OrderLine ol ON cvho.orderId = ol.orderId
                    ON (cv.id, cv.campaignId) = (cvho.campaignVisitId, cvho.campaignId) AND 
                     (cvhp.productId,cvhp.productVariantId) = (ol.productId,ol.productVariantId)
-                WHERE cv.timestamp > (NOW() - INTERVAL 1 WEEK)
+                WHERE cv.timestamp > (NOW() - INTERVAL 1 WEEK) ". $sqlCampaignId ."
                 GROUP BY cvhp.productId,cvhp.productVariantId
                 HAVING cost > 0
                 ORDER BY c.id ASC";
@@ -171,16 +182,17 @@ class CCampaignVisitListAjaxController extends AAjaxController
             $row['campaignName'] = $campaignData['campaignName'];
             $row['codeProduct'] = $campaignData['codeProduct'];
             $row['campaignVisit'] = $campaignData['campaignVisit'];
-            $row['defaultCpc'] = $campaignData['defaultCpc'];
+            $row['defaultCpc'] = number_format($campaignData['defaultCpc'],2,',',' ');
             $row['shopName'] = $campaignData['shopName'];
             $row['visits'] = $campaignData['visits'];
-            $row['cost'] = $campaignData['cost'];
+            $row['cost'] = number_format($campaignData['cost'],2,',',' ');;
             $row['orderCount'] = $campaignData['orderCount'];
             $row['orderValue'] = $campaignData['orderValue'];
             $row['priceModifier'] = $campaignData['priceModifier'];
             $row['cos'] = $cos;
             $row['maxCos'] = $maxCos;
-            $row['sizeFill'] = $sizeFill;
+            $row['sizeFill'] = number_format( $sizeFill,2,',',' ');
+
             $row['messageDelete'] = $messageDelete;
             $row['multiplierIs'] = $multiplierIs;
 
