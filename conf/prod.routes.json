@@ -3312,12 +3312,13 @@
             ]
         },
         {
-            "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/)?",
+            "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/):id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignVisitListController"
             },
-            "filters": {}
-        ,
+            "filters": {
+                "id": "[0-9]+"
+            },
             "translations": {},
             "methods": [
                 "GET",
