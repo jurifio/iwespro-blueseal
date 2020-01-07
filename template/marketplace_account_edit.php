@@ -80,7 +80,7 @@
                                         <div class="col-md-12">
                                             <?php if (isset($marketplaceAccount -> config['productSizeGroup1'])){ ?>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-2">
                                                     <div class="form-group form-group-default required">
                                                         <div class="form-group form-group-default selectize-enabled">
                                                             <label for="productSizeGroupId1">Selettore
@@ -95,13 +95,58 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-2">
                                                     <div class="form-group form-group-default required">
                                                         <div class="form-group form-group-default selectize-enabled">
                                                             <label for="productSizeGroupId2">Selettore Gruppo
                                                                 Taglia
                                                                 2</label>
                                                             <select id="productSizeGroupId2" name="productSizeGroupId2"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione il Gruppo Taglia"
+                                                                    data-init-plugin="selectize"></select>
+                                                            <span class="bs red corner label"><i
+                                                                        class="fa fa-asterisk"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group form-group-default required">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="productSizeGroupId3">Selettore Gruppo
+                                                                Taglia
+                                                                3</label>
+                                                            <select id="productSizeGroupId3" name="productSizeGroupId3"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione il Gruppo Taglia"
+                                                                    data-init-plugin="selectize"></select>
+                                                            <span class="bs red corner label"><i
+                                                                        class="fa fa-asterisk"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group form-group-default required">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="productSizeGroupId3">Selettore Gruppo
+                                                                Taglia
+                                                                4</label>
+                                                            <select id="productSizeGroupId4" name="productSizeGroupId4"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione il Gruppo Taglia"
+                                                                    data-init-plugin="selectize"></select>
+                                                            <span class="bs red corner label"><i
+                                                                        class="fa fa-asterisk"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group form-group-default required">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="productSizeGroupId3">Selettore Gruppo
+                                                                Taglia
+                                                                5</label>
+                                                            <select id="productSizeGroupId5" name="productSizeGroupId5"
                                                                     class="full-width selectpicker"
                                                                     placeholder="Selezione il Gruppo Taglia"
                                                                     data-init-plugin="selectize"></select>

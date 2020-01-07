@@ -170,9 +170,90 @@ $(document).ready(function () {
         });
 
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'ProductSizeGroup',
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#productSizeGroupId3');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'ProductSizeGroup',
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#productSizeGroupId4');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'ProductSizeGroup',
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#productSizeGroupId5');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
     $('#productSizeGroupId1').change(function () {
         let productSizeGroupId1 = $('#productSizeGroupId1').val();
         $('#config_productSizeGroup1').val(productSizeGroupId1);
+
+
+    });
+    $('#productSizeGroupId2').change(function () {
+        let productSizeGroupId2 = $('#productSizeGroupId2').val();
+        $('#config_productSizeGroup2').val(productSizeGroupId2);
+
+
+    });
+    $('#productSizeGroupId3').change(function () {
+        let productSizeGroupId3 = $('#productSizeGroupId3').val();
+        $('#config_productSizeGroup3').val(productSizeGroupId3);
+
+
+    });
+    $('#productSizeGroupId4').change(function () {
+        let productSizeGroupId4 = $('#productSizeGroupId4').val();
+        $('#config_productSizeGroup4').val(productSizeGroupId4);
+
+
+    });
+    $('#productSizeGroupId5').change(function () {
+        let productSizeGroupId5 = $('#productSizeGroupId5').val();
+        $('#config_productSizeGroup5').val(productSizeGroupId5);
 
 
     });
@@ -187,6 +268,15 @@ $(window).on('load', function () {
     }
     if ($("#labelconfig_productSizeGroup2")) {
         $("#labelconfig_productSizeGroup2").html("Id Gruppo Taglia 2 Per Cambiare il Gruppo Taglia utilizzare l'apposito selettore a fine Form");
+    }
+    if ($("#labelconfig_productSizeGroup3")) {
+        $("#labelconfig_productSizeGroup3").html("Id Gruppo Taglia 3 Per Cambiare il Gruppo Taglia utilizzare l'apposito selettore a fine Form");
+    }
+    if ($("#labelconfig_productSizeGroup4")) {
+        $("#labelconfig_productSizeGroup4").html("Id Gruppo Taglia 4 Per Cambiare il Gruppo Taglia utilizzare l'apposito selettore a fine Form");
+    }
+    if ($("#labelconfig_productSizeGroup5")) {
+        $("#labelconfig_productSizeGroup5").html("Id Gruppo Taglia 5 Per Cambiare il Gruppo Taglia utilizzare l'apposito selettore a fine Form");
     }
     if ($("#labelconfig_valueexcept1")) {
         $("#labelconfig_valueexcept1").html("Imposta il valore del Moltiplicatore Per il gruppo taglia 1");
