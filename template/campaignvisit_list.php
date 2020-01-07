@@ -38,6 +38,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Codice Campagna</th>
+                                <th data-slug="campaignVisit"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Data Visita</th>
                                 <th data-slug="codeProduct"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -97,6 +101,11 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Filtra">
+        <bs-toolbar-button
+            data-remote="btn.datatable.date.filter"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"

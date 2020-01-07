@@ -25,6 +25,8 @@ class CCampaignVisitListAjaxController extends AAjaxController
         $query = "SELECT c.id,
                         c.name as campaignName,
                         c.code as campaignCode,
+						cvhp.campaignVisitId as CampaignVisitId,
+                        cv.timestamp as campaignVisit,
                         cvhp.productId as productId,
                         cvhp.productVariantId as productVariantId,
                         concat(cvhp.productId, '-',cvhp.productVariantId) as codeProduct,
@@ -111,22 +113,23 @@ class CCampaignVisitListAjaxController extends AAjaxController
             if ($campaignData['orderCount'] == 0) $cos = 'NaN';
             else $cos = round($campaignData['cost'] / $campaignData['orderValue'] * 100,2);
             /** costo campagna  / somma totale degli ordini per cento   */
-           
+
             //definizione del massimo costo per giorno in base alla query
             $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos'] ?? 7;
             if ($nCos === 'NaN' || $nCos > $maxCos) {
                 $messageDelete="Deleting product from Marketplace, cos: $nCos, over maxCos: " . $maxCos;
-               
+
             }else{
                 $messageDelete='';
             }
-            
-            
-            
+
+
+
 
             $row['id'] = $campaignData['id'];
             $row['campaignCode'] = $campaignData['campaignCode'];
             $row['campaignName'] = $campaignData['campaignName'];
+            $row['campaignVisit'] = $campaignData['campaignVisit'];
             $row['codeProduct'] = $campaignData['codeProduct'];
             $row['defaultCpc'] = $campaignData['defaultCpc'];
             $row['shopName'] = $campaignData['shopName'];
