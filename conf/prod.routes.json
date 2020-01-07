@@ -3312,7 +3312,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/):id(/)?",
+            "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignVisitListController"
             },

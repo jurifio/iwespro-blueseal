@@ -17,14 +17,10 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-1">
+                            <div class="col-md-3">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="campaignId">Campagna Associata</label>
-                                    <select id="campaignId" name="campaignId"
-                                            class="full-width selectpicker"
-                                            placeholder="Seleziona la Lista"
-                                            data-init-plugin="selectize">
-                                    </select>
+                                    <label for="campaignId">Seleziona la Campagna</label>
+                                    '<select id="campaignId" name="campaignId" class="full-width selectize"></select>
                                 </div>
                             </div>
                         </div>
