@@ -119,15 +119,15 @@ class CCampaignVisitListAjaxController extends AAjaxController
             $checkIfProductSizeGroupExId3 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx3']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx3'] : 0;
             $checkIfProductSizeGroupExId4 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx4'] : 0;
             $checkIfProductSizeGroupExId5 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx5']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx5'] : 0;
-            if ($checkIfProductSizeGroupId1 == $productSizeGroupId) {
+            if ($checkIfProductSizeGroupExId1 == $productSizeGroupId) {
                 continue;
-            } elseif ($checkIfProductSizeGroupId2 == $productSizeGroupId) {
+            } elseif ($checkIfProductSizeGroupExId2 == $productSizeGroupId) {
                 continue;
-            } elseif ($checkIfProductSizeGroupId3 == $productSizeGroupId) {
+            } elseif ($checkIfProductSizeGroupExId3 == $productSizeGroupId) {
                 continue;
-            } elseif ($checkIfProductSizeGroupId4 == $productSizeGroupId) {
+            } elseif ($checkIfProductSizeGroupExId4 == $productSizeGroupId) {
                continue;
-            } elseif ($checkIfProductSizeGroupId5 == $productSizeGroupId) {
+            } elseif ($checkIfProductSizeGroupExId5 == $productSizeGroupId) {
               continue;
             }
 
