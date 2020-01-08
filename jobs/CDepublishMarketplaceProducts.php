@@ -59,6 +59,8 @@ class CDepublishMarketplaceProducts extends ACronJob
 
         /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
         $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        $productCategoryTranslationRepo=\Monkey::app()->repoFactory->create('ProductCategoryTranslation');
+        $productHasProductCategoryRepo=\Monkey::app()->repoFactory->create('ProductHasProductCategory');
         //creo il report
         $reportArray = [];
         $this->report('run', 'Starting Cycle for ' . count($res));
@@ -74,6 +76,25 @@ class CDepublishMarketplaceProducts extends ACronJob
             // verifico se la campagna è lincata al marketplace
             if (!$campaign->marketplaceAccount) {
                 $this->warning('Cycle', 'Campaign not linked with marketplace', $one);
+            }
+            $productHasProductCategory=$productHasProductCategoryRepo->findOneBy(["productId" => $campaignData['productId'],"productVariantId" => $campaignData['productVariantId']]);
+            $productCategoryId=$productHasProductCategory->productCategoryId;
+            $sqlCategory='SELECT t0.slug as  node,t0.id as  id, pct.name as parentCategory
+      ,(SELECT GROUP_CONCAT(t2.slug)
+                    FROM ProductCategory t2
+                    WHERE t2.lft<t0.lft AND t2.rght>t0.rght
+                    ORDER BY t2.lft) ancestors
+FROM ProductCategory  t0 JOIN ProductCategoryTranslation pct ON t0.id=pct.productCategoryId    WHERE depth=3 AND t0.id='.$productCategoryId.'
+GROUP BY t0.slug';
+            $res_category = \Monkey::app()->dbAdapter->query($sqlCategory, [])->fetchAll();
+            if($res_category!=null) {
+                foreach ($res_category as $category) {
+                    $parentCategoryName = $category['parentCategory'];
+                }
+                $productCategoryTranslation = $productCategoryTranslationRepo->findOneBy(['name' => $parentCategoryName]);
+                $parentCategory = $productCategoryTranslation->id;
+            }else{
+                $parentCategory=0;
             }
             $iniSizes = $product->productSku->count();
             $actualSizes = 0;
@@ -103,7 +124,22 @@ class CDepublishMarketplaceProducts extends ACronJob
             } elseif ($checkIfProductSizeGroupExId5 == $productSizeGroupId) {
                 continue;
             }
-
+            $checkIfProductCategoryIdEx1 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx1']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx1'] : 0;
+            $checkIfProductCategoryIdEx2 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx2']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx2'] : 0;
+            $checkIfProductCategoryIdEx3 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx3']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx3'] : 0;
+            $checkIfProductCategoryIdEx4 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx4']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx4'] : 0;
+            $checkIfProductCategoryIdEx5 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx5']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx5'] : 0;
+            if ($checkIfProductCategoryIdEx1 == $parentCategory) {
+                continue;
+            } elseif ($checkIfProductCategoryIdEx2 == $parentCategory) {
+                continue;
+            } elseif ($checkIfProductCategoryIdEx3 == $parentCategory) {
+                continue;
+            } elseif ($checkIfProductCategoryIdEx4 == $parentCategory) {
+                continue;
+            } elseif ($checkIfProductCategoryIdEx5 == $parentCategory) {
+                continue;
+            }
 
             $sizeFill = $actualSizes / $iniSizes;
 
@@ -134,45 +170,60 @@ class CDepublishMarketplaceProducts extends ACronJob
                 case ($product->getDisplayActivePrice() >= $priceModifierRange1[0] && $product->getDisplayActivePrice() <= $priceModifierRange1[1]):
                     $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos1'] ?? 7;
                     $checkIfProductSizeGroupId1 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup1']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup1'] : 0;
+                    $checkIfProductCategoryId1 = isset($campaign->marketplaceAccount->getConfig()['productCategoryId1']) ? $campaign->marketplaceAccount->getConfig()['productCategoryId1'] : 0;
                     if( $checkIfProductSizeGroupId1==$productSizeGroupId){
                         $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept1'];
-                    } else {
+                    } elseif ($checkIfProductCategoryId1 == $parentCategory) {
+                        $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept1'];
+                    }else{
                         $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
                     }
                     break;
                 case ($product->getDisplayActivePrice() >= $priceModifierRange2[0] && $product->getDisplayActivePrice() <= $priceModifierRange2[1]):
                     $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos2'] ?? 7;
                     $checkIfProductSizeGroupId2 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup2']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup2'] : 0;
+                    $checkIfProductCategoryId2 = isset($campaign->marketplaceAccount->getConfig()['productCategoryId2']) ? $campaign->marketplaceAccount->getConfig()['productCategoryId2'] : 0;
                     if( $checkIfProductSizeGroupId2==$productSizeGroupId){
                         $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept2'];
-                    } else {
+                    } elseif ($checkIfProductCategoryId2 == $parentCategory) {
+                        $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept2'];
+                    }else{
                         $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
                     }
                     break;
                 case ($product->getDisplayActivePrice() >= $priceModifierRange3[0] && $product->getDisplayActivePrice() <= $priceModifierRange3[1]):
                     $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos3'] ?? 7;
                     $checkIfProductSizeGroupId3 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup3']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup3'] : 0;
+                    $checkIfProductCategoryId3 = isset($campaign->marketplaceAccount->getConfig()['productCategoryId3']) ? $campaign->marketplaceAccount->getConfig()['productCategoryId3'] : 0;
                     if( $checkIfProductSizeGroupId3==$productSizeGroupId){
                         $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept3'];
-                    } else {
+                    } elseif ($checkIfProductCategoryId3 == $parentCategory) {
+                        $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept3'];
+                    }else{
                         $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
                     }
                     break;
                 case ($product->getDisplayActivePrice() >= $priceModifierRange4[0] && $product->getDisplayActivePrice() <= $priceModifierRange4[1]):
                     $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos4'] ?? 7;
                     $checkIfProductSizeGroupId4 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup4'] : 0;
+                    $checkIfProductCategoryId4 = isset($campaign->marketplaceAccount->getConfig()['productCategoryId4']) ? $campaign->marketplaceAccount->getConfig()['productCategoryId4'] : 0;
                     if( $checkIfProductSizeGroupId4==$productSizeGroupId){
                         $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept4'];
-                    } else {
+                    } elseif ($checkIfProductCategoryId4 == $parentCategory) {
+                        $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept4'];
+                    }else{
                         $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
                     }
                     break;
                 case ($product->getDisplayActivePrice() >= $priceModifierRange5[0] && $product->getDisplayActivePrice() <= $priceModifierRange5[1]):
                     $maxCos = $campaign->marketplaceAccount->getConfig()['maxCos5'] ?? 7;
                     $checkIfProductSizeGroupId5 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroup5']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroup5'] : 0;
+                    $checkIfProductCategoryId5 = isset($campaign->marketplaceAccount->getConfig()['productCategoryId5']) ? $campaign->marketplaceAccount->getConfig()['productCategoryId5'] : 0;
                     if( $checkIfProductSizeGroupId5==$productSizeGroupId){
                         $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept5'];
-                    } else {
+                    } elseif ($checkIfProductCategoryId5 == $parentCategory) {
+                        $multiplierIs = $campaign->marketplaceAccount->getConfig()['valueexcept5'];
+                    }else{
                         $multiplierIs = isset($campaign->marketplaceAccount->getConfig()['multiplierDefault']) ? $campaign->marketplaceAccount->getConfig()['multiplierDefault'] : 0.1;
                     }
                     break;

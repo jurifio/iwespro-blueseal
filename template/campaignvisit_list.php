@@ -20,7 +20,7 @@
                             <div class="col-md-3">
                                 <div class="form-group form-group-default selectize-enabled">
                                     <label for="campaignId">Seleziona la Campagna</label>
-                                    '<select id="campaignId" name="campaignId" class="full-width selectize"></select>
+                                    <select id="campaignId" name="campaignId" class="full-width selectize"></select>
                                 </div>
                             </div>
                         </div>
