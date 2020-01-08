@@ -81,7 +81,8 @@ $(document).on('bs.marketplace-account.save', function () {
                 '<input id="{{field}}" autocomplete="off" type="text" class="form-control" ' +
                 'name="{{field}}" value="" required="required"/>' +
                 '</div>' +
-                '</div>';
+                '</div>' +
+
 
             $('#marketplace_account_marketplace_id').val(res.id);
             $('#marketplace_account_id').val(res.title);
@@ -93,30 +94,32 @@ $(document).on('bs.marketplace-account.save', function () {
 })(jQuery);
 
 function drawObject(prefix, object, inputMock, box, offset) {
+    var initial=0;
     "use strict";
     if (prefix != '') box.append($('<p>' + prefix + '</p>'));
-    var initial=0;
-    var check5=0;
-    var mult=0;
-    for (let prop in object) {
 
+    for (let prop in object) {
+        if(prop == 'lang' || prop=='defaultCpc' || prop=='productSizeGroupEx1' || prop=='productCategoryIdEx1' || prop=='priceModifierRange1' || prop=='priceModifierRange2'|| prop=='priceModifierRange3' || prop=='priceModifierRange4' || prop=='priceModifierRange5') {
+            box.append(' <div class="panel-body clearfix"><div class="row">');
+        }
 
         if (object.hasOwnProperty(prop) && typeof object[prop] != 'function') {
-            if (typeof object[prop] == 'object' && prefix == '') {
-                if(initial==0 || initial==5 || initial==10 || initial==15 || initial==20 || initial==25 || initial==30 || initial==35 || initial==40|| initial==45 || initial==50|| initial==55 || initial==60 || initial==65 || initial==70 || initial==70) {
-                    inputMock = '<div class="row">' + inputMock + '</div>';
-                }else{
-                    inputMock='<div class="row">'+inputMock+'</div>';
-                }
 
-                drawObject(prop, object[prop], inputMock, box, offset);
+            if (typeof object[prop] == 'object' && prefix == '') {
+
+                    drawObject(prop, object[prop], inputMock, box, offset);
+
             } else if (typeof object[prop] == 'object') {
+
                 drawObject(prefix + '_' + prop, object[prop], inputMock, box, offset + 1);
             } else {
 
                     drawInput(prefix, prop, object[prop], inputMock, box, offset + 1);
 
             }
+        }
+        if(prop == 'slug' || prop=='timeRange'|| prop=='productSizeGroupEx6'|| prop=='productCategoryIdEx6' || prop=='maxCos1' || prop=='maxCos2'|| prop=='maxCos3' || prop=='maxCos4' || prop=='maxCos5') {
+            box.append('</div></div>');
         }
         initial++;
     }
@@ -356,74 +359,51 @@ $(document).ready(function () {
             searchField: 'name',
             options: res2,
         });
-
     });
+
     $('#productSizeGroupId1').change(function () {
         let productSizeGroupId1 = $('#productSizeGroupId1').val();
         $('#config_productSizeGroup1').val(productSizeGroupId1);
-
-
     });
     $('#productSizeGroupId2').change(function () {
         let productSizeGroupId2 = $('#productSizeGroupId2').val();
         $('#config_productSizeGroup2').val(productSizeGroupId2);
-
-
     });
     $('#productSizeGroupId3').change(function () {
         let productSizeGroupId3 = $('#productSizeGroupId3').val();
         $('#config_productSizeGroup3').val(productSizeGroupId3);
-
-
     });
     $('#productSizeGroupId4').change(function () {
         let productSizeGroupId4 = $('#productSizeGroupId4').val();
         $('#config_productSizeGroup4').val(productSizeGroupId4);
-
-
     });
     $('#productSizeGroupId5').change(function () {
         let productSizeGroupId5 = $('#productSizeGroupId5').val();
         $('#config_productSizeGroup5').val(productSizeGroupId5);
-
-
     });
-
     $('#productSizeGroupEx1').change(function () {
         let productSizeGroupEx1 = $('#productSizeGroupEx1').val();
         $('#config_productSizeGroupEx1').val(productSizeGroupEx1);
-
-
     });
     $('#productSizeGroupEx2').change(function () {
         let productSizeGroupEx2 = $('#productSizeGroupEx2').val();
         $('#config_productSizeGroupEx2').val(productSizeGroupEx2);
-
-
     });
     $('#productSizeGroupEx3').change(function () {
         let productSizeGroupEx3 = $('#productSizeGroupEx3').val();
         $('#config_productSizeGroupEx3').val(productSizeGroupEx3);
-
-
     });
     $('#productSizeGroupEx4').change(function () {
         let productSizeGroupEx4 = $('#productSizeGroupEx4').val();
         $('#config_productSizeGroupEx4').val(productSizeGroupEx4);
-
-
     });
     $('#productSizeGroupEx5').change(function () {
         let productSizeGroupEx5 = $('#productSizeGroupEx5').val();
         $('#config_productSizeGroupEx5').val(productSizeGroupEx5);
-
-
     });
     $('#productSizeGroupEx6').change(function () {
         let productSizeGroupEx6 = $('#productSizeGroupEx6').val();
         $('#config_productSizeGroupEx6').val(productSizeGroupEx6);
-
-
     });
     Pace.ignore(function () {
         var productCategoryIdEx1Select = $('select[name=\"productCategoryIdEx1\"]');
@@ -755,74 +735,49 @@ $(document).ready(function () {
                     });
                 });
             });
-
-
     $('#productCategoryId1').change(function () {
         let productCategoryId1 = $('#productCategoryId1').val();
         $('#config_productCategoryId1').val(productCategoryId1);
-
-
     });
     $('#productCategoryId2').change(function () {
         let productCategoryId2 = $('#productCategoryId2').val();
         $('#config_productCategoryId2').val(productCategoryId2);
-
-
     });
     $('#productCategoryId3').change(function () {
         let productCategoryId3 = $('#productCategoryId3').val();
         $('#config_productCategoryId3').val(productCategoryId3);
-
-
     });
     $('#productCategoryId4').change(function () {
         let productCategoryId4 = $('#productCategoryId4').val();
         $('#config_productCategoryId4').val(productCategoryId4);
-
-
     });
     $('#productCategoryId5').change(function () {
         let productCategoryId5 = $('#productCategoryId5').val();
         $('#config_productCategoryId5').val(productCategoryId5);
-
-
     });
-
     $('#productCategoryIdEx1').change(function () {
         let productCategoryIdEx1 = $('#productCategoryIdEx1').val();
         $('#config_productCategoryIdEx1').val(productCategoryIdEx1);
-
-
     });
     $('#productCategoryIdEx2').change(function () {
         let productCategoryIdEx2 = $('#productCategoryIdEx2').val();
         $('#config_productCategoryIdEx2').val(productCategoryIdEx2);
-
-
     });
     $('#productCategoryIdEx3').change(function () {
         let productCategoryIdEx3 = $('#productCategoryIdEx3').val();
         $('#config_productCategoryIdEx3').val(productCategoryIdEx3);
-
-
     });
     $('#productCategoryIdEx4').change(function () {
         let productCategoryIdEx4 = $('#productCategoryIdEx4').val();
         $('#config_productCategoryIdEx4').val(productCategoryIdEx4);
-
-
     });
     $('#productCategoryIdEx5').change(function () {
         let productCategoryIdEx5 = $('#productCategoryIdEx5').val();
         $('#config_productCategoryIdEx5').val(productCategoryIdEx5);
-
-
     });
     $('#productCategoryIdEx6').change(function () {
         let productCategoryIdEx6 = $('#productCategoryIdEx6').val();
         $('#config_productCategoryIdEx6').val(productCategoryIdEx6);
-
-
     });
 });
 $(window).on('load', function () {
@@ -956,6 +911,9 @@ $(window).on('load', function () {
     if ($("#labelconfig_priceModifierRange4")) {
         $("#labelconfig_priceModifierRange4").html("Fascia di Prezzo 4 CPC Dedicato");
     }
+    if ($("#labelconfig_priceModifierRange5")) {
+        $("#labelconfig_priceModifierRange5").html("Fascia di Prezzo 4 CPC Dedicato");
+    }
     if ($("#labelconfig_range1Cpc")) {
         $("#labelconfig_range1Cpc").html("CPC Dedicato Fascia 1 in Euro");
     }
@@ -967,6 +925,9 @@ $(window).on('load', function () {
     }
     if ($("#labelconfig_range4Cpc")) {
         $("#labelconfig_range4Cpc").html("CPC Dedicato Fascia 4 in Euro");
+    }
+    if ($("#labelconfig_range5Cpc")) {
+        $("#labelconfig_range5Cpc").html("CPC Dedicato Fascia 5 in Euro");
     }
 
 
