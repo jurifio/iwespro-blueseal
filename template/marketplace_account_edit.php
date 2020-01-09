@@ -43,7 +43,7 @@
                                                    value="<?php echo $marketplaceCode[1]; ?>">
                                             <div class="form-group form-group-default required">
                                                 <label for="marketplace_account_name">Nome</label>
-                                                <input id="marketplace_account_name" autocomplete="off" type="text"
+                                                <input id="marketplace_account_name" autocomplete="off" type="hidden"
                                                        class="form-control" name="marketplace_account_name" value=""
                                                        disabled="disabled"
                                                        required="required"/>
@@ -88,7 +88,11 @@
                                                                     </label>
                                                                     <select id="productCategoryIdEx1"
                                                                             name="productCategoryIdEx1"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 1 da Escludere "
+                                                                            data-init-plugin="selectize">
+                                                                      <?php echo $productCategoryEx1Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -102,7 +106,11 @@
                                                                     </label>
                                                                     <select id="productCategoryIdEx2"
                                                                             name="productCategoryIdEx2"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 2 da Escludere "
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategoryEx2Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -116,7 +124,11 @@
                                                                     </label>
                                                                     <select id="productCategoryIdEx3"
                                                                             name="productCategoryIdEx3"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 3 da Escludere "
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategoryEx3Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -130,7 +142,11 @@
                                                                     </label>
                                                                     <select id="productCategoryIdEx4"
                                                                             name="productCategoryIdEx4"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 4 da Escludere "
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategoryEx4Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -144,7 +160,11 @@
                                                                     </label>
                                                                     <select id="productCategoryIdEx5"
                                                                             name="productCategoryIdEx5"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 5 da Escludere "
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategoryEx5Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -159,7 +179,11 @@
                                                                         </label>
                                                                         <select id="productCategoryIdEx6"
                                                                                 name="productCategoryIdEx6"
-                                                                                class="full-width selectize"></select>
+                                                                                class="full-width selectpicker"
+                                                                                placeholder="Selezione la Categoria 6 da Escludere "
+                                                                                data-init-plugin="selectize">
+                                                                            <?php echo $productCategoryEx6Option?>
+                                                                        </select>
                                                                         <span class="bs red corner label"><i
                                                                                     class="fa fa-asterisk"></i></span>
                                                                     </div>
@@ -181,7 +205,11 @@
                                                                         1</label>
                                                                     <select id="productCategoryId1"
                                                                             name="productCategoryId1"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 1"
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategory1Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -195,7 +223,11 @@
                                                                         2</label>
                                                                     <select id="productCategoryId2"
                                                                             name="productCategoryId2"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 2"
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategory2Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -209,7 +241,11 @@
                                                                         3</label>
                                                                     <select id="productCategoryId3"
                                                                             name="productCategoryId3"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 3"
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategory3Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -223,7 +259,11 @@
                                                                         4</label>
                                                                     <select id="productCategoryId4"
                                                                             name="productCategoryId4"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 4"
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategory4Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -237,7 +277,11 @@
                                                                         5</label>
                                                                     <select id="productCategoryId5"
                                                                             name="productCategoryId5"
-                                                                            class="full-width selectize"></select>
+                                                                            class="full-width selectpicker"
+                                                                            placeholder="Selezione la Categoria 5"
+                                                                            data-init-plugin="selectize">
+                                                                        <?php echo $productCategory5Option?>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -262,7 +306,9 @@
                                                                             name="productSizeGroupEx1"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia da Escludere"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupEx1?>'><?php echo $productSizeGroupEx1Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -278,7 +324,9 @@
                                                                             name="productSizeGroupEx2"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupEx2?>'><?php echo $productSizeGroupEx2Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -294,7 +342,9 @@
                                                                             name="productSizeGroupEx3"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupEx3?>'><?php echo $productSizeGroupEx3Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -310,7 +360,9 @@
                                                                             name="productSizeGroupEx4"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupEx4?>'><?php echo $productSizeGroupEx4Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -326,7 +378,9 @@
                                                                             name="productSizeGroupEx5"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupEx5?>'><?php echo $productSizeGroupEx5Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -342,7 +396,9 @@
                                                                             name="productSizeGroupEx6"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupEx6?>'><?php echo $productSizeGroupEx6Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -366,7 +422,9 @@
                                                                             name="productSizeGroupId1"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupId1?>'><?php echo $productSizeGroupId1Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -382,7 +440,9 @@
                                                                             name="productSizeGroupId2"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupId2?>'><?php echo $productSizeGroupId2Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -398,7 +458,9 @@
                                                                             name="productSizeGroupId3"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupId3?>'><?php echo $productSizeGroupId3Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -414,7 +476,9 @@
                                                                             name="productSizeGroupId4"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupId4?>'><?php echo $productSizeGroupId4Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>
@@ -430,7 +494,9 @@
                                                                             name="productSizeGroupId5"
                                                                             class="full-width selectpicker"
                                                                             placeholder="Selezione il Gruppo Taglia"
-                                                                            data-init-plugin="selectize"></select>
+                                                                            data-init-plugin="selectize">
+                                                                        <option value='<?php echo $productSizeGroupId5?>'><?php echo $productSizeGroupId5Text;?></option>
+                                                                    </select>
                                                                     <span class="bs red corner label"><i
                                                                                 class="fa fa-asterisk"></i></span>
                                                                 </div>

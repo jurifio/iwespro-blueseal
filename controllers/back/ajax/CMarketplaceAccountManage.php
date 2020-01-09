@@ -38,10 +38,16 @@ class CMarketplaceAccountManage extends AAjaxController
             $data  = $this->app->router->request()->getRequestData();
         $marketplaceAccountId=$data['marketplaceAccountId'];
         $marketplaceId=$data['marketplaceId'];
-        $name=$data['marketplace_account_name'];
+        $nameOld=$data['marketplace_account_name'];
         $collect=$data['collect'];
+       $name=$data['nameAggregator'];
+
         $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketPlaceAccount')->findOneBy(['id'=>$marketplaceAccountId,'marketplaceId'=>$marketplaceId]);
-        $marketplaceAccount->name=$name;
+        if($name!=null) {
+            $marketplaceAccount->name = $name;
+        }else{
+            $marketplaceAccount->name = $nameOld;
+        }
         $marketplaceAccount->config=$collect;
         $marketplaceAccount->update();
         \Monkey::app()->applicationLog('MarketPlaceAccount','Report','Update','Update Marketplace '.$marketplaceAccountId.'-'.$marketplaceId. ' '.$name);

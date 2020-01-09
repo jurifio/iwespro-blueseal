@@ -33,6 +33,8 @@ class CSelectProductCategoryAjaxController extends AAjaxController
 {
     public function get()
     {
+        $data = \Monkey::app()->router->request()->getRequestData();
+        $slug = $data['slug'];
         $collectCategory = [];
 
         $sqlCategory='SELECT t0.id as  id,t0.slug as slug

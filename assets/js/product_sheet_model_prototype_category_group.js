@@ -23,7 +23,8 @@
                    <textarea id="desc-cat-group" style="width: 300px; height: 300px"></textarea>      
                    `
         });
-
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
@@ -92,7 +93,8 @@
                    </select>
                    `
         });
-
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
 
@@ -195,7 +197,8 @@
                 tableR.append(table);
             });
         });
-
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
 
@@ -246,7 +249,8 @@
                    <input type="text" id="name-cat-group" style="width:70%"> 
                    `
         });
-
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
@@ -301,7 +305,8 @@
                 <input type="text" id="sub-name"> 
             </div>`
         });
-
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {
@@ -350,7 +355,8 @@
             body: `<p>Procedere con l'eliminazione delle categorie?</p> 
                    `
         });
-
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
             const data = {

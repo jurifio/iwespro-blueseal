@@ -141,6 +141,7 @@ GROUP BY t0.slug';
             $checkIfProductSizeGroupExId3 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx3']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx3'] : 0;
             $checkIfProductSizeGroupExId4 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx4']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx4'] : 0;
             $checkIfProductSizeGroupExId5 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx5']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx5'] : 0;
+            $checkIfProductSizeGroupExId6 = isset($campaign->marketplaceAccount->getConfig()['productSizeGroupEx6']) ? $campaign->marketplaceAccount->getConfig()['productSizeGroupEx6'] : 0;
             if ($checkIfProductSizeGroupExId1 == $productSizeGroupId) {
                 continue;
             } elseif ($checkIfProductSizeGroupExId2 == $productSizeGroupId) {
@@ -150,13 +151,16 @@ GROUP BY t0.slug';
             } elseif ($checkIfProductSizeGroupExId4 == $productSizeGroupId) {
                continue;
             } elseif ($checkIfProductSizeGroupExId5 == $productSizeGroupId) {
-              continue;
+                continue;
+            } elseif ($checkIfProductSizeGroupExId6 == $productSizeGroupId) {
+                continue;
             }
             $checkIfProductCategoryIdEx1 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx1']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx1'] : 0;
             $checkIfProductCategoryIdEx2 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx2']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx2'] : 0;
             $checkIfProductCategoryIdEx3 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx3']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx3'] : 0;
             $checkIfProductCategoryIdEx4 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx4']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx4'] : 0;
             $checkIfProductCategoryIdEx5 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx5']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx5'] : 0;
+            $checkIfProductCategoryIdEx6 = isset($campaign->marketplaceAccount->getConfig()['productCategoryIdEx6']) ? $campaign->marketplaceAccount->getConfig()['productCategoryIdEx6'] : 0;
             if ($checkIfProductCategoryIdEx1 == $parentCategory) {
                 continue;
             } elseif ($checkIfProductCategoryIdEx2 == $parentCategory) {
@@ -166,6 +170,8 @@ GROUP BY t0.slug';
             } elseif ($checkIfProductCategoryIdEx4 == $parentCategory) {
                 continue;
             } elseif ($checkIfProductCategoryIdEx5 == $parentCategory) {
+                continue;
+            } elseif ($checkIfProductCategoryIdEx6 == $parentCategory) {
                 continue;
             }
 
