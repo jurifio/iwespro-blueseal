@@ -144,7 +144,7 @@ function drawObject(prefix, object, inputMock, box, offset) {
             }
         }
         if( prop=='emaiNotifyOffline') {
-            box.append('<div class="col-md-6"></div></div>');
+            box.append('</div>');
         }
         if(prop == 'feedUrl' || prop=='priceModifier' || prop=='productSizeGroupEx6'|| prop=='productCategoryIdEx6' ) {
             box.append('</div>');
@@ -664,6 +664,15 @@ $(window).on('load', function () {
     }
     if($("#div_config_defaultCpc")){
         $("#div_config_defaultCpc").addClass('hidden');
+    }
+    if($("#div_config_defaultCpcM")){
+        $("#div_config_defaultCpcM").addClass('hidden');
+    }
+    if($("#div_config_defaultCpcF")){
+        $("#div_config_defaultCpcF").addClass('hidden');
+    }
+    if($("#div_config_defaultCpcFMobile")){
+        $("#div_config_defaultCpcFMobile").addClass('hidden');
     }
     if($("#div_config_priceModifier")){
         $("#div_config_priceModifier").addClass('hidden');

@@ -34,7 +34,7 @@ class CMarketplaceAccountInsertController extends ARestrictedAccessRootControlle
 
 
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id' => $marketplaceCode[0],'marketplaceId' => $marketplaceCode[1]]);
-
+        $config='{}';
         $marketplaceConfig = json_encode($marketplaceAccount->config,false);
         $countConfig = json_decode($marketplaceConfig,true);
         $countField = count($countConfig);
