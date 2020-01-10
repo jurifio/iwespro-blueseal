@@ -47,6 +47,8 @@ $(document).on('bs.marketplace-account.save', function () {
             marketplaceId: $('#marketplaceId').val(),
             marketplace_account_name: $('#marketplace_account_name').val(),
             nameAggregator:$('#config_nameAggregator').val(),
+            range5Cpc:$('#config_range5Cpc').val(),
+            productSizeGroup5:$('#config_productSizeGroup5').val(),
 
         }
     }).done(function () {
