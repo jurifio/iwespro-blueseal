@@ -59,6 +59,7 @@ class COrderListAjaxController extends AAjaxController
                   `s2`.`title` as remoteShopSellerName,
                   o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
+            
                   group_concat(c.name) as orderSources
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
@@ -76,6 +77,7 @@ class COrderListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
+
                 WHERE `o`.`status` LIKE 'ORD%'   GROUP BY ol.id, ol.orderId";
 
         //      WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";

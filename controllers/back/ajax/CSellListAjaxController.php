@@ -58,7 +58,8 @@ class CSellListAjaxController extends AAjaxController
                   `s2`.`title` as remoteShopSellerName,
                   o.marketplaceId as marketplaceId,
                   o.marketplaceOrderId as marketplaceOrderId,
-                  group_concat(c.name) as orderSources
+                  group_concat(c.name) as orderSources,
+                ship.trackingNumber as shipmentId
                 FROM `Order` `o`
                   JOIN `User` `u` ON `o`.`userId` = `u`.`id`
                   JOIN `UserDetails` `ud` ON `ud`.`userId` = `u`.`id`
@@ -75,6 +76,8 @@ class CSellListAjaxController extends AAjaxController
                   LEFT JOIN ( 
                     CampaignVisitHasOrder cvho JOIN 
                     Campaign c ON cvho.campaignId = c.id) ON o.id = cvho.orderId
+ join `OrderLineHasShipment` `olhs` on `o`.`id` =`olhs`.orderId
+left join Shipment ship on olhs.shipmentId = ship.id
                 WHERE `o`.`status` LIKE 'ORD_SHIPPED' OR `o`.`status` LIKE 'ORD_DELIVERED' OR  `o`.`status` LIKE 'ORD_CLOSED'   and o.paymentDate is not null  GROUP BY ol.id, ol.orderId";
 
         //      WHERE `o`.`status` LIKE 'ORD%' AND `o`.`creationDate` > '2018-06-09 00:00:00' GROUP BY ol.id, ol.orderId";
