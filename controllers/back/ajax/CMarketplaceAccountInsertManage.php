@@ -27,7 +27,6 @@ class CMarketplaceAccountInsertManage extends AAjaxController
             $marketplaceAccountRepo=\Monkey::app()->repoFactory->create('MarketplaceAccount');
             $data  = $this->app->router->request()->getRequestData();
             $marketplace_account_name=$data['marketplace_account_name'];
-            $nameAdminister=$data['nameAdminister'];
             $slug=$data['slug'];
             $nameAdminister=$data['nameAdminister'];
             $emailNotify=$data['emailNotify'];
@@ -72,11 +71,11 @@ class CMarketplaceAccountInsertManage extends AAjaxController
             $range3Cpc=$data['range3Cpc'];
             $range4Cpc=$data['range4Cpc'];
             $range5Cpc=$data['range5Cpc'];
-            $productSizeGroupId1=$data['productSizeGroupId1'];
-            $productSizeGroupId2=$data['productSizeGroupId2'];
-            $productSizeGroupId3=$data['productSizeGroupId3'];
-            $productSizeGroupId4=$data['productSizeGroupId4'];
-            $productSizeGroupId5=$data['productSizeGroupId5'];
+            $productSizeGroup1=$data['productSizeGroupId1'];
+            $productSizeGroup2=$data['productSizeGroupId2'];
+            $productSizeGroup3=$data['productSizeGroupId3'];
+            $productSizeGroup4=$data['productSizeGroupId4'];
+            $productSizeGroup5=$data['productSizeGroupId5'];
             $productCategoryId1=$data['productCategoryId1'];
             $productCategoryId2=$data['productCategoryId2'];
             $productCategoryId3=$data['productCategoryId3'];
@@ -116,7 +115,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
             $priceModifier=0;
 
 
-       $collectUpdate='{"nameAggregator":"'.$nameAggregator.'",
+       $collectUpdate='{"nameAggregator":"'.$marketplace_account_name.'",
                         "lang":"'.$lang.'", 
                         "slug":"'.$slug.'", 
                         "filePath":"'.$filePath.'", 
