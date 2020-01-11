@@ -62,15 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
-                                              id="photoUrl" name="photoUrl" action="POST">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <div class="fallback">
-                                                    <label for="file">Logo Aggregatore</label>
-                                                    <input name="file" type="file" multiple/>
-                                                </div>
-                                            </div>
-                                        </form>
+                                        <button type="button" class="btn btn-primary" name="uploadLogo" id="uploadLogo">carica Logo</button>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
