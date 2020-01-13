@@ -63,6 +63,8 @@
                                     </div>
                                     <div class="col-md-3">
                                         <button type="button" class="btn btn-primary" name="uploadLogo" id="uploadLogo">carica Logo</button>
+                                        <input id="logoFile" type="hidden" value=""/>
+                                        <div id ="returnFileLogo"></div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -514,16 +516,16 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-3" >
+                                    <div class="col-md-3">
                                         <div class="form-group form-group-default required">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="productSizeGroupId1">Selettore
-                                                    Gruppo Taglia per il range
-                                                    1</label>
+                                                    Gruppo Taglia per il range 1
+                                                </label>
                                                 <select id="productSizeGroupId1"
                                                         name="productSizeGroupId1"
                                                         class="full-width selectpicker"
-                                                        placeholder="Selezione il Gruppo Taglia"
+                                                        placeholder="Selezione il Gruppo Taglia 1"
                                                         data-init-plugin="selectize">
 
                                                 </select>

@@ -1,84 +1,6 @@
-$(document).on('bs.marketplace-account.save', function () {
-
-    $.ajax({
-        method: "POST",
-        url: "/blueseal/xhr/MarketplaceAccountInsertManage",
-        data: {
-            lang:$('#lang').val(),
-            marketplace_account_name: $('#marketplace_account_name').val(),
-            slug:$('#slug').val(),
-            nameAdminister:$('#nameAdminister').val(),
-            emailNotify:$('#emailNotify').val(),
-            isActive: $('#isActive').val(),
-            defaultCpcF: $('#defaultCpcF').val(),
-            defaultCpcFM: $('#defaultCpcFM').val(),
-            defaultCpcM: $('#defaultCpcM').val(),
-            defaultCpc: $('#defaultCpc').val(),
-            budget01:$('#budget01').val(),
-            budget02:$('#budget02').val(),
-            budget03:$('#budget03').val(),
-            budget04:$('#budget04').val(),
-            budget05:$('#budget05').val(),
-            budget06:$('#budget06').val(),
-            budget07:$('#budget07').val(),
-            budget08:$('#budget08').val(),
-            budget09:$('#budget09').val(),
-            budget10:$('#budget10').val(),
-            budget11:$('#budget11').val(),
-            budget12:$('#budget12').val(),
-            typeInsertion:$('#typeInsertion').val(),
-            marketplaceName:$('#marketplaceName'),
-            productCategoryIdEx1:$('#productCategoryIdEx1').val(),
-            productCategoryIdEx2:$('#productCategoryIdEx2').val(),
-            productCategoryIdEx3:$('#productCategoryIdEx3').val(),
-            productCategoryIdEx4:$('#productCategoryIdEx4').val(),
-            productCategoryIdEx5:$('#productCategoryIdEx5').val(),
-            productCategoryIdEx6:$('#productCategoryIdEx6').val(),
-            productSizeGroupEx1:$('#productSizeGroupEx1').val(),
-            productSizeGroupEx2:$('#productSizeGroupEx2').val(),
-            productSizeGroupEx3:$('#productSizeGroupEx3').val(),
-            productSizeGroupEx4:$('#productSizeGroupEx4').val(),
-            productSizeGroupEx5:$('#productSizeGroupEx5').val(),
-            productSizeGroupEx6:$('#productSizeGroupEx6').val(),
-            priceModifierRange1:$('#priceModifierRange1').val(),
-            priceModifierRange2:$('#priceModifierRange2').val(),
-            priceModifierRange3:$('#priceModifierRange3').val(),
-            priceModifierRange4:$('#priceModifierRange4').val(),
-            priceModifierRange5:$('#priceModifierRange5').val(),
-            range1Cpc:$('#range1Cpc').val(),
-            range2Cpc:$('#range2Cpc').val(),
-            range3Cpc:$('#range3Cpc').val(),
-            range4Cpc:$('#range4Cpc').val(),
-            range5Cpc:$('#range5Cpc').val(),
-            productSizeGroupId1:$('#priceSizeGroupId1').val(),
-            productSizeGroupId2:$('#priceSizeGroupId2').val(),
-            productSizeGroupId3:$('#priceSizeGroupId3').val(),
-            productSizeGroupId4:$('#priceSizeGroupId4').val(),
-            productSizeGroupId5:$('#priceSizeGroupId5').val(),
-            productCategoryId1:$('#productCategoryId1').val(),
-            productCategoryId2:$('#productCategoryId2').val(),
-            productCategoryId3:$('#productCategoryId3').val(),
-            productCategoryId4:$('#productCategoryId4').val(),
-            productCategoryId5:$('#productCategoryId5').val(),
-
-
-        }
-    }).done(function () {
-        new Alert({
-            type: "success",
-            message: "Inserimento Eseguito"
-        }).open();
-    }).fail(function (e) {
-        console.log(e);
-        new Alert({
-            type: "danger",
-            message: "Impossibile Salvare"
-        }).open();
-    });
-});
-
 $(document).ready(function () {
-    $('#uploadLogo').click(function() {
+
+    $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
 
         let header = bsModal.find('.modal-header h4');
@@ -95,31 +17,33 @@ $(document).ready(function () {
         });
         cancelButton.remove();
         let bodyContent =
-            '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
-            '<div class="fallback">'+
+            '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">' +
+            '<div class="fallback">' +
             '<input name="file" type="file" multiple />' +
             '</div>' +
             '</form>';
 
         body.html(bodyContent);
-        let dropzone = new Dropzone("#dropzoneModal",{
-            url: "/blueseal/xhr/ProductCardsPhotoAjaxManage",
+        let dropzone = new Dropzone("#dropzoneModal", {
+            url: "/blueseal/xhr/UploadAggregatorImageAjaxController",
             maxFilesize: 5,
             maxFiles: 100,
             parallelUploads: 10,
             acceptedFiles: "image/jpeg",
             dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
             uploadMultiple: true,
-            sending: function(file, xhr, formData) {
-                formData.append("id", $.QueryString["id"]);
-                formData.append("productletiantId", $.QueryString["productletiantId"]);
+            sending: function (file, xhr, formData) {
+            },
+            success: function (res) {
+                $('#returnFileLogo').append('<img src="https://iwes.s3.amazonaws.com/iwes-aggregator/' + res['name'] + '">');
+                $('#logoFile').val('https://iwes.s3.amazonaws.com/iwes-aggregator/' + res['name']);
             }
         });
 
-        dropzone.on('addedfile',function(){
+        dropzone.on('addedfile', function () {
             okButton.attr("disabled", "disabled");
         });
-        dropzone.on('queuecomplete',function(){
+        dropzone.on('queuecomplete', function () {
             okButton.removeAttr("disabled");
             $(document).trigger('bs.load.photo');
         });
@@ -357,7 +281,7 @@ $(document).ready(function () {
 
 });
 $('#selectCreation').change(function () {
-    if ($('#selectCreation').val() == 1){
+    if ($('#selectCreation').val() == 1) {
         $('#divmarketplace').empty();
         $('#divmarketplace').append(`
          <div class="col-md-12">
@@ -373,7 +297,7 @@ $('#selectCreation').change(function () {
                                     </div>
         
         `);
-    }else{
+    } else {
         $('#divmarketplace').empty();
         $('#divmarketplace').append(`
          <div class="col-md-12">
@@ -399,7 +323,7 @@ $('#selectCreation').change(function () {
             url: '/blueseal/xhr/GetTableContent',
             data: {
                 table: 'Marketplace',
-                condition :{type:'cpc'}
+                condition: {type: 'cpc'}
 
             },
             dataType: 'json'
@@ -415,4 +339,262 @@ $('#selectCreation').change(function () {
 
         });
     }
+});
+
+
+$(document).on('bs.marketplace-account.save', function () {
+    let bsModal = new $.bsModal('Inserimento Aggregatore', {
+        body: '<p>Confermare?</p>'
+    });
+
+
+        var lang = $('#lang').val();
+        var marketplace_account_name = $('#marketplace_account_name').val();
+        var slug = $('#slug').val();
+        var nameAdminister = $('#nameAdminister').val();
+        var emailNotify = $('#emailNotify').val();
+        var isActive = $('#isActive').val();
+        var defaultCpcF = $('#defaultCpcF').val();
+        var defaultCpcFM = $('#defaultCpcFM').val();
+        var logoFile = $('#logoFile').val();
+        var defaultCpcM = $('#defaultCpcM').val();
+        var defaultCpc = $('#defaultCpc').val();
+        var budget01 = $('#budget01').val();
+        var budget02 = $('#budget02').val();
+        var budget03 = $('#budget03').val();
+        var budget04 = $('#budget04').val();
+        var budget05 = $('#budget05').val();
+        var budget06 = $('#budget06').val();
+        var budget07 = $('#budget07').val();
+        var budget08 = $('#budget08').val();
+        var budget09 = $('#budget09').val();
+        var budget10 = $('#budget10').val();
+        var budget11 = $('#budget11').val();
+        var budget12 = $('#budget12').val();
+        var typeInsertion = $('#typeInsertion').val();
+        var marketplaceName = $('#marketplaceName');
+        var productCategoryIdEx1 = $('#productCategoryIdEx1').val();
+        var productCategoryIdEx2 = $('#productCategoryIdEx2').val();
+        var productCategoryIdEx3 = $('#productCategoryIdEx3').val();
+        var productCategoryIdEx4 = $('#productCategoryIdEx4').val();
+        var productCategoryIdEx5 = $('#productCategoryIdEx5').val();
+        var productCategoryIdEx6 = $('#productCategoryIdEx6').val();
+        var productSizeGroupEx1 = $('#productSizeGroupEx1').val();
+        var productSizeGroupEx2 = $('#productSizeGroupEx2').val();
+        var productSizeGroupEx3 = $('#productSizeGroupEx3').val();
+        var productSizeGroupEx4 = $('#productSizeGroupEx4').val();
+        var productSizeGroupEx5 = $('#productSizeGroupEx5').val();
+        var productSizeGroupEx6 = $('#productSizeGroupEx6').val();
+        var priceModifierRange1 = $('#priceModifierRange1').val();
+        var priceModifierRange2 = $('#priceModifierRange2').val();
+        var priceModifierRange3 = $('#priceModifierRange3').val();
+        var priceModifierRange4 = $('#priceModifierRange4').val();
+        var priceModifierRange5 = $('#priceModifierRange5').val();
+        var range1Cpc = $('#range1Cpc').val();
+        var range2Cpc = $('#range2Cpc').val();
+        var range3Cpc = $('#range3Cpc').val();
+        var range4Cpc = $('#range4Cpc').val();
+        var range5Cpc = $('#range5Cpc').val();
+        var productSizeGroupId1 = $('#productSizeGroupId1').val();
+        var productSizeGroupId2 = $('#productSizeGroupId2').val();
+        var productSizeGroupId3 = $('#productSizeGroupId3').val();
+        var productSizeGroupId4 = $('#productSizeGroupId4').val();
+        var productSizeGroupId5 = $('#productSizeGroupId5').val();
+        var productCategoryId1 = $('#productCategoryId1').val();
+        var productCategoryId2 = $('#productCategoryId2').val();
+        var productCategoryId3 = $('#productCategoryId3').val();
+        var productCategoryId4 = $('#productCategoryId4').val();
+        var productCategoryId5 = $('#productCategoryId5').val();
+        /* var config = {
+             lang: $('#lang').val(),
+             marketplace_account_name: $('#marketplace_account_name').val(),
+             slug: $('#slug').val(),
+             nameAdminister: $('#nameAdminister').val(),
+             emailNotify: $('#emailNotify').val(),
+             isActive: $('#isActive').val(),
+             defaultCpcF: $('#defaultCpcF').val(),
+             defaultCpcFM: $('#defaultCpcFM').val(),
+             logoFile: $('#logoFile').val(),
+             defaultCpcM: $('#defaultCpcM').val(),
+             defaultCpc: $('#defaultCpc').val(),
+             budget01: $('#budget01').val(),
+             budget02: $('#budget02').val(),
+             budget03: $('#budget03').val(),
+             budget04: $('#budget04').val(),
+             budget05: $('#budget05').val(),
+             budget06: $('#budget06').val(),
+             budget07: $('#budget07').val(),
+             budget08: $('#budget08').val(),
+             budget09: $('#budget09').val(),
+             budget10: $('#budget10').val(),
+             budget11: $('#budget11').val(),
+             budget12: $('#budget12').val(),
+             typeInsertion: $('#typeInsertion').val(),
+             marketplaceName: $('#marketplaceName'),
+             productCategoryIdEx1: $('#productCategoryIdEx1').val(),
+             productCategoryIdEx2: $('#productCategoryIdEx2').val(),
+             productCategoryIdEx3: $('#productCategoryIdEx3').val(),
+             productCategoryIdEx4: $('#productCategoryIdEx4').val(),
+             productCategoryIdEx5: $('#productCategoryIdEx5').val(),
+             productCategoryIdEx6: $('#productCategoryIdEx6').val(),
+             productSizeGroupEx1: $('#productSizeGroupEx1').val(),
+             productSizeGroupEx2: $('#productSizeGroupEx2').val(),
+             productSizeGroupEx3: $('#productSizeGroupEx3').val(),
+             productSizeGroupEx4: $('#productSizeGroupEx4').val(),
+             productSizeGroupEx5: $('#productSizeGroupEx5').val(),
+             productSizeGroupEx6: $('#productSizeGroupEx6').val(),
+             priceModifierRange1: $('#priceModifierRange1').val(),
+             priceModifierRange2: $('#priceModifierRange2').val(),
+             priceModifierRange3: $('#priceModifierRange3').val(),
+             priceModifierRange4: $('#priceModifierRange4').val(),
+             priceModifierRange5: $('#priceModifierRange5').val(),
+             range1Cpc: $('#range1Cpc').val(),
+             range2Cpc: $('#range2Cpc').val(),
+             range3Cpc: $('#range3Cpc').val(),
+             range4Cpc: $('#range4Cpc').val(),
+             range5Cpc: $('#range5Cpc').val(),
+             productSizeGroupId1: $('#productSizeGroupId1').val(),
+             productSizeGroupId2: $('#productSizeGroupId2').val(),
+             productSizeGroupId3: $('#productSizeGroupId3').val(),
+             productSizeGroupId4: $('#productSizeGroupId4').val(),
+             productSizeGroupId5: $('#productSizeGroupId5').val(),
+             productCategoryId1: $('#productCategoryId1').val(),
+             productCategoryId2: $('#productCategoryId2').val(),
+             productCategoryId3: $('#productCategoryId3').val(),
+             productCategoryId4: $('#productCategoryId4').val(),
+             productCategoryId5: $('#productCategoryId5').val()*/
+
+        var config = '?nameAggregator=' + marketplace_account_name + '&' +
+            'typeInsertion=' + typeInsertion + '&' +
+            'marketplaceName=' + marketplaceName + '&' +
+            'lang=' + lang + '&' +
+            'slug=' + slug + '&' +
+            'logoFile=' + logoFile + '&' +
+            'activeAutomatic=' + isActive + '&' +
+            'defaultCpc=' + defaultCpc + '&' +
+            'defaultCpcM=' + defaultCpcM + '&' +
+            'defaultCpcF=' + defaultCpcF + '&' +
+            'defaultCpcFM=' + defaultCpcFM + '&' +
+            'budget01=' + budget01 + '&' +
+            'budget02=' + budget02 + '&' +
+            'budget03=' + budget03 + '&' +
+            'budget04=' + budget04 + '&' +
+            'budget05=' + budget05 + '&' +
+            'budget06=' + budget06 + '&' +
+            'budget07=' + budget07 + '&' +
+            'budget08=' + budget08 + '&' +
+            'budget09=' + budget09 + '&' +
+            'budget10=' + budget10 + '&' +
+            'budget11=' + budget11 + '&' +
+            'budget12=' + budget12 + '&' +
+            'nameAdminister=' + nameAdminister + '&' +
+            'emailNotify=' + emailNotify + '&' +
+            'productSizeGroupEx1=' + productSizeGroupEx1 + '&' +
+            'productSizeGroupEx2=' + productSizeGroupEx2 + '&' +
+            'productSizeGroupEx3=' + productSizeGroupEx3 + '&' +
+            'productSizeGroupEx4=' + productSizeGroupEx4 + '&' +
+            'productSizeGroupEx5=' + productSizeGroupEx5 + '&' +
+            'productSizeGroupEx6=' + productSizeGroupEx6 + '&' +
+            'productCategoryIdEx1=' + productCategoryIdEx1 + '&' +
+            'productCategoryIdEx2=' + productCategoryIdEx2 + '&' +
+            'productCategoryIdEx3=' + productCategoryIdEx3 + '&' +
+            'productCategoryIdEx4=' + productCategoryIdEx4 + '&' +
+            'productCategoryIdEx5=' + productCategoryIdEx5 + '&' +
+            'productCategoryIdEx6=' + productCategoryIdEx6 + '&' +
+            'priceModifierRange1=' + priceModifierRange1 + '&' +
+            'range1Cpc=' + range1Cpc + '&' +
+            'productSizeGroupId1=' + productSizeGroupId1 + '&' +
+            'productCategoryId1=' + productCategoryId1 + '&' +
+            'priceModifierRange2=' + priceModifierRange2 + '&' +
+            'range2Cpc=' + range2Cpc + '&' +
+            'productSizeGroupId2=' + productSizeGroupId2 + '&' +
+            'productCategoryId2=' + productCategoryId2 + '&' +
+            'priceModifierRange3=' + priceModifierRange3 + '&' +
+            'range3Cpc=' + range3Cpc + '&' +
+            'productSizeGroupId3=' + productSizeGroupId3 + '&' +
+            'productCategoryId3=' + productCategoryId3 + '&' +
+            'priceModifierRange4=' + priceModifierRange4 + '&' +
+            'range4Cpc=' + range4Cpc + '&' +
+            'productSizeGroupId4=' + productSizeGroupId4 + '&' +
+            'productCategoryId4=' + productCategoryId4 + '&' +
+            'priceModifierRange5=' + priceModifierRange5 + '&' +
+            'range5Cpc=' + range5Cpc + '&' +
+            'productSizeGroupId5=' + productSizeGroupId5 + '&' +
+            'productCategoryId5=' + productCategoryId5;
+        /*/var config='{"nameAggregator":"'+marketplace_account_name+'",'+
+             '"lang":" ' + lang + '",'+
+             '"slug":"'+slug+'",'+
+             '"logoFile":"'+logoFile+'",'+
+             '"activeAutomatic":'+isActive+','+
+             '"defaultCpc":'+defaultCpc+','+
+             '"defaultCpcM":'+defaultCpcM+','+
+             '"defaultCpcF":'+defaultCpcF+','+
+             '"defaultCpcFM":'+defaultCpcFM+','+
+             '"budget01":'+budget01+' ,'+
+             '"budget02":'+budget02+' ,'+
+             '"budget03":'+budget03+' ,'+
+             '"budget04":'+budget04+' ,'+
+             '"budget05":'+budget05+' ,'+
+             '"budget06":'+budget06+' ,'+
+             '"budget07":'+budget07+' ,'+
+             '"budget08":'+budget08+' ,'+
+             '"budget09":'+budget09+' ,'+
+             '"budget10":'+budget10+' ,'+
+             '"budget11":'+budget11+' ,'+
+             '"budget12":'+budget12+' ,'+
+             '"nameAdminister":"'+nameAdminister+'",'+
+             '"emailNotify":"'+emailNotify+'",'+
+             '"productSizeGroupEx1":'+productSizeGroupEx1+','+
+             '"productSizeGroupEx2":'+productSizeGroupEx2+','+
+             '"productSizeGroupEx3":'+productSizeGroupEx3+','+
+             '"productSizeGroupEx4":'+productSizeGroupEx4+','+
+             '"productSizeGroupEx5":'+productSizeGroupEx5+','+
+             '"productSizeGroupEx6":'+productSizeGroupEx6+','+
+             '"productCategoryIdEx1":'+productCategoryIdEx1+','+
+             '"productCategoryIdEx2":'+productCategoryIdEx2 +','+
+             '"productCategoryIdEx3":'+productCategoryIdEx3 +','+
+             '"productCategoryIdEx4":'+productCategoryIdEx4 +','+
+             '"productCategoryIdEx5":'+productCategoryIdEx5 +','+
+             '"productCategoryIdEx6":'+productCategoryIdEx6 +','+
+             '"priceModifierRange1":"'+priceModifierRange1 +'",'+
+             '"range1Cpc":'+range1Cpc +','+
+             '"productSizeGroupId1":'+productSizeGroupId1 +','+
+             '"productCategoryId1":'+productCategoryId1 +','+
+             '"priceModifierRange2":"'+priceModifierRange2 +'",'+
+             '"range2Cpc":'+range2Cpc +','+
+             '"productSizeGroupId2":'+productSizeGroupId2 +','+
+             '"productCategoryId2":'+productCategoryId2 +','+
+             '"priceModifierRange3":"'+priceModifierRange3 +'",'+
+             '"range3Cpc":'+range3Cpc +','+
+             '"productSizeGroupId3":'+productSizeGroupId3 +','+
+             '"productCategoryId3":'+productCategoryId3 +','+
+             '"priceModifierRange4":"'+priceModifierRange4+'",'+
+             '"range4Cpc":'+range4Cpc+','+
+             '"productSizeGroupId4":'+productSizeGroupId4+','+
+             '"productCategoryId4":'+productCategoryId4 +','+
+             '"priceModifierRange5":"'+priceModifierRange5 +'",'+
+             '"range5Cpc":'+range5Cpc+','+
+             '"productSizeGroupId5":'+productSizeGroupId5+','+
+             '"productCategoryId5":'+productCategoryId5 +'}';
+
+         */
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        var data = 1;
+        var urldef = "/blueseal/xhr/MarketplaceAccountInsertManage" + config;
+        $.ajax({
+            method: "POST",
+            url: urldef,
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.showOkBtn();
+            });
+            bsModal.showOkBtn();
+        });
+    });
 });
