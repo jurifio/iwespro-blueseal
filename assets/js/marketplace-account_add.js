@@ -342,6 +342,37 @@ $(document).ready(function () {
 });
 $('#shopId').change(function () {
     $('#rawBrands').empty();
+    var shopSelect=$('#shopId').val();
+$.ajax({
+        url: '/blueseal/xhr/SelectBrandMarketplaceAccountAjaxController',
+        method: 'get',
+    data: {
+        shop: shopSelect
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        addressSelect.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name'],
+            options: res,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.shopTitle) + '</span> - ' +
+                        '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.shopTitle) + '</span>  - ' +
+                        '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
+                        '</div>'
+                }
+            }
+        });
+    });
 
 
 });
