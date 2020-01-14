@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    document.getElementById('insertAggregator').style.display = "block";
     $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
 
@@ -47,6 +47,66 @@ $(document).ready(function () {
             okButton.removeAttr("disabled");
             $(document).trigger('bs.load.photo');
         });
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop',
+            condition :{hasEcommerce:1}
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop',
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopSupplierId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+
+
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'ProductBrand',
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#brandId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
     });
 
     $.ajax({
@@ -280,6 +340,11 @@ $(document).ready(function () {
 
 
 });
+$('#shopId').change(function () {
+    $('#rawBrands').empty();
+
+
+});
 $('#selectCreation').change(function () {
     if ($('#selectCreation').val() == 1) {
         $('#divmarketplace').empty();
@@ -351,6 +416,8 @@ $(document).on('bs.marketplace-account.save', function () {
         var lang = $('#lang').val();
         var marketplace_account_name = $('#marketplace_account_name').val();
         var slug = $('#slug').val();
+        var useRange=$('#useRange').val();
+        var shopId=$('#shopId').val();
         var nameAdminister = $('#nameAdminister').val();
         var emailNotify = $('#emailNotify').val();
         var isActive = $('#isActive').val();
@@ -395,6 +462,11 @@ $(document).on('bs.marketplace-account.save', function () {
         var range3Cpc = $('#range3Cpc').val();
         var range4Cpc = $('#range4Cpc').val();
         var range5Cpc = $('#range5Cpc').val();
+        var range1CpcM = $('#range1CpcM').val();
+        var range2CpcM = $('#range2CpcM').val();
+        var range3CpcM = $('#range3CpcM').val();
+        var range4CpcM = $('#range4CpcM').val();
+        var range5CpcM = $('#range5CpcM').val();
         var productSizeGroupId1 = $('#productSizeGroupId1').val();
         var productSizeGroupId2 = $('#productSizeGroupId2').val();
         var productSizeGroupId3 = $('#productSizeGroupId3').val();
@@ -468,8 +540,10 @@ $(document).on('bs.marketplace-account.save', function () {
             'typeInsertion=' + typeInsertion + '&' +
             'marketplaceName=' + marketplaceName + '&' +
             'lang=' + lang + '&' +
+            'shopId=' + shopId + '&' +
             'slug=' + slug + '&' +
             'logoFile=' + logoFile + '&' +
+            'useRange=' + useRange + '&' +
             'activeAutomatic=' + isActive + '&' +
             'defaultCpc=' + defaultCpc + '&' +
             'defaultCpcM=' + defaultCpcM + '&' +
@@ -503,22 +577,27 @@ $(document).on('bs.marketplace-account.save', function () {
             'productCategoryIdEx6=' + productCategoryIdEx6 + '&' +
             'priceModifierRange1=' + priceModifierRange1 + '&' +
             'range1Cpc=' + range1Cpc + '&' +
+            'range1CpcM=' + range1CpcM + '&' +
             'productSizeGroupId1=' + productSizeGroupId1 + '&' +
             'productCategoryId1=' + productCategoryId1 + '&' +
             'priceModifierRange2=' + priceModifierRange2 + '&' +
             'range2Cpc=' + range2Cpc + '&' +
+            'range2CpcM=' + range2CpcM + '&' +
             'productSizeGroupId2=' + productSizeGroupId2 + '&' +
             'productCategoryId2=' + productCategoryId2 + '&' +
             'priceModifierRange3=' + priceModifierRange3 + '&' +
             'range3Cpc=' + range3Cpc + '&' +
+            'range3CpcM=' + range3CpcM + '&' +
             'productSizeGroupId3=' + productSizeGroupId3 + '&' +
             'productCategoryId3=' + productCategoryId3 + '&' +
             'priceModifierRange4=' + priceModifierRange4 + '&' +
             'range4Cpc=' + range4Cpc + '&' +
+            'range4CpcM=' + range4CpcM + '&' +
             'productSizeGroupId4=' + productSizeGroupId4 + '&' +
             'productCategoryId4=' + productCategoryId4 + '&' +
             'priceModifierRange5=' + priceModifierRange5 + '&' +
             'range5Cpc=' + range5Cpc + '&' +
+            'range5CpcM=' + range5CpcM + '&' +
             'productSizeGroupId5=' + productSizeGroupId5 + '&' +
             'productCategoryId5=' + productCategoryId5;
         /*/var config='{"nameAggregator":"'+marketplace_account_name+'",'+
@@ -598,3 +677,24 @@ $(document).on('bs.marketplace-account.save', function () {
         });
     });
 });
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+function addRulesTab(){
+    var brandId=$('#brandId').val();
+    var shopSupplierId=$('#shopSupplierId').val();
+
+
+
+}

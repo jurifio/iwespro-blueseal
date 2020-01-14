@@ -50,11 +50,15 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         'username' => 'iwes123',
         'password' => 'Spedizioni123'
     ];
+
     /**
      * @param CShipment $shipment
+     * @param $orderId
      * @return CShipment|bool
      * $orderId
+     * @throws BambooException
      * @throws \Throwable
+     * @throws \bamboo\core\exceptions\RedPandaException
      */
     public function addPickUp(CShipment $shipment,$orderId)
     {
@@ -216,10 +220,10 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
 
             if($findOrder->isShippingToIwes === null  ) {
                 $shippingAddress[] = json_decode($findOrder->frozenBillingAddress,true);
-                $AttentionName =  $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'];
-                $Name = $shippingAddress[0]['company'];
-                $AddressLine = $shippingAddress[0]['address'] . ' ' . $shippingAddress[0]['extra'];
-                $City = $shippingAddress[0]['city'];
+                $AttentionName =  preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname']);
+                $Name = preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'].' '.$shippingAddress[0]['company']);
+                $AddressLine = preg_replace('/[\,\.\"\'\/\&%#\$]/',' ', $shippingAddress[0]['address'] );
+                $City = preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['city']);
                 $PostalCode = $shippingAddress[0]['postcode'];
                 $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $shippingAddress[0]['countryId']]);
                 $CountryCode = $country->ISO;
@@ -235,24 +239,14 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 $Number = '00390733471365';
 
             }
-        if ($findOrder->isShippingToIwes === null ){
 
-            $shipperName =$shipment->fromAddress->subject;
-            $shipperAttentionName= $shipment->fromAddress->subject;
-            $shipperAddressLine= $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra;
-            $shipperCity= $shipment->fromAddress->city;
-            $shipperPostalCode= $shipment->fromAddress->postcode;
-            $shipperCountryCode= $shipment->fromAddress->country->ISO;
-
-
-        }else{
-            $shipperName ='Iwes Logistic';
-            $shipperAttentionName= '';
+            $shipperName ='Iwes Snc';
+            $shipperAttentionName= 'Iwes Logistic';
             $shipperAddressLine= 'Via Cesare Pavese 1';
             $shipperCity= 'Civitanova Marche';
             $shipperPostalCode= '62012';
             $shipperCountryCode= 'IT';
-        }
+
 
 
         $service = [
@@ -311,10 +305,10 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                         ]
                     ],
                     'ShipFrom' => [
-                        'Name' => $shipment->fromAddress->subject,
+                        'Name' => preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shipment->fromAddress->subject),
                         'Address' => [
-                            'AddressLine' => $shipment->fromAddress->address . ' ',
-                            'City' => $shipment->fromAddress->city,
+                            'AddressLine' => preg_replace('/[\,\"\'\/\&%#\$]/',' ',$shipment->fromAddress->address) . ' ',
+                            'City' => preg_replace('/[\,\"\'\/\&%#\$]/',' ',$shipment->fromAddress->city),
                             'PostalCode' => $shipment->fromAddress->postcode,
                             'CountryCode' => $shipment->fromAddress->country->ISO
                         ]

@@ -31,6 +31,10 @@ class CMarketplaceAccountInsertController extends ARestrictedAccessRootControlle
         $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths','blueseal') . '/template/marketplace_account_add.php');
 
         $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
+        $productBrands=\Monkey::app()->repoFactory->create('ProductBrand');
+        $shops=\Monkey::app()->repoFactory->create('Shops');
+
+
 
         $config='{ "nameAggregator":"Nome Aggregatore","lang":"lingua isocode","slug":"nome abbraviato","filePath":" /export/nomeAggregatoreBetterFeedTemp.linguaisocode.xml","feedUrl":"/services/feed/linguaisocode/slugomeabbreviato",
 "activeAutomatic":"0","defaultCpc":"0","timeRange":7,"multiplierDefault":0.00,"priceModifier":0.00,
