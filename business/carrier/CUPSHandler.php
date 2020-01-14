@@ -194,20 +194,22 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
 
     /**
      * @param CShipment $shipment
+     * @param $ordeId
      * @return CShipment
      * @throws BambooException
      */
-    public function addDelivery(CShipment $shipment)
+    public function addDelivery(CShipment $shipment,$orderId)
     {
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
        $orderLineHasShipments=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
         $valuePrice=0;
        if($orderLineHasShipments!=null) {
-           $orderId = $orderLineHasShipments->orderId;
+          // $orderId = $orderLineHasShipments->orderId;
            }
         foreach ($shipment->orderLine as $orderLine) {
             $orders[] = $orderLine->printId();
             $valuePrice+=$orderLine->netPrice;
+          //  $orderId=$orderLine->orderId;
         }
        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
         if($findOrder->orderPaymentMethodId==5){

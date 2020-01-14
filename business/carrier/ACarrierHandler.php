@@ -16,9 +16,10 @@ abstract class ACarrierHandler {
     /**
      * Add a delivery Shipment, returns the Shipment
      * @param CShipment $shipment
+     * @param $orderId int
      * @return CShipment
      */
-    public abstract function addDelivery(CShipment $shipment);
+    public abstract function addDelivery(CShipment $shipment, $orderId);
 
 
     /**

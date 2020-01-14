@@ -26,90 +26,169 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $marketplaceRepo = \Monkey::app()->repoFactory->create('MarketPlace');
         $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
         $data = $this->app->router->request()->getRequestData();
-        if (!isset($_GET['nameAggregator'])) {
-            $marketplace_account_name = $_GET['nameAggregator'];
+        if ($_GET['nameAggregator']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Nome Aggregatore non inserito</i>';
         } else {
-            return 'nome Aggregatore non valorizzato';
+            $marketplace_account_name = $_GET['nameAggregator'];
         }
 
-        if (!isset($_GET['slug'])) {
-            return 'slug non valorizzato';
+        if ($_GET['slug']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> slug non valorizzato</i>';
         } else {
             $slug = $_GET['slug'];
         }
-        if (!isset($_GET['nameAdminister'])) {
-            return 'intestazione Email Destinatario non valorizzato';
+        if ($_GET['nameAdminister']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> intestazione Email Destinatario non valorizzato</i>';
         } else {
             $nameAdminister = $_GET['nameAdminister'];
         }
-        if (!isset($_GET['emailNotify'])) {
-            return ' Email Notifica  non valorizzata';
+        if (_GET['emailNotify']=='') {
+            return  '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Email Notifica  non valorizzata</i>';
         } else {
             $emailNotify = $_GET['emailNotify'];
         }
-        if (!isset($_GET['isActive'])) {
-         return ' Attivo non attivo non selezionato';
+        if ($_GET['isActive']=='') {
+         return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Attivo non attivo non selezionato</i>';
          }else{
             $isActive = $_GET['isActive'];
         }
-        if (!isset($_GET['defaultCpcF'])) {
-            return 'Cpc Fornitore Desktop non valorizzato  ';
+        if ($_GET['defaultCpcF']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Cpc Fornitore Desktop non valorizzato</i>';
         }else{
             $defaultCpcF = $_GET['defaultCpcF'];
         }
-        if (!isset($_GET['logoFile'])) {
-            return 'logo File non Inserito  ';
+        if ($_GET['logoFile']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Logo non Inserito</i>';
         }else{
             $logoFile = $_GET['logoFile'];
         }
-        if (!isset($_GET['defaultCpcFM'])) {
-            return 'Cpc Fornitore Mobile non valorizzato  ';
+        if ($_GET['defaultCpcFM']=="") {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Cpc Fornitore Mobile non Valorizzato</i>';
         }else{
             $defaultCpcFM = $_GET['defaultCpcFM'];
         }
-        if (!isset($_GET['defaultCpcM'])) {
-            return 'Cpc Default Mobile non valorizzato  ';
+        if ($_GET['defaultCpcF']=="") {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Cpc Fornitore Desktop non Valorizzato</i>';
+        }else{
+            $defaultCpcFM = $_GET['defaultCpcF'];
+        }
+        if ($_GET['defaultCpcM']=="") {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Default Cpc Mobile non Valorizzato</i>';
         }else{
             $defaultCpcM = $_GET['defaultCpcM'];
         }
-        if (!isset($_GET['defaultCpc'])) {
-            return 'Cpc Default Desktop non valorizzato  ';
+        if ($_GET['defaultCpc']=="") {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Cpc Default Desktop non Valorizzato</i>';
         }else{
             $defaultCpc = $_GET['defaultCpc'];
         }
-        if (!isset($_GET['budget01'])) {
-            return 'Cpc Default Desktop non valorizzato  ';
+        if ($_GET['budget01']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Gennaio Valorizzato</i>';
         } else {
-            $defaultCpc = $_GET['defaultCpc'];
+            $budget01 = $_GET['budget01'];
+        }
+        if ($_GET['budget02']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Febbraio Valorizzato</i>';
+        } else {
+            $budget02 = $_GET['budget02'];
+        }
+        if ($_GET['budget03']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Marzo Valorizzato</i>';
+        } else {
+            $budget03 = $_GET['budget03'];
+        }
+        if ($_GET['budget04']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Aprile Valorizzato</i>';
+        } else {
+            $budget04 = $_GET['budget04'];
+        }
+        if ($_GET['budget05']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Maggio Valorizzato</i>';
+        } else {
+            $budget05 = $_GET['budget05'];
+        }
+        if ($_GET['budget06']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Giugno Valorizzato</i>';
+        } else {
+            $budget06 = $_GET['budget06'];
+        }
+        if ($_GET['budget07']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Luglio Valorizzato</i>';
+        } else {
+            $budget07 = $_GET['$budget07'];
+        }
+        if ($_GET['budget08']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Agosto Valorizzato</i>';
+        } else {
+            $budget08 = $_GET['budget08'];
+        }
+        if ($_GET['budget09']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Settembre Valorizzato</i>';
+        } else {
+            $budget09 = $_GET['budget09'];
+        }
+        if ($_GET['budget10']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Ottobre Valorizzato</i>';
+        } else {
+            $budget10 = $_GET['budget10'];
+        }
+        if ($_GET['budget11']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Novembre Valorizzato</i>';
+        } else {
+            $budget11 = $_GET['budget11'];
+        }
+        if ($_GET['budget12']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Dicembre Valorizzato</i>';
+        } else {
+            $budget12 = $_GET['budget12'];
+        }
+        if ($_GET['typeInsertion']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Aggregatore non eseguita</i>';
+        } else {
+            $typeInsertion = $_GET['typeInsertion'];
+        }
+        if ($_GET['marketplaceName']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Aggregatore non valorizzato</i>';
+        } else {
+            $marketplaceName = $_GET['marketplaceName'];
+        }
+        if ($_GET['productCategoryIdEx1']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 1 Prodotti non valorizzato </i>';
+        } else {
+            $productCategoryIdEx1 = $_GET['productCategoryIdEx1'];
+        }
+        if ($_GET['productCategoryIdEx2']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 2 Prodotti </i>';
+        } else {
+            $productCategoryIdEx2 = $_GET['productCategoryIdEx2'];
+        }
+        if ($_GET['productCategoryIdEx3']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 3 Prodotti </i>';
+        } else {
+            $productCategoryIdEx3 = $_GET['productCategoryIdEx3'];
+        }
+        if ($_GET['productCategoryIdEx4']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 4 Prodotti </i>';
+        } else {
+            $productCategoryIdEx4 = $_GET['productCategoryIdEx4'];
+        }
+        if ($_GET['productCategoryIdEx5']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 5 Prodotti </i>';
+        } else {
+            $productCategoryIdEx5 = $_GET['productCategoryIdEx5'];
+        }
+        if ($_GET['productCategoryIdEx6']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 6 Prodotti </i>';
+        } else {
+            $productCategoryIdEx6 = $_GET['productCategoryIdEx6'];
+        }
+        if ($_GET['productSizeGroupEx1']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione Gruppo Taglia 1 Prodotti </i>';
+        } else {
+            $productSizeGroupEx1 = $_GET['productSizeGroupEx1'];
         }
 
 
-        $budget01 = $_GET['budget01'];
-        $budget02 = $_GET['budget02'];
-        $budget03 = $_GET['budget03'];
-        $budget04 = $_GET['budget04'];
-        $budget05 = $_GET['budget05'];
-        $budget06 = $_GET['budget06'];
-        $budget07 = $_GET['budget07'];
-        $budget08 = $_GET['budget08'];
-        $budget09 = $_GET['budget09'];
-        $budget10 = $_GET['budget10'];
-        $budget11 = $_GET['budget11'];
-        $budget12 = $_GET['budget12'];
-        $typeInsertion = $_GET['typeInsertion'];
-        $marketplaceName = $_GET['marketplaceName'];
-        $productCategoryIdEx1 = $_GET['productCategoryIdEx1'];
-        $productCategoryIdEx2 = $_GET['productCategoryIdEx2'];
-        $productCategoryIdEx3 = $_GET['productCategoryIdEx3'];
-        $productCategoryIdEx4 = $_GET['productCategoryIdEx4'];
-        $productCategoryIdEx5 = $_GET['productCategoryIdEx5'];
-        $productCategoryIdEx6 = $_GET['productCategoryIdEx6'];
-        $productSizeGroupEx1 = $_GET['productSizeGroupEx1'];
-        $productSizeGroupEx2 = $_GET['productSizeGroupEx2'];
-        $productSizeGroupEx3 = $_GET['productSizeGroupEx3'];
-        $productSizeGroupEx4 = $_GET['productSizeGroupEx4'];
-        $productSizeGroupEx5 = $_GET['productSizeGroupEx5'];
-        $productSizeGroupEx6 = $_GET['productSizeGroupEx6'];
         $priceModifierRange1 = $_GET['priceModifierRange1'];
         $priceModifierRange2 = $_GET['priceModifierRange2'];
         $priceModifierRange3 = $_GET['priceModifierRange3'];
