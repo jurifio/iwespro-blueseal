@@ -53,13 +53,14 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
     /**
      * @param CShipment $shipment
      * @return CShipment|bool
+     * $orderId
      * @throws \Throwable
      */
-    public function addPickUp(CShipment $shipment)
+    public function addPickUp(CShipment $shipment,$orderId)
     {
         \Monkey::app()->applicationReport('CUPSHandler', 'addPickup', 'Called addPickUp');
 
-        $shipment = $this->addDelivery($shipment);
+        $shipment = $this->addDelivery($shipment,$orderId);
 
         $orders = [];
 
@@ -213,16 +214,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         }
        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
 
-            if($findOrder->isShippingToIwes === null || $findOrder->isShippingToIwes===0 ) {
-                $AttentionName =  'Iwes Logistic';
-                $Name = 'Iwes snc';
-                $AddressLine = 'Via Cesare Pavese 1';
-                $City = 'Civitanova Marche';
-                $PostalCode = '62012';
-                $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => '110']);
-                $CountryCode = $country->ISO;
-                $Number = '00390733471365';
-            }else{
+            if($findOrder->isShippingToIwes === null  ) {
                 $shippingAddress[] = json_decode($findOrder->frozenBillingAddress,true);
                 $AttentionName =  $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'];
                 $Name = $shippingAddress[0]['company'];
@@ -232,9 +224,18 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $shippingAddress[0]['countryId']]);
                 $CountryCode = $country->ISO;
                 $Number = $shippingAddress[0]['phone'];
+            }else{
+                $AttentionName =  'Iwes Logistic';
+                $Name = 'Iwes snc';
+                $AddressLine = 'Via Cesare Pavese 1';
+                $City = 'Civitanova Marche';
+                $PostalCode = '62012';
+                $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => '110']);
+                $CountryCode = $country->ISO;
+                $Number = '00390733471365';
 
             }
-        if ($findOrder->isShippingToIwes === null || $findOrder->isShippingToIwes===0){
+        if ($findOrder->isShippingToIwes === null ){
 
             $shipperName =$shipment->fromAddress->subject;
             $shipperAttentionName= $shipment->fromAddress->subject;
@@ -259,7 +260,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             'Description' => 'UPS Standard'
         ];
 
-        if($findOrder->isShippingToIwes === null || $findOrder->isShippingToIwes===0 ) {
+        if($findOrder->isShippingToIwes === null  ) {
             if ($shipment->toAddress->country->continent != 'EU') {
                 $service = [
                     'Code' => '65',
