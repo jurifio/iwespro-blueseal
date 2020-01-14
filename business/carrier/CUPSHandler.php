@@ -194,9 +194,9 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
 
     /**
      * @param CShipment $shipment
-     * @param $ordeId
+     * @param $orderId
      * @return CShipment
-     * @throws BambooException
+     * @throws \bamboo\core\exceptions\RedPandaException
      */
     public function addDelivery(CShipment $shipment,$orderId)
     {
@@ -212,6 +212,61 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
           //  $orderId=$orderLine->orderId;
         }
        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
+
+            if($findOrder->isShippingToIwes === null || $findOrder->isShippingToIwes===0 ) {
+                $AttentionName =  'Iwes Logistic';
+                $Name = 'Iwes snc';
+                $AddressLine = 'Via Cesare Pavese 1';
+                $City = 'Civitanova Marche';
+                $PostalCode = '62012';
+                $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => '110']);
+                $CountryCode = $country->ISO;
+                $Number = '00390733471365';
+            }else{
+                $shippingAddress[] = json_decode($findOrder->frozenBillingAddress,true);
+                $AttentionName =  $shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'];
+                $Name = $shippingAddress[0]['company'];
+                $AddressLine = $shippingAddress[0]['address'] . ' ' . $shippingAddress[0]['extra'];
+                $City = $shippingAddress[0]['city'];
+                $PostalCode = $shippingAddress[0]['postcode'];
+                $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $shippingAddress[0]['countryId']]);
+                $CountryCode = $country->ISO;
+                $Number = $shippingAddress[0]['phone'];
+
+            }
+        if ($findOrder->isShippingToIwes === null || $findOrder->isShippingToIwes===0){
+
+            $shipperName =$shipment->fromAddress->subject;
+            $shipperAttentionName= $shipment->fromAddress->subject;
+            $shipperAddressLine= $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra;
+            $shipperCity= $shipment->fromAddress->city;
+            $shipperPostalCode= $shipment->fromAddress->postcode;
+            $shipperCountryCode= $shipment->fromAddress->country->ISO;
+
+
+        }else{
+            $shipperName ='Iwes Logistic';
+            $shipperAttentionName= '';
+            $shipperAddressLine= 'Via Cesare Pavese 1';
+            $shipperCity= 'Civitanova Marche';
+            $shipperPostalCode= '62012';
+            $shipperCountryCode= 'IT';
+        }
+
+
+        $service = [
+            'Code' => '11',
+            'Description' => 'UPS Standard'
+        ];
+
+        if($findOrder->isShippingToIwes === null || $findOrder->isShippingToIwes===0 ) {
+            if ($shipment->toAddress->country->continent != 'EU') {
+                $service = [
+                    'Code' => '65',
+                    'Description' => 'UPS Saver'
+                ];
+            }
+        }
         if($findOrder->orderPaymentMethodId==5){
 
             $shipmentServiceOptions=[
@@ -229,21 +284,6 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             $shipmentServiceOptions='';
         }
 
-
-
-
-        $service = [
-            'Code' => '11',
-            'Description' => 'UPS Standard'
-        ];
-
-        if($shipment->toAddress->country->continent != 'EU') {
-            $service = [
-                'Code' => '65',
-                'Description' => 'UPS Saver'
-            ];
-        }
-
         $delivery = [
             'UPSSecurity' => $this->getUpsSecurity(),
             'ShipmentRequest' => [
@@ -256,14 +296,14 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 'Shipment' => [
                     'Description' => $shipment->printId(),
                     'Shipper' => [
-                        'Name' => $shipment->fromAddress->subject,
-                        'AttentionName' => $shipment->fromAddress->subject,
+                        'Name' => $shipperName,
+                        'AttentionName' => $shipperAttentionName,
                         'ShipperNumber' => $this->getConfig()['UPSClientCode'],
                         'Address' => [
-                            'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
-                            'City' => $shipment->fromAddress->city,
-                            'PostalCode' => $shipment->fromAddress->postcode,
-                            'CountryCode' => $shipment->fromAddress->country->ISO
+                            'AddressLine' => $shipperAddressLine,
+                            'City' => $shipperCity,
+                            'PostalCode' => $shipperPostalCode,
+                            'CountryCode' => $shipperCountryCode
                         ],
                         'Phone' => [
                             'Number' => !empty($shipment->fromAddress->phone) ? $shipment->fromAddress->phone : ($shipment->fromAddress->cellphone ? $shipment->fromAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
@@ -272,23 +312,23 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                     'ShipFrom' => [
                         'Name' => $shipment->fromAddress->subject,
                         'Address' => [
-                            'AddressLine' => $shipment->fromAddress->address . ' ' . $shipment->fromAddress->extra,
+                            'AddressLine' => $shipment->fromAddress->address . ' ',
                             'City' => $shipment->fromAddress->city,
                             'PostalCode' => $shipment->fromAddress->postcode,
                             'CountryCode' => $shipment->fromAddress->country->ISO
                         ]
                     ],
                     'ShipTo' => [
-                        'AttentionName' => $shipment->toAddress->subject,
-                        'Name' => $shipment->toAddress->subject,
+                        'AttentionName' => $AttentionName,
+                        'Name' => $Name,
                         'Address' => [
-                            'AddressLine' => $shipment->toAddress->address . ' ' . $shipment->toAddress->extra,
-                            'City' => $shipment->toAddress->city,
-                            'PostalCode' => $shipment->toAddress->postcode,
-                            'CountryCode' => $shipment->toAddress->country->ISO
+                            'AddressLine' => $AddressLine,
+                            'City' => $City,
+                            'PostalCode' => $PostalCode,
+                            'CountryCode' => $CountryCode
                         ],
                         'Phone' => [
-                            'Number' => !empty($shipment->toAddress->phone) ? $shipment->toAddress->phone : ($shipment->toAddress->cellphone ? $shipment->toAddress->cellphone : '+390733471365') //$shipment->fromAddress->phone ?? $shipment->fromAddress->cellphone
+                            'Number' => $Number
                         ]
                     ],
                     'PaymentInformation' => [
@@ -327,6 +367,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 ]
             ]
         ];
+        \Monkey::app()->applicationLog('CUPSHandler','report','string call',json_encode($delivery),'');
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
