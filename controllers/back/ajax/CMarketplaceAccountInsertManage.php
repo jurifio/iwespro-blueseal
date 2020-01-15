@@ -343,6 +343,16 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $productCategoryId5 = $_GET['productCategoryId5'];
         }
+        if($_GET['nameRule']==''){
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Nome Regola non Valorizzata </i>';
+        }else{
+            $nameRule = $_GET['nameRule'];
+        }
+        if($_GET['nameRule']==''){
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Nome Regola non Valorizzata </i>';
+        }else{
+            $nameRule = $_GET['nameRule'];
+        }
 
         if ($typeInsertion == 1) {
             $marketplace = $marketplaceRepo->findOneBy(['name' => $marketplaceName]);
@@ -454,7 +464,8 @@ class CMarketplaceAccountInsertManage extends AAjaxController
                         "range5Cpc":' . $range5Cpc . ',
                         "range5CpcM":' . $range5CpcM . ',
                         "productSizeGroup5":' . $productSizeGroup5 . ',
-                        "productCategoryId5":' . $productCategoryId5 . '}';
+                        "productCategoryId5":' . $productCategoryId5 .',
+                        "nameRule":"' . $nameRule .'}';
 
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->getEmptyEntity();
         $marketplaceAccount->marketplaceId = $marketplaceId;
