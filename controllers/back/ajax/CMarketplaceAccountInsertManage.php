@@ -25,42 +25,48 @@ class CMarketplaceAccountInsertManage extends AAjaxController
     {
         $marketplaceRepo = \Monkey::app()->repoFactory->create('MarketPlace');
         $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         $data = $this->app->router->request()->getRequestData();
         if ($_GET['nameAggregator']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Nome Aggregatore non inserito</i>';
         } else {
             $marketplace_account_name = $_GET['nameAggregator'];
         }
-
         if ($_GET['slug']=='') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> slug non valorizzato</i>';
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">slug non definito</i>';
         } else {
             $slug = $_GET['slug'];
+        }
+
+        if ($_GET['lang']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> linguaggio non selezionato</i>';
+        } else {
+            $lang = $_GET['lang'];
         }
         if ($_GET['shopId']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Shop non valorizzato</i>';
         } else {
             $shopId = $_GET['shopId'];
         }
-        if ($_GET['useRange']=='') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selettore Range non utilizzato</i>';
+        if ($_GET['isActive']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato aggregatore </i>';
         } else {
-            $useRange = $_GET['useRange'];
+            $isActive = $_GET['isActive'];
         }
         if ($_GET['nameAdminister']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> intestazione Email Destinatario non valorizzato</i>';
         } else {
             $nameAdminister = $_GET['nameAdminister'];
         }
-        if (_GET['emailNotify']=='') {
+        if ($_GET['emailNotify']=='') {
             return  '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Email Notifica  non valorizzata</i>';
         } else {
             $emailNotify = $_GET['emailNotify'];
         }
-        if ($_GET['isActive']=='') {
-         return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Attivo non attivo non selezionato</i>';
+        if ($_GET['activeAutomatic']=='') {
+         return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Usa Fascia non selezionato</i>';
          }else{
-            $isActive = $_GET['isActive'];
+            $activeAutomatic = $_GET['activeAutomatic'];
         }
         if ($_GET['logoFile']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Logo non Inserito</i>';
@@ -121,7 +127,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         if ($_GET['budget07']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Luglio Valorizzato</i>';
         } else {
-            $budget07 = $_GET['$budget07'];
+            $budget07 = $_GET['budget07'];
         }
         if ($_GET['budget08']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> budget Agosto Valorizzato</i>';
@@ -348,10 +354,10 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         }else{
             $nameRule = $_GET['nameRule'];
         }
-        if($_GET['nameRule']==''){
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Nome Regola non Valorizzata </i>';
+        if($_GET['ruleOption']==''){
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Nessuna Selezione </i>';
         }else{
-            $nameRule = $_GET['nameRule'];
+            $ruleOption = $_GET['ruleOption'];
         }
 
         if ($typeInsertion == 1) {
@@ -381,22 +387,23 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $valueexcept3 = 0.1;
         $valueexcept4 = 0.1;
         $valueexcept5 = 0.1;
-        $filePath = '/export/' . ucfirst($slug) . 'BetterFeedTemp' . $lang . '.xml';
+        $filePath = '/export/' . ucfirst($slug) . 'BetterFeedTemp.' . $lang . '.xml';
         $feedUrl = '/services/feed/' . $lang . '/' . $slug;
         $timeRange = 7;
         $multiplierDefault = 0.1;
         $priceModifier = 0;
+        $ruleOption=str_replace('on,','',$ruleOption);
 
 
         $collectUpdate = '{"nameAggregator":"' . $marketplace_account_name . '",
                         "lang":"' . $lang . '", 
                         "slug":"' . $slug . '", 
                         "shop":'.$shopId.',
-                        "useRange":'.$useRange.'",
+                        "isActive":'.$isActive.'",
                         "filePath":"' . $filePath . '", 
                         "feedUrl":"' . $feedUrl . '",
                         "logoFile":"' . $logoFile . '",
-                        "activeAutomatic":' . $isActive . ',
+                        "activeAutomatic":' . $activeAutomatic . ',
                         "defaultCpc":' . $defaultCpc . ',
                         "defaultCpcM":' . $defaultCpcM . ',
                         "defaultCpcF":' . $defaultCpcF . ',
@@ -465,16 +472,26 @@ class CMarketplaceAccountInsertManage extends AAjaxController
                         "range5CpcM":' . $range5CpcM . ',
                         "productSizeGroup5":' . $productSizeGroup5 . ',
                         "productCategoryId5":' . $productCategoryId5 .',
-                        "nameRule":"' . $nameRule .'}';
+                        "nameRule":"' . $nameRule .'",
+                        "ruleOption:":"'.$ruleOption.'"}';
+        $collectUpdate=trim($collectUpdate," \t\n\r\0\x0B");
+        $findUrlSite=$shopRepo->findOneBy(['id'=>$shopId]);
+        if($findUrlSite->urlSite1!=null) {
+            $urlSite = $findUrlSite->urlSite . '/' . $lang;
+        }else{
+            $urlSite='';
+        }
+
 
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->getEmptyEntity();
         $marketplaceAccount->marketplaceId = $marketplaceId;
         $marketplaceAccount->name = $marketplace_account_name;
         $marketplaceAccount->config = $collectUpdate;
+        $marketplaceAccount->urlSite=$urlSite;
         $marketplaceAccount->insert();
         $markeplcaAccountIdFind = $marketplaceAccountRepo->findOneBy(['name' => $marketplace_account_name]);
         $marketplaceAccountId = $markeplcaAccountIdFind->id;
-        \Monkey::app()->applicationLog('MarketPlaceAccount','Report','Insert','Insert Marketplace Account ' . $marketplaceAccountId . '-' . $marketplaceId . ' ' . $name);
+        \Monkey::app()->applicationLog('MarketPlaceAccount','Report','Insert','Insert Marketplace Account ' . $marketplaceAccountId . '-' . $marketplaceId . ' ' . $marketplace_account_name);
         return 'Inserimento Eseguito con Successo';
     }
 }

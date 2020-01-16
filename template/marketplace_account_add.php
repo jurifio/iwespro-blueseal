@@ -90,7 +90,7 @@
                                                         data-init-plugin="selectize">
                                                     <option value=""></option>
                                                     <option value="1">Si</option>
-                                                    <option value="2">No</option>
+                                                    <option value="0">No</option>
                                                 </select>
 
                                             </div>
@@ -124,7 +124,7 @@
                                                         data-init-plugin="selectize">
                                                     <option value=""></option>
                                                     <option value="1">Si</option>
-                                                    <option value="2">No</option>
+                                                    <option value="0">No</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -609,7 +609,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group form-group-default required">
                                                     <label for="priceModifierRange2">Range 2 Retail Price </label>
                                                     <input id="priceModifierRange2" autocomplete="off" type="text"
@@ -676,7 +676,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange3">Range 3 Retail Price </label>
                                                 <input id="priceModifierRange3" autocomplete="off" type="text"
@@ -739,7 +739,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange4">Range 4 Retail Price </label>
                                                 <input id="priceModifierRange4" autocomplete="off" type="text"
@@ -801,7 +801,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange5">Range 5 Retail Price </label>
                                                 <input id="priceModifierRange5" autocomplete="off" type="text"

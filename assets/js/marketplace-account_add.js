@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     document.getElementById('insertAggregator').style.display = "block";
     $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
@@ -299,8 +300,12 @@ $(document).ready(function () {
     });
 
 
-
 });
+
+
+
+
+
 $('#shopId').change(function () {
     $('#rawBrands').empty();
     var shopSelect = $('#shopId').val();
@@ -317,7 +322,7 @@ $('#shopId').change(function () {
         let bodyres;
         bodyres='<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca Brand"></div>';
         bodyres= bodyres+'<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Shop"></div>';
-        bodyres= bodyres+'<div class="col-md-4"><input type="checkbox" class="form-control"  id="selectedView" name="selectedView"></div></div>';
+        bodyres= bodyres+'<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
         bodyres = bodyres+'<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:40%;">Shop</th><th style="width:20%;">Selezione</th></tr>';
       //  $('#rawBrands').append('<input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca Brand"/>');
        // $('#rawBrands').append('<table id="myTable"> <tr class="header1"><th style="width:20%;">Categoria</th><th style="width:20%;">Shop</th><th style="width:20%;">Shop Id Origine</th><th style="width:20%;">Shop Id Origine</th><th style="width:20%;">Shop Id Destinazione</th><th style="width:20%;">Pubblicato</th></tr>');
@@ -334,6 +339,7 @@ $('#shopId').change(function () {
 
 
 });
+
 $('#selectCreation').change(function () {
     if ($('#selectCreation').val() == 1) {
         $('#divmarketplace').empty();
@@ -396,6 +402,7 @@ $('#selectCreation').change(function () {
 });
 
 
+
 $(document).on('bs.marketplace-account.save', function () {
     let bsModal = new $.bsModal('Inserimento Aggregatore', {
         body: '<p>Confermare?</p>'
@@ -403,7 +410,9 @@ $(document).on('bs.marketplace-account.save', function () {
 
     var val='';
     $(':checkbox:checked').each(function(i){
-        val = val + $(this).val()+',';
+        if($(this)!=$('#checkedAll')) {
+            val = val + $(this).val() + ',';
+        }
     });
     var lang = $('#lang').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
@@ -431,7 +440,7 @@ $(document).on('bs.marketplace-account.save', function () {
     var budget11 = $('#budget11').val();
     var budget12 = $('#budget12').val();
     var typeInsertion = $('#typeInsertion').val();
-    var marketplaceName = $('#marketplaceName');
+    var marketplaceName = $('#marketplaceName').val();
     var productCategoryIdEx1 = $('#productCategoryIdEx1').val();
     var productCategoryIdEx2 = $('#productCategoryIdEx2').val();
     var productCategoryIdEx3 = $('#productCategoryIdEx3').val();
@@ -537,8 +546,8 @@ $(document).on('bs.marketplace-account.save', function () {
         'shopId=' + shopId + '&' +
         'slug=' + slug + '&' +
         'logoFile=' + logoFile + '&' +
-        'useRange=' + useRange + '&' +
-        'activeAutomatic=' + isActive + '&' +
+        'activeAutomatic=' + useRange + '&' +
+        'isActive=' + isActive + '&' +
         'defaultCpc=' + defaultCpc + '&' +
         'defaultCpcM=' + defaultCpcM + '&' +
         'defaultCpcF=' + defaultCpcF + '&' +
@@ -737,4 +746,10 @@ function myShopFunction() {
         }
     }
 }
+
+$(document).on('click','#checkedAll',function () {
+
+    $('input:checkbox').not(this).prop('checked', this.checked);
+
+});
 
