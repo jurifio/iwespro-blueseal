@@ -47,7 +47,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
     {
 
         set_time_limit(0);
-        ini_set('memory_limit','2048M');
+        ini_set('memory_limit', '2048M');
 
         $res = "";
         /********marketplace********/
@@ -57,33 +57,49 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
         $db_pass = "rrtYvg6W!";
         try {
 
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+            $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $res .= " connessione ok <br>";
         } catch (PDOException $e) {
-            $res .= $e->getMessage();
+            $res .= $e -> getMessage();
         }
-        $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
-        $productBrandRepo=\Monkey::app()->repoFactory->create('ProductBrand');
-        $productRepo=\Monkey::app()->repoFactory->create('Product');
+        $marketplaceAccountRepo = \Monkey ::app() -> repoFactory -> create('MarketplaceAccount');
+        $productBrandRepo = \Monkey ::app() -> repoFactory -> create('ProductBrand');
+        $productRepo = \Monkey ::app() -> repoFactory -> create('Product');
+        $productSkuRepo = \Monkey ::app() -> repoFactory -> create('ProductSku');
 
-        $marketplaceAccounts = $marketplaceAccountRepo->findAll();
+        $marketplaceAccounts = $marketplaceAccountRepo -> findBy(['id' => 32, 'marketplaceId' => 9]);
 
         foreach ($marketplaceAccounts as $marketplaceAccount) {
-            $activeAutomatic = isset($marketplaceAccount->config['activeAutomatic']) ? $marketplaceAccount->config['activeAutomatic'] : 0;
+            $activeAutomatic = isset($marketplaceAccount -> config['activeAutomatic']) ? $marketplaceAccount -> config['activeAutomatic'] : 0;
 
-            $isActive = isset($marketplaceAccount->config['isActive']) ? $marketplaceAccount->config['isActive'] : 0;
+            $isActive = isset($marketplaceAccount -> config['isActive']) ? $marketplaceAccount -> config['isActive'] : 0;
             if ($isActive == 0) {
                 continue;
             }
-            $rows=[];
-            $productBrands=[];
-            $shops=[];
+            $rows = [];
+            $productBrands = [];
+            $shops = [];
 
-            $filter=json_decode($marketplaceAccount->config['ruleOption'],false);
+            $filters = explode(',', json_encode($marketplaceAccount -> config['ruleOption'], false));
+            foreach ($filters as $filter) {
+                $brandShop = explode('-', $filter);
+                $brand = $brandShop[0];
+                $shopD = $brandShop[1];
+                $products = $productRepo -> findBy(['productBrandId' => $brand, 'productStatusId' => 6]);
+                foreach ($products as $product) {
+                    if ($product -> qty >= 1) {
+                        $productSku = $productSkuRepo -> findOneBy(['productId' => $product -> id, 'productVariantId' => $product -> productVariantId, 'shopId' => $shopD]);
+                        if ($productSku != null) {
+                            array_push($rows, [$productSku -> productId . '-' . $product -> productVariantId]);
+                        }
 
+                    } else {
+                        continue;
+                    }
+                }
+
+            }
         }
-
-
     }
 }

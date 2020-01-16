@@ -473,10 +473,10 @@ class CMarketplaceAccountInsertManage extends AAjaxController
                         "productSizeGroup5":' . $productSizeGroup5 . ',
                         "productCategoryId5":' . $productCategoryId5 .',
                         "nameRule":"' . $nameRule .'",
-                        "ruleOption:":"'.$ruleOption.'"}';
+                        "ruleOption":"'.$ruleOption.'"}';
         $collectUpdate=trim($collectUpdate," \t\n\r\0\x0B");
         $findUrlSite=$shopRepo->findOneBy(['id'=>$shopId]);
-        if($findUrlSite->urlSite1!=null) {
+        if($findUrlSite->urlSite !=null) {
             $urlSite = $findUrlSite->urlSite . '/' . $lang;
         }else{
             $urlSite='';
