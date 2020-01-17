@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-window-close",
-    permission:"/admin/product/edit&&allShops",
+    permission:"/admin/product/edit&&allShops||shooting",
     event:"bs-close-shooting",
     class:"btn btn-default",
     rel:"tooltip",

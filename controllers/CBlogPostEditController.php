@@ -19,6 +19,7 @@ class CBlogPostEditController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/blog_edit.php');
 
+
 	    $id = $this->app->router->request()->getRequestData('id');
 	    $blogId = $this->app->router->request()->getRequestData('blogId');
 	    $post = \Monkey::app()->repoFactory->create('Post')->findOne(['id'=>$id,'blogId'=>$blogId]);

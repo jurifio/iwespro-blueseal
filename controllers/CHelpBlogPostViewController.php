@@ -18,6 +18,7 @@ class CHelpBlogPostViewController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $id = \Monkey::app()->router->getMatchedRoute()->getComputedFilter("id");
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/help_blog_post.php');
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
 
         $post = \Monkey::app()->repoFactory->create('Post')->findOneBy(["id" =>$id,'blogId'=>3]);
 

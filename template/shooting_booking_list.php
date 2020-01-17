@@ -67,7 +67,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"
-                data-permission="allShops"
+                data-permission="allShops||shooting"
                 data-event="bs-booking-accept"
                 data-class="btn btn-default"
                 data-rel="tooltip"
