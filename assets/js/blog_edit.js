@@ -19,11 +19,30 @@ summer.summernote({
 		'Times New Roman',
 		'Verdana'
 	],
-	onImageUpload: function() {},
+	onImageUpload: function(files, editor, welEditable) {
+		sendFile(files[0], editor, welEditable);
+	},
 	fontNamesIgnoreCheck: ['Raleway']
 });
+function sendFile(file, editor, welEditable) {
+	data = new FormData();
+	data.append("file", file);
+	$.ajax({
+		data: data,
+		acceptedFiles: "image/*",
+		type: "POST",
+		url: '/blueseal/xhr/BlogPostPhotoUploadAjaxController',
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(url) {
+			//summer.summernote.editor.insertImage(welEditable, url);
+			summer.summernote('pasteHTML', '<p><img src="'+url+'"></p>');
+		}
+	});
+}
 
-summer.on('summernote.image.upload', function(we, files) {
+/*summer.on('summernote.image.upload', function(we, files) {
 	// upload image to server and create imgNode...
 	var data = new FormData();
 	data.append("file", files[0]);
@@ -38,7 +57,7 @@ summer.on('summernote.image.upload', function(we, files) {
 	}).fail(function (result) {
 		console.log('fail');
 	});
-});
+});*/
 
 
 $('[data-toggle="popover"]').popover();
@@ -99,7 +118,7 @@ $('#cover').on('click',function() {
     //$('[data-json="PostTranslation.coverImage"]').click();
 });
 
-/*
+
 $('[data-json="PostTranslation.coverImage"]').on('change', function(){
     if (this.files && this.files[0]) {
         var reader = new FileReader();
@@ -108,8 +127,7 @@ $('[data-json="PostTranslation.coverImage"]').on('change', function(){
         };
         reader.readAsDataURL(this.files[0]);
     }
-});
-*/
+})
 
 $(document).on('bs.post.save', function() {
 

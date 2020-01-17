@@ -40,7 +40,7 @@ class CBlogPostPhotoUploadAjaxController extends AAjaxController
         $destination = $tempFolder . $filename; //change this directory
         $location = $files["file"]["tmp_name"];
         move_uploaded_file($location, $destination);
-        $newname=crc32(rand(0,10010010101)).'-'.$files["file"]["name"];
+        $newname=$files["file"]["name"];
         rename($destination,$tempFolder.$newname);
         $newdestination=$tempFolder.$newname;
 		$image = new S3Manager($config['credential']);

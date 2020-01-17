@@ -2,18 +2,7 @@
 
 namespace bamboo\blueseal\jobs;
 
-use bamboo\domain\entities\CCartAbandonedEmailSend;
-use bamboo\domain\repositories\CCartAbandonedEmailSendRepo;
-use bamboo\domain\entities\COrder;
-use bamboo\domain\entities\CCart;
-use bamboo\domain\entities\CCartAbandonedEmailParam;
-use bamboo\domain\entities\CCouponType;
-use bamboo\domain\entities\CCoupon;
-use bamboo\domain\entities\CCartLine;
-use bamboo\core\base\CSerialNumber;
-use bamboo\core\db\pandaorm\repositories\ARepo;
-use bamboo\domain\repositories\CEmailRepo;
-use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
+
 use PDO;
 use prepare;
 
@@ -91,7 +80,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                     if ($product -> qty >= 1) {
                         $productSku = $productSkuRepo -> findOneBy(['productId' => $product -> id, 'productVariantId' => $product -> productVariantId, 'shopId' => $shopD]);
                         if ($productSku != null) {
-                            array_push($rows, [$productSku -> productId . '-' . $product -> productVariantId]);
+                            $rows[] = [$productSku->productId . '-' . $product->productVariantId];
                         }
 
                     } else {
@@ -100,6 +89,25 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 }
 
             }
+            /** @var CMarketplaceAccountHasProductRepo $marketplaceAccountHasProductRepo */
+            $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+            \Monkey::app()->repoFactory->beginTransaction();
+            foreach ($rows as $row) {
+                try {
+                    $ids = [];
+                    set_time_limit(6);
+                    $product = $productRepo->findOneByStringId($row);
+                    $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccountJob($product, $marketplaceAccount,  $activeAutomatic);
+                    $i++;
+                    \Monkey::app()->repoFactory->commit();
+                } catch
+                (\Throwable $e) {
+                    \Monkey::app()->repoFactory->rollback();
+                    throw $e;
+                }
+            }
         }
     }
+
+
 }
