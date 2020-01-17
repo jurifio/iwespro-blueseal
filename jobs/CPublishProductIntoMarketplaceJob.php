@@ -181,6 +181,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name;
                 $aggregatorPublishLog->result="success";
                 $aggregatorPublishLog->email="gianluca@iwes.it,juri@iwes.it";
+                $aggregatorPublishLog->insert();
 
             }catch(\Throwable $e){
                 $bodyMail='<html><body>errore nella mail<br>'.$e.'</body></html>';
@@ -192,6 +193,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name;
                 $aggregatorPublishLog->result="error";
                 $aggregatorPublishLog->email="gianluca@iwes.it,juri@iwes.it";
+                $aggregatorPublishLog->insert();
             }
         }
     }
