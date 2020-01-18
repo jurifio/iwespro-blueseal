@@ -596,7 +596,7 @@
                                                             class="full-width selectpicker"
                                                             placeholder="Selezione il Gruppo Taglia 1"
                                                             data-init-plugin="selectize">
-
+                                                        <option value='<?php echo $productSizeGroupId1?>'><?php echo $productSizeGroupId1Text;?></option>
                                                     </select>
 
                                                 </div>
@@ -633,7 +633,7 @@
 
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <div class="form-group form-group-default required">
                                                     <label for="range2Cpc">Cpc 2 Dedicato Desktop</label>
                                                     <input id="range2Cpc" autocomplete="off" type="text"
@@ -660,12 +660,12 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group form-group-default required">
-                                                    <label for="maxCos1">maxCos 1</label>
-                                                    <input id="maxCos1" autocomplete="off" type="text"
-                                                           class="form-control" name="maxCos1" value="<?php echo $marketplaceAccount->config['maxCos1']?>"
+                                                    <label for="maxCos2">maxCos 2</label>
+                                                    <input id="maxCos2" autocomplete="off" type="text"
+                                                           class="form-control" name="maxCos1" value="<?php echo $marketplaceAccount->config['maxCos2']?>"
                                                            required="required"/>
                                                 </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group form-group-default required">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="productSizeGroupId2">Selettore
@@ -676,7 +676,7 @@
                                                                 class="full-width selectpicker"
                                                                 placeholder="Selezione il Gruppo Taglia"
                                                                 data-init-plugin="selectize">
-
+                                                            <option value='<?php echo $productSizeGroupId2?>'><?php echo $productSizeGroupId2Text;?></option>
                                                         </select>
 
                                                     </div>
@@ -714,7 +714,7 @@
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default required">
                                                 <label for="range3Cpc">Cpc 3 Dedicato Desktop</label>
                                                 <input id="range3Cpc" autocomplete="off" type="text"
@@ -723,7 +723,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default required">
                                                 <label for="range3CpcM">Cpc 3 Dedicato Mobile</label>
                                                 <input id="range3CpcM" autocomplete="off" type="text"
@@ -731,6 +731,21 @@
                                                        required="required"/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="valueexcept3">Moltiplicatore 2 </label>
+                                                <input id="valueexcept3" autocomplete="off" type="text"
+                                                       class="form-control" name="valueexcept3" value="<?php echo $marketplaceAccount->config['valueexcept3']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="maxCos3">maxCos 3</label>
+                                                <input id="maxCos3" autocomplete="off" type="text"
+                                                       class="form-control" name="maxCos1" value="<?php echo $marketplaceAccount->config['maxCos3']?>"
+                                                       required="required"/>
+                                            </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
@@ -742,6 +757,7 @@
                                                             class="full-width selectpicker"
                                                             placeholder="Selezione il Gruppo Taglia"
                                                             data-init-plugin="selectize">
+                                                        <option value='<?php echo $productSizeGroupId3?>'><?php echo $productSizeGroupId3Text;?></option>
                                                     </select>
 
                                                 </div>
@@ -804,7 +820,7 @@
                                                             class="full-width selectpicker"
                                                             placeholder="Selezione il Gruppo Taglia"
                                                             data-init-plugin="selectize">
-
+                                                        <option value='<?php echo $productSizeGroupId4?>'><?php echo $productSizeGroupId4Text;?></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -866,7 +882,7 @@
                                                             class="full-width selectpicker"
                                                             placeholder="Selezione il Gruppo Taglia"
                                                             data-init-plugin="selectize">
-
+                                                        <option value='<?php echo $productSizeGroupId5?>'><?php echo $productSizeGroupId5Text;?></option>
                                                     </select>
                                                 </div>
                                             </div>
