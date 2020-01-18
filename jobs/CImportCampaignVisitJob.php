@@ -73,6 +73,7 @@ class CImportCampaignVisitJob extends ACronJob
                         $stmtRemoteCampaignVisit = $db_con->prepare('SELECT id as remoteCampaignVisitId,
                                                                                       `timestamp` as `timestamp`,
                                                                                       cost as cost, 
+                                                                                      costCustomer as costCustomer,
                                                                                      campaignId as remoteCampaignId 
                             from CampaignVisit WHERE campaignId=' . $remoteCampaignId . ' and isImport is null');
                         $stmtRemoteCampaignVisit->execute();
@@ -81,6 +82,7 @@ class CImportCampaignVisitJob extends ACronJob
                             $campaignVisitInsert->campaignId = $campaign->id;
                             $campaignVisitInsert->timestamp = $rowRemoteCampaignVisit['timestamp'];
                             $campaignVisitInsert->cost = $rowRemoteCampaignVisit['cost'];
+                            $campaignVisitInsert->costCustomer = $rowRemoteCampaignVisit['costCustomer'];
                             $campaignVisitInsert->remoteCampaignVisitId = $rowRemoteCampaignVisit['remoteCampaignVisitId'];
                             $campaignVisitInsert->remoteCampaignId = $rowRemoteCampaignVisit['remoteCampaignId'];
                             $campaignVisitInsert->remoteShopId = $shop;

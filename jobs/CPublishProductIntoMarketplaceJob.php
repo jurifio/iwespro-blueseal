@@ -3,6 +3,7 @@
 namespace bamboo\blueseal\jobs;
 
 
+use DateTime;
 use PDO;
 use prepare;
 use bamboo\domain\repositories\CEmailRepo;
@@ -55,6 +56,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
         } catch (PDOException $e) {
             $res .= $e->getMessage();
         }
+
         $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
         $productBrandRepo = \Monkey::app()->repoFactory->create('ProductBrand');
         /** @var CProductRepo $productRepo */
@@ -62,16 +64,17 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
         $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
         $marketplaceRepo = \Monkey::app()->repoFactory->create('Marketplace');
 
-        $marketplaceAccounts = $marketplaceAccountRepo->findBy(['id' => 32,'marketplaceId' => 9]);
+        $marketplaceAccounts = $marketplaceAccountRepo->findAll();
 
         foreach ($marketplaceAccounts as $marketplaceAccount) {
             try {
-                $markeplaceId = $marketplaceAccount->marketplaceId;
+                $marketplaceId = $marketplaceAccount->marketplaceId;
                 $marketplaceAccountId = $marketplaceAccount->id;
                 $activeAutomatic = isset($marketplaceAccount->config['activeAutomatic']) ? $marketplaceAccount->config['activeAutomatic'] : 0;
 
-                $isActive = isset($marketplaceAccount->config['isActive']) ? $marketplaceAccount->config['isActive'] : 0;
-                if ($isActive == 0) {
+
+                $isActive = $marketplaceAccount->isActive;
+                if ($isActive != 1) {
                     continue;
                 }
                 $rows = [];
@@ -102,8 +105,11 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                             if ($productSku != null) {
                                 if ($marketplace->type == 'cpc') {
                                     if ($activeAutomatic == 0) {
-                                        $fee = $marketplaceAccount->config['defaultCpc'];
-                                        $feeMobile = $marketplaceAccount->config['defaultCpcM'];
+                                        $fee = $marketplaceAccount->config['defaultCpcF'];
+                                        $feeMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                        $feeCustomer=$marketplaceAccount->config['defaultCpc'];
+                                        $feeMobileCustomer=$marketplaceAccount->config['defaultCpcM'];
+
                                     } else {
                                         $price = $productSku->price;
                                         $salePrice = $productSku->salePrice;
@@ -118,23 +124,33 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                                             case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
                                                 $fee = $marketplaceAccount->config['range1Cpc'];
                                                 $feeMobile = $marketplaceAccount->config['range1CpcM'];
+                                                $feeCustomer=$marketplaceAccount->config['defaultCpc'];
+                                                $feeMobileCustomer=$marketplaceAccount->config['defaultCpcM'];
                                                 break;
                                             case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
                                                 $fee = $marketplaceAccount->config['range2Cpc'];
                                                 $feeMobile = $marketplaceAccount->config['range2CpcM'];
+                                                $feeCustomer=$marketplaceAccount->config['defaultCpc'];
+                                                $feeMobileCustomer=$marketplaceAccount->config['defaultCpcM'];
                                                 break;
                                             case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
                                                 $fee = $marketplaceAccount->config['range3Cpc'];
                                                 $feeMobile = $marketplaceAccount->config['range3CpcM'];
+                                                $feeCustomer=$marketplaceAccount->config['defaultCpc'];
+                                                $feeMobileCustomer=$marketplaceAccount->config['defaultCpcM'];
                                                 break;
                                             case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
                                                 $fee = $marketplaceAccount->config['range4Cpc'];
                                                 $feeMobile = $marketplaceAccount->config['range4CpcM'];
+                                                $feeCustomer=$marketplaceAccount->config['defaultCpc'];
+                                                $feeMobileCustomer=$marketplaceAccount->config['defaultCpcM'];
 
                                                 break;
                                             case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
                                                 $fee = $marketplaceAccount->config['range5Cpc'];
                                                 $feeMobile = $marketplaceAccount->config['range5CpcM'];
+                                                $feeCustomer=$marketplaceAccount->config['defaultCpc'];
+                                                $feeMobileCustomer=$marketplaceAccount->config['defaultCpcM'];
                                                 break;
                                         }
                                     }
@@ -174,25 +190,26 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 $bodyMail .= 'numero Prodotti Totali in Coda di Pubblicazione ' . $countProduct;
                 /** @var CEmailRepo $mailRepo */
                 $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail);
+                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail);
                 $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
-                $aggregatorPublishLog->marketplaceAccountId=$markeplaceAccountId;
-                $aggregatorPublishLog->marketplaceId=$markeplaceId;
+                $aggregatorPublishLog->marketplaceAccountId=$marketplaceAccountId;
+                $aggregatorPublishLog->marketplaceId=$marketplaceId;
                 $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name;
                 $aggregatorPublishLog->result="success";
-                $aggregatorPublishLog->email="gianluca@iwes.it,juri@iwes.it";
+                $aggregatorPublishLog->email="gianluca@iwes.it;juri@iwes.it;it@iwes.it";
                 $aggregatorPublishLog->insert();
 
             }catch(\Throwable $e){
                 $bodyMail='<html><body>errore nella mail<br>'.$e.'</body></html>';
                 $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail);
+                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail);
                 $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
                 $aggregatorPublishLog->marketplaceAccountId=$markeplaceAccountId;
-                $aggregatorPublishLog->marketplaceId=$markeplaceId;
+                $aggregatorPublishLog->marketplaceId=$marketplaceId;
                 $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name;
                 $aggregatorPublishLog->result="error";
-                $aggregatorPublishLog->email="gianluca@iwes.it,juri@iwes.it";
+                $aggregatorPublishLog->action='publish';
+                $aggregatorPublishLog->email="gianluca@iwes.it;juri@iwes.it;it@iwes.it";
                 $aggregatorPublishLog->insert();
             }
         }

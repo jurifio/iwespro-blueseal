@@ -25,6 +25,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
     {
         $marketplaceRepo = \Monkey::app()->repoFactory->create('MarketPlace');
         $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
+        $campaignRepo=  \Monkey::app()->repoFactory->create('Campaign');
         $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         $data = $this->app->router->request()->getRequestData();
         if ($_GET['nameAggregator']=='') {
@@ -159,10 +160,20 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $typeInsertion = $_GET['typeInsertion'];
         }
+        if ($_GET['typeInsertionCampaign']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Campagna non eseguita</i>';
+        } else {
+            $typeInsertionCampaign = $_GET['typeInsertionCampaign'];
+        }
         if ($_GET['marketplaceName']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Aggregatore non valorizzato</i>';
         } else {
             $marketplaceName = $_GET['marketplaceName'];
+        }
+        if ($_GET['campaignName']=='') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Campagna non valorizzato</i>';
+        } else {
+            $campaignName = $_GET['campaignName'];
         }
         if ($_GET['productCategoryIdEx1']=='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Esclusione categoria 1 Prodotti non valorizzato </i>';
@@ -377,6 +388,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $marketplaceId = $marketplaceName;
         }
+
         $maxCos1 = 0.1;
         $maxCos2 = 0.1;
         $maxCos3 = 0.1;
@@ -488,9 +500,43 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $marketplaceAccount->name = $marketplace_account_name;
         $marketplaceAccount->config = $collectUpdate;
         $marketplaceAccount->urlSite=$urlSite;
+        $marketplaceAccount->isActive=$isActive;
         $marketplaceAccount->insert();
         $markeplcaAccountIdFind = $marketplaceAccountRepo->findOneBy(['name' => $marketplace_account_name]);
         $marketplaceAccountId = $markeplcaAccountIdFind->id;
+        $campaignUpdate=$campaignRepo->findOneBy(['id'=>$campaignId]);
+        $campaignUpdate->code='MarketplaceAccount'.$marketplaceAccountId.'-'.$marketplaceId;
+        $campaignUpdate->marketplaceAccountId=$marketplaceAccountId;
+        if ($typeInsertionCampaign == 1) {
+            $campaign = $campaignName->findOneBy(['name' => $campaignName]);
+            if ($campaign == null) {
+                $campaignInsert = $campaignRepo->getEmptyEntity();
+                $campaignInsert->name = $campaignName;
+                $campaignInsert->defaultCpc = $defaultCpc;
+                $campaignInsert->defaultCpcF=$defaultCpcF;
+                $campaignInsert->defaultCpcM=$defaultCpcM;
+                $campaignInsert->defaultCpcFM=$defaultCpcFM;
+                $campaignInsert->remoteShopId=$shopId;
+                $campaignInsert->isActive=$isActive;
+                $campaignInsert->code='MarketplaceAccount'.$marketplaceAccountId.'-'.$marketplaceId;
+                $campaignInsert->marketplaceAccountId=$marketplaceAccountId;
+                $campaignInsert->marketplaceId=$marketplaceId;
+                $campaingInsert->remoteShopId=$shopId;
+                $campaignInsert->insert();
+
+            } else {
+                return;
+            }
+
+
+        } else {
+            $campaignUpdate = $campaignRepo->findOneBy(['id' => $campaignName]);
+            $campaignUpdate->marketplaceAccountId=$marketplaceAccountId;
+            $campaignUpdate->marketplaceId=$marketplaceId;
+            $campaignUpdate->update();
+        }
+
+
         \Monkey::app()->applicationLog('MarketPlaceAccount','Report','Insert','Insert Marketplace Account ' . $marketplaceAccountId . '-' . $marketplaceId . ' ' . $marketplace_account_name);
         return 'Inserimento Eseguito con Successo';
     }

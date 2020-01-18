@@ -28,6 +28,7 @@
                                 aggregatore
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertRules')">Inserisci Regole</button>
+                            <button class="tablinks" onclick="openTab(event, 'insertCampaign')">Inserisci Campagne</button>
                         </div>
                     </div>
                 </div>
@@ -884,6 +885,43 @@
                                     </div>
                                     <div id="rawBrands">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="insertCampaign" class="tabcontent">
+                    <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
+                          autocomplete="off">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default clearfix">
+                                    <div class="panel-heading clearfix">
+                                        <h5 class="m-t-12">Campagna</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default required">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="selectCreationCampaign">Devi Creare la Campagna ?
+                                                    </label>
+                                                    <select id="selectCreationCampaign"
+                                                            name="selectCreationCampaign"
+                                                            class="full-width selectpicker"
+                                                            placeholder="Selezione se devi creare la campagna "
+                                                            data-init-plugin="selectize">
+                                                        <option value=""></option>
+                                                        <option value="1">Si</option>
+                                                        <option value="2">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="divcampaign">
+
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

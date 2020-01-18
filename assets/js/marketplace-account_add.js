@@ -400,6 +400,64 @@ $('#selectCreation').change(function () {
         });
     }
 });
+$('#selectCreationCampaign').change(function () {
+    if ($('#selectCreationCampaign').val() == 1) {
+        $('#divcampaign').empty();
+        $('#divcampaign').append(`
+         <div class="col-md-12">
+                                        <div class="form-group form-group-default required">
+                                            <input type="hidden" id="typeInsertionCampaign" name="typeInsertionCampaign" value="1"/>
+                                            <label for="campaignName">Nome campagna</label>
+                                            <input id="campaignName" autocomplete="off" type="text"
+                                                   class="form-control" name="campaignName" value=""
+                                                   required="required"/>
+                                            <span class="bs red corner label"><i
+                                                        class="fa fa-asterisk"></i></span>
+                                        </div>
+                                    </div>
+        
+        `);
+    } else {
+        $('#divcampaign').empty();
+        $('#divcampaign').append(`
+         <div class="col-md-12">
+                                        <div class="form-group form-group-default required">
+                                         <input type="hidden" id="typeInsertionCampaign" name="typeInsertionCampaign" value="2"/>
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="campaignName">Nome Campagna
+                                                </label>
+                                                <select id="campaignName"
+                                                        name="campaignName"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione la Campagna"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                                <span class="bs red corner label"><i
+                                                            class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+        `);
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Campaign'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#campaignName');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+
+        });
+    }
+});
 
 
 
@@ -441,6 +499,8 @@ $(document).on('bs.marketplace-account.save', function () {
     var budget12 = $('#budget12').val();
     var typeInsertion = $('#typeInsertion').val();
     var marketplaceName = $('#marketplaceName').val();
+    var campaignName=$('#campaignName').val();
+    var typeInsertionCampaign=$('#typeInsertionCampaign').val();
     var productCategoryIdEx1 = $('#productCategoryIdEx1').val();
     var productCategoryIdEx2 = $('#productCategoryIdEx2').val();
     var productCategoryIdEx3 = $('#productCategoryIdEx3').val();
@@ -542,6 +602,8 @@ $(document).on('bs.marketplace-account.save', function () {
     var config = '?nameAggregator=' + marketplace_account_name + '&' +
         'typeInsertion=' + typeInsertion + '&' +
         'marketplaceName=' + marketplaceName + '&' +
+        'typeInsertionCampaign=' + typeInsertionCampaign + '&' +
+        'campaignName=' + campaignName + '&' +
         'lang=' + lang + '&' +
         'shopId=' + shopId + '&' +
         'slug=' + slug + '&' +

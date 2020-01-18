@@ -47,6 +47,16 @@ class CMarketplaceAccountController extends ARestrictedAccessRootController
         $productCategoryEx5Option = '';
         $productCategoryEx6Option = '';
         $productCategoryIdEx1 = $marketplaceAccount->config['productCategoryIdEx1'];
+        $shops=\Monkey::app()->repoFactory->create('Shop')->findAll();
+        $optionShop='';
+        foreach($shops as $shop){
+            if($shop->id== $marketplaceAccount->config['shop']){
+                $optionShop.='<option selected="selected" value="'.$shop->id.'">'.$shop->name.'</option>';
+            }else{
+                $optionShop.='<option  value="'.$shop->id.'">'.$shop->name.'</option>';
+            }
+
+        }
 
         $sqlCategory = 'SELECT t0.id as  id,t0.slug as slug
       ,(SELECT GROUP_CONCAT(t2.slug)
@@ -211,6 +221,7 @@ FROM ProductCategory  t0   GROUP BY t0.slug';
             }
         }
 
+
         $productCategoryId3 = $marketplaceAccount->config['productCategoryId3'];
 
         $sqlCategory = 'SELECT t0.id as  id,t0.slug as slug
@@ -288,6 +299,7 @@ FROM ProductCategory  t0   GROUP BY t0.slug';
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'marketplaceAccountGet' => $marketplaceAccountGet,
+            'optionShop'=>$optionShop,
             'marketplaceAccount' => $marketplaceAccount,
             'marketplaceConfig' => $marketplaceConfig,
             'marketplaceCode' => $marketplaceCode,
