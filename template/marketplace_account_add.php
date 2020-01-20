@@ -831,7 +831,7 @@
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productSizeGroupId5">Selettore
                                                         Gruppo Taglia per il range
-                                                        4</label>
+                                                        5</label>
                                                     <select id="productSizeGroupId5"
                                                             name="productSizeGroupId5"
                                                             class="full-width selectpicker"

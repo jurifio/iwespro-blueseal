@@ -50,7 +50,7 @@ class CMarketplaceAccountController extends ARestrictedAccessRootController
         $shops=\Monkey::app()->repoFactory->create('Shop')->findAll();
         $optionShop='';
         foreach($shops as $shop){
-            if($shop->id== $marketplaceAccount->config['shop']){
+            if($shop->id == $marketplaceAccount->config['shop']){
                 $optionShop.='<option selected="selected" value="'.$shop->id.'">'.$shop->name.'</option>';
             }else{
                 $optionShop.='<option  value="'.$shop->id.'">'.$shop->name.'</option>';
@@ -293,6 +293,41 @@ FROM ProductCategory  t0   GROUP BY t0.slug';
         $productSizeGroupId5 = $marketplaceAccount->config['productSizeGroup5'];
         $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $productSizeGroupId5]);
         $productSizeGroupId5Text = $productSizeGroup->name;
+        $shopId =$marketplaceAccount->config['shop'];
+        $res = $this -> app -> dbAdapter -> query('(SELECT pb.id as id,
+        pb.name as brandName, s.name as shopName, s.id as shopIdOrigin, s.id AS shopIdDestination from ProductBrand pb
+                                                      join Product p on pb.id=p.productBrandId
+                                                      join  ProductSku ps on p.id =ps.productId and p.productVariantId=ps.productVariantId
+                                                      join Shop s on ps.shopId=s.id
+ WHERE ps.shopId = '.$shopId.' group by pb.name,ps.shopId)
+UNION
+(SELECT pb.id as id,
+        pb.name as brandName,
+        s.name as  shopName,
+        ps.shopIdOrigin as shopIdOrigin, ps.shopIdDestination AS shopDestination from ProductBrand pb
+                                                  join Product p on pb.id=p.productBrandId
+                                                  join  ProductHasShopDestination ps on p.id =ps.productId and p.productVariantId=ps.productVariantId
+                                                  join Shop s on ps.shopIdOrigin=s.id
+ WHERE ps.shopIdDestination = '.$shopId.' and ps.shopIdOrigin <> '.$shopId.' group by pb.name, shopIdOrigin)', []) -> fetchAll();
+$bodyres='<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca Brand"></div>';
+$bodyres.='<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Shop"></div>';
+$bodyres.='<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
+       $bodyres.= '<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:40%;">Shop</th><th style="width:20%;">Selezione</th></tr>';
+        foreach ($res as $result) {
+           // $selectBrands[] = ['id' => $result['id'], 'brandName' => $result['brandName'], 'shopName' => $result['shopName'], 'shopIdOrigin' => $result['shopIdOrigin'], 'shopIdDestination' => $result['shopIdDestination']];
+            $bodyres.='<tr><td style="width:40%;">' . $result['brandName']. '</td><td style="width:40%;">' . $result['shopName'] . '</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="'.$result['id'].'-'.$result['shopIdOrigin'].'"></td></tr>';
+        }
+$bodyres.='</table>';
+
+$campaigns=\Monkey::app()->repoFactory->create('Campaign')->findAll();
+$campaignOption='';
+foreach($campaigns as $campaign) {
+    if($campaign->marketplaceId==$marketplaceAccount->marketplaceId && $campaign->marketplaceAccountId==$marketplaceAccount->id) {
+        $campaignOption .= '<option selected="selected" value"' . $campaign->id . '">' . $campaign->name . '</option>';
+    }else{
+        $campaignOption .= '<option value"' . $campaign->id . '">' . $campaign->name . '</option>';
+    }
+}
 
 
         return $view->render([
@@ -337,6 +372,8 @@ FROM ProductCategory  t0   GROUP BY t0.slug';
             'productCategoryEx4Option'=>$productCategoryEx4Option,
             'productCategoryEx5Option'=>$productCategoryEx5Option,
             'productCategoryEx6Option'=>$productCategoryEx6Option,
+            'bodyres'=>$bodyres,
+            'campaignOption'=>$campaignOption,
             'sidebar' => $this->sidebar->build()
         ]);
     }

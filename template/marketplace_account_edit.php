@@ -19,7 +19,6 @@
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
                 </div>
             </div>
-
             <div class="container-fluid">
                 <div class="row">
                     <div class="tab">
@@ -46,6 +45,12 @@
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="marketplace_account_name">Nome</label>
+                                                <input type="hidden" id="marketplaceAccountId"
+                                                       name="marketplaceAccountId"
+                                                       value="<?php echo $marketplaceCode[0]; ?>">
+                                                <input type="hidden" id="marketplaceId"
+                                                       name="marketplaceId"
+                                                       value="<?php echo $marketplaceCode[1]; ?>">
                                                 <input id="marketplace_account_name" autocomplete="off" type="text"
                                                        class="form-control" name="marketplace_account_name"
                                                        value="<?php echo $marketplaceAccount->name; ?>"
@@ -83,8 +88,7 @@
                                             </button>
                                             <input id="logoFile" type="hidden"
                                                    value="<?php echo $marketplaceAccount->config['logoFile'] ?>"/>
-                                            <div id="returnFileLogo"><img
-                                                        src="<?php echo $marketplaceAccount->config['logoFile'] ?>"/>
+                                            <div id="returnFileLogo"><img src="<?php echo $marketplaceAccount->config['logoFile'] ?>"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -96,12 +100,12 @@
                                                         class="full-width selectpicker"
                                                         placeholder="Selezione se attivo"
                                                         data-init-plugin="selectize">
-                                                    <?php if ($marketplaceAccount->isActive == 1) {
+                                                    <?php if ($marketplaceAccount->isActive == "1") {
                                                         echo '<option  selected="selected" value="1">Si</option>';
                                                         echo '<option value="0">No</option>';
                                                     } else {
                                                         echo '<option  value="1">Si</option>';
-                                                        echo '<option  selected="selected"value="0">No</option>';
+                                                        echo '<option  selected="selected" value="0">No</option>';
                                                     } ?>
                                                 </select>
 
@@ -141,7 +145,7 @@
                                                         echo '<option value="0">No</option>';
                                                     } else {
                                                         echo '<option  value="1">Si</option>';
-                                                        echo '<option  selected="selected"value="0">No</option>';
+                                                        echo '<option  selected="selected" value="0">No</option>';
                                                     } ?>
                                                 </select>
                                             </div>
@@ -165,7 +169,23 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="timeRange">Calcolo giorni</label>
+                                                <input id="timeRange" autocomplete="off" type="text"
+                                                       class="form-control" name="timeRange" value="<?php echo $marketplaceAccount->config['timeRange']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="multiplierDefault"> Moltiplicatore di Default </label>
+                                                <input id="multiplierDefault" autocomplete="off" type="text"
+                                                       class="form-control" name="multiplierDefault" value="<?php echo $marketplaceAccount->config['multiplierDefault']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpcF">Cpc Fornitore Desktop</label>
                                                 <input id="defaultCpcF" autocomplete="off" type="text"
@@ -173,7 +193,7 @@
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpcFM">Cpc Fornitore Mobile </label>
                                                 <input id="defaultCpcFM" autocomplete="off" type="text"
@@ -182,7 +202,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpc">Default Cpc Desktop</label>
                                                 <input id="defaultCpc" autocomplete="off" type="text"
@@ -191,7 +211,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpcM">Default Cpc Mobile </label>
                                                 <input id="defaultCpcM" autocomplete="off" type="text"
@@ -269,7 +289,6 @@
                                                 <input id="budget07" autocomplete="off" type="text"
                                                        class="form-control" name="budget07" value="<?php echo $marketplaceAccount->config['budget07']?>"
                                                        required="required"/>
-
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -318,10 +337,9 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <input type="hidden" id="typeInsertion" name="typeInsertion" value="2">
                                     <input type="hidden" id="marketplaceName" name="marketplaceName" value="<?php echo $marketplaceAccount->marketplaceId?>"
-                                    <div class="row" id="source_label_productCategoryGroup">
+                                    <div class="row">
                                         <div class="col-md-12">Esclusione Categorie
                                         </div>
                                     </div>
@@ -355,7 +373,6 @@
                                                             data-init-plugin="selectize">
                                                         <?php echo $productCategoryEx2Option ?>
                                                     </select>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -430,11 +447,11 @@
                                         </div>
                                     </div>
                                     <!--gruppo taglie inizio -->
-                                    <div class="row" id="source_label_productSizeGroup">
+                                    <div class="row">
                                         <div class="col-md-12">Esclusione Gruppi Taglia
                                         </div>
                                     </div>
-                                    <div class="row" id="source_group_productSizeGroup">
+                                    <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
@@ -448,7 +465,6 @@
                                                             data-init-plugin="selectize">
                                                         <option value='<?php echo $productSizeGroupEx1?>'><?php echo $productSizeGroupEx1Text;?></option>
                                                     </select>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -615,7 +631,6 @@
                                                             data-init-plugin="selectize">
                                                         <?php echo $productCategory1Option ?>
                                                     </select>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -628,16 +643,15 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="priceModifierRange2">Range 2 Retail Price </label>
                                                     <input id="priceModifierRange2" autocomplete="off" type="text"
-                                                           class="form-control" name="priceModifierRange2" value=""
+                                                           class="form-control" name="priceModifierRange2" value="<?php echo $marketplaceAccount->config['priceModifierRange2']?>"
                                                            required="required"/>
-
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group form-group-default required">
                                                     <label for="range2Cpc">Cpc 2 Dedicato Desktop</label>
                                                     <input id="range2Cpc" autocomplete="off" type="text"
-                                                           class="form-control" name="range2Cpc" value=""
+                                                           class="form-control" name="range2Cpc" value="<?php echo $marketplaceAccount->config['range2Cpc']?>"
                                                            required="required"/>
 
                                                 </div>
@@ -646,7 +660,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="range2CpcM">Cpc 2 Dedicato Mobile</label>
                                                     <input id="range2CpcM" autocomplete="off" type="text"
-                                                           class="form-control" name="range2CpcM" value=""
+                                                           class="form-control" name="range2CpcM" value="<?php echo $marketplaceAccount->config['range2CpcM']?>"
                                                            required="required"/>
                                                 </div>
                                             </div>
@@ -662,9 +676,10 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="maxCos2">maxCos 2</label>
                                                     <input id="maxCos2" autocomplete="off" type="text"
-                                                           class="form-control" name="maxCos1" value="<?php echo $marketplaceAccount->config['maxCos2']?>"
+                                                           class="form-control" name="maxCos2" value="<?php echo $marketplaceAccount->config['maxCos2']?>"
                                                            required="required"/>
                                                 </div>
+                                            </div>
                                             <div class="col-md-2">
                                                 <div class="form-group form-group-default required">
                                                     <div class="form-group form-group-default selectize-enabled">
@@ -678,11 +693,10 @@
                                                                 data-init-plugin="selectize">
                                                             <option value='<?php echo $productSizeGroupId2?>'><?php echo $productSizeGroupId2Text;?></option>
                                                         </select>
-
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group form-group-default required">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="productCategoryId2">Selettore
@@ -710,7 +724,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange3">Range 3 Retail Price </label>
                                                 <input id="priceModifierRange3" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange3" value=""
+                                                       class="form-control" name="priceModifierRange3" value="<?php echo $marketplaceAccount->config['priceModifierRange3']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -718,7 +732,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range3Cpc">Cpc 3 Dedicato Desktop</label>
                                                 <input id="range3Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range3Cpc" value=""
+                                                       class="form-control" name="range3Cpc" value="<?php echo $marketplaceAccount->config['range3Cpc']?>"
                                                        required="required"/>
 
                                             </div>
@@ -727,13 +741,13 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range3CpcM">Cpc 3 Dedicato Mobile</label>
                                                 <input id="range3CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range3CpcM" value=""
+                                                       class="form-control" name="range3CpcM" value="<?php echo $marketplaceAccount->config['range3CpcM']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default required">
-                                                <label for="valueexcept3">Moltiplicatore 2 </label>
+                                                <label for="valueexcept3">Moltiplicatore 3 </label>
                                                 <input id="valueexcept3" autocomplete="off" type="text"
                                                        class="form-control" name="valueexcept3" value="<?php echo $marketplaceAccount->config['valueexcept3']?>"
                                                        required="required"/>
@@ -743,10 +757,11 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="maxCos3">maxCos 3</label>
                                                 <input id="maxCos3" autocomplete="off" type="text"
-                                                       class="form-control" name="maxCos1" value="<?php echo $marketplaceAccount->config['maxCos3']?>"
+                                                       class="form-control" name="maxCos3" value="<?php echo $marketplaceAccount->config['maxCos3']?>"
                                                        required="required"/>
                                             </div>
-                                        <div class="col-md-3">
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productSizeGroupId3">Selettore
@@ -763,7 +778,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productCategoryId3">Selettore
@@ -789,27 +804,43 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange4">Range 4 Retail Price </label>
                                                 <input id="priceModifierRange4" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange4" value=""
+                                                       class="form-control" name="priceModifierRange4" value="<?php echo $marketplaceAccount->config['priceModifierRange4']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default required">
                                                 <label for="range4Cpc">Cpc 4 Dedicato Desktop</label>
                                                 <input id="range4Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range4Cpc" value=""
+                                                       class="form-control" name="range4Cpc" value="<?php echo $marketplaceAccount->config['range4Cpc']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group form-group-default required">
+                                                <label for="range4CpcM">Cpc 4 Dedicato Mobile</label>
+                                                <input id="range4CpcM" autocomplete="off" type="text"
+                                                       class="form-control" name="range4CpcM" value="<?php echo $marketplaceAccount->config['range4CpcM']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default required">
-                                                <label for="range4CpcM">Cpc 4 Dedicato Mobile</label>
-                                                <input id="range4CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range4CpcM" value=""
+                                                <label for="valueexcept4">Moltiplicatore 4 </label>
+                                                <input id="valueexcept4" autocomplete="off" type="text"
+                                                       class="form-control" name="valueexcept4" value="<?php echo $marketplaceAccount->config['valueexcept4']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="maxCos4">maxCos 4</label>
+                                                <input id="maxCos4" autocomplete="off" type="text"
+                                                       class="form-control" name="maxCos4" value="<?php echo $marketplaceAccount->config['maxCos4']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productSizeGroupId4">Selettore
@@ -825,7 +856,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productCategoryId4">Selettore
@@ -851,32 +882,48 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange5">Range 5 Retail Price </label>
                                                 <input id="priceModifierRange5" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange5" value=""
+                                                       class="form-control" name="priceModifierRange5" value="<?php echo $marketplaceAccount->config['priceModifierRange5']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group form-group-default required">
                                                 <label for="range5Cpc">Cpc 5 Dedicato Desktop</label>
                                                 <input id="range5Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range5Cpc" value=""
+                                                       class="form-control" name="range5Cpc" value="<?php echo $marketplaceAccount->config['range5Cpc']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group form-group-default required">
+                                                <label for="range5CpcM">Cpc 5 Dedicato Mobile</label>
+                                                <input id="range5CpcM" autocomplete="off" type="text"
+                                                       class="form-control" name="range5CpcM" value="<?php echo $marketplaceAccount->config['range5CpcM']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default required">
-                                                <label for="range5CpcM">Cpc 5 Dedicato Mobile</label>
-                                                <input id="range5CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range5CpcM" value=""
+                                                <label for="valueexcept5">Moltiplicatore 5 </label>
+                                                <input id="valueexcept5" autocomplete="off" type="text"
+                                                       class="form-control" name="valueexcept5" value="<?php echo $marketplaceAccount->config['valueexcept5']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="maxCos5">maxCos 5</label>
+                                                <input id="maxCos5" autocomplete="off" type="text"
+                                                       class="form-control" name="maxCos5" value="<?php echo $marketplaceAccount->config['maxCos5']?>"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productSizeGroupId5">Selettore
                                                         Gruppo Taglia per il range
-                                                        4</label>
+                                                        5</label>
                                                     <select id="productSizeGroupId5"
                                                             name="productSizeGroupId5"
                                                             class="full-width selectpicker"
@@ -887,7 +934,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
                                                     <label for="productCategoryId5">Selettore
@@ -923,12 +970,14 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="nameRule">Nome Regola </label>
                                                 <input id="nameRule" autocomplete="off" type="text"
-                                                       class="form-control" name="nameRule" value=""
+                                                       class="form-control" name="nameRule" value="<?php echo $marketplaceAccount->config['nameRule']?>"
                                                        required="required"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="rawBrands">
+                                        <input type="hidden" id="ruleOption" name="ruleOption" value="<?php echo $marketplaceAccount->config['ruleOption']?>"/>;
+                                        <?php echo $bodyres?>
                                     </div>
                                 </div>
                             </div>
@@ -944,29 +993,22 @@
                                     <div class="panel-heading clearfix">
                                         <h5 class="m-t-12">Campagna</h5>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" id="divcampaign">
                                         <div class="col-md-12">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="selectCreationCampaign">Devi Creare la Campagna ?
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="campaignName">Associata
+                                                    Campagna
                                                     </label>
-                                                    <select id="selectCreationCampaign"
-                                                            name="selectCreationCampaign"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione se devi creare la campagna "
-                                                            data-init-plugin="selectize">
-                                                        <option value=""></option>
-                                                        <option value="1">Si</option>
-                                                        <option value="2">No</option>
-                                                    </select>
-                                                </div>
+                                                <select id="campaignName"
+                                                        name="campaignName"
+                                                        class="full-width selectpicker"
+                                                        placeholder=""
+                                                        data-init-plugin="selectize">
+                                                    <?php echo $campaignOption ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" id="divcampaign">
-
-                                    </div>
-
                                 </div>
                             </div>
                         </div>

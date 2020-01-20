@@ -194,8 +194,9 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
                 $aggregatorPublishLog->marketplaceAccountId=$marketplaceAccountId;
                 $aggregatorPublishLog->marketplaceId=$marketplaceId;
-                $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name;
+                $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name . ' job CPublishProductIntoMarketplaceJob';
                 $aggregatorPublishLog->result="success";
+                $aggregatorPublishLog->action='publish';
                 $aggregatorPublishLog->email="gianluca@iwes.it;juri@iwes.it;it@iwes.it";
                 $aggregatorPublishLog->insert();
 
@@ -206,7 +207,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
                 $aggregatorPublishLog->marketplaceAccountId=$markeplaceAccountId;
                 $aggregatorPublishLog->marketplaceId=$marketplaceId;
-                $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name;
+                $aggregatorPublishLog->subject="Pubblicazione su " . $marketplaceAccount->name. ' job CPublishProductIntoMarketplaceJob';
                 $aggregatorPublishLog->result="error";
                 $aggregatorPublishLog->action='publish';
                 $aggregatorPublishLog->email="gianluca@iwes.it;juri@iwes.it;it@iwes.it";

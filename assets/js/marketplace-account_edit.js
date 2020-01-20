@@ -49,7 +49,7 @@ $(document).ready(function () {
             $(document).trigger('bs.load.photo');
         });
     });
-    $.ajax({
+   /* $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -68,7 +68,7 @@ $(document).ready(function () {
             options: res2,
         });
 
-    });
+    });*/
 
     $.ajax({
         method: 'GET',
@@ -400,64 +400,7 @@ $('#selectCreation').change(function () {
         });
     }
 });
-$('#selectCreationCampaign').change(function () {
-    if ($('#selectCreationCampaign').val() == 1) {
-        $('#divcampaign').empty();
-        $('#divcampaign').append(`
-         <div class="col-md-12">
-                                        <div class="form-group form-group-default required">
-                                            <input type="hidden" id="typeInsertionCampaign" name="typeInsertionCampaign" value="1"/>
-                                            <label for="campaignName">Nome campagna</label>
-                                            <input id="campaignName" autocomplete="off" type="text"
-                                                   class="form-control" name="campaignName" value=""
-                                                   required="required"/>
-                                            <span class="bs red corner label"><i
-                                                        class="fa fa-asterisk"></i></span>
-                                        </div>
-                                    </div>
-        
-        `);
-    } else {
-        $('#divcampaign').empty();
-        $('#divcampaign').append(`
-         <div class="col-md-12">
-                                        <div class="form-group form-group-default required">
-                                         <input type="hidden" id="typeInsertionCampaign" name="typeInsertionCampaign" value="2"/>
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="campaignName">Nome Campagna
-                                                </label>
-                                                <select id="campaignName"
-                                                        name="campaignName"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Selezione la Campagna"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                                <span class="bs red corner label"><i
-                                                            class="fa fa-asterisk"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-        `);
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'Campaign'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#campaignName');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: res2,
-            });
 
-        });
-    }
-});
 
 
 
@@ -472,6 +415,7 @@ $(document).on('bs.marketplace-account.save', function () {
             val = val + $(this).val() + ',';
         }
     });
+    var ruleOption='';
     var lang = $('#lang').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
     var slug = $('#slug').val();
@@ -480,6 +424,8 @@ $(document).on('bs.marketplace-account.save', function () {
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
+    var timeRange=$('#timeRange').val();
+    var multiplierDefault=$('#multiplierDefault');
     var defaultCpcF = $('#defaultCpcF').val();
     var defaultCpcFM = $('#defaultCpcFM').val();
     var logoFile = $('#logoFile').val();
@@ -497,6 +443,16 @@ $(document).on('bs.marketplace-account.save', function () {
     var budget10 = $('#budget10').val();
     var budget11 = $('#budget11').val();
     var budget12 = $('#budget12').val();
+    var maxCos1 = $('#maxCos1').val();
+    var maxCos2 = $('#maxCos2').val();
+    var maxCos3 = $('#maxCos3').val();
+    var maxCos4 = $('#maxCos4').val();
+    var maxCos5 = $('#maxCos5').val();
+    var valueexcept1 =$('#valueexcept1').val();
+    var valueexcept2 =$('#valueexcept2').val();
+    var valueexcept3 =$('#valueexcept3').val();
+    var valueexcept4 =$('#valueexcept4').val();
+    var valueexcept5 =$('#valueexcept5').val();
     var typeInsertion = $('#typeInsertion').val();
     var marketplaceName = $('#marketplaceName').val();
     var campaignName=$('#campaignName').val();
@@ -539,6 +495,13 @@ $(document).on('bs.marketplace-account.save', function () {
     var productCategoryId4 = $('#productCategoryId4').val();
     var productCategoryId5 = $('#productCategoryId5').val();
     var nameRule = $('#nameRule').val();
+    var rule=$('#ruleOption').val();
+
+    if(val==''){
+         ruleOption=rule;
+    }else{
+         ruleOption=val.substring(0, val.length - 1);
+    }
 
     /* var config = {
          lang: $('#lang').val(),
@@ -614,6 +577,8 @@ $(document).on('bs.marketplace-account.save', function () {
         'defaultCpcM=' + defaultCpcM + '&' +
         'defaultCpcF=' + defaultCpcF + '&' +
         'defaultCpcFM=' + defaultCpcFM + '&' +
+        'multiplierDefault=' + multiplierDefault + '&' +
+        'timeRange=' + timeRange + '&' +
         'budget01=' + budget01 + '&' +
         'budget02=' + budget02 + '&' +
         'budget03=' + budget03 + '&' +
@@ -626,6 +591,16 @@ $(document).on('bs.marketplace-account.save', function () {
         'budget10=' + budget10 + '&' +
         'budget11=' + budget11 + '&' +
         'budget12=' + budget12 + '&' +
+        'valueexcept1=' + valueexcept1 + '&' +
+        'valueexcept2=' + valueexcept2 + '&' +
+        'valueexcept3=' + valueexcept3 + '&' +
+        'valueexcept4=' + valueexcept4 + '&' +
+        'valueexcept5=' + valueexcept5 + '&' +
+        'maxCos1=' + maxCos1 + '&' +
+        'maxCos2=' + maxCos2 + '&' +
+        'maxCos3=' + maxCos3 + '&' +
+        'maxCos4=' + maxCos4 + '&' +
+        'maxCos5=' + maxCos5 + '&' +
         'nameAdminister=' + nameAdminister + '&' +
         'emailNotify=' + emailNotify + '&' +
         'productSizeGroupEx1=' + productSizeGroupEx1 + '&' +
@@ -666,7 +641,7 @@ $(document).on('bs.marketplace-account.save', function () {
         'productSizeGroupId5=' + productSizeGroupId5 + '&' +
         'productCategoryId5=' + productCategoryId5+ '&' +
         'nameRule='+nameRule+ '&' +
-        'ruleOption='+val.substring(0, val.length - 1);
+        'ruleOption='+ruleOption;
     /*/var config='{"nameAggregator":"'+marketplace_account_name+'",'+
          '"lang":" ' + lang + '",'+
          '"slug":"'+slug+'",'+
@@ -726,10 +701,12 @@ $(document).on('bs.marketplace-account.save', function () {
      */
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        var data = 1;
+        const data = { marketplaceId:$('#marketplaceId').val(), marketplaceAccountId: $('#marketplaceAccountId').val()
+
+        };
         var urldef = "/blueseal/xhr/MarketplaceAccountInsertManage" + config;
         $.ajax({
-            method: "POST",
+            method: "PUT",
             url: urldef,
             data: data
         }).done(function (res) {
