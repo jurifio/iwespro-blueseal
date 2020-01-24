@@ -218,7 +218,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         }
        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
 
-            if($findOrder->isShippingToIwes === null  ) {
+            if($findOrder->isShippingToIwes == null || $findOrder->isShippingToIwes == 0  ) {
                 $shippingAddress[] = json_decode($findOrder->frozenBillingAddress,true);
                 $AttentionName =  preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname']);
                 $Name = preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'].' '.$shippingAddress[0]['company']);
@@ -254,7 +254,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
             'Description' => 'UPS Standard'
         ];
 
-        if($findOrder->isShippingToIwes === null  ) {
+        if($findOrder->isShippingToIwes == null || $findOrder->isShippingToIwes == 0  ) {
             if ($shipment->toAddress->country->continent != 'EU') {
                 $service = [
                     'Code' => '65',

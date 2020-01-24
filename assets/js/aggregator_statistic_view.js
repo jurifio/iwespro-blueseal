@@ -80,4 +80,18 @@
             options: res2,
         });
     });
+
 })(jQuery);
+$('#marketplaceAccount').change(function () {
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/CSelectAggregatorStatisticRenderAjaxController',
+        data: {
+            marketplaceAccount: $('#marketplaceAccount').val(),
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+
+    });
+});

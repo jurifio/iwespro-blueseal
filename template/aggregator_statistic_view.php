@@ -4,6 +4,7 @@
     <?php include "parts/head.php" ?>
     <?php echo $app -> getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page -> getTitle(); ?></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
 </head>
 <body class="fixed-header">
@@ -58,6 +59,14 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="radio-inline"><input type="radio" name="optradio" value="d" checked>Giorno</label>
+                                            <label class="radio-inline"><input type="radio" name="optradio" value="w">Sett</label>
+                                            <label class="radio-inline"><input type="radio" name="optradio" value="m">Mese</label>
+                                            <label class="radio-inline"><input type="radio" name="optradio" value="y">Anno</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="panel panel-default clearfix">
                                             <div class="panel-heading clearfix">
                                                 <h5 class="m-t-10">Group Report</h5>
@@ -80,6 +89,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="row">
                                         <div class="fancy-tree-container" id="categoryTree">
                                         </div>
@@ -112,11 +122,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <button type="button" id="generate" name="generate" class="btn btn-primary">Genera</button>
-                                            </div>
+                                            <button type="button" id="generate" name="generate" class="btn btn-primary">
+                                                Genera
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </form>
                     </div>
                     <div class="col-md-9">
