@@ -21,7 +21,7 @@ use bamboo\domain\repositories\CShipmentRepo;
  * Class CSelectAggregatorStatisticRenderAjaxController
  * @package bamboo\controllers\back\ajax
  */
-class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
+class CSelectAggregatorStatisticRenderAjaxController extends AMarketplaceAccountAjaxController
 {
     public function get()
     {
@@ -31,7 +31,7 @@ class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
         /** @var CMarketplaceAccount $markeplaceAccount */
         $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId]);
         $marketplaceId=$marketplaceAccount->marketplaceId;
-        $sql="SELECT
+        /*$sql="SELECT
              (select COUNT(*) id from CampaignVisit cv1 join Campaign c1 ON c1.id=cv1.campaignId WHERE cv1.timestamp between '2019-12-01' and '2020-12-31' ) as totCampaignVisit,
          (select sum(cost) from CampaignVisit cv2 join Campaign c2 on c2.id=cv2.campaignId WHERE cv2.timestamp between '2019-12-01' and '2020-12-31' ) as totCampaignCost,
          (select sum(costCustomer) from CampaignVisit cv3 join Campaign c3 ON c3.id=cv3.campaignId where cv3.timestamp between '2019-12-01' and '2020-12-31' ) as totCampaignCostCustomer,			 	          
@@ -70,7 +70,8 @@ class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
           isnull(c.id) OR (
             cv.timestamp BETWEEN IFNULL('2019-12-01', cv.timestamp) AND ifnull('2019-12-31', cv.timestamp) OR
             o.orderDate BETWEEN ifnull('2019-12-01', o.orderDate) AND ifnull('2019-12-31', o.orderDate))) AND  m.id=".$marketplaceId." AND ma.id=".$marketplaceAccountId." 
-        GROUP BY ma.id, ma.marketplaceId, cv.timestamp";
+        GROUP BY ma.id, ma.marketplaceId, cv.timestamp";*/
+        $sql=self::SQL_SELECT_CAMPAING_PRODUCT_STATISTIC_MARKETPLACE_ACCOUNT;
         $res = $this -> app -> dbAdapter -> query($sql, []) -> fetchAll();
         foreach($res as $result){
             array_push($resultjson,

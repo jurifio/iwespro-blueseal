@@ -93,5 +93,6 @@ $('#marketplaceAccount').change(function () {
     }).done(function (res2) {
         $('#firstGraph').empty();
 
+
     });
 });
