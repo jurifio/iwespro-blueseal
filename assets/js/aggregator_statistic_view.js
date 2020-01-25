@@ -88,10 +88,10 @@ $('#marketplaceAccount').change(function () {
         url: '/blueseal/xhr/CSelectAggregatorStatisticRenderAjaxController',
         data: {
             marketplaceAccount: $('#marketplaceAccount').val(),
-
         },
         dataType: 'json'
     }).done(function (res2) {
+        $('#firstGraph').empty();
 
     });
 });

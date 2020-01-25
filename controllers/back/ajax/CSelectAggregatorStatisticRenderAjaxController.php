@@ -32,9 +32,9 @@ class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
         $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId]);
         $marketplaceId=$marketplaceAccount->marketplaceId;
         $sql="SELECT
-         (select COUNT(*) id from CampaignVisit cv1 join Campaign c1 ON c1.id=cv1.campaignId WHERE cv1.timestamp between '2019-12-01' and '2019-12-31' ) as totCampaignVisit,
-         (select sum(cost) from CampaignVisit cv2 join Campaign c2 on c2.id=cv2.campaignId WHERE cv2.timestamp between '2019-12-01' and '2019-12-31' ) as totCampaignCost,
-         (select sum(costCustomer) from CampaignVisit cv3 join Campaign c3 ON c3.id=cv3.campaignId where cv3.timestamp between '2019-12-01' and '2019-12-31' ) as totCampaignCostCustomer,
+             (select COUNT(*) id from CampaignVisit cv1 join Campaign c1 ON c1.id=cv1.campaignId WHERE cv1.timestamp between '2019-12-01' and '2020-12-31' ) as totCampaignVisit,
+         (select sum(cost) from CampaignVisit cv2 join Campaign c2 on c2.id=cv2.campaignId WHERE cv2.timestamp between '2019-12-01' and '2020-12-31' ) as totCampaignCost,
+         (select sum(costCustomer) from CampaignVisit cv3 join Campaign c3 ON c3.id=cv3.campaignId where cv3.timestamp between '2019-12-01' and '2020-12-31' ) as totCampaignCostCustomer,			 	          
        
           m.id                                            AS marketplaceId,
           ma.id                                           AS marketplaceAccountId,
@@ -43,6 +43,9 @@ class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
           c.id                                            AS campaignId,
           c.name                                          AS campaign,
           m.type                                          AS marketplaceType,
+         (COUNT(ol.id)/(select COUNT(*) id from CampaignVisit cv1 join Campaign c1 ON c1.id=cv1.campaignId WHERE cv1.timestamp between '2019-12-01' and '2020-12-31' )*100) AS conversionRateQty,
+			 (sum(ifnull(o.netTotal, 0))/(select sum(cost) from CampaignVisit cv2 join Campaign c2 on c2.id=cv2.campaignId WHERE cv2.timestamp between '2019-12-01' and '2020-12-31' )) AS conversionRateOrderTot,
+			(sum(ifnull(o.netTotal, 0))/(select sum(costCustomer) from CampaignVisit cv2 join Campaign c2 on c2.id=cv2.campaignId WHERE cv2.timestamp between '2019-12-01' and '2020-12-31' )) AS conversionRateCustomerOrderTot,			 	          
         DATE_FORMAT(cv.timestamp, '%d %m %Y')                                      as timestamp,  
           (SELECT count(DISTINCT mahp.productId, mahp.productVariantId)
            FROM MarketplaceAccountHasProduct mahp
@@ -62,6 +65,7 @@ class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
           LEFT JOIN CampaignVisit cv ON c.id = cv.campaignId
           LEFT JOIN (CampaignVisitHasOrder cvho
             JOIN `Order` o ON o.id = cvho.orderId) ON cv.campaignId = cvho.campaignId AND cv.id = cvho.campaignVisitId
+            LEFT JOIN OrderLine ol ON o.id=ol.orderId 
         WHERE  (
           isnull(c.id) OR (
             cv.timestamp BETWEEN IFNULL('2019-12-01', cv.timestamp) AND ifnull('2019-12-31', cv.timestamp) OR
@@ -74,11 +78,15 @@ class CSelectAggregatorStatisticRenderAjaxController extends AAjaxController
                                         'visits'=>$result['visits'],
                                         'totalVisits'=>$result['totalVisits'],
                                          'cost'=>$result['cost'],
+                                         'orderTotal'=>$result['orderTotal'],
                                          'costCustomer'=>$result['costCustomer'],
                                          'date'=>$result['timestamp'],
                                             'totCampaignVisit'=>$result['totCampaignVisit'],
-                                            'totCampaignCost'=>$rsult['totCampaignCost'],
-                                            'totCampaignCostCustomer'=>$rsult['totCampaignCostCustomer'] ]);
+                                            'totCampaignCost'=>$result['totCampaignCost'],
+                                            'totCampaignCostCustomer'=>$result['totCampaignCostCustomer'],
+                                            'conversionRateQty'=>$result['conversionRateQty'],
+                                            'conversionRateOrderTot'=>$result['conversionRateOrderTot'],
+                                            'conversionRateCustomerOrderTot'=>$result['conversionRateCustomerOrderTot']]);
     }
 
         return json_encode($resultjson);
