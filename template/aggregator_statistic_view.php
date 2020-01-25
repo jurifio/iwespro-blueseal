@@ -39,24 +39,13 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="startDate">Data Inizio</label>
-                                                <input type="datetime-local" id="startDate" class="form-control"
-                                                       placeholder="Inserisci la data di Inizio Calcolo"
-                                                       name="startDate"
-                                                       required="required">
+                                                <label for="daterange">Intervallo Date</label>
+                                                <input type="text" size="50" id="daterange" size="" name="daterange" value="<?php echo $dateStart.'-'.$dateEnd?>" />
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="endDate">Data Fine </label>
-                                                <input type="datetime-local" id="endDate" class="form-control"
-                                                       placeholder="Inserisci la data di Fine Calcolo"
-                                                       name="endDate"
-                                                       required="required">
-                                            </div>
-                                        </div>
+
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -138,12 +127,9 @@
                             </div>
                             <div class="panel-body clearfix">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                     </div>
-                                    <div class="col-md-4">
-                                    </div>
-                                    <div class="col-md-4">
-                                        filterDate
+                                    <div class="col-md-6">
                                     </div>
                                 </div>
                                 <div class="row">

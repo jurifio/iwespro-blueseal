@@ -81,7 +81,41 @@
         });
     });
 
+
+
+
+
+
+
 })(jQuery);
+$(function() {
+    $('input[name="daterange"]').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(32, 'hour'),
+        locale: {
+            format: 'DD-MM-YYYY',
+            cancelLabel: "Cancella",
+            applyLabel: "Applica"
+        },
+        ranges: {
+            'Oggi': [moment(), moment()],
+            'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Ultimi 7 Giorni': [moment().subtract(6, 'days'), moment()],
+            'Ultimi 30 giorni': [moment().subtract(29, 'days'), moment()],
+            'Questo Mese': [moment().startOf('month'), moment().endOf('month')],
+            'Scorso Mese': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        alwaysShowCalendars: true,
+        autoUpdateInput: false,
+        drops: "down",
+    });
+});
+
+
+
+
+
 $('#marketplaceAccount').change(function () {
     $.ajax({
         method: 'GET',

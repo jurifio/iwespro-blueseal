@@ -230,7 +230,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 $Number = $shippingAddress[0]['phone'];
             }else{
                 $AttentionName =  'Iwes Logistic';
-                $Name = 'Iwes snc';
+                $Name = 'Iwes Snc';
                 $AddressLine = 'Via Cesare Pavese 1';
                 $City = 'Civitanova Marche';
                 $PostalCode = '62012';
@@ -285,7 +285,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
                 'Request' => [
                     'RequestOption' => 'validate',
                     'TransactionReference' => [
-                        'CustomerContext' => 'CustomerContext.' //???
+                        'CustomerContext' => 'CustomerContext.'
                     ]
                 ],
                 'Shipment' => [
