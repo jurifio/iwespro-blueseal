@@ -226,3 +226,101 @@ $('#typeFriendId').change(function () {
     $("#rating").append(bodyRating);
 });
 
+$("#accountAsService").change(function(){
+    var accountAsService = $('#accountAsService').val();
+    if(accountAsService==1) {
+        $('#rawProduct').empty();
+
+        $.ajax({
+            url: '/blueseal/xhr/SelectBillRegistryProductAjaxController',
+            method: 'get',
+            data: {
+                accountAsService: accountAsService
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            let rawProduct = res;
+            let bodyres;
+            bodyres = '<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca per Categoria"></div>';
+            bodyres = bodyres + '<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Codice"></div>';
+            bodyres = bodyres + '<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
+            bodyres = bodyres + '<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:20%;">Codice Prodotto</th><th style="width:20%;">Nome Prodotto</th><th style="width:20%;">Selezione</th></tr>';
+            //  $('#rawBrands').append('<input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca Brand"/>');
+            // $('#rawBrands').append('<table id="myTable"> <tr class="header1"><th style="width:20%;">Categoria</th><th style="width:20%;">Shop</th><th style="width:20%;">Shop Id Origine</th><th style="width:20%;">Shop Id Origine</th><th style="width:20%;">Shop Id Destinazione</th><th style="width:20%;">Pubblicato</th></tr>');
+            ////  $('#rawBrands').append('<div class="row"><div class="col-md-2">id Categoria</div><div class="col-md-2">Categoria</div><div class="col-md-2">ShopName</div>' + '<div class="col-md-2">Shop Id Origine</div>' + '<div class="col-md-2">Shop Id Destinazione</div><div class="col-md-2">Pubblicato</div></div>');
+            $.each(rawProduct, function (k, v) {
+                bodyres = bodyres + '<tr><td style="width:40%;">' + v.categoryName + '</td><td style="width:40%;">' + v.codeProduct + '</td><td style="width:40%;">' + v.nameProduct + '</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' + v.id  + '"></td></tr>';
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+            bodyres = bodyres + '</table>';
+            $('#rawProduct').append(bodyres);
+        });
+    }else{
+        $('#rawProduct').empty();
+    }
+});
+
+
+function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+function myShopFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myShop");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+$(document).on('click','#checkedAll',function () {
+
+    $('input:checkbox').not(this).prop('checked', this.checked);
+
+});
+
+$("#accountAsParallel").change(function() {
+    var accountAsParallel = $('#accountAsParallel').val();
+    if (accountAsParallel == 1) {
+
+        $("#rawParallel").removeClass("hide");
+        $("#rawParallel").addClass("show");
+
+    }else{
+        $("#rawParallel").removeClass("show");
+        $("#rawParallel").addClass("hide");
+    }
+
+});

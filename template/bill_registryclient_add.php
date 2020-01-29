@@ -327,6 +327,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="dateActivation">Data Attivazione</label>
+                                        <input type="datetime-local" class="form-control" id="dateActivation" name="dateActivation" value="" />
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="accountAsFriend">Seleziona Se Friend</label>
                                         <select id="accountAsFriend" name="accountAsFriend"
@@ -349,13 +356,82 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4" id="rating">
+                                <div class="col-md-2" id="rating">
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="accountAsParallel">Seleziona Se è Parallelo</label>
+                                        <select id="accountAsParallel" name="accountAsParallel"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option value=""></option>
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row hide" id="rawParallel">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="accountAsParallelSupplier">Seleziona Se è Supplier </label>
+                                        <select id="accountAsParallelSupplier" name="accountAsParallelSupplier"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option value=""></option>
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="accountAsParallelSeller">Seleziona Se è Seller </label>
+                                        <select id="accountAsParallelSellerr" name="accountAsParallelSeller"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option value=""></option>
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default required">
+                                        <label for="parallelFee">Fee riconosciuta sul Parallelo</label>
+                                        <input id="parallelFee" autocomplete="off" type="text"
+                                               class="form-control" name="parallelFee" value=""
+                                               required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="accountAsService">Seleziona Se ha Servizi</label>
+                                        <select id="accountAsService" name="accountAsService"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option value=""></option>
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="rawProduct">
+
                             </div>
                         </div>
                     </div>
