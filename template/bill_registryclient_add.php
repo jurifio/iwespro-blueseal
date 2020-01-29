@@ -466,12 +466,12 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Operazioni Aggregatore">
+    <bs-toolbar-group data-group-label="Operazioni Cliente">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-floppy-o"
                 data-permission="/admin/product/add"
-                data-event="bs.marketplace-account.save"
+                data-event="bs.client.save"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Salva"

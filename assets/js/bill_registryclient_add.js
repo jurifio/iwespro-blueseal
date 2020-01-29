@@ -324,3 +324,7 @@ $("#accountAsParallel").change(function() {
     }
 
 });
+
+$(document).on('bs.client.save', function () {
+
+});
