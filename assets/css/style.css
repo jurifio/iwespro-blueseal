@@ -21,6 +21,9 @@
 .image-preview {
     overflow: hidden;
 }
+.checked{
+    color:orange;
+}
 
 /*
  * - Dashboard

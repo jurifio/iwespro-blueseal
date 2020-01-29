@@ -112,13 +112,13 @@ $(document).ready(function () {
             render: {
                 item: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.name) + escape(item.location) + '</span> - ' +
+                        '<span class="label">' + escape(item.name) +' '+ escape(item.location) + '</span> - ' +
                         '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
                         '</div>'
                 },
                 option: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.name) + escape(item.location) + '</span> - ' +
+                        '<span class="label">' + escape(item.name) +' '+ escape(item.location) + '</span> - ' +
                         '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
                         '</div>'
                 }
@@ -186,36 +186,36 @@ $('#typeFriendId').change(function () {
     let ratingValue = $('#typeFriendId').val();
     let bodyRating = '';
     switch (ratingValue) {
-        case 5:
-            bodyRating = `<span class="fa fa-star checked"></span>
+        case '5':
+            bodyRating += `<span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
-                        <span class="fa fa-starchecked"></span>`;
+                        <span class="fa fa-star checked"></span>`;
             break;
-        case 4:
-            bodyRating = `<span class="fa fa-star checked"></span>
+        case '4':
+            bodyRating += `<span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star "></span>`;
             break;
-        case 3:
-            bodyRating = `<span class="fa fa-star checked"></span>
+        case '3':
+            bodyRating += `<span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star "></span>
                         <span class="fa fa-star "></span>`;
             break;
-        case 2:
-            bodyRating = `<span class="fa fa-star checked"></span>
+        case '2':
+            bodyRating += `<span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star "></span>
                         <span class="fa fa-star "></span>
                         <span class="fa fa-star "></span>`;
             break;
-        case 1:
-            bodyRating = `<span class="fa fa-star checked"></span>
+        case '1':
+            bodyRating += `<span class="fa fa-star checked"></span>
                         <span class="fa fa-star "></span>
                         <span class="fa fa-star "></span>
                         <span class="fa fa-star "></span>

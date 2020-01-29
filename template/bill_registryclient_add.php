@@ -254,7 +254,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group form-group-default">
+                                    <div class="form-group form-group-default required">
                                         <label for="iban">Iban</label>
                                         <input id="iban" autocomplete="off" type="text"
                                                class="form-control" name="iban" value=""
@@ -293,7 +293,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group form-group-default">
+                                    <div class="form-group form-group-default required">
                                         <label for="sdi">Codice UNIVOCO SDI</label>
                                         <input id="sdi" autocomplete="off" type="text"
                                                class="form-control" name="sdi" value=""
@@ -312,7 +312,7 @@
                                 <h5 class="m-t-12">Inserimento Parametri Account Cliente</h5>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="accountStatusId">Seleziona lo Stato del Cliente</label>
                                         <select id="accountStatusId" name="accountStatusId"
@@ -326,17 +326,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="accountAsFriend">Seleziona lo Stato del Cliente</label>
+                                        <label for="accountAsFriend">Seleziona Se Friend</label>
                                         <select id="accountAsFriend" name="accountAsFriend"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                             <option value=""></option>
-                                            <option value="1">Attivo</option>
-                                            <option value="0">non Attivo</option>
-                                            <option value="2">sospeso</option>
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -350,7 +349,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2" id="rating">
+                                <div class="col-md-4" id="rating">
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
                                     <span class="fa fa-star"></span>
