@@ -1,3375 +1,3422 @@
 {
-    "routes": [
-        {
-            "name": "Backoffice Login",
-            "pattern": "/blueseal/?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-lista-utenti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEmailListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/logout/?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLogoutController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/dashboard/?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealDashboardController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/ordini(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/ordini-in-lavorazione(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderWorkingListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },{
-            "pattern": "/blueseal/ordini-cancellati(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderCancelListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },{
-            "pattern": "/blueseal/ordini-resi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderReturnListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },{
-            "pattern": "/blueseal/ordini-con-righe-diverse(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderMixStatusLineListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/vendite(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSellListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/ordini/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/registri(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/registri/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/registri/registroincassi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBillingJournalListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/print/billingJournal(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterPrintController"
-            },
-            "filters": {
-                "id": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/ordini/utenti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/ordini/inserisci(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\COrderAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        }, {
-            "pattern": "/blueseal/prodotti/season(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSeasonListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/tag(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductTagListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/dettagli(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/nomi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNamesListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/colori(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductColorListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/prodotti-lista-codici(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductListEanController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/dettagli(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/dettagli/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailBatchTranslateListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/lista-ean(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEanListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/connettori/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CConnectorController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/brand(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/brand/modifica/:shopId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandEditController"
-            },
-            "filters": {
-                "shopId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/taglie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/immaginidimensioni(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryImageSizeListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/taglie/modifica/:shopId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeEditController"
-            },
-            "filters": {
-                "shopId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/stagioni(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/stagioni/modifica/:shopId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonEditController"
-            },
-            "filters": {
-                "shopId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/tag(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/tag/modifica/:shopId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagEditController"
-            },
-            "filters": {
-                "shopId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/colori(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/colori/modifica/:shopId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorEditController"
-            },
-            "filters": {
-                "shopId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/categorie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari/categorie/modifica/:shopId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryEditController"
-            },
-            "filters": {
-                "shopId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/connettori(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopImporterController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/dettagli/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/dettagli/lingua/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateLangListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/dettagli/lingua_list/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateLangAllListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/email/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailUserServiceAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-template-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-template-modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-lista-eventi/:campaignId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventListController"
-            },
-            "filters": {
-                "campaignId": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-lista-inserzioni/:eventId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionListController"
-            },
-            "filters": {
-                "eventId": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-lista-campagne(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterCampaignListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-lista-gruppi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-email-lista-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEmailListAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-gruppo-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-campagna-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterCampaignAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-evento-aggiungi/:campaignId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventAddController"
-            },
-            "filters": {
-                "campaignId": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-inserzione-aggiungi/:eventId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionAddController"
-            },
-            "filters": {
-                "eventId": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/attivi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductActiveListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/photos(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPhotoManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/incompleti/importatori(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImporterController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/brand(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/brand-gestione-ean(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandHasEanListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE",
-                "PUT",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/brand/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gruppo-taglie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/lista-taglie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeFullListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/lista-macrogruppi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeMacroGroupSimpleListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/brand/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gruppo-taglie/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gruppo-colore(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gruppo-colore/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gruppo-colore/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gruppo-colore/elimina(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CColorDeleteController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/categorie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/categorie/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/skus(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSkuManageController"
-            },
-            "filters": {
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/utenti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CUserListController"
-            },
-            "filters": {
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/xhr/:xcontroller(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBluesealXhrController"
-            },
-            "filters": {
-                "xcontroller": "[a-zA-Z]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
-            },
-            "filters": {
-                "shop": "[0-9]+",
-                "orderId": "[0-9]+",
-                "orderLineId": "[0-9]+",
-                "confirm": "[a-z]{3}"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/print/azteccode(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CPrintAztecCodeController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/landing/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/landing/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/blog(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/blog(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CWorkBlogPostListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/blog/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CWorkBlogPostViewController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/blog/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/blog/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/blog/cestino(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTrashController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/blog/categorie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostCategoryController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/blog/tag(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTagController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/coupon(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/coupon/smart(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddSmartController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/coupon/modifica/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/coupon/aggiungi(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/tipocoupon(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/tipocoupon/modifica/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/tipocoupon/aggiungi(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/eventocoupon(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/eventocoupon/modifica/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/eventocoupon/aggiungi(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/tag(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/tag/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/tag/modifica/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/descrizioni(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/descrizioni/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/descrizioni/lingua(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateLangListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/nomi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/nomi/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/nomi/lingua/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/nomi/lingua_list/:langId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangAllListController"
-            },
-            "filters": {
-                "langId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/landing(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CImporterListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/dizionari(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/importatori/importa(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CImportProductFileController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEmailListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-template(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-redemption(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-external-redemption(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterExternalRedemptionListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-redemption-grouped(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionGroupedListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-redemption/single-redemption(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterSingleRedemptionListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-redemption/newsletter-redemption/single-redemption/clicked-url(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterClickedUrlRedemptionListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter/newsletter-redemption-compara(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionCompareController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-user/:insertionId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserListController"
-            },
-            "filters": {
-                "insertionId": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/newsletter-lista-utenti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEmailListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/fusione(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductFusionListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/sconti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSalesListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/categorie(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/categorie/invertite(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignInvertedController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/marketplace(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/marketplace/associate(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/marketplace/prestashop(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CPrestashopMarketplaceProductListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/marketplace/lista-marketplace-shop(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasShopListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-
-        {
-            "pattern": "/blueseal/prodotti/marketplace/account/:accountId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductStatisticListController"
-            },
-            "filters": {
-                "accountId": "[0-9]+-[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/account/aggregato/:accountId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryStatisticListController"
-            },
-            "filters": {
-                "accountId": "[0-9]+-[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/utente(/:userId)?(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
-            },
-            "filters": {
-                "userId": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/friend/prodotti/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendProductEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/support(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListSupportController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/lista-gestione-cat(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelCategoryController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/modifica(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/schede-prodotto(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetPrototypeListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/modifica-schede-prodotto/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CModifyProductSheetPrototypeListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/category-group(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeCategoryGroupListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/modelli/macro-category-group(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeMacroCategoryGroupListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/movimenti/inserisci/rapido(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseFastOperationController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/movimenti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseOperationListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/movimenti/barcode/print(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/barcode/print(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/slim(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSlimListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/catalog(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCatalogListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/gestione-prezzi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPriceManageController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/brand/valori(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandValueListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/friends(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendsListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/campagne(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/accounts(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/account(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketing/campaigns(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/statistiche/esporta(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExport"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/statistiche/file/:fileName(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExportFile"
-            },
-            "filters": {
-                "fileName": "[a-zA-Z0-9\\.]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "name": "Gestione ordini con i friend",
-            "pattern": "/blueseal/friend/ordini(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },{
-            "name": "Gestione ordini spediti con i friend",
-            "pattern": "/blueseal/friend/vendite(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendSellListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "name": "Gestione ordini in lavorazione con i friend",
-            "pattern": "/blueseal/friend/ordini-in-lavorazione(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderWorkingListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        }, {
-            "name": "Gestione ordini non elaborabili i friend",
-            "pattern": "/blueseal/friend/ordini-cancellati(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderCancelListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "name": "Gestione delle fatture dei Friend",
-            "pattern": "/blueseal/friend/fatture(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderInvoiceListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/fixGruppiTaglia(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixProductGroupSizeController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/calendario(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleCalendarController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/spedizioni(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/email(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/download-invoice/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadInvoices"
-            },
-            "filters": {
-                "id": "[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/download-contracts/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadContracts"
-            },
-            "filters": {
-                "id": "[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/distinte(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/distinte/(stampa|print)/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillPrintController"
-            },
-            "filters": {
-                "id": "[0-9]{1,10}"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/shops(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/shop(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopEditController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/jobs(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },{
-            "pattern": "/blueseal/jobs/log(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CJobLogListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/traduzioni/contenuti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CContentTranslationController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/indirizzario(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CAddressBookListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/fatture/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CDocumentCustomAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/campaign/watch(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCampaignWatchController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/impostazioni/corrieri(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCarrierCountryListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/utility/gestione-forzata-saldi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSalePriceProductSkuListControllerUtility"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/utility/gestione-forzata-sku-pubblici(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSalePriceProductPublicSkuAllListControllerUtility"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/shooting/righe-shooting(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/shooting/righe-shooting/:id(/?)",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingDetailsListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/shooting/booking(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingBookingListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/shooting/accettazione-prodotti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingAcceptProductListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/users/ruoli(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/users/permessi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacPermissionListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "DELETE"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/filtri-custom(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/filtri-custom/preview(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterPreviewListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/editoriale-piano-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/editoriale-pianodettagli-lista/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanDetailListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/editoriale-pianodettagli-listacompleta(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanDetailViewAllListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/media-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanSocialAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/media(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanSocialListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/argomento(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanArgumentListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/editorial/argomento-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanArgumentAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/foison(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/foison-sub-request(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonSubRequestListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/foison/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonDetailController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/marketplace(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceWorkController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/contratti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CContractsListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/contratti/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CContractDetailsListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/normalizzazione-prodotti/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchDetailsListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/dettagli-brand/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandBatchDetailsListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/brands/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBrandBatchDetailsListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/traduzione-nomi/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/prodotti-conto-lavoro(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/fatture(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkInvoiceListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/text-manage(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkTextManageListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/text-manage/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFasonTextManageListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/lotti/text-manage-fb/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFasonFbTextManageListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/work/faq(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFaqListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/messages(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMessageListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/message/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMessageDetailListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/wishlist(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CWishListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/cartabandoned(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/cartabandoned/add-plan(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/cartabandoned/emailparam(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedEmailParamListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/cartabandoned/emailsent(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedEmailSentListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/administration-link(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CAdministrationLinkController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/gallery-link(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGalleryLinkController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/cartabandoned/edit-plan/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        }
-    ,
-        {
-            "pattern": "/blueseal/prodotti/marketplace/associate/sale(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateSaleListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/sitelist(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CSiteListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/manage-fixed-page(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/manage-fixed-page/:id/:langId/:fixedPageTypeId(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageDetailListController"
-            },
-            "filters": {
-                "id": ":?[A-Za-z0-9_-]+",
-                "langId": ":?[A-Za-z0-9_-]+",
-                "fixedPageTypeId": ":?[A-Za-z0-9_-]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/manage-fixed-page/fixed-page-template-list(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET"
-            ]
-        },
-        {
-            "pattern": "/blueseal/manage-fixed-page/add-fixed-page-template(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/manage-fixed-page/fixed-page-template/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/prodotti/prodotti-pubblicati-su-shop-friend(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductHasShopDestinationListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/api/:endpoint",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"
-            },
-            "filters": {
-                "loc": "[a-z]{2}",
-                "endpoint": "[a-zA-Z]+"
-            },
-            "translations": {},
-            "methods": [
-                "POST",
-                "PUT",
-                "GET",
-                "DELETE"
-            ],
-            "hosts": [
-                "*"
-            ]
-        },
-        {
-            "pattern": "/blueseal/registri/gainplan(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/registri/gainplan-passivo(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/registri/gainplan-passivo/aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementAddController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },{
-            "pattern": "/blueseal/registri/gainplan-passivo/modifica/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/fatture/lista(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CInvoiceListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/fatture/modifica/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CInvoiceEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/help/blog/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CHelpBlogPostViewController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/aggregatori/lista(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorConfiguratorListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/impostazioni/progressivi/lista(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CShopHasCounterListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/email/email-template-lista(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateListController"
-            },
-            "filters": {},
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/email/email-template-modifica/:id(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateEditController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/email/email-template-aggiungi(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateAddController"
-            },
-            "filters": {}
-        ,
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignVisitListController"
-            },
-            "filters": {
-                "id": "[0-9]+"
-            },
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },{
-            "pattern": "/blueseal/marketplace/account-inserisci(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountInsertController"
-            },
-            "filters": {}
-        ,
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/lista-log-pubblicazione(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorPublishLogController"
-            },
-            "filters": {}
-        ,
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        },
-        {
-            "pattern": "/blueseal/marketplace/aggregatori-statistiche(/)?",
-            "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorStatisticViewController"
-            },
-            "filters": {}
-        ,
-            "translations": {},
-            "methods": [
-                "GET",
-                "POST",
-                "DELETE",
-                "PUT"
-            ]
-        }
-    ]
+  "routes": [
+    {
+      "name": "Backoffice Login",
+      "pattern": "/blueseal/?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLoginController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-lista-utenti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEmailListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/logout/?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealLogoutController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/dashboard/?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealDashboardController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini-in-lavorazione(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderWorkingListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini-cancellati(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderCancelListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini-resi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderReturnListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini-con-righe-diverse(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderMixStatusLineListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/vendite(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSellListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderManageController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterManageController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri/registroincassi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBillingJournalListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/print/billingJournal(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CVatRegisterPrintController"
+      },
+      "filters": {
+        "id": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini/utenti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderByUserListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/ordini/inserisci(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\COrderAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/season(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSeasonListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/tag(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductTagListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/dettagli(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/nomi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNamesListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/colori(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductColorListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/prodotti-lista-codici(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductListEanController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/dettagli(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/dettagli/:langId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailBatchTranslateListController"
+      },
+      "filters": {
+        "langId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/lista-ean(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEanListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/connettori/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CConnectorController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/brand(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/brand/modifica/:shopId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryBrandEditController"
+      },
+      "filters": {
+        "shopId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/taglie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/immaginidimensioni(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryImageSizeListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/taglie/modifica/:shopId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySizeEditController"
+      },
+      "filters": {
+        "shopId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/stagioni(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/stagioni/modifica/:shopId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionarySeasonEditController"
+      },
+      "filters": {
+        "shopId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/tag(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/tag/modifica/:shopId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryTagEditController"
+      },
+      "filters": {
+        "shopId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/colori(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/colori/modifica/:shopId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryColorEditController"
+      },
+      "filters": {
+        "shopId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/categorie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari/categorie/modifica/:shopId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryCategoryEditController"
+      },
+      "filters": {
+        "shopId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/connettori(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShopImporterController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/dettagli/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/dettagli/lingua/:langId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateLangListController"
+      },
+      "filters": {
+        "langId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/dettagli/lingua_list/:langId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDetailTranslateLangAllListController"
+      },
+      "filters": {
+        "langId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/email/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailUserServiceAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-template-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-template-modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-lista-eventi/:campaignId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventListController"
+      },
+      "filters": {
+        "campaignId": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-lista-inserzioni/:eventId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionListController"
+      },
+      "filters": {
+        "eventId": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-lista-campagne(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterCampaignListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-lista-gruppi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-email-lista-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEmailListAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-gruppo-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterGroupAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-campagna-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterCampaignAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-evento-aggiungi/:campaignId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEventAddController"
+      },
+      "filters": {
+        "campaignId": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-inserzione-aggiungi/:eventId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterInsertionAddController"
+      },
+      "filters": {
+        "eventId": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/attivi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductActiveListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/photos(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPhotoManageController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/incompleti/importatori(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImporterController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/brand(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/brand-gestione-ean(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandHasEanListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE",
+        "PUT",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/brand/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gruppo-taglie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/lista-taglie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeFullListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/lista-macrogruppi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeMacroGroupSimpleListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/brand/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gruppo-taglie/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSizeManageController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gruppo-colore(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CColorListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gruppo-colore/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CColorAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gruppo-colore/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CColorEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gruppo-colore/elimina(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CColorDeleteController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/categorie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/categorie/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryManageController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/skus(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSkuManageController"
+      },
+      "filters": {
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/utenti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CUserListController"
+      },
+      "filters": {
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/xhr/:xcontroller(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBluesealXhrController"
+      },
+      "filters": {
+        "xcontroller": "[a-zA-Z]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/confirm/:shop/:orderId/:orderLineId/:confirm",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendConfirmationController"
+      },
+      "filters": {
+        "shop": "[0-9]+",
+        "orderId": "[0-9]+",
+        "orderLineId": "[0-9]+",
+        "confirm": "[a-z]{3}"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/print/azteccode(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CPrintAztecCodeController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketing/landing/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketing/landing/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/blog(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/blog(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CWorkBlogPostListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/blog/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CWorkBlogPostViewController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/blog/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/blog/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/blog/cestino(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTrashController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/blog/categorie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostCategoryController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/blog/tag(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBlogPostTagController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/coupon(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketing/coupon/smart(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddSmartController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/coupon/modifica/:id(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/coupon/aggiungi(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/tipocoupon(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/tipocoupon/modifica/:id(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/tipocoupon/aggiungi(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponTypeAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/eventocoupon(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/eventocoupon/modifica/:id(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/eventocoupon/aggiungi(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCouponEventAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/tag(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CTagListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/tag/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CTagAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/tag/modifica/:id(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/descrizioni(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/descrizioni/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/descrizioni/lingua(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDescriptionTranslateLangListController"
+      },
+      "filters": {
+        "langId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/nomi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/nomi/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/nomi/lingua/:langId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangListController"
+      },
+      "filters": {
+        "langId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/nomi/lingua_list/:langId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNameTranslateLangAllListController"
+      },
+      "filters": {
+        "langId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketing/landing(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CLandingPageListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CImporterListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/dizionari(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDictionaryListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/importatori/importa(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CImportProductFileController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterEmailListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-template(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterTemplateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-redemption(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-external-redemption(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterExternalRedemptionListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-redemption-grouped(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionGroupedListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-redemption/single-redemption(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterSingleRedemptionListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-redemption/newsletter-redemption/single-redemption/clicked-url(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterClickedUrlRedemptionListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter/newsletter-redemption-compara(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterRedemptionCompareController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-user/:insertionId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserListController"
+      },
+      "filters": {
+        "insertionId": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/newsletter-lista-utenti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CNewsletterUserEmailListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/fusione(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductFusionListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/sconti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSalesListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/categorie(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/categorie/invertite(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryAssignInvertedController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/marketplace(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/marketplace/associate(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/marketplace/prestashop(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CPrestashopMarketplaceProductListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/marketplace/lista-marketplace-shop(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasShopListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/marketplace/account/:accountId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceProductStatisticListController"
+      },
+      "filters": {
+        "accountId": "[0-9]+-[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/account/aggregato/:accountId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCategoryStatisticListController"
+      },
+      "filters": {
+        "accountId": "[0-9]+-[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/utente(/:userId)?(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CUserManageController"
+      },
+      "filters": {
+        "userId": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/friend/prodotti/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendProductEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/support(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelListSupportController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/lista-gestione-cat(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelCategoryController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/modifica(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductModelEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/schede-prodotto(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetPrototypeListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/modifica-schede-prodotto/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CModifyProductSheetPrototypeListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/category-group(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeCategoryGroupListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/modelli/macro-category-group(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSheetModelPrototypeMacroCategoryGroupListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/movimenti/inserisci(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductMovementsEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/movimenti/inserisci/rapido(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseFastOperationController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/movimenti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CStorehouseOperationListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/movimenti/barcode/print(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/barcode/print(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBarcodePrintController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/slim(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSlimListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/catalog(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCatalogListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/gestione-prezzi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductPriceManageController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/brand/valori(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandValueListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/friends(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendsListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/campagne(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCampaignStatisticsController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/accounts(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/account(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketing/campaigns(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/statistiche/esporta(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExport"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/statistiche/file/:fileName(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CStatisticsExportFile"
+      },
+      "filters": {
+        "fileName": "[a-zA-Z0-9\\.]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "name": "Gestione ordini con i friend",
+      "pattern": "/blueseal/friend/ordini(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "name": "Gestione ordini spediti con i friend",
+      "pattern": "/blueseal/friend/vendite(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendSellListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "name": "Gestione ordini in lavorazione con i friend",
+      "pattern": "/blueseal/friend/ordini-in-lavorazione(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderWorkingListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "name": "Gestione ordini non elaborabili i friend",
+      "pattern": "/blueseal/friend/ordini-cancellati(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderCancelListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "name": "Gestione delle fatture dei Friend",
+      "pattern": "/blueseal/friend/fatture(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFriendOrderInvoiceListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/fixGruppiTaglia(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFixProductGroupSizeController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/calendario(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleCalendarController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/spedizioni(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/email(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/download-invoice/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadInvoices"
+      },
+      "filters": {
+        "id": "[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/download-contracts/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDownloadContracts"
+      },
+      "filters": {
+        "id": "[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/distinte(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/distinte/(stampa|print)/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CPaymentBillPrintController"
+      },
+      "filters": {
+        "id": "[0-9]{1,10}"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/shops(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShopListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/shop(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShopEditController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/jobs(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CJobListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/jobs/log(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CJobLogListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/traduzioni/contenuti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CContentTranslationController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/indirizzario(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CAddressBookListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/fatture/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CDocumentCustomAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/campaign/watch(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceCampaignWatchController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/impostazioni/corrieri(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCarrierCountryListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/utility/gestione-forzata-saldi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSalePriceProductSkuListControllerUtility"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/utility/gestione-forzata-sku-pubblici(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSalePriceProductPublicSkuAllListControllerUtility"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/shooting/righe-shooting(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/shooting/righe-shooting/:id(/?)",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingDetailsListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/shooting/booking(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingBookingListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/shooting/accettazione-prodotti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingAcceptProductListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/users/ruoli(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/users/permessi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacPermissionListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "DELETE"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/filtri-custom(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/filtri-custom/preview(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCustomFilterPreviewListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/editoriale-piano-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/editoriale-pianodettagli-lista/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanDetailListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/editoriale-pianodettagli-listacompleta(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanDetailViewAllListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/media-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanSocialAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/media(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanSocialListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/argomento(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanArgumentListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/editorial/argomento-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanArgumentAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/foison(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/foison-sub-request(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonSubRequestListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/foison/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFoisonDetailController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/marketplace(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceWorkController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/contratti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CContractsListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/contratti/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CContractDetailsListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/normalizzazione-prodotti/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchDetailsListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/dettagli-brand/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBrandBatchDetailsListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/brands/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBrandBatchDetailsListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/traduzione-nomi/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/prodotti-conto-lavoro(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/fatture(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkInvoiceListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/text-manage(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkTextManageListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/text-manage/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFasonTextManageListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/lotti/text-manage-fb/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFasonFbTextManageListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/work/faq(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductWorkFaqListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/messages(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMessageListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/message/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMessageDetailListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/wishlist(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CWishListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/cartabandoned(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/cartabandoned/add-plan(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/cartabandoned/emailparam(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedEmailParamListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/cartabandoned/emailsent(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedEmailSentListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/administration-link(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CAdministrationLinkController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/gallery-link(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CGalleryLinkController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/cartabandoned/edit-plan/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCartAbandonedPlanEmailSendEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/marketplace/associate/sale(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasProductAssociateSaleListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/sitelist(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CSiteListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/manage-fixed-page(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/manage-fixed-page/:id/:langId/:fixedPageTypeId(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CManageFixedPageDetailListController"
+      },
+      "filters": {
+        "id": ":?[A-Za-z0-9_-]+",
+        "langId": ":?[A-Za-z0-9_-]+",
+        "fixedPageTypeId": ":?[A-Za-z0-9_-]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/manage-fixed-page/fixed-page-template-list(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "pattern": "/blueseal/manage-fixed-page/add-fixed-page-template(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/manage-fixed-page/fixed-page-template/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CFixedPageTemplateEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/prodotti/prodotti-pubblicati-su-shop-friend(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CProductHasShopDestinationListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/api/:endpoint",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CApiController"
+      },
+      "filters": {
+        "loc": "[a-z]{2}",
+        "endpoint": "[a-zA-Z]+"
+      },
+      "translations": {},
+      "methods": [
+        "POST",
+        "PUT",
+        "GET",
+        "DELETE"
+      ],
+      "hosts": [
+        "*"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri/gainplan(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri/gainplan-passivo(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri/gainplan-passivo/aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/registri/gainplan-passivo/modifica/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/fatture/lista(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CInvoiceListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/fatture/modifica/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CInvoiceEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/help/blog/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CHelpBlogPostViewController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/aggregatori/lista(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorConfiguratorListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/impostazioni/progressivi/lista(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CShopHasCounterListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/email/email-template-lista(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/email/email-template-modifica/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/email/email-template-aggiungi(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CEmailTemplateAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/prodotti-in-depubblicazione(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CCampaignVisitListController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/account-inserisci(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountInsertController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/lista-log-pubblicazione(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorPublishLogController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/marketplace/aggregatori-statistiche(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorStatisticViewController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/anagrafica/clienti-lista(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBillRegistryClientListController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/anagrafica/clienti-inserisci(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBillRegistryClientAddController"
+      },
+      "filters": {},
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    },
+    {
+      "pattern": "/blueseal/anagrafica/clienti-modifica/:id(/)?",
+      "behaviour": {
+        "ctrl": "\\bamboo\\blueseal\\controllers\\CBillRegistryClientEditController"
+      },
+      "filters": {
+        "id": "[0-9]+"
+      },
+      "translations": {},
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT"
+      ]
+    }
+  ]
 }
