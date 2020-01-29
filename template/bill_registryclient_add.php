@@ -26,12 +26,11 @@
                             <button class="tablinks" onclick="openTab(event, 'insertClientBillingInfo')">Dati
                                 Amministrativi
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'insertClientAccount')">Account</button>
+                            <button class="tablinks" onclick="openTab(event, 'insertClientAccount')">Account E Servizi </button>
                             <button class="tablinks" onclick="openTab(event, 'insertClientLocation')">Sedi e Filiali
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertClientContact')">Contatti</button>
-                            <button class="tablinks" onclick="openTab(event, 'insertClientProduct')">Servizi Associati
-                            </button>
+
                             <button class="tablinks" onclick="openTab(event, 'insertClientContract')">Contratti</button>
                         </div>
                     </div>
@@ -452,8 +451,6 @@
                             </div>
                         </div>
                         <div id="insertClientContact" class="tabcontent">
-                        </div>
-                        <div id="insertClientProduct" class="tabcontent">
                         </div>
                         <div id="insertClientContract" class="tabcontent">
                         </div>
