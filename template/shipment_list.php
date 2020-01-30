@@ -20,7 +20,8 @@
                     </div>
                 </div>
             </div>
-
+            <input type="hidden" id="lastInvoiceDate" name="lastInvoiceDate" value="<?php echo $dateInvoice ?>"/>
+            <input type="hidden" id="shipmentInvoiceNumber" name="shipmentInvoiceNumber" value="<?php echo $shipmentInvoiceNumber ?>"/>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">

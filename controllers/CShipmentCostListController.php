@@ -29,7 +29,6 @@ class CShipmentCostListController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/shipment_cost_list.php');
 
         $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        $dateTime = $this -> app -> router -> request() -> getRequestData('dateTime');
         $res = $this -> app -> dbAdapter -> query('SELECT shipmentInvoiceNumber as shipmentInvoiceNumber , dateInvoice as dateInvoice from Shipment where shipmentInvoiceNumber is not null 
 and dateInvoice is not null order by dateInvoice ASc limit 1', []) -> fetchAll();
 
