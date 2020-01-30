@@ -112,18 +112,36 @@ $(document).ready(function () {
             render: {
                 item: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.name) +' '+ escape(item.location) + '</span> - ' +
+                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
                         '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
                         '</div>'
                 },
                 option: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.name) +' '+ escape(item.location) + '</span> - ' +
+                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
                         '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
                         '</div>'
                 }
             }
         });
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name'],
+            options: res2
+        });
+
     });
 
     $.ajax({
@@ -226,9 +244,9 @@ $('#typeFriendId').change(function () {
     $("#rating").append(bodyRating);
 });
 
-$("#accountAsService").change(function(){
+$("#accountAsService").change(function () {
     var accountAsService = $('#accountAsService').val();
-    if(accountAsService==1) {
+    if (accountAsService == 1) {
         $('#rawProduct').empty();
 
         $.ajax({
@@ -250,13 +268,13 @@ $("#accountAsService").change(function(){
             // $('#rawBrands').append('<table id="myTable"> <tr class="header1"><th style="width:20%;">Categoria</th><th style="width:20%;">Shop</th><th style="width:20%;">Shop Id Origine</th><th style="width:20%;">Shop Id Origine</th><th style="width:20%;">Shop Id Destinazione</th><th style="width:20%;">Pubblicato</th></tr>');
             ////  $('#rawBrands').append('<div class="row"><div class="col-md-2">id Categoria</div><div class="col-md-2">Categoria</div><div class="col-md-2">ShopName</div>' + '<div class="col-md-2">Shop Id Origine</div>' + '<div class="col-md-2">Shop Id Destinazione</div><div class="col-md-2">Pubblicato</div></div>');
             $.each(rawProduct, function (k, v) {
-                bodyres = bodyres + '<tr><td style="width:40%;">' + v.categoryName + '</td><td style="width:40%;">' + v.codeProduct + '</td><td style="width:40%;">' + v.nameProduct + '</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' + v.id  + '"></td></tr>';
+                bodyres = bodyres + '<tr><td style="width:40%;">' + v.categoryName + '</td><td style="width:40%;">' + v.codeProduct + '</td><td style="width:40%;">' + v.nameProduct + '</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' + v.id + '"></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyres = bodyres + '</table>';
             $('#rawProduct').append(bodyres);
         });
-    }else{
+    } else {
         $('#rawProduct').empty();
     }
 });
@@ -283,6 +301,7 @@ function myFunction() {
         }
     }
 }
+
 function myShopFunction() {
     // Declare variables
     var input, filter, table, tr, td, s, txtValue;
@@ -305,20 +324,20 @@ function myShopFunction() {
     }
 }
 
-$(document).on('click','#checkedAll',function () {
+$(document).on('click', '#checkedAll', function () {
 
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
 
-$("#accountAsParallel").change(function() {
+$("#accountAsParallel").change(function () {
     var accountAsParallel = $('#accountAsParallel').val();
     if (accountAsParallel == 1) {
 
         $("#rawParallel").removeClass("hide");
         $("#rawParallel").addClass("show");
 
-    }else{
+    } else {
         $("#rawParallel").removeClass("show");
         $("#rawParallel").addClass("hide");
     }
@@ -329,52 +348,50 @@ $(document).on('bs.client.save', function () {
     let bsModal = new $.bsModal('Inserimento Aggregatore', {
         body: '<p>Confermare?</p>'
     });
-    var val='';
-    $(':checkbox:checked').each(function(i){
-        if($(this)!=$('#checkedAll')) {
+    var val = '';
+    $(':checkbox:checked').each(function (i) {
+        if ($(this) != $('#checkedAll')) {
             val = val + $(this).val() + ',';
         }
     });
-    var config='?companyName='+$("#companyName").val()+ '&' +
-    'address='+$("#address").val()+ '&' +
-    'extra='+$("#extra").val()+ '&' +
-    'city='+$("#city").val()+ '&' +
-    'zipCode='+$("#zipCode").val()+ '&' +
-    'province='+$("#province").val()+ '&' +
-    'countryId='+$("#countryId").val()+ '&' +
-    'vatNumber='+$("#vatNumber").val()+ '&' +
-    'phone='+$("#mobile").val()+ '&' +
-    'fax='+$("#fax").val()+ '&' +
-    'userId='+$("#userId").val()+ '&' +
-    'contactName='+$("#contactName").val()+ '&' +
-     'phoneAdmin='+$("#phoneAdmin").val()+ '&' +
-     'mobileAdmin='+$("#mobileAdmin").val()+ '&' +
-     'emailAdmin='+$("#emailAdmin").val()+ '&' +
-     'website='+$("#website").val()+ '&' +
-     'email='+$("#email").val()+ '&' +
-     'emailCc='+$("#emailCc").val()+ '&' +
-    'emailCcn='+$("#emailCcn").val()+ '&' +
-     'emailPec='+$("#emailPec").val()+ '&' +
-    'note='+$("#note").val()+ '&' +
-    'bankRegistryId='+$("#bankRegistryId").val()+ '&' +
-    'iban='+$("#iban").val()+ '&' +
-    'currencyId='+$("#currencyId").val()+ '&' +
-    'registryTypePaymentId='+$("#billRegistryTypePaymentId").val()+ '&' +
-    'billRegistryTypeTaxesId='+$("#billRegistryTypeTaxesId").val()+ '&' +
-    'sdi='+$("#sid").val()+ '&' +
-    'accountStatusId='+$("#accountStatusId").val()+ '&' +
-    'dateActivation='+$("#dateActivation").val()+ '&' +
-    'accountAsFriend='+$("#accountAsFriend").val()+ '&' +
-    'typeFriendId='+$("#typeFriendId").val()+ '&' +
-    'accountAsParallel='+$("#accountAsParallel").val()+ '&' +
-    'accountAsParallelSupplier='+$("#accountAsParallelSupplier").val()+ '&' +
-    'accountAsParallelSeller='+$("#accountAsParallelSeller").val()+ '&' +
-     'parallelFee='+$("#parallelFee").val()+ '&' +
-     'accountAsService='+$("#accountAsService").val()+ '&'
-     'productList='+ val.substring(0, val.length - 1);
-
-
-
+    var config = '?companyName=' + $("#companyName").val() + '&' +
+        'address=' + $("#address").val() + '&' +
+        'extra=' + $("#extra").val() + '&' +
+        'city=' + $("#city").val() + '&' +
+        'zipCode=' + $("#zipCode").val() + '&' +
+        'province=' + $("#province").val() + '&' +
+        'countryId=' + $("#countryId").val() + '&' +
+        'vatNumber=' + $("#vatNumber").val() + '&' +
+        'phone=' + $("#mobile").val() + '&' +
+        'fax=' + $("#fax").val() + '&' +
+        'userId=' + $("#userId").val() + '&' +
+        'contactName=' + $("#contactName").val() + '&' +
+        'phoneAdmin=' + $("#phoneAdmin").val() + '&' +
+        'mobileAdmin=' + $("#mobileAdmin").val() + '&' +
+        'emailAdmin=' + $("#emailAdmin").val() + '&' +
+        'website=' + $("#website").val() + '&' +
+        'email=' + $("#email").val() + '&' +
+        'emailCc=' + $("#emailCc").val() + '&' +
+        'emailCcn=' + $("#emailCcn").val() + '&' +
+        'emailPec=' + $("#emailPec").val() + '&' +
+        'note=' + $("#note").val() + '&' +
+        'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
+        'iban=' + $("#iban").val() + '&' +
+        'currencyId=' + $("#currencyId").val() + '&' +
+        'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
+        'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
+        'sdi=' + $("#sid").val() + '&' +
+        'shopId=' + $("#shopId").val() + '&' +
+        'accountStatusId=' + $("#accountStatusId").val() + '&' +
+        'dateActivation=' + $("#dateActivation").val() + '&' +
+        'accountAsFriend=' + $("#accountAsFriend").val() + '&' +
+        'typeFriendId=' + $("#typeFriendId").val() + '&' +
+        'accountAsParallel=' + $("#accountAsParallel").val() + '&' +
+        'accountAsParallelSupplier=' + $("#accountAsParallelSupplier").val() + '&' +
+        'accountAsParallelSeller=' + $("#accountAsParallelSeller").val() + '&' +
+        'parallelFee=' + $("#parallelFee").val() + '&' +
+        'accountAsService=' + $("#accountAsService").val() + '&' +
+        'productList=' + val.substring(0, val.length - 1);
 
 
     bsModal.showCancelBtn();
@@ -386,7 +403,14 @@ $(document).on('bs.client.save', function () {
             url: urldef,
             data: data
         }).done(function (res) {
-            bsModal.writeBody(res);
+            if(res.includes('1-')){
+                let  billRegistryClientId=res.replace('1-','');
+                bsModal.writeBody('Inserimento eseguito con successo');
+                setTimeout(function(){
+                    window.location.href = '/blueseal/anagrafica/clienti-modifica/'+billRegistryClientId;
+                    }, 1000);
+
+            }
         }).fail(function (res) {
             bsModal.writeBody(res);
         }).always(function (res) {

@@ -27,11 +27,11 @@
                                 Amministrativi
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertClientAccount')">Account E Servizi </button>
-                            <button class="tablinks" onclick="openTab(event, 'insertClientLocation')">Sedi e Filiali
+                            <button class="tablinks hide" onclick="openTab(event, 'insertClientLocation')">Sedi e Filiali
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'insertClientContact')">Contatti</button>
+                            <button class="tablinks hide" onclick="openTab(event, 'insertClientContact')">Contatti</button>
 
-                            <button class="tablinks" onclick="openTab(event, 'insertClientContract')">Contratti</button>
+                            <button class="tablinks hide" onclick="openTab(event, 'insertClientContract')">Contratti</button>
                         </div>
                     </div>
                 </div>
@@ -366,6 +366,18 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="shopId">Seleziona Se ha uno Shop</label>
+                                        <select id="shopId" name="shopId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default selectize-enabled">
                                         <label for="accountAsParallel">Seleziona Se è Parallelo</label>
                                         <select id="accountAsParallel" name="accountAsParallel"
                                                 class="full-width selectpicker"
@@ -434,7 +446,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="insertClientLocation" class="tabcontent">
+                    <div id="insertClientLocation" class="tabcontent hide">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="panel-heading clearfix">
@@ -450,9 +462,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="insertClientContact" class="tabcontent">
+                        <div id="insertClientContact" class="tabcontent hide">
                         </div>
-                        <div id="insertClientContract" class="tabcontent">
+                        <div id="insertClientContract" class="tabcontent hide">
                         </div>
                     </div>
                 </div>

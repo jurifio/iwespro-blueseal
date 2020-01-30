@@ -62,7 +62,7 @@ $(document).on('bs-add-invoice-shipping-info', function () {
                 shipmentInvoiceNumber: $('input#shipmentInvoiceNumber').val(),
                 realShipmentPrice: $('input#realShipmentPrice').val().replace(/,/g, '.'),
                 invoiceDate :$('input#invoiceDate').val(),
-                isBilling : $('input#isBilling').val(),
+                isBilling : $('#isBilling').val(),
                 trackingNumber: trackingNumber
             };
             $.ajax({
