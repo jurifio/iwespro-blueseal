@@ -187,7 +187,8 @@ class CRegistryClientManageAjaxController extends AAjaxController
         if ($_GET['dateActivation'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
         } else {
-            $dateActivation = $_GET['dateActivation'];
+            $dateActivation =strtotime($_GET['dateActivation']);
+            $dateActivation=date('Y-m-d H:i:s', $dateActivation);
         }
         if ($_GET['accountAsFriend'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Selezione se Friend Non eseguita</i>';

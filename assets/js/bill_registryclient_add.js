@@ -1,41 +1,38 @@
 $(document).ready(function () {
-    Pace.ignore(function () {
-        var container = $('select[name="userId"]').parent();
-        var content = container.html();
-        container.html('<img src="/assets/img/ajax-loader.gif">');
-        $.ajax({
-            url: "/blueseal/xhr/UserData",
-            dataType: "json"
-        }).done(function (res) {
-            container.html(content);
-            select = $('select[name="userId"]');
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['email', 'name', 'surname'],
-                options: res,
-                render: {
-                    item: function (item, escape) {
-                        var label = item.name + ' ' + item.surname || item.email;
-                        var caption = (item.name + item.surname).length > 0 ? item.email : null;
-                        return '<div>' +
-                            '<span class="label">' + escape(label) + '</span>' +
-                            (caption ? ' - <span class="caption">' + escape(caption) + '</span>' : '') +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        var label = item.name + ' ' + item.surname || item.email;
-                        var caption = (item.name + item.surname).length > 0 ? item.email : null;
-                        return '<div>' +
-                            '<span class="label">' + escape(label) + '</span>' +
-                            (caption ? ' - <span class="caption">' + escape(caption) + '</span>' : '') +
-                            '</div>'
-                    }
-                }
-            });
-        });
-    });
 
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'UserDetails'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#userId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'userId',
+            labelField: 'name',
+            searchField: ['name','surname'],
+            options: res2,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
+                        '<span class="caption">gender:' + escape(item.gender + 'birthDay:' + item.birthDate) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
+                        '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
+                        '</div>'
+                }
+            }
+        });
+
+    });
 
     $.ajax({
         method: 'GET',
