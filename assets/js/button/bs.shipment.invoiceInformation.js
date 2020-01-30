@@ -12,40 +12,44 @@ window.buttonSetup = {
 
 $(document).on('bs-add-invoice-shipping-info', function () {
 
+
     let dataTable = $('.dataTable').DataTable();
     let selectedRows = dataTable.rows('.selected').data();
     if (selectedRows.length === 1) {
-
+        var lastInvoiceNumber=$("#shipmentInvoiceNumber").val();
+        var lastInvoiceDate=$("#lastInvoiceDate").val();
         var idShipment = selectedRows[0].id;
         var fromAddress = selectedRows[0].fromAddress;
         var toAddress = selectedRows[0].toAddress;
         var trackingNumber = selectedRows[0].trackingNumber;
+        var carrier=selectedRows[0].carrier;
 
 
-        let bsModal = new $.bsModal('Info su fattura di spedizione', {
-            body: '<div><p>Aggiugi informazioni realative alla fatturazione della spedizione n. <strong>'+ idShipment +'</strong></p>' +
-            '<p><strong>INVIATO DA:</strong></p>'+ fromAddress +'</p>' +
-            '<p><strong>A</strong></p>' + toAddress + '</div>' +
+        let bsModal = new $.bsModal('Consuntiva Costi di spedizione', {
+            body: '<div><p>Aggiugi informazioni realative alla fatturazione della spedizione n. <strong>'+ idShipment +'</strong></p></div>' +
+                '<div class="row"><div class="col-md-6"><strong>INVIATO DA:</strong><p>'+ fromAddress +'</div>'+
+                '<div class="col-md-6"><strong>A</strong><p> ' + toAddress + '</div></div>' +
+                '<div class="row"><div class="col-md-12"><strong>CARRIER:'+carrier+'</strong></div></div>'+
             '<div class="form-group form-group-default required">' +
             '<label for="shipmentInvoiceNumber">Numero fattura di spedizione</label>' +
             '<input autocomplete="off" type="text" id="shipmentInvoiceNumber" ' +
-            'placeholder="Numero di fattura della spedizione" class="form-control" name="shipmentInvoiceNumber" required="required">' +
+            'placeholder="Numero di fattura della spedizione" class="form-control" name="shipmentInvoiceNumber" value="'+lastInvoiceNumber+'" required="required">' +
             '</div>' +
             '<div class="form-group form-group-default required">' +
             '<label for="invoiceDate">Data Fattura Carrier</label>' +
             '<input autocomplete="off" type="datetime-local" id="invoiceDate" ' +
-            'placeholder="Data Fattura" class="form-control" name="invoiceDate" required="required">' +
+            'placeholder="Data Fattura" class="form-control" name="invoiceDate" value="'+lastInvoiceDate+'" required="required">' +
             '</div>'+
              '<div class="form-group form-group-default required">' +
             '<label for="realShipmentPrice">Spesa effettiva della spedizione</label>' +
             '<input autocomplete="off" type="text" id="realShipmentPrice" ' +
             'placeholder="Spesa effettiva" class="form-control" name="realShipmentPrice" required="required">' +
              '</div>'+
-             '<div class="form-group form-group-default required">' +
+             '<div class="form-group form-group-default required hide">' +
              '<label for="isBilling">Rifatturata</label>' +
                 '<select name="isBilling"  placeholder="seleziona se rifatturata" id="isBilling">' +
                 '<option value="">Seleziona</option>' +
-                '<option value="1">Si</option>' +
+                '<option value="1" selected="selected" >Si</option>' +
                 '<option value="0">No</option>' +
                 '</select>' +
                 '</div>'

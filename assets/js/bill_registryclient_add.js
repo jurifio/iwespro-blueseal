@@ -326,5 +326,74 @@ $("#accountAsParallel").change(function() {
 });
 
 $(document).on('bs.client.save', function () {
+    let bsModal = new $.bsModal('Inserimento Aggregatore', {
+        body: '<p>Confermare?</p>'
+    });
+    var val='';
+    $(':checkbox:checked').each(function(i){
+        if($(this)!=$('#checkedAll')) {
+            val = val + $(this).val() + ',';
+        }
+    });
+    var config='?companyName='+$("#companyName").val()+ '&' +
+    'address='+$("#address").val()+ '&' +
+    'extra='+$("#extra").val()+ '&' +
+    'city='+$("#city").val()+ '&' +
+    'zipCode='+$("#zipCode").val()+ '&' +
+    'province='+$("#province").val()+ '&' +
+    'countryId='+$("#countryId").val()+ '&' +
+    'vatNumber='+$("#vatNumber").val()+ '&' +
+    'phone='+$("#mobile").val()+ '&' +
+    'fax='+$("#fax").val()+ '&' +
+    'userId='+$("#userId").val()+ '&' +
+    'contactName='+$("#contactName").val()+ '&' +
+     'phoneAdmin='+$("#phoneAdmin").val()+ '&' +
+     'mobileAdmin='+$("#mobileAdmin").val()+ '&' +
+     'emailAdmin='+$("#emailAdmin").val()+ '&' +
+     'website='+$("#website").val()+ '&' +
+     'email='+$("#email").val()+ '&' +
+     'emailCc='+$("#emailCc").val()+ '&' +
+    'emailCcn='+$("#emailCcn").val()+ '&' +
+     'emailPec='+$("#emailPec").val()+ '&' +
+    'note='+$("#note").val()+ '&' +
+    'bankRegistryId='+$("#bankRegistryId").val()+ '&' +
+    'iban='+$("#iban").val()+ '&' +
+    'currencyId='+$("#currencyId").val()+ '&' +
+    'registryTypePaymentId='+$("#billRegistryTypePaymentId").val()+ '&' +
+    'billRegistryTypeTaxesId='+$("#billRegistryTypeTaxesId").val()+ '&' +
+    'sdi='+$("#sid").val()+ '&' +
+    'accountStatusId='+$("#accountStatusId").val()+ '&' +
+    'dateActivation='+$("#dateActivation").val()+ '&' +
+    'accountAsFriend='+$("#accountAsFriend").val()+ '&' +
+    'typeFriendId='+$("#typeFriendId").val()+ '&' +
+    'accountAsParallel='+$("#accountAsParallel").val()+ '&' +
+    'accountAsParallelSupplier='+$("#accountAsParallelSupplier").val()+ '&' +
+    'accountAsParallelSeller='+$("#accountAsParallelSeller").val()+ '&' +
+     'parallelFee='+$("#parallelFee").val()+ '&' +
+     'accountAsService='+$("#accountAsService").val()+ '&'
+     'productList='+ val.substring(0, val.length - 1);
 
+
+
+
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        var data = 1;
+        var urldef = "/blueseal/xhr/RegistryClientManageAjaxController" + config;
+        $.ajax({
+            method: "POST",
+            url: urldef,
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.showOkBtn();
+            });
+            bsModal.showOkBtn();
+        });
+    });
 });

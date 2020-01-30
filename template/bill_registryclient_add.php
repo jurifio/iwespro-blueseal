@@ -395,7 +395,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="accountAsParallelSeller">Seleziona Se è Seller </label>
-                                        <select id="accountAsParallelSellerr" name="accountAsParallelSeller"
+                                        <select id="accountAsParallelSeller" name="accountAsParallelSeller"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">

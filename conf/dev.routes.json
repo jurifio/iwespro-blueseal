@@ -3465,8 +3465,7 @@
                 "DELETE",
                 "PUT"
             ]
-        }
-    ,
+        },
         {
             "pattern": "/blueseal/anagrafica/clienti-modifica/:id(/)?",
             "behaviour": {
@@ -3481,6 +3480,17 @@
                 "POST",
                 "DELETE",
                 "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/spedizioni/costi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentCostListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
             ]
         }
     ]
