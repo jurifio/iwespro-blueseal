@@ -44,6 +44,7 @@ class CShipmentInvoiceController extends AAjaxController
         $trackingNumber = $data['trackingNumber'];
         $invoiceDate =strtotime($data['invoiceDate']);
         $invoiceDate=date('Y-m-d H:i:s', $invoiceDate);
+        $dateNow=(new \DateTime())->format('Y-m-d H:i:s');
         $isBilling =$data['isBilling'];
 
         if (empty($shipmentInvoiceNumber) || empty($realShipmentPrice)){
@@ -56,10 +57,12 @@ class CShipmentInvoiceController extends AAjaxController
             /** @var CShipment $shipment */
             $shipment =  $shipmentRepo->findOneBy(['id' => $idShipment ]);
 
+
             $shipment->shipmentInvoiceNumber = $shipmentInvoiceNumber;
             $shipment->realShipmentPrice = $realShipmentPrice;
             $shipment->dateInvoice =$invoiceDate;
             $shipment->isBilling =$isBilling;
+            $shipment->lastUpdate=$dateNow;
             $shipment->update();
             $res = "Sunto della spedizione:</br>"."Numero fattura: <strong>".$shipmentInvoiceNumber."/".$invoiceDate."</strong></br>".
                 "Costo reale di spedizione: <strong>".$realShipmentPrice."</strong></br>"."Tracking Number: <strong>".$trackingNumber."</strong>";

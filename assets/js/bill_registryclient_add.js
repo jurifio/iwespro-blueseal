@@ -359,7 +359,8 @@ $(document).on('bs.client.save', function () {
         'province=' + $("#province").val() + '&' +
         'countryId=' + $("#countryId").val() + '&' +
         'vatNumber=' + $("#vatNumber").val() + '&' +
-        'phone=' + $("#mobile").val() + '&' +
+        'phone=' + $("#phone").val() + '&' +
+        'mobile='+ $("#mobile").val() + '&' +
         'fax=' + $("#fax").val() + '&' +
         'userId=' + $("#userId").val() + '&' +
         'contactName=' + $("#contactName").val() + '&' +
@@ -377,7 +378,7 @@ $(document).on('bs.client.save', function () {
         'currencyId=' + $("#currencyId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
         'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
-        'sdi=' + $("#sid").val() + '&' +
+        'sdi=' + $("#sdi").val() + '&' +
         'shopId=' + $("#shopId").val() + '&' +
         'accountStatusId=' + $("#accountStatusId").val() + '&' +
         'dateActivation=' + $("#dateActivation").val() + '&' +
@@ -407,6 +408,8 @@ $(document).on('bs.client.save', function () {
                     window.location.href = '/blueseal/anagrafica/clienti-modifica/'+billRegistryClientId;
                     }, 1000);
 
+            }else{
+                bsModal.writeBody(res);
             }
         }).fail(function (res) {
             bsModal.writeBody(res);

@@ -25,12 +25,9 @@ class CRegistryClientManageAjaxController extends AAjaxController
     {
         $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
-        $billRegistryClientAccountHasProductRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
+        $billRegistryClientAccountHasProductRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccountHasProduct');
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
 
-        $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
-        $campaignRepo = \Monkey::app()->repoFactory->create('Campaign');
-        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $data = $this->app->router->request()->getRequestData();
         if ($_GET['companyName'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Ragione Sociale Cliente non inserita</i>';
@@ -255,7 +252,7 @@ class CRegistryClientManageAjaxController extends AAjaxController
         }
         $products=explode(',',$productList);
         try {
-            $brcInsert = $billRegistryClientAccountRepo->getEmptyEntity();
+            $brcInsert = $billRegistryClientRepo->getEmptyEntity();
             $brcInsert->companyName = $companyName;
             $brcInsert->address = $address;
             $brcInsert->extra = $extra;

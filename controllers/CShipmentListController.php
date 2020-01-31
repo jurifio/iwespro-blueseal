@@ -30,7 +30,7 @@ class CShipmentListController extends ARestrictedAccessRootController
 
         $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         $res = $this -> app -> dbAdapter -> query('SELECT shipmentInvoiceNumber as shipmentInvoiceNumber , dateInvoice as dateInvoice from Shipment where shipmentInvoiceNumber is not null 
-and dateInvoice is not null order by dateInvoice ASc limit 1', []) -> fetchAll();
+and dateInvoice is not NULL  order by lastUpdate desc limit 1', []) -> fetchAll();
 
         foreach ($res as $result) {
             $shipmentInvoiceNumber = $result['shipmentInvoiceNumber'];

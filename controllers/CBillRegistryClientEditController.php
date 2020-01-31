@@ -30,6 +30,7 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryclient_edit.php');
+        $id = \Monkey::app()->router->request()->getRequestData('id');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

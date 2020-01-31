@@ -29,12 +29,12 @@ class CShipmentCostListController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/shipment_cost_list.php');
 
         $shops = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        $res = $this -> app -> dbAdapter -> query('SELECT shipmentInvoiceNumber as shipmentInvoiceNumber , dateInvoice as dateInvoice, lastUpdate as lastUpdate from Shipment where shipmentInvoiceNumber is not null 
-and dateInvoice is not null order by lastUpdate ASc limit 1', []) -> fetchAll();
+        $res = $this -> app -> dbAdapter -> query('SELECT shipmentInvoiceNumber as shipmentInvoiceNumber , dateInvoice as dateInvoice from Shipment where shipmentInvoiceNumber is not null 
+and dateInvoice is not NULL  order by lastUpdate desc limit 1', []) -> fetchAll();
 
         foreach ($res as $result) {
             $shipmentInvoiceNumber = $result['shipmentInvoiceNumber'];
-           // $invoiceDate= new \DateTime($result['dateInvoice']);
+            //$invoiceDate= new \DateTime($result['dateInvoice']);
             $invoiceDate=strtotime($result['dateInvoice']);
         }
         $dateInvoice=date('Y-m-d\TH:i', $invoiceDate);
