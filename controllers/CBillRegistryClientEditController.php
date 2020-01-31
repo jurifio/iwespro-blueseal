@@ -38,6 +38,9 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $billRegistryClientContactRepo=\Monkey::app()->repoFactory->create('BillRegistryClientContact');
         $billRegistryClientContractRepo=\Monkey::app()->repoFactory->create('BillRegistryClientContract');
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
+        $country=\Monkey::app()->repoFactory->create('Country')->findAll();
+        $shop=\Monkey::app()->repoFactory->create('Shop')->findAll();
+        $userDetails=\Monkey::app()->repoFactory->create('UserDetails')->findAll();
         $brc=$billRegistryClientRepo->findOneBy(['id'=>$id]);
         $brca=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$id]);
         $billRegistryClientAccountId=$brca->id;
@@ -46,6 +49,8 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $brcl=$billRegistryClientLocationRepo->findBy(['billRegistryClientId'=>$id]);
         $brcc=$billRegistryClientContactRepo->findBy(['billRegistryClientId'=>$id]);
         $brcContract=$billRegistryClientContractRepo->findBy(['billRegistryClientId'=>$id],['billRegistryClientAccountId'=>$billRegistryClientAccountId]);
+        $bankRegistry=\Monkey::app()->repoFactory->create('BankRegistry')->findAll();
+        $currency=\Monkey::app()->repoFactory->create('Currency')->findAll();
 
 
 
@@ -62,7 +67,13 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
             'brcbi'=>$brcbi,
             'brcl'=>$brcl,
             'brcc'=>$brcc,
+            'country',
             'brcContract'=>$brcContract,
+            'shop'=>$shop,
+            'country'=>$country,
+            'userDetails'=>$userDetails,
+            'bankRegistry'=>$bankRegistry,
+            'currency'=>$currency,
             'sidebar' => $this->sidebar->build()
         ]);
     }

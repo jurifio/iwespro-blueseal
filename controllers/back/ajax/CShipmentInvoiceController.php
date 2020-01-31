@@ -69,6 +69,40 @@ class CShipmentInvoiceController extends AAjaxController
             return $res;
         }
     }
+    public function put()
+    {
+        //prendo i dati passati in input
+        $data = \Monkey::app()->router->request()->getRequestData();
+        $id = $data['trackingNumber'];
+        $shipmentInvoiceNumber = $data['shipmentInvoiceNumber'];
+        $realShipmentPrice = $data['realShipmentPrice'];
+        $invoiceDate =strtotime($data['invoiceDate']);
+        $invoiceDate=date('Y-m-d H:i:s', $invoiceDate);
+        $dateNow=(new \DateTime())->format('Y-m-d H:i:s');
+        $isBilling =$data['isBilling'];
+
+        if (empty($shipmentInvoiceNumber) || empty($realShipmentPrice)){
+            $res = "Non hai inserito le informazioni di fatturazizone in merito alla spedizione";
+            return $res;
+        } else {
+            /** @var CShipmentRepo $shipmentRepo */
+            $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
+
+            /** @var CShipment $shipment */
+            $shipment =  $shipmentRepo->findOneBy(['id' => $id ]);
+            $trackingNumber=$shipment->trackingNumber;
+
+            $shipment->shipmentInvoiceNumber = $shipmentInvoiceNumber;
+            $shipment->realShipmentPrice = $realShipmentPrice;
+            $shipment->dateInvoice =$invoiceDate;
+            $shipment->isBilling =$isBilling;
+            $shipment->lastUpdate=$dateNow;
+            $shipment->update();
+            $res = "Sunto della spedizione:</br>"."Numero fattura: <strong>".$shipmentInvoiceNumber."/".$invoiceDate."</strong></br>".
+                "Costo reale di spedizione: <strong>".$realShipmentPrice."</strong></br>"."Tracking Number: <strong>".$trackingNumber."</strong>";
+            return $res;
+        }
+    }
 
 
 }

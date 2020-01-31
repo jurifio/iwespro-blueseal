@@ -123,6 +123,9 @@
         <bs-toolbar-button
                 data-remote="bs.shipment.invoiceInformation"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="bs.shipment.invoiceMassiveInformation"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
