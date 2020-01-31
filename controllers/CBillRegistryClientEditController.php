@@ -51,6 +51,9 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $brcContract=$billRegistryClientContractRepo->findBy(['billRegistryClientId'=>$id],['billRegistryClientAccountId'=>$billRegistryClientAccountId]);
         $bankRegistry=\Monkey::app()->repoFactory->create('BankRegistry')->findAll();
         $currency=\Monkey::app()->repoFactory->create('Currency')->findAll();
+        $billRegistryTypePayment=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findAll();
+        $billRegistryTypeTaxes=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findAll();
+        $typeFriend=\Monkey::app()->repoFactory->create('TypeFriend')->findAll();
 
 
 
@@ -74,6 +77,9 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
             'userDetails'=>$userDetails,
             'bankRegistry'=>$bankRegistry,
             'currency'=>$currency,
+            'billRegistryTypePayment'=>$billRegistryTypePayment,
+            'billRegistryTypeTaxes'=>$billRegistryTypeTaxes,
+            'typeFriend'=>$typeFriend,
             'sidebar' => $this->sidebar->build()
         ]);
     }

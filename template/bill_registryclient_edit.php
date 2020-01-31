@@ -110,12 +110,12 @@
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                             <?php foreach ($country as $countries) {
-                                                     if ($countries->id == $brc->countryId) {
-                                                      echo '<option  selected="selected" value="' . $countries->id . '">' . $countries->name . '</option>';
-                                                }else{
-                                                   echo '<option value="' . $countries->id . '">' . $countries->name . '</option>';
+                                                if ($countries->id == $brc->countryId) {
+                                                    echo '<option  selected="selected" value="' . $countries->id . '">' . $countries->name . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $countries->id . '">' . $countries->name . '</option>';
                                                 }
-                                            };?>
+                                            }; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -123,7 +123,8 @@
                                     <div class="form-group form-group-default">
                                         <label for="vatNumber">Partita Iva/Codice Fiscale</label>
                                         <input id="vatNumber" autocomplete="off" type="text"
-                                               class="form-control" name="vatNumber" value="<?php echo $brc->vatNumber; ?>"
+                                               class="form-control" name="vatNumber"
+                                               value="<?php echo $brc->vatNumber; ?>"
                                         />
                                     </div>
                                 </div>
@@ -153,175 +154,196 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="userId">Seleziona l'utente </label >
-                                        <select id = "userId" name = "userId"
+                                        <label for="userId">Seleziona l'utente </label>
+                                        <select id="userId" name="userId"
                                                 class="full-width selectpicker"
-                                                placeholder = "Seleziona la Lista"
-                                                data-init-plugin = "selectize">
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
                                             <?php foreach ($userDetails as $userDetail) {
                                                 if ($userDetail->userId == $brc->userId) {
-                                                    echo '<option  selected="selected" value="' . $userDetail->userId . '">' . $userDetail->name . '-'.$userDetail->surname.' </option>';
-                                                }else{
-                                                    echo '<option  value="' . $userDetail->userId . '">' . $userDetail->name . '-'.$userDetail->surname.' </option>';
+                                                    echo '<option  selected="selected" value="' . $userDetail->userId . '">' . $userDetail->name . '-' . $userDetail->surname . ' </option>';
+                                                } else {
+                                                    echo '<option  value="' . $userDetail->userId . '">' . $userDetail->name . '-' . $userDetail->surname . ' </option>';
                                                 }
-                                            };?>
-                                        </select >
-                                    </div >
-                                </div >
-                            </div >
-                            <div class="row" >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="contactName" > Nome Contatto </label >
-                                        <input id = "contactName" autocomplete = "off" type = "text"
-                                               class="form-control" name = "contactName" value = "<?php echo $brc->contactName; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="phoneAdmin" > Telefono contatto Amministratore </label >
-                                        <input id = "phoneAdmin" autocomplete = "off" type = "text"
-                                               class="form-control" name = "phoneAdmin" value = "<?php echo $brc->phoneAdmin; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-defaul" >
-                                        <label for="mobileAdmin" > Mobile Contatto Amministratore </label >
-                                        <input id = "mobileAdmin" autocomplete = "off" type = "text"
-                                               class="form-control" name = "mobileAdmin" value = "<?php echo $brc->mobileAdmin; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="emailAdmin" > Email Amministratore </label >
-                                        <input id = "emailAdmin" autocomplete = "off" type = "text"
-                                               class="form-control" name = "emailAdmin" value = "<?php echo $brc->emailAdmin; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-4" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="website" > WebSite</label >
-                                        <input id = "website" autocomplete = "off" type = "text"
-                                               class="form-control" name = "website" value = "<?php echo $brc->website; ?>"
-            />
-                                    </div >
-                                </div >
-                            </div >
-                            <div class="row" >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="email" > email Azienda </label >
-                                        <input id = "email" autocomplete = "off" type = "text"
-                                               class="form-control" name = "email" value = "<?php echo $brc->email; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="emailCc" > email Azienda CC </label >
-                                        <input id = "emailCc" autocomplete = "off" type = "text"
-                                               class="form-control" name = "emailCc" value = "<?php echo $brc->emailCc; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="emailCcn" > email Azienda CCn </label >
-                                        <input id = "emailCcn" autocomplete = "off" type = "text"
-                                               class="form-control" name = "emailCcn" value = "<?php echo $brc->emailCcn; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="emailPec" > PEC</label >
-                                        <input id = "emailPec" autocomplete = "off" type = "text"
-                                               class="form-control" name = "emailPec" value = "<?php echo $brc->emailPec; ?>"
-            />
-                                    </div >
-                                </div >
-                                <div class="col-md-4" >
-                                    <div class="form-group form-group-default" >
-                                        <label for="note" > Note</label >
-                                        <textarea class="form-control" name = "note" id = "note"
-                                                  value = "<?php echo $brc->note; ?>" ></textarea >
-                                    </div >
-                                </div >
-                            </div >
-                        </div >
-                    </div >
-                </div >
-                <div id = "insertClientBillingInfo" class="tabcontent" >
-                    <div class="row" >
-                        <div class="col-md-12" >
-                            <div class="panel-heading clearfix" >
-                                <h5 class="m-t-12" > Inserimento Dati amministrativi </h5 >
-                            </div >
-                            <div class="row" >
-                                <div class="col-md-6" >
-                                    <div class="form-group form-group-default selectize-enabled" >
-                                        <label for="bankRegistryId" > Seleziona la Banca di Appoggio </label >
-                                        <select id = "bankRegistryId" name = "bankRegistryId"
+                                            }; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="contactName"> Nome Contatto </label>
+                                        <input id="contactName" autocomplete="off" type="text"
+                                               class="form-control" name="contactName"
+                                               value="<?php echo $brc->contactName; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneAdmin"> Telefono contatto Amministratore </label>
+                                        <input id="phoneAdmin" autocomplete="off" type="text"
+                                               class="form-control" name="phoneAdmin"
+                                               value="<?php echo $brc->phoneAdmin; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-defaul">
+                                        <label for="mobileAdmin"> Mobile Contatto Amministratore </label>
+                                        <input id="mobileAdmin" autocomplete="off" type="text"
+                                               class="form-control" name="mobileAdmin"
+                                               value="<?php echo $brc->mobileAdmin; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailAdmin"> Email Amministratore </label>
+                                        <input id="emailAdmin" autocomplete="off" type="text"
+                                               class="form-control" name="emailAdmin"
+                                               value="<?php echo $brc->emailAdmin; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="website"> WebSite</label>
+                                        <input id="website" autocomplete="off" type="text"
+                                               class="form-control" name="website" value="<?php echo $brc->website; ?>"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="email"> email Azienda </label>
+                                        <input id="email" autocomplete="off" type="text"
+                                               class="form-control" name="email" value="<?php echo $brc->email; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCc"> email Azienda CC </label>
+                                        <input id="emailCc" autocomplete="off" type="text"
+                                               class="form-control" name="emailCc" value="<?php echo $brc->emailCc; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCcn"> email Azienda CCn </label>
+                                        <input id="emailCcn" autocomplete="off" type="text"
+                                               class="form-control" name="emailCcn"
+                                               value="<?php echo $brc->emailCcn; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailPec"> PEC</label>
+                                        <input id="emailPec" autocomplete="off" type="text"
+                                               class="form-control" name="emailPec"
+                                               value="<?php echo $brc->emailPec; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="note"> Note</label>
+                                        <textarea class="form-control" name="note" id="note"
+                                                  value="<?php echo $brc->note; ?>"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="insertClientBillingInfo" class="tabcontent">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading clearfix">
+                                <h5 class="m-t-12"> Inserimento Dati amministrativi </h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="bankRegistryId"> Seleziona la Banca di Appoggio </label>
+                                        <select id="bankRegistryId" name="bankRegistryId"
                                                 class="full-width selectpicker"
-                                                placeholder = "Seleziona la Lista"
-                                                data - init - plugin = "selectize" >
+                                                placeholder="Seleziona la Lista"
+                                                data - init - plugin="selectize">
                                             <?php foreach ($bankRegistry as $bank) {
                                                 if ($bank->id == $brcbi->bankRegistryId) {
-                                                    echo '<option  selected="selected" value="' . $bank->id . '">' . $bank->name . ' '.$bank->location.' </option>';
-                                                }else{
-                                                    echo '<option  value="' . $bank->id . '">' . $bank->name . ' '.$bank->location.' </option>';
+                                                    echo '<option  selected="selected" value="' . $bank->id . '">' . $bank->name . ' ' . $bank->location . ' </option>';
+                                                } else {
+                                                    echo '<option  value="' . $bank->id . '">' . $bank->name . ' ' . $bank->location . ' </option>';
                                                 }
-                                            };?>
-                                        </select >
-                                    </div >
-                                </div >
-                                <div class="col-md-6" >
-                                    <div class="form-group form-group-default required" >
-                                        <label for="iban" > Iban</label >
-                                        <input id = "iban" autocomplete = "off" type = "text"
-                                               class="form-control" name = "iban" value = "<?php echo $brcbi->iban;?>"
-                                               required = "required" />
-                                    </div >
-                                </div >
-                            </div >
-                            <div class="row" >
-                                <div class="col-md-2" >
-                                    <div class="form-group form-group-default selectize-enabled" >
-                                        <label for="currencyId" > Seleziona la divisa </label >
-                                        <select id = "currencyId" name = "currencyId"
+                                            }; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label for="iban"> Iban</label>
+                                        <input id="iban" autocomplete="off" type="text"
+                                               class="form-control" name="iban" value="<?php echo $brcbi->iban; ?>"
+                                               required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="currencyId"> Seleziona la divisa </label>
+                                        <select id="currencyId" name="currencyId"
                                                 class="full-width selectpicker"
-                                                data - init - plugin = "selectize" >
+                                                data - init - plugin="selectize">
                                             <?php foreach ($currency as $curr) {
                                                 if ($brcbi->currencyId == $curr->id) {
-                                                    echo '<option  selected="selected" value="' . $curr->id . '">' . $curr->code.'</option>';
-                                                }else{
-                                                    echo '<option  value="' . $curr->id . '">' . $curr->code.'</option>';
+                                                    echo '<option  selected="selected" value="' . $curr->id . '">' . $curr->code . '</option>';
+                                                } else {
+                                                    echo '<option  value="' . $curr->id . '">' . $curr->code . '</option>';
                                                 }
-                                            };?>
-                                        </select >
-                                    </div >
-                                </div >
-                                <div class="col-md-4" >
-                                    <div class="form-group form-group-default selectize-enabled" >
-                                        <label for="billRegistryTypePaymentId" > Seleziona il Pagamento desiderato </label >
-                                        <select id = "billRegistryTypePaymentId" name = "billRegistryTypePaymentId"
+                                            }; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="billRegistryTypePaymentId"> Seleziona il Pagamento
+                                            desiderato </label>
+                                        <select id="billRegistryTypePaymentId" name="billRegistryTypePaymentId"
                                                 class="full-width selectpicker"
-                                                placeholder = "Seleziona la Lista"
-                                                data - init - plugin = "selectize" >
-                                        </select >
-                                    </div >
-                                </div >
-                                <div class="col-md-4" >
-                                    <div class="form-group form-group-default selectize-enabled" >
-                                        <label for="billRegistryTypeTaxesId" > Seleziona l'aliquota Iva</label>
+                                                placeholder="Seleziona la Lista"
+                                                data - init - plugin="selectize">
+                                            <?php foreach ($billRegistryTypePayment as $tp) {
+                                                if ($tp->id == $brcbi->billRegistryTypePaymentId) {
+                                                    echo '<option  selected="selected" value="' . $tp->id . '">' . $tp->name . '</option>';
+                                                } else {
+                                                    echo '<option  value="' . $tp->id . '">' . $tp->name . '</option>';
+                                                }
+                                            }; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="billRegistryTypeTaxesId"> Seleziona l'aliquota Iva</label>
                                         <select id="billRegistryTypeTaxesId" name="billRegistryTypeTaxesId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach ($billRegistryTypeTaxes as $tt) {
+                                                if ($tt->id == $brcbi->billRegistryTypeTaxesId) {
+                                                    echo '<option  selected="selected" value="' . $tt->id . '">' . $tt->description . '</option>';
+                                                } else {
+                                                    echo '<option  value="' . $tt->id . '">' . $tt->description . '</option>';
+                                                }
+                                            }; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -329,7 +351,7 @@
                                     <div class="form-group form-group-default required">
                                         <label for="sdi">Codice UNIVOCO SDI</label>
                                         <input id="sdi" autocomplete="off" type="text"
-                                               class="form-control" name="sdi" value=""
+                                               class="form-control" name="sdi" value="<?php echo $brcbi->sdi; ?>"
                                                required="required"/>
                                     </div>
                                 </div>
@@ -352,17 +374,39 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php switch ($brca->accountStatusId) {
+                                                case 1:
+                                                    $selectActive = 'selected="selected"';
+                                                    $selectNotActive = '';
+                                                    $selectSuspend = '';
+                                                    break;
+                                                case 0:
+                                                    $selectActive = '';
+                                                    $selectNotActive = 'selected="selected"';
+                                                    $selectSuspend = '';
+                                                    break;
+                                                case 2:
+                                                    $selectActive = '';
+                                                    $selectNotActive = '';
+                                                    $selectSuspend = 'selected="selected"';
+                                                    break;
+
+                                            }
+                                            ?>
                                             <option value=""></option>
-                                            <option value="1">Attivo</option>
-                                            <option value="0">non Attivo</option>
-                                            <option value="2">sospeso</option>
+                                            <option <?php echo $selectActive; ?> value="1">Attivo</option>
+                                            <option <?php echo $selectNotActive; ?> value="0">non Attivo</option>
+                                            <option <?php echo $selectSuspend; ?> value="2">sospeso</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="dateActivation">Data Attivazione</label>
-                                        <input type="datetime-local" class="form-control" id="dateActivation" name="dateActivation" value="" />
+                                        <?php $dateActivation = strtotime($brca->dateActivation);
+                                        $dateActivation = date('Y-m-d\TH:i',$dateActivation); ?>
+                                        <input type="datetime-local" class="form-control" id="dateActivation"
+                                               name="dateActivation" value="<?php echo $dateActivation; ?>"/>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -372,9 +416,21 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php switch ($brca->accountAsFriend) {
+                                                case 1:
+                                                    $selectActiveFriend = 'selected="selected"';
+                                                    $selectNotActiveFriend = '';
+                                                    break;
+                                                case 0:
+                                                    $selectActiveFriend = '';
+                                                    $selectNotActiveFriend = 'selected="selected"';
+                                                    break;
+
+                                            }
+                                            ?>
                                             <option value=""></option>
-                                            <option value="1">Si</option>
-                                            <option value="0">No</option>
+                                            <option <?php echo $selectActiveFriend; ?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveFriend; ?> value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -385,15 +441,69 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach ($typeFriend as $tf) {
+                                                if ($tf->id == $brca->typeFriendId) {
+                                                    echo '<option  selected="selected" value="' . $tf->rating . '">' . $tf->name . '</option>';
+                                                } else {
+                                                    echo '<option  value="' . $tf->rating . '">' . $tf->name . '</option>';
+                                                }
+                                            }; ?>
+
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2" id="rating">
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
+                                    <?php switch ($brca->typeFriendId) {
+                                        case 1:
+                                            break;
+                                            $checkStar1='checked';
+                                            $checkStar2='';
+                                            $checkStar3='';
+                                            $checkStar4='';
+                                            $checkStar5='';
+
+
+                                        case 2:
+                                            $checkStar1='checked';
+                                            $checkStar2='checked';
+                                            $checkStar3='';
+                                            $checkStar4='';
+                                            $checkStar5='';
+                                            break;
+                                        case 3:
+                                            $checkStar1='checked';
+                                            $checkStar2='checked';
+                                            $checkStar3='checked';
+                                            $checkStar4='';
+                                            $checkStar5='';
+                                            break;
+                                        case 4:
+                                            $checkStar1='checked';
+                                            $checkStar2='checked';
+                                            $checkStar3='checked';
+                                            $checkStar4='checked';
+                                            $checkStar5='';
+                                            break;
+                                        case 5:
+                                            $checkStar1='checked';
+                                            $checkStar2='checked';
+                                            $checkStar3='checked';
+                                            $checkStar4='checked';
+                                            $checkStar5='checked';
+                                            break;
+                                        default:
+                                            $checkStar1='';
+                                            $checkStar2='';
+                                            $checkStar3='';
+                                            $checkStar4='';
+                                            $checkStar5='';
+                                    }
+                                    ?>
+                                    <span class="fa fa-star <?php echo $checkStar1?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar2?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar3?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar4?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar5?>"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -404,6 +514,13 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach ($shop as $shops) {
+                                                if ($shops->id == $brca->shopId) {
+                                                    echo '<option  selected="selected" value="' . $shops->id . '">' . $shops->name . '</option>';
+                                                } else {
+                                                    echo '<option  value="' .  $shops->id . '">' . $shops->name . '</option>';
+                                                }
+                                            }; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -416,14 +533,31 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php switch ($brca->accountAsParallel) {
+                                                case 1:
+                                                    $selectActiveAsP = 'selected="selected"';
+                                                    $selectNotActiveAsP = '';
+                                                    break;
+                                                case 0:
+                                                    $selectActiveAsP = '';
+                                                    $selectNotActiveAsP = 'selected="selected"';
+                                                    break;
+
+                                            }
+                                            ?>
                                             <option value=""></option>
-                                            <option value="1">Si</option>
-                                            <option value="0">No</option>
+                                            <option <?php echo $selectActiveAsP;?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsP;?> value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row hide" id="rawParallel">
+                            <?php  if($brca->accountAsParallel==1){
+                                $classRawParallel='';
+                            }else{
+                                $classRawParallel='hide';
+                            }?>
+                            <div class="row <?php echo $classRawParallel;?>" id="rawParallel">
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="accountAsParallelSupplier">Seleziona Se è Supplier </label>
@@ -431,9 +565,21 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php switch ($brca->accountAsParallel) {
+                                                case 1:
+                                                    $selectActiveAsPS = 'selected="selected"';
+                                                    $selectNotActiveAsPS = '';
+                                                    break;
+                                                case 0:
+                                                    $selectActiveAsPS = '';
+                                                    $selectNotActiveAsPS = 'selected="selected"';
+                                                    break;
+
+                                            }
+                                            ?>
                                             <option value=""></option>
-                                            <option value="1">Si</option>
-                                            <option value="0">No</option>
+                                            <option <?php echo $selectActiveAsPS;?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsPS;?> value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -444,6 +590,21 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php switch ($brca->accountAsParallel) {
+                                                case 1:
+                                                    $selectActiveAsPSS = 'selected="selected"';
+                                                    $selectNotActiveAsPSS = '';
+                                                    break;
+                                                case 0:
+                                                    $selectActiveAsPSS = '';
+                                                    $selectNotActiveAsPSS = 'selected="selected"';
+                                                    break;
+
+                                            }
+                                            ?>
+                                            <option value=""></option>
+                                            <option <?php echo $selectActiveAsPSS;?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsPSS;?> value="0">No</option>
                                             <option value=""></option>
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
@@ -454,7 +615,7 @@
                                     <div class="form-group form-group-default required">
                                         <label for="parallelFee">Fee riconosciuta sul Parallelo</label>
                                         <input id="parallelFee" autocomplete="off" type="text"
-                                               class="form-control" name="parallelFee" value=""
+                                               class="form-control" name="parallelFee" value="<?php echo $brca->parallelFee;?>"
                                                required="required"/>
                                     </div>
                                 </div>
@@ -467,6 +628,21 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php switch ($brca->accountAsService) {
+                                                case 1:
+                                                    $selectActiveAsS = 'selected="selected"';
+                                                    $selectNotActiveAsS = '';
+                                                    break;
+                                                case 0:
+                                                    $selectActiveAsS = '';
+                                                    $selectNotActiveAsS = 'selected="selected"';
+                                                    break;
+
+                                            }
+                                            ?>
+                                            <option value=""></option>
+                                            <option <?php echo $selectActiveAsS;?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsS;?> value="0">No</option>
                                             <option value=""></option>
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
@@ -475,6 +651,25 @@
                                 </div>
                             </div>
                             <div class="row" id="rawProduct">
+                                <? $bodyres='';?>
+                                <?php if($brca->accountAsService==1){
+                                    $bodyres.= '<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca per Categoria"></div>';
+                                    $bodyres.='<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Codice"></div>';
+                                    $bodyres.='<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
+                                   $bodyres.= '<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:20%;">Codice Prodotto</th><th style="width:20%;">Nome Prodotto</th><th style="width:20%;">Selezione</th></tr>';
+                                }
+                                foreach($brcahp as $product){
+                                    $brp=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$product->billRegistryProductId]);
+                                    $brcp=\Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy([']id'=>$brp->billRegistryCategoryProductId]);
+                                    $categoryName=$brcp->name;
+                                    $codeProduct=$brp->codeProduct;
+                                    $nameProduct=$brp->name;
+                                    $bodyres .= '<tr><td style="width:40%;">'.$categoryName . '</td><td style="width:40%;">' . $codeProduct.'</td><td style="width:40%;">'.$nameProduct.'</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' .$product->billRegistryProductId . '"></td></tr>';
+
+                                }
+                                $bodyres.='</table>';
+                                echo $bodyres;
+                                ?>
 
                             </div>
                         </div>
@@ -504,21 +699,21 @@
             </div>
     </div>
     <?php include "parts/footer.php" ?>
-                                    </div>
-                                    <?php include "parts/bsmodal.php"; ?>
-                                    <?php include "parts/alert.php"; ?>
-                                    <bs-toolbar class="toolbar-definition">
-                                        <bs-toolbar-group data-group-label="Operazioni Cliente">
-                                            <bs-toolbar-button
-                                                    data-tag="a"
-                                                    data-icon="fa-floppy-o"
-                                                    data-permission="/admin/product/add"
-                                                    data-event="bs.client.save"
-                                                    data-class="btn btn-default"
-                                                    data-rel="tooltip"
-                                                    data-title="Salva"
-                                                    data-placement="bottom"
-                                            ></bs-toolbar-button>
-                                    </bs-toolbar>
+</div>
+<?php include "parts/bsmodal.php"; ?>
+<?php include "parts/alert.php"; ?>
+<bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Operazioni Cliente">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-floppy-o"
+                data-permission="/admin/product/add"
+                data-event="bs.client.save"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Salva"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+</bs-toolbar>
 </body>
 </html>
