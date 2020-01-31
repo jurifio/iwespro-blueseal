@@ -28,6 +28,8 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
 
     public function get()
     {
+
+        ini_set('memory_limit', '2048M');
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryclient_edit.php');
         $id = \Monkey::app()->router->request()->getRequestData('id');

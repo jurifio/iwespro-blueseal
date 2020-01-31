@@ -651,7 +651,7 @@
                                 </div>
                             </div>
                             <div class="row" id="rawProduct">
-                                <? $bodyres='';?>
+                                <?php echo  $bodyres='';?>
                                 <?php if($brca->accountAsService==1){
                                     $bodyres.= '<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca per Categoria"></div>';
                                     $bodyres.='<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Codice"></div>';
@@ -660,7 +660,7 @@
                                 }
                                 foreach($brcahp as $product){
                                     $brp=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$product->billRegistryProductId]);
-                                    $brcp=\Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy([']id'=>$brp->billRegistryCategoryProductId]);
+                                    $brcp=\Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id'=>$brp->billRegistryCategoryProductId]);
                                     $categoryName=$brcp->name;
                                     $codeProduct=$brp->codeProduct;
                                     $nameProduct=$brp->name;
