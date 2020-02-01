@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="shipmentInvoiceNumber">Fattura Carrier</label>
                                         <input id="shipmentInvoiceNumber" autocomplete="off" type="text"
@@ -85,13 +85,28 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="dateInvoice">Data Fattura Carrier</label>
                                         <input type="datetime-local" class="form-control" id="dateInvoice" name="dateInvoice" value="" />
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="scope">Seleziona il tipo di spezione</label>
+                                        <select id="scope" name="scope"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option value="usToUser">Da Iwes verso Cliente</option>
+                                            <option value="supplierToUser">Da Supplier verso Cliente</option>
+                                            <option value="supplierToUs">Da Supplier verso Iwes</option>
+                                            <option value="userToUs">Da Cliente verso Iwes</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="isOrder">Seleziona Se è legato ad un ordine </label>
                                         <select id="isOrder" name="isOrder"
@@ -104,7 +119,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="order">Seleziona l'ordine</label>
                                             <select id="order" name="order"

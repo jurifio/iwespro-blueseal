@@ -53,9 +53,9 @@ $(document).ready(function () {
     });
     $.ajax({
         method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
+        url: '/blueseal/xhr/SelectOrderLineAjaxController',
         data: {
-            table: 'OrderLine'
+            id: 1,
 
         },
         dataType: 'json'
@@ -64,19 +64,19 @@ $(document).ready(function () {
         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
-            labelField: 'orderId',
-            searchField: ['id','orderId'],
+            labelField: 'id',
+            searchField: ['id'],
             options: res2,
             render: {
                 item: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.id) + ' ' + escape(item.orderId) + '</span> - ' +
+                        '<span class="label">' + escape(item.id)  + '</span> - ' +
                         '<span class="caption"> product:' + escape(item.productId+'-'+item.productVariantId +item.productSizeId+ 'prezzo:' + item.netPrice) + '</span>' +
                         '</div>'
                 },
                 option: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.id) + ' ' + escape(item.orderId) + '</span> - ' +
+                        '<span class="label">' + escape(item.id) + '</span> - ' +
                         '<span class="caption"> product:' + escape(item.productId+'-'+item.productVariantId +item.productSizeId+ 'prezzo:' + item.netPrice) + '</span>' +
                         '</div>'
                 }
@@ -203,6 +203,7 @@ $(document).on('bs.shipment.save', function () {
         'dateInvoice=' + $("#dateInvoice").val() + '&' +
         'isOrder=' + $("#isOrder").val() + '&' +
         'order='+ $("#order").val() + '&' +
+        'scope='+ $("#scope").val() + '&' +
         'fromAddressBookId=' + $("#fromAddressBookId").val() + '&' +
         'fromName=' + $("#fromName").val() + '&' +
         'fromSubject=' + $("#fromSubject").val() + '&' +
@@ -220,14 +221,14 @@ $(document).on('bs.shipment.save', function () {
         'toSubject=' + $("#toSubject").val() + '&' +
         'toAddress=' + $("#toAddress").val() + '&' +
         'toExtra=' + $("#toExtra").val() + '&' +
-        'sdi=' + $("#sdi").val() + '&' +
-        'shopId=' + $("#shopId").val() + '&' +
-        'accountStatusId=' + $("#accountStatusId").val() + '&' +
-        'dateActivation=' + $("#dateActivation").val() + '&' +
-        'accountAsFriend=' + $("#accountAsFriend").val() + '&' +
-        'typeFriendId=' + $("#typeFriendId").val() + '&' +
-        'accountAsParallel=' + $("#accountAsParallel").val() + '&' +
-        'accountAsParallelSupplier=' + $("#accountAsParallelSupplier").val() + '&' +
+        'toCity=' + $("#toCity").val() + '&' +
+        'toCountryId=' + $("#toCountryId").val() + '&' +
+        'toPostCode=' + $("#toPostCode").val() + '&' +
+        'toPhone=' + $("#toPhone").val() + '&' +
+        'toCellphone=' + $("#toCellphone").val() + '&' +
+        'toVatNumber=' + $("#toVatNumber").val() + '&' +
+        'toProvince=' + $("#toProvince").val() + '&' +
+        'toIban=' + $("#toIban").val() + '&' +
         'accountAsParallelSeller=' + $("#accountAsParallelSeller").val() + '&' +
         'parallelFee=' + $("#parallelFee").val() + '&' +
         'accountAsService=' + $("#accountAsService").val() + '&' +
@@ -237,22 +238,13 @@ $(document).on('bs.shipment.save', function () {
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         var data = 1;
-        var urldef = "/blueseal/xhr/RegistryClientManageAjaxController" + config;
+        var urldef = "/blueseal/xhr/ShipmentManageAjaxController" + config;
         $.ajax({
             method: "POST",
             url: urldef,
             data: data
         }).done(function (res) {
-            if(res.includes('1-')){
-                let  billRegistryClientId=res.replace('1-','');
-                bsModal.writeBody('Inserimento eseguito con successo');
-                setTimeout(function(){
-                    window.location.href = '/blueseal/anagrafica/clienti-modifica?id='+billRegistryClientId;
-                }, 1000);
-
-            }else{
-                bsModal.writeBody(res);
-            }
+            bsModal.writeBody(res);
         }).fail(function (res) {
             bsModal.writeBody(res);
         }).always(function (res) {
