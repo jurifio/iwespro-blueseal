@@ -88,6 +88,10 @@ $(document).on('bs-add-invoice-shippingmassive-info', function () {
                 data: data
             }).done(function (res) {
                $('#result').append(res);
+                var selectize = $("#trackingNumberFind")[0].selectize;
+                selectize.clear();
+                document.getElementById('realShipmentPrice').value = '';
+
             }).fail(function (res) {
                 bsModal.writeBody('Errore grave');
             }).always(function (res) {
