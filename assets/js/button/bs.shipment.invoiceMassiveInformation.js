@@ -34,6 +34,7 @@ $(document).on('bs-add-invoice-shippingmassive-info', function () {
 
 
 
+
             let bsModal = new $.bsModal('Consuntiva Costi di spedizione ', {
                 body: '<div><p>ricerca Spedizioni</p></div>' +
 

@@ -21,15 +21,15 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
  */
 
 
-class CBillRegistryClientAddController extends ARestrictedAccessRootController
+class CShipmentAddController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "shipment_a";
+    protected $pageSlug = "shipment_add";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryclient_add.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/shipment_add.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

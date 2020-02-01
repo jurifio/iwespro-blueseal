@@ -59,6 +59,9 @@ class CShipmentManageController extends AAjaxController
             $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneByStringId($shipmentData['id']);
             $shipment->bookingNumber = $shipmentData['bookingNumber'];
             $shipment->trackingNumber = $shipmentData['trackingNumber'];
+            if($shipmentData['carrierId']!=null) {
+                $shipment->carrierId = $shipmentData['carrierId'];
+            }
             $shipment->predictedShipmentDate = !empty($shipmentData['predictedShipmentDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedShipmentDate']) : null;
             $shipment->predictedDeliveryDate = !empty($shipmentData['predictedDeliveryDate']) ? STimeToolbox::DbFormattedDateTime($shipmentData['predictedDeliveryDate']) : null;
             if (!$shipment->shipmentDate && !(empty($shipmentData['shipmentDate']))) {

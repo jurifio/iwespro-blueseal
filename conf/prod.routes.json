@@ -3428,6 +3428,20 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/spedizioni/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
