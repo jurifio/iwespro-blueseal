@@ -206,6 +206,7 @@ $(document).on('bs.shipment.save', function () {
         'scope='+ $("#scope").val() + '&' +
         'fromAddressBookId=' + $("#fromAddressBookId").val() + '&' +
         'fromName=' + $("#fromName").val() + '&' +
+        'fromAddress=' + $("#fromAddress").val() + '&' +
         'fromSubject=' + $("#fromSubject").val() + '&' +
         'fromExtra=' + $("#fromExtra").val() + '&' +
         'fromCity=' + $("#fromCity").val() + '&' +
@@ -228,11 +229,7 @@ $(document).on('bs.shipment.save', function () {
         'toCellphone=' + $("#toCellphone").val() + '&' +
         'toVatNumber=' + $("#toVatNumber").val() + '&' +
         'toProvince=' + $("#toProvince").val() + '&' +
-        'toIban=' + $("#toIban").val() + '&' +
-        'accountAsParallelSeller=' + $("#accountAsParallelSeller").val() + '&' +
-        'parallelFee=' + $("#parallelFee").val() + '&' +
-        'accountAsService=' + $("#accountAsService").val() + '&' +
-        'productList=' + val.substring(0, val.length - 1);
+        'toIban=' + $("#toIban").val();
 
 
     bsModal.showCancelBtn();

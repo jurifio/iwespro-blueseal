@@ -299,7 +299,7 @@ class CShipmentManageAjaxController extends AAjaxController
                 $insertOrderLineHasShipment = $orderLineHasShipmentRepo->getEmptyEntity();
                 $insertOrderLineHasShipment->shipmentId = $lastId;
                 $insertOrderLineHasShipment->orderLineId=$orderLineId;
-                $insertOrderLineHasShipment-> ordeId=$orderId;
+                $insertOrderLineHasShipment-> orderId=$orderId;
                 $insertOrderLineHasShipment->insert();
                 }
 
