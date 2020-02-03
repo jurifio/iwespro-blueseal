@@ -3393,7 +3393,8 @@
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBillRegistryClientAddController"
             },
-            "filters": {},
+            "filters": {}
+        ,
             "translations": {},
             "methods": [
                 "GET",
@@ -3403,13 +3404,11 @@
             ]
         },
         {
-            "pattern": "/blueseal/anagrafica/clienti-modifica/:id(/)?",
+            "pattern": "/blueseal/anagrafica/clienti-modifica(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBillRegistryClientEditController"
             },
-            "filters": {
-                "id": "[0-9]+"
-            },
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",

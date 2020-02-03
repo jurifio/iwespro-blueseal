@@ -41,6 +41,8 @@
                         <div class="col-md-12">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Informazioni di base</h5>
+                                <input type="hidden" id="billRegistryClientId" name="billRegistryClientId" value="<?php echo $brc->id?>"/>
+                                <input type="hidden" id="billRegistryClientAccountId" name="billRegistryClientAccountId" value="<?php echo $brca->id?>"/>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
@@ -681,12 +683,26 @@
                                 <h5 class="m-t-12">Inserimento Filiali</h5>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-
+                                <div class="col-md-12">
+                                    <button  class="success" id="addLocation" type="button"> <span class="fa fa-plus-circle">Aggiungi</span></button>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row">
+                                <?php
+                                $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputLocation" onkeyup="myFunctionLocation()" placeholder="ricerca per nome"></div>';
+                                $bodyLocation .= '<div class="col-md-6"><input type="text" id="myLocation" onkeyup="myShopFunctionLocation()" placeholder="ricerca per città"></div></div>';
 
+                                $bodyLocation .= '<table id="myTableLocation"> <tr class="header1"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
+
+                                ?>
+                                <div id="rawLocation">
+                                    <?php foreach($brcl as $location){
+                                        $bodyLocation.='<tr><td>'.$location->id.'</td><td>'.$location->name.'</td><td>'.$location->city.'</td><td></td></tr>';
+                                    }
+                                    echo $bodyLocation;
+                                    ?>
                                 </div>
+                            </table>
                             </div>
                         </div>
                     </div>

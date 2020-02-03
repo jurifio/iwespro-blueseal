@@ -1,37 +1,4 @@
 
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'UserDetails'
-
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    var select = $('#userId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
-        valueField: 'userId',
-        labelField: 'name',
-        searchField: ['name','surname'],
-        options: res2,
-        render: {
-            item: function (item, escape) {
-                return '<div>' +
-                    '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
-                    '<span class="caption">gender:' + escape(item.gender + 'birthDay:' + item.birthDate) + '</span>' +
-                    '</div>'
-            },
-            option: function (item, escape) {
-                return '<div>' +
-                    '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
-                    '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
-                    '</div>'
-            }
-        }
-    });
-
-});
 
 $.ajax({
     method: 'GET',
@@ -52,6 +19,7 @@ $.ajax({
     });
 
 });
+
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -90,37 +58,7 @@ $.ajax({
     });
 
 });
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'BankRegistry'
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    var select = $('#bankRegistryId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: ['name', 'location', 'abi', 'cab'],
-        options: res2,
-        render: {
-            item: function (item, escape) {
-                return '<div>' +
-                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                    '</div>'
-            },
-            option: function (item, escape) {
-                return '<div>' +
-                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                    '</div>'
-            }
-        }
-    });
-});
+
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -318,6 +256,49 @@ function myShopFunction() {
         }
     }
 }
+function myFunctionLocation() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInputLocation");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableLocation");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myShopFunctionLocation() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myLocation");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableLocation");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
 
 $(document).on('click', '#checkedAll', function () {
 
@@ -337,6 +318,229 @@ $("#accountAsParallel").change(function () {
         $("#rawParallel").addClass("hide");
     }
 
+});
+$('#addLocation').click(function () {
+    let bsModalLocation = new $.bsModal('Inserimento Filiale', {
+        body: `<p>Confermare?</p>
+ <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameLocation">Nome Filiale</label>
+                                        <input id="nameLocation" autocomplete="off" type="text"
+                                               class="form-control" name="nameLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="addressLocation">Indirizzo</label>
+                                        <input id="addressLocation" autocomplete="off" type="text"
+                                               class="form-control" name="addressLocation" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="extraLocation">Indirizzo 2</label>
+                                        <input id="extraLocation" autocomplete="off" type="text"
+                                               class="form-control" name="extra" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="cityLocation">città</label>
+                                        <input id="cityLocation" autocomplete="off" type="text"
+                                               class="form-control" name="cityLocation" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="zipCodeLocation">CAP</label>
+                                        <input id="zipCodeLocation" autocomplete="off" type="text"
+                                               class="form-control" name="zipCodeLocation" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="provinceLocation">Provincia</label>
+                                        <input id="provinceLocation" autocomplete="off" type="text"
+                                               class="form-control" name="provinceLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="countryIdLocation">Seleziona la Nazione </label>
+                                        <select id="countryIdlocation" name="countryIdLocation"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="vatNumberLocation">Partita Iva/Codice Fiscale</label>
+                                        <input id="vatNumberLocation" autocomplete="off" type="text"
+                                               class="form-control" name="vatNumberLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="signBoardLocation">Insegna</label>
+                                        <input id="signBoardLocation" autocomplete="off" type="text"
+                                               class="form-control" name="signBoardLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneLocation">Telefono</label>
+                                        <input id="phoneLocation" autocomplete="off" type="text"
+                                               class="form-control" name="phoneLocation" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default ">
+                                        <label for="mobileLocation">Mobile</label>
+                                        <input id="mobileLocation" autocomplete="off" type="text"
+                                               class="form-control" name="mobileLocation" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="faxLocation">Fax </label>
+                                        <input id="faxLocation" autocomplete="off" type="text"
+                                               class="form-control" name="faxLocation" value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="contactNameLocation"> Nome Contatto </label>
+                                        <input id="contactNameLocation" autocomplete="off" type="text"
+                                               class="form-control" name="contactNameLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div> </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailLocation"> email Azienda </label>
+                                        <input id="emailLocation" autocomplete="off" type="text"
+                                               class="form-control" name="email" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCcLocation"> email Azienda CC </label>
+                                        <input id="emailCcLocation" autocomplete="off" type="text"
+                                               class="form-control" name="emailCcLocation" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCcnLocation"> email Azienda CCn </label>
+                                        <input id="emailCcnLocation" autocomplete="off" type="text"
+                                               class="form-control" name="emailCcnLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="noteLocation"> Note</label>
+                                        <textarea class="form-control" name="noteLocation" id="noteLocation"
+                                                  value=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+`
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Country'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#countryIdLocation');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+    bsModalLocation.showCancelBtn();
+    bsModalLocation.addClass('modal-wide');
+    bsModalLocation.addClass('modal-high');
+    bsModalLocation.setOkEvent(function () {
+        const data = {
+
+            nameLocation: $('#nameLocation').val(),
+            billRegistryClientId :   $('#billRegistryClientId').val(),
+            addressLocation:$('#addressLocation').val(),
+            extraLocation:$('#extraLocation').val(),
+            zipCodeLocation:$('#zipCodeLocation').val(),
+            cityLocation:$('#cityLocation').val(),
+            countryIdLocation:$('#countryIdLocation').val(),
+            vatNumberLocation:$('#vatNumberLocation').val(),
+            signBoardLocation:$('#signBoardLocation').val(),
+            provinceLocation:$('#provinceLocation').val(),
+
+            sdiLocation:$('#sdiLocation').val(),
+            contactNameLocation:$('#contactNameLocation').val(),
+            phoneLocation:$('#phoneLocation').val(),
+            mobileLocation:$('#mobileLocation').val(),
+            faxLocation:$('#faxLocation').val(),
+            emailLocation:$('#emailLocation').val(),
+            emailCcLocation:$('#emailCcLocation').val(),
+            emailCcnLocation:$('#emailCcnLocation').val(),
+            noteLocation:$('#noteLocation').val()
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/BillRegistryLocationManageAjaxController',
+            data: data
+        }).done(function (res) {
+            var bodyLocation='<tr><td>'+res+'</td><td>'+$('#nameLocation').val()+'</td><td>'+$('#cityLocation').val()+'</td><td></td></tr>';
+            $('#rawLocation').append(bodyLocation);
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                //window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
 });
 
 $(document).on('bs.client.save', function () {
