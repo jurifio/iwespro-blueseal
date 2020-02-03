@@ -690,9 +690,9 @@
                             <div class="row">
                                 <?php
                                 $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputLocation" onkeyup="myFunctionLocation()" placeholder="ricerca per nome"></div>';
-                                $bodyLocation .= '<div class="col-md-6"><input type="text" id="myLocation" onkeyup="myShopFunctionLocation()" placeholder="ricerca per città"></div></div>';
+                                $bodyLocation .= '<div class="col-md-6"><input type="text" id="myShopLocation" onkeyup="myShopFunctionLocation()" placeholder="ricerca per città"></div></div>';
 
-                                $bodyLocation .= '<table id="myTableLocation"> <tr class="header1"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
+                                $bodyLocation .= '<table id="myTableLocation"> <tr class="header2"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
 
                                 ?>
                                 <div id="rawLocation">
