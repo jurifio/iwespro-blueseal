@@ -42,7 +42,7 @@ class CBillRegistryClientListAjaxController extends AAjaxController
 
                 $row = [];
                 $row['DT_RowId'] = $client->printId();
-                $row['id'] = '<a href="/blueseal/contabilita/clienti/modifica/' . $client->printId() . '">' . $client->printId() . '</a>';
+                $row['id'] = '<a href="/blueseal/anagrafica/clienti-modifica?id=' . $client->printId() . '">' . $client->printId() . '</a>';
                 $row['companyName'] = $client->companyName;
 
 

@@ -1,185 +1,183 @@
-$(document).ready(function () {
 
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'UserDetails'
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'UserDetails'
 
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#userId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'userId',
-            labelField: 'name',
-            searchField: ['name','surname'],
-            options: res2,
-            render: {
-                item: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
-                        '<span class="caption">gender:' + escape(item.gender + 'birthDay:' + item.birthDate) + '</span>' +
-                        '</div>'
-                },
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
-                        '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
-                        '</div>'
-                }
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#userId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'userId',
+        labelField: 'name',
+        searchField: ['name','surname'],
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
+                    '<span class="caption">gender:' + escape(item.gender + 'birthDay:' + item.birthDate) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
+                    '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
+                    '</div>'
             }
-        });
-
+        }
     });
 
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Country'
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#countryId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'TypeFriend'
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#typeFriendId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Currency'
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#currencyId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'code',
-            searchField: 'code',
-            options: res2,
-        });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BankRegistry'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#bankRegistryId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name', 'location', 'abi', 'cab'],
-            options: res2,
-            render: {
-                item: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                        '</div>'
-                },
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                        '</div>'
-                }
-            }
-        });
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Shop'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#shopId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name'],
-            options: res2
-        });
-
-    });
-
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BillRegistryTypeTaxes'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#billRegistryTypeTaxesId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'description',
-            searchField: ['description'],
-            options: res2
-        });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BillRegistryTypePayment'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#billRegistryTypePaymentId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name'],
-            options: res2
-        });
-
-    });
-
-    document.getElementById('insertClient').style.display = "block";
 });
+
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'Country'
+
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#countryId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        options: res2,
+    });
+
+});
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'TypeFriend'
+
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#typeFriendId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        options: res2,
+    });
+
+});
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'Currency'
+
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#currencyId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'code',
+        searchField: 'code',
+        options: res2,
+    });
+
+});
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BankRegistry'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#bankRegistryId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name', 'location', 'abi', 'cab'],
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                    '</div>'
+            }
+        }
+    });
+});
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'Shop'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#shopId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        options: res2
+    });
+
+});
+
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BillRegistryTypeTaxes'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#billRegistryTypeTaxesId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'description',
+        searchField: ['description'],
+        options: res2
+    });
+
+});
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BillRegistryTypePayment'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#billRegistryTypePaymentId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        options: res2
+    });
+
+});
+
+document.getElementById('insertClient').style.display = "block";
 
 
 function openTab(evt, tabName) {

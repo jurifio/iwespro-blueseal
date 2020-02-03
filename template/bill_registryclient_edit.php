@@ -12,7 +12,7 @@
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
-        <form class="content sm-gutter">
+        <div class="content sm-gutter">
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
@@ -28,14 +28,10 @@
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertClientAccount')">Account E Servizi
                             </button>
-                            <button class="tablinks hide" onclick="openTab(event, 'insertClientLocation')">Sedi e
-                                Filiali
+                            <button class="tablinks" onclick="openTab(event, 'insertClientLocation')">Sedi e Filiali
                             </button>
-                            <button class="tablinks hide" onclick="openTab(event, 'insertClientContact')">Contatti
-                            </button>
-
-                            <button class="tablinks hide" onclick="openTab(event, 'insertClientContract')">Contratti
-                            </button>
+                            <button class="tablinks" onclick="openTab(event, 'insertClientContact')">Contatti</button>
+                            <button class="tablinks" onclick="openTab(event, 'insertClientContract')">Contratti</button>
                         </div>
                     </div>
                 </div>
@@ -190,7 +186,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group form-group-defaul">
+                                    <div class="form-group form-group-default">
                                         <label for="mobileAdmin"> Mobile Contatto Amministratore </label>
                                         <input id="mobileAdmin" autocomplete="off" type="text"
                                                class="form-control" name="mobileAdmin"
@@ -271,37 +267,37 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="bankRegistryId"> Seleziona la Banca di Appoggio </label>
+                                        <label for="bankRegistryId">Seleziona la Banca di Appoggio</label>
                                         <select id="bankRegistryId" name="bankRegistryId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
-                                                data - init - plugin="selectize">
+                                                data-init-plugin="selectize">
                                             <?php foreach ($bankRegistry as $bank) {
                                                 if ($bank->id == $brcbi->bankRegistryId) {
                                                     echo '<option  selected="selected" value="' . $bank->id . '">' . $bank->name . ' ' . $bank->location . ' </option>';
                                                 } else {
                                                     echo '<option  value="' . $bank->id . '">' . $bank->name . ' ' . $bank->location . ' </option>';
                                                 }
-                                            }; ?>
+                                            } ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group form-group-default required">
-                                        <label for="iban"> Iban</label>
+                                    <div class="form-group form-group-default">
+                                        <label for="iban">Iban</label>
                                         <input id="iban" autocomplete="off" type="text"
                                                class="form-control" name="iban" value="<?php echo $brcbi->iban; ?>"
-                                               required="required"/>
+                                        />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="currencyId"> Seleziona la divisa </label>
+                                        <label for="currencyId">Seleziona la divisa </label>
                                         <select id="currencyId" name="currencyId"
                                                 class="full-width selectpicker"
-                                                data - init - plugin="selectize">
+                                                data-init-plugin="selectize">
                                             <?php foreach ($currency as $curr) {
                                                 if ($brcbi->currencyId == $curr->id) {
                                                     echo '<option  selected="selected" value="' . $curr->id . '">' . $curr->code . '</option>';
@@ -319,14 +315,14 @@
                                         <select id="billRegistryTypePaymentId" name="billRegistryTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
-                                                data - init - plugin="selectize">
+                                                data-init-plugin="selectize">
                                             <?php foreach ($billRegistryTypePayment as $tp) {
                                                 if ($tp->id == $brcbi->billRegistryTypePaymentId) {
                                                     echo '<option  selected="selected" value="' . $tp->id . '">' . $tp->name . '</option>';
                                                 } else {
                                                     echo '<option  value="' . $tp->id . '">' . $tp->name . '</option>';
                                                 }
-                                            }; ?>
+                                            } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -343,16 +339,16 @@
                                                 } else {
                                                     echo '<option  value="' . $tt->id . '">' . $tt->description . '</option>';
                                                 }
-                                            }; ?>
+                                            } ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group form-group-default required">
+                                    <div class="form-group form-group-default">
                                         <label for="sdi">Codice UNIVOCO SDI</label>
                                         <input id="sdi" autocomplete="off" type="text"
                                                class="form-control" name="sdi" value="<?php echo $brcbi->sdi; ?>"
-                                               required="required"/>
+                                        />
                                     </div>
                                 </div>
 
@@ -447,7 +443,7 @@
                                                 } else {
                                                     echo '<option  value="' . $tf->rating . '">' . $tf->name . '</option>';
                                                 }
-                                            }; ?>
+                                            } ?>
 
                                         </select>
                                     </div>
@@ -456,54 +452,54 @@
                                     <?php switch ($brca->typeFriendId) {
                                         case 1:
                                             break;
-                                            $checkStar1='checked';
-                                            $checkStar2='';
-                                            $checkStar3='';
-                                            $checkStar4='';
-                                            $checkStar5='';
+                                            $checkStar1 = 'checked';
+                                            $checkStar2 = '';
+                                            $checkStar3 = '';
+                                            $checkStar4 = '';
+                                            $checkStar5 = '';
 
 
                                         case 2:
-                                            $checkStar1='checked';
-                                            $checkStar2='checked';
-                                            $checkStar3='';
-                                            $checkStar4='';
-                                            $checkStar5='';
+                                            $checkStar1 = 'checked';
+                                            $checkStar2 = 'checked';
+                                            $checkStar3 = '';
+                                            $checkStar4 = '';
+                                            $checkStar5 = '';
                                             break;
                                         case 3:
-                                            $checkStar1='checked';
-                                            $checkStar2='checked';
-                                            $checkStar3='checked';
-                                            $checkStar4='';
-                                            $checkStar5='';
+                                            $checkStar1 = 'checked';
+                                            $checkStar2 = 'checked';
+                                            $checkStar3 = 'checked';
+                                            $checkStar4 = '';
+                                            $checkStar5 = '';
                                             break;
                                         case 4:
-                                            $checkStar1='checked';
-                                            $checkStar2='checked';
-                                            $checkStar3='checked';
-                                            $checkStar4='checked';
-                                            $checkStar5='';
+                                            $checkStar1 = 'checked';
+                                            $checkStar2 = 'checked';
+                                            $checkStar3 = 'checked';
+                                            $checkStar4 = 'checked';
+                                            $checkStar5 = '';
                                             break;
                                         case 5:
-                                            $checkStar1='checked';
-                                            $checkStar2='checked';
-                                            $checkStar3='checked';
-                                            $checkStar4='checked';
-                                            $checkStar5='checked';
+                                            $checkStar1 = 'checked';
+                                            $checkStar2 = 'checked';
+                                            $checkStar3 = 'checked';
+                                            $checkStar4 = 'checked';
+                                            $checkStar5 = 'checked';
                                             break;
                                         default:
-                                            $checkStar1='';
-                                            $checkStar2='';
-                                            $checkStar3='';
-                                            $checkStar4='';
-                                            $checkStar5='';
+                                            $checkStar1 = '';
+                                            $checkStar2 = '';
+                                            $checkStar3 = '';
+                                            $checkStar4 = '';
+                                            $checkStar5 = '';
                                     }
                                     ?>
-                                    <span class="fa fa-star <?php echo $checkStar1?>"></span>
-                                    <span class="fa fa-star <?php echo $checkStar2?>"></span>
-                                    <span class="fa fa-star <?php echo $checkStar3?>"></span>
-                                    <span class="fa fa-star <?php echo $checkStar4?>"></span>
-                                    <span class="fa fa-star <?php echo $checkStar5?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar1 ?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar2 ?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar3 ?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar4 ?>"></span>
+                                    <span class="fa fa-star <?php echo $checkStar5 ?>"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -518,9 +514,9 @@
                                                 if ($shops->id == $brca->shopId) {
                                                     echo '<option  selected="selected" value="' . $shops->id . '">' . $shops->name . '</option>';
                                                 } else {
-                                                    echo '<option  value="' .  $shops->id . '">' . $shops->name . '</option>';
+                                                    echo '<option  value="' . $shops->id . '">' . $shops->name . '</option>';
                                                 }
-                                            }; ?>
+                                            } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -546,18 +542,18 @@
                                             }
                                             ?>
                                             <option value=""></option>
-                                            <option <?php echo $selectActiveAsP;?> value="1">Si</option>
-                                            <option <?php echo $selectNotActiveAsP;?> value="0">No</option>
+                                            <option <?php echo $selectActiveAsP; ?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsP; ?> value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <?php  if($brca->accountAsParallel==1){
-                                $classRawParallel='';
-                            }else{
-                                $classRawParallel='hide';
-                            }?>
-                            <div class="row <?php echo $classRawParallel;?>" id="rawParallel">
+                            <?php if ($brca->accountAsParallel == 1) {
+                                $classRawParallel = '';
+                            } else {
+                                $classRawParallel = 'hide';
+                            } ?>
+                            <div class="row <?php echo $classRawParallel; ?>" id="rawParallel">
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="accountAsParallelSupplier">Seleziona Se è Supplier </label>
@@ -578,8 +574,8 @@
                                             }
                                             ?>
                                             <option value=""></option>
-                                            <option <?php echo $selectActiveAsPS;?> value="1">Si</option>
-                                            <option <?php echo $selectNotActiveAsPS;?> value="0">No</option>
+                                            <option <?php echo $selectActiveAsPS; ?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsPS; ?> value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -603,8 +599,8 @@
                                             }
                                             ?>
                                             <option value=""></option>
-                                            <option <?php echo $selectActiveAsPSS;?> value="1">Si</option>
-                                            <option <?php echo $selectNotActiveAsPSS;?> value="0">No</option>
+                                            <option <?php echo $selectActiveAsPSS; ?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsPSS; ?> value="0">No</option>
                                             <option value=""></option>
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
@@ -612,11 +608,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group form-group-default required">
+                                    <div class="form-group form-group-default">
                                         <label for="parallelFee">Fee riconosciuta sul Parallelo</label>
                                         <input id="parallelFee" autocomplete="off" type="text"
-                                               class="form-control" name="parallelFee" value="<?php echo $brca->parallelFee;?>"
-                                               required="required"/>
+                                               class="form-control" name="parallelFee"
+                                               value="<?php echo $brca->parallelFee; ?>"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -641,8 +638,8 @@
                                             }
                                             ?>
                                             <option value=""></option>
-                                            <option <?php echo $selectActiveAsS;?> value="1">Si</option>
-                                            <option <?php echo $selectNotActiveAsS;?> value="0">No</option>
+                                            <option <?php echo $selectActiveAsS; ?> value="1">Si</option>
+                                            <option <?php echo $selectNotActiveAsS; ?> value="0">No</option>
                                             <option value=""></option>
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
@@ -651,52 +648,55 @@
                                 </div>
                             </div>
                             <div class="row" id="rawProduct">
-                                <?php echo  $bodyres='';?>
-                                <?php if($brca->accountAsService==1){
-                                    $bodyres.= '<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca per Categoria"></div>';
-                                    $bodyres.='<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Codice"></div>';
-                                    $bodyres.='<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
-                                   $bodyres.= '<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:20%;">Codice Prodotto</th><th style="width:20%;">Nome Prodotto</th><th style="width:20%;">Selezione</th></tr>';
-                                }
-                                foreach($brcahp as $product){
-                                    $brp=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$product->billRegistryProductId]);
-                                    $brcp=\Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id'=>$brp->billRegistryCategoryProductId]);
-                                    $categoryName=$brcp->name;
-                                    $codeProduct=$brp->codeProduct;
-                                    $nameProduct=$brp->name;
-                                    $bodyres .= '<tr><td style="width:40%;">'.$categoryName . '</td><td style="width:40%;">' . $codeProduct.'</td><td style="width:40%;">'.$nameProduct.'</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' .$product->billRegistryProductId . '"></td></tr>';
+                                <?php echo $bodyres = ''; ?>
+                                <?php if ($brca->accountAsService == 1) {
+                                    $bodyres .= '<div class="row"><div class="col-md-4"><input type="text" id="myInput" onkeyup="myFunction()" placeholder="ricerca per Categoria"></div>';
+                                    $bodyres .= '<div class="col-md-4"><input type="text" id="myShop" onkeyup="myShopFunction()" placeholder="ricerca per Codice"></div>';
+                                    $bodyres .= '<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
+                                    $bodyres .= '<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:20%;">Codice Prodotto</th><th style="width:20%;">Nome Prodotto</th><th style="width:20%;">Selezione</th></tr>';
+
+                                    foreach ($brcahp as $brcahps) {
+                                        $brp = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $brcahps->billRegistryProductId]);
+                                        $brcp = \Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id' => $brp->id]);
+                                        $categoryName = $brcp->name;
+                                        $codeProduct = $brp->codeProduct;
+                                        $nameProduct = $brp->name;
+                                        $bodyres .= '<tr><td style="width:40%;">' . $categoryName . '</td><td style="width:40%;">' . $codeProduct . '</td><td style="width:40%;">' . $nameProduct . '</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' . $brcahps->billRegistryProductId . '"></td></tr>';
+
+                                    }
+                                    $bodyres .= '</table>';
+                                    echo $bodyres;
 
                                 }
-                                $bodyres.='</table>';
-                                echo $bodyres;
                                 ?>
 
                             </div>
                         </div>
                     </div>
-                    <div id="insertClientLocation" class="tabcontent hide">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="panel-heading clearfix">
-                                    <h5 class="m-t-12">Inserimento Filiali</h5>
+                </div>
+                <div id="insertClientLocation" class="tabcontent ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading clearfix">
+                                <h5 class="m-t-12">Inserimento Filiali</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
+                                <div class="col-md-4">
 
-                                    </div>
-                                    <div class="col-md-4">
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="insertClientContact" class="tabcontent hide">
-                        </div>
-                        <div id="insertClientContract" class="tabcontent hide">
-                        </div>
                     </div>
                 </div>
+                <div id="insertClientContact" class="tabcontent ">
+                </div>
+                <div id="insertClientContract" class="tabcontent ">
+                </div>
             </div>
+        </div>
     </div>
     <?php include "parts/footer.php" ?>
 </div>
@@ -717,3 +717,6 @@
 </bs-toolbar>
 </body>
 </html>
+
+
+

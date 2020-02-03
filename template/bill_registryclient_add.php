@@ -12,7 +12,7 @@
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
-        <form class="content sm-gutter">
+        <div class="content sm-gutter">
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
@@ -468,6 +468,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
     <?php include "parts/footer.php" ?>
 </div>
