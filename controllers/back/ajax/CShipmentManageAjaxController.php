@@ -96,7 +96,7 @@ class CShipmentManageAjaxController extends AAjaxController
             $fromAddressBookId = $_GET['fromAddressBookId'];
         }
         if ($_GET['fromName'] == "") {
-            $fromName = '';
+            $fromName='';
         } else {
             $fromName = $_GET['fromName'];
         }
@@ -161,12 +161,12 @@ class CShipmentManageAjaxController extends AAjaxController
             $toAddressBookId = $_GET['toAddressBookId'];
         }
         if ($_GET['toName'] == "") {
-            $toName = '';
+            $toName='';
         } else {
             $toName = $_GET['toName'];
         }
         if ($_GET['toSubject'] == "") {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Soggetto Destinaratio non Inserito </i>';
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Soggetto Destinatario non Inserito </i>';
         } else {
             $toSubject = $_GET['toSubject'];
         }
@@ -233,7 +233,7 @@ class CShipmentManageAjaxController extends AAjaxController
             if ($deliveryDate != null) {
                 $shipmentInsert->deliveryDate = $deliveryDate;
             }
-            if ($fromAddressBookId != '') {
+            if ($fromAddressBookId != null) {
                 $shipmentInsert->fromAddressBookId = $fromAddressBookId;
             } else {
                 $addressBookInsert = $addressBookRepo->getEmptyEntity();
@@ -256,7 +256,7 @@ class CShipmentManageAjaxController extends AAjaxController
                 $shipmentInsert->fromAddressBookId = $fromAddressBookId;
             }
 
-            if ($toAddressBookId !=='') {
+            if ($toAddressBookId != null) {
                 $shipmentInsert->toAddressBookId = $toAddressBookId;
             } else {
                 $addressBookInsert = $addressBookRepo->getEmptyEntity();
@@ -282,7 +282,7 @@ class CShipmentManageAjaxController extends AAjaxController
             if ($shipmentInvoiceNumber != null) {
                 $shipmentInsert->shipmentInvoiceNumber = $shipmentInvoiceNumber;
             }
-            if ($realShipmentPrice1 = null) {
+            if ($realShipmentPrice != null) {
                 $shipmentInsert->realShipmentPrice = $realShipmentPrice;
             }
             if ($dateInvoice != null) {

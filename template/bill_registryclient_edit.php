@@ -41,8 +41,10 @@
                         <div class="col-md-12">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Informazioni di base</h5>
-                                <input type="hidden" id="billRegistryClientId" name="billRegistryClientId" value="<?php echo $brc->id?>"/>
-                                <input type="hidden" id="billRegistryClientAccountId" name="billRegistryClientAccountId" value="<?php echo $brca->id?>"/>
+                                <input type="hidden" id="billRegistryClientId" name="billRegistryClientId"
+                                       value="<?php echo $brc->id ?>"/>
+                                <input type="hidden" id="billRegistryClientAccountId" name="billRegistryClientAccountId"
+                                       value="<?php echo $brca->id ?>"/>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
@@ -676,74 +678,81 @@
                         </div>
                     </div>
                 </div>
-                <div id="insertClientLocation" class="tabcontent ">
+                <div id="insertClientLocation" class="tabcontent">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Inserimento Filiali</h5>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button  class="success" id="addLocation" type="button"> <span class="fa fa-plus-circle">Aggiungi Filiale</span></button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <?php
-                                $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputLocation" onkeyup="myFunctionLocation()" placeholder="ricerca per nome"></div>';
-                                $bodyLocation .= '<div class="col-md-6"><input type="text" id="myShopLocation" onkeyup="myShopFunctionLocation()" placeholder="ricerca per città"></div></div>';
-
-                                $bodyLocation .= '<table id="myTableLocation"> <tr class="header2"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
-
-                                ?>
-                                <div id="rawLocation">
-                                    <?php foreach($brcl as $location){
-                                        $bodyLocation.='<tr><td>'.$location->id.'</td><td>'.$location->name.'</td><td>'.$location->city.'</td><td></td></tr>';
-                                    }
-                                    echo $bodyLocation;
-                                    ?>
-                                </div>
-                            </table>
-                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="insertClientContact" class="tabcontent ">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="panel-heading clearfix">
-                                <h5 class="m-t-12">Inserimento Contatti</h5>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button  class="success" id="addConcatc" type="button"> <span class="fa fa-plus-circle">Aggiungi contatto</span></button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <?php
-                                $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionConcact()" placeholder="ricerca per nome"></div>';
-                                $bodyLocation .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per città"></div></div>';
-
-                                $bodyLocation .= '<table id="myTableContact"> <tr class="header3"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
-
-                                ?>
-                                <div id="rawLocation">
-                                    <?php foreach($brcl as $location){
-                                        $bodyLocation.='<tr><td>'.$location->id.'</td><td>'.$location->name.'</td><td>'.$location->city.'</td><td></td></tr>';
-                                    }
-                                    echo $bodyLocation;
-                                    ?>
-                                </div>
-                                </table>
-                            </div>
+                            <button class="success" id="addLocation" type="button"><span
+                                        class="fa fa-plus-circle">Aggiungi Filiale</span></button>
                         </div>
                     </div>
-                </div>
-                <div id="insertClientContract" class="tabcontent ">
+                    <div class="row">
+                        <?php
+                        $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputLocation" onkeyup="myFunctionLocation()" placeholder="ricerca per nome"></div>';
+                        $bodyLocation .= '<div class="col-md-6"><input type="text" id="myShopLocation" onkeyup="myShopFunctionLocation()" placeholder="ricerca per città"></div></div>';
+
+                        $bodyLocation .= '<table id="myTableLocation"> <tr class="header2"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
+
+                        ?>
+                        <div id="rawLocation">
+                            <?php foreach ($brcl as $location) {
+                                $bodyLocation .= '<tr><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td></td></tr>';
+                            }
+                            echo $bodyLocation;
+                            ?>
+                        </div>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        <div id="insertClientContact" class="tabcontent">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-heading clearfix">
+                        <h5 class="m-t-12">Inserimento Contatti</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="success" id="addContact" type="button"><span
+                                class="fa fa-plus-circle">Aggiungi contatto</span></button>
+                </div>
+            </div>
+            <div class="row">
+                <?php
+                $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
+                $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
+
+                $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email</th><th style="width:20%;">Telefono-email</th><th style="width:20%;">Operazioni</th></tr>';
+
+                ?>
+                <div id="rawContact">
+                    <?php foreach ($brcc as $contact) {
+                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td></td></tr>';
+                    }
+                    echo $bodyContact;
+                    ?>
+                </div>
+                </table>
+            </div>
+        </div>
     </div>
-    <?php include "parts/footer.php" ?>
+</div>
+<div id="insertClientContract" class="tabcontent">
+
+</div>
+</div>
+</div>
+</div>
+<?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>

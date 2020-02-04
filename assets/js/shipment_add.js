@@ -244,9 +244,13 @@ $(document).on('bs.shipment.save', function () {
             bsModal.writeBody(res);
         }).fail(function (res) {
             bsModal.writeBody(res);
+            setTimeout()
         }).always(function (res) {
             bsModal.setOkEvent(function () {
                 bsModal.hide();
+                setTimeout(function(){
+                    window.location.href = '/blueseal/spedizioni/aggiungi';
+                }, 1000);
 
             });
             bsModal.showOkBtn();

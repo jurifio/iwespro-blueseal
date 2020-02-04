@@ -36,8 +36,8 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
         $billRegistryClientAccountHasProductRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccountHasProduct');
         $billRegistryClientLocationRepo= \Monkey::app()->repoFactory->create('BillRegistryClientLocation');
-        $billRegistryClientContactRepo=\Monkey::app()->repoFactory->create('BillRegistryClientContact');
-        $billRegistryClientContractRepo=\Monkey::app()->repoFactory->create('BillRegistryClientContract');
+        $billRegistryClientContactRepo=\Monkey::app()->repoFactory->create('BillRegistryContact');
+        $billRegistryClientContractRepo=\Monkey::app()->repoFactory->create('BillRegistryContract');
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
         $country=\Monkey::app()->repoFactory->create('Country')->findAll();
         $shop=\Monkey::app()->repoFactory->create('Shop')->findAll();
@@ -49,7 +49,7 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $brcbi=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$id]);
         $brcl=$billRegistryClientLocationRepo->findBy(['billRegistryClientId'=>$id]);
         $brcc=$billRegistryClientContactRepo->findBy(['billRegistryClientId'=>$id]);
-        $brcContract=$billRegistryClientContractRepo->findBy(['billRegistryClientId'=>$id],['billRegistryClientAccountId'=>$billRegistryClientAccountId]);
+        $brcContract=$billRegistryClientContractRepo->findBy(['billRegistryClientId'=>$id,'billRegistryClientAccountId'=>$billRegistryClientAccountId]);
         $bankRegistry=\Monkey::app()->repoFactory->create('BankRegistry')->findAll();
         $currency=\Monkey::app()->repoFactory->create('Currency')->findAll();
         $billRegistryTypePayment=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findAll();

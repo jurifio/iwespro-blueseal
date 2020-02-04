@@ -322,7 +322,7 @@ function myFunctionContact() {
     }
 }
 
-function myShopFunctioncontact() {
+function myShopFunctionContact() {
     // Declare variables
     var input, filter, table, tr, td, s, txtValue;
     input = document.getElementById("myShopContact");
@@ -568,6 +568,102 @@ $('#addLocation').click(function () {
         });
     });
 });
+$('#addContact').click(function () {
+    let bsModalLocation = new $.bsModal('Inserimento Contatti', {
+        body: `<p>Confermare?</p>
+ <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameContact">Nome Contatto</label>
+                                        <input id="nameContact" autocomplete="off" type="text"
+                                               class="form-control" name="nameContact"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneContact">Telefono</label>
+                                        <input id="phoneContact" autocomplete="off" type="text"
+                                               class="form-control" name="phoneContact" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="mobileContact">Mobile</label>
+                                        <input id="mobileContact" autocomplete="off" type="text"
+                                               class="form-control" name="mobileContact" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailContact">Email</label>
+                                        <input id="emailContact" autocomplete="off" type="text"
+                                               class="form-control" name="emailContact" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="faxContact">Fax</label>
+                                        <input id="faxContact" autocomplete="off" type="text"
+                                               class="form-control" name="faxContact" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="roleContact">Ruolo</label>
+                                        <input id="roleContact" autocomplete="off" type="text"
+                                               class="form-control" name="roleContact"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                          
+                   
+`
+    });
+
+    bsModalLocation.showCancelBtn();
+    bsModalLocation.addClass('modal-wide');
+    bsModalLocation.addClass('modal-high');
+    bsModalLocation.setOkEvent(function () {
+        const data = {
+
+            nameContact: $('#nameLocation').val(),
+            billRegistryClientId :   $('#billRegistryClientId').val(),
+            phoneContact:$('#phoneContact').val(),
+            emailContact:$('#emailContact').val(),
+            faxContact:$('#faxContact').val(),
+            roleContact:$('#roleContact').val(),
+
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
+            data: data
+        }).done(function (res) {
+            var bodyLocation='<tr><td>'+res+'</td><td>'+$('#nameContact').val()+'</td><td>'+$('#emailContact').val()+'</td><td></td></tr>';
+            $('#rawLocation').append(bodyLocation);
+            bsModalLocation.writeBody(res);
+        }).fail(function (res) {
+            bsModalLocation.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModalLocation.setOkEvent(function () {
+                bsModalLocation.hide();
+                //window.location.reload();
+            });
+            bsModalLocation.showOkBtn();
+        });
+    });
+});
 
 $(document).on('bs.client.save', function () {
     let bsModal = new $.bsModal('Inserimento Aggregatore', {
@@ -647,27 +743,5 @@ $(document).on('bs.client.save', function () {
             });
             bsModal.showOkBtn();
         });
-    });
-});
-
-$('#countryIdLocation').change(function () {
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Country'
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#countryIdLocation');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-
     });
 });

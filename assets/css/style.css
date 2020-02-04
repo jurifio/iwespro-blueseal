@@ -1625,7 +1625,7 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     border-bottom: 1px solid #ddd;
 }
 
-#myTableContact tr.header2, #myTableContact tr:hover {
+#myTableContact tr.header3, #myTableContact tr:hover {
     /* Add a grey background color to the table header and on hover */
     background-color: #f1f1f1;
 }

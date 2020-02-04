@@ -27,7 +27,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="carrierId">Seleziona il Carrier</label>
+                                    <label for="carrierId"><font style="green">Seleziona il Carrier</font></label>
                                     <select id="carrierId" name="carrierId"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
@@ -37,7 +37,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="deliveryDate">Data Consegna</label>
+                                    <label for="deliveryDate"><font style="green">Data Consegna</font></label>
                                     <input type="datetime-local" class="form-control" id="deliveryDate"
                                            name="deliveryDate" value=""/>
                                 </div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="shopId">Shop</label>
+                                    <label for="shopId"><font style="green">Shop</font></label>
                                     <select id="shopId" name="shopId"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="realShipmentPrice">costo Spedizione</label>
+                                    <label for="realShipmentPrice"><font style="green">costo Spedizione</font></label>
                                     <input id="realShipmentPrice" autocomplete="off" type="text"
                                            class="form-control" name="realShipmentPrice" value=""
                                     />
@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="scope">Seleziona il tipo di spezione</label>
+                                    <label for="scope"><font style="green">Seleziona il tipo di spezione</font></label>
                                     <select id="scope" name="scope"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
@@ -110,7 +110,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="isOrder">Seleziona Se è legato ad un ordine </label>
+                                    <label for="isOrder"><font style="green">Seleziona Se è legato ad un ordine </font></label>
                                     <select id="isOrder" name="isOrder"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
@@ -147,17 +147,17 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="fromName">Mittente</label>
-                                    <input id="fromName" autocomplete="off" type="text"
-                                           class="form-control" name="fromName" value=""
+                                    <label for="fromSubject"><font style="green">Mittente</font></label>
+                                    <input id="fromSubject" autocomplete="off" type="text"
+                                           class="form-control" name="fromSubject" value=""
                                     />
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="fromSubject">Soggetto</label>
-                                    <input id="fromSubject" autocomplete="off" type="text"
-                                           class="form-control" name="fromSubject" value=""
+                                    <label for="fromName">C/O.</label>
+                                    <input id="fromName" autocomplete="off" type="text"
+                                           class="form-control" name="fromName" value=""
                                     />
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="fromCountryId">Seleziona la nazione</label>
+                                    <label for="fromCountryId"><font style="green">Seleziona la nazione</font></label>
                                     <select id="fromCountryId" name="fromCountryId"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
@@ -262,17 +262,17 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="toName">nome Destinatario</label>
-                                    <input id="toName" autocomplete="off" type="text"
-                                           class="form-control" name="toName" value=""
+                                    <label for="toSubject"><font style="green">Destinatario</font></label>
+                                    <input id="toSubject" autocomplete="off" type="text"
+                                           class="form-control" name="toSubject" value=""
                                     />
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="toSubject">Soggetto</label>
-                                    <input id="toSubject" autocomplete="off" type="text"
-                                           class="form-control" name="toSubject" value=""
+                                    <label for="toName">C/O</label>
+                                    <input id="toName" autocomplete="off" type="text"
+                                           class="form-control" name="toName" value=""
                                     />
                                 </div>
                             </div>
@@ -302,7 +302,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="toCountryId">Seleziona la nazione</label>
+                                    <label for="toCountryId"><font style="green">Seleziona la nazione</font></label>
                                     <select id="toCountryId" name="toCountryId"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
