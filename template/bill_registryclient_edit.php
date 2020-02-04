@@ -703,8 +703,8 @@
                         <div id="rawLocation">
                             <?php foreach ($brcl as $location) {
                                 $bodyLocation .= '<tr><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td><button class="success" id="editLocation" onclick="editLocation('.$location->id.')" type="button"><span
-                                        class="fa fa-pencil">Modifica Filiale</span></button></td><td><button class="success" id="deleteLocation"  onclick="deleteLocation('.$location->id.')" type="button"><span
-                                        class="fa fa-eraser">Elimina Filiale</span></button></td></tr>';
+                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteLocation"  onclick="deleteLocation('.$location->id.')" type="button"><span
+                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
                             }
                             echo $bodyLocation;
                             ?>
@@ -739,8 +739,8 @@
                 <div id="rawContact">
                     <?php foreach ($brcc as $contact) {
                         $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
-                                        class="fa fa-pencil">Modifica Contatto</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
-                                        class="fa fa-eraser">Elimina Contatto</span></button></td></tr>';
+                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
+                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
                     }
                     echo $bodyContact;
                     ?>
