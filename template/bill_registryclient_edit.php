@@ -697,17 +697,19 @@
                         $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputLocation" onkeyup="myFunctionLocation()" placeholder="ricerca per nome"></div>';
                         $bodyLocation .= '<div class="col-md-6"><input type="text" id="myShopLocation" onkeyup="myShopFunctionLocation()" placeholder="ricerca per città"></div></div>';
 
-                        $bodyLocation .= '<table id="myTableLocation"> <tr class="header2"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
+                        $bodyLocation .= '<table id="myTableLocation"> <tr class="header2"><th style="width:20%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
 
                         ?>
                         <div id="rawLocation">
                             <?php foreach ($brcl as $location) {
-                                $bodyLocation .= '<tr><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td></td></tr>';
+                                $bodyLocation .= '<tr><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td><button class="success" id="editLocation" onclick="editLocation('.$location->id.')" type="button"><span
+                                        class="fa fa-pencil">Modifica Filiale</span></button></td><td><button class="success" id="deleteLocation"  onclick="deleteLocation('.$location->id.')" type="button"><span
+                                        class="fa fa-eraser">Elimina Filiale</span></button></td></tr>';
                             }
                             echo $bodyLocation;
                             ?>
                         </div>
-                        </table>
+                            </table>
                     </div>
                 </div>
             </div>
@@ -731,17 +733,19 @@
                 $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
                 $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
 
-                $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email</th><th style="width:20%;">Telefono-email</th><th style="width:20%;">Operazioni</th></tr>';
+                $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email</th><th style="width:20%;">Telefono-email</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
 
                 ?>
                 <div id="rawContact">
                     <?php foreach ($brcc as $contact) {
-                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td></td></tr>';
+                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td><button class="success" id="editConcact" onclick="editContact('.$contact->id.')" type="button"><span
+                                        class="fa fa-pencil">Modifica Contatto/span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
+                                        class="fa fa-eraser">Elimina Contatto</span></button></td></tr>';
                     }
                     echo $bodyContact;
                     ?>
                 </div>
-                </table>
+                    </table>
             </div>
         </div>
     </div>

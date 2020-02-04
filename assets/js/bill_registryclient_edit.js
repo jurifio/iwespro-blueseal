@@ -1,5 +1,3 @@
-
-
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -19,6 +17,7 @@ $.ajax({
     });
 
 });
+
 
 $.ajax({
     method: 'GET',
@@ -57,6 +56,37 @@ $.ajax({
         options: res2,
     });
 
+});
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BankRegistry'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#bankRegistryId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name', 'location', 'abi', 'cab'],
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                    '</div>'
+            }
+        }
+    });
 });
 
 
@@ -117,21 +147,6 @@ $.ajax({
 });
 
 document.getElementById('insertClient').style.display = "block";
-
-
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
 
 
 $('#typeFriendId').change(function () {
@@ -214,136 +229,6 @@ $("#accountAsService").change(function () {
 });
 
 
-function myFunction() {
-    // Declare variables
-    var input, filter, table, tr, td, s, txtValue;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (s = 0; s < tr.length; s++) {
-        td = tr[s].getElementsByTagName("td")[0];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[s].style.display = "";
-            } else {
-                tr[s].style.display = "none";
-            }
-        }
-    }
-}
-
-function myShopFunction() {
-    // Declare variables
-    var input, filter, table, tr, td, s, txtValue;
-    input = document.getElementById("myShop");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (s = 0; s < tr.length; s++) {
-        td = tr[s].getElementsByTagName("td")[1];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[s].style.display = "";
-            } else {
-                tr[s].style.display = "none";
-            }
-        }
-    }
-}
-function myFunctionLocation() {
-    // Declare variables
-    var input, filter, table, tr, td, s, txtValue;
-    input = document.getElementById("myInputLocation");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTableLocation");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (s = 0; s < tr.length; s++) {
-        td = tr[s].getElementsByTagName("td")[1];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[s].style.display = "";
-            } else {
-                tr[s].style.display = "none";
-            }
-        }
-    }
-}
-
-function myShopFunctionLocation() {
-    // Declare variables
-    var input, filter, table, tr, td, s, txtValue;
-    input = document.getElementById("myLocation");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTableLocation");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (s = 0; s < tr.length; s++) {
-        td = tr[s].getElementsByTagName("td")[2];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[s].style.display = "";
-            } else {
-                tr[s].style.display = "none";
-            }
-        }
-    }
-}
-function myFunctionContact() {
-    // Declare variables
-    var input, filter, table, tr, td, s, txtValue;
-    input = document.getElementById("myInputContact");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTableContact");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (s = 0; s < tr.length; s++) {
-        td = tr[s].getElementsByTagName("td")[1];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[s].style.display = "";
-            } else {
-                tr[s].style.display = "none";
-            }
-        }
-    }
-}
-
-function myShopFunctionContact() {
-    // Declare variables
-    var input, filter, table, tr, td, s, txtValue;
-    input = document.getElementById("myShopContact");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTableConcact");
-    tr = table.getElementsByTagName("tr");
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (s = 0; s < tr.length; s++) {
-        td = tr[s].getElementsByTagName("td")[2];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[s].style.display = "";
-            } else {
-                tr[s].style.display = "none";
-            }
-        }
-    }
-}
-
 $(document).on('click', '#checkedAll', function () {
 
     $('input:checkbox').not(this).prop('checked', this.checked);
@@ -422,21 +307,30 @@ $('#addLocation').click(function () {
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="countryIdLocation">Seleziona la Nazione </label>
-                                        <select id="countryIdlocation" name="countryIdLocation"
+                                        <select id="countryIdLocation" name="countryIdLocation"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-default">
                                         <label for="vatNumberLocation">Partita Iva/Codice Fiscale</label>
                                         <input id="vatNumberLocation" autocomplete="off" type="text"
                                                class="form-control" name="vatNumberLocation"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="sdiLocation">codice Univoco Filiale</label>
+                                        <input id="sdiLocation" autocomplete="off" type="text"
+                                               class="form-control" name="sdiLocation"
                                                value=""
                                         />
                                     </div>
@@ -450,19 +344,32 @@ $('#addLocation').click(function () {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="form-group form-group-default">
-                                        <label for="phoneLocation">Telefono</label>
-                                        <input id="phoneLocation" autocomplete="off" type="text"
-                                               class="form-control" name="phoneLocation" value=""
+                                        <label for="contactNameLocation"> Nome Contatto </label>
+                                        <input id="contactNameLocation" autocomplete="off" type="text"
+                                               class="form-control" name="contactNameLocation"
+                                               value=""
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-6">
                                     <div class="form-group form-group-default ">
                                         <label for="mobileLocation">Mobile</label>
                                         <input id="mobileLocation" autocomplete="off" type="text"
                                                class="form-control" name="mobileLocation" value=""
+                                        />
+                                    </div>
+                                </div> 
+                            </div>     
+                            <div class="row">
+                            <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneLocation">Telefono</label>
+                                        <input id="phoneLocation" autocomplete="off" type="text"
+                                               class="form-control" name="phoneLocation" value=""
                                         />
                                     </div>
                                 </div>
@@ -474,18 +381,6 @@ $('#addLocation').click(function () {
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group form-group-default">
-                                        <label for="contactNameLocation"> Nome Contatto </label>
-                                        <input id="contactNameLocation" autocomplete="off" type="text"
-                                               class="form-control" name="contactNameLocation"
-                                               value=""
-                                        />
-                                    </div>
-                                </div> </div>
-                            <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="emailLocation"> email Azienda </label>
@@ -521,6 +416,25 @@ $('#addLocation').click(function () {
                             </div>
 `
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Country'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#countryIdLocation');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
 
     bsModalLocation.showCancelBtn();
     bsModalLocation.addClass('modal-wide');
@@ -529,34 +443,34 @@ $('#addLocation').click(function () {
         const data = {
 
             nameLocation: $('#nameLocation').val(),
-            billRegistryClientId :   $('#billRegistryClientId').val(),
-            addressLocation:$('#addressLocation').val(),
-            extraLocation:$('#extraLocation').val(),
-            zipCodeLocation:$('#zipCodeLocation').val(),
-            cityLocation:$('#cityLocation').val(),
-            countryIdLocation:$('#countryIdLocation').val(),
-            vatNumberLocation:$('#vatNumberLocation').val(),
-            signBoardLocation:$('#signBoardLocation').val(),
-            provinceLocation:$('#provinceLocation').val(),
-
-            sdiLocation:$('#sdiLocation').val(),
-            contactNameLocation:$('#contactNameLocation').val(),
-            phoneLocation:$('#phoneLocation').val(),
-            mobileLocation:$('#mobileLocation').val(),
-            faxLocation:$('#faxLocation').val(),
-            emailLocation:$('#emailLocation').val(),
-            emailCcLocation:$('#emailCcLocation').val(),
-            emailCcnLocation:$('#emailCcnLocation').val(),
-            noteLocation:$('#noteLocation').val()
+            billRegistryClientId: $('#billRegistryClientId').val(),
+            addressLocation: $('#addressLocation').val(),
+            extraLocation: $('#extraLocation').val(),
+            zipCodeLocation: $('#zipCodeLocation').val(),
+            cityLocation: $('#cityLocation').val(),
+            countryIdLocation: $('#countryIdLocation').val(),
+            vatNumberLocation: $('#vatNumberLocation').val(),
+            signBoardLocation: $('#signBoardLocation').val(),
+            provinceLocation: $('#provinceLocation').val(),
+            sdiLocation: $('#sdiLocation').val(),
+            contactNameLocation: $('#contactNameLocation').val(),
+            phoneLocation: $('#phoneLocation').val(),
+            mobileLocation: $('#mobileLocation').val(),
+            faxLocation: $('#faxLocation').val(),
+            emailLocation: $('#emailLocation').val(),
+            emailCcLocation: $('#emailCcLocation').val(),
+            emailCcnLocation: $('#emailCcnLocation').val(),
+            noteLocation: $('#noteLocation').val()
         };
         $.ajax({
             method: 'post',
             url: '/blueseal/xhr/BillRegistryClientLocationManageAjaxController',
             data: data
         }).done(function (res) {
-            var bodyLocation='<tr><td>'+res+'</td><td>'+$('#nameLocation').val()+'</td><td>'+$('#cityLocation').val()+'</td><td></td></tr>';
-            $('#rawLocation').append(bodyLocation);
-            bsModalLocation.writeBody(res);
+
+             var bodyLocation ='<tr><td>' + res + '</td><td>' + $('#nameLocation').val() + '</td><td>' + $('#cityLocation').val() + '</td><td></td></tr>';
+            $('#myTableLocation').append(bodyLocation);
+
         }).fail(function (res) {
             bsModalLocation.writeBody('Errore grave');
         }).always(function (res) {
@@ -569,7 +483,7 @@ $('#addLocation').click(function () {
     });
 });
 $('#addContact').click(function () {
-    let bsModalLocation = new $.bsModal('Inserimento Contatti', {
+    let bsModalContact = new $.bsModal('Inserimento Contatti', {
         body: `<p>Confermare?</p>
  <div class="row">
                                 <div class="col-md-2">
@@ -631,18 +545,18 @@ $('#addContact').click(function () {
 `
     });
 
-    bsModalLocation.showCancelBtn();
-    bsModalLocation.addClass('modal-wide');
-    bsModalLocation.addClass('modal-high');
-    bsModalLocation.setOkEvent(function () {
+    bsModalContact.showCancelBtn();
+    bsModalContact.addClass('modal-wide');
+    bsModalContact.addClass('modal-high');
+    bsModalContact.setOkEvent(function () {
         const data = {
 
             nameContact: $('#nameLocation').val(),
-            billRegistryClientId :   $('#billRegistryClientId').val(),
-            phoneContact:$('#phoneContact').val(),
-            emailContact:$('#emailContact').val(),
-            faxContact:$('#faxContact').val(),
-            roleContact:$('#roleContact').val(),
+            billRegistryClientId: $('#billRegistryClientId').val(),
+            phoneContact: $('#phoneContact').val(),
+            emailContact: $('#emailContact').val(),
+            faxContact: $('#faxContact').val(),
+            roleContact: $('#roleContact').val(),
 
         };
         $.ajax({
@@ -650,17 +564,16 @@ $('#addContact').click(function () {
             url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
             data: data
         }).done(function (res) {
-            var bodyLocation='<tr><td>'+res+'</td><td>'+$('#nameContact').val()+'</td><td>'+$('#emailContact').val()+'</td><td></td></tr>';
-            $('#rawLocation').append(bodyLocation);
-            bsModalLocation.writeBody(res);
+            var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '</td><td></td></tr>';
+            $('#myTableContact').append(bodyContact);
         }).fail(function (res) {
-            bsModalLocation.writeBody('Errore grave');
+            bsModalContact.writeBody('Errore grave');
         }).always(function (res) {
-            bsModalLocation.setOkEvent(function () {
-                bsModalLocation.hide();
+            bsModalContact.setOkEvent(function () {
+                bsModalContact.hide();
                 //window.location.reload();
             });
-            bsModalLocation.showOkBtn();
+            bsModalContact.showOkBtn();
         });
     });
 });
@@ -684,7 +597,7 @@ $(document).on('bs.client.save', function () {
         'countryId=' + $("#countryId").val() + '&' +
         'vatNumber=' + $("#vatNumber").val() + '&' +
         'phone=' + $("#phone").val() + '&' +
-        'mobile='+ $("#mobile").val() + '&' +
+        'mobile=' + $("#mobile").val() + '&' +
         'fax=' + $("#fax").val() + '&' +
         'userId=' + $("#userId").val() + '&' +
         'contactName=' + $("#contactName").val() + '&' +
@@ -725,14 +638,14 @@ $(document).on('bs.client.save', function () {
             url: urldef,
             data: data
         }).done(function (res) {
-            if(res.includes('1-')){
-                let  billRegistryClientId=res.replace('1-','');
+            if (res.includes('1-')) {
+                let billRegistryClientId = res.replace('1-', '');
                 bsModal.writeBody('Inserimento eseguito con successo');
-                setTimeout(function(){
-                    window.location.href = '/blueseal/anagrafica/clienti-modifica?id='+billRegistryClientId;
+                setTimeout(function () {
+                    window.location.href = '/blueseal/anagrafica/clienti-modifica?id=' + billRegistryClientId;
                 }, 1000);
 
-            }else{
+            } else {
                 bsModal.writeBody(res);
             }
         }).fail(function (res) {
@@ -745,3 +658,150 @@ $(document).on('bs.client.save', function () {
         });
     });
 });
+
+
+function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myShopFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myShop");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myFunctionLocation() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInputLocation");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableLocation");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myShopFunctionLocation() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myLocation");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableLocation");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myFunctionContact() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInputContact");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableContact");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myShopFunctionContact() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myShopContact");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableConcact");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}

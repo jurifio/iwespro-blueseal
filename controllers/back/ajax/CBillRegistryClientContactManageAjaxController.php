@@ -25,7 +25,7 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
     {
         $data = $this->app->router->request()->getRequestData();
         $name = $data["nameContact"];
-        $billRegistryclientId = $data["billRegistryclientId"];
+        $billRegistryClientId = $data["billRegistryclientId"];
         $phone= $data["phoneContact"];
         $fax = $data["faxContact"];
         $email=$data["emailContact"];
@@ -34,7 +34,7 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
 
         try{
             $brcInsert=\Monkey::app()->repoFactory->create('BillRegistryContact')->getEmptyEntity();
-            $brcInsert->billRegistryclientId=$billRegistryclientId;
+            $brcInsert->billRegistryClientId=$billRegistryClientId;
             $brcInsert->name=$name;
             $brcInsert->phone=$phone;
             $brcInsert->fax=$fax;

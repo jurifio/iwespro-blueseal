@@ -25,7 +25,7 @@ class CBillRegistryClientLocationManageAjaxController extends AAjaxController
     {
         $data = $this->app->router->request()->getRequestData();
         $name = $data["nameLocation"];
-        $billRegistryclientId = $data["billRegistryclientId"];
+        $billRegistryClientId = $data["billRegistryClientId"];
         $address= $data["addressLocation"];
         $extra = $data["extraLocation"];
         $zipCode=$data["zipCodeLocation"];
@@ -44,7 +44,7 @@ class CBillRegistryClientLocationManageAjaxController extends AAjaxController
         $note=$data['noteLocation'];
         try{
             $brclInsert=\Monkey::app()->repoFactory->create('BillRegistryClientLocation')->getEmptyEntity();
-            $brclInsert->billRegistryclientId=$billRegistryclientId;
+            $brclInsert->billRegistryClientId=$billRegistryClientId;
             $brclInsert->name=$name;
             $brclInsert->address=$address;
             $brclInsert->extra=$extra;
@@ -54,7 +54,7 @@ class CBillRegistryClientLocationManageAjaxController extends AAjaxController
             $brclInsert->vatNumber=$vatNumber;
             $brclInsert->signBoard=$signBoard;
             $brclInsert->province=$province;
-            $brclInsert->sdi=$sdi;
+           $brclInsert->sdi=$sdi;
             $brclInsert->contactName=$contactName;
             $brclInsert->phone=$phone;
             $brclInsert->fax=$fax;
