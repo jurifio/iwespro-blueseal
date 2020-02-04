@@ -468,7 +468,8 @@ $('#addLocation').click(function () {
             data: data
         }).done(function (res) {
 
-             var bodyLocation ='<tr><td>' + res + '</td><td>' + $('#nameLocation').val() + '</td><td>' + $('#cityLocation').val() + '</td><td></td></tr>';
+             var bodyLocation ='<tr><td>' + res + '</td><td>' + $('#nameLocation').val() + '</td><td>' + $('#cityLocation').val() + '</td><td><button class="success" id="editLocation" onclick="editLocation('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+             bodyLocation=bodyLocation+'<td><button class="success" id="deleteLocation"  onclick="deleteLocation('+ res +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             $('#myTableLocation').append(bodyLocation);
 
         }).fail(function (res) {
@@ -551,10 +552,11 @@ $('#addContact').click(function () {
     bsModalContact.setOkEvent(function () {
         const data = {
 
-            nameContact: $('#nameLocation').val(),
+            nameContact: $('#nameContact').val(),
             billRegistryClientId: $('#billRegistryClientId').val(),
             phoneContact: $('#phoneContact').val(),
             emailContact: $('#emailContact').val(),
+            mobileContact:$('#mobileContact').val(),
             faxContact: $('#faxContact').val(),
             roleContact: $('#roleContact').val(),
 
@@ -564,7 +566,9 @@ $('#addContact').click(function () {
             url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
             data: data
         }).done(function (res) {
-            var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '</td><td></td></tr>';
+            var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '</td>';
+       bodyContact=bodyContact+'<td><button class="success" id="editContact" onclick="editContact('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+       bodyContact=bodyContact+'<td><button class="success" id="deleteContact"  onclick="deleteContact('+res+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             $('#myTableContact').append(bodyContact);
         }).fail(function (res) {
             bsModalContact.writeBody('Errore grave');
@@ -804,4 +808,122 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
+}
+function editLocation(id){
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
+        method: 'get',
+        data: {
+            id: id
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        let rawContact = res;
+        $.each(rawContact, function (k, v) {
+            var nameContactEdit=v.name;
+            var phoneContactEdit=v.phone;
+            var mobileContactEdit=v.mobile;
+            var emailContactEdit=v.email;
+            var faxContactEdit=v.fax;
+            var roleContactEdit=v.role;
+            // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+        });
+        let bsModalContact = new $.bsModal('Inserimento Contatti', {
+            body: `<p>Confermare?</p>
+ <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameContact">Nome Contatto</label>
+                                        <input id="nameContact" autocomplete="off" type="text"
+                                               class="form-control" name="nameContact"
+                                               value="${nameContactEdit}"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneContact">Telefono</label>
+                                        <input id="phoneContact" autocomplete="off" type="text"
+                                               class="form-control" name="phoneContact" value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="mobileContact">Mobile</label>
+                                        <input id="mobileContact" autocomplete="off" type="text"
+                                               class="form-control" name="mobileContact" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailContact">Email</label>
+                                        <input id="emailContact" autocomplete="off" type="text"
+                                               class="form-control" name="emailContact" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="faxContact">Fax</label>
+                                        <input id="faxContact" autocomplete="off" type="text"
+                                               class="form-control" name="faxContact" value=""
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="roleContact">Ruolo</label>
+                                        <input id="roleContact" autocomplete="off" type="text"
+                                               class="form-control" name="roleContact"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                          
+                   
+`
+        });
+
+        bsModalContact.showCancelBtn();
+        bsModalContact.addClass('modal-wide');
+        bsModalContact.addClass('modal-high');
+        bsModalContact.setOkEvent(function () {
+            const data = {
+
+                nameContact: $('#nameLocation').val(),
+                billRegistryClientId: $('#billRegistryClientId').val(),
+                phoneContact: $('#phoneContact').val(),
+                emailContact: $('#emailContact').val(),
+                faxContact: $('#faxContact').val(),
+                roleContact: $('#roleContact').val(),
+
+            };
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
+                data: data
+            }).done(function (res) {
+                var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '</td>';
+                bodyContact=bodyContact+'<td><button class="success" id="editContact" onclick="editContact('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                bodyContact=bodyContact+'<td><button class="success" id="deleteContact"  onclick="deleteContact('+res+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                $('#myTableContact').append(bodyContact);
+            }).fail(function (res) {
+                bsModalContact.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModalContact.setOkEvent(function () {
+                    bsModalContact.hide();
+                    //window.location.reload();
+                });
+                bsModalContact.showOkBtn();
+            });
+        });
+    });
+
 }

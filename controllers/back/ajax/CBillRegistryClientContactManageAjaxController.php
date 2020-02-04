@@ -25,7 +25,7 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
     {
         $data = $this->app->router->request()->getRequestData();
         $name = $data["nameContact"];
-        $billRegistryClientId = $data["billRegistryclientId"];
+        $billRegistryClientId = $data["billRegistryClientId"];
         $phone= $data["phoneContact"];
         $fax = $data["faxContact"];
         $email=$data["emailContact"];
@@ -39,9 +39,9 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
             $brcInsert->phone=$phone;
             $brcInsert->fax=$fax;
             $brcInsert->email=$email;
-            $brclInsert->mobile=$mobile;
-            $brclInsert->role=$role;
-            $brclInsert->insert();
+            $brcInsert->mobile=$mobile;
+            $brcInsert->role=$role;
+            $brcInsert->insert();
             $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContact ',[])->fetchAll();
             foreach ($res as $result) {
                 $lastId = $result['id'];
@@ -53,6 +53,18 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
             return 'Errore Inserimento'.$e;
 
         }
+    }
+
+    public function get()
+    {
+        $data = $this->app->router->request()->getRequestData();
+        $id=$data['id'];
+        $contact=[];
+        $brc=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
+        $contact[] = ['id' => $brc -> id, 'billRegistryClientId' => $brc -> billRegistryClientId, 'name' => $brc -> name, 'phone' => $brc -> phone, 'email' => $brc -> email, 'fax' => $bcr -> fax, 'mobile' => $brc -> mobile, 'role' => $brc -> role];
+
+        return json_encode($contact);
+
     }
 
 }
