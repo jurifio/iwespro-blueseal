@@ -89,7 +89,14 @@ class CShipmentCostListAjaxController extends AAjaxController
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
             $row['remoteShipmentId']=$val->remoteShipmentId;
-          $toAddress=json_decode($row['frozenShippingAddress'],true);
+            $findOhs=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$val->id]);
+            if($findOhs!=null) {
+                $toAddress = json_decode($row['frozenShippingAddress'],true);
+
+                $row['toAddress'] = $toAddress['name'] . ' ' . $toAddress['surname'] . ' ' . $toAddress['company'] . '<br />' . $toAddress['address'] . '<br/>' . $toAddress['postcode'] . ' ' . $toAddress['city'] . ' ' . $toAddress['province'];
+            }else{
+                $row['toAddress']=$val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->address.'<br />'.$val->toAddress->city) : '---';
+            }
           $row['toAddress']=$toAddress['name'].' '.$toAddress['surname'].' '.$toAddress['company'].'<br />'.$toAddress['address'].'<br/>'.$toAddress['postcode'].' '.$toAddress['city'].' '.$toAddress['province'];
 
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->address.'<br />'.$val->fromAddress->city) : '---';

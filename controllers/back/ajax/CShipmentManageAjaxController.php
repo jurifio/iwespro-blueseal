@@ -155,7 +155,7 @@ class CShipmentManageAjaxController extends AAjaxController
         } else {
             $fromIban = $_GET['fromIban'];
         }
-        if ($_GET['toAddressBookId'] == "") {
+        if ($_GET['toAddressBookId'] != "") {
             $toAddressBookId = '';
         } else {
             $toAddressBookId = $_GET['toAddressBookId'];
@@ -233,7 +233,7 @@ class CShipmentManageAjaxController extends AAjaxController
             if ($deliveryDate != null) {
                 $shipmentInsert->deliveryDate = $deliveryDate;
             }
-            if ($fromAddressBookId != null) {
+            if ($fromAddressBookId != '') {
                 $shipmentInsert->fromAddressBookId = $fromAddressBookId;
             } else {
                 $addressBookInsert = $addressBookRepo->getEmptyEntity();
@@ -256,7 +256,7 @@ class CShipmentManageAjaxController extends AAjaxController
                 $shipmentInsert->fromAddressBookId = $fromAddressBookId;
             }
 
-            if ($toAddressBookId != null) {
+            if ($toAddressBookId!='') {
                 $shipmentInsert->toAddressBookId = $toAddressBookId;
             } else {
                 $addressBookInsert = $addressBookRepo->getEmptyEntity();

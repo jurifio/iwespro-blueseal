@@ -58,7 +58,7 @@ class CShipmentListAjaxController extends AAjaxController
                   left join Shop sh on sh.id = shabf.shopId
                   left join ShopHasShippingAddressBook shabt on t.id = shabt.addressBookId
                   left join Shop sh2 on s.remoteShopShipmentId = sh2.id
-                  LEFT JOIN (
+                  LEFT  JOIN (
                      OrderLineHasShipment olhs
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
                       join `Order` O on ol.orderId = O.id
@@ -88,8 +88,14 @@ class CShipmentListAjaxController extends AAjaxController
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
             $row['remoteShipmentId']=$val->remoteShipmentId;
-          $toAddress=json_decode($row['frozenShippingAddress'],true);
-          $row['toAddress']=$toAddress['name'].' '.$toAddress['surname'].' '.$toAddress['company'].'<br />'.$toAddress['address'].'<br/>'.$toAddress['postcode'].' '.$toAddress['city'].' '.$toAddress['province'];
+            $findOhs=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$val->id]);
+            if($findOhs!=null) {
+                $toAddress = json_decode($row['frozenShippingAddress'],true);
+
+                $row['toAddress'] = $toAddress['name'] . ' ' . $toAddress['surname'] . ' ' . $toAddress['company'] . '<br />' . $toAddress['address'] . '<br/>' . $toAddress['postcode'] . ' ' . $toAddress['city'] . ' ' . $toAddress['province'];
+            }else{
+                $row['toAddress']=$val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->address.'<br />'.$val->toAddress->city) : '---';
+            }
 
             $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->address.'<br />'.$val->fromAddress->city) : '---';
             $row['predictedShipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d');

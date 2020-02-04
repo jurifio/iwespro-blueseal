@@ -530,15 +530,15 @@ $('#addLocation').click(function () {
         }).done(function (res) {
             var bodyLocation='<tr><td>'+res+'</td><td>'+$('#nameLocation').val()+'</td><td>'+$('#cityLocation').val()+'</td><td></td></tr>';
             $('#rawLocation').append(bodyLocation);
-            bsModal.writeBody(res);
+            bsModalLocation.writeBody(res);
         }).fail(function (res) {
-            bsModal.writeBody('Errore grave');
+            bsModalLocation.writeBody('Errore grave');
         }).always(function (res) {
-            bsModal.setOkEvent(function () {
-                bsModal.hide();
+            bsModalLocation.setOkEvent(function () {
+                bsModalLocation.hide();
                 //window.location.reload();
             });
-            bsModal.showOkBtn();
+            bsModalLocation.showOkBtn();
         });
     });
 });
