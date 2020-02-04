@@ -61,7 +61,7 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
         $id=$data['id'];
         $contact=[];
         $brc=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
-        $contact[] = ['id' => $brc -> id, 'billRegistryClientId' => $brc -> billRegistryClientId, 'name' => $brc -> name, 'phone' => $brc -> phone, 'email' => $brc -> email, 'fax' => $bcr -> fax, 'mobile' => $brc -> mobile, 'role' => $brc -> role];
+        $contact[] = ['id' => $brc -> id, 'billRegistryClientId' => $brc -> billRegistryClientId, 'name' => $brc -> name, 'phone' => $brc -> phone, 'email' => $brc -> email, 'fax' => $brc -> fax, 'mobile' => $brc -> mobile, 'role' => $brc -> role];
 
         return json_encode($contact);
 

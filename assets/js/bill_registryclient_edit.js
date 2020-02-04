@@ -566,7 +566,7 @@ $('#addContact').click(function () {
             url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
             data: data
         }).done(function (res) {
-            var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '</td>';
+            var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '-'+ $('#phoneContact').val() +'</td>';
        bodyContact=bodyContact+'<td><button class="success" id="editContact" onclick="editContact('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
        bodyContact=bodyContact+'<td><button class="success" id="deleteContact"  onclick="deleteContact('+res+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             $('#myTableContact').append(bodyContact);
@@ -809,7 +809,14 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-function editLocation(id){
+function editContact(id){
+    $(this).parents('tr').first().remove();
+    var nameContactEdit='';
+    var phoneContactEdit='';
+    var mobileContactEdit='';
+    var emailContactEdit='';
+    var faxContactEdit='';
+    var roleContactEdit='';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
         method: 'get',
@@ -821,15 +828,16 @@ function editLocation(id){
         console.log(res);
         let rawContact = res;
         $.each(rawContact, function (k, v) {
-            var nameContactEdit=v.name;
-            var phoneContactEdit=v.phone;
-            var mobileContactEdit=v.mobile;
-            var emailContactEdit=v.email;
-            var faxContactEdit=v.fax;
-            var roleContactEdit=v.role;
+
+            nameContactEdit=v.name;
+             phoneContactEdit=v.phone;
+             mobileContactEdit=v.mobile;
+            emailContactEdit=v.email;
+            faxContactEdit=v.fax;
+            roleContactEdit=v.role;
             // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
         });
-        let bsModalContact = new $.bsModal('Inserimento Contatti', {
+        let bsModalContact = new $.bsModal('Modifica Contatti', {
             body: `<p>Confermare?</p>
  <div class="row">
                                 <div class="col-md-2">
@@ -837,7 +845,7 @@ function editLocation(id){
                                         <label for="nameContact">Nome Contatto</label>
                                         <input id="nameContact" autocomplete="off" type="text"
                                                class="form-control" name="nameContact"
-                                               value="${nameContactEdit}"
+                                               value="`+nameContactEdit+`"
                                         />
                                     </div>
                                 </div>
@@ -845,7 +853,7 @@ function editLocation(id){
                                     <div class="form-group form-group-default">
                                         <label for="phoneContact">Telefono</label>
                                         <input id="phoneContact" autocomplete="off" type="text"
-                                               class="form-control" name="phoneContact" value=""
+                                               class="form-control" name="phoneContact" value="`+phoneContactEdit+`"
                                         />
                                     </div>
                                 </div>
@@ -853,7 +861,7 @@ function editLocation(id){
                                     <div class="form-group form-group-default">
                                         <label for="mobileContact">Mobile</label>
                                         <input id="mobileContact" autocomplete="off" type="text"
-                                               class="form-control" name="mobileContact" value=""
+                                               class="form-control" name="mobileContact" value="`+mobileContactEdit+`"
                                         />
 
                                     </div>
@@ -862,7 +870,7 @@ function editLocation(id){
                                     <div class="form-group form-group-default">
                                         <label for="emailContact">Email</label>
                                         <input id="emailContact" autocomplete="off" type="text"
-                                               class="form-control" name="emailContact" value=""
+                                               class="form-control" name="emailContact" value="`+emailContactEdit+`"
                                         />
 
                                     </div>
@@ -871,7 +879,7 @@ function editLocation(id){
                                     <div class="form-group form-group-default">
                                         <label for="faxContact">Fax</label>
                                         <input id="faxContact" autocomplete="off" type="text"
-                                               class="form-control" name="faxContact" value=""
+                                               class="form-control" name="faxContact" value="`+faxContactEdit+`"
                                         />
 
                                     </div>
@@ -881,7 +889,7 @@ function editLocation(id){
                                         <label for="roleContact">Ruolo</label>
                                         <input id="roleContact" autocomplete="off" type="text"
                                                class="form-control" name="roleContact"
-                                               value=""
+                                               value="`+roleContactEdit+`"
                                         />
                                     </div>
                                 </div>
@@ -906,10 +914,11 @@ function editLocation(id){
 
             };
             $.ajax({
-                method: 'post',
+                method: 'put',
                 url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
                 data: data
             }).done(function (res) {
+
                 var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '</td>';
                 bodyContact=bodyContact+'<td><button class="success" id="editContact" onclick="editContact('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                 bodyContact=bodyContact+'<td><button class="success" id="deleteContact"  onclick="deleteContact('+res+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';

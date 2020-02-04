@@ -740,12 +740,12 @@
                 $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
                 $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
 
-                $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email</th><th style="width:20%;">Telefono-email</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
+                $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email-Telefono</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
 
                 ?>
                 <div id="rawContact">
                     <?php foreach ($brcc as $contact) {
-                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
+                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
                                         class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
                                         class="fa fa-eraser">Elimina</span></button></td></tr>';
                     }
