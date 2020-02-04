@@ -684,7 +684,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button  class="success" id="addLocation" type="button"> <span class="fa fa-plus-circle">Aggiungi</span></button>
+                                    <button  class="success" id="addLocation" type="button"> <span class="fa fa-plus-circle">Aggiungi Filiale</span></button>
                                 </div>
                             </div>
                             <div class="row">
@@ -708,6 +708,35 @@
                     </div>
                 </div>
                 <div id="insertClientContact" class="tabcontent ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading clearfix">
+                                <h5 class="m-t-12">Inserimento Contatti</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button  class="success" id="addConcatc" type="button"> <span class="fa fa-plus-circle">Aggiungi contatto</span></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <?php
+                                $bodyLocation = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionConcact()" placeholder="ricerca per nome"></div>';
+                                $bodyLocation .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per città"></div></div>';
+
+                                $bodyLocation .= '<table id="myTableContact"> <tr class="header3"><th style="width:40%;">id</th><th style="width:20%;">Nome Sede</th><th style="width:20%;">Città</th><th style="width:20%;">Operazioni</th></tr>';
+
+                                ?>
+                                <div id="rawLocation">
+                                    <?php foreach($brcl as $location){
+                                        $bodyLocation.='<tr><td>'.$location->id.'</td><td>'.$location->name.'</td><td>'.$location->city.'</td><td></td></tr>';
+                                    }
+                                    echo $bodyLocation;
+                                    ?>
+                                </div>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="insertClientContract" class="tabcontent ">
                 </div>

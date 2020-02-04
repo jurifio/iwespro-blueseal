@@ -59,6 +59,7 @@ $.ajax({
 
 });
 
+
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -299,6 +300,49 @@ function myShopFunctionLocation() {
         }
     }
 }
+function myFunctionContact() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInputContact");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableContact");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myShopFunctioncontact() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myShopContact");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableConcact");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
 
 $(document).on('click', '#checkedAll', function () {
 
@@ -477,25 +521,7 @@ $('#addLocation').click(function () {
                             </div>
 `
     });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Country'
 
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#countryIdLocation');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-
-    });
     bsModalLocation.showCancelBtn();
     bsModalLocation.addClass('modal-wide');
     bsModalLocation.addClass('modal-high');
@@ -621,5 +647,27 @@ $(document).on('bs.client.save', function () {
             });
             bsModal.showOkBtn();
         });
+    });
+});
+
+$('#countryIdLocation').change(function () {
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Country'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#countryIdLocation');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
     });
 });

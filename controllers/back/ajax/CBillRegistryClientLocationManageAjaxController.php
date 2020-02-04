@@ -44,6 +44,7 @@ class CBillRegistryClientLocationManageAjaxController extends AAjaxController
         $note=$data['noteLocation'];
         try{
             $brclInsert=\Monkey::app()->repoFactory->create('BillRegistryClientLocation')->getEmptyEntity();
+            $brclInsert->billRegistryclientId=$billRegistryclientId;
             $brclInsert->name=$name;
             $brclInsert->address=$address;
             $brclInsert->extra=$extra;

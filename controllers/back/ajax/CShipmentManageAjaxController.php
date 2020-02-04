@@ -90,7 +90,7 @@ class CShipmentManageAjaxController extends AAjaxController
             $orderLineId = $orderVal[0];
         }
 
-        if ($_GET['fromAddressBookId'] == "") {
+        if ($_GET['fromAddressBookId'] === '') {
             $fromAddressBookId = '';
         } else {
             $fromAddressBookId = $_GET['fromAddressBookId'];
@@ -155,7 +155,7 @@ class CShipmentManageAjaxController extends AAjaxController
         } else {
             $fromIban = $_GET['fromIban'];
         }
-        if ($_GET['toAddressBookId'] != "") {
+        if ($_GET['toAddressBookId'] === '') {
             $toAddressBookId = '';
         } else {
             $toAddressBookId = $_GET['toAddressBookId'];
@@ -256,7 +256,7 @@ class CShipmentManageAjaxController extends AAjaxController
                 $shipmentInsert->fromAddressBookId = $fromAddressBookId;
             }
 
-            if ($toAddressBookId!='') {
+            if ($toAddressBookId !=='') {
                 $shipmentInsert->toAddressBookId = $toAddressBookId;
             } else {
                 $addressBookInsert = $addressBookRepo->getEmptyEntity();
@@ -272,7 +272,7 @@ class CShipmentManageAjaxController extends AAjaxController
                 $addressBookInsert->province = $toProvince;
                 $addressBookInsert->iban = $toIban;
                 $addressBookInsert->insert();
-                $findAddressBookUpdate = $addressBookRepo->findOneBy(['subject' => $fromSubject,'Address' => $fromAddress,'city' => $fromCity,'countryId' => $fromCountryId]);
+                $findAddressBookUpdate = $addressBookRepo->findOneBy(['subject' => $toSubject,'Address' => $toAddress,'city' => $toCity,'countryId' => $toCountryId]);
                 $toAddressBookId = $findAddressBookUpdate->id;
                 $findAddressBookUpdate->checksum = crc32($toAddressBookId . $toName . $toSubject . $toAddress . $toExtra . $toProvince . $toCity . $toPostCode . $toCountryId . $toPhone);
                 $findAddressBookUpdate->update();
@@ -305,7 +305,7 @@ class CShipmentManageAjaxController extends AAjaxController
 
 
                 \Monkey::app()->applicationLog('CShipmentAjaxController','Report','Insert Shipment','Insert id-shipment  ' . $lastId );
-                return 'inserimento eseguito';
+                return 'inserimento eseguito spedizione numero:'.$lastId;
 
             }
         catch
