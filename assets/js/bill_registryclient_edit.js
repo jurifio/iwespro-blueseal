@@ -525,7 +525,7 @@ $('#addLocation').click(function () {
         };
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/BillRegistryLocationManageAjaxController',
+            url: '/blueseal/xhr/BillRegistryClientLocationManageAjaxController',
             data: data
         }).done(function (res) {
             var bodyLocation='<tr><td>'+res+'</td><td>'+$('#nameLocation').val()+'</td><td>'+$('#cityLocation').val()+'</td><td></td></tr>';
@@ -597,7 +597,7 @@ $(document).on('bs.client.save', function () {
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         var data = 1;
-        var urldef = "/blueseal/xhr/RegistryClientManageAjaxController" + config;
+        var urldef = "/blueseal/xhr/BillRegistryClientManageAjaxController" + config;
         $.ajax({
             method: "POST",
             url: urldef,

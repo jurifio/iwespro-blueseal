@@ -6,7 +6,7 @@ use bamboo\domain\entities\CAddressBook;
 
 
 /**
- * Class CRegistryClientLocationManageAjaxController
+ * Class CBillRegistryClientLocationManageAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,7 +18,7 @@ use bamboo\domain\entities\CAddressBook;
  * @date 03/02/2020
  * @since 1.0
  */
-class CRegistryClientLocationManageAjaxController extends AAjaxController
+class CBillRegistryClientLocationManageAjaxController extends AAjaxController
 {
 
     public function post()
@@ -66,10 +66,10 @@ class CRegistryClientLocationManageAjaxController extends AAjaxController
             foreach ($res as $result) {
                 $lastId = $result['id'];
             }
-            \Monkey::app()->applicationLog( 'CRegistryClientLocationManageAjaxController','Report','Insert','Insert location' . $lastId,'');
+            \Monkey::app()->applicationLog( 'CBillRegistryClientLocationManageAjaxController','Report','Insert','Insert location' . $lastId,'');
             return $lastId;
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog( 'CRegistryClientLocationManageAjaxController' ,'Error','Insert','Insert location', $e);
+            \Monkey::app()->applicationLog( 'CBillRegistryClientLocationManageAjaxController' ,'Error','Insert','Insert location', $e);
             return 'Errore Inserimento'.$e;
 
         }

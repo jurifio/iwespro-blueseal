@@ -395,7 +395,7 @@ $(document).on('bs.client.save', function () {
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         var data = 1;
-        var urldef = "/blueseal/xhr/RegistryClientManageAjaxController" + config;
+        var urldef = "/blueseal/xhr/BillRegistryClientManageAjaxController" + config;
         $.ajax({
             method: "POST",
             url: urldef,

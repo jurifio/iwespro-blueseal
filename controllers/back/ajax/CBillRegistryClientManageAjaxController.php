@@ -6,7 +6,7 @@ use bamboo\domain\entities\CAddressBook;
 
 
 /**
- * Class CRegistryClientManageAjaxController
+ * Class CBillRegistryClientManageAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,7 +18,7 @@ use bamboo\domain\entities\CAddressBook;
  * @date 11/01/2020
  * @since 1.0
  */
-class CRegistryClientManageAjaxController extends AAjaxController
+class CBillRegistryClientManageAjaxController extends AAjaxController
 {
 
     public function post()
