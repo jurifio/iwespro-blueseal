@@ -453,15 +453,22 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2" id="rating">
-                                    <?php switch ($brca->typeFriendId) {
+                                        <?php
+                                        $checkStar1 = '';
+                                        $checkStar2 = '';
+                                        $checkStar3 = '';
+                                        $checkStar4 = '';
+                                        $checkStar5 = '';
+
+                                        switch ($brca->typeFriendId) {
                                         case 1:
-                                            break;
+
                                             $checkStar1 = 'checked';
                                             $checkStar2 = '';
                                             $checkStar3 = '';
                                             $checkStar4 = '';
                                             $checkStar5 = '';
-
+                                            break;
 
                                         case 2:
                                             $checkStar1 = 'checked';
