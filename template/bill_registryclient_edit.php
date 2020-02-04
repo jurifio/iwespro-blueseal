@@ -738,8 +738,8 @@
                 ?>
                 <div id="rawContact">
                     <?php foreach ($brcc as $contact) {
-                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td><button class="success" id="editConcact" onclick="editContact('.$contact->id.')" type="button"><span
-                                        class="fa fa-pencil">Modifica Contatto/span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
+                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '</td><td>' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
+                                        class="fa fa-pencil">Modifica Contatto</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
                                         class="fa fa-eraser">Elimina Contatto</span></button></td></tr>';
                     }
                     echo $bodyContact;
