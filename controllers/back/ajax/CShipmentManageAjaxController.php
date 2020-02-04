@@ -101,7 +101,7 @@ class CShipmentManageAjaxController extends AAjaxController
             $fromName = $_GET['fromName'];
         }
         if ($_GET['fromSubject'] == "") {
-            $fromSubject = $_GET['fromSubject'];
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Soggetto  Mittente non Inserito </i>';
         } else {
             $fromSubject = $_GET['fromSubject'];
         }
@@ -166,7 +166,7 @@ class CShipmentManageAjaxController extends AAjaxController
             $toName = $_GET['toName'];
         }
         if ($_GET['toSubject'] == "") {
-            $toSubject = $_GET['toSubject'];
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Soggetto Destinaratio non Inserito </i>';
         } else {
             $toSubject = $_GET['toSubject'];
         }

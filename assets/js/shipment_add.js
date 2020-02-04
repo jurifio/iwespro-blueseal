@@ -246,10 +246,11 @@ $(document).on('bs.shipment.save', function () {
             bsModal.writeBody(res);
         }).always(function (res) {
             bsModal.setOkEvent(function () {
-                bsModal.showOkBtn();
                 bsModal.hide();
+
             });
             bsModal.showOkBtn();
+
 
         });
     });
