@@ -1333,3 +1333,13 @@ function deleteLocation(id) {
 
 
 }
+function addContract(){
+
+}
+function editContract(id){
+
+}
+
+function deleteContract(id){
+
+}

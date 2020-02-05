@@ -484,8 +484,8 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Salva"
-                data-placement="bottom"
-        ></bs-toolbar-button>
+                data-placement="bottom">
+        </bs-toolbar-button>
 </bs-toolbar>
 </body>
 </html>

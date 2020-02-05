@@ -254,6 +254,13 @@ class CShipmentManageAjaxController extends AAjaxController
                 $findAddressBookUpdate->checksum = crc32($fromAddressBookId . $fromName . $fromSubject . $fromAddress . $fromExtra . $fromProvince . $fromCity . $fromPostCode . $fromCountryId . $fromPhone);
                 $findAddressBookUpdate->update();
                 $shipmentInsert->fromAddressBookId = $fromAddressBookId;
+
+            }
+            $shopHasShippingAddressBook=\Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->findOneBy(['shopId'=>$shopId,'addressBookId'=>$fromAddressBookId]);
+            if($shopHasShippingAddressBook==null){
+                $shopHasShippingAddressBookInsert=\Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->getEmptyEntity();
+                $shopHasShippingAddressBookInsert->shopId=$shopId;
+                $shopHasShippingAddressBookInsert->addressBookId=$fromAddressBookId;
             }
 
             if ($toAddressBookId != null) {
@@ -277,6 +284,12 @@ class CShipmentManageAjaxController extends AAjaxController
                 $findAddressBookUpdate->checksum = crc32($toAddressBookId . $toName . $toSubject . $toAddress . $toExtra . $toProvince . $toCity . $toPostCode . $toCountryId . $toPhone);
                 $findAddressBookUpdate->update();
                 $shipmentInsert->toAddressBookId = $toAddressBookId;
+            }
+            $shopHasShippingAddressBookTo=\Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->findOneBy(['shopId'=>$shopId,'addressBookId'=>$toAddressBookId]);
+            if($shopHasShippingAddressBookTo==null){
+                $shopHasShippingAddressBookToInsert=\Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->getEmptyEntity();
+                $shopHasShippingAddressBookToInsert->shopId=$shopId;
+                $shopHasShippingAddressBookToInsert->addressBookId=$toAddressBookId;
             }
 
             if ($shipmentInvoiceNumber != null) {
