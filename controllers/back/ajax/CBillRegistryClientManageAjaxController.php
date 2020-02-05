@@ -313,8 +313,6 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
                 $contractInsert->billRegistryClientId=$billRegistryClientId;
                 $contractInsert->billRegistryClientAccountId=$billRegistryClientAccountId;
                 $contractInsert->typeContractId=1;
-                $contractInsert->valueMarkUpFullPrice=35;
-                $contractInsert->valueMarkUpSalePrice=25;
                 $contractInsert->typeValidityId=1;
                 $contractInsert->insert();
                 $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContract ',[])->fetchAll();
@@ -325,7 +323,7 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
                 $contractRowInsert->billRegistryContractId=$contractId;
                 $contractRowInsert->billRegistryProductId=$product;
                 $contractRowInsert->statusId=1;
-                $contractRowInsert->billRegistryProductTableId=1;
+                $contractRowInsert->billRegistryProductTableId=$productId;
                 $contractRowInsert->insert();
 
 
