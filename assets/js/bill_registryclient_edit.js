@@ -468,7 +468,7 @@ $('#addLocation').click(function () {
             data: data
         }).done(function (res) {
 
-             var bodyLocation ='<tr><td>' + res + '</td><td>' + $('#nameLocation').val() + '</td><td>' + $('#cityLocation').val() + '</td><td><button class="success" id="editLocation" onclick="editLocation('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+             var bodyLocation ='<tr id="trLocation'+res+'"><td>' + res + '</td><td>' + $('#nameLocation').val() + '</td><td>' + $('#cityLocation').val() + '</td><td><button class="success" id="editLocation" onclick="editLocation('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
              bodyLocation=bodyLocation+'<td><button class="success" id="deleteLocation"  onclick="deleteLocation('+ res +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             $('#myTableLocation').append(bodyLocation);
 
@@ -566,7 +566,7 @@ $('#addContact').click(function () {
             url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
             data: data
         }).done(function (res) {
-            var bodyContact = '<tr><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '-'+ $('#phoneContact').val() +'</td>';
+            var bodyContact = '<tr id="trContact'+res+'"><td>' + res + '</td><td>' + $('#nameContact').val() + '</td><td>' + $('#emailContact').val() + '-'+ $('#phoneContact').val() +'</td>';
        bodyContact=bodyContact+'<td><button class="success" id="editContact" onclick="editContact('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
        bodyContact=bodyContact+'<td><button class="success" id="deleteContact"  onclick="deleteContact('+res+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             $('#myTableContact').append(bodyContact);
@@ -810,7 +810,7 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 function editContact(id){
-    $(this).parents('tr').first().remove();
+    $(`#trContact`+id).remove();
     var nameContactEdit='';
     var phoneContactEdit='';
     var mobileContactEdit='';

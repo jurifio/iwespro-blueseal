@@ -709,7 +709,7 @@
                         ?>
                         <div id="rawLocation">
                             <?php foreach ($brcl as $location) {
-                                $bodyLocation .= '<tr><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td><button class="success" id="editLocation" onclick="editLocation('.$location->id.')" type="button"><span
+                                $bodyLocation .= '<tr id="trLocation'.$location->id.'"><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td><button class="success" id="editLocation" onclick="editLocation('.$location->id.')" type="button"><span
                                         class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteLocation"  onclick="deleteLocation('.$location->id.')" type="button"><span
                                         class="fa fa-eraser">Elimina</span></button></td></tr>';
                             }
@@ -745,7 +745,7 @@
                 ?>
                 <div id="rawContact">
                     <?php foreach ($brcc as $contact) {
-                        $bodyContact .= '<tr><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
+                        $bodyContact .= '<tr id="trContact'.$contact->id.'"><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
                                         class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
                                         class="fa fa-eraser">Elimina</span></button></td></tr>';
                     }
