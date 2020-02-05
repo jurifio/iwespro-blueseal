@@ -1,4 +1,4 @@
-$(document).ready(function () {
+
 
     $.ajax({
         method: 'GET',
@@ -179,7 +179,6 @@ $(document).ready(function () {
     });
 
     document.getElementById('insertClient').style.display = "block";
-});
 
 
 function openTab(evt, tabName) {

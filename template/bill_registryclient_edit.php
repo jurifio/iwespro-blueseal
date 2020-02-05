@@ -758,7 +758,7 @@
                     </table>
                 </div>
             </div>
-
+        </div>
             <div id="insertClientContract" class="tabcontent">
                 <div class="row">
                     <div class="col-md-12">
@@ -778,13 +778,13 @@
                     $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
                     $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per data Creazione"></div></div>';
 
-                    $bodyContract .= '<table id="myTableContract"><tr class="header3"><th style="width:20%;">id contratto</th><th style="width:20%;">data Creazione</th><th style="width:20%;">data Scadenza</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
+                    $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">data Creazione</th><th style="width:20%;">data Scadenza</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
 
                     ?>
                     <div id="rawContract">
                         <?php foreach ($brcContract as $contract) {
                             $bodyContract .='<tr id="trContract'.$contract->id.'"><td>'.$contract->id.'-'.$contract->billRegistryClientId.'-'.$contract->billRegistryClientAccountId.'</td>';
-                            $bodyContract .='<td></td><td></td>';
+                            $bodyContract .='<td>'.$contract->dateContractExpire.'</td><td>'.$contract->dateCreate.'</td>';
                             $bodyContract.='<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                             $bodyContract.='<td><button class="success" id="deleteContract"  onclick="deleteContract('. $contract->id .')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                         }

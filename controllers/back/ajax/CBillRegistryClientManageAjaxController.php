@@ -309,6 +309,29 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
             $brcbiInsert->billRegistryClientId=$billRegistryClientId;
             $brcbiInsert->insert();
             foreach($products as $product ){
+                $contractInsert=\Monkey::app()->repoFactory->create('BillRegistryContract')->getEmptyEntity();
+                $contractInsert->billRegistryClientId=$billRegistryClientId;
+                $contractInsert->billRegistryClientAccountId=$billRegistryClientAccountId;
+                $contractInsert->typeContractId=1;
+                $contractInsert->valueMarkUpFullPrice=35;
+                $contractInsert->valueMarkUpSalePrice=25;
+                $contractInsert->typeValidityId=1;
+                $contractInsert->insert();
+                $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContract ',[])->fetchAll();
+                foreach ($res as $result) {
+                    $contractId = $result['id'];
+                }
+                $contractRowInsert=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->getEmptyEntity();
+                $contractRowInsert->billRegistryContractId=$contractId;
+                $contractRowInsert->billRegistryProductId=$product;
+                $contractRowInsert->statusId=1;
+                $contractRowInsert->billRegistryProductTableId=1;
+                $contractRowInsert->insert();
+
+
+
+
+
                 $brcbahpInsert=$billRegistryClientAccountHasProductRepo->getEmptyEntity();
                 $brcbahpInsert->billRegistryProductId=$product;
                 $brcbahpInsert->billRegistryClientAccountId=$billRegistryClientAccountId;
