@@ -273,7 +273,7 @@ $('#addLocation').click(function () {
                                     <div class="form-group form-group-default">
                                         <label for="extraLocation">Indirizzo 2</label>
                                         <input id="extraLocation" autocomplete="off" type="text"
-                                               class="form-control" name="extra" value=""
+                                               class="form-control" name="extraLocation" value=""
                                         />
 
                                     </div>
@@ -409,13 +409,10 @@ $('#addLocation').click(function () {
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default">
                                         <label for="noteLocation"> Note</label>
-                                        <textarea class="form-control" name="noteLocation" id="noteLocation"
-                                                  value=""></textarea>
+                                        <textarea class="form-control" name="noteLocation" id="noteLocation" value=""></textarea>
                                     </div>
                                 </div>
-                            </div>
-`
-    });
+                            </div>` });
     $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
@@ -779,7 +776,50 @@ function myShopFunctionContact() {
     var input, filter, table, tr, td, s, txtValue;
     input = document.getElementById("myShopContact");
     filter = input.value.toUpperCase();
-    table = document.getElementById("myTableConcact");
+    table = document.getElementById("myTableContact");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+function myFunctionContract() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myInputContract");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableContract");
+    tr = table.getElementsByTagName("tr");
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (s = 0; s < tr.length; s++) {
+        td = tr[s].getElementsByTagName("td")[1];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[s].style.display = "";
+            } else {
+                tr[s].style.display = "none";
+            }
+        }
+    }
+}
+
+function myShopFunctionContract() {
+    // Declare variables
+    var input, filter, table, tr, td, s, txtValue;
+    input = document.getElementById("myShopContract");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTableContract");
     tr = table.getElementsByTagName("tr");
 
     // Loop through all table rows, and hide those who don't match the search query
@@ -841,6 +881,7 @@ function editContact(id){
             body: `<p>Confermare?</p>
  <div class="row">
                                 <div class="col-md-2">
+                                <input type="hidden" id="idContact" value="`+id+`"/>
                                     <div class="form-group form-group-default">
                                         <label for="nameContact">Nome Contatto</label>
                                         <input id="nameContact" autocomplete="off" type="text"
@@ -904,10 +945,11 @@ function editContact(id){
         bsModalContact.addClass('modal-high');
         bsModalContact.setOkEvent(function () {
             const data = {
-
-                nameContact: $('#nameLocation').val(),
+                idContact:$('#idContact').val(),
+                nameContact: $('#nameContact').val(),
                 billRegistryClientId: $('#billRegistryClientId').val(),
                 phoneContact: $('#phoneContact').val(),
+                mobileContact:$('#mobileContact').val(),
                 emailContact: $('#emailContact').val(),
                 faxContact: $('#faxContact').val(),
                 roleContact: $('#roleContact').val(),
@@ -934,5 +976,360 @@ function editContact(id){
             });
         });
     });
+
+}
+
+
+function editLocation(id){
+    $(`#trLocation`+id).remove();
+    var nameLocationEdit='';
+    var typeLocationEdit='';
+    var signboardLocationEdit='';
+    var addressLocationEdit='';
+    var zipCodeLocationEdit='';
+    var extraLocationEdit='';
+    var cityLocationEdit='';
+    var provinceLocationEdit='';
+    var countryIdLocationEdit='';
+    var vatNumberLocationEdit='';
+    var sdiLocationEdit='';
+    var contactNameLocationEdit='';
+    var phoneLocationEdit='';
+    var mobileLocationEdit='';
+    var faxLocationEdit='';
+    var emailLocationEdit='';
+    var emailCcLocationEdit='';
+    var emailCcnLocationEdit='';
+    var noteLocationEdit='';
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryClientLocationManageAjaxController',
+        method: 'get',
+        data: {
+            id: id
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        let rawLocation = res;
+        $.each(rawLocation, function (k, v) {
+
+            nameLocationEdit=v.name;
+            typeLocationEdit=v.typeLocation;
+            signboardLocationEdit=v.signBoard;
+            zipCodeLocationEdit=v.zipCode;
+            addressLocationEdit=v.address;
+            extraLocationEdit=v.extra;
+            cityLocationEdit=v.city;
+            provinceLocationEdit=v.province;
+            countryIdLocationEdit=v.countryId;
+            vatNumberLocationEdit=v.vatNumber;
+            sdiLocationEdit=v.sdi;
+            contactNameLocationEdit=v.contactName;
+            phoneLocationEdit=v.phone;
+            mobileLocationEdit=v.mobile;
+            faxLocationEdit=v.fax;
+            emailLocationEdit=v.email;
+            emailCcLocationEdit=v.emailCc;
+            emailCcnLocationEdit=v.emailCcn;
+            noteLocationEdit=v.note;
+            // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+        });
+        let bsModalLocation = new $.bsModal('Modifica Filiale', {
+            body: `<p>Confermare?</p>
+ <div class="row">
+                                <div class="col-md-2">
+                                <input type="hidden" id="idLocation" name="idLocation" value="`+id+`"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameLocationEdit">Nome Filiale</label>
+                                        <input id="nameLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameLocationEdit"
+                                               value="`+nameLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="addressLocationEdit">Indirizzo</label>
+                                        <input id="addressLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="addressLocationEdit" value="`+addressLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="extraLocationEdit">Indirizzo 2</label>
+                                        <input id="extraLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="extraLocationEdit" value="`+extraLocationEdit+`"
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="cityLocationEdit">città</label>
+                                        <input id="cityLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="cityLocationEdit" value="`+cityLocationEdit+`"
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="zipCodeLocationEdit">CAP</label>
+                                        <input id="zipCodeLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="zipCodeLocationEdit" value="`+zipCodeLocationEdit+`"
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="provinceLocationEdit">Provincia</label>
+                                        <input id="provinceLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="provinceLocationEdit"
+                                               value="`+provinceLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="countryIdLocationEdit">Seleziona la Nazione </label>
+                                        <select id="countryIdLocationEdit" name="countryIdLocationEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="vatNumberLocationEdit">Partita Iva/Codice Fiscale</label>
+                                        <input id="vatNumberLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="vatNumberLocationEdit"
+                                               value="`+vatNumberLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="sdiLocationEdit">codice Univoco Filiale</label>
+                                        <input id="sdiLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="sdiLocationEdit"
+                                               value="`+sdiLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="signBoardLocationEdit">Insegna</label>
+                                        <input id="signBoardLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="signBoardLocationEdit"
+                                               value="`+signboardLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label for="contactNameLocationEdit"> Nome Contatto </label>
+                                        <input id="contactNameLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="contactNameLocationEdit"
+                                               value="`+contactNameLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default ">
+                                        <label for="mobileLocationEdit">Mobile</label>
+                                        <input id="mobileLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="mobileLocationEdit" value="`+mobileLocationEdit+`"
+                                        />
+                                    </div>
+                                </div> 
+                            </div>     
+                            <div class="row">
+                            <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneLocationEdit">Telefono</label>
+                                        <input id="phoneLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="phoneLocationEdit" value="`+phoneLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="faxLocationEdit">Fax </label>
+                                        <input id="faxLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="faxLocationEdit" value="`+faxLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailLocationEdit"> email Azienda </label>
+                                        <input id="emailLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="emailEdit" value="`+emailLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCcLocationEdit"> email Azienda CC </label>
+                                        <input id="emailCcLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="emailCcLocationEdit" value="`+emailCcLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCcnLocationEdit"> email Azienda CCn </label>
+                                        <input id="emailCcnLocationEdit" autocomplete="off" type="text"
+                                               class="form-control" name="emailCcnLocationEdit"
+                                               value="`+emailCcnLocationEdit+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="noteLocationEdit"> Note</label>
+                                        <textarea class="form-control" name="noteLocationEdit" id="noteLocationEdit" value="`+noteLocationEdit+`"></textarea>
+                                    </div>
+                                </div>
+                            </div>` });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Country'
+
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#countryIdLocationEdit');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+
+        });
+
+        bsModalLocation.showCancelBtn();
+        bsModalLocation.addClass('modal-wide');
+        bsModalLocation.addClass('modal-high');
+        bsModalLocation.setOkEvent(function () {
+            const data = {
+                id: $('#idLocation').val(),
+                nameLocation: $('#nameLocationEdit').val(),
+                billRegistryClientId: $('#billRegistryClientId').val(),
+                addressLocation: $('#addressLocationEdit').val(),
+                extraLocation: $('#extraLocationEdit').val(),
+                zipCodeLocation: $('#zipCodeLocationEdit').val(),
+                cityLocation: $('#cityLocationEdit').val(),
+                countryIdLocation: $('#countryIdLocationEdit').val(),
+                vatNumberLocation: $('#vatNumberLocationEdit').val(),
+                signBoardLocation: $('#signBoardLocationEdit').val(),
+                provinceLocation: $('#provinceLocationEdit').val(),
+                sdiLocation: $('#sdiLocationEdit').val(),
+                contactNameLocation: $('#contactNameLocationEdit').val(),
+                phoneLocation: $('#phoneLocationEdit').val(),
+                mobileLocation: $('#mobileLocationEdit').val(),
+                faxLocation: $('#faxLocationEdit').val(),
+                emailLocation: $('#emailLocationEdit').val(),
+                emailCcLocation: $('#emailCcLocationEdit').val(),
+                emailCcnLocation: $('#emailCcnLocationEdit').val(),
+                noteLocation: $('#noteLocationEdit').val()
+        };
+        $.ajax({
+            method: 'put',
+            url: '/blueseal/xhr/BillRegistryClientLocationManageAjaxController',
+            data: data
+        }).done(function (res) {
+
+            var bodyLocation ='<tr id="trLocation'+res+'"><td>' + res + '</td><td>' + $('#nameLocationEdit').val() + '</td><td>' + $('#cityLocationEdit').val() + '</td><td><button class="success" id="editLocation" onclick="editLocation('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+            bodyLocation=bodyLocation+'<td><button class="success" id="deleteLocation"  onclick="deleteLocation('+ res +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+            $('#myTableLocation').append(bodyLocation);
+            }).fail(function (res) {
+                bsModalLocation.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModalLocation.setOkEvent(function () {
+                    bsModalLocation.hide();
+                    //window.location.reload();
+                });
+                bsModalLocation.showOkBtn();
+            });
+        });
+    });
+
+}
+
+function deleteContact(id){
+    $(`#trContact`+id).remove();
+
+    let bsModalContact = new $.bsModal('elimina Contatto', {
+        body: `<p>Confermare la Cancellazione del contatto  con Id `+id+`?</p>`});
+
+    bsModalContact.showCancelBtn();
+    bsModalContact.addClass('modal-wide');
+    bsModalContact.addClass('modal-high');
+    bsModalContact.setOkEvent(function () {
+        const data = {
+            id:id
+        };
+        $.ajax({
+            method: 'delete',
+            url: '/blueseal/xhr/BillRegistryClientContactManageAjaxController',
+            data: data
+        }).done(function (res) {
+            bsModalContact.writeBody(res);
+        }).fail(function (res) {
+            bsModalContact.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModalContact.setOkEvent(function () {
+                bsModalContact.hide();
+                //window.location.reload();
+            });
+            bsModalContact.showOkBtn();
+        });
+    });
+
+
+}
+
+function deleteLocation(id) {
+    $(`#trLocation`+id).remove();
+
+        let bsModalLocation = new $.bsModal('elimina Filiale', {
+            body: `<p>Confermare la Cancellazione della filiale con Id `+id+`?</p>`});
+
+        bsModalLocation.showCancelBtn();
+        bsModalLocation.addClass('modal-wide');
+        bsModalLocation.addClass('modal-high');
+        bsModalLocation.setOkEvent(function () {
+            const data = {
+                id:id
+            };
+            $.ajax({
+                method: 'delete',
+                url: '/blueseal/xhr/BillRegistryClientLocationManageAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModalLocation.writeBody(res);
+            }).fail(function (res) {
+                bsModalLocation.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModalLocation.setOkEvent(function () {
+                    bsModalLocation.hide();
+                    //window.location.reload();
+                });
+                bsModalLocation.showOkBtn();
+            });
+        });
+
 
 }

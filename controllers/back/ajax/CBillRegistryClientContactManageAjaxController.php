@@ -66,5 +66,60 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
         return json_encode($contact);
 
     }
+    public function put()
+    {
+        $data = $this->app->router->request()->getRequestData();
+        $id=$data["idContact"];
+        $name = $data["nameContact"];
+        $billRegistryClientId = $data["billRegistryClientId"];
+        $phone= $data["phoneContact"];
+        $fax = $data["faxContact"];
+        $email=$data["emailContact"];
+        $mobile=$data["mobileContact"];
+        $role=$data["roleContact"];
+
+        try{
+            $brcUpdate=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
+            $brcUpdate->billRegistryClientId=$billRegistryClientId;
+            $brcUpdate->name=$name;
+            $brcUpdate->phone=$phone;
+            $brcUpdate->fax=$fax;
+            $brcUpdate->email=$email;
+            $brcUpdate->mobile=$mobile;
+            $brcUpdate->role=$role;
+            $brcUpdate->update();
+            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','update','Insert Contact' . $id,'');
+            return $id;
+        }catch (\Throwable $e){
+            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','update','Insert contact', $e);
+            return 'Errore Inserimento'.$e;
+
+        }
+
+
+        $data = $this->app->router->request()->getRequestData();
+        $id=$data['id'];
+        $contact=[];
+        $brc=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
+        $contact[] = ['id' => $brc -> id, 'billRegistryClientId' => $brc -> billRegistryClientId, 'name' => $brc -> name, 'phone' => $brc -> phone, 'email' => $brc -> email, 'fax' => $brc -> fax, 'mobile' => $brc -> mobile, 'role' => $brc -> role];
+
+        return json_encode($contact);
+
+    }
+    public function delete()
+    {
+        $data = $this->app->router->request()->getRequestData();
+        $id = $data["id"];
+        try{
+            $brcDelete=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
+            $brcDelete->delete();
+            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','delete','delete contact' . $id,'');
+            return 'Cancellazione Filiale con id: '.$id;
+        }catch (\Throwable $e){
+            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','delete','delete contact', $e);
+            return 'Errore Cancellazione'.$e;
+
+        }
+    }
 
 }

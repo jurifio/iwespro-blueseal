@@ -26,7 +26,7 @@
                             <button class="tablinks" onclick="openTab(event, 'insertClientBillingInfo')">Dati
                                 Amministrativi
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'insertClientAccount')">Account E Servizi
+                            <button class="tablinks" onclick="openTab(event, 'insertClientAccount')">Account
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertClientLocation')">Sedi e Filiali
                             </button>
@@ -453,14 +453,14 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2" id="rating">
-                                        <?php
-                                        $checkStar1 = '';
-                                        $checkStar2 = '';
-                                        $checkStar3 = '';
-                                        $checkStar4 = '';
-                                        $checkStar5 = '';
+                                    <?php
+                                    $checkStar1 = '';
+                                    $checkStar2 = '';
+                                    $checkStar3 = '';
+                                    $checkStar4 = '';
+                                    $checkStar5 = '';
 
-                                        switch ($brca->typeFriendId) {
+                                    switch ($brca->typeFriendId) {
                                         case 1:
 
                                             $checkStar1 = 'checked';
@@ -666,13 +666,18 @@
                                     $bodyres .= '<div class="col-md-4"><input type="checkbox" class="form-control"  id="checkedAll" name="checkedAll"></div></div>';
                                     $bodyres .= '<table id="myTable"> <tr class="header1"><th style="width:40%;">Categoria</th><th style="width:20%;">Codice Prodotto</th><th style="width:20%;">Nome Prodotto</th><th style="width:20%;">Selezione</th></tr>';
 
-                                    foreach ($brcahp as $brcahps) {
-                                        $brp = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $brcahps->billRegistryProductId]);
-                                        $brcp = \Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id' => $brp->id]);
+                                    foreach ($brp as $product) {
+                                        $brcahp = \Monkey::app()->repoFactory->create('BillRegistryClientAccountHasProduct')->findOneBy(['billRegistryProductId' => $product->id,'billRegistryClientAccountId' => $brca->id]);
+                                        if ($brcahp != null) {
+                                            $checked = 'checked="checked"';
+                                        } else {
+                                            $checked = '';
+                                        }
+                                        $brcp = \Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id' => $product->id]);
                                         $categoryName = $brcp->name;
-                                        $codeProduct = $brp->codeProduct;
-                                        $nameProduct = $brp->name;
-                                        $bodyres .= '<tr><td style="width:40%;">' . $categoryName . '</td><td style="width:40%;">' . $codeProduct . '</td><td style="width:40%;">' . $nameProduct . '</td><td style="width:20%;"><input type="checkbox" class="form-control"  name="selected_values[]" value="' . $brcahps->billRegistryProductId . '"></td></tr>';
+                                        $codeProduct = $product->codeProduct;
+                                        $nameProduct = $product->name;
+                                        $bodyres .= '<tr><td style="width:40%;">' . $categoryName . '</td><td style="width:40%;">' . $codeProduct . '</td><td style="width:40%;">' . $nameProduct . '</td><td style="width:20%;"><input type="checkbox" ' . $checked . ' class="form-control"  name="selected_values[]" value="' . $product->id . '"></td></tr>';
 
                                     }
                                     $bodyres .= '</table>';
@@ -680,7 +685,6 @@
 
                                 }
                                 ?>
-
                             </div>
                         </div>
                     </div>
@@ -709,59 +713,88 @@
                         ?>
                         <div id="rawLocation">
                             <?php foreach ($brcl as $location) {
-                                $bodyLocation .= '<tr id="trLocation'.$location->id.'"><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td><button class="success" id="editLocation" onclick="editLocation('.$location->id.')" type="button"><span
-                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteLocation"  onclick="deleteLocation('.$location->id.')" type="button"><span
+                                $bodyLocation .= '<tr id="trLocation' . $location->id . '"><td>' . $location->id . '</td><td>' . $location->name . '</td><td>' . $location->city . '</td><td><button class="success" id="editLocation" onclick="editLocation(' . $location->id . ')" type="button"><span
+                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteLocation"  onclick="deleteLocation(' . $location->id . ')" type="button"><span
                                         class="fa fa-eraser">Elimina</span></button></td></tr>';
                             }
                             echo $bodyLocation;
                             ?>
                         </div>
-                            </table>
+                        </table>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="insertClientContact" class="tabcontent">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel-heading clearfix">
-                        <h5 class="m-t-12">Inserimento Contatti</h5>
+            <div id="insertClientContact" class="tabcontent">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-heading clearfix">
+                            <h5 class="m-t-12">Inserimento Contatti</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <button class="success" id="addContact" type="button"><span
-                                class="fa fa-plus-circle">Aggiungi contatto</span></button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="success" id="addContact" type="button"><span
+                                    class="fa fa-plus-circle">Aggiungi contatto</span></button>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <?php
-                $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
-                $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
+                <div class="row">
+                    <?php
+                    $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
+                    $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
 
-                $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email-Telefono</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
+                    $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email-Telefono</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
 
-                ?>
-                <div id="rawContact">
-                    <?php foreach ($brcc as $contact) {
-                        $bodyContact .= '<tr id="trContact'.$contact->id.'"><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact('.$contact->id.')" type="button"><span
-                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact('.$contact->id.')" type="button"><span
-                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
-                    }
-                    echo $bodyContact;
                     ?>
-                </div>
+                    <div id="rawContact">
+                        <?php foreach ($brcc as $contact) {
+                            $bodyContact .= '<tr id="trContact' . $contact->id . '"><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact(' . $contact->id . ')" type="button"><span
+                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact(' . $contact->id . ')" type="button"><span
+                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
+                        }
+                        echo $bodyContact;
+                        ?>
+                    </div>
                     </table>
+                </div>
+            </div>
+
+            <div id="insertClientContract" class="tabcontent">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-heading clearfix">
+                            <h5 class="m-t-12">Inserimento Contratti</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="success" id="addContract" type="button"><span
+                                    class="fa fa-plus-circle">Aggiungi contratto</span></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <?php
+                    $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per idcontratto"></div>';
+                    $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Email"></div></div>';
+
+                    $bodyContract .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id contratto</th><th style="width:20%;">data Creazione</th><th style="width:20%;">data Scadenza</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
+
+                    ?>
+                    <div id="rawContact">
+                        <?php foreach ($brcContract as $contract) {
+                            $bodyContract .= '<tr id="trContract' . $contract->id . '"><td>' . $contract->id .'-'.$contract->billRegistryClientId.'-'.$contract->billRegistryClientAccountId. '</td><td>' . $contract->dateCreate . '</td><td>' . $contract->dateContractExpire.'</td><td><button class="success" id="editContact" onclick="editContact(' . $contract->id . ')" type="button"><span
+                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact(' . $contact->id . ')" type="button"><span
+                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
+                        }
+                        echo $bodyContract;
+                        ?>
+                    </div>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div id="insertClientContract" class="tabcontent">
-
-</div>
-</div>
-</div>
 </div>
 <?php include "parts/footer.php" ?>
 </div>

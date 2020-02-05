@@ -34,8 +34,8 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $id = \Monkey::app()->router->request()->getRequestData('id');
         $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
-        $billRegistryClientAccountHasProductRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccountHasProduct');
         $billRegistryClientLocationRepo= \Monkey::app()->repoFactory->create('BillRegistryClientLocation');
+        $billRegistryProduct=\Monkey::app()->repoFactory->create('BillRegistryProduct');
         $billRegistryClientContactRepo=\Monkey::app()->repoFactory->create('BillRegistryContact');
         $billRegistryClientContractRepo=\Monkey::app()->repoFactory->create('BillRegistryContract');
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
@@ -45,7 +45,7 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $brc=$billRegistryClientRepo->findOneBy(['id'=>$id]);
         $brca=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$id]);
         $billRegistryClientAccountId=$brca->id;
-        $brcahp=$billRegistryClientAccountHasProductRepo->findBy(['billRegistryClientAccountId'=>$billRegistryClientAccountId]);
+        $brp=$billRegistryProduct->findAll();
         $brcbi=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$id]);
         $brcl=$billRegistryClientLocationRepo->findBy(['billRegistryClientId'=>$id]);
         $brcc=$billRegistryClientContactRepo->findBy(['billRegistryClientId'=>$id]);
@@ -67,10 +67,10 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
             'page' => $this->page,
             'brc'=>$brc,
             'brca'=>$brca,
-            'brcahp'=>$brcahp,
             'brcbi'=>$brcbi,
             'brcl'=>$brcl,
             'brcc'=>$brcc,
+            'brp'=>$brp,
             'country'=>$country,
             'brcContract'=>$brcContract,
             'shop'=>$shop,

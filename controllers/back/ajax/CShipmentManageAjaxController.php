@@ -116,7 +116,7 @@ class CShipmentManageAjaxController extends AAjaxController
             $fromExtra = $_GET['fromExtra'];
         }
         if ($_GET['fromCity'] == '') {
-            $fromCity = '';
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Citta Mittente Non  Inserita </i>';
         } else {
             $fromCity = $_GET['fromCity'];
         }
@@ -181,7 +181,7 @@ class CShipmentManageAjaxController extends AAjaxController
             $toExtra = $_GET['toExtra'];
         }
         if ($_GET['toCity'] == '') {
-            $toCity = '';
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Citta Destinazione non selezionata </i>';
         } else {
             $toCity = $_GET['toCity'];
         }

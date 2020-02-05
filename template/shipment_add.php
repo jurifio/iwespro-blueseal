@@ -294,7 +294,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default">
-                                    <label for="toCity">Città</label>
+                                    <label for="toCity" style="color:green;">Città</label>
                                     <input id="toCity" autocomplete="off" type="text"
                                            class="form-control" name="toCity" value=""
                                     />
