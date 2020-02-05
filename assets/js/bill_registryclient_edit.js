@@ -1342,13 +1342,13 @@ function editContract(id){
     var billRegistryClientId=$('#billRegistryClientId').val();
     var billRegistryClientAccountId=$('#billRegistryClientAccountId').val();
     var typeContractId='';
-    var valueMarkUpFullPrice='';
-    var valueMarkUpSalePrice='';
     var typeValidityId='';
     var fileContract='';
+    var dateAlertRenewal;
     var dateContractExpire='';
     var dateActivation='';
     var statusId='';
+    var billRegistryProductId='';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
         method: 'get',
@@ -1363,13 +1363,13 @@ function editContract(id){
 
             contractId=id;
             typeContractId=v.typeContractId;
-            valueMarkUpFullPrice=v.valueMarkUpFullPrice;
-            valueMarkUpSalePrice=v.valueMarkUpSalePrice;
             typeValidityId=v.typeValidityId;
             fileContract=v.fileContract;
             dateContractExpire=v.dateContractExpire;
+            dateAlertRenewal=v.dateAlertRenewal;
             dateActivation=v.dateActivation;
             statusId=v.statusId;
+            billRegistryProductId=v.billRegistryProductId;
 
             // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
         });
@@ -1379,9 +1379,9 @@ function editContract(id){
                                 <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="`+contractId+`"/>
                                     <div class="form-group form-group-default">
-                                        <label for="valueMarkUpFullPrice">MarkUp Su Prezzo Pieno</label>
-                                        <input id="valueMarkUpFullPrice" autocomplete="off" type="text"
-                                               class="form-control" name="valueMarkUpFullPrice"
+                                        <label for="dateActivation">data Attivazione</label>
+                                        <input id="dateActivation" autocomplete="off" type="date-time"
+                                               class="form-control" name="dateActivation"
                                                value="`+valueMarkUpFullPrice+`"
                                         />
                                     </div>
@@ -1558,10 +1558,10 @@ function editContract(id){
 
         });
 
-        bsModalLocation.showCancelBtn();
-        bsModalLocation.addClass('modal-wide');
-        bsModalLocation.addClass('modal-high');
-        bsModalLocation.setOkEvent(function () {
+        bsModalContract.showCancelBtn();
+        bsModalContract.addClass('modal-wide');
+        bsModalContract.addClass('modal-high');
+        bsModalContract.setOkEvent(function () {
             const data = {
                 id: $('#idLocation').val(),
                 nameLocation: $('#nameLocationEdit').val(),
@@ -1590,17 +1590,17 @@ function editContract(id){
                 data: data
             }).done(function (res) {
 
-                var bodyLocation ='<tr id="trLocation'+res+'"><td>' + res + '</td><td>' + $('#nameLocationEdit').val() + '</td><td>' + $('#cityLocationEdit').val() + '</td><td><button class="success" id="editLocation" onclick="editLocation('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                bodyLocation=bodyLocation+'<td><button class="success" id="deleteLocation"  onclick="deleteLocation('+ res +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
-                $('#myTableLocation').append(bodyLocation);
+                var bodyContract ='<tr id="trContract'+res+'"><td>' + res + '</td><td>' + $('#nameLocationEdit').val() + '</td><td>' + $('#cityLocationEdit').val() + '</td><td><button class="success" id="editLocation" onclick="editLocation('+res+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                bodyContract=bodyContract+'<td><button class="success" id="deleteLocation"  onclick="deleteLocation('+ res +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                $('#myTableContract').append(bodyContract);
             }).fail(function (res) {
-                bsModalLocation.writeBody('Errore grave');
+                bsModalContract.writeBody('Errore grave');
             }).always(function (res) {
-                bsModalLocation.setOkEvent(function () {
-                    bsModalLocation.hide();
+                bsModalContract.setOkEvent(function () {
+                    bsModalContract.hide();
                     //window.location.reload();
                 });
-                bsModalLocation.showOkBtn();
+                bsModalContract.showOkBtn();
             });
         });
     });
