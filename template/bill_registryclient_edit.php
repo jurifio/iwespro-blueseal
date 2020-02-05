@@ -673,7 +673,7 @@
                                         } else {
                                             $checked = '';
                                         }
-                                        $brcp = \Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id' => $product->id]);
+                                        $brcp = \Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findOneBy(['id' => $product->billRegistryCategoryProductId]);
                                         $categoryName = $brcp->name;
                                         $codeProduct = $product->codeProduct;
                                         $nameProduct = $product->name;
@@ -778,7 +778,7 @@
                     $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
                     $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per data Creazione"></div></div>';
 
-                    $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">data Creazione</th><th style="width:20%;">data Scadenza</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
+                    $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">data Creazione</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Dettagli</th><th style="width:10%;">Lista<br>Dettagli</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
 
                     ?>
                     <div id="rawContract">
@@ -786,6 +786,8 @@
                             $bodyContract .='<tr id="trContract'.$contract->id.'"><td>'.$contract->id.'-'.$contract->billRegistryClientId.'-'.$contract->billRegistryClientAccountId.'</td>';
                             $bodyContract .='<td>'.$contract->dateContractExpire.'</td><td>'.$contract->dateCreate.'</td>';
                             $bodyContract.='<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                            $bodyContract.='<td><button class="success" id="editContract" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
+                            $bodyContract.='<td><button class="success" id="editContract" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
                             $bodyContract.='<td><button class="success" id="deleteContract"  onclick="deleteContract('. $contract->id .')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                         }
                         echo $bodyContract;
