@@ -786,8 +786,8 @@
                             $bodyContract .='<tr id="trContract'.$contract->id.'"><td>'.$contract->id.'-'.$contract->billRegistryClientId.'-'.$contract->billRegistryClientAccountId.'</td>';
                             $bodyContract .='<td>'.$contract->dateContractExpire.'</td><td>'.$contract->dateCreate.'</td>';
                             $bodyContract.='<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                            $bodyContract.='<td><button class="success" id="editContract" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
-                            $bodyContract.='<td><button class="success" id="editContract" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
+                            $bodyContract.='<td><button class="success" id="addContractDetail" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
+                            $bodyContract.='<td><button class="success" id="listContractDetail" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
                             $bodyContract.='<td><button class="success" id="deleteContract"  onclick="deleteContract('. $contract->id .')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                         }
                         echo $bodyContract;

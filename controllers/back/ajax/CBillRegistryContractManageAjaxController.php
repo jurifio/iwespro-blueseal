@@ -66,7 +66,12 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
         $brc=\Monkey::app()->repoFactory->create('BillRegistryContract')->findOneBy(['id'=>$id]);
         /* @var \bamboo\domain\entities\CBillRegistryContractRow $brcr*/
         $brcr=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId'=>$brc->id]);
-
+        $dateActivation = strtotime($brcr->dateActivation);
+        $dateActivation = date('Y-m-d\TH:i',$dateActivation);
+        $dateContractExpire = strtotime($brc -> dateContractExpire);
+        $dateContractExpire = date('Y-m-d\TH:i',$dateContractExpire);
+        $dateAlertRenewal = strtotime($brc ->dateAlertRenewal);
+        $dateAlertRenewal = date('Y-m-d\TH:i',$dateAlertRenewal);
 
         $contract[] = ['id' => $brc -> id,
                        'billRegistryClientId' => $brc -> billRegistryClientId,
@@ -74,9 +79,11 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
                        'typeContractId' => $brc -> typeContractId,
                        'typeValidityId' => $brc -> typeValidityId,
                        'fileContract' => $brc -> fileContract,
-                       'dateContractExpire' => $brc -> dateContractExpire,
-                       'dateAlertRenewal' => $brc -> dateAlertRenewal,
-                       'dateActivation'=>$brcr->dateActivation,
+                       'dateContractExpire' =>  $dateContractExpire,
+                       'dateCreate'=> $brc -> dateCreate,
+                       'dateAlertRenewal' => $dateAlertRenewal,
+                       'dateActivation'=>$dateActivation,
+                        'billRegistryContractRowId'=>$brcr->id,
                        'billRegistryProductId'=>$brcr->billRegistryProductId
 
             ];
@@ -87,29 +94,37 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
     public function put()
     {
         $data = $this->app->router->request()->getRequestData();
-        $id=$data["idContact"];
-        $name = $data["nameContact"];
-        $billRegistryClientId = $data["billRegistryClientId"];
-        $phone= $data["phoneContact"];
-        $fax = $data["faxContact"];
-        $email=$data["emailContact"];
-        $mobile=$data["mobileContact"];
-        $role=$data["roleContact"];
+        $id=$data["id"];
+        $dateActivation = $data["dateActivation"];
+        $dateContractExpire = $data["dateContractExpire"];
+        $dateAlertRenewal= $data["dateAlertRenewal"];
+        $typeContractId = $data["typeContractId"];
+        $typeValidityId=$data["typeValidityId"];
+        $statusId=$data['statusId'];
+        $billRegistryProductId=$data["billRegistryProductId"];
+        $billRegistryContractRowId=$data["billRegistryContractRowId"];
+        $dateActivation =strtotime($dateActivation);
+        $dateActivation=date('Y-m-d H:i:s', $dateActivation);
+        $dateAlertRenewal =strtotime($dateAlertRenewal);
+        $dateAlertRenewal=date('Y-m-d H:i:s', $dateAlertRenewal);
+        $dateContractExpire =strtotime($dateContractExpire);
+        $dateContractExpire=date('Y-m-d H:i:s', $dateContractExpire);
 
         try{
-            $brcUpdate=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
-            $brcUpdate->billRegistryClientId=$billRegistryClientId;
-            $brcUpdate->name=$name;
-            $brcUpdate->phone=$phone;
-            $brcUpdate->fax=$fax;
-            $brcUpdate->email=$email;
-            $brcUpdate->mobile=$mobile;
-            $brcUpdate->role=$role;
+            $brcUpdate=\Monkey::app()->repoFactory->create('BillRegistryContract')->findOneBy(['id'=>$id]);
+            $brcUpdate->typeContractId=$typeContractId;
+            $brcUpdate->typeValidityId=$typeValidityId;
+            $brcUpdate->dateContractExpire=$dateContractExpire;
+            $brcUpdate->dateAlertRenewal=$dateAlertRenewal;
             $brcUpdate->update();
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','update','Insert Contact' . $id,'');
+            $brcrUpdate=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['id'=>$billRegistryContractRowId,'billRegistryContractId'=>$id]);
+            $brcrUpdate->dateActivation=$dateActivation;
+            $brcrUpdate->statusId=$statusId;
+            $brcrUpdate->update();
+            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','update','Modify Contract' . $id,'');
             return $id;
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','update','Insert contact', $e);
+            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','update','Modify Contract', $e);
             return 'Errore Inserimento'.$e;
 
         }
@@ -129,12 +144,16 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
         $data = $this->app->router->request()->getRequestData();
         $id = $data["id"];
         try{
-            $brcDelete=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
+            $brcDelete=\Monkey::app()->repoFactory->create('BillRegistryContract')->findOneBy(['id'=>$id]);
             $brcDelete->delete();
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','delete','delete contact' . $id,'');
-            return 'Cancellazione Filiale con id: '.$id;
+            $brcrDelete=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findBy(['billRegistryContractId'=>$id]);
+            foreach($brcrDelete as $contract) {
+                $contract->delete();
+            }
+            \Monkey::app()->applicationLog( 'CBillRegistryContractManageAjaxController','Report','delete','delete contract' . $id,'');
+            return 'Cancellazione Contratto con id: '.$id;
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','delete','delete contact', $e);
+            \Monkey::app()->applicationLog( 'CBillRegistryContractManageAjaxController' ,'Error','delete','delete contract', $e);
             return 'Errore Cancellazione'.$e;
 
         }

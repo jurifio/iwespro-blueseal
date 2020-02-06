@@ -69,7 +69,7 @@ class CBillRegistryClientContactManageAjaxController extends AAjaxController
     public function put()
     {
         $data = $this->app->router->request()->getRequestData();
-        $id=$data["idContact"];
+        $id=$data["id"];
         $name = $data["nameContact"];
         $billRegistryClientId = $data["billRegistryClientId"];
         $phone= $data["phoneContact"];
