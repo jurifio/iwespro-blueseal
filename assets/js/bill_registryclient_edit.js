@@ -1717,6 +1717,44 @@ function addContractDetail(id) {
                                     </div>
                                 </div>
                             </div>
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommission">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommission">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommission">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommission">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
@@ -1923,6 +1961,44 @@ function addContractDetail(id) {
                                         <label for="feePaypalCommission">Commissione pagamento paypal</label>
                                         <input id="feePaypalCommission" autocomplete="off" type="text"
                                                class="form-control" name="feePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommission">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommission">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommission">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommission">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommission"
                                                value=""
                                         />
                                     </div>
@@ -2323,6 +2399,44 @@ function addContractDetail(id) {
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommission">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommission">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommission">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommission">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
                                         <label for="chargeDeliveryIsActive">Addebitare Costi di Spedizione</label>
                                         <select id="chargeDeliveryIsActive" name="chargeDeliveryIsActive"
@@ -2611,6 +2725,44 @@ function addContractDetail(id) {
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommission">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommission">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommission">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommission">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
                                         <label for="chargeDeliveryIsActive">Addebitare Costi di Spedizione</label>
                                         <select id="chargeDeliveryIsActive" name="chargeDeliveryIsActive"
@@ -2775,9 +2927,58 @@ function addContractDetail(id) {
         bsModalDetailContract.addClass('modal-high');
         bsModalDetailContract.setOkEvent(function () {
             $(`#trContract` + id).remove();
-            const data = {
-                id: id
-            };
+
+            switch(billRegistryProductId) {
+                case "1":
+                const data = {
+                        id: contractId,
+                        billRegistryContractRowId:billRegistryContractRowId,
+                        automaticInvoice:$('#automaticInvoice').val,
+                        value:$('#value').val,
+                        billingDay:$('#billingDay').val,
+                        typePaymentId:$('#billingDay').val,
+                        periodTypeCharge:$('#periodTypeCharge').val,
+                        sellingFeeCommision:$('#sellingFeeCommision').val,
+                        feeCreditCardCommission:$('#feeCreditCardCommission').val,
+                        dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission')
+
+
+
+
+
+                    };
+                    break;
+                case "2":
+                    const data = {
+                        id: id
+                    };
+                    break;
+                case "3":
+                    const data = {
+                        id: id
+                    };
+                    break;
+                case "4":
+                    const data = {
+                        id: id
+                    };
+                    break;
+                case "5":
+                    const data = {
+                        id: id
+                    };
+                    break;
+                case "6":
+                    const data = {
+                        id: id
+                    };
+                    break;
+                case "7":
+                    const data = {
+                        id: id
+                    };
+                    break;
+            }
             $.ajax({
                 method: 'post',
                 url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
