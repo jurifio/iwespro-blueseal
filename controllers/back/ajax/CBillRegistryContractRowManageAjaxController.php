@@ -296,8 +296,19 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
         switch($brcr->billRegistryProductId){
             case "1":
                 $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
-                $contractDetailId=$tableData->id;
-                $isContractDetailRow='0';
+                if($tableData!=null) {
+                    $contractDetailId = $tableData->id;
+                    $isContractDetailRow = '0';
+                }else{
+                    $contractRow[]=[ 'exist'=>'0',
+                        'billRegistryContractId'=>'0',
+                        'billRegistryContractRowId'=>'0',
+                        'billRegistryProductId'=>'0',
+                        'contractDetailId'=>'0',
+                        'isContractDetailRow'=>'0',
+                        'nameProduct'=>'0'];
+                    return json_encode($contractRow);
+                }
                 break;
             case "2":
                 $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);

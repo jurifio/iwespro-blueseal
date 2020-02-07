@@ -1476,7 +1476,7 @@ function editContract(id) {
         bsModalContract.addClass('modal-wide');
         bsModalContract.addClass('modal-high');
         bsModalContract.setOkEvent(function () {
-            $(`#trContract` + id).remove();
+
             const data = {
                 id: contractId,
                 billRegistryContractRowId: billRegistryContractRowId,
@@ -1496,7 +1496,7 @@ function editContract(id) {
                 url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
                 data: data
             }).done(function (res) {
-
+                $(`#trContract` + id).remove();
                 var bodyContract = '<tr id="trContract' + res + '"><td>' + res + '</td><td>' + nameProduct + '</td><td>' + $('#dateContractExpire').val() + '</td>';
                 bodyContract = bodyContract + '<td><button class="success" id="editContract" onclick="editContract(' + res + ')" type="button"><span class="fa fa-pencil">Modifica Testata</span></button></td>';
                 bodyContract = bodyContract + '<td><button class="success" id="addContractDetail" onclick="addContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Aggiungi</span></button></td>';
@@ -1528,7 +1528,7 @@ function deleteContract(id) {
     bsModalContract.addClass('modal-wide');
     bsModalContract.addClass('modal-high');
     bsModalContract.setOkEvent(function () {
-        $(`#trContract` + id).remove();
+
         const data = {
             id: id
         };
@@ -1537,6 +1537,7 @@ function deleteContract(id) {
             url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
             data: data
         }).done(function (res) {
+            $(`#trContract` + id).remove();
             bsModalContract.writeBody(res);
         }).fail(function (res) {
             bsModalContract.writeBody('Errore grave');
