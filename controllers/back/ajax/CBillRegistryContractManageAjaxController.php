@@ -99,7 +99,7 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
         $dateActivation = $data["dateActivation"];
         $dateContractExpire = $data["dateContractExpire"];
         $dateAlertRenewal= $data["dateAlertRenewal"];
-        $typeContractId = $data["typeContractId"];
+
         $typeValidityId=$data["typeValidityId"];
         $statusId=$data['statusId'];
         $billRegistryProductId=$data["billRegistryProductId"];
@@ -113,7 +113,7 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
 
         try{
             $brcUpdate=\Monkey::app()->repoFactory->create('BillRegistryContract')->findOneBy(['id'=>$id]);
-            $brcUpdate->typeContractId=$typeContractId;
+
             $brcUpdate->typeValidityId=$typeValidityId;
             $brcUpdate->dateContractExpire=$dateContractExpire;
             $brcUpdate->dateAlertRenewal=$dateAlertRenewal;

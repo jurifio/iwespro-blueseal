@@ -1490,7 +1490,7 @@ function editContract(id) {
                 id: contractId,
                 billRegistryContractRowId: billRegistryContractRowId,
                 dateActivation: $('#dateActivation').val(),
-                typeContractId: $('#typeContractId').val(),
+
                 typeValidityId: $('#typeValidityId').val(),
                 statusId: $('#statusId').val(),
                 dateContractExpire: $('#dateContractExpire').val(),
