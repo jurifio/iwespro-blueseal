@@ -1422,7 +1422,7 @@ function editContract(id) {
         let bsModalContract = new $.bsModal('Modifica Contratto Servizio '+nameProduct, {
             body: `<p>Confermare?</p>
  <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                     <div class="form-group form-group-default">
                                         <label for="dateActivation">data Attivazione</label>
@@ -1432,7 +1432,7 @@ function editContract(id) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="typeValidityId">Validità</label>
                                         <select id="typeValidityId" name="typeValidityId"
@@ -1445,7 +1445,7 @@ function editContract(id) {
                                          </select>       
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                    <div class="form-group form-group-default">
                                         <label for="dateContractExpire">data Scadenza Contratto</label>
                                         <input id="dateContractExpire" autocomplete="off" type="datetime-local"
@@ -1454,7 +1454,16 @@ function editContract(id) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dateAlertRenewal">data Alert Scadenza Contratto</label>
+                                        <input id="dateAlertRenewal" autocomplete="off" type="datetime-local"
+                                               class="form-control" name="dateAlertRenewal"
+                                               value="` + dateAlertRenewal + `"
+                                        />
+                                    </div>
+                                </div>j
+                                <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
                                         <label for="statusId">Stato Contratto</label>
                                         <select id="statusId" name="statusId"
