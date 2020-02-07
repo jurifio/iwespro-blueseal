@@ -48,10 +48,10 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
             foreach ($res as $result) {
                 $lastId = $result['id'];
             }
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','Insert','Insert Contact' . $lastId,'');
+            \Monkey::app()->applicationLog( 'CBillRegistryContractManageAjaxController','Report','Insert','Insert Contract' . $lastId,'');
             return $lastId;
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','Insert','Insert contact', $e);
+            \Monkey::app()->applicationLog( 'CBillRegistryContractManageAjaxController' ,'Error','Insert','Insert contract', $e);
             return 'Errore Inserimento'.$e;
 
         }
@@ -121,10 +121,10 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
             $brcrUpdate->dateActivation=$dateActivation;
             $brcrUpdate->statusId=$statusId;
             $brcrUpdate->update();
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController','Report','update','Modify Contract' . $id,'');
+            \Monkey::app()->applicationLog( 'CBillRegistryContractManageAjaxController','Report','update','Modify Contract' . $id,'');
             return $id;
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog( 'CBillRegistryClientContactManageAjaxController' ,'Error','update','Modify Contract', $e);
+            \Monkey::app()->applicationLog( 'CBillRegistryContractManageAjaxController' ,'Error','update','Modify Contract', $e);
             return 'Errore Inserimento'.$e;
 
         }

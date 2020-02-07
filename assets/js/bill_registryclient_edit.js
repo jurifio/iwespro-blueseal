@@ -1659,14 +1659,13 @@ function addContractDetail(id) {
                                 </div>
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="typePaymentId" name="typePaymentId"
+                                        <label for="1typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="1typePaymentId" name="1typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          </select>       
                                     </div>
-                                </div>
                                 </div>
                                  <div class="col-md-2">
                                    <div class="form-group form-group-default">
@@ -1795,8 +1794,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
-                                        <select id="deliveryTypePaymentId" name="deliveryTypePaymentId"
+                                        <label for="1deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="1deliveryTypePaymentId" name="1deliveryTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -1844,8 +1843,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
-                                        <select id="paymentTypePaymentId" name="paymentTypePaymentId"
+                                        <label for="1paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="1paymentTypePaymentId" name="1paymentTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -1908,8 +1907,8 @@ function addContractDetail(id) {
                                 </div>
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="typePaymentId" name="typePaymentId"
+                                        <label for="2typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="2typePaymentId" name="2typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2044,8 +2043,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
-                                        <select id="deliveryTypePaymentId" name="deliveryTypePaymentId"
+                                        <label for="2deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="2deliveryTypePaymentId" name="2deliveryTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2093,8 +2092,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
-                                        <select id="paymentTypePaymentId" name="paymentTypePaymentId"
+                                        <label for="2paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="2paymentTypePaymentId" name="2paymentTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2154,8 +2153,8 @@ function addContractDetail(id) {
                             <div class="row">
                                  <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="typePaymentId" name="typePaymentId"
+                                        <label for="4typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="4typePaymentId" name="4typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2244,8 +2243,8 @@ function addContractDetail(id) {
                             <div class="row">
                                  <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="typePaymentId" name="typePaymentId"
+                                        <label for="5typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="5typePaymentId" name="5typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2339,8 +2338,8 @@ function addContractDetail(id) {
                                 </div>
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="typePaymentId" name="typePaymentId"
+                                        <label for="3typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="3typePaymentId" name="3typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2475,8 +2474,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
-                                        <select id="deliveryTypePaymentId" name="deliveryTypePaymentId"
+                                        <label for="3deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="3deliveryTypePaymentId" name="3deliveryTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2524,8 +2523,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
-                                        <select id="paymentTypePaymentId" name="paymentTypePaymentId"
+                                        <label for="3paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="3paymentTypePaymentId" name="3paymentTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2631,8 +2630,8 @@ function addContractDetail(id) {
                                 </div>
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="typePaymentId" name="typePaymentId"
+                                        <label for="4typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="4typePaymentId" name="4typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2801,8 +2800,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
-                                        <select id="deliveryTypePaymentId" name="deliveryTypePaymentId"
+                                        <label for="4deliveryTypePaymentId">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="4deliveryTypePaymentId" name="4deliveryTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2850,8 +2849,8 @@ function addContractDetail(id) {
                                 </div>
                                <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
-                                        <select id="paymentTypePaymentId" name="paymentTypePaymentId"
+                                        <label for="4paymentTypePaymentId">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="4paymentTypePaymentId" name="4paymentTypePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -2921,61 +2920,333 @@ function addContractDetail(id) {
             });
 
         });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#2paymentTypePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#2deliveryTypePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#2typePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#3paymentTypePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#3deliveryTypePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#3typePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#4paymentTypePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#4deliveryTypePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#4typePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
 
         bsModalDetailContract.showCancelBtn();
         bsModalDetailContract.addClass('modal-wide');
         bsModalDetailContract.addClass('modal-high');
         bsModalDetailContract.setOkEvent(function () {
-            $(`#trContract` + id).remove();
-
+                var data='';
             switch(billRegistryProductId) {
                 case "1":
-                const data = {
+                 data = {
                         id: contractId,
+                        billRegistryProductId:billRegistryProductId,
                         billRegistryContractRowId:billRegistryContractRowId,
-                        automaticInvoice:$('#automaticInvoice').val,
-                        value:$('#value').val,
-                        billingDay:$('#billingDay').val,
-                        typePaymentId:$('#billingDay').val,
-                        periodTypeCharge:$('#periodTypeCharge').val,
-                        sellingFeeCommision:$('#sellingFeeCommision').val,
-                        feeCreditCardCommission:$('#feeCreditCardCommission').val,
-                        dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission')
-
-
-
-
-
+                        automaticInvoice:$('#automaticInvoice').val(),
+                        value:$('#value').val(),
+                        billingDay:$('#billingDay').val(),
+                        typePaymentId:$('#1typePaymentId').val(),
+                        periodTypeCharge:$('#periodTypeCharge').val(),
+                        sellingFeeCommision:$('#sellingFeeCommision').val(),
+                        feeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                        dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                        feeCodCommission:$('#feeCodCommission').val(),
+                        dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
+                        feeBankTransferCommission:$('#feeBankTransferCommission').val(),
+                        dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
+                        feePaypalCommission:$('#feePaypalCommission').val(),
+                        dayChargeFeePaypalCommission:$('#dayChargeFeePaypalCommission').val(),
+                        chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
+                        feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
+                        periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
+                        deliveryTypePaymentId:$('#1deliveryTypePaymentId').val(),
+                        chargePaymentIsActive:$('#chargePaymentIsActive').val(),
+                        feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
+                        periodTypeChargePayment:$('#periodTypeChargePayment').val(),
+                        paymentTypePaymentId:$('#1paymentTypePaymentId').val()
                     };
                     break;
                 case "2":
-                    const data = {
-                        id: id
+                     data = {
+                         id: contractId,
+                         billRegistryProductId:billRegistryProductId,
+                         billRegistryContractRowId:billRegistryContractRowId,
+                         automaticInvoice:$('#automaticInvoice').val(),
+                         value:$('#value').val(),
+                         billingDay:$('#billingDay').val(),
+                         typePaymentId:$('#2typePaymentId').val(),
+                         periodTypeCharge:$('#periodTypeCharge').val(),
+                         sellingFeeCommision:$('#sellingFeeCommision').val(),
+                         feeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                         dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                         feeCodCommission:$('#feeCodCommission').val(),
+                         dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
+                         feeBankTransferCommission:$('#feeBankTransferCommission').val(),
+                         dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
+                         feePaypalCommission:$('#feePaypalCommission').val(),
+                         dayChargeFeePaypalCommission:$('#dayChargeFeePaypalCommission').val(),
+                         chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
+                         feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
+                         periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
+                         deliveryTypePaymentId:$('#2deliveryTypePaymentId').val(),
+                         chargePaymentIsActive:$('#chargePaymentIsActive').val(),
+                         feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
+                         periodTypeChargePayment:$('#periodTypeChargePayment').val(),
+                         paymentTypePaymentId:$('#2paymentTypePaymentId').val()
                     };
                     break;
                 case "3":
-                    const data = {
-                        id: id
+                     data = {
+                         id: contractId,
+                         billRegistryContractRowId:billRegistryContractRowId,
+                         billRegistryProductId:billRegistryProductId,
+                         automaticInvoice:$('#automaticInvoice').val(),
+                         descriptionInvoice:$('#descriptionInvoice').val(),
+                         billingDay:$('#billingDay').val(),
+                         typePaymentId:$('#5typePaymentId').val(),
+                         startUpCostCampaign:$('#startUpCostCampaign').val(),
+                         feeAgencyCommision:$('#feeAgencyCommision').val(),
+                         prepaidPaymentIsActive:$('#prepaidPaymentIsActive').val(),
+                         prepaidCost:$('#prepaidCost').val()
+
                     };
                     break;
                 case "4":
-                    const data = {
-                        id: id
+                     data = {
+                         id: contractId,
+                         billRegistryContractRowId:billRegistryContractRowId,
+                         billRegistryProductId:billRegistryProductId,
+                         automaticInvoice:$('#automaticInvoice').val(),
+                         descriptionInvoice:$('#descriptionInvoice').val(),
+                         billingDay:$('#billingDay').val(),
+                         typePaymentId:$('#6typePaymentId').val(),
+                         startUpCostCampaign:$('#startUpCostCampaign').val(),
+                         feeAgencyCommision:$('#feeAgencyCommision').val(),
+                         prepaidPaymentIsActive:$('#prepaidPaymentIsActive').val(),
+                         prepaidCost:$('#prepaidCost').val()
                     };
                     break;
                 case "5":
-                    const data = {
-                        id: id
+                    data = {
+                        id: contractId,
+                        billRegistryContractRowId:billRegistryContractRowId,
+                        billRegistryProductId:billRegistryProductId,
+                        automaticInvoice:$('#automaticInvoice').val(),
+                        value:$('#value').val(),
+                        billingDay:$('#billingDay').val(),
+                        typePaymentId:$('#3typePaymentId').val(),
+                        periodTypeCharge:$('#periodTypeCharge').val(),
+                        sellingFeeCommision:$('#sellingFeeCommision').val(),
+                        feeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                        dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                        feeCodCommission:$('#feeCodCommission').val(),
+                        dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
+                        feeBankTransferCommission:$('#feeBankTransferCommission').val(),
+                        dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
+                        feePaypalCommission:$('#feePaypalCommission').val(),
+                        dayChargeFeePaypalCommission:$('#dayChargeFeePaypalCommission').val(),
+                        chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
+                        feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
+                        periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
+                        deliveryTypePaymentId:$('#3deliveryTypePaymentId').val(),
+                        chargePaymentIsActive:$('#chargePaymentIsActive').val(),
+                        feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
+                        periodTypeChargePayment:$('#periodTypeChargePayment').val(),
+                        paymentTypePaymentId:$('#3paymentTypePaymentId').val()
                     };
                     break;
                 case "6":
-                    const data = {
-                        id: id
+                     data = {
+                         id: contractId,
+                         billRegistryContractRowId:billRegistryContractRowId,
+                         billRegistryProductId:billRegistryProductId,
+                         typeContractId:$('#typeContractId').val(),
+                         valueMarkUpFullPrice:$('#valueMarkUpFullPrice').val(),
+                         valueMarkUpSalePrice:$('#valueMarkUpSalePrice').val(),
                     };
                     break;
                 case "7":
-                    const data = {
-                        id: id
+                     data = {
+                         id: contractId,
+                         billRegistryContractRowId:billRegistryContractRowId,
+                         billRegistryProductId:billRegistryProductId,
+                         automaticInvoice:$('#automaticInvoice').val(),
+                         emailAccount:$('#emailAccount').val(),
+                         emailAccountSendQty:$('#emailAccountSendQty').val(),
+                         emailAccountCampaignQty:$('#emailAccountCampaignQty').val(),
+                         value:$('#value').val(),
+                         billingDay:$('#billingDay').val(),
+                         typePaymentId:$('#4typePaymentId').val(),
+                         periodTypeCharge:$('#periodTypeCharge').val(),
+                         sellingFeeCommision:$('#sellingFeeCommision').val(),
+                         feeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                         dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
+                         feeCodCommission:$('#feeCodCommission').val(),
+                         dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
+                         feeBankTransferCommission:$('#feeBankTransferCommission').val(),
+                         dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
+                         feePaypalCommission:$('#feePaypalCommission').val(),
+                         dayChargePaypalCommission:$('#dayChargePaypalCommission').val(),
+                         chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
+                         feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
+                         periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
+                         deliveryTypePaymentId:$('#4deliveryTypePaymentId').val(),
+                         chargePaymentIsActive:$('#chargePaymentIsActive').val(),
+                         feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
+                         periodTypeChargePayment:$('#periodTypeChargePayment').val(),
+                         paymentTypePaymentId:$('#4paymentTypePaymentId').val()
                     };
                     break;
             }

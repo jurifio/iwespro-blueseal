@@ -208,15 +208,22 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         \Monkey::app()->applicationReport('UpsHandler', 'addDelivery', 'Called addDelivery');
        $orderLineHasShipments=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
         $valuePrice=0;
-       if($orderLineHasShipments!=null) {
-          // $orderId = $orderLineHasShipments->orderId;
-           }
+
         foreach ($shipment->orderLine as $orderLine) {
             $orders[] = $orderLine->printId();
             $valuePrice+=$orderLine->netPrice;
           //  $orderId=$orderLine->orderId;
         }
        $findOrder=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderId]);
+        if($valuePrice==0 || is_null($valuePrice)){
+            $findOrderLines=\Monkey::app()->repoFactory->create('OrderLine')->findBy(['orderId'=>$orderId]);
+            foreach($findOrderLines as $fol ){
+                $orders[] = $fol->printId();
+                $valuePrice+=$fol->netPrice;
+                //  $orderId=$orderLine->orderId;
+            }
+
+        }
 
             if($findOrder->isShippingToIwes == null || $findOrder->isShippingToIwes == 0  ) {
                 $shippingAddress[] = json_decode($findOrder->frozenBillingAddress,true);
