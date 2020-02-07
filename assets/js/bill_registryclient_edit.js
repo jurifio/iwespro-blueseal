@@ -1363,7 +1363,7 @@ function editContract(id) {
     var dateActivation = '';
     var statusId = '';
     var billRegistryProductId = '';
-    var dateCreate = '';
+    var nameProduct = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
         method: 'get',
@@ -1385,7 +1385,7 @@ function editContract(id) {
             dateActivation = v.dateActivation;
             statusId = v.statusId;
             billRegistryProductId = v.billRegistryProductId;
-            dateCreate = v.dateCreate;
+            nameProduct = v.nameProduct;
             billRegistryContractRowId = v.billRegistryContractRowId;
 
 
@@ -1419,7 +1419,7 @@ function editContract(id) {
                 checkedStatusSuspend = 'checked="checked"';
                 break;
         }
-        let bsModalContract = new $.bsModal('Modifica Contratto', {
+        let bsModalContract = new $.bsModal('Modifica Contratto Servizio '+nameProduct, {
             body: `<p>Confermare?</p>
  <div class="row">
                                 <div class="col-md-3">
@@ -1497,7 +1497,7 @@ function editContract(id) {
                 data: data
             }).done(function (res) {
 
-                var bodyContract = '<tr id="trContract' + res + '"><td>' + res + '</td><td>' + dateCreate + '</td><td>' + $('#dateContractExpire').val() + '</td>';
+                var bodyContract = '<tr id="trContract' + res + '"><td>' + res + '</td><td>' + nameProduct + '</td><td>' + $('#dateContractExpire').val() + '</td>';
                 bodyContract = bodyContract + '<td><button class="success" id="editContract" onclick="editContract(' + res + ')" type="button"><span class="fa fa-pencil">Modifica Testata</span></button></td>';
                 bodyContract = bodyContract + '<td><button class="success" id="addContractDetail" onclick="addContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Aggiungi</span></button></td>';
                 bodyContract = bodyContract + '<td><button class="success" id="listContractDetail" onclick="listContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Elenca</span></button></td>';
@@ -1564,7 +1564,7 @@ function addContractDetail(id) {
     var dateActivation = '';
     var statusId = '';
     var billRegistryProductId = '';
-    var dateCreate = '';
+    var nameProduct = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
         method: 'get',
@@ -1586,7 +1586,7 @@ function addContractDetail(id) {
             dateActivation = v.dateActivation;
             statusId = v.statusId;
             billRegistryProductId = v.billRegistryProductId;
-            dateCreate = v.dateCreate;
+            nameProduct = v.nameProduct;
             billRegistryContractRowId = v.billRegistryContractRowId;
 
 
@@ -2345,7 +2345,6 @@ function addContractDetail(id) {
                                          </select>       
                                     </div>
                                 </div>
-                                </div>
                                  <div class="col-md-2">
                                    <div class="form-group form-group-default">
                                         <label for="sellingFeeCommision">Commissione sul Venduto</label>
@@ -2862,7 +2861,7 @@ function addContractDetail(id) {
 
 
         }
-        let bsModalDetailContract = new $.bsModal('Aggiungi Dettaglio  Contratto', {
+        let bsModalDetailContract = new $.bsModal('Aggiungi Dettaglio  Contratto al Servizio '+nameProduct+ ' associato' , {
             body: bodyForm
         });
         $.ajax({
@@ -3307,6 +3306,57 @@ function addContractDetail(id) {
 }
 
 function listContractDetail(id) {
+    var contractId = '';
+    var billRegistryContractRowId = '';
+    var billRegistryClientId = $('#billRegistryClientId').val();
+    var billRegistryClientAccountId = $('#billRegistryClientAccountId').val();
+    var contractDetailId='';
+    var billRegistryProductId = '';
+    var nameProduct = '';
+    var isContractDetailRow='';
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
+        method: 'get',
+        data: {
+            id: id
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        let rawContractrow = res;
+        $.each(rawContractrow, function (k, v) {
 
+            contractId = id;
+            billRegistryContractRowId=v.billRegistryContractRowId;
+            billRegistryProductId = v.billRegistryProductId;
+            nameProduct = v.nameProduct;
+            contractDetailId=v.contractDetailId;
+            isContractDetailRow=v.isContractDetailRow;
+
+
+            // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+        });
+        var bodyListForm='';
+        if(isContractDetailRow=='0'){
+            bodyListForm+='<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
+            bodyListForm+='<tr><td>'+id+'</td><td>'+billRegistryContractRowId+'</td><td>'+nameProduct+'</td>';
+            bodyListForm+='<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+            bodyListForm+='<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table>';
+        }else{
+            bodyListForm+='<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
+            bodyListForm+='<tr><td>'+id+'</td><td>'+billRegistryContractRowId+'</td><td>'+nameProduct+'</td>';
+            bodyListForm+='<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+            bodyListForm+='<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table>';
+        }
+        let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio '+nameProduct+ ' ', {
+            body: bodyListForm
+        });
+        bsModalDetailContract.showCancelBtn();
+        bsModalDetailContract.addClass('modal-wide');
+        bsModalDetailContract.addClass('modal-high');
+
+
+
+    });
 }
 

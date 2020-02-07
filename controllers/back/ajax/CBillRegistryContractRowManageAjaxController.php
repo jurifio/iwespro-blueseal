@@ -2,6 +2,7 @@
 
 namespace bamboo\controllers\back\ajax;
 
+use bamboo\core\exceptions\RedPandaOrderLogicException;
 use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CBillRegistryContract;
 use bamboo\domain\entities\CBillRegistryContractRow;
@@ -284,7 +285,59 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
 
     public function get()
     {
+        $data = $this->app->router->request()->getRequestData();
+        $id=$data['id'];
+        $contractRow=[];
+        /* @var CBillRegistryContractRow $brc */
+        $brc=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['id'=>$id]);
+        /* @var \bamboo\domain\entities\CBillRegistryContractRow $brcr*/
+        $brcr=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId'=>$brc->id]);
+        $brp=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$brcr->billRegistryProductId]);
+        switch($brcr->billRegistryProductId){
+            case "1":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='0';
+                break;
+            case "2":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='0';
+                break;
+            case "3":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='1';
+                break;
+            case "4":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='1';
+                break;
+            case "5":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='1';
+                break;
+            case "6":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='1';
+                break;
+            case "7":
+                $tableData=\Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findOneBy(['billRegistryContractRowId'=>$brcr->id]);
+                $contractDetailId=$tableData->id;
+                $isContractDetailRow='0';
+                break;
 
+        }
+        $contractRow[]=['billRegistryContractId'=>$brc->id,
+                        'billRegistryContractRowId'=>$brcr->id,
+                        'billRegistryProductId'=>$brp->id,
+                        'contractDetailId'=>$contractDetailId,
+                        'isContractDetailRow'=>$isContractDetailRow,
+                        'nameProduct'=>$brp->name];
+        return json_encode($contractRow);
 
     }
     public function put()
