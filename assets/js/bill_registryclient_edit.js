@@ -1915,7 +1915,6 @@ function addContractDetail(id) {
                                          </select>       
                                     </div>
                                 </div>
-                                </div>
                                  <div class="col-md-2">
                                    <div class="form-group form-group-default">
                                         <label for="sellingFeeCommision">Commissione sul Venduto</label>
@@ -2105,7 +2104,7 @@ function addContractDetail(id) {
 
 
                 break;
-            case 3:
+            case "3":
                 bodyForm = `<div class="row">
                                 <div class="col-md-3">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
@@ -2195,7 +2194,7 @@ function addContractDetail(id) {
                             </div>
 `;
                 break;
-            case 4:
+            case "4":
                 bodyForm = `<div class="row">
                                 <div class="col-md-3">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
@@ -2285,7 +2284,7 @@ function addContractDetail(id) {
                             </div>
 `;
                 break;
-            case 5:
+            case "5":
                 bodyForm = `<div class="row">
                                 <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
@@ -2538,7 +2537,7 @@ function addContractDetail(id) {
                 break;
 
 
-            case 6:
+            case "6":
                 bodyForm = `
 <div class="row">
                     <div class="col-md-4">
@@ -2577,7 +2576,7 @@ function addContractDetail(id) {
             `;
 
                 break;
-            case 7:
+            case "7":
                 bodyForm = `<div class="row">
                                 <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
@@ -2874,7 +2873,7 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#paymentTypePaymentId');
+            var select = $('#1paymentTypePaymentId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -2892,7 +2891,7 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#deliveryTypePaymentId');
+            var select = $('#1deliveryTypePaymentId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -2910,7 +2909,7 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#typePaymentId');
+            var select = $('#1typePaymentId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -2928,9 +2927,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#2paymentTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select1 = $('#2paymentTypePaymentId');
+            if (typeof (select1[0].selectize) != 'undefined') select1[0].selectize.destroy();
+            select1.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -2946,9 +2945,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#2deliveryTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select2 = $('#2deliveryTypePaymentId');
+            if (typeof (select2[0].selectize) != 'undefined') select2[0].selectize.destroy();
+            select2.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -2964,9 +2963,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#2typePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select3 = $('#2typePaymentId');
+            if (typeof (select3[0].selectize) != 'undefined') select3[0].selectize.destroy();
+            select3.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -2982,9 +2981,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#3paymentTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select4 = $('#3paymentTypePaymentId');
+            if (typeof (select4[0].selectize) != 'undefined') select4[0].selectize.destroy();
+            select4.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3073,6 +3072,42 @@ function addContractDetail(id) {
             dataType: 'json'
         }).done(function (res2) {
             var select = $('#4typePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#5typePaymentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#6typePaymentId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
