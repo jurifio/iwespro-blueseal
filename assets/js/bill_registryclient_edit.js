@@ -2242,8 +2242,8 @@ function addContractDetail(id) {
                             <div class="row">
                                  <div class="col-md-3">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <label for="5typePaymentId">Tipo di pagamento Associato</label>
-                                        <select id="5typePaymentId" name="5typePaymentId"
+                                        <label for="6typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="6typePaymentId" name="6typePaymentId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">

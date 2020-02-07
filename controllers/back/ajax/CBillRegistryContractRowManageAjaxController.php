@@ -117,7 +117,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->billRegistryContractRowId=$data['billRegistryContractRowId'];
                     $rowInsert->descriptionInvoice=$data['descriptionInvoice'];
                     $rowInsert->startUpCostCampaign=$data['startUpCostCampaign'];
-                    $rowInsert->AutomaticInvoice=$data['AutomaticInvoice'];
+                    $rowInsert->automaticInvoice=$data['automaticInvoice'];
                     $rowInsert->billingDay=$data['billingDay'];
                     $rowInsert->typePaymentId=$data['typePaymentId'];
                     $rowInsert->feeAgencyCommision=$data['feeAgencyCommision'];
@@ -143,7 +143,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->billRegistryContractRowId=$data['billRegistryContractRowId'];
                     $rowInsert->descriptionInvoice=$data['descriptionInvoice'];
                     $rowInsert->startUpCostCampaign=$data['startUpCostCampaign'];
-                    $rowInsert->AutomaticInvoice=$data['AutomaticInvoice'];
+                    $rowInsert->automaticInvoice=$data['automaticInvoice'];
                     $rowInsert->billingDay=$data['billingDay'];
                     $rowInsert->typePaymentId=$data['typePaymentId'];
                     $rowInsert->feeAgencyCommision=$data['feeAgencyCommision'];
