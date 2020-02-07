@@ -1432,7 +1432,7 @@ function editContract(id) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="typeValidityId">Validità</label>
                                         <select id="typeValidityId" name="typeValidityId"
@@ -1462,7 +1462,7 @@ function editContract(id) {
                                                value="` + dateAlertRenewal + `"
                                         />
                                     </div>
-                                </div>j
+                                </div>
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
                                         <label for="statusId">Stato Contratto</label>
