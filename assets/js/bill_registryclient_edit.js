@@ -3314,6 +3314,7 @@ function listContractDetail(id) {
     var billRegistryProductId = '';
     var nameProduct = '';
     var isContractDetailRow='';
+    var exist='';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
         method: 'get',
@@ -3325,7 +3326,7 @@ function listContractDetail(id) {
         console.log(res);
         let rawContractrow = res;
         $.each(rawContractrow, function (k, v) {
-
+            exist=v.exist;
             contractId = id;
             billRegistryContractRowId=v.billRegistryContractRowId;
             billRegistryProductId = v.billRegistryProductId;
@@ -3336,24 +3337,37 @@ function listContractDetail(id) {
 
             // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
         });
+
         var bodyListForm='';
-        if(isContractDetailRow=='0'){
-            bodyListForm+='<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
-            bodyListForm+='<tr><td>'+id+'</td><td>'+billRegistryContractRowId+'</td><td>'+nameProduct+'</td>';
-            bodyListForm+='<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-            bodyListForm+='<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table>';
+        if (exist=='1') {
+            if (isContractDetailRow == '0') {
+                bodyListForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
+                bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table>';
+            } else {
+                bodyListForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
+                bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                bodyListForm += '<td><button class="success" id="editContractDetail" onclick="addTableDetail(' + contractDetailId + ',' + billRegistryProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table><div id="tableDetail"></div>>';
+            }
+            let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio '+nameProduct+ ' ', {
+                body: bodyListForm
+            });
+            bsModalDetailContract.showCancelBtn();
+            bsModalDetailContract.addClass('modal-wide');
+            bsModalDetailContract.addClass('modal-high');
         }else{
-            bodyListForm+='<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
-            bodyListForm+='<tr><td>'+id+'</td><td>'+billRegistryContractRowId+'</td><td>'+nameProduct+'</td>';
-            bodyListForm+='<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-            bodyListForm+='<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId +')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table>';
+            bodyListForm =' Attenzione Devi Prima Caricare il Dettaglio del Contratto';
+            let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio', {
+                body: bodyListForm
+            });
+            bsModalDetailContract.showCancelBtn();
+            bsModalDetailContract.addClass('modal-wide');
+            bsModalDetailContract.addClass('modal-high');
         }
-        let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio '+nameProduct+ ' ', {
-            body: bodyListForm
-        });
-        bsModalDetailContract.showCancelBtn();
-        bsModalDetailContract.addClass('modal-wide');
-        bsModalDetailContract.addClass('modal-high');
+
 
 
 
