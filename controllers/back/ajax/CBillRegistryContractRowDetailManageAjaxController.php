@@ -38,8 +38,7 @@ class CBillRegistryContractRowDetailManageAjaxController extends AAjaxController
         $billRegistryClientId=$data['billRegistryClientId'];
 
         $contractRowDetail = [];
-        /* @var CBillRegistryContractRowDetail $brc */
-        $brcrd = \Monkey::app()->repoFactory->create('BillRegistryContractRowDetail')->findOneBy(['billRegistryContractRowId' => $id]);
+        $brcrd = \Monkey::app()->repoFactory->create('BillRegistryContractRowDetail')->findBy(['billRegistryContractRowId' => $id]);
         foreach ($brcrd as $detailRow) {
             $brp = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $detailRow->billRegistryProductId]);
             $bpl= \Monkey::app()->repoFactory->create('BillRegistryPriceList')->findOneBy(['billRegistryProductId'=>$detailRow->billRegistryProductId,'billRegistryClientId'=>$billRegistryClientId,'isActive'=>1]);
