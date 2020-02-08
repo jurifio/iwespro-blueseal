@@ -3446,7 +3446,7 @@ $('#addPaymentDiv').addClass('hide');
 
             typeform = `<div class="row">
                                <div class="col-md-12">
-                               <button class="success" id="addProductRow" onclick="addProductRow(` + contractDetailId + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-product-hunt">Prodotti</span></button>
+                               <button class="success" id="addProductRow" onclick="addProductRow(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-product-hunt">Prodotti</span></button>
                                 </div>
                         <div>
                         <div  class="row">
