@@ -3416,7 +3416,8 @@ $('#addPaymentDiv').addClass('hide');
         method: 'get',
         data: {
             id: id,
-            billRegistryGroupProductId:billRegistryGroupProductId
+            billRegistryGroupProductId:billRegistryGroupProductId,
+            billRegistryClientId:$('#billRegistryClientId').val()
         },
         dataType: 'json'
     }).done(function (res) {
@@ -3426,7 +3427,7 @@ $('#addPaymentDiv').addClass('hide');
         if (rawContractRowDetail != '') {
             bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Elimina</th></tr>';
             $.each(rawContractRowDetail, function (k, v) {
-                bodyListDetailForm += '<tr><td>' + v.billRegistryProductId + '</td>';
+                bodyListDetailForm += '<tr><td>' + v.billRegistryContractRowDetailId + '</td>';
                 bodyListDetailForm += '<td>' + v.codeProduct + '-' + v.nameProduct + '</td>';
                 bodyListDetailForm += '<td>' + v.um + '</td>';
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
