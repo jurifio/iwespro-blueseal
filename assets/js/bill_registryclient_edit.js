@@ -3442,8 +3442,7 @@ $('#addPaymentDiv').addClass('hide');
     });
 
     var typeForm = '';
-    switch (billRegistryGroupProductId) {
-        case '1':
+
 
             typeform = `<div class="row">
                                <div class="col-md-12">
@@ -3457,12 +3456,12 @@ $('#addPaymentDiv').addClass('hide');
                         </div>
                         <div class="row">
                                 <div class="col-md-12"  id="listProductRowSection">
-                                `+bodyListDetailform+`
+                               `+bodyListDetailform+`
                                 </div>
                         </div>`;
+            $('#addProductDiv').append(typeForm);
 
-            break;
-    }
+
 }
 
 function deleteContractDetail(id) {
