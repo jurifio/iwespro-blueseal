@@ -3410,7 +3410,7 @@ function addProduct(id, billRegistryGroupProductId) {
 $('#addProductDiv').removeClass('hide');
 $('#addProductDiv').addClass('show');
 $('#addPaymentDiv').addClass('hide');
-
+    var bodyListDetailForm = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
         method: 'get',
@@ -3423,7 +3423,7 @@ $('#addPaymentDiv').addClass('hide');
     }).done(function (res) {
         console.log(res);
         let rawContractRowDetail = res;
-        var bodyListDetailForm = '';
+
         if (rawContractRowDetail != '') {
             bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Elimina</th></tr>';
             $.each(rawContractRowDetail, function (k, v) {
@@ -3435,9 +3435,9 @@ $('#addPaymentDiv').addClass('hide');
                 bodyListDetailForm += '<td>' + v.taxes + '</td>';
 
             });
-            bodyListDetailform += '</table>';
+            bodyListDetailForm += '</table>';
         }else{
-            bodyListDetailform='non ci sono prodotti';
+            bodyListDetailForm='non ci sono prodotti';
         }
     });
 
@@ -3456,7 +3456,7 @@ $('#addPaymentDiv').addClass('hide');
                         </div>
                         <div class="row">
                                 <div class="col-md-12"  id="listProductRowSection">
-                               `+bodyListDetailform+`
+                               `+bodyListDetailForm+`
                                 </div>
                         </div>`;
             $('#addProductDiv').append(typeForm);
