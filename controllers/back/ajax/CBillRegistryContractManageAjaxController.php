@@ -66,7 +66,7 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
         $brc=\Monkey::app()->repoFactory->create('BillRegistryContract')->findOneBy(['id'=>$id]);
         /* @var \bamboo\domain\entities\CBillRegistryContractRow $brcr*/
         $brcr=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId'=>$brc->id]);
-        $brp=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$brcr->billRegistryProductId]);
+        $brp=\Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id'=>$brcr->billRegistryGroupProductId]);
         $dateActivation = strtotime($brcr->dateActivation);
         $dateActivation = date('Y-m-d\TH:i',$dateActivation);
         $dateContractExpire = strtotime($brc -> dateContractExpire);
@@ -85,7 +85,7 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
                        'dateAlertRenewal' => $dateAlertRenewal,
                        'dateActivation'=>$dateActivation,
                         'billRegistryContractRowId'=>$brcr->id,
-                       'billRegistryProductId'=>$brcr->billRegistryProductId
+                       'billRegistryGroupProductId'=>$brcr->billRegistryGroupProductId
 
             ];
 
@@ -102,7 +102,7 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
 
         $typeValidityId=$data["typeValidityId"];
         $statusId=$data['statusId'];
-        $billRegistryProductId=$data["billRegistryProductId"];
+        $billRegistryGroupProductId=$data["billRegistryGroupProductId"];
         $billRegistryContractRowId=$data["billRegistryContractRowId"];
         $dateActivation =strtotime($dateActivation);
         $dateActivation=date('Y-m-d H:i:s', $dateActivation);

@@ -321,9 +321,9 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
                 }
                 $contractRowInsert=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->getEmptyEntity();
                 $contractRowInsert->billRegistryContractId=$contractId;
-                $contractRowInsert->billRegistryProductId=$product;
+                $contractRowInsert->billRegistryGroupProductId=$product;
                 $contractRowInsert->statusId=1;
-                $contractRowInsert->billRegistryProductTableId=$productId;
+                $contractRowInsert->billRegistryProductTableId=$product;
                 $contractRowInsert->insert();
 
 
@@ -331,7 +331,7 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
 
 
                 $brcbahpInsert=$billRegistryClientAccountHasProductRepo->getEmptyEntity();
-                $brcbahpInsert->billRegistryProductId=$product;
+                $brcbahpInsert->billRegistryGroupProductId=$product;
                 $brcbahpInsert->billRegistryClientAccountId=$billRegistryClientAccountId;
                 $brcbahpInsert->isActive=1;
                 $brcbahpInsert->insert();

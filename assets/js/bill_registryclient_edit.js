@@ -200,7 +200,7 @@ $("#accountAsService").change(function () {
         $('#rawProduct').empty();
 
         $.ajax({
-            url: '/blueseal/xhr/SelectBillRegistryProductAjaxController',
+            url: '/blueseal/xhr/SelectBillRegistryGroupProductAjaxController',
             method: 'get',
             data: {
                 accountAsService: accountAsService
@@ -1362,7 +1362,7 @@ function editContract(id) {
     var dateContractExpire = '';
     var dateActivation = '';
     var statusId = '';
-    var billRegistryProductId = '';
+    var billRegistryGroupProductId = '';
     var nameProduct = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
@@ -1384,7 +1384,7 @@ function editContract(id) {
             dateAlertRenewal = v.dateAlertRenewal;
             dateActivation = v.dateActivation;
             statusId = v.statusId;
-            billRegistryProductId = v.billRegistryProductId;
+            billRegistryGroupProductId = v.billRegistryGroupProductId;
             nameProduct = v.nameProduct;
             billRegistryContractRowId = v.billRegistryContractRowId;
 
@@ -1419,7 +1419,7 @@ function editContract(id) {
                 checkedStatusSuspend = 'checked="checked"';
                 break;
         }
-        let bsModalContract = new $.bsModal('Modifica Contratto Servizio '+nameProduct, {
+        let bsModalContract = new $.bsModal('Modifica Contratto Servizio ' + nameProduct, {
             body: `<p>Confermare?</p>
  <div class="row">
                                 <div class="col-md-2">
@@ -1495,7 +1495,7 @@ function editContract(id) {
                 statusId: $('#statusId').val(),
                 dateContractExpire: $('#dateContractExpire').val(),
                 dateAlertRenewal: $('#dateAlertRenewal').val(),
-                billRegistryProductId: billRegistryProductId,
+                billRegistryGroupProductId: billRegistryGroupProductId,
                 statusId: $('#statusId').val()
 
 
@@ -1573,7 +1573,7 @@ function addContractDetail(id) {
     var dateContractExpire = '';
     var dateActivation = '';
     var statusId = '';
-    var billRegistryProductId = '';
+    var billRegistryGroupProductId = '';
     var nameProduct = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
@@ -1595,7 +1595,7 @@ function addContractDetail(id) {
             dateAlertRenewal = v.dateAlertRenewal;
             dateActivation = v.dateActivation;
             statusId = v.statusId;
-            billRegistryProductId = v.billRegistryProductId;
+            billRegistryGroupProductId = v.billRegistryGroupProductId;
             nameProduct = v.nameProduct;
             billRegistryContractRowId = v.billRegistryContractRowId;
 
@@ -1615,7 +1615,7 @@ function addContractDetail(id) {
                 break;
         }
         var bodyForm = '';
-        switch (billRegistryProductId) {
+        switch (billRegistryGroupProductId) {
             case "1":
                 bodyForm = `<div class="row">
                                 <div class="col-md-2">
@@ -2871,7 +2871,7 @@ function addContractDetail(id) {
 
 
         }
-        let bsModalDetailContract = new $.bsModal('Aggiungi Dettaglio  Contratto al Servizio '+nameProduct+ ' associato' , {
+        let bsModalDetailContract = new $.bsModal('Aggiungi Dettaglio  Contratto al Servizio ' + nameProduct + ' associato', {
             body: bodyForm
         });
         $.ajax({
@@ -3131,166 +3131,166 @@ function addContractDetail(id) {
         bsModalDetailContract.addClass('modal-wide');
         bsModalDetailContract.addClass('modal-high');
         bsModalDetailContract.setOkEvent(function () {
-                var data='';
-            switch(billRegistryProductId) {
+            var data = '';
+            switch (billRegistryGroupProductId) {
                 case "1":
-                 data = {
+                    data = {
                         id: contractId,
-                        billRegistryProductId:billRegistryProductId,
-                        billRegistryContractRowId:billRegistryContractRowId,
-                        automaticInvoice:$('#automaticInvoice').val(),
-                        value:$('#value').val(),
-                        billingDay:$('#billingDay').val(),
-                        typePaymentId:$('#1typePaymentId').val(),
-                        periodTypeCharge:$('#periodTypeCharge').val(),
-                        sellingFeeCommision:$('#sellingFeeCommision').val(),
-                        feeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                        dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                        feeCodCommission:$('#feeCodCommission').val(),
-                        dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
-                        feeBankTransferCommission:$('#feeBankTransferCommission').val(),
-                        dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
-                        feePaypalCommission:$('#feePaypalCommission').val(),
-                        dayChargeFeePaypalCommission:$('#dayChargeFeePaypalCommission').val(),
-                        chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
-                        feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
-                        periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
-                        deliveryTypePaymentId:$('#1deliveryTypePaymentId').val(),
-                        chargePaymentIsActive:$('#chargePaymentIsActive').val(),
-                        feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
-                        periodTypeChargePayment:$('#periodTypeChargePayment').val(),
-                        paymentTypePaymentId:$('#1paymentTypePaymentId').val()
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        automaticInvoice: $('#automaticInvoice').val(),
+                        value: $('#value').val(),
+                        billingDay: $('#billingDay').val(),
+                        typePaymentId: $('#1typePaymentId').val(),
+                        periodTypeCharge: $('#periodTypeCharge').val(),
+                        sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        feeCodCommission: $('#feeCodCommission').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommission').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
+                        feePaypalCommission: $('#feePaypalCommission').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommission').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActive').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
+                        periodTypeChargeDelivery: $('#periodTypeChargeDelivery').val(),
+                        deliveryTypePaymentId: $('#1deliveryTypePaymentId').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActive').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
+                        periodTypeChargePayment: $('#periodTypeChargePayment').val(),
+                        paymentTypePaymentId: $('#1paymentTypePaymentId').val()
                     };
                     break;
                 case "2":
-                     data = {
-                         id: contractId,
-                         billRegistryProductId:billRegistryProductId,
-                         billRegistryContractRowId:billRegistryContractRowId,
-                         automaticInvoice:$('#automaticInvoice').val(),
-                         value:$('#value').val(),
-                         billingDay:$('#billingDay').val(),
-                         typePaymentId:$('#2typePaymentId').val(),
-                         periodTypeCharge:$('#periodTypeCharge').val(),
-                         sellingFeeCommision:$('#sellingFeeCommision').val(),
-                         feeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                         dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                         feeCodCommission:$('#feeCodCommission').val(),
-                         dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
-                         feeBankTransferCommission:$('#feeBankTransferCommission').val(),
-                         dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
-                         feePaypalCommission:$('#feePaypalCommission').val(),
-                         dayChargeFeePaypalCommission:$('#dayChargeFeePaypalCommission').val(),
-                         chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
-                         feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
-                         periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
-                         deliveryTypePaymentId:$('#2deliveryTypePaymentId').val(),
-                         chargePaymentIsActive:$('#chargePaymentIsActive').val(),
-                         feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
-                         periodTypeChargePayment:$('#periodTypeChargePayment').val(),
-                         paymentTypePaymentId:$('#2paymentTypePaymentId').val()
+                    data = {
+                        id: contractId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        automaticInvoice: $('#automaticInvoice').val(),
+                        value: $('#value').val(),
+                        billingDay: $('#billingDay').val(),
+                        typePaymentId: $('#2typePaymentId').val(),
+                        periodTypeCharge: $('#periodTypeCharge').val(),
+                        sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        feeCodCommission: $('#feeCodCommission').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommission').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
+                        feePaypalCommission: $('#feePaypalCommission').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommission').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActive').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
+                        periodTypeChargeDelivery: $('#periodTypeChargeDelivery').val(),
+                        deliveryTypePaymentId: $('#2deliveryTypePaymentId').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActive').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
+                        periodTypeChargePayment: $('#periodTypeChargePayment').val(),
+                        paymentTypePaymentId: $('#2paymentTypePaymentId').val()
                     };
                     break;
                 case "3":
-                     data = {
-                         id: contractId,
-                         billRegistryContractRowId:billRegistryContractRowId,
-                         billRegistryProductId:billRegistryProductId,
-                         automaticInvoice:$('#automaticInvoice').val(),
-                         descriptionInvoice:$('#descriptionInvoice').val(),
-                         billingDay:$('#billingDay').val(),
-                         typePaymentId:$('#3typePaymentId').val(),
-                         startUpCostCampaign:$('#startUpCostCampaign').val(),
-                         feeAgencyCommision:$('#feeAgencyCommision').val(),
-                         prepaidPaymentIsActive:$('#prepaidPaymentIsActive').val(),
-                         prepaidCost:$('#prepaidCost').val()
+                    data = {
+                        id: contractId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        automaticInvoice: $('#automaticInvoice').val(),
+                        descriptionInvoice: $('#descriptionInvoice').val(),
+                        billingDay: $('#billingDay').val(),
+                        typePaymentId: $('#3typePaymentId').val(),
+                        startUpCostCampaign: $('#startUpCostCampaign').val(),
+                        feeAgencyCommision: $('#feeAgencyCommision').val(),
+                        prepaidPaymentIsActive: $('#prepaidPaymentIsActive').val(),
+                        prepaidCost: $('#prepaidCost').val()
 
                     };
                     break;
                 case "4":
-                     data = {
-                         id: contractId,
-                         billRegistryContractRowId:billRegistryContractRowId,
-                         billRegistryProductId:billRegistryProductId,
-                         automaticInvoice:$('#automaticInvoice').val(),
-                         descriptionInvoice:$('#descriptionInvoice').val(),
-                         billingDay:$('#billingDay').val(),
-                         typePaymentId:$('#4typePaymentId').val(),
-                         startUpCostCampaign:$('#startUpCostCampaign').val(),
-                         feeAgencyCommision:$('#feeAgencyCommision').val(),
-                         prepaidPaymentIsActive:$('#prepaidPaymentIsActive').val(),
-                         prepaidCost:$('#prepaidCost').val()
+                    data = {
+                        id: contractId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        automaticInvoice: $('#automaticInvoice').val(),
+                        descriptionInvoice: $('#descriptionInvoice').val(),
+                        billingDay: $('#billingDay').val(),
+                        typePaymentId: $('#4typePaymentId').val(),
+                        startUpCostCampaign: $('#startUpCostCampaign').val(),
+                        feeAgencyCommision: $('#feeAgencyCommision').val(),
+                        prepaidPaymentIsActive: $('#prepaidPaymentIsActive').val(),
+                        prepaidCost: $('#prepaidCost').val()
                     };
                     break;
                 case "5":
                     data = {
                         id: contractId,
-                        billRegistryContractRowId:billRegistryContractRowId,
-                        billRegistryProductId:billRegistryProductId,
-                        automaticInvoice:$('#automaticInvoice').val(),
-                        value:$('#value').val(),
-                        billingDay:$('#billingDay').val(),
-                        typePaymentId:$('#5typePaymentId').val(),
-                        periodTypeCharge:$('#periodTypeCharge').val(),
-                        sellingFeeCommision:$('#sellingFeeCommision').val(),
-                        feeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                        dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                        feeCodCommission:$('#feeCodCommission').val(),
-                        dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
-                        feeBankTransferCommission:$('#feeBankTransferCommission').val(),
-                        dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
-                        feePaypalCommission:$('#feePaypalCommission').val(),
-                        dayChargeFeePaypalCommission:$('#dayChargeFeePaypalCommission').val(),
-                        chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
-                        feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
-                        periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
-                        deliveryTypePaymentId:$('#5deliveryTypePaymentId').val(),
-                        chargePaymentIsActive:$('#chargePaymentIsActive').val(),
-                        feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
-                        periodTypeChargePayment:$('#periodTypeChargePayment').val(),
-                        paymentTypePaymentId:$('#5paymentTypePaymentId').val()
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        automaticInvoice: $('#automaticInvoice').val(),
+                        value: $('#value').val(),
+                        billingDay: $('#billingDay').val(),
+                        typePaymentId: $('#5typePaymentId').val(),
+                        periodTypeCharge: $('#periodTypeCharge').val(),
+                        sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        feeCodCommission: $('#feeCodCommission').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommission').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
+                        feePaypalCommission: $('#feePaypalCommission').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommission').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActive').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
+                        periodTypeChargeDelivery: $('#periodTypeChargeDelivery').val(),
+                        deliveryTypePaymentId: $('#5deliveryTypePaymentId').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActive').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
+                        periodTypeChargePayment: $('#periodTypeChargePayment').val(),
+                        paymentTypePaymentId: $('#5paymentTypePaymentId').val()
                     };
                     break;
                 case "6":
-                     data = {
-                         id: contractId,
-                         billRegistryContractRowId:billRegistryContractRowId,
-                         billRegistryProductId:billRegistryProductId,
-                         typeContractId:$('#typeContractId').val(),
-                         valueMarkUpFullPrice:$('#valueMarkUpFullPrice').val(),
-                         valueMarkUpSalePrice:$('#valueMarkUpSalePrice').val(),
+                    data = {
+                        id: contractId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        typeContractId: $('#typeContractId').val(),
+                        valueMarkUpFullPrice: $('#valueMarkUpFullPrice').val(),
+                        valueMarkUpSalePrice: $('#valueMarkUpSalePrice').val(),
                     };
                     break;
                 case "7":
-                     data = {
-                         id: contractId,
-                         billRegistryContractRowId:billRegistryContractRowId,
-                         billRegistryProductId:billRegistryProductId,
-                         automaticInvoice:$('#automaticInvoice').val(),
-                         emailAccount:$('#emailAccount').val(),
-                         emailAccountSendQty:$('#emailAccountSendQty').val(),
-                         emailAccountCampaignQty:$('#emailAccountCampaignQty').val(),
-                         value:$('#value').val(),
-                         billingDay:$('#billingDay').val(),
-                         typePaymentId:$('#6typePaymentId').val(),
-                         periodTypeCharge:$('#periodTypeCharge').val(),
-                         sellingFeeCommision:$('#sellingFeeCommision').val(),
-                         feeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                         dayChargeFeeCreditCardCommission:$('#feeCreditCardCommission').val(),
-                         feeCodCommission:$('#feeCodCommission').val(),
-                         dayChargeFeeCodCommission:$('#dayChargeFeeCodCommission').val(),
-                         feeBankTransferCommission:$('#feeBankTransferCommission').val(),
-                         dayChargeFeeBankTransferCommission:$('#dayChargeFeeBankTransferCommission').val(),
-                         feePaypalCommission:$('#feePaypalCommission').val(),
-                         dayChargePaypalCommission:$('#dayChargePaypalCommission').val(),
-                         chargeDeliveryIsActive:$('#chargeDeliveryIsActive').val(),
-                         feeCostDeliveryCommission:$('#feeCostDeliveryCommission').val(),
-                         periodTypeChargeDelivery:$('#periodTypeChargeDelivery').val(),
-                         deliveryTypePaymentId:$('#6deliveryTypePaymentId').val(),
-                         chargePaymentIsActive:$('#chargePaymentIsActive').val(),
-                         feeCostCommissionPayment:$('#feeCostCommissionPayment').val(),
-                         periodTypeChargePayment:$('#periodTypeChargePayment').val(),
-                         paymentTypePaymentId:$('#6paymentTypePaymentId').val()
+                    data = {
+                        id: contractId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        automaticInvoice: $('#automaticInvoice').val(),
+                        emailAccount: $('#emailAccount').val(),
+                        emailAccountSendQty: $('#emailAccountSendQty').val(),
+                        emailAccountCampaignQty: $('#emailAccountCampaignQty').val(),
+                        value: $('#value').val(),
+                        billingDay: $('#billingDay').val(),
+                        typePaymentId: $('#6typePaymentId').val(),
+                        periodTypeCharge: $('#periodTypeCharge').val(),
+                        sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
+                        feeCodCommission: $('#feeCodCommission').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommission').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
+                        feePaypalCommission: $('#feePaypalCommission').val(),
+                        dayChargePaypalCommission: $('#dayChargePaypalCommission').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActive').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
+                        periodTypeChargeDelivery: $('#periodTypeChargeDelivery').val(),
+                        deliveryTypePaymentId: $('#6deliveryTypePaymentId').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActive').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
+                        periodTypeChargePayment: $('#periodTypeChargePayment').val(),
+                        paymentTypePaymentId: $('#6paymentTypePaymentId').val()
                     };
                     break;
             }
@@ -3320,11 +3320,11 @@ function listContractDetail(id) {
     var billRegistryContractRowId = '';
     var billRegistryClientId = $('#billRegistryClientId').val();
     var billRegistryClientAccountId = $('#billRegistryClientAccountId').val();
-    var contractDetailId='';
-    var billRegistryProductId = '';
+    var contractDetailId = '';
+    var billRegistryGroupProductId = '';
     var nameProduct = '';
-    var isContractDetailRow='';
-    var exist='';
+    var isContractDetailRow = '';
+    var exist = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
         method: 'get',
@@ -3335,52 +3335,139 @@ function listContractDetail(id) {
     }).done(function (res) {
         console.log(res);
         let rawContractrow = res;
-        $.each(rawContractrow, function (k, v) {
-            exist=v.exist;
-            contractId = id;
-            billRegistryContractRowId=v.billRegistryContractRowId;
-            billRegistryProductId = v.billRegistryProductId;
-            nameProduct = v.nameProduct;
-            contractDetailId=v.contractDetailId;
-            isContractDetailRow=v.isContractDetailRow;
+        var bodyListForm = '';
+        if (rawContractrow != '') {
+            var bodyListForm = '';
+            bodyListForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
+            $.each(rawContractrow, function (k, v) {
+                exist = v.exist;
+                contractId = id;
+                billRegistryContractRowId = v.billRegistryContractRowId;
+                billRegistryGroupProductId = v.billRegistryGroupProductId;
+                nameProduct = v.nameProduct;
+                contractDetailId = v.contractDetailId;
+                isContractDetailRow = v.isContractDetailRow;
+                if (exist == '1') {
+                    if (isContractDetailRow == '0') {
+                        bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                        bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addContractDetail" onclick="addProduct(' + contractDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addContractDetail" onclick="addPayment(' + billRegistryContractRowId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                    } else {
 
+                        bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                        bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addContractDetail" onclick="addProduct(' + contractDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addContractDetail" onclick="addPayment(' + billRegistryContractRowId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                    }
 
-            // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-        });
-
-        var bodyListForm='';
-        if (exist=='1') {
-            if (isContractDetailRow == '0') {
-                bodyListForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
-                bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
-                bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table>';
-            } else {
-                bodyListForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina<br>Dettaglio Contratto</th></tr>';
-                bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
-                bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                bodyListForm += '<td><button class="success" id="editContractDetail" onclick="addTableDetail(' + contractDetailId + ',' + billRegistryProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + contractDetailId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr></table><div id="tableDetail"></div>>';
-            }
-            let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio '+nameProduct+ ' ', {
-                body: bodyListForm
+                } else {
+                    bodyListForm = 'Non esistono righe per questo contratto';
+                }
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
-            bsModalDetailContract.showCancelBtn();
-            bsModalDetailContract.addClass('modal-wide');
-            bsModalDetailContract.addClass('modal-high');
-        }else{
-            bodyListForm =' Attenzione Devi Prima Caricare il Dettaglio del Contratto';
-            let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio', {
-                body: bodyListForm
-            });
-            bsModalDetailContract.showCancelBtn();
-            bsModalDetailContract.addClass('modal-wide');
-            bsModalDetailContract.addClass('modal-high');
+            bodyListForm += '</table><div id="editContractDetailDiv"></div><div id="addPaymentDiv" class="hide"></div><div id="addProductDiv" class="hide"></div>';
+        } else {
+            bodyListForm = 'Non Esistono righe di contratto';
         }
 
 
+        let bsModalDetailContract = new $.bsModal('Modifica Dettaglio  Contratto al Servizio ' + nameProduct, {
+            body: bodyListForm
+        });
+        bsModalDetailContract.showCancelBtn();
+        bsModalDetailContract.addClass('modal-wide');
+        bsModalDetailContract.addClass('modal-high');
 
 
     });
 }
+
+
+function editContractDetail(id) {
+
+}
+
+function addPayment(id) {
+
+
+
+    var typeForm = '';
+    switch (productId) {
+        case '1':
+            typeform = `<div class="row">
+                               <div class="col-md-12">
+                               <button class="success" id="addProductRow" onclick="addProductRow(' + contractDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button>
+                                </div>
+                        </div> `
+
+    }
+}
+
+function addProduct(id, billRegistryGroupProductId) {
+$('#addProductDiv').removeClass('hide');
+$('#addProductDiv').addClass('show');
+$('#addPaymentDiv').addClass('hide');
+
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
+        method: 'get',
+        data: {
+            id: id,
+            billRegistryGroupProductId:billRegistryGroupProductId
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        let rawContractRowDetail = res;
+        var bodyListDetailForm = '';
+        if (rawContractRowDetail != '') {
+            bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Elimina</th></tr>';
+            $.each(rawContractRowDetail, function (k, v) {
+                bodyListDetailForm += '<tr><td>' + v.billRegistryProductId + '</td>';
+                bodyListDetailForm += '<td>' + v.codeProduct + '-' + v.nameProduct + '</td>';
+                bodyListDetailForm += '<td>' + v.um + '</td>';
+                bodyListDetailForm += '<td>' + v.qty + '</td>';
+                bodyListDetailForm += '<td>' + v.price + '</td>';
+                bodyListDetailForm += '<td>' + v.taxes + '</td>';
+
+            });
+            bodyListDetailform += '</table>';
+        }else{
+            bodyListDetailform='non ci sono prodotti';
+        }
+    });
+
+    var typeForm = '';
+    switch (productId) {
+        case '1':
+
+            typeform = `<div class="row">
+                               <div class="col-md-12">
+                               <button class="success" id="addProductRow" onclick="addProductRow(` + contractDetailId + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-product-hunt">Prodotti</span></button>
+                                </div>
+                        <div>
+                        <div  class="row">
+                                <div class="col-md-12 hide"id="addProductRowSection">
+                                </div>
+                              
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12"  id="listProductRowSection">
+                                `+bodyListDetailform+`
+                                </div>
+                        </div>`;
+
+            break;
+    }
+}
+
+function deleteContractDetail(id) {
+
+}
+
+
+
 

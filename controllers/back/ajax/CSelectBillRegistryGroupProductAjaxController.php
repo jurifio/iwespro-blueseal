@@ -15,17 +15,17 @@ use PDO;
 use PDOException;
 
 /**
- * Class CSelectBillRegistryProductAjaxController
+ * Class CSelectBillRegistryGroupProductAjaxController
  * @package bamboo\controllers\back\ajax
  */
-class CSelectBillRegistryProductAjaxController extends AAjaxController
+class CSelectBillRegistryGroupProductAjaxController extends AAjaxController
 {
     public function get()
     {
         $selectProduct=[];
         $accountAsService = $this -> app -> router -> request() -> getRequestData('accountAsService');
         $res = $this -> app -> dbAdapter -> query('SELECT brp.id as id, brp.codeProduct as codeProduct, brcp.name as categoryName, brp.name as nameProduct
-        from BillRegistryProduct brp join BillRegistryCategoryProduct brcp on brp.billRegistryCategoryProductId=brcp.id
+        from BillRegistryGroupProduct brp join BillRegistryCategoryProduct brcp on brp.billRegistryCategoryProductId=brcp.id
         ', []) -> fetchAll();
 
         foreach ($res as $result) {

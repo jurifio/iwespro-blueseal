@@ -246,7 +246,7 @@ $("#accountAsService").change(function () {
         $('#rawProduct').empty();
 
         $.ajax({
-            url: '/blueseal/xhr/SelectBillRegistryProductAjaxController',
+            url: '/blueseal/xhr/SelectBillRegistryGroupProductAjaxController',
             method: 'get',
             data: {
                 accountAsService: accountAsService
