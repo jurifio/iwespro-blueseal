@@ -3442,7 +3442,7 @@ $('#addPaymentDiv').addClass('hide');
     });
 
     var typeForm = '';
-    switch (productId) {
+    switch (billRegistryGroupProductId) {
         case '1':
 
             typeform = `<div class="row">
