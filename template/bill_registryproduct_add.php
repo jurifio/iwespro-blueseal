@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <div class="form-group form-group-default">
                                         <label for="cost">prezzo d'Acquisto</label>
                                         <input id="cost" autocomplete="off" type="text"
@@ -67,7 +67,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <div class="form-group form-group-default">
                                         <label for="price">Prezzo di Vendita</label>
                                         <input id="price" autocomplete="off" type="text"
