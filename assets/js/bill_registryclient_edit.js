@@ -3545,7 +3545,37 @@ $('#addProductRowSection').removeClass('hide');
                 }
             }
         });
+        selectProductBillRegistryProductId.change(function () {
+            var selectionBillRegistryProductId = $('#productBillRegistryProductId').val();
+            document.getElementById('um').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('productBillRegistryTypeTaxesId').value = '';
+            var selectizefromCountryId = $("#productBillRegistryTypeTaxesId")[0].selectize;
+            selectizefromCountryId.clear();
 
+
+
+            $.ajax({
+                url: '/blueseal/xhr/BillRegistryProductManageAjaxController',
+                method: 'get',
+                data: {
+                    id: selectionBillRegistryProductId,
+                    billRegistryClientId:$('#billRegistryClientId').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+
+                $.each(res, function (k, v) {
+                    document.getElementById('price').value = v.price;
+                    document.getElementById('um').value = v.um;
+
+                    //document.getElementById('fromCountryId').value = v.countryId;
+                    $('#productBillRegistryTypeTaxesId').data('selectize').setValue(v.idTaxes);
+
+                });
+            });
+        });
 
     });
     $.ajax({
@@ -3568,37 +3598,7 @@ $('#addProductRowSection').removeClass('hide');
 
     });
 
-    $('#productBillRegistryProductId').change(function () {
-        var selectionBillRegistryProductId = $('#productBillRegistryProductId').val();
-        document.getElementById('um').value = '';
-        document.getElementById('price').value = '';
-        document.getElementById('productBillRegistryTypeTaxesId').value = '';
-        var selectizefromCountryId = $("#productBillRegistryTypeTaxesId")[0].selectize;
-        selectizefromCountryId.clear();
 
-
-
-        $.ajax({
-            url: '/blueseal/xhr/BillRegistryProductManageAjaxController',
-            method: 'get',
-            data: {
-                id: selectionBillRegistryProductId,
-                billRegistryClientId:$('#billRegistryClientId')
-
-            },
-            dataType: 'json'
-        }).done(function (res) {
-
-            $.each(res, function (k, v) {
-                document.getElementById('price').value = v.price;
-                document.getElementById('um').value = v.um;
-
-                //document.getElementById('fromCountryId').value = v.countryId;
-                $('#productBillRegistryTypeTaxesId').data('selectize').setValue(v.idTaxes);
-
-            });
-        });
-    });
 
 }
 
