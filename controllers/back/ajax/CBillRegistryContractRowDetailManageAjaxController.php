@@ -42,8 +42,8 @@ class CBillRegistryContractRowDetailManageAjaxController extends AAjaxController
         foreach ($brcrd as $detailRow) {
             $brp = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $detailRow->billRegistryProductId]);
             $bpl= \Monkey::app()->repoFactory->create('BillRegistryPriceList')->findOneBy(['billRegistryProductId'=>$detailRow->billRegistryProductId,'billRegistryClientId'=>$billRegistryClientId,'isActive'=>1]);
-            $brt= \Monkey::app()->repoFactory->create('BillRegistryTaxes')->findOneBy(['id' => $detailRow->billRegistryTypeTaxeId]);
-            $contractRowDetail[]=['billRegistryProductId'=>$detailRow->id,'codeProduct'=>$brp->codeProduct,'nameProduct'=>$brp->nameProduct,'um'=>$detailRow->um,'price'=>$bpl->price,'qty'=>$detailRow->qty,'taxes'=>$brt->description];
+            $brt= \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $detailRow->billRegistryTypeTaxesId]);
+            $contractRowDetail[]=['billRegistryContractRowDetailId'=>$detailRow->id,'codeProduct'=>$brp->codeProduct,'nameProduct'=>$brp->nameProduct,'um'=>$detailRow->um,'price'=>$bpl->price,'qty'=>$detailRow->qty,'taxes'=>$brt->description];
             }
 
 
