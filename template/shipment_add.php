@@ -121,7 +121,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4>
+                            <div class="col-md-4">
                                 <div class="form-group form-group-default selectize-enabled">
                                     <label for="order">Seleziona l'ordine</label>
                                     <select id="order" name="order"
