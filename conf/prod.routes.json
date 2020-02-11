@@ -3469,6 +3469,20 @@
                 "DELETE",
                 "PUT"
             ]
+        },
+        {
+            "pattern": "/blueseal/spedizioni/fatture(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CShipmentInvoiceListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

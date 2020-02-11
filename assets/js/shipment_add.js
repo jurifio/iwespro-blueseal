@@ -70,14 +70,14 @@ $(document).ready(function () {
             render: {
                 item: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.id)  + '</span> - ' +
-                        '<span class="caption"> product:' + escape(item.productId+'-'+item.productVariantId +item.productSizeId+ 'prezzo:' + item.netPrice) + '</span>' +
+                        '<span class="label">'+escape(item.shopName)+ '-' + escape(item.id)  + '</span> - ' +
+                        '<span class="caption"> product: ' + escape(item.productId+' - '+item.productVariantId +item.productSizeId+ ' prezzo: ' + item.netPrice) + '</span>' +
                         '</div>'
                 },
                 option: function (item, escape) {
                     return '<div>' +
-                        '<span class="label">' + escape(item.id) + '</span> - ' +
-                        '<span class="caption"> product:' + escape(item.productId+'-'+item.productVariantId +item.productSizeId+ 'prezzo:' + item.netPrice) + '</span>' +
+                        '<span class="label">'+escape(item.shopName)+'-' + escape(item.id)  + '</span> - ' +
+                        '<span class="caption"> product: ' + escape(item.productId+' - '+item.productVariantId +item.productSizeId+ ' prezzo: ' + item.netPrice) + '</span>' +
                         '</div>'
                 }
             }

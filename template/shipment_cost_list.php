@@ -68,9 +68,9 @@
                                     data-orderable="true" class="center">Ordine
                                 </th>
                                 <th data-slug="shipmentInvoiceNumber"
-                                    data-is-visible="false"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Num.fatt.<br>Carrier
+                                    data-is-visible="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Num.fatt.<br>Carrier
                                 </th>
                                 <th data-slug="dateInvoice"
                                     data-searchable="true"

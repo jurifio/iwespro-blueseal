@@ -28,7 +28,7 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                     c.`name` as carrier,
                     s.scope as scope,
                     s.bookingNumber,
-                   s.shipmentInvoiceNumber,    
+                    s.shipmentInvoiceNumber,    
        				s.realShipmentPrice,
                     s.trackingNumber,
                     s.predictedShipmentDate,
@@ -38,11 +38,13 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                     s.cancellationdate,
                     s.note,
                     s.remoteShipmentId as remoteShipmentId,
-                     s.dateInvoice as dateInvoice
+                     s.dateInvoice as dateInvoice,
+                    s.remoteShopShipmentId as shopId
                 
                   
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
+                where s.shipmentInvoiceNumber is not null
                   GROUP BY s.shipmentInvoiceNumber";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -62,23 +64,19 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
 
             $row["DT_RowId"] = $val->printId();
             $row['id'] = $val->printId();
-            $row['shipmentInvoiceNumber']=$val->shipmentInvoiceNumber;
+            $row['shipmentInvoiceNumber']='<button style="width: 200px ; height:32px;"  onclick="openShipmentDetail(' . $val->shipmentInvoiceNumber . ')" class="btn btn-light"><i class="fa fa-list-alt" aria-hidden="true"></i> ' . $val->shipmentInvoiceNumber . '</button>';
             $row['shop'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$row['shopId']])->name;
             $row['carrier'] = $val->carrier->name;
-
-
-            $row['shipmentInvoiceNumber'] = $val->shipmentInvoiceNumber;
-            $row['realShipmentPrice'] = $val->realShipmentPrice;
-
-            $margin = $shippingSum - $val->realShipmentPrice;
-
-            if ($margin > 0) {
-                $row['shipmentPriceMargin'] = "<p style='color:green'>".$margin."</p>";
-            } else if ($margin < 0){
-                $row['shipmentPriceMargin'] = "<p style='color:red'>".$margin."</p>";
-            } else {
-                $row['shipmentPriceMargin'] = $margin;
+            $row['dateInvoice']=$val->dateInvoice;
+            $res = \Monkey::app()->dbAdapter->query('select sum(realShipmentPrice) as total ,count(id) as totalShipment  from Shipment WHERE shipmentInvoiceNumber="'.$val->shipmentInvoiceNumber.'"',[])->fetchAll();
+            foreach ($res as $result) {
+                $impFat = $result['total'];
+                $totalShipment=$result['totalShipment'];
             }
+            $row['impFat']=money_format('%.2n',$impFat) . ' &euro;';
+            $row['iva']=money_format('%.2n', $impFat/100*22) . ' &euro;';
+            $row['totFat']=money_format('%.2n',$impFat+($impFat/100*22)) . ' &euro;';
+            $row['totalShipment']=$totalShipment;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

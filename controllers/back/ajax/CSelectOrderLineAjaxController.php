@@ -34,14 +34,17 @@ class CSelectOrderLineAjaxController extends AAjaxController
         $orderLines=[];
        $id = $this -> app -> router -> request() -> getRequestData('id');
         $res=\Monkey::app()->repoFactory->create('OrderLine')->findAll();
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
 
         foreach ($res as $result) {
-
+$shop=$shopRepo->findOneBy(['id'=>$result->shopId]);
+$shopName=$shop->name;
             $orderLines[] = ['id' => $result->id.'-'.$result->orderId,
                 'productId' =>  $result->productId,
                 'productVariantId' => $result->productVariantId,
                 'productSizeId' => $result->productSizeId,
-                'netPrice' => money_format('%.2n',$result->netPrice)
+                'netPrice' => money_format('%.2n',$result->netPrice),
+                'shopName'=>$shopName
                 ];
         }
 

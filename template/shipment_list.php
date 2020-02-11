@@ -97,9 +97,9 @@
                                     data-searchable="false"
                                     data-orderable="false" class="center">Contenuto Prodotti</th>
                                 <th data-slug="shipmentInvoiceNumber"
-                                    data-is-visible="false"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Numero di fattura</th>
+                                    data-is-visible="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero di fattura</th>
                                 <th data-slug="orderShipmentPrice"
                                     data-is-visible="false"
                                     data-searchable="false"
