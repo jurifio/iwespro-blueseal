@@ -1,4 +1,3 @@
-var counterRowDetail=0;
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -3339,7 +3338,7 @@ function listContractDetail(id) {
         var bodyListForm = '';
         if (rawContractrow != '') {
             var bodyListForm = '';
-            bodyListForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
+            bodyListForm += '<table id="tableContractRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
             $.each(rawContractrow, function (k, v) {
                 exist = v.exist;
                 contractId = id;
@@ -3397,9 +3396,9 @@ function addPayment(id) {
 }
 
 function addProduct(id, billRegistryGroupProductId) {
-$('#addProductDiv').removeClass('hide');
-$('#addProductDiv').addClass('show');
-$('#addPaymentDiv').addClass('hide');
+    $('#addProductDiv').removeClass('hide');
+    $('#addProductDiv').addClass('show');
+    $('#addPaymentDiv').addClass('hide');
     var typeForm = '';
     var bodyListDetailForm = '';
     $.ajax({
@@ -3414,17 +3413,17 @@ $('#addPaymentDiv').addClass('hide');
     }).done(function (res) {
         console.log(res);
         let rawContractRowDetail = res;
+        var counterRow='1';
         if (rawContractRowDetail != '') {
             bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Aggiungi</th></tr>';
             $.each(rawContractRowDetail, function (k, v) {
-
                 bodyListDetailForm += '<tr><td>' + v.billRegistryContractRowDetailId + '</td>';
                 bodyListDetailForm += '<td>' + v.codeProduct + '-' + v.nameProduct + '</td>';
                 bodyListDetailForm += '<td>' + v.um + '</td>';
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
                 bodyListDetailForm += '<td>' + v.price + '</td>';
                 bodyListDetailForm += '<td>' + v.taxes + '</td></tr>';
-                bodyListDetailForm += '<button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyListDetailForm += '<button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + v.billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListDetailForm += '</table>';
         }else{
@@ -3460,15 +3459,12 @@ function deleteContractDetail(id) {
 
 }
 function addProductRow(id, billRegistryGroupProductId){
-    counterRowDetail=counterRowDetail+1;
-}
-var bodyFormProduct=`<div class="row">
+    var bodyFormProduct=`<div class="row">
  <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
-                                        <input type="hidden" id="billRegistryContractRow`+counterRowDetail+`" name="billRegistryContractRow`+counterRowDetail`" value="`+id+`"/>
-                                        <label for="productBillRegistryProductId`+counterRowDetail+`">Seleziona il Prodotto</label>
-                                        <select id="productBillRegistryProductId`+counterRowDetail+`" name="productBillRegistryProductId`+counterRowDetail+`"
+                                        <label for="productBillRegistryProductId">Seleziona il Prodotto</label>
+                                        <select id="productBillRegistryProductId" name="productBillRegistryProductId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -3477,46 +3473,48 @@ var bodyFormProduct=`<div class="row">
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                        <label for="um`+counterRowDetail+`">um</label>
-                                        <input id="um`+counterRowDetail+`" autocomplete="off" type="text"
-                                               class="form-control" name="um`+counterRowDetail+`"
+                                        <label for="um">um</label>
+                                        <input id="um" autocomplete="off" type="text"
+                                               class="form-control" name="um"
                                                value=""
                                         />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                        <label for="qty`+counterRowDetail+`">Quantità</label>
-                                        <input id="qty`+counterRowDetail+`" autocomplete="off" type="text"
-                                               class="form-control" name="qty`+counterRowDetail+`"
+                                        <label for="qty">Quantità</label>
+                                        <input id="qty" autocomplete="off" type="text"
+                                               class="form-control" name="qty"
                                                value="1"
                                         />
                                     </div>
                                 </div>
                                   <div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                        <label for="price`+counterRowDetail+`">price</label>
-                                        <input id="price`+counterRowDetail+`" autocomplete="off" type="text"
-                                               class="form-control" name="price`+counterRowDetail+`"
+                                        <label for="price">price</label>
+                                        <input id="price" autocomplete="off" type="text"
+                                               class="form-control" name="price"
                                                value=""
                                         />
                                     </div>
                                 </div>
                                  <div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                        <label for="productBillRegistryTypeTaxesId`+counterRowDetail+`">Aliquota Iva</label>
-                                        <select id="productBillRegistryTypeTaxesId`+counterRowDetail+`" name="productBillRegistryTypeTaxesId`+counterRowDetail+`"
+                                        <label for="productBillRegistryTypeTaxesId">Aliquota Iva</label>
+                                        <select id="productBillRegistryTypeTaxesId" name="productBillRegistryTypeTaxesId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          </select>       
                                     </div>
-                                    <div class="col-md-2">
-                                     <button class="success" id="addProductRow`+counterRowDetail+`" onclick="addProductRowDetail(` +counterRowDetail + `)" type="button"><span id="span`+counterRowDetail+`" class="fa fa-plus">Inserisci</span></button>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                     <button class="success" id="addProductRowDetail" onclick="addProductRowDetail(` + id +`)" type="button"><span  class="fa fa-plus">Inserisci</span></button>
                                     </div>
                                 </div>
 </div>`;
-$('#addProductRowSection').removeClass('hide');
+    $('#addProductRowSection').removeClass('hide');
     $('#addProductRowSection').addClass('show');
     $('#addProductRowSection').append(bodyFormProduct);
 
@@ -3605,50 +3603,44 @@ $('#addProductRowSection').removeClass('hide');
 
     });
 
-    function addProductRowDetail(countId){
-        n=countId.toString();
-        var fieldBillRegistryContractRowId='#billRegistryContractRowId'+n;
-        var fieldProductBillRegistryProductId='#productBillRegistryProductId'+n;
-        var fieldUm='#um'+n;
-        var fieldQty='#qty'+n;
-        var fieldPrice='#price'+n;
-        var fieldProductBillRegistryTypeTaxesId='#productBillRegistryTypeTaxesId'+n;
-        var spanId='#span'+n;
-
-        $.ajax({
-            url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
-            method: 'post',
-            data: {
-                billRegistryContractRowId:$(fieldBillRegistryContractRowId).val(),
-                productBillRegistryProductId: $(fieldProductBillRegistryProductId).val(),
-                um:$(fieldUm).val(),
-                qty:$(fieldQty).val(),
-                price:$(fieldPrice).val(),
-                productBillRegistryTypeTaxesId:$(fieldProductBillRegistryTypeTaxesId).val(),
-                billRegistryClientId:$('#billRegistryClientId')
-
-            },
-            dataType: 'json'
-        }).done(function (res) {
-            if (res==1){
-                $(spanId).removeClass("fa fa-check");
-                $(spanId).addClass("fa fa-plus");
-            }else{
-                $(spanId).removeClass("fa fa-plus");
-                $(spanId).addClass("fa fa-exclamation");
-            }
 
 
-            }).fail(function (res) {
-            $(spanId).removeClass("fa fa-plus");
-            $(spanId).addClass("fa fa-exclamation");
-        });
+}
 
-    }
+function addProductRowDetail(countId){
+    var nameProductRowDetail='';
+    var idRowDetail='';
+    var taxDesc='';
 
+     $.ajax({
+         url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
+         method: 'post',
+         data: {
+             billRegistryContractRowId:countId,
+             productBillRegistryProductId: $('#productBillRegistryProductId').val(),
+             um:$('#um').val(),
+             qty:$('#qty').val(),
+             price:$('#price').val(),
+             productBillRegistryTypeTaxesId:$('#productBillRegistryTypeTaxesId').val(),
+             billRegistryClientId:$('#billRegistryClientId').val()
 
+         },
+         dataType: 'json'
+     }).done(function (res) {
 
+         $.each(res, function (k, v) {
+             idRowDetail=v.billRegistryContractRowDetailId;
+             nameProductRowDetail=v.nameProduct;
+             taxDesc=v.taxDesc;
+         });
+         $('#tableContractDetailRowList').append('<tr><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td></tr>')
+        $('#addProductRowSection').empty();
+     });
 
+}
 
+function deleteProductDetail(billRegistryContractRowDetailId,billRegistryGroupProductId){
+
+}
 
 

@@ -26,19 +26,25 @@ class CBillRegistryContractRowDetailManageAjaxController extends AAjaxController
 
     public function post()
     {
+        $detailRow=[];
         $data = $this->app->router->request()->getRequestData();
         $billRegistryProductId = $data['productBillRegistryProductId'];
+        $billRegistryProductFind=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$billRegistryProductId]);
+        $billRegistryProductName=$billRegistryProductFind->nameProduct;
+        $billRegistryProductCode=$billRegistryProductFind->codeProduct;
         $um=$data['um'];
         $qty=$data['qty'];
         $price=$data['price'];
         $billRegistryContractRowId=$data['billRegistryContractRowId'];
         $billRegistryTypeTaxesId=$data['productBillRegistryTypeTaxesId'];
+        $billRegistryTypeTaxesFind=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$billRegistryTypeTaxesId]);
+        $descritionTaxes=$billRegistryTypeTaxesFind->description;
         $billRegistryClientId=$data['billRegistryClientId'];
-        $billRegistryProductContractRowDetailRepo=\Monkey::app()->repoFactory->create('BillRegistryProductContractRowDetail');
+        $billRegistryContractRowDetailRepo=\Monkey::app()->repoFactory->create('BillRegistryContractRowDetail');
         $billRegistryPriceListRepo=\Monkey::app()->repoFactory->create('BillRegistryPriceList');
         try {
             $brplFind = $billRegistryPriceListRepo->findOneBy(['billRegistryProductId' => $billRegistryProductId,'billRegistryClientId' => $billRegistryClientId,'isActive' => 1]);
-            if ($brlFind != null) {
+            if ($brplFind != null) {
                 $brplFind->isActive = 0;
                 $brplFind->update();
             }
@@ -52,7 +58,7 @@ class CBillRegistryContractRowDetailManageAjaxController extends AAjaxController
             foreach ($res as $result) {
                 $lastId = $result['id'];
             }
-            $brcrd = $billRegistryProductContractRowDetailRepo->getEmptyEntity();
+            $brcrd = $billRegistryContractRowDetailRepo->getEmptyEntity();
             $brcrd->billRegistryContractRowId = $billRegistryContractRowId;
             $brcrd->billRegistryProductId = $billRegistryProductId;
             $brcrd->um = $um;
@@ -60,7 +66,13 @@ class CBillRegistryContractRowDetailManageAjaxController extends AAjaxController
             $brcrd->qty = $qty;
             $brcrd->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
             $brcrd->insert();
-            return '1';
+            $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowDetail ',[])->fetchAll();
+            foreach ($res as $result) {
+                $lastRowDetailId = $result['id'];
+            }
+
+            $detailRow[]=['billRegistryContractRowDetailId'=>$lastRowDetailId,'nameProduct'=>$billRegistryProductCode.'-'.$billRegistryProductName,'taxDesc'=>$descritionTaxes];
+            return $detailRow;
         }catch (\Throwable $e){
             \Monkey::app()->applicationLog('CBillRegistryContractRowDetailManageAjaxController','Error','Error insert product in detail Row',$e,'');
             return '0';
