@@ -78,6 +78,10 @@
                                 <th data-slug="cancellationDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Cancellazione</th>
+                                <th data-slug="shipmentInvoiceNumber"
+                                    data-is-visible="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero di fattura</th>
                                 <th data-slug="creationDate"
                                     data-isVisible="false"
                                     data-searchable="true"
@@ -96,10 +100,6 @@
                                     data-is-visible="false"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Contenuto Prodotti</th>
-                                <th data-slug="shipmentInvoiceNumber"
-                                    data-is-visible="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero di fattura</th>
                                 <th data-slug="orderShipmentPrice"
                                     data-is-visible="false"
                                     data-searchable="false"
