@@ -40,6 +40,10 @@
                                     data-is-visible="true"
                                     data-searchable="true"
                                     data-orderable="false" class="center">Numero di fattura</th>
+                                <th data-slug="shipmentInvoiceNumberPrint"
+                                    data-is-visible="true"
+                                    data-searchable="true"
+                                    data-orderable="false" class="center">Dettagli</th>
                                 <th data-slug="carrier"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Carrier</th>
