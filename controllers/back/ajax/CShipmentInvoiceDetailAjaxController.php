@@ -34,18 +34,17 @@ class CShipmentInvoiceDetailAjaxController extends AAjaxController
     {
         $shipmentDetail=[];
        $invoice = $this -> app -> router -> request() -> getRequestData('invoice');
-        $res=\Monkey::app()->repoFactory->create('Shipment')->findBy(['shipmentInvoiceNumber'=>$invoice]);
         $res = \Monkey::app()->dbAdapter->query('select remoteShopShipmentId, sum(realShipmentPrice) as total from Shipment WHERE shipmentInvoiceNumber="'.$invoice.'" GROUP BY shipmentInvoiceNumber,remoteShopShipmentId',[])->fetchAll();
         $shopRepo=\Monkey::app()->repoFactory->create('Shop');
 
         foreach ($res as $result) {
             $total=$result['total'];
-$shop=$shopRepo->findOneBy(['id'=>$result->remoteShopShipmentId]);
+$shop=$shopRepo->findOneBy(['id'=>$result['remoteShopShipmentId']]);
 $shopName=$shop->name;
             $imp=money_format('%.2n',$total) . ' &euro;';
             $iva=money_format('%.2n', $total/100*22) . ' &euro;';
             $totFat=money_format('%.2n',$total+($total/100*22)) . ' &euro;';
-            $shipmentDetail[] = ['shipmentId' => $result->id,
+            $shipmentDetail[] = [
                 'imp' =>  $imp,
                 'iva' => $iva,
                 'totFat' => $totFat,

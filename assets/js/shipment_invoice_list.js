@@ -1,4 +1,4 @@
-function openShipmentDetail(invoice){
+function openShipmentDetail(invoice,carrier){
 var shipmentId='';
 var shop='';
 var imp='';
@@ -18,7 +18,8 @@ var tot='';
         let rawShipmentDetail = res;
 
             var bodyListForm = '';
-            bodyListForm += '<table id="tableShipmentDetailRowList"><tr class="header4"><th align="center" style="width:20%;">Spedizione N.</th><th align="center" style="width:20%;">Shop</th><th  align="center" style="width:20%;">Imponibile</th><th align="center"  style="width:20%;">iva</th><th align="center" style="width:20%;">Totale</th></tr>';
+
+            bodyListForm+='<div class="row"><div class="col-md-3"><b>Shop</b></div><div class="col-md-3"><b>Imponibile</b></div><div class="col-md-3"><b>iva</b></div><div class="col-md-3"><b>Totale</b></div></div>';
             $.each(rawShipmentDetail, function (k, v) {
 
 
@@ -26,22 +27,24 @@ var tot='';
                 imp=v.imp;
                 iva=v.iva;
                 tot=v.totFat;
-                shipmentId=v.shipmentId;
 
-                        bodyListForm += '<tr><td align="center">' + shipmentId + '</td><td align="center">' + shop + '</td><td align="center">' + imp + '</td>';
-                        bodyListForm += '<td align="center">' + iva + '</td><td align="center">' + tot + '</td></tr>';
+
+                        bodyListForm += '<div class="row"><div class="col-md-3">' + shop + '</div><div class="col-md-3">' + imp + '</div>';
+                        bodyListForm += '<div class="col-md-3">' + iva + '</div><div class="col-md-3">' + tot + '</div></div>';
 
 
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
-            bodyListForm += '</table><div id="editContractDetailDiv"></div><div id="addPaymentDiv" class="hide"></div><div id="addProductDiv" class="hide"></div>';
 
 
 
-        let bsModalShipmentDetail = new $.bsModal('Dettaglio  Fattura Carrier Numero ' + invoice, {
+
+        let bsModalShipmentDetail = new $.bsModal('Dettaglio  Fattura Carrier <b>'+carrier+'</b> Numero <b>' + invoice+'</b>', {
             body: bodyListForm
         });
-        bsModalShipmentDetail.showCancelBtn();
+        bsModalDetailContract.showCancelBtn();
+        bsModalDetailContract.addClass('modal-wide');
+        bsModalDetailContract.addClass('modal-high');
 
 
 

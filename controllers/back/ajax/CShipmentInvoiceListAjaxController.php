@@ -64,9 +64,9 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
 
             $row["DT_RowId"] = $val->printId();
             $row['id'] = $val->printId();
-            $row['shipmentInvoiceNumber']='<button style="width: 200px ; height:32px;"  onclick="openShipmentDetail(' . $val->shipmentInvoiceNumber . ')" class="btn btn-light"><i class="fa fa-list-alt" aria-hidden="true"></i> ' . $val->shipmentInvoiceNumber . '</button>';
-            $row['shop'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$row['shopId']])->name;
             $row['carrier'] = $val->carrier->name;
+            $row['shipmentInvoiceNumber']='<button style="width: 200px ; height:32px;"  onclick="openShipmentDetail(\'' . $val->shipmentInvoiceNumber .'\',\''. $val->carrier->name.'\')" class="btn btn-light"><i class="fa fa-list-alt" aria-hidden="true"></i> ' . $val->shipmentInvoiceNumber . '</button>';
+            $row['shop'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$row['shopId']])->name;
             $row['dateInvoice']=$val->dateInvoice;
             $res = \Monkey::app()->dbAdapter->query('select sum(realShipmentPrice) as total ,count(id) as totalShipment  from Shipment WHERE shipmentInvoiceNumber="'.$val->shipmentInvoiceNumber.'"',[])->fetchAll();
             foreach ($res as $result) {
