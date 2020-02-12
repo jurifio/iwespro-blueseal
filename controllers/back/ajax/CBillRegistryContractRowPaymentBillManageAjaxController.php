@@ -6,6 +6,8 @@ use bamboo\core\exceptions\RedPandaOrderLogicException;
 use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CBillRegistryContract;
 use bamboo\domain\entities\CBillRegistryContractRow;
+use bamboo\domain\entities\CBillRegistryContractRowPaymentBill;
+
 
 
 /**
