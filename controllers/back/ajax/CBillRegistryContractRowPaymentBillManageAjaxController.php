@@ -190,6 +190,10 @@ function put()
 public
 function delete()
 {
-
+    $data = $this->app->router->request()->getRequestData();
+    $id = $data['billRegistryContractRowPaymentId'];
+    $brcrd = \Monkey::app()->repoFactory->create('BillRegistryContractRowPaymentBill')->findOneBy(['id' => $id]);
+    $brcrd->delete();
+    return '1';
 }
 }

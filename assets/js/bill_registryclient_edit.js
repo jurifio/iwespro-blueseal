@@ -3412,7 +3412,7 @@ function addPayment(id, billRegistryGroupProductId) {
         if (rawContractRowPayment != '') {
             bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th style="width:20%;">Mese</th><th style="width:20%;">Numero Mandato data</th><th style="width:20%;">Importo</th><th style="width:10%;">Inviato</th><th style="width:10%;">Pagato</th><th style="width:20%;">Operazioni</th></tr>';
             $.each(rawContractRowPayment, function (k, v) {
-                bodyListPaymentForm += '<tr><td>' + v.mandatoryMonth + '</td>';
+                bodyListPaymentForm += '<tr  id="paymentRow"'+v.id+'"><td>' + v.mandatoryMonth + '</td>';
                 bodyListPaymentForm += '<td>' + v.id + 'del '+v.dateMandatoryMonth +'</td>';
                 bodyListPaymentForm += '<td>' + v.amount + '</td>';
                 bodyListPaymentForm += '<td><input type="checkbox" ' + v.isSubmited + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td>';
@@ -3465,7 +3465,7 @@ function addProduct(id, billRegistryGroupProductId) {
         if (rawContractRowDetail != '') {
             bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Aggiungi</th></tr>';
             $.each(rawContractRowDetail, function (k, v) {
-                bodyListDetailForm += '<tr><td>' + v.billRegistryContractRowDetailId + '</td>';
+                bodyListDetailForm += '<tr id="productRowTr"'+v.billRegistryContractRowDetailId+'"><td>' + v.billRegistryContractRowDetailId + '</td>';
                 bodyListDetailForm += '<td>' + v.codeProduct + '-' + v.nameProduct + '</td>';
                 bodyListDetailForm += '<td>' + v.um + '</td>';
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
@@ -3683,7 +3683,7 @@ function addProductRowDetail(countId){
              nameProductRowDetail=v.nameProduct;
              taxDesc=v.taxDesc;
          });
-         $('#tableContractDetailRowList').append('<tr><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td></tr>');
+         $('#tableContractDetailRowList').append('<tr id="productRowTr'+idRowDetail+'"><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td><td><button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + idRowDetail + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addProductRowSection').empty();
      });
 
@@ -3859,17 +3859,45 @@ function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductI
             idRowPayment=v.billRegistryContractRowPaymentId;
             month=v.mandatoryMonth;
         });
-        $('#tableContractPaymentRowList').append('<tr><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + v.idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + v.idRowPayment + '"></td><td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+        $('#tableContractPaymentRowList').append('<tr id="paymentRow"'+v.idRowPayment+'><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + v.idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + v.idRowPayment + '"></td><td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addPaymentRowSection').empty();
     });
 
 }
 
 function deleteProductDetail(id){
+    var rowProductId='productRowTr'+id.toString();
+    $(rowProductId).remove();
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
+        method: 'delete',
+        data: {
+            billRegistryContractRowDetailId:id
+        },
+        dataType: 'json'
+    }).done(function (res) {
+
+        if(res=='1'){
+            $(rowProductId).remove();
+        }
+    });
 
 }
 function deletePaymentDetail(id){
+var rowPaymentId='paymentRow'+id.toString();
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
+        method: 'delete',
+        data: {
+            billRegistryContractRowPaymentId:id
+        },
+        dataType: 'json'
+    }).done(function (res) {
 
+       if(res=='1'){
+           $(rowPaymentId).remove();
+       }
+    });
 }
 
 

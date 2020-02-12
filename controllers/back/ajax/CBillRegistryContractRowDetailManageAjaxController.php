@@ -112,6 +112,10 @@ function put()
 public
 function delete()
 {
-
+    $data = $this->app->router->request()->getRequestData();
+    $id = $data['billRegistryContractRowDetailId'];
+    $brcrd = \Monkey::app()->repoFactory->create('BillRegistryContractRowDetail')->findOneBy(['id' => $id]);
+    $brcrd->delete();
+    return '1';
 }
 }
