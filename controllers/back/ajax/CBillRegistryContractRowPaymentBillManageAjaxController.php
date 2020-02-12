@@ -26,55 +26,86 @@ class CBillRegistryContractRowPaymentBillManageAjaxController extends AAjaxContr
 
     public function post()
     {
-        $detailRow=[];
+        $paymentRow=[];
         $data = $this->app->router->request()->getRequestData();
-        $billRegistryProductId = $data['productBillRegistryProductId'];
-        $billRegistryProductFind=\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$billRegistryProductId]);
-        $billRegistryProductName=$billRegistryProductFind->nameProduct;
-        $billRegistryProductCode=$billRegistryProductFind->codeProduct;
-        $um=$data['um'];
-        $qty=$data['qty'];
-        $price=$data['price'];
+        $billRegistryGroupProductId = $data['billRegistryGroupProductId'];
         $billRegistryContractRowId=$data['billRegistryContractRowId'];
-        $billRegistryTypeTaxesId=$data['productBillRegistryTypeTaxesId'];
-        $billRegistryTypeTaxesFind=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$billRegistryTypeTaxesId]);
-        $descritionTaxes=$billRegistryTypeTaxesFind->description;
         $billRegistryClientId=$data['billRegistryClientId'];
-        $billRegistryContractRowDetailRepo=\Monkey::app()->repoFactory->create('BillRegistryContractRowDetail');
-        $billRegistryPriceListRepo=\Monkey::app()->repoFactory->create('BillRegistryPriceList');
+        $mandatoryMonth=$data['mandatoryMonth'];
+        $dateSent=$data['dateMandatoryMonth'];
+        $amount=$data['amount'];
+        $dateMandatory=new \DateTime($dateSent);
+        $dateMandatoryMonth = $dateMandatory->format('Y-m-d H:i:s');
+        $socialId=$data['socialId'];
+        $campaignId=$data['campaignId'];
+
         try {
-            $brplFind = $billRegistryPriceListRepo->findOneBy(['billRegistryProductId' => $billRegistryProductId,'billRegistryClientId' => $billRegistryClientId,'isActive' => 1]);
-            if ($brplFind != null) {
-                $brplFind->isActive = 0;
-                $brplFind->update();
-            }
-            $brpl = $billRegistryPriceListRepo->getEmptyEntity();
-            $brpl->billRegistryProductId = $billRegistryProductId;
-            $brpl->billRegistryClientId = $billRegistryClientId;
-            $brpl->price = $price;
-            $brpl->isActive = 1;
-            $brpl->insert();
-            $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryPriceList ',[])->fetchAll();
+
+        $billRegistryContractRowPaymentBill=\Monkey::app()->repoFactory->create('BillRegistryContractRowPaymentBill')->getEmptyEntity();
+        $billRegistryContractRowPaymentBill->mandatoryMonth=$mandatoryMonth;
+        $billRegistryContractRowPaymentBill->billRegistryContractRowId=$billRegistryContractRowId;
+        $billRegistryContractRowPaymentBill->billRegistryClientId=$billRegistryClientId;
+        $billRegistryContractRowPaymentBill->billRegistryGroupProductId=$billRegistryGroupProductId;
+        $billRegistryContractRowPaymentBill->dateMandatoryMonth=$dateMandatoryMonth;
+
+        if($socialId!=null){
+            $billRegistryContractRowPaymentBill->socialId=$socialId;
+        }
+        if($campaignId!=null){
+            $billRegistryContractRowPaymentBill->campaignId=$campaignId;
+        }
+        $billRegistryContractRowPaymentBill->amount=$amount;
+        $billRegistryContractRowPaymentBill->insert();
+
+
+            $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowPaymentBill ',[])->fetchAll();
             foreach ($res as $result) {
                 $lastId = $result['id'];
             }
-            $brcrd = $billRegistryContractRowDetailRepo->getEmptyEntity();
-            $brcrd->billRegistryContractRowId = $billRegistryContractRowId;
-            $brcrd->billRegistryProductId = $billRegistryProductId;
-            $brcrd->um = $um;
-            $brcrd->billRegistryPriceListId = $lastId;
-            $brcrd->qty = $qty;
-            $brcrd->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
-            $brcrd->insert();
-            $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowDetail ',[])->fetchAll();
-            foreach ($res as $result) {
-                $lastRowDetailId = $result['id'];
+            switch($mandatoryMonth){
+                case '1';
+                $month='Gennaio';
+                break;
+                case '2';
+                    $month='Febbraio';
+                    break;
+                case '3';
+                    $month='Marzo';
+                    break;
+                case '4';
+                    $month='Aprile';
+                    break;
+                case '5';
+                    $month='Maggio';
+                    break;
+                case '6';
+                    $month='Giugno';
+                    break;
+                case '7';
+                    $month='Luglio';
+                    break;
+                case '8';
+                    $month='Agosto';
+                    break;
+                case '9';
+                    $month='Settembre';
+                    break;
+                case '10';
+                    $month='Ottobre';
+                    break;
+                case '11';
+                    $month='Novembre';
+                    break;
+                case '12';
+                    $month='Dicembre';
+                    break;
             }
 
-            $detailRow[]=['billRegistryContractRowDetailId'=>$lastRowDetailId,'nameProduct'=>$billRegistryProductCode.'-'.$billRegistryProductName,'taxDesc'=>$descritionTaxes];
-            return $detailRow;
+
+            $paymentRow[]=['billRegistryContractRowPaymentId'=>$lastId,'mandatoryMonth'=>$month];
+            return json_encode($paymentRow);
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog('CBillRegistryContractRowDetailManageAjaxController','Error','Error insert product in detail Row',$e,'');
+            \Monkey::app()->applicationLog('CBillRegistryContractRowPaymentBillManageAjaxController','Error','Error insert payment Row',$e,'');
             return '0';
         }
 
@@ -91,10 +122,10 @@ class CBillRegistryContractRowPaymentBillManageAjaxController extends AAjaxContr
         $contractRowPayment = [];
         $brcrd = \Monkey::app()->repoFactory->create('BillRegistryContractRowPaymentBill')->findBy(['billRegistryContractRowId' => $id]);
         foreach ($brcrd as $paymentRow) {
-            if($paymentRow->isSubmitted==1){
-                $isSubmitted='checked="checked"';
+            if($paymentRow->isSubmited==1){
+                $isSubmited='checked="checked"';
             }else{
-                $isSubmitted=' ';
+                $isSubmited=' ';
             }
             if($paymentRow->isPaid==1){
                 $isPaid='checked="checked"';
@@ -139,10 +170,9 @@ class CBillRegistryContractRowPaymentBillManageAjaxController extends AAjaxContr
                     $mandatoryMonth='Dicembre';
                     break;
             }
-            $dateMandatory=strtotime($result['dateMandatoryMonth']);
-
-        $dateMandatoryMonth=date('d-m-Y\TH:i', $dateMandatory);
-            $contractRowPayment[]=['id'=>$paymentRow->id,'mandatoryMonth'=>$mandatoryMonth,' dateMandatoryMonth'=> $dateMandatoryMonth,'amount'=>$paymentRow->amount,'isSubmitted'=>$isSubmitted,'isPaid'=>$isPaid];
+            $dateMandatory=new \DateTime($paymentRow->dateMandatoryMonth);
+            $dateMandatoryMonth = $dateMandatory->format('d-m-Y');
+            $contractRowPayment[]=['id'=>$paymentRow->id,'mandatoryMonth'=>$mandatoryMonth,'dateMandatoryMonth'=> $dateMandatoryMonth,'amount'=>$paymentRow->amount,'isSubmited'=>$isSubmited,'isPaid'=>$isPaid];
             }
 
 

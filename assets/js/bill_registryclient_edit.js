@@ -3410,15 +3410,14 @@ function addPayment(id, billRegistryGroupProductId) {
         let rawContractRowPayment = res;
         var counterRow='1';
         if (rawContractRowPayment != '') {
-            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th style="width:20%;">Mese</th><th style="width:20%;">Numero Mandato</th><th style="width:20%;">data</th><th style="width:20%;">Importo</th><th style="width:10%;">Inviato</th><th style="width:10%;">Pagato</th></tr>';
+            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th style="width:20%;">Mese</th><th style="width:20%;">Numero Mandato data</th><th style="width:20%;">Importo</th><th style="width:10%;">Inviato</th><th style="width:10%;">Pagato</th><th style="width:20%;">Operazioni</th></tr>';
             $.each(rawContractRowPayment, function (k, v) {
                 bodyListPaymentForm += '<tr><td>' + v.mandatoryMonth + '</td>';
-                bodyListPaymentForm += '<td>' + v.id + '</td>';
-                bodyListPaymentForm += '<td>' + v.dateMandatoryMonth + '</td>';
+                bodyListPaymentForm += '<td>' + v.id + 'del '+v.dateMandatoryMonth +'</td>';
                 bodyListPaymentForm += '<td>' + v.amount + '</td>';
-                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.isSubmitted + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td></tr>';
-                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.isPaid + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td></tr>';
-                bodyListPaymentForm += '<button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyListPaymentForm += '<td><input type="checkbox" ' + v.isSubmited + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td>';
+                bodyListPaymentForm += '<td><input type="checkbox" ' + v.isPaid + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td>';
+                bodyListPaymentForm += '<td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListPaymentForm += '</table>';
         }else{
@@ -3435,7 +3434,7 @@ function addPayment(id, billRegistryGroupProductId) {
                               
                         </div>
                         <div class="row">
-                                <div class="col-md-12"  id="listProductRowSection">
+                                <div class="col-md-12"  id="listPaymentRowSection">
                                `+bodyListPaymentForm+`
                                 </div>
                         </div>`;
@@ -3471,8 +3470,8 @@ function addProduct(id, billRegistryGroupProductId) {
                 bodyListDetailForm += '<td>' + v.um + '</td>';
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
                 bodyListDetailForm += '<td>' + v.price + '</td>';
-                bodyListDetailForm += '<td>' + v.taxes + '</td></tr>';
-                bodyListDetailForm += '<button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + v.billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyListDetailForm += '<td>' + v.taxes + '</td>';
+                bodyListDetailForm += '<td><button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + v.billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListDetailForm += '</table>';
         }else{
@@ -3507,6 +3506,7 @@ function addProduct(id, billRegistryGroupProductId) {
 function deleteContractDetail(id) {
 
 }
+
 function addProductRow(id, billRegistryGroupProductId){
     var bodyFormProduct=`<div class="row">
  <div class="row">
@@ -3656,6 +3656,7 @@ function addProductRow(id, billRegistryGroupProductId){
 
 }
 
+
 function addProductRowDetail(countId){
     var nameProductRowDetail='';
     var idRowDetail='';
@@ -3682,13 +3683,192 @@ function addProductRowDetail(countId){
              nameProductRowDetail=v.nameProduct;
              taxDesc=v.taxDesc;
          });
-         $('#tableContractDetailRowList').append('<tr><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td></tr>')
+         $('#tableContractDetailRowList').append('<tr><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td></tr>');
         $('#addProductRowSection').empty();
      });
 
 }
+function addPaymentRow(id, billRegistryGroupProductId){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
 
-function deleteProductDetail(billRegistryContractRowDetailId,billRegistryGroupProductId){
+    today = yyyy + '-' + mm + '-' + dd+'T00:00';
+    var bodyFormPayment=`<div class="row">
+ <div class="row">
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="mandatoryMonth">Seleziona il Mese</label>
+                                        <select id="mandatoryMonth" name="mandatoryMonth"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                                <option value="">Seleziona</option>
+                                                <option value="1">Gennaio</option>
+                                                <option value="2">Febbraio</option>
+                                                <option value="3">Marzo</option>
+                                                <option value="4">Aprile</option>
+                                                <option value="5">Maggio</option>
+                                                <option value="6">Giugno</option>
+                                                <option value="7">Luglio</option>
+                                                <option value="8">Agosto</option>
+                                                <option value="9">Settembre</option>
+                                                <option value="10">Ottobre</option>
+                                                <option value="11">Novembre</option>
+                                                <option value="12">Dicembre</option>
+                                      </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="dateMandatoryMonth">Data Mandato</label>
+                                        <input id="dateMandatoryMonth" autocomplete="off" type="datetime-local"
+                                               class="form-control" name="dateMandatoryMonth"
+                                               value="`+today+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="amount">Importo</label>
+                                        <input id="amount" autocomplete="off" type="text"
+                                               class="form-control" name="amount"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>`;
+                               switch(billRegistryGroupProductId){
+                                   case "3":
+                                bodyFormPayment+=` <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="socialId"> Piattaforma Social </label>
+                                        <select id="socialId" name="socialId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                              
+                                      </select>       
+                                    </div>
+                                </div>
+                                `;
+                            break;
+                                   case "4":
+                                       bodyFormPayment+=` <div class="col-md-2">
+                                       <div className="form-group form-group-default selectize-enabled">
+                                           <label For="campaignId">Seleziona la Campagna</label>
+                                           <select id="campaignId" name="campaignId"
+                                                   className="full-width selectpicker"
+                                                   placeholder="Seleziona la Lista"
+                                                   data-init-plugin="selectize">
+
+                                           </select>
+                                       </div>
+                                    </div>`;
+                                       break;
+                               }
+    bodyFormPayment+=`<div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                     <button class="success" id="addPaymentRowDetail" onclick="addPaymentRowDetail(` + id +`,`+billRegistryGroupProductId+`)" type="button"><span  class="fa fa-plus">Inserisci</span></button>
+                                    </div>
+                                </div>
+</div>`;
+
+    $('#addPaymentRowSection').removeClass('hide');
+    $('#addPaymentRowSection').addClass('show');
+    $('#addPaymentRowSection').append(bodyFormPayment);
+   if (billRegistryGroupProductId ==='3') {
+       $.ajax({
+           method: 'GET',
+           url: '/blueseal/xhr/GetTableContent',
+           data: {
+               table: 'BillRegistrySocial'
+
+
+           },
+           dataType: 'json'
+       }).done(function (res2) {
+           var socialId = $('#socialId');
+           if (typeof (socialId[0].selectize) != 'undefined') socialId[0].selectize.destroy();
+           socialId.selectize({
+               valueField: 'id',
+               labelField: 'name',
+               searchField: 'name',
+               options: res2,
+           });
+       });
+   }
+
+
+
+    if (billRegistryGroupProductId=='4') {
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Campaign'
+
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var selectCampaign = $('#campaignId');
+            if (typeof (selectCampaign[0].selectize) != 'undefined') selectCampaign[0].selectize.destroy();
+            selectCampaign.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+
+        });
+    }
+
+
+}
+
+function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductId){
+    var idRowPayment='';
+    var month='';
+    var campaignId='';
+    var socialId='';
+    if($('#campaignId').val()!=null){
+        campaignId=$('#campaignId').val();
+    }
+    if($('#socialId').val()!=null){
+        socialId=$('#social').val();
+    }
+
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
+        method: 'post',
+        data: {
+            billRegistryContractRowId:billRegistryContractRowId,
+            billRegistryGroupProductId:billRegistryGroupProductId,
+            billRegistryClientId:$('#billRegistryClientId').val(),
+            mandatoryMonth:$('#mandatoryMonth').val(),
+            dateMandatoryMonth:$('#dateMandatoryMonth').val(),
+            amount:$('#amount').val(),
+            campaignId:campaignId,
+            socialId:socialId
+
+        },
+        dataType: 'json'
+    }).done(function (res) {
+
+        $.each(res, function (k, v) {
+            idRowPayment=v.billRegistryContractRowPaymentId;
+            month=v.mandatoryMonth;
+        });
+        $('#tableContractPaymentRowList').append('<tr><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + v.idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + v.idRowPayment + '"></td><td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+        $('#addPaymentRowSection').empty();
+    });
+
+}
+
+function deleteProductDetail(id){
+
+}
+function deletePaymentDetail(id){
 
 }
 
