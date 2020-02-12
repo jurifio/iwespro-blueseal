@@ -3416,8 +3416,8 @@ function addPayment(id, billRegistryGroupProductId) {
                 bodyListPaymentForm += '<td>' + v.id + '</td>';
                 bodyListPaymentForm += '<td>' + v.dateMandatoryMonth + '</td>';
                 bodyListPaymentForm += '<td>' + v.amount + '</td>';
-                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.checked + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td></tr>';
-                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.checked + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td></tr>';
+                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.isSubmitted + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td></tr>';
+                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.isPaid + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td></tr>';
                 bodyListPaymentForm += '<button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListPaymentForm += '</table>';

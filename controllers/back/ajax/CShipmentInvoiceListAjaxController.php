@@ -44,7 +44,7 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                   
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
-                where s.shipmentInvoiceNumber is not null
+                where s.shipmentInvoiceNumber is not null and s.realShipmentPrice is not null
                   GROUP BY s.shipmentInvoiceNumber";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -71,7 +71,7 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
            $dateInvoice=strtotime($val->dateInvoice);
             $invoiceDate=date('d-m-Y', $dateInvoice);
             $row['dateInvoice']=$invoiceDate;
-            $res = \Monkey::app()->dbAdapter->query('select sum(realShipmentPrice) as total ,count(id) as totalShipment  from Shipment WHERE shipmentInvoiceNumber="'.$val->shipmentInvoiceNumber.'"',[])->fetchAll();
+            $res = \Monkey::app()->dbAdapter->query('select sum(realShipmentPrice) as total ,count(id) as totalShipment  from Shipment WHERE realShipmentPrice is not null and  shipmentInvoiceNumber="'.$val->shipmentInvoiceNumber.'"',[])->fetchAll();
             foreach ($res as $result) {
                 $impFat = $result['total'];
                 $totalShipment=$result['totalShipment'];

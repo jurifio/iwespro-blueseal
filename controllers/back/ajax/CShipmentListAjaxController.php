@@ -64,6 +64,7 @@ class CShipmentListAjaxController extends AAjaxController
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
                       join `Order` O on ol.orderId = O.id
                      ) ON s.id = olhs.shipmentId
+                
                   GROUP BY s.id";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

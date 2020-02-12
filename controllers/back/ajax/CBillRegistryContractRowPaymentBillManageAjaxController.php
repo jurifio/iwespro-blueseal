@@ -142,11 +142,11 @@ class CBillRegistryContractRowPaymentBillManageAjaxController extends AAjaxContr
             $dateMandatory=strtotime($result['dateMandatoryMonth']);
 
         $dateMandatoryMonth=date('d-m-Y\TH:i', $dateMandatory);
-            $contractRowPayment[]=['id'=>$paymentRow->id,'mandatoryMonth'=>$mandatoryMonth,' dateMandatoryMonth'=> $dateMandatoryMonth,'um'=>$paymentRow->um,'price'=>$bpl->price,'qty'=>$detailRow->qty,'taxes'=>$brt->description];
+            $contractRowPayment[]=['id'=>$paymentRow->id,'mandatoryMonth'=>$mandatoryMonth,' dateMandatoryMonth'=> $dateMandatoryMonth,'amount'=>$paymentRow->amount,'isSubmitted'=>$isSubmitted,'isPaid'=>$isPaid];
             }
 
 
-return json_encode($contractRowDetail);
+return json_encode($contractRowPayment);
 
 }
 
