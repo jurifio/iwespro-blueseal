@@ -190,7 +190,7 @@ function put()
 }
 
 public
-function DELETE()
+function delete()
 {
     $data = $this->app->router->request()->getRequestData();
     $id = $data['billRegistryContractRowPaymentId'];
