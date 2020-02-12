@@ -3720,21 +3720,21 @@ function addPaymentRow(id, billRegistryGroupProductId){
                                       </select>       
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-default">
-                                        <label for="dateMandatoryMonth">Data Mandato</label>
-                                        <input id="dateMandatoryMonth" autocomplete="off" type="datetime-local"
-                                               class="form-control" name="dateMandatoryMonth"
-                                               value="`+today+`"
-                                        />
-                                    </div>
-                                </div>
                                  <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="amount">Importo</label>
                                         <input id="amount" autocomplete="off" type="text"
                                                class="form-control" name="amount"
                                                value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="dateMandatoryMonth">Data Mandato</label>
+                                        <input id="dateMandatoryMonth" autocomplete="off" type="datetime-local"
+                                               class="form-control" name="dateMandatoryMonth"
+                                               value="`+today+`"
                                         />
                                     </div>
                                 </div>`;
@@ -3859,7 +3859,7 @@ function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductI
             idRowPayment=v.billRegistryContractRowPaymentId;
             month=v.mandatoryMonth;
         });
-        $('#tableContractPaymentRowList').append('<tr id="paymentRow'+v.idRowPayment+'"><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + v.idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + v.idRowPayment + '"></td><td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+        $('#tableContractPaymentRowList').append('<tr id="paymentRow'+idRowPayment+'"><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + idRowPayment + '"></td><td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addPaymentRowSection').empty();
     });
 
@@ -3867,7 +3867,7 @@ function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductI
 
 function deleteProductDetail(id){
     var rowProductId='productRowTr'+id.toString();
-    $(rowProductId).remove();
+    $(rowProductId).addClass('hide');
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
         method: 'delete',
@@ -3876,15 +3876,12 @@ function deleteProductDetail(id){
         },
         dataType: 'json'
     }).done(function (res) {
-
-        if(res=='1'){
-            $(rowProductId).remove();
-        }
     });
 
 }
 function deletePaymentDetail(id){
 var rowPaymentId='paymentRow'+id.toString();
+    $(rowPaymentId).addClass('hide');
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
         method: 'delete',
@@ -3893,10 +3890,6 @@ var rowPaymentId='paymentRow'+id.toString();
         },
         dataType: 'json'
     }).done(function (res) {
-
-       if(res=='1'){
-           $(rowPaymentId).remove();
-       }
     });
 }
 
