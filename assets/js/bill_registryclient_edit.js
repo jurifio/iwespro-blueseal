@@ -3390,8 +3390,57 @@ function editContractDetail(id) {
 
 }
 
-function addPayment(id) {
-
+function addPayment(id, billRegistryGroupProductId) {
+    $('#addPaymentDiv').removeClass('hide');
+    $('#addPaymentDiv').addClass('show');
+    $('#addProductDiv').addClass('hide');
+    var typePaymentForm = '';
+    var bodyListPaymentForm = '';
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
+        method: 'get',
+        data: {
+            id: id,
+            billRegistryGroupProductId:billRegistryGroupProductId,
+            billRegistryClientId:$('#billRegistryClientId').val()
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        let rawContractRowPayment = res;
+        var counterRow='1';
+        if (rawContractRowPayment != '') {
+            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th style="width:20%;">Mese</th><th style="width:20%;">Numero Mandato</th><th style="width:20%;">data</th><th style="width:20%;">Importo</th><th style="width:10%;">Inviato</th><th style="width:10%;">Pagato</th></tr>';
+            $.each(rawContractRowPayment, function (k, v) {
+                bodyListPaymentForm += '<tr><td>' + v.mandatoryMonth + '</td>';
+                bodyListPaymentForm += '<td>' + v.id + '</td>';
+                bodyListPaymentForm += '<td>' + v.dateMandatoryMonth + '</td>';
+                bodyListPaymentForm += '<td>' + v.amount + '</td>';
+                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.checked + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td></tr>';
+                bodyListPaymentForm += '<td style="width:20%;"><input type="checkbox" ' + v.checked + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td></tr>';
+                bodyListPaymentForm += '<button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+            });
+            bodyListPaymentForm += '</table>';
+        }else{
+            bodyListPaymentForm='non ci sono Mandati';
+        }
+        typePaymentForm = `<div class="row">
+                               <div class="col-md-12">
+                               <button class="success" id="addPaymentRow" onclick="addPaymentRow(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-plus">Inserisci</span></button>
+                                </div>
+                        <div>
+                        <div  class="row">
+                                <div class="col-md-12 hide" id="addPaymentRowSection">
+                                </div>
+                              
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12"  id="listProductRowSection">
+                               `+bodyListPaymentForm+`
+                                </div>
+                        </div>`;
+        $('#addPaymentDiv').append(typePaymentForm);
+    });
 
 }
 
