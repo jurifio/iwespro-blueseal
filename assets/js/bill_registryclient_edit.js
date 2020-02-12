@@ -3867,7 +3867,7 @@ function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductI
 
 function deleteProductDetail(id){
     var rowProductId='productRowTr'+id.toString();
-    $(rowProductId).addClass('hide');
+    $(rowProductId).remove();
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
         method: 'delete',
@@ -3881,7 +3881,7 @@ function deleteProductDetail(id){
 }
 function deletePaymentDetail(id){
 var rowPaymentId='paymentRow'+id.toString();
-    $(rowPaymentId).addClass('hide');
+    $(rowPaymentId).remove();
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
         method: 'delete',
