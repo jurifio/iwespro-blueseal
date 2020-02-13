@@ -37,6 +37,7 @@ and dateInvoice is not NULL  order by lastUpdate desc limit 1', []) -> fetchAll(
             // $invoiceDate= new \DateTime($result['dateInvoice']);
             $invoiceDate=strtotime($result['dateInvoice']);
         }
+
         $dateInvoice=date('Y-m-d\TH:i', $invoiceDate);
 
         return $view->render([

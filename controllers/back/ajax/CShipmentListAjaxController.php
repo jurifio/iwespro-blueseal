@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -23,26 +24,25 @@ class CShipmentListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-                    s.id,
+                    s.id as id,
                     c.name as carrier,
                     s.scope as scope,
                     shabf.shopId as shopId,
                     sh.name as shop,
-                    s.bookingNumber,
-                    s.trackingNumber,
-                    s.predictedShipmentDate,
-                    s.deliveryDate,
-                    s.predictedDeliveryDate,
-                    s.shipmentDate,
-                    s.cancellationdate,
-                    s.note,
+                    s.bookingNumber as bookinNumber,
+                    s.trackingNumber as trackingNumber,
+                    s.predictedShipmentDate as predictedShipmentDate ,
+                    s.deliveryDate as deliveryDate,
+                    s.predictedDeliveryDate as predictedDeliveryDate,
+                    s.shipmentDate as shipmentDate,
+                    s.cancellationDate as cancellationDate,
+                    s.note as note,
                     s.remoteShipmentId as remoteShipmentId,
                     `sh2`.`name` as  remoteShopName,
                      s.dateInvoice as dateInvoice,
                     s.shipmentInvoiceNumber as shipmentInvoiceNumber,
-                
                     if(s.isBilling=0,'No','Si') as isBilling,
-                    s.creationDate,
+                    s.creationDate as creationDate,
                     O.id as orderId,
                     O.isParallel AS isParallel,
                     O.frozenShippingAddress as frozenShippingAddress,
@@ -64,13 +64,12 @@ class CShipmentListAjaxController extends AAjaxController
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
                       join `Order` O on ol.orderId = O.id
                      ) ON s.id = olhs.shipmentId
-                
-                  GROUP BY s.id";
+                  GROUP BY s.id order by s.id desc";
 
-        $datatable = new CDataTables($sql, ['id'], $_GET, true);
+        $datatable = new CDataTables($sql,['id'],$_GET,true);
 
         $allShop = $this->app->getUser()->hasPermission('allShops');
-        if(!$allShop) {
+        if (!$allShop) {
             $datatable->addCondition('scope',[CShipment::SCOPE_SUPPLIER_TO_USER,CShipment::SCOPE_SUPPLIER_TO_US,CShipment::SCOPE_US_TO_USER,CShipment::SCOPE_US_TO_SUPPLIER,CShipment::SCOPE_USER_TO_US]);
         }
 
@@ -78,7 +77,7 @@ class CShipmentListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings(true);
 
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
+        foreach ($datatable->getResponseSetData() as $key => $row) {
 
             $val = \Monkey::app()->repoFactory->create('Shipment')->findOne([$row['id']]);
 
@@ -89,64 +88,69 @@ class CShipmentListAjaxController extends AAjaxController
             $row['carrier'] = $val->carrier->name;
             $row['bookingNumber'] = $val->bookingNumber;
             $row['trackingNumber'] = $val->trackingNumber;
-            $row['remoteShipmentId']=$val->remoteShipmentId;
-            $findOhs=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$val->id]);
-            if($findOhs!=null) {
+            $row['remoteShipmentId'] = $val->remoteShipmentId;
+            $findOhs = \Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['shipmentId' => $val->id]);
+            if ($findOhs != null) {
                 $toAddress = json_decode($row['frozenShippingAddress'],true);
 
                 $row['toAddress'] = $toAddress['name'] . ' ' . $toAddress['surname'] . ' ' . $toAddress['company'] . '<br />' . $toAddress['address'] . '<br/>' . $toAddress['postcode'] . ' ' . $toAddress['city'] . ' ' . $toAddress['province'];
-            }else{
-                $row['toAddress']= $val->toAddress ? ($val->toAddress->subject.'<br />'.$val->toAddress->address.'<br />'.$val->toAddress->city) : '---';
+            } else {
+                $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject . '<br />' . $val->toAddress->address . '<br />' . $val->toAddress->city) : '---';
             }
 
-            $row['fromAddress']  = $val->fromAddress ? ($val->fromAddress->subject.'<br />'.$val->fromAddress->address.'<br />'.$val->fromAddress->city) : '---';
+            $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject . '<br />' . $val->fromAddress->address . '<br />' . $val->fromAddress->city) : '---';
             $row['predictedShipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d');
             $row['shipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d');
             $row['predictedDeliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedDeliveryDate,'Y-m-d');
             $row['deliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->deliveryDate,'Y-m-d');
-            $row['cancellationDate'] = ($val->cancellationDate) ? '<span style="color-red">'
-                . $val->cancellationDate . '<br />' . $val->shipmentFault->description . '</span>'
-                : '';
-            $row['creationDate'] = $val->creationDate;
-            $row['productContent'] = "";
-
-
-            $orderlineIds = [];
-            $shippingSum = 0;
-            foreach ($val->orderLine as $orderLine) {
-                if($allShop) $orderlineIds[] = '<a href="/blueseal/ordini/aggiungi?order='.$orderLine->orderId.'">'.$orderLine->printId().'</a>';
-                else $orderlineIds[] = $orderLine->printId();
-
-                //SE LA SPEDIZIONE VA DAL FRIEND A IWES NON FARE LA SOMMMA E MOSTRA 0 SU COSTO DI SPEDIZIONE
-                if($val->scope === "supplierToUs") {
-                    $shippingSum = 0;
-                } else {
-                    $shippingSum += $orderLine->shippingCharge;
-                }
-
-
-            }
-
-            $row['orderShipmentPrice'] = $shippingSum;
-            $row['orderContent'] = implode('<br />',$orderlineIds);
-            $row['note'] = $val->note;
-
-            $row['shipmentInvoiceNumber'] = $val->shipmentInvoiceNumber;
-            $row['realShipmentPrice'] = $val->realShipmentPrice;
-
-            $margin = $shippingSum - $val->realShipmentPrice;
-
-            if ($margin > 0) {
-                $row['shipmentPriceMargin'] = "<p style='color:green'>".$margin."</p>";
-            } else if ($margin < 0){
-                $row['shipmentPriceMargin'] = "<p style='color:red'>".$margin."</p>";
+            if ($val->cancellationDate != null) {
+                $cancellationDate = '<span style="color-red">' . $val->cancellationDate . '<br />' . $val->shipmentFault->description . '</span>';
             } else {
-                $row['shipmentPriceMargin'] = $margin;
+                $cancellationDate = '';
             }
 
-            $datatable->setResponseDataSetRow($key,$row);
+        $row['cancellationDate'] = $cancellationDate;
+        $row['creationDate'] = $val->creationDate;
+        $row['productContent'] = "";
+        $row["shipmentInvoiceNumber"] = $val->shipmentInvoiceNumber;
+
+
+        $orderlineIds = [];
+        $shippingSum = 0;
+        foreach ($val->orderLine as $orderLine) {
+            if ($allShop) $orderlineIds[] = '<a href="/blueseal/ordini/aggiungi?order=' . $orderLine->orderId . '">' . $orderLine->printId() . '</a>';
+            else $orderlineIds[] = $orderLine->printId();
+
+            //SE LA SPEDIZIONE VA DAL FRIEND A IWES NON FARE LA SOMMMA E MOSTRA 0 SU COSTO DI SPEDIZIONE
+            if ($val->scope === "supplierToUs") {
+                $shippingSum = 0;
+            } else {
+                $shippingSum += $orderLine->shippingCharge;
+            }
+
+
         }
 
-        return $datatable->responseOut();
+        $row['orderShipmentPrice'] = $shippingSum;
+        $row['orderContent'] = implode('<br />',$orderlineIds);
+        $row['note'] = $val->note;
+
+        $row['shipmentInvoiceNumber'] = $val->shipmentInvoiceNumber;
+        $row['realShipmentPrice'] = $val->realShipmentPrice;
+
+        $margin = $shippingSum - $val->realShipmentPrice;
+
+        if ($margin > 0) {
+            $row['shipmentPriceMargin'] = "<p style='color:green'>" . $margin . "</p>";
+        } else if ($margin < 0) {
+            $row['shipmentPriceMargin'] = "<p style='color:red'>" . $margin . "</p>";
+        } else {
+            $row['shipmentPriceMargin'] = $margin;
+        }
+
+        $datatable->setResponseDataSetRow($key,$row);
     }
+
+return $datatable->responseOut();
+}
 }
