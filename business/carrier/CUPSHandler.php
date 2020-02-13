@@ -226,7 +226,7 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
         }
 
             if($findOrder->isShippingToIwes == null || $findOrder->isShippingToIwes == 0  ) {
-                $shippingAddress[] = json_decode($findOrder->frozenBillingAddress,true);
+                $shippingAddress[] = json_decode($findOrder->frozenShippingAddress,true);
                 $AttentionName =  preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname']);
                 $Name = preg_replace('/[\,\.\"\'\/\&%#\$]/',' ',$shippingAddress[0]['name'] . ' ' . $shippingAddress[0]['surname'].' '.$shippingAddress[0]['company']);
                 $AddressLine = preg_replace('/[\,\.\"\'\/\&%#\$]/',' ', $shippingAddress[0]['address'] );

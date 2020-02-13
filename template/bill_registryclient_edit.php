@@ -768,12 +768,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <button class="success" id="addContract" type="button"><span
-                                    class="fa fa-plus-circle">Aggiungi contratto</span></button>
-                    </div>
-                </div>
-                <div class="row">
                     <?php
                     $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
                     $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Servizio"></div></div>';
