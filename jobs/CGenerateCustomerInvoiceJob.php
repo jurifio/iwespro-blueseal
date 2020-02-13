@@ -56,6 +56,9 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                 $billRegistryContractRow = $billRegistryContractRowRepo->findBy(['billRegistryContractId' => $contractId,'statusId' => '1']);
                 $invoiceHeader = [];
                 $rowInvoiceDetail = [];
+                $grossTotal=0;
+                $netTotal=0;
+                $vat=0;
                 foreach ($billRegistryContractRow as $contractRow) {
                     $contractRowId = $contractRow->id;
 
@@ -205,11 +208,14 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 
                         }
                         $billRegistryPriceList=$billRegistryPriceListRepo->findOneBy(['billRegistryProductId'=>$billRegistryProduct->id,'billRegistryClientId'=>$billRegistryClientId,'isActive'=>1]);
-                        $price=$billRegistryPriceList->price;
+                        $priceRow=$billRegistryPriceList->price;
 
                         $billRegistryTypeTaxes=$billRegistryTypeTaxesRepo->findOneBy(['id'=>$rowDetail->billRegistryTypeTaxesId]);
                         $perc=$billRegistryTypeTaxes->perc;
                         $qty=$rowDetail->qty;
+                        $netPriceRow=$priceRow*$qty;
+
+
 
 
 
