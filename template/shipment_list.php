@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include "parts/head.php"?>
-    <?php echo $app->getAssets(['ui','forms','tables'], $page); ?>
+    <?php include "parts/head.php" ?>
+    <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-<?php include "parts/sidebar.php";?>
+<?php include "parts/sidebar.php"; ?>
 <div class="page-container">
-    <?php include "parts/header.php";?>
+    <?php include "parts/header.php"; ?>
     <?php include "parts/operations.php" ?>
 
     <div class="page-content-wrapper">
@@ -21,7 +21,8 @@
                 </div>
             </div>
             <input type="hidden" id="lastInvoiceDate" name="lastInvoiceDate" value="<?php echo $dateInvoice ?>"/>
-            <input type="hidden" id="shipmentInvoiceNumberTemp" name="shipmentInvoiceNumberTemp" value="<?php echo $shipmentInvoiceNumber ?>"/>
+            <input type="hidden" id="shipmentInvoiceNumberTemp" name="shipmentInvoiceNumberTemp"
+                   value="<?php echo $shipmentInvoiceNumber ?>"/>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
@@ -35,89 +36,118 @@
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Codice</th>
-                                <?php if(count($shops) > 1): ?>
+                                    data-orderable="true" class="center">Codice
+                                </th>
+                                <?php if (count($shops) > 1): ?>
                                     <th data-slug="shop"
                                         data-searchable="true"
-                                        data-orderable="true" class="center">Shop</th>
+                                        data-orderable="true" class="center">Shop
+                                    </th>
                                 <?php endif; ?>
                                 <th data-slug="remoteShipmentId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Id Spedizione Shop </th>
+                                    data-orderable="true" class="center">Id Spedizione Shop
+                                </th>
                                 <th data-slug="remoteShopName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Shop Che Spedisce</th>
+                                    data-orderable="true" class="center">Shop Che Spedisce
+                                </th>
                                 <th data-slug="carrier"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Carrier</th>
+                                    data-orderable="true" class="center">Carrier
+                                </th>
                                 <th data-slug="bookingNumber"
                                     data-isVisible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Booking</th>
+                                    data-orderable="true" class="center">Booking
+                                </th>
                                 <th data-slug="trackingNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Tracking</th>
+                                    data-orderable="true" class="center">Tracking
+                                </th>
                                 <th data-slug="fromAddress"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Da</th>
+                                    data-orderable="true" class="center">Da
+                                </th>
                                 <th data-slug="toAddress"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">A</th>
+                                    data-orderable="true" class="center">A
+                                </th>
                                 <th data-slug="predictedShipmentDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Data Spedizione Prevista</th>
+                                    data-orderable="true" class="center dataFilterType">Data Spedizione Prevista
+                                </th>
                                 <th data-slug="shipmentDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Data Spedizione</th>
+                                    data-orderable="true" class="center dataFilterType">Data Spedizione
+                                </th>
                                 <th data-slug="predictedDeliveryDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Data Consegna Prevista</th>
+                                    data-orderable="true" class="center dataFilterType">Data Consegna Prevista
+                                </th>
                                 <th data-slug="deliveryDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Data Consegna</th>
+                                    data-orderable="true" class="center dataFilterType">Data Consegna
+                                </th>
                                 <th data-slug="cancellationDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center dataFilterType">Cancellazione</th>
+                                    data-orderable="true" class="center dataFilterType">Cancellazione
+                                </th>
                                 <th data-slug="shipmentInvoiceNumber"
-                                    data-is-visible="true"
+                                    data-is-visible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Numero di fattura</th>
+                                    data-orderable="true" class="center">Numero di fattura
+                                </th>
                                 <th data-slug="creationDate"
                                     data-isVisible="false"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    data-default-order="desc" class="center dataFilterType">Data Creazione</th>
+                                    data-default-order="desc" class="center dataFilterType">Data Creazione
+                                </th>
                                 <th data-slug="note"
+                                    data-is-visible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Note</th>
+                                    data-orderable="true" class="center">Note
+                                </th>
                                 <th data-slug="orderId"
+                                    data-is-visible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Ordine</th>
+                                    data-orderable="true" class="center">Ordine
+                                </th>
                                 <th data-slug="orderContent"
+                                    data-is-visible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Contenuto Ordini</th>
+                                    data-orderable="true" class="center">Contenuto Ordini
+                                </th>
                                 <th data-slug="productContent"
                                     data-is-visible="false"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Contenuto Prodotti</th>
+                                    data-orderable="false" class="center">Contenuto Prodotti
+                                </th>
                                 <th data-slug="orderShipmentPrice"
                                     data-is-visible="false"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Spese spedizione</th>
+                                    data-orderable="false" class="center">Spese spedizione
+                                </th>
                                 <th data-slug="realShipmentPrice"
                                     data-is-visible="false"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Costo effettivo spedizione</th>
+                                    data-orderable="false" class="center">Costo effettivo spedizione
+                                </th>
                                 <th data-slug="shipmentPriceMargin"
                                     data-is-visible="false"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Margine sulla spedizione</th>
+                                    data-orderable="false" class="center">Margine sulla spedizione
+                                </th>
                                 <th data-slug="dateInvoice"
+                                    data-is-visible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Fattura Spedizioniere</th>
+                                    data-orderable="true" class="center">Data Fattura Spedizioniere
+                                </th>
                                 <th data-slug="isBilling"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Rifatturata</th>
+                                    data-orderable="true" class="center">Rifatturata
+                                </th>
                             </tr>
 
                             </thead>
@@ -129,7 +159,7 @@
             </div>
         </div>
     </div>
-    <?php include "parts/footer.php"?>
+    <?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
@@ -165,7 +195,7 @@
                 data-remote="bs.shipment.invoiceInformation"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

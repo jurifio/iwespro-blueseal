@@ -29,7 +29,7 @@ class CShipmentListAjaxController extends AAjaxController
                     s.scope as scope,
                     shabf.shopId as shopId,
                     sh.name as shop,
-                    s.bookingNumber as bookinNumber,
+                    s.bookingNumber as bookingNumber,
                     s.trackingNumber as trackingNumber,
                     s.predictedShipmentDate as predictedShipmentDate ,
                     s.deliveryDate as deliveryDate,

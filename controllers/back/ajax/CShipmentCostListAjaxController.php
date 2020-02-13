@@ -29,7 +29,7 @@ class CShipmentCostListAjaxController extends AAjaxController
                     s.scope as scope,
                     shabf.shopId as shopId,
                     sh.name as shop,
-                    s.bookingNumber,
+                    s.bookingNumber  ,
                     s.trackingNumber,
                     s.predictedShipmentDate,
                     s.deliveryDate,
@@ -64,7 +64,7 @@ class CShipmentCostListAjaxController extends AAjaxController
                      Join OrderLine ol on ol.orderId = olhs.orderId and ol.id = olhs.orderLineId
                       join `Order` O on ol.orderId = O.id
                      ) ON s.id = olhs.shipmentId
-                  GROUP BY s.id";
+                  GROUP BY s.id order by id desc";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
