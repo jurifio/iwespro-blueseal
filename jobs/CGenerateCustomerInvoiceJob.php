@@ -34,6 +34,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
         $billRegistryContractRepo = \Monkey::app()->repoFactory->create('BillRegistryContract');
         $billRegistryContractRowRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRow');
         $billRegistryContractRowDetailRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRowDetail');
+        $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
         $billRegistryGroupProductRepo = \Monkey::app()->repoFactory->create('BillRegistryGroupProductRepo');
         $billRegistryPriceListRepo = \Monkey::app()->repoFactory->create('BillRegistryPriceList');
         $billRegistryProductRepo = \Monkey::app()->repoFactory->create('BillRegistryProduct');
@@ -53,12 +54,17 @@ class CGenerateCustomerInvoiceJob extends ACronJob
             foreach ($billRegistryContracts as $billRegistryContract) {
                 $contractId = $billRegistryContract->id;
                 $billRegistryClientId = $billRegistryContract->billregistryClientId;
+                $billRegistryClientAccount = $billRegistryClientAccountRepo->findOneBy(['billRegistryClientId' => $billRegistryClientId]);
+                $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
+                $shop = $billRegistryClientAccount->shopId;
+
                 $billRegistryContractRow = $billRegistryContractRowRepo->findBy(['billRegistryContractId' => $contractId,'statusId' => '1']);
                 $invoiceHeader = [];
                 $rowInvoiceDetail = [];
-                $grossTotal=0;
-                $netTotal=0;
-                $vat=0;
+                $rowInvoiceExtraFee=[];
+                $grossTotal = 0;
+                $netTotal = 0;
+                $vat = 0;
                 foreach ($billRegistryContractRow as $contractRow) {
                     $contractRowId = $contractRow->id;
 
@@ -89,7 +95,132 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             $feeCostCommissionPayment = $billRegistryRowMonkSource->feeCostCommissionPayment;
                             $periodTypeChargePayment = $billRegistryRowMonkSource->periodTypeChargePayment;
                             $paymentTypePaymentId = $billRegistryRowMonkSource->paymentTypePaymentId;
+                            $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findBy(['remoteShopSellerId' => $shopId]);
+                            $creditCardCommission = 0;
+                            $bankTransferCommission = 0;
+                            $codCommission = 0;
+                            $paypalCommission = 0;
+                            foreach ($orderLine as $orl) {
+                                if ($orl->status == 'ORD_DELIVERED' || $orl->status == 'ORD_SENT' || $orl->status == 'ORD_FRND_PYD') {
+                                    if ($orl->isBill == null) {
+                                        $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orl->orderId]);
 
+                                        switch ($order->orderPaymentMethodId) {
+                                            case 1:
+                                                $paypalCommission += $orl->netPrice * $feePaypalCommission;
+                                                break;
+                                            case 2:
+                                                $creditCardCommission += $orl->netPrice * $feeCreditCardCommission;
+                                                break;
+                                            case 3:
+                                                $bankTransferCommission += $orl->netPrice * $feeBankTransferCommission;
+                                                break;
+                                            case 5:
+                                                $codCommission += $orl->netPrice * $feeCodCommission;
+                                                break;
+
+                                        }
+                                        $costDeliveryCommission=0;
+                                        $orderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId'=>$orl->id,'orderId'=>$orl->orderId]);
+                                        foreach($orderLineHasShipment as $olhs ){
+                                            $shipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id'=>$olhs->shipmentId]);
+                                            if($shipment->realShipmentPrice!=null){
+                                                $costDeliveryCommission+=$shipment->realShipmentPrice+($shipment->realShipmentPrice/100*$feeCostDeliveryCommission);
+                                            }
+
+                                        }
+
+                                    }
+                                } else {
+                                    continue;
+                                }
+                            }
+                            $customerTaxes=$billRegistryTypeTaxesRepo->findOneBy(['id'=>$billRegistryClientBillingInfo->billRegistryTypeTaxesId]);
+                            $netTotalRow=$paypalCommission+$codCommission+$bankTransferCommission+$creditCardCommission+$costDeliveryCommission;
+                            $netTotal+=$netTotalRow;
+                            $vatRowTotalExtra=($paypalCommission+$codCommission+$bankTransferCommission+$creditCardCommission+$costDeliveryCommission)/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalExtra;
+                            $grossTotal+=$netTotal+$vatRowTotalExtra;
+                            if($paypalCommission!=0) {
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'commissioni Pagamenti Paypal',
+                                    'qty' => 1,
+                                    'priceRow' => $paypalCommission,
+                                    'netPrice' => $paypalCommission,
+                                    'vatRow' => $paypalCommission/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $paypalCommision+($paypalCommission/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                    ];
+                            }
+                            if ($codCommission!=0){
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'commissioni Pagamenti Contrassegni',
+                                    'qty' => 1,
+                                    'priceRow' => $codCommission,
+                                    'netPrice' => $codCommission,
+                                    'vatRow' => $codCommission/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $codCommission+($codCommission/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            if ($bankTransferCommission!=0){
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'commissioni Pagamenti Bonifici Sepa',
+                                    'qty' => 1,
+                                    'priceRow' => $bankTransferCommission,
+                                    'netPrice' => $bankTransferCommission,
+                                    'vatRow' => $bankTransferCommission/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $bankTransferCommission+($bankTransferCommission/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            if ($creditCardCommission!=0){
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'commissioni Pagamenti Carte di Credito',
+                                    'qty' => 1,
+                                    'priceRow' => $creditCardCommission,
+                                    'netPrice' => $creditCardCommission,
+                                    'vatRow' => $creditCardCommission/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $creditCardCommission+($creditCardCommission/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            if ($creditCardCommission!=0){
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'commissioni su Spedizioni',
+                                    'qty' => 1,
+                                    'priceRow' => $creditCardCommission,
+                                    'netPrice' => $creditCardCommission,
+                                    'vatRow' => $creditCardCommission/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $creditCardCommission+($creditCardCommission/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
 
                             break;
                         case 2:
@@ -116,6 +247,30 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             $feeCostCommissionPayment = $billRegistryRowMonkAir->feeCostCommissionPayment;
                             $periodTypeChargePayment = $billRegistryRowMonkAir->periodTypeChargePayment;
                             $paymentTypePaymentId = $billRegistryRowMonkAir->paymentTypePaymentId;
+
+
+                            $customerTaxes=$billRegistryTypeTaxesRepo->findOneBy(['id'=>$billRegistryClientBillingInfo->billRegistryTypeTaxesId]);
+                            $netTotalRow=$valueContractRow;
+                            $netTotal+=$netTotalRow;
+                            $vatRowTotalExtra=$valueContractRow/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalExtra;
+                            $grossTotal+=$netTotal+$vatRowTotalExtra;
+                            if($valueContractRow!=0) {
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'Servizio Monk Air',
+                                    'qty' => 1,
+                                    'priceRow' => $valueContractRow,
+                                    'netPrice' => $valueContractRow,
+                                    'vatRow' => $valueContractRow/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $valueContractRow+($valueContractRow/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
                             break;
                         case 3:
                             $billRegistryRowMonkEntrySocial = \Monkey::app()->repoFactory->create('BillRegistryRowMonkEntrySocial')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
@@ -127,6 +282,52 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             $feeAgencyCommision = $billRegistryRowMonkEntrySocial->feeAgencyCommision;
                             $prepaidPaymentIsActive = $billRegistryRowMonkEntrySocial->prepaidPaymentIsActive;
                             $prepaidCost = $billRegistryRowMonkEntrySocial->prepaidCost;
+                            $startUpCostIsPaid=$billRegistryRowMonkEntrySocial->startUpCostIsPaid;
+
+                            if($startUpCostIsPaid==null ||$startUpCostIsPaid==0) {
+                            $netTotalRowStartUpCost=$startUpCostIsPaid;
+                            $vatTotalRowStartUPCost=$netTotalRowStartUpCost/100*$customerTaxes->perc;
+                            $vat+=$vatTotalRowStartUPCost;
+                            $netTotal+=$netTotalRowStartUpCost;
+                            $grossTotal+=$netTotalRowStartUpCost+$vatTotalRowStartUPCost;
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'Costo di StartUp Campagna',
+                                    'qty' => 1,
+                                    'priceRow' => $startUpCostIsPaid,
+                                    'netPrice' => $startUpCostIsPaid,
+                                    'vatRow' => $startUpCostIsPaid/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $startUpCostIsPaid+($startUpCostIsPaid/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            $netTotalRow+=$prepaidCost;
+                            $netTotal+=$netTotalRow;
+                            $vatRowTotalExtra=$valueContractRow/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalExtra;
+                            $grossTotal+=$netTotal+$vatRowTotalExtra;
+                            if($valueContractRow!=0) {
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => $descriptionInvoice,
+                                    'qty' => 1,
+                                    'priceRow' => $valueContractRow,
+                                    'netPrice' => $valueContractRow,
+                                    'vatRow' => $valueContractRow/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $valueContractRow+($valueContractRow/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+
+
                             break;
                         case 4:
                             $billRegistryRowMonkEntryTraffic = \Monkey::app()->repoFactory->create('BillRegistryRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
@@ -203,27 +404,36 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                         $detailProductDescription = '';
                         $billRegistryProductDetail = $billRegistryProductDetailRepo->findBy(['billRegistryProductId' => $billRegistryProduct->id]);
                         foreach ($billRegistryProductDetail as $productDetailDescription) {
-                            $detailProductDescription .= $productDetailDescription->detailDescription;
+                            $detailProductDescription .= $productDetailDescription->detailDescription . '<br>';
 
 
                         }
-                        $billRegistryPriceList=$billRegistryPriceListRepo->findOneBy(['billRegistryProductId'=>$billRegistryProduct->id,'billRegistryClientId'=>$billRegistryClientId,'isActive'=>1]);
-                        $priceRow=$billRegistryPriceList->price;
+                        $billRegistryPriceList = $billRegistryPriceListRepo->findOneBy(['billRegistryProductId' => $billRegistryProduct->id,'billRegistryClientId' => $billRegistryClientId,'isActive' => 1]);
+                        $priceRow = $billRegistryPriceList->price;
 
-                        $billRegistryTypeTaxes=$billRegistryTypeTaxesRepo->findOneBy(['id'=>$rowDetail->billRegistryTypeTaxesId]);
-                        $perc=$billRegistryTypeTaxes->perc;
-                        $qty=$rowDetail->qty;
-                        $netPriceRow=$priceRow*$qty;
+                        $billRegistryTypeTaxes = $billRegistryTypeTaxesRepo->findOneBy(['id' => $rowDetail->billRegistryTypeTaxesId]);
+                        $perc = $billRegistryTypeTaxes->perc;
+                        $qty = $rowDetail->qty;
+                        $netPriceRow = $priceRow * $qty;
+                        $vatRow = $netPice / 100 * $perc;
+                        $grossTotalRow = $netPriceRow + $vatRow;
+                        $netTotal += $netTotalRow;
+                        $vat += $vatRow;
+                        $grossTotal += $grossTotalRow;
+                        $rowInvoiceDetail[] = [
+                            'billRegistryProductId' => $billRegistryProduct->id,
+                            'description' => $codeProduct . '-' . $nameProduct . '<br>' . $detailProductDescription,
+                            'qty' => $qty,
+                            'priceRow' => $priceRow,
+                            'netPrice' => $netPriceRow,
+                            'vatRow' => $vatRow,
+                            'grossTotalRow' => $grossTotalRow,
+                            'billRegistryTypeTaxesId' => $rowDetail->billRegistryTypeTaxesId,
+                            'billRegistryTypeTaxesDesc' => $billRegistryTypeTaxes->perc,
+                            'billRegistryContractId'=>$contractId,
+                            'billRegistryContractRowId'=>$contractRowId,
+                            'billRegistryContractRowDetailId' => $rowDetail->id];
 
-
-
-
-
-
-
-
-
-                        $rowInvoiceDetail[] = [''];
                     }
 
 
