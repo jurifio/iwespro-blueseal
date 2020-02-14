@@ -305,20 +305,41 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     'billRegistryContractRowDetailId' => 0
                                 ];
                             }
-                            $netTotalRow+=$prepaidCost;
-                            $netTotal+=$netTotalRow;
-                            $vatRowTotalExtra=$valueContractRow/100*$customerTaxes->perc;
-                            $vat+=$vatRowTotalExtra;
-                            $grossTotal+=$netTotal+$vatRowTotalExtra;
-                            if($valueContractRow!=0) {
+                            $netTotalRowPrepaidCost=$prepaidCost;
+                            $netTotal+=$netTotalRowPrepaidCost;
+                            $vatRowTotalPrepaidCost=$netTotalRowPrepaidCost/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalPrepaidCost;
+                            $grossTotal+=$netTotal+$vatRowTotalPrepaidCost;
+                            if($prepaidCost!=0) {
                                 $rowInvoiceExtraFee[] = [
                                     'billRegistryProductId'=> 0,
-                                    'description' => $descriptionInvoice,
+                                    'description' => 'Servizio MonkEntrySocial',
                                     'qty' => 1,
-                                    'priceRow' => $valueContractRow,
-                                    'netPrice' => $valueContractRow,
-                                    'vatRow' => $valueContractRow/100*$customerTaxes->perc,
-                                    'grossTotalRow' => $valueContractRow+($valueContractRow/100*$customerTaxes->perc),
+                                    'priceRow' => $prepaidCost,
+                                    'netPrice' => $prepaidCost,
+                                    'vatRow' => $prepaidCost/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $prepaidCost+($prepaidCost/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            $netTotalRowAgencyCommision=$prepaidCost/100*$feeAgencyCommision;
+                            $netTotal+=$netTotalRowAgencyCommision;
+                            $vatRowTotalAgencyCommision=$netTotalRowAgencyCommision/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalAgencyCommision;
+                            $grossTotal+=$netTotal+$vatRowTotalAgencyCommision;
+                            if($prepaidCost!=0) {
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'Servizio MonkEntrySocial',
+                                    'qty' => 1,
+                                    'priceRow' => $netTotalRowAgencyCommision,
+                                    'netPrice' => $netTotalRowAgencyCommision,
+                                    'vatRow' => $vatRowTotalAgencyCommision,
+                                    'grossTotalRow' => $netTotalRowAgencyCommision+$vatRowTotalAgencyCommision,
                                     'billRegistryTypeTaxesId' => $customerTaxes->id,
                                     'billRegistryTypeTaxesDesc' => $customerTaxes->description,
                                     'billRegistryContractId'=>$contractId,
@@ -339,6 +360,71 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             $feeAgencyCommision = $billRegistryRowMonkEntryTraffic->feeAgencyCommision;
                             $prepaidPaymentIsActive = $billRegistryRowMonkEntryTraffic->prepaidPaymentIsActive;
                             $prepaidCost = $billRegistryRowMonkEntryTraffic->prepaidCost;
+                            $startUpCostIsPaid=$billRegistryRowMonkEntryTraffic->startUpCostIsPaid;
+
+                            if($startUpCostIsPaid==null ||$startUpCostIsPaid==0) {
+                                $netTotalRowStartUpCost=$startUpCostIsPaid;
+                                $vatTotalRowStartUPCost=$netTotalRowStartUpCost/100*$customerTaxes->perc;
+                                $vat+=$vatTotalRowStartUPCost;
+                                $netTotal+=$netTotalRowStartUpCost;
+                                $grossTotal+=$netTotalRowStartUpCost+$vatTotalRowStartUPCost;
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'Costo di StartUp Campagna',
+                                    'qty' => 1,
+                                    'priceRow' => $startUpCostIsPaid,
+                                    'netPrice' => $startUpCostIsPaid,
+                                    'vatRow' => $startUpCostIsPaid/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $startUpCostIsPaid+($startUpCostIsPaid/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            $netTotalRowPrepaidCost=$prepaidCost;
+                            $netTotal+=$netTotalRowPrepaidCost;
+                            $vatRowTotalPrepaidCost=$netTotalRowPrepaidCost/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalPrepaidCost;
+                            $grossTotal+=$netTotal+$vatRowTotalPrepaidCost;
+                            if($prepaidCost!=0) {
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'Servizio MonkEntrySocial',
+                                    'qty' => 1,
+                                    'priceRow' => $prepaidCost,
+                                    'netPrice' => $prepaidCost,
+                                    'vatRow' => $prepaidCost/100*$customerTaxes->perc,
+                                    'grossTotalRow' => $prepaidCost+($prepaidCost/100*$customerTaxes->perc),
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
+                            $netTotalRowAgencyCommision=$prepaidCost/100*$feeAgencyCommision;
+                            $netTotal+=$netTotalRowAgencyCommision;
+                            $vatRowTotalAgencyCommision=$netTotalRowAgencyCommision/100*$customerTaxes->perc;
+                            $vat+=$vatRowTotalAgencyCommision;
+                            $grossTotal+=$netTotal+$vatRowTotalAgencyCommision;
+                            if($prepaidCost!=0) {
+                                $rowInvoiceExtraFee[] = [
+                                    'billRegistryProductId'=> 0,
+                                    'description' => 'Commissioni Agenzia MonkEntrySocial',
+                                    'qty' => 1,
+                                    'priceRow' => $netTotalRowAgencyCommision,
+                                    'netPrice' => $netTotalRowAgencyCommision,
+                                    'vatRow' => $vatRowTotalAgencyCommision,
+                                    'grossTotalRow' => $netTotalRowAgencyCommision+$vatRowTotalAgencyCommision,
+                                    'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                    'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                    'billRegistryContractId'=>$contractId,
+                                    'billRegistryContractRowId'=>$contractRowId,
+                                    'billRegistryContractRowDetailId' => 0
+                                ];
+                            }
                             break;
                         case 5:
                             $billRegistryRowSocialMonk = \Monkey::app()->repoFactory->create('BillRegistryRowSocialMonk')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
