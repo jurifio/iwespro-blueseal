@@ -576,10 +576,11 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             $realTotal = $netTotal;
                         }
                         $billRegistryInvoice->invoiceDate = $invoiceDate;
+                        $billRegistryInvoice->automaticInvoice=$automaticInvoice;
                         $billRegistryInvoice->insert();
                         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
                         foreach ($res as $result) {
-                            $lastBillRegitryInvoiceId = $result['id'];
+                            $lastBillRegistryInvoiceId = $result['id'];
                         }
 
                         $billRegistryTypePayment = $billRegistryTypePaymentRepo->findOneBy(['id' => $typePaymentId]);
@@ -590,7 +591,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                         foreach ($filterBillRegistryTypePayment as $rowsPayment) {
                             $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
                             $billRegistryTimeTable->typeDocument = '7';
-                            $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegitryInvoiceId;
+                            $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegitrysInvoiceId;
                             $amountRate = $realTotal / 100 * $rowsPayment->prc;
                             if ($rowPayment->day == '0') {
                                 $modPayment = $today->modify('+ ' . $rowPayment->NumDay . ' day');
@@ -1248,7 +1249,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                         $invoiceText .= '</td>';
                         $invoiceText .= ' <td style="border: 0px"></td>';
                         $invoiceText .= ' <td style="border: 0px"></td></tr>';
-                        $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $lastBillRegitryInvoiceId]);
+                        $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $lastBillRegistryInvoiceId]);
                         foreach ($billRegistryTimeTableFind as $paymentInvoice) {
                             $invoiceText .= '<tr style="border: 0px" class="text-center">
                         <td colspan="2" style="border: 0px">';
@@ -1294,7 +1295,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 </script>
 </body>
 </html>');
-                        $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegitryInvoiceId]);
+                        $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegistryInvoiceId]);
                         $updateBillRegistryInvoice->invoiceText = $invoiceText;
                         $updateBillRegistryInvoice->update();
 
