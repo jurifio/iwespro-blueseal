@@ -3282,7 +3282,7 @@ function addContractDetail(id) {
                         feeBankTransferCommission: $('#feeBankTransferCommission').val(),
                         dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
                         feePaypalCommission: $('#feePaypalCommission').val(),
-                        dayChargePaypalCommission: $('#dayChargePaypalCommission').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommission').val(),
                         chargeDeliveryIsActive: $('#chargeDeliveryIsActive').val(),
                         feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
                         periodTypeChargeDelivery: $('#periodTypeChargeDelivery').val(),

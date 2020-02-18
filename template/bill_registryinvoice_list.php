@@ -89,21 +89,17 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione spedizioni">
+    <bs-toolbar-group data-group-label="Gestione Fatture">
         <bs-toolbar-button
-                data-remote="btn.add.shipmentToUs"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.shipment.tracking.update"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione fatturazione spedizione">
-        <bs-toolbar-button
-                data-remote="bs.shipment.invoiceInformation"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="bs.shipment.invoiceMassiveInformation"
-        ></bs-toolbar-button>
+                data-tag="a"
+                data-icon="fa-cog"
+                data-permission="/admin/product/add"
+                data-event="bs.invoice.generate"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Salva"
+                data-placement="bottom">
+        </bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
