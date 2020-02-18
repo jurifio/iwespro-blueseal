@@ -26,7 +26,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
     {
         $sql = "SELECT
                       `bri`.`id`                                            AS `id`,
-                       concat(`bri`.`invoiceNumber`,'-',`bri`.`invoiceYear`)                                       as `invoice`,
+                       concat(`bri`.`invoiceNumber`,'/',`bri`.`invoiceType`,'-',`bri`.`invoiceYear`)                                       as `invoice`,
                       `brc`.`companyName`                                      AS `companyName`,
                       `bri`.`netTotal`                                         AS `netTotal`,
                       `bri`.`vat`             AS `vat`,
@@ -44,16 +44,38 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
         $datatable->doAllTheThings();
 
         $invoiceEdit = $this->app->baseUrl(false) . "/blueseal/anagrafica/fatture-modifica?id=";
-        /** @var CBillRegistryInvoice $billRegistryInvoiceRepo */
+
         $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+        $billRegistryClientRepo=\Monkey::app()->repoFactory->create('BillRegistryClient');
+        $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
         foreach ($datatable->getResponseSetData() as $key => $row) {
-            /** @var CBillRegistryInvoice $billRegistryInvoice */
             $billRegistryInvoice = $billRegistryInvoiceRepo->findOne([$row['id']]);
             $row = [];
-            $row["DT_RowId"] = 'row__' . $billRegistryProduct->printId();
+            $row["DT_RowId"] = 'row__' . $billRegistryInvoice->printId();
             $row['id'] = '<a href="'.$invoiceEdit.$billRegistryInvoice->id.'">'.$billRegistryInvoice->id.'</a>';
+           $billRegistryClient=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryClientId]);
             $date=new \DateTime($billRegistryInvoice->invoiceDate);
             $row['invoiceDate']=$date->format('d-m-Y');
+            $year=$date->format('Y');
+           $row['invoiceNumber']=$billRegistryInvoice->invoiceNumber.'/'.$billRegistryInvoice->invoiceType.'-'.$year;
+           $row['companyName']=$billRegistryClient->companyName;
+           $row['netPrice']=money_format('%.2n',$billRegistryInvoice->netTotal).' &euro;';
+            $row['vat']=money_format('%.2n',$billRegistryInvoice->vat).' &euro;';
+            $row['grossTotal']=money_format('%.2n',$billRegistryInvoice->grossTotal).' &euro;';
+            $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBY(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
+            $row['typePayment']=$billRegistryTypePayment->name;
+            if($billRegistryInvoice->isPaid==1){
+                $row['isPaid']='Si';
+            }else{
+                $row['isPaid']='No';
+            }
+            if($billRegistryInvoice->isSent==1){
+                $row['isSent']='Si';
+            }else{
+                $row['isSent']='No';
+            }
+
+
             $datatable->setResponseDataSetRow($key, $row);
         }
 

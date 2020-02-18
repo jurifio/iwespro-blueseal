@@ -20,7 +20,7 @@ $(document).on('bs.invoice.generate', function () {
             bsModal.setOkEvent(function () {
                 bsModal.showOkBtn();
             });
-            bsModal.showOkBtn();
+
         });
     });
 
