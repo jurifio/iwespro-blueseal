@@ -27,3 +27,10 @@ $(document).on('bs.invoice.generate', function () {
 
 
 });
+$(document).on('bs.invoice.add', function () {
+    let url='/blueseal/anagrafica/fatture-inserisci';
+
+    window.location.href=url;
+
+
+});

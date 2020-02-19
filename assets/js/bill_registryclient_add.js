@@ -1,6 +1,4 @@
-
-
-    $.ajax({
+ $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -341,7 +339,7 @@ $("#accountAsParallel").change(function () {
 });
 
 $(document).on('bs.client.save', function () {
-    let bsModal = new $.bsModal('Inserimento Aggregatore', {
+    let bsModal = new $.bsModal('Inserimento Cliente', {
         body: '<p>Confermare?</p>'
     });
     var val = '';

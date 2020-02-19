@@ -97,8 +97,18 @@
                 data-event="bs.invoice.generate"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Salva"
+                data-title="Genera Fatture "
                 data-placement="bottom">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-plus-circle"
+            data-permission="/admin/product/add"
+            data-event="bs.invoice.add"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi Fattura"
+            data-placement="bottom">
         </bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
