@@ -176,6 +176,46 @@ class CVatRegisterListAjaxController extends AAjaxController
                     $row['typeDocument']='RICEVUTA FISCALE';
                     $row['vat']=number_format($val->vat,'2');
                     break;
+                case 'BP':
+                    $row['typeDocument']='FATTURA INTRACEE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'F':
+                    $row['typeDocument']='FATTURA INTRACEE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'BX':
+                    $row['typeDocument']='FATTURA EXTRAUE';
+                    $row['vat']='0,00 non imponibile ex art 8/A  D.P.R. n. 633/72 ' ;
+                    break;
+                case 'BK':
+                    $row['typeDocument']='RICEVUTA FISCALE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'R':
+                    $row['typeDocument']='RICEVUTA FISCALE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'CP':
+                    $row['typeDocument']='FATTURA INTRACEE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'F':
+                    $row['typeDocument']='FATTURA INTRACEE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'CX':
+                    $row['typeDocument']='FATTURA EXTRAUE';
+                    $row['vat']='0,00 non imponibile ex art 8/A  D.P.R. n. 633/72 ' ;
+                    break;
+                case 'CK':
+                    $row['typeDocument']='RICEVUTA FISCALE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
+                case 'R':
+                    $row['typeDocument']='RICEVUTA FISCALE';
+                    $row['vat']=number_format($val->vat,'2');
+                    break;
             }
 
             if($invoice->printSummaryDate!=null){
