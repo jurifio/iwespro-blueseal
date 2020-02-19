@@ -26,7 +26,7 @@ class CVatRegisterListAjaxController extends AAjaxController
     {
         $sql = "SELECT
                   `o`.`id` as `id`,
-                  `o`.remoteOrderId                                           as remoteOrderId,
+                  `o`.remoteOrderSellerId                                           as remoteOrderId,
                   concat(`i`.`invoiceNumber`,'/',`i`.`invoiceType`,'/',`i`.`invoiceYear`) as invoiceNumber,
                   `i`.`invoiceDate` as invoiceDate,
                   `i`.`printSummaryDate` as stampato,
