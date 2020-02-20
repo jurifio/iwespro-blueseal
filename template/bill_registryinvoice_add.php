@@ -401,7 +401,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="billRegistryTypePaymentProductId">Codice</label>
-                                        <select id="billRegistryTypePaymentProductId" name="billRegistryTypePaymentProductId"
+                                        <select id="billRegistryTypePaymentProductId"
+                                                name="billRegistryTypePaymentProductId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -439,12 +440,42 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    competenze
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="netTotal">importo Netto </label>
+                                        <input id="netTotal" autocomplete="off" type="text"
+                                               class="form-control" name="netTotal" value=""
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    totale da Pagare
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="discountTotal">Sconto Totale</label>
+                                        <input id="discountTota" autocomplete="off" type="text"
+                                               class="form-control" name="discountTota" value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="vatTotal">iva Totale</label>
+                                        <input id="vatTotal" autocomplete="off" type="text"
+                                               class="form-control" name="vatTotal" value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="grossTotal">Totale da Pagare</label>
+                                        <input id="grossTotal" autocomplete="off" type="text"
+                                               class="form-control" name="grossTotal" value=""
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

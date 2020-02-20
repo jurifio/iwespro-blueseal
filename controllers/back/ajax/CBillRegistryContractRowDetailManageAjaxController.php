@@ -72,7 +72,7 @@ class CBillRegistryContractRowDetailManageAjaxController extends AAjaxController
             }
 
             $detailRow[]=['billRegistryContractRowDetailId'=>$lastRowDetailId,'nameProduct'=>$billRegistryProductCode.'-'.$billRegistryProductName,'taxDesc'=>$descritionTaxes];
-            return $detailRow;
+            return json_encode($detailRow);
         }catch (\Throwable $e){
             \Monkey::app()->applicationLog('CBillRegistryContractRowDetailManageAjaxController','Error','Error insert product in detail Row',$e,'');
             return '0';

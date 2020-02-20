@@ -1507,10 +1507,10 @@ function editContract(id) {
             }).done(function (res) {
                 $(`#trContract` + id).remove();
                 var bodyContract = '<tr id="trContract' + res + '"><td>' + res + '</td><td>' + nameProduct + '</td><td>' + $('#dateContractExpire').val() + '</td>';
-                bodyContract = bodyContract + '<td><button class="success" id="editContract" onclick="editContract(' + res + ')" type="button"><span class="fa fa-pencil">Modifica Testata</span></button></td>';
-                bodyContract = bodyContract + '<td><button class="success" id="addContractDetail" onclick="addContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Aggiungi</span></button></td>';
-                bodyContract = bodyContract + '<td><button class="success" id="listContractDetail" onclick="listContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Elenca</span></button></td>';
-                bodyContract = bodyContract + '<td><button class="success" id="deleteLocation"  onclick="deleteLocation(' + res + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyContract = bodyContract + '<td><button class="success" id="editContractButton" onclick="editContract(' + res + ')" type="button"><span class="fa fa-pencil">Modifica Testata</span></button></td>';
+                bodyContract = bodyContract + '<td><button class="success" id="addContractDetailButton" onclick="addContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Aggiungi</span></button></td>';
+                bodyContract = bodyContract + '<td><button class="success" id="listContractDetailButton" onclick="listContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Elenca</span></button></td>';
+                bodyContract = bodyContract + '<td><button class="success" id="deleteLocationButton"  onclick="deleteLocation(' + res + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                 $('#myTableContract').append(bodyContract);
             }).fail(function (res) {
                 bsModalContract.writeBody('Errore grave');
@@ -3350,17 +3350,17 @@ function listContractDetail(id) {
                 if (exist == '1') {
                     if (isContractDetailRow == '0') {
                         bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
-                        bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                        bodyListForm += '<td><button class="success" id="addContractDetail" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
-                        bodyListForm += '<td><button class="success" id="addPaymentDetail" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
-                        bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                        bodyListForm += '<td><button class="success" id="editContractRowDetailButton" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addContractRowDetailButton" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addPaymentRowDetailButton" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="deleteContractRowDetailButton" onclick="deleteContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                     } else {
 
                         bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
-                        bodyListForm += '<td><button class="success" id="editContractDetail" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                        bodyListForm += '<td><button class="success" id="addContractDetail" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
-                        bodyListForm += '<td><button class="success" id="addPaymentDetail" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
-                        bodyListForm += '<td><button class="success" id="deleteContractDetail" onclick="deleteContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                        bodyListForm += '<td><button class="success" id="editContractRowDetailButton" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addContractRowDetailButton" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="addPaymentRowDetailButton" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
+                        bodyListForm += '<td><button class="success" id="deleteContractRowDetailButton" onclick="deleteContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                     }
 
                 } else {
@@ -3368,7 +3368,7 @@ function listContractDetail(id) {
                 }
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
-            bodyListForm += '</table><div id="editContractDetailDiv"></div><div id="addPaymentDiv" class="hide"></div><div id="addProductDiv" class="hide"></div>';
+            bodyListForm += '</table><div id="editContractDetailDiv"></div><div id="addPaymentDiv" class="col-md-12"></div><div id="addProductDiv" class="col-md-12"></div>';
         } else {
             bodyListForm = 'Non Esistono righe di contratto';
         }
@@ -3391,9 +3391,18 @@ function editContractDetail(id) {
 }
 
 function addPayment(id, billRegistryGroupProductId) {
+    $('#addPaymentRowDetailButton').attr("disabled", true);
+    $('#addContractRowDetailButton').attr("disabled", true);
+    $('#editContractRowDetailButton').attr("disabled", true);
+    $('#deleteContractRowDetailButton').attr("disabled", true);
+
+    $('#addProductDiv').removeClass('show');
+
+    $('#addProductDiv').addClass('hide');
+    $('#addProductDiv').empty();
     $('#addPaymentDiv').removeClass('hide');
     $('#addPaymentDiv').addClass('show');
-    $('#addProductDiv').addClass('hide');
+    $('#addPaymentDiv').empty();
     var typePaymentForm = '';
     var bodyListPaymentForm = '';
     $.ajax({
@@ -3417,7 +3426,7 @@ function addPayment(id, billRegistryGroupProductId) {
                 bodyListPaymentForm += '<td>' + v.amount + '</td>';
                 bodyListPaymentForm += '<td><input type="checkbox" ' + v.isSubmited + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td>';
                 bodyListPaymentForm += '<td><input type="checkbox" ' + v.isPaid + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td>';
-                bodyListPaymentForm += '<td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyListPaymentForm += '<td><button class="success" id="deletePaymentDetailButton" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListPaymentForm += '</table>';
         }else{
@@ -3425,11 +3434,11 @@ function addPayment(id, billRegistryGroupProductId) {
         }
         typePaymentForm = `<div class="row">
                                <div class="col-md-12">
-                               <button class="success" id="addPaymentRow" onclick="addPaymentRow(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-plus">Inserisci</span></button>
+                               <button class="success" id="addPaymentRowButton" onclick="addPaymentRow(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-plus">Inserisci riga Pagamento</span></button>
                                 </div>
                         <div>
                         <div  class="row">
-                                <div class="col-md-12 hide" id="addPaymentRowSection">
+                                <div class="col-md-12" id="addPaymentRowSection">
                                 </div>
                               
                         </div>
@@ -3444,9 +3453,18 @@ function addPayment(id, billRegistryGroupProductId) {
 }
 
 function addProduct(id, billRegistryGroupProductId) {
+    $('#addPaymentRowDetailButton').attr("disabled", true);
+    $('#addContractRowDetailButton').attr("disabled", true);
+    $('#editContractRowDetailButton').attr("disabled", true);
+    $('#deleteContractRowDetailButton').attr("disabled", true);
+
     $('#addProductDiv').removeClass('hide');
+
     $('#addProductDiv').addClass('show');
+    $('#addProductDiv').empty();
+    $('#addPaymentDiv').removeClass('show');
     $('#addPaymentDiv').addClass('hide');
+    $('#addPaymentDiv').empty();
     var typeForm = '';
     var bodyListDetailForm = '';
     $.ajax({
@@ -3471,7 +3489,7 @@ function addProduct(id, billRegistryGroupProductId) {
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
                 bodyListDetailForm += '<td>' + v.price + '</td>';
                 bodyListDetailForm += '<td>' + v.taxes + '</td>';
-                bodyListDetailForm += '<td><button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + v.billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyListDetailForm += '<td><button class="success" id="deleteProductDetailButton" onclick="deleteProductDetail(' + v.billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListDetailForm += '</table>';
         }else{
@@ -3479,11 +3497,11 @@ function addProduct(id, billRegistryGroupProductId) {
         }
         typeForm = `<div class="row">
                                <div class="col-md-12">
-                               <button class="success" id="addProductRow" onclick="addProductRow(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-plus">Inserisci</span></button>
+                               <button class="success" id="addProductRowButton" onclick="addProductRow(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span class="fa fa-plus">Inserisci Riga Prodotto</span></button>
                                 </div>
                         <div>
                         <div  class="row">
-                                <div class="col-md-12 hide" id="addProductRowSection">
+                                <div class="col-md-12 " id="addProductRowSection">
                                 </div>
                               
                         </div>
@@ -3508,6 +3526,7 @@ function deleteContractDetail(id) {
 }
 
 function addProductRow(id, billRegistryGroupProductId){
+    $('#addProductRowButton').attr("disabled",true);
     var bodyFormProduct=`<div class="row">
  <div class="row">
                                 <div class="col-md-2">
@@ -3559,12 +3578,10 @@ function addProductRow(id, billRegistryGroupProductId){
                                 </div>
                                  <div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                     <button class="success" id="addProductRowDetail" onclick="addProductRowDetail(` + id +`)" type="button"><span  class="fa fa-plus">Inserisci</span></button>
+                                     <button class="success" id="addProductRowDetailButton" onclick="addProductRowDetail(` + id +`)" type="button"><span  class="fa fa-plus">Aggiungi</span></button>
                                     </div>
                                 </div>
 </div>`;
-    $('#addProductRowSection').removeClass('hide');
-    $('#addProductRowSection').addClass('show');
     $('#addProductRowSection').append(bodyFormProduct);
 
     $.ajax({
@@ -3683,12 +3700,18 @@ function addProductRowDetail(countId){
              nameProductRowDetail=v.nameProduct;
              taxDesc=v.taxDesc;
          });
-         $('#tableContractDetailRowList').append('<tr id="productRowTr'+idRowDetail+'"><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td><td><button class="success" id="deleteProductDetail" onclick="deleteProductDetail(' + idRowDetail + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+         $('#tableContractDetailRowList').append('<tr id="productRowTr'+idRowDetail+'"><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td><td><button class="success" id="deleteProductDetailButton" onclick="deleteProductDetail(' + idRowDetail + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addProductRowSection').empty();
+        $('#addProductRowButton').attr('disabled',false);
+         $('#addPaymentRowDetailButton').attr("disabled", false);
+         $('#addContractRowDetailButton').attr("disabled", false);
+         $('#editContractRowDetailButton').attr("disabled", false);
+         $('#deleteContractRowDetailButton').attr("disabled", false);
      });
 
 }
 function addPaymentRow(id, billRegistryGroupProductId){
+
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -3769,13 +3792,11 @@ function addPaymentRow(id, billRegistryGroupProductId){
                                }
     bodyFormPayment+=`<div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                     <button class="success" id="addPaymentRowDetail" onclick="addPaymentRowDetail(` + id +`,`+billRegistryGroupProductId+`)" type="button"><span  class="fa fa-plus">Inserisci</span></button>
+                                     <button class="success" id="addPaymentRowDetailButton" onclick="addPaymentRowDetail(` + id +`,`+billRegistryGroupProductId+`)" type="button"><span  class="fa fa-plus">Aggiungi</span></button>
                                     </div>
                                 </div>
 </div>`;
 
-    $('#addPaymentRowSection').removeClass('hide');
-    $('#addPaymentRowSection').addClass('show');
     $('#addPaymentRowSection').append(bodyFormPayment);
    if (billRegistryGroupProductId ==='3') {
        $.ajax({
@@ -3859,8 +3880,13 @@ function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductI
             idRowPayment=v.billRegistryContractRowPaymentId;
             month=v.mandatoryMonth;
         });
-        $('#tableContractPaymentRowList').append('<tr id="paymentRow'+idRowPayment+'"><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + idRowPayment + '"></td><td><button class="success" id="deletePaymentDetail" onclick="deletePaymentDetail(' + idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+        $('#tableContractPaymentRowList').append('<tr id="paymentRow'+idRowPayment+'"><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + idRowPayment + '"></td><td><button class="success" id="deletePaymentDetailButton" onclick="deletePaymentDetail(' + idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addPaymentRowSection').empty();
+        $('#addPaymentRowButton').attr('disabled',false);
+        $('#addPaymentRowDetailButton').attr("disabled", false);
+        $('#addContractRowDetailButton').attr("disabled", false);
+        $('#editContractRowDetailButton').attr("disabled", false);
+        $('#deleteContractRowDetailButton').attr("disabled", false);
     });
 
 }
