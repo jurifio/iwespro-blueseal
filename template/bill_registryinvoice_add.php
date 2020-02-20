@@ -340,8 +340,8 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="codeProduct">Codice</label>
-                                        <select id="codeProduct" name="codeProduct"
+                                        <label for="idProduct">Codice</label>
+                                        <select id="idProduct" name="idProduct"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -461,7 +461,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="vatTotal">iva Totale</label>
+                                        <label for="vatTotal">Iva Totale</label>
                                         <input id="vatTotal" autocomplete="off" type="text"
                                                class="form-control" name="vatTotal" value=""
                                         />

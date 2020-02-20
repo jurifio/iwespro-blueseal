@@ -112,6 +112,25 @@ $.ajax({
     });
 
 });
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BillRegistryProduct'
+
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#idProduct');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'codeProduct',
+        searchField: 'codeProduct',
+        options: res2,
+    });
+
+});
 
 $.ajax({
     method: 'GET',
@@ -202,24 +221,7 @@ $.ajax({
         }
     });
 });
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'Shop'
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    var select = $('#shopId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: ['name'],
-        options: res2
-    });
 
-});
 
 $.ajax({
     method: 'GET',
@@ -276,49 +278,7 @@ function openTab(evt, tabName) {
 }
 
 
-$('#typeFriendId').change(function () {
-    let ratingValue = $('#typeFriendId').val();
-    let bodyRating = '';
-    switch (ratingValue) {
-        case '5':
-            bodyRating += `<span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>`;
-            break;
-        case '4':
-            bodyRating += `<span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star "></span>`;
-            break;
-        case '3':
-            bodyRating += `<span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star "></span>
-                        <span class="fa fa-star "></span>`;
-            break;
-        case '2':
-            bodyRating += `<span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star "></span>
-                        <span class="fa fa-star "></span>
-                        <span class="fa fa-star "></span>`;
-            break;
-        case '1':
-            bodyRating += `<span class="fa fa-star checked"></span>
-                        <span class="fa fa-star "></span>
-                        <span class="fa fa-star "></span>
-                        <span class="fa fa-star "></span>
-                        <span class="fa fa-star "></span>`;
-            break;
-    }
-    $("#rating").empty();
-    $("#rating").append(bodyRating);
-});
+
 
 $("#accountAsService").change(function () {
     var accountAsService = $('#accountAsService').val();
@@ -404,6 +364,11 @@ $(document).on('click', '#checkedAll', function () {
 
     $('input:checkbox').not(this).prop('checked', this.checked);
 
+});
+$('#idProduct').change(function(){
+    var selectionProductId = $('#idProduct').val();
+    document.getElementById('nameProduct').value = '';
+    document.getElementById('companyName').value = '';
 });
 $('#billRegistryClientId').change(function () {
     var selectionBillRegistryClientId = $('#billRegistryClientId').val();
