@@ -23,10 +23,10 @@ class CBlueSealSidebar
     protected $sidebar;
     protected $repo;
 
-	/**
-	 * CBlueSealSidebar constructor.
-	 * @param AApplication $app
-	 */
+    /**
+     * CBlueSealSidebar constructor.
+     * @param AApplication $app
+     */
     public function __construct(AApplication $app)
     {
         $this->app = $app;
