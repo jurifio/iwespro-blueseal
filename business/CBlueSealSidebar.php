@@ -39,7 +39,6 @@ class CBlueSealSidebar
             $groups = \Monkey::app()->repoFactory->create('SidebarGroup')->em()->findBySql("Select id 
                                                                                     from SidebarGroup 
                                                                                     ORDER BY `order` asc");
-
             $sidebar = [];
             foreach ($groups as $group) {
                 $sidebarPages = [];
