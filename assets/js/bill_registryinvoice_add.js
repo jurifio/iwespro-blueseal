@@ -673,7 +673,7 @@ function addRowProduct(){
     myrowInvoice+='<td>Prezzo * '+$('#qty').val()+'='+netTotalRow+'</td>';
     myrowInvoice+='<td>Sconto % '+$('#discountRow').val()+'='+discountRowAmount+'</td>';
     myrowInvoice+='<td>Iva  '+$('#percVat').val()+'='+vatRow+'</td>';
-    myrowInvoice+='<td>Totale Riga  '+$('#grossTotalRow').val()+'</td></tr>';
+    myrowInvoice+='<td>Totale Riga  '+grossTotalRow+'</td></tr>';
 
     $('#myRowInvoice').append(myrowInvoice);
 
