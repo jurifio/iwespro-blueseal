@@ -2,7 +2,6 @@ var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
-
 today = yyyy + '-' + mm + '-' + dd+'T00:00';
 $.ajax({
     method: 'GET',
@@ -259,6 +258,24 @@ $.ajax({
     });
 
 });
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BillRegistryTypeTaxes'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var select = $('#billRegistryTypeTaxesProductId');
+    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+    select.selectize({
+        valueField: 'id',
+        labelField: 'description',
+        searchField: ['description'],
+        options: res2
+    });
+
+});
 
 document.getElementById('insertInvoice').style.display = "block";
 
@@ -365,10 +382,38 @@ $(document).on('click', '#checkedAll', function () {
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
-$('#idProduct').change(function(){
+$('#idProduct').change(function() {
     var selectionProductId = $('#idProduct').val();
     document.getElementById('nameProduct').value = '';
-    document.getElementById('companyName').value = '';
+    document.getElementById('um').value = '';
+    document.getElementById('price').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('percVat').value = '';
+    var selectTaxesId = $("#billRegistryTypeTaxesProductId")[0].selectize;
+    selectTaxesId.clear();
+    $.ajax({
+        url: '/blueseal/xhr/SelectBillRegistryProductToRowInvoiceAjaxController',
+        method: 'get',
+        data: {
+            id: selectionProductId
+        },
+        dataType: 'json'
+    }).done(function (res) {
+
+        $.each(res, function (k, v) {
+            document.getElementById('nameProduct').value = v.nameProduct;
+            document.getElementById('um').value = v.um;
+            document.getElementById('price').value = v.price;
+            document.getElementById('description').value = v.description;
+            document.getElementById('qty').value = '1';
+
+            document.getElementById('percVat').value = v.perc;
+
+            $('#billRegistryTypeTaxesProductId').data('selectize').setValue(v.taxes);
+
+        })
+
+    });
 });
 $('#billRegistryClientId').change(function () {
     var selectionBillRegistryClientId = $('#billRegistryClientId').val();
@@ -383,6 +428,7 @@ $('#billRegistryClientId').change(function () {
     document.getElementById('mobile').value = '';
     document.getElementById('fax').value = '';
     document.getElementById('mobile').value = '';
+
     var selectUserId= $("#userId")[0].selectize;
     selectUserId.clear();
 
@@ -399,6 +445,8 @@ $('#billRegistryClientId').change(function () {
     document.getElementById('note').value = '';
     document.getElementById('sdi').value = '';
     document.getElementById('iban').value = '';
+
+
     var selectBankRegistryId= $("#bankRegistryId")[0].selectize;
     selectBankRegistryId.clear();
     var selectCurrencyId= $("#currencyId")[0].selectize;
@@ -544,3 +592,93 @@ function addRowProduct() {
 function addRowProductGeneric() {
 
 }
+$('#billRegistryTypeTaxesProductId').change(function() {
+    idVat = $('#billRegistryTypeTaxesProductId').val();
+    $.ajax({
+        url: '/blueseal/xhr/SelectBillRegistryTypeTaxesToRowInvoiceAjaxController',
+        method: 'get',
+        data: {
+            id: idVat
+        },
+        dataType: 'json'
+    }).done(function (res) {
+            $('#percVat').val(res);
+        });
+    });
+
+
+
+$('#qty').change(function () {
+    let price=parseFloat($('#price').val());
+    let qty=parseInt($('#qty').val());
+    let discountRow=parseFloat($('#discountRow').val());
+    let netTotalRow=0;
+    if(discountRow==null || discountRow==0){
+        netTotalRow=price*qty;
+    }else{
+        netTotalRow=(price-(price/100*discountRow))*qty;
+    }
+    $('#netTotalRow').val(netTotalRow.toFixed(2));
+
+})
+$('#discountRow').change(function () {
+    let price=parseFloat($('#price').val());
+    let qty=parseInt($('#qty').val());
+    let discountRow=parseFloat($('#discountRow').val());
+    let netTotalRow=0;
+    if(discountRow==null || discountRow==0){
+        netTotalRow=price*qty;
+    }else{
+        netTotalRow=(price-(price/100*discountRow))*qty;
+    }
+    $('#netTotalRow').val(netTotalRow.toFixed(2));
+
+});
+$('#price').change(function () {
+    let price=parseFloat($('#price').val());
+    let qty=parseInt($('#qty').val());
+    let discountRow=parseFloat($('#discountRow').val());
+    let netTotalRow=0;
+    if(discountRow==null || discountRow==0){
+        netTotalRow=price*qty;
+    }else{
+        netTotalRow=(price-(price/100*discountRow))*qty;
+    }
+    $('#netTotalRow').val(netTotalRow.toFixed(2));
+
+});
+var rowInvoice=[];
+function addRowProduct(){
+    let vatRow=parseFloat($('#netTotalRow').val())/100*parseFloat($('#percVat').val());
+    let discountRowAmount=parseFloat($('#netTotalRow').val())/100*parseFloat($('#discountRow').val());
+    let grossTotalRow=parseFloat($('#netTotalRow').val())+vatRow;
+    let rowInvoiceSingle=[];
+    rowInvoiceSingle.push($('#idProduct').val(),$('#price').val(),$('#description').val(),$('#qty').val(),$('#netTotalRow').val(),vatRow,discountRowAmount,grossTotalRow,$('#billRegistryTypeTaxesProductId').val());
+    rowInvoice.push(rowInvoiceSingle);
+    var oldGrossTotal=parseFloat($('#grossTotal').val());
+    var grossTotal=oldGrossTotal+grossTotalRow;
+    var oldNetTotal=parseFloat($('#netTotal').val());
+    var netTotal=oldNetTotal+parseFloat($('#netTotalRow').val());
+    var oldDiscountTotal=parseFloat($('#discountTotal').val());
+    var discountTotal=oldDiscountTotal+discountRowAmount;
+    var oldVatTotal=parseFloat($('#vatTotal').val());
+    var vatTotal=oldVatTotal+vatRow;
+    var netTotalRow=parseFloat($('#price').val())*$('#qty').val();
+    var netTotalRowWiDiscount=
+    $('#netTotal').val(netTotal.toFixed(2));
+    $('#discountTotal').val(discountTotal.toFixed(2));
+    $('#vatTotal').val(vatTotal.toFixed(2));
+    $('#grossTotal').val(grossTotal.toFixed(2));
+    let myrowInvoice='<tr><td>'+$('#nameProduct').val()+' prezzo: '+$('#price').val()+'</td>';
+    myrowInvoice+='<td>Prezzo * '+$('#qty').val()+'='+netTotalRow+'</td>';
+    myrowInvoice+='<td>Sconto % '+$('#discountRow').val()+'='+discountRowAmount+'</td>';
+    myrowInvoice+='<td>Iva  '+$('#percVat').val()+'='+vatRow+'</td>';
+    myrowInvoice+='<td>Totale Riga  '+$('#grossTotalRow').val()+'</td></tr>';
+
+    $('#myRowInvoice').append(myrowInvoice);
+
+
+
+}
+
+

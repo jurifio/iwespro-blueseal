@@ -360,7 +360,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="qty">Quantità</label>
                                         <input id="qty" autocomplete="off" type="text"
-                                               class="form-control" name="qty" value=""
+                                               class="form-control" name="qty" value="0"
                                         />
                                     </div>
                                 </div>
@@ -376,7 +376,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="price">Prezzo Netto</label>
                                         <input id="price" autocomplete="off" type="text"
-                                               class="form-control" name="price" value=""
+                                               class="form-control" name="price" value="0.00"
                                         />
                                     </div>
                                 </div>
@@ -385,24 +385,23 @@
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default">
                                         <label for="description">descrizione</label>
-                                        <input id="description" autocomplete="off" type="textarea"
-                                               class="form-control" name="description" value=""
-                                        />
+                                        <textarea id="description" name="description" rows="3" cols="50" value""></textarea>
+
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="discountRow">Sconto %</label>
                                         <input id="discountRow" autocomplete="off" type="text"
-                                               class="form-control" name="discountRow" value=""
+                                               class="form-control" name="discountRow" value="0.00"
                                         />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="billRegistryTypePaymentProductId">Codice</label>
-                                        <select id="billRegistryTypePaymentProductId"
-                                                name="billRegistryTypePaymentProductId"
+                                        <label for="billRegistryTypeTaxesProductId">iva</label>
+                                        <select id="billRegistryTypeTaxesProductId"
+                                                name="billRegistryTypeTaxesProductId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
@@ -411,9 +410,10 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="discountRow">Sconto %</label>
-                                        <input id="discountRow" autocomplete="off" type="text"
-                                               class="form-control" name="discountRow" value=""
+                                        <input type="hidden" id="percVat" name="percVat" value="0.00"/>
+                                        <label for="netTotalRow">importo Netto </label>
+                                        <input id="netTotalRow" autocomplete="off" type="text"
+                                               class="form-control" name="discountRow" value="0.00"
                                         />
                                     </div>
                                 </div>
@@ -428,8 +428,9 @@
                                 </div>
                             </div>
                             <div class="row" id="rawProduct">
+                              <table id="myRowInvoice"> <tr class="header1"><th style="width:20%;">prodotto</th><th style="width:20%;">prezzo</th><th style="width:20%;">sconto</th><th style="width:20%;">iva</th><th style="width:20%;">totale Riga</th></tr>';
 
-                            </div>
+                              </table> </div>
                             <div class="row" id="rawProductGeneric">
 
                             </div>
@@ -441,9 +442,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="netTotal">importo Netto </label>
+                                        <label for="netTotal">importo Netto Totale</label>
                                         <input id="netTotal" autocomplete="off" type="text"
-                                               class="form-control" name="netTotal" value=""
+                                               class="form-control" name="netTotal" value="0.00"
                                         />
                                     </div>
                                 </div>
@@ -452,8 +453,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="discountTotal">Sconto Totale</label>
-                                        <input id="discountTota" autocomplete="off" type="text"
-                                               class="form-control" name="discountTota" value=""
+                                        <input id="discountTotal" autocomplete="off" type="text"
+                                               class="form-control" name="discountTotal" value="0.00"
                                         />
                                     </div>
                                 </div>
@@ -463,7 +464,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="vatTotal">Iva Totale</label>
                                         <input id="vatTotal" autocomplete="off" type="text"
-                                               class="form-control" name="vatTotal" value=""
+                                               class="form-control" name="vatTotal" value="0.00"
                                         />
                                     </div>
                                 </div>
@@ -473,7 +474,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="grossTotal">Totale da Pagare</label>
                                         <input id="grossTotal" autocomplete="off" type="text"
-                                               class="form-control" name="grossTotal" value=""
+                                               class="form-control" name="grossTotal" value="0.00"
                                         />
                                     </div>
                                 </div>
