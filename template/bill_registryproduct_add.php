@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="cost">prezzo d'Acquisto</label>
                                         <input id="cost" autocomplete="off" type="text"
@@ -67,7 +67,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="price">Prezzo di Vendita</label>
                                         <input id="price" autocomplete="off" type="text"
@@ -75,7 +75,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="billRegistryGroupProductId">Seleziona il Gruppo Prodotti </label>
                                         <select id="billRegistryGroupProductId" name="billRegistryGroupProductId"
@@ -85,7 +85,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="billRegistryTypeTaxesId">Seleziona Aliquota Iva</label>
                                         <select id="billRegistryTypeTaxesId" name="billRegistryTypeTaxesId"
@@ -95,7 +95,9 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
                                     <div class="form-group form-group-default">
                                         <label for="descriptionTemp">Descrizione</label>
                                         <input id="descriptionTemp" autocomplete="off" type="text"

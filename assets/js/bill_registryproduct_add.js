@@ -98,6 +98,7 @@ function addDescription(){
     var bodyListDescription=`<div class="row">
                                <div class="col-md-12">`+descriptionTemp+`</div></div>`;
     $('#divDescription').append(bodyListDescription);
+    document.getElementById('descriptionTemp').value = '';
 }
 
 $(document).on('bs.productIwes.save', function () {
@@ -133,6 +134,15 @@ $(document).on('bs.productIwes.save', function () {
                 bsModal.hide();
             });
             bsModal.showOkBtn();
+            document.getElementById('um').value = '';
+            document.getElementById('nameProduct').value = '';
+            document.getElementById('cost').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('codeProduct').value = '';
+            document.getElementById('billRegistryGroupProductId').value = '';
+            document.getElementById('billRegistryTypeTaxesId').value = '';
+            document.getElementById('descriptionTemp').value = '';
+            $('#divDescription').empty();
         });
     });
 });

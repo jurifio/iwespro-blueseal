@@ -77,6 +77,11 @@ class CBillRegistryProductManageAjaxController extends AAjaxController
             $productList = $_GET['productList'];
         }
 try {
+    $brpFindCodeProduct=$billRegistryProductRepo->findOneBy(['codeProduct'=>$codeProduct]);
+        if($brpFindCodeProduct!=null){
+            return 'Codice Prodotto esistente ';
+    }
+
     $brpInsert = $billRegistryProductRepo->getEmptyEntity();
     $brpInsert->codeProduct = $codeProduct;
     $brpInsert->nameProduct = $nameProduct;

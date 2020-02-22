@@ -36,6 +36,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->value = $data['value'];
                     $rowInsert->billingDay = $data['billingDay'];
                     $rowInsert->typePaymentId = $data['typePaymentId'];
@@ -76,6 +78,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->value = $data['value'];
                     $rowInsert->billingDay = $data['billingDay'];
                     $rowInsert->typePaymentId = $data['typePaymentId'];
@@ -116,6 +120,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->descriptionInvoice = $data['descriptionInvoice'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->startUpCostCampaign = $data['startUpCostCampaign'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
                     $rowInsert->billingDay = $data['billingDay'];
@@ -142,6 +148,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->descriptionInvoice = $data['descriptionInvoice'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->startUpCostCampaign = $data['startUpCostCampaign'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
                     $rowInsert->billingDay = $data['billingDay'];
@@ -170,6 +178,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
                     $rowInsert->value = $data['value'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->billingDay = $data['billingDay'];
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
@@ -210,6 +220,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->typeContractId = $data['typeContractId'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->valueMarkUpFullPrice = $data['valueMarkUpFullPrice'];
                     $rowInsert->valueMarkUpSalePrice = $data['valueMarkUpSalePrice'];
                     $rowInsert->insert();
@@ -232,6 +244,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                    $rowInsert->nameRow=$data['nameRow'];
+                    $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->emailAccount = $data['emailAccount'];
                     $rowInsert->emailAccountSendQty = $data['emailAccountSendQty'];
                     $rowInsert->emailAccountCampaignQty = $data['emailAccountCampaignQty'];
@@ -284,109 +298,137 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
         $contractRow = [];
         /* @var CBillRegistryContractRow $brc */
         $brc = \Monkey::app()->repoFactory->create('BillRegistryContract')->findOneBy(['id' => $id]);
-        /* @var \bamboo\domain\entities\CBillRegistryContractRow $brcr */
+
         $brcrs = \Monkey::app()->repoFactory->create('BillRegistryContractRow')->findBy(['billRegistryContractId' => $brc->id]);
         foreach ($brcrs as $brcr) {
             $brp = \Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id' => $brcr->billRegistryGroupProductId]);
             switch ($brcr->billRegistryGroupProductId) {
                 case "1":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                    if ($tableData != null) {
-                        $contractDetailId = $tableData->id;
-                        $isContractDetailRow = '0';
-                        $contractRow[] = ['exist' => '1',
-                            'billRegistryContractId' => $brc->id,
-                            'billRegistryContractRowId' => $brcr->id,
-                            'billRegistryGroupProductId' => $brp->id,
-                            'contractDetailId' => $contractDetailId,
-                            'isContractDetailRow' => $isContractDetailRow,
-                            'nameProduct' => $brp->name];
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->findBy(['billRegistryContractRowId' => $brcr->id]);
+                    if ($tableDatas != null) {
+                        foreach ($tableDatas as $tableData) {
+                            $contractDetailId = $tableData->id;
+                            $isContractDetailRow = '0';
+                            $contractRow[] = ['exist' => '1',
+                                'billRegistryContractId' => $brc->id,
+                                'billRegistryContractRowId' => $brcr->id,
+                                'billRegistryGroupProductId' => $brp->id,
+                                'nameRow'=>$tableData->nameRow,
+                                'descriptionRow'=>$tableData->descriptionRow,
+                                'contractDetailId' => $contractDetailId,
+                                'isContractDetailRow' => $isContractDetailRow,
+                                'nameProduct' => $brp->name];
+                        }
                     }
 
             break;
         case
             "2":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                   if ($tableData != null) {
-                       $contractDetailId = $tableData->id;
-                       $isContractDetailRow = '0';
-                       $contractRow[] = ['exist' => '1',
-                           'billRegistryContractId' => $brc->id,
-                           'billRegistryContractRowId' => $brcr->id,
-                           'billRegistryGroupProductId' => $brp->id,
-                           'contractDetailId' => $contractDetailId,
-                           'isContractDetailRow' => $isContractDetailRow,
-                           'nameProduct' => $brp->name];
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                   if ($tableDatas != null) {
+                       foreach ($tableDatas as $tableData) {
+                           $contractDetailId = $tableData->id;
+                           $isContractDetailRow = '0';
+                           $contractRow[] = ['exist' => '1',
+                               'billRegistryContractId' => $brc->id,
+                               'billRegistryContractRowId' => $brcr->id,
+                               'billRegistryGroupProductId' => $brp->id,
+                               'nameRow'=>$tableData->nameRow,
+                               'descriptionRow'=>$tableData->descriptionRow,
+                               'contractDetailId' => $contractDetailId,
+                               'isContractDetailRow' => $isContractDetailRow,
+                               'nameProduct' => $brp->name];
+                       }
                    }
                     break;
                 case "3":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                    if ($tableData != null) {
-                        $contractDetailId = $tableData->id;
-                        $isContractDetailRow = '0';
-                        $contractRow[] = ['exist' => '1',
-                            'billRegistryContractId' => $brc->id,
-                            'billRegistryContractRowId' => $brcr->id,
-                            'billRegistryGroupProductId' => $brp->id,
-                            'contractDetailId' => $contractDetailId,
-                            'isContractDetailRow' => $isContractDetailRow,
-                            'nameProduct' => $brp->name];
+                    $tableDataa = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    if ($tableDatas != null) {
+                        foreach ($tableDatas as $tableData) {
+                            $contractDetailId = $tableData->id;
+                            $isContractDetailRow = '0';
+                            $contractRow[] = ['exist' => '1',
+                                'billRegistryContractId' => $brc->id,
+                                'billRegistryContractRowId' => $brcr->id,
+                                'billRegistryGroupProductId' => $brp->id,
+                                'nameRow'=>$tableData->nameRow,
+                                'descriptionRow'=>$tableData->descriptionRow,
+                                'contractDetailId' => $contractDetailId,
+                                'isContractDetailRow' => $isContractDetailRow,
+                                'nameProduct' => $brp->name];
+                        }
                     }
                     break;
                 case "4":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                    if ($tableData != null) {
-                        $contractDetailId = $tableData->id;
-                        $isContractDetailRow = '0';
-                        $contractRow[] = ['exist' => '1',
-                            'billRegistryContractId' => $brc->id,
-                            'billRegistryContractRowId' => $brcr->id,
-                            'billRegistryGroupProductId' => $brp->id,
-                            'contractDetailId' => $contractDetailId,
-                            'isContractDetailRow' => $isContractDetailRow,
-                            'nameProduct' => $brp->name];
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    if ($tableDatas != null) {
+                        foreach ($tableDatas as $tableData) {
+                            $contractDetailId = $tableData->id;
+                            $isContractDetailRow = '0';
+                            $contractRow[] = ['exist' => '1',
+                                'billRegistryContractId' => $brc->id,
+                                'billRegistryContractRowId' => $brcr->id,
+                                'billRegistryGroupProductId' => $brp->id,
+                                'nameRow'=>$tableData->nameRow,
+                                'descriptionRow'=>$tableData->descriptionRow,
+                                'contractDetailId' => $contractDetailId,
+                                'isContractDetailRow' => $isContractDetailRow,
+                                'nameProduct' => $brp->name];
+                        }
                     }
                     break;
                 case "5":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                    if ($tableData != null) {
-                        $contractDetailId = $tableData->id;
-                        $isContractDetailRow = '1';
-                        $contractRow[] = ['exist' => '1',
-                            'billRegistryContractId' => $brc->id,
-                            'billRegistryContractRowId' => $brcr->id,
-                            'billRegistryGroupProductId' => $brp->id,
-                            'contractDetailId' => $contractDetailId,
-                            'isContractDetailRow' => $isContractDetailRow,
-                            'nameProduct' => $brp->name];
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    if ($tableDatas != null) {
+                        foreach ($tableDatas as $tableData) {
+                            $contractDetailId = $tableData->id;
+                            $isContractDetailRow = '1';
+                            $contractRow[] = ['exist' => '1',
+                                'billRegistryContractId' => $brc->id,
+                                'billRegistryContractRowId' => $brcr->id,
+                                'billRegistryGroupProductId' => $brp->id,
+                                'nameRow'=>$tableData->nameRow,
+                                'descriptionRow'=>$tableData->descriptionRow,
+                                'contractDetailId' => $contractDetailId,
+                                'isContractDetailRow' => $isContractDetailRow,
+                                'nameProduct' => $brp->name];
+                        }
                     }
                     break;
                 case "6":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                    if ($tableData != null) {
-                        $contractDetailId = $tableData->id;
-                        $isContractDetailRow = '1';
-                        $contractRow[] = ['exist' => '1',
-                            'billRegistryContractId' => $brc->id,
-                            'billRegistryContractRowId' => $brcr->id,
-                            'billRegistryGroupProductId' => $brp->id,
-                            'contractDetailId' => $contractDetailId,
-                            'isContractDetailRow' => $isContractDetailRow,
-                            'nameProduct' => $brp->name];
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    if ($tableDatas != null) {
+                        foreach ($tableDatas as $tableData) {
+                            $contractDetailId = $tableData->id;
+                            $isContractDetailRow = '1';
+                            $contractRow[] = ['exist' => '1',
+                                'billRegistryContractId' => $brc->id,
+                                'billRegistryContractRowId' => $brcr->id,
+                                'billRegistryGroupProductId' => $brp->id,
+                                'nameRow'=>$tableData->nameRow,
+                                'descriptionRow'=>$tableData->descriptionRow,
+                                'contractDetailId' => $contractDetailId,
+                                'isContractDetailRow' => $isContractDetailRow,
+                                'nameProduct' => $brp->name];
+                        }
                     }
                     break;
                 case "7":
-                    $tableData = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
-                    if ($tableData != null) {
-                        $contractDetailId = $tableData->id;
-                        $isContractDetailRow = '0';
-                        $contractRow[] = ['exist' => '1',
-                            'billRegistryContractId' => $brc->id,
-                            'billRegistryContractRowId' => $brcr->id,
-                            'billRegistryGroupProductId' => $brp->id,
-                            'contractDetailId' => $contractDetailId,
-                            'isContractDetailRow' => $isContractDetailRow,
-                            'nameProduct' => $brp->name];
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    if ($tableDatas != null) {
+                        foreach ($tableDatas as $tableData) {
+                            $contractDetailId = $tableData->id;
+                            $isContractDetailRow = '0';
+                            $contractRow[] = ['exist' => '1',
+                                'billRegistryContractId' => $brc->id,
+                                'billRegistryContractRowId' => $brcr->id,
+                                'billRegistryGroupProductId' => $brp->id,
+                                'nameRow'=>$tableData->nameRow,
+                                'descriptionRow'=>$tableData->descriptionRow,
+                                'contractDetailId' => $contractDetailId,
+                                'isContractDetailRow' => $isContractDetailRow,
+                                'nameProduct' => $brp->name];
+                        }
                     }
                     break;
 

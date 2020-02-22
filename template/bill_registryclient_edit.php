@@ -770,9 +770,9 @@
                 <div class="row">
                     <?php
                     $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
-                    $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Servizio"></div></div>';
+                    $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Contratto"></div></div>';
 
-                    $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">Servizio</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Righe Contratto</th><th style="width:10%;">Lista<br>Righe Contratto</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
+                    $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">Contratto</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Righe Contratto</th><th style="width:10%;">Lista<br>Righe Contratto</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
 
                     ?>
                     <div id="rawContract">

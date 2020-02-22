@@ -1619,6 +1619,26 @@ function addContractDetail(id) {
             case "1":
                 bodyForm = `<div class="row">
                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+                                <div class="row">
+                                <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                 <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
                                     <div class="form-group form-group-default">
@@ -1866,6 +1886,26 @@ function addContractDetail(id) {
                 break;
             case "2":
                 bodyForm = `<div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+                                <div class="row">
                                 <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                 <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
@@ -2115,7 +2155,28 @@ function addContractDetail(id) {
 
                 break;
             case "3":
-                bodyForm = `<div class="row">
+                bodyForm = `
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+                                <div class="row">
                                 <div class="col-md-3">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                 <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
@@ -2205,7 +2266,28 @@ function addContractDetail(id) {
 `;
                 break;
             case "4":
-                bodyForm = `<div class="row">
+                bodyForm = `
+<div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+<div class="row">
                                 <div class="col-md-3">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                 <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
@@ -2295,7 +2377,28 @@ function addContractDetail(id) {
 `;
                 break;
             case "5":
-                bodyForm = `<div class="row">
+                bodyForm = `
+<div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+<div class="row">
                                 <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                 <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
@@ -2549,6 +2652,26 @@ function addContractDetail(id) {
             case "6":
                 bodyForm = `
 <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+<div class="row">
                     <div class="col-md-4">
                         <div class="form-group form-group-default selectize-enabled">
                             <label for="typeContractId">Tipo di Contratto</label>
@@ -2586,7 +2709,28 @@ function addContractDetail(id) {
 
                 break;
             case "7":
-                bodyForm = `<div class="row">
+                bodyForm = `
+<div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+<div class="row">
                                 <div class="col-md-2">
                                 <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
                                 <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
@@ -3138,6 +3282,8 @@ function addContractDetail(id) {
                         id: contractId,
                         billRegistryGroupProductId: billRegistryGroupProductId,
                         billRegistryContractRowId: billRegistryContractRowId,
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         value: $('#value').val(),
                         billingDay: $('#billingDay').val(),
@@ -3168,6 +3314,8 @@ function addContractDetail(id) {
                         billRegistryGroupProductId: billRegistryGroupProductId,
                         billRegistryContractRowId: billRegistryContractRowId,
                         automaticInvoice: $('#automaticInvoice').val(),
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         value: $('#value').val(),
                         billingDay: $('#billingDay').val(),
                         typePaymentId: $('#2typePaymentId').val(),
@@ -3196,6 +3344,8 @@ function addContractDetail(id) {
                         id: contractId,
                         billRegistryContractRowId: billRegistryContractRowId,
                         billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         descriptionInvoice: $('#descriptionInvoice').val(),
                         billingDay: $('#billingDay').val(),
@@ -3212,6 +3362,8 @@ function addContractDetail(id) {
                         id: contractId,
                         billRegistryContractRowId: billRegistryContractRowId,
                         billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         descriptionInvoice: $('#descriptionInvoice').val(),
                         billingDay: $('#billingDay').val(),
@@ -3227,6 +3379,8 @@ function addContractDetail(id) {
                         id: contractId,
                         billRegistryContractRowId: billRegistryContractRowId,
                         billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         value: $('#value').val(),
                         billingDay: $('#billingDay').val(),
@@ -3256,6 +3410,8 @@ function addContractDetail(id) {
                         id: contractId,
                         billRegistryContractRowId: billRegistryContractRowId,
                         billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         typeContractId: $('#typeContractId').val(),
                         valueMarkUpFullPrice: $('#valueMarkUpFullPrice').val(),
                         valueMarkUpSalePrice: $('#valueMarkUpSalePrice').val(),
@@ -3266,6 +3422,8 @@ function addContractDetail(id) {
                         id: contractId,
                         billRegistryContractRowId: billRegistryContractRowId,
                         billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow:$('#nameRow').val(),
+                        descriptionRow:$('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         emailAccount: $('#emailAccount').val(),
                         emailAccountSendQty: $('#emailAccountSendQty').val(),
@@ -3323,6 +3481,8 @@ function listContractDetail(id) {
     var contractDetailId = '';
     var billRegistryGroupProductId = '';
     var nameProduct = '';
+    var nameRow='';
+    var descriptionRow='';
     var isContractDetailRow = '';
     var exist = '';
     $.ajax({
@@ -3338,25 +3498,28 @@ function listContractDetail(id) {
         var bodyListForm = '';
         if (rawContractrow != '') {
             var bodyListForm = '';
-            bodyListForm += '<table id="tableContractRowList"><tr class="header4"><th style="width:20%;">id Contratto</th><th style="width:20%;">id Dettaglio Contratto</th><th style="width:20%;">Nome Prodotto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
+            bodyListForm += '<table id="tableContractRowList"><tr class="header4"><th style="width:20%;">id</th><th style="width:10%;">id Contratto</th><th style="width:10%;">id Dettaglio Contratto</th><th style="width:10%;">Nome Contratto</th><th style="width:10%;">Nome Dettaglio Contratto</th><th style="width:10%;">Descrizione Dettaglio Contratto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
             $.each(rawContractrow, function (k, v) {
                 exist = v.exist;
                 contractId = id;
                 billRegistryContractRowId = v.billRegistryContractRowId;
                 billRegistryGroupProductId = v.billRegistryGroupProductId;
                 nameProduct = v.nameProduct;
+                nameRow=v.nameRow;
+                descriptionRow=v.descriptionRow;
                 contractDetailId = v.contractDetailId;
                 isContractDetailRow = v.isContractDetailRow;
                 if (exist == '1') {
                     if (isContractDetailRow == '0') {
-                        bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                        bodyListForm += '<tr><td>' + contractDetailId + '</td>';
+                        bodyListForm += '<td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td><td>' + nameRow + '</td><td>' + descriptionRow + '</td>';
                         bodyListForm += '<td><button class="success" id="editContractRowDetailButton" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addContractRowDetailButton" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addPaymentRowDetailButton" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
                         bodyListForm += '<td><button class="success" id="deleteContractRowDetailButton" onclick="deleteContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                     } else {
-
-                        bodyListForm += '<tr><td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                        bodyListForm += '<tr><td>' + contractDetailId + '</td>';
+                        bodyListForm += '<td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
                         bodyListForm += '<td><button class="success" id="editContractRowDetailButton" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addContractRowDetailButton" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addPaymentRowDetailButton" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
@@ -3410,27 +3573,27 @@ function addPayment(id, billRegistryGroupProductId) {
         method: 'get',
         data: {
             id: id,
-            billRegistryGroupProductId:billRegistryGroupProductId,
-            billRegistryClientId:$('#billRegistryClientId').val()
+            billRegistryGroupProductId: billRegistryGroupProductId,
+            billRegistryClientId: $('#billRegistryClientId').val()
         },
         dataType: 'json'
     }).done(function (res) {
         console.log(res);
         let rawContractRowPayment = res;
-        var counterRow='1';
+        var counterRow = '1';
         if (rawContractRowPayment != '') {
-            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th style="width:20%;">Mese</th><th style="width:20%;">Numero Mandato data</th><th style="width:20%;">Importo</th><th style="width:10%;">Inviato</th><th style="width:10%;">Pagato</th><th style="width:20%;">Operazioni</th></tr>';
+            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th>Mese</th><th>Numero e Data Mandato </th><th>Importo</th><th>Inviato</th><th>Pagato</th><th>Operazioni</th></tr>';
             $.each(rawContractRowPayment, function (k, v) {
-                bodyListPaymentForm += '<tr  id="paymentRow'+v.id+'"><td>' + v.mandatoryMonth + '</td>';
-                bodyListPaymentForm += '<td>' + v.id + 'del '+v.dateMandatoryMonth +'</td>';
-                bodyListPaymentForm += '<td>' + v.amount + '</td>';
+                bodyListPaymentForm += '<tr  id="paymentRow' + v.id + '"><td>' + v.mandatoryMonth + '</td>';
+                bodyListPaymentForm += '<td>N. ' + v.id + ' del ' + v.dateMandatoryMonth + '</td>';
+                bodyListPaymentForm += '<td>' + parseFloat(v.amount).toFixed(2) + '</td>';
                 bodyListPaymentForm += '<td><input type="checkbox" ' + v.isSubmited + ' class="form-control"  name="selected_isSubmited[]" value="' + v.id + '"></td>';
                 bodyListPaymentForm += '<td><input type="checkbox" ' + v.isPaid + ' class="form-control"  name="selected_isPaid[]" value="' + v.id + '"></td>';
-                bodyListPaymentForm += '<td><button class="success" id="deletePaymentDetailButton" onclick="deletePaymentDetail(' + v.id +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                bodyListPaymentForm += '<td><button class="success" id="deletePaymentDetailButton" onclick="deletePaymentDetail(' + v.id + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListPaymentForm += '</table>';
-        }else{
-            bodyListPaymentForm='non ci sono Mandati';
+        } else {
+            bodyListPaymentForm = 'non ci sono Mandati';
         }
         typePaymentForm = `<div class="row">
                                <div class="col-md-12">
@@ -3444,7 +3607,7 @@ function addPayment(id, billRegistryGroupProductId) {
                         </div>
                         <div class="row">
                                 <div class="col-md-12"  id="listPaymentRowSection">
-                               `+bodyListPaymentForm+`
+                               ` + bodyListPaymentForm + `
                                 </div>
                         </div>`;
         $('#addPaymentDiv').append(typePaymentForm);
@@ -3472,18 +3635,18 @@ function addProduct(id, billRegistryGroupProductId) {
         method: 'get',
         data: {
             id: id,
-            billRegistryGroupProductId:billRegistryGroupProductId,
-            billRegistryClientId:$('#billRegistryClientId').val()
+            billRegistryGroupProductId: billRegistryGroupProductId,
+            billRegistryClientId: $('#billRegistryClientId').val()
         },
         dataType: 'json'
     }).done(function (res) {
         console.log(res);
         let rawContractRowDetail = res;
-        var counterRow='1';
+        var counterRow = '1';
         if (rawContractRowDetail != '') {
             bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Aggiungi</th></tr>';
             $.each(rawContractRowDetail, function (k, v) {
-                bodyListDetailForm += '<tr id="productRowTr'+v.billRegistryContractRowDetailId+'"><td>' + v.billRegistryContractRowDetailId + '</td>';
+                bodyListDetailForm += '<tr id="productRowTr' + v.billRegistryContractRowDetailId + '"><td>' + v.billRegistryContractRowDetailId + '</td>';
                 bodyListDetailForm += '<td>' + v.codeProduct + '-' + v.nameProduct + '</td>';
                 bodyListDetailForm += '<td>' + v.um + '</td>';
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
@@ -3492,8 +3655,8 @@ function addProduct(id, billRegistryGroupProductId) {
                 bodyListDetailForm += '<td><button class="success" id="deleteProductDetailButton" onclick="deleteProductDetail(' + v.billRegistryContractRowDetailId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
             });
             bodyListDetailForm += '</table>';
-        }else{
-            bodyListDetailForm='non ci sono prodotti';
+        } else {
+            bodyListDetailForm = 'non ci sono prodotti';
         }
         typeForm = `<div class="row">
                                <div class="col-md-12">
@@ -3507,16 +3670,11 @@ function addProduct(id, billRegistryGroupProductId) {
                         </div>
                         <div class="row">
                                 <div class="col-md-12"  id="listProductRowSection">
-                               `+bodyListDetailForm+`
+                               ` + bodyListDetailForm + `
                                 </div>
                         </div>`;
         $('#addProductDiv').append(typeForm);
     });
-
-
-
-
-
 
 
 }
@@ -3525,9 +3683,9 @@ function deleteContractDetail(id) {
 
 }
 
-function addProductRow(id, billRegistryGroupProductId){
-    $('#addProductRowButton').attr("disabled",true);
-    var bodyFormProduct=`<div class="row">
+function addProductRow(id, billRegistryGroupProductId) {
+    $('#addProductRowButton').attr("disabled", true);
+    var bodyFormProduct = `<div class="row">
  <div class="row">
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
@@ -3578,7 +3736,7 @@ function addProductRow(id, billRegistryGroupProductId){
                                 </div>
                                  <div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                     <button class="success" id="addProductRowDetailButton" onclick="addProductRowDetail(` + id +`)" type="button"><span  class="fa fa-plus">Aggiungi</span></button>
+                                     <button class="success" id="addProductRowDetailButton" onclick="addProductRowDetail(` + id + `)" type="button"><span  class="fa fa-plus">Aggiungi</span></button>
                                     </div>
                                 </div>
 </div>`;
@@ -3589,7 +3747,7 @@ function addProductRow(id, billRegistryGroupProductId){
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'BillRegistryProduct',
-            condition :{billRegistryGroupProductId:billRegistryGroupProductId}
+            condition: {billRegistryGroupProductId: billRegistryGroupProductId}
 
         },
         dataType: 'json'
@@ -3625,13 +3783,12 @@ function addProductRow(id, billRegistryGroupProductId){
             selectizefromCountryId.clear();
 
 
-
             $.ajax({
                 url: '/blueseal/xhr/BillRegistryProductManageAjaxController',
                 method: 'get',
                 data: {
                     id: selectionBillRegistryProductId,
-                    billRegistryClientId:$('#billRegistryClientId').val()
+                    billRegistryClientId: $('#billRegistryClientId').val()
 
                 },
                 dataType: 'json'
@@ -3670,55 +3827,55 @@ function addProductRow(id, billRegistryGroupProductId){
     });
 
 
-
 }
 
 
-function addProductRowDetail(countId){
-    var nameProductRowDetail='';
-    var idRowDetail='';
-    var taxDesc='';
+function addProductRowDetail(countId) {
+    var nameProductRowDetail = '';
+    var idRowDetail = '';
+    var taxDesc = '';
 
-     $.ajax({
-         url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
-         method: 'post',
-         data: {
-             billRegistryContractRowId:countId,
-             productBillRegistryProductId: $('#productBillRegistryProductId').val(),
-             um:$('#um').val(),
-             qty:$('#qty').val(),
-             price:$('#price').val(),
-             productBillRegistryTypeTaxesId:$('#productBillRegistryTypeTaxesId').val(),
-             billRegistryClientId:$('#billRegistryClientId').val()
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
+        method: 'post',
+        data: {
+            billRegistryContractRowId: countId,
+            productBillRegistryProductId: $('#productBillRegistryProductId').val(),
+            um: $('#um').val(),
+            qty: $('#qty').val(),
+            price: $('#price').val(),
+            productBillRegistryTypeTaxesId: $('#productBillRegistryTypeTaxesId').val(),
+            billRegistryClientId: $('#billRegistryClientId').val()
 
-         },
-         dataType: 'json'
-     }).done(function (res) {
+        },
+        dataType: 'json'
+    }).done(function (res) {
 
-         $.each(res, function (k, v) {
-             idRowDetail=v.billRegistryContractRowDetailId;
-             nameProductRowDetail=v.nameProduct;
-             taxDesc=v.taxDesc;
-         });
-         $('#tableContractDetailRowList').append('<tr id="productRowTr'+idRowDetail+'"><td>'+idRowDetail+'</td><td>'+nameProductRowDetail+'</td><td>'+$('#um').val()+'</td><td>'+$('#qty').val()+'</td><td>'+$('#price').val()+'</td><td>'+taxDesc+'</td><td><button class="success" id="deleteProductDetailButton" onclick="deleteProductDetail(' + idRowDetail + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+        $.each(res, function (k, v) {
+            idRowDetail = v.billRegistryContractRowDetailId;
+            nameProductRowDetail = v.nameProduct;
+            taxDesc = v.taxDesc;
+        });
+        $('#tableContractDetailRowList').append('<tr id="productRowTr' + idRowDetail + '"><td>' + idRowDetail + '</td><td>' + nameProductRowDetail + '</td><td>' + $('#um').val() + '</td><td>' + $('#qty').val() + '</td><td>' + $('#price').val() + '</td><td>' + taxDesc + '</td><td><button class="success" id="deleteProductDetailButton" onclick="deleteProductDetail(' + idRowDetail + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addProductRowSection').empty();
-        $('#addProductRowButton').attr('disabled',false);
-         $('#addPaymentRowDetailButton').attr("disabled", false);
-         $('#addContractRowDetailButton').attr("disabled", false);
-         $('#editContractRowDetailButton').attr("disabled", false);
-         $('#deleteContractRowDetailButton').attr("disabled", false);
-     });
+        $('#addProductRowButton').attr('disabled', false);
+        $('#addPaymentRowDetailButton').attr("disabled", false);
+        $('#addContractRowDetailButton').attr("disabled", false);
+        $('#editContractRowDetailButton').attr("disabled", false);
+        $('#deleteContractRowDetailButton').attr("disabled", false);
+    });
 
 }
-function addPaymentRow(id, billRegistryGroupProductId){
+
+function addPaymentRow(id, billRegistryGroupProductId) {
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-    today = yyyy + '-' + mm + '-' + dd+'T00:00';
-    var bodyFormPayment=`<div class="row">
+    today = yyyy + '-' + mm + '-' + dd + 'T00:00';
+    var bodyFormPayment = `<div class="row">
  <div class="row">
                                 <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
@@ -3757,13 +3914,13 @@ function addPaymentRow(id, billRegistryGroupProductId){
                                         <label for="dateMandatoryMonth">Data Mandato</label>
                                         <input id="dateMandatoryMonth" autocomplete="off" type="datetime-local"
                                                class="form-control" name="dateMandatoryMonth"
-                                               value="`+today+`"
+                                               value="` + today + `"
                                         />
                                     </div>
                                 </div>`;
-                               switch(billRegistryGroupProductId){
-                                   case "3":
-                                bodyFormPayment+=` <div class="col-md-2">
+    switch (billRegistryGroupProductId) {
+        case "3":
+            bodyFormPayment += ` <div class="col-md-2">
                                      <div class="form-group form-group-default selectize-enabled">
                                         <label for="socialId"> Piattaforma Social </label>
                                         <select id="socialId" name="socialId"
@@ -3775,9 +3932,9 @@ function addPaymentRow(id, billRegistryGroupProductId){
                                     </div>
                                 </div>
                                 `;
-                            break;
-                                   case "4":
-                                       bodyFormPayment+=` <div class="col-md-2">
+            break;
+        case "4":
+            bodyFormPayment += ` <div class="col-md-2">
                                        <div className="form-group form-group-default selectize-enabled">
                                            <label For="campaignId">Seleziona la Campagna</label>
                                            <select id="campaignId" name="campaignId"
@@ -3788,41 +3945,40 @@ function addPaymentRow(id, billRegistryGroupProductId){
                                            </select>
                                        </div>
                                     </div>`;
-                                       break;
-                               }
-    bodyFormPayment+=`<div class="col-md-2">
+            break;
+    }
+    bodyFormPayment += `<div class="col-md-2">
                                     <div class="form-group form-group-default">
-                                     <button class="success" id="addPaymentRowDetailButton" onclick="addPaymentRowDetail(` + id +`,`+billRegistryGroupProductId+`)" type="button"><span  class="fa fa-plus">Aggiungi</span></button>
+                                     <button class="success" id="addPaymentRowDetailButton" onclick="addPaymentRowDetail(` + id + `,` + billRegistryGroupProductId + `)" type="button"><span  class="fa fa-plus">Aggiungi</span></button>
                                     </div>
                                 </div>
 </div>`;
 
     $('#addPaymentRowSection').append(bodyFormPayment);
-   if (billRegistryGroupProductId ==='3') {
-       $.ajax({
-           method: 'GET',
-           url: '/blueseal/xhr/GetTableContent',
-           data: {
-               table: 'BillRegistrySocial'
+    if (billRegistryGroupProductId === '3') {
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistrySocial'
 
 
-           },
-           dataType: 'json'
-       }).done(function (res2) {
-           var socialId = $('#socialId');
-           if (typeof (socialId[0].selectize) != 'undefined') socialId[0].selectize.destroy();
-           socialId.selectize({
-               valueField: 'id',
-               labelField: 'name',
-               searchField: 'name',
-               options: res2,
-           });
-       });
-   }
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var socialId = $('#socialId');
+            if (typeof (socialId[0].selectize) != 'undefined') socialId[0].selectize.destroy();
+            socialId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+        });
+    }
 
 
-
-    if (billRegistryGroupProductId=='4') {
+    if (billRegistryGroupProductId == '4') {
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -3847,42 +4003,42 @@ function addPaymentRow(id, billRegistryGroupProductId){
 
 }
 
-function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductId){
-    var idRowPayment='';
-    var month='';
-    var campaignId='';
-    var socialId='';
-    if($('#campaignId').val()!=null){
-        campaignId=$('#campaignId').val();
+function addPaymentRowDetail(billRegistryContractRowId, billRegistryGroupProductId) {
+    var idRowPayment = '';
+    var month = '';
+    var campaignId = '';
+    var socialId = '';
+    if ($('#campaignId').val() != null) {
+        campaignId = $('#campaignId').val();
     }
-    if($('#socialId').val()!=null){
-        socialId=$('#social').val();
+    if ($('#socialId').val() != null) {
+        socialId = $('#social').val();
     }
 
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
         method: 'post',
         data: {
-            billRegistryContractRowId:billRegistryContractRowId,
-            billRegistryGroupProductId:billRegistryGroupProductId,
-            billRegistryClientId:$('#billRegistryClientId').val(),
-            mandatoryMonth:$('#mandatoryMonth').val(),
-            dateMandatoryMonth:$('#dateMandatoryMonth').val(),
-            amount:$('#amount').val(),
-            campaignId:campaignId,
-            socialId:socialId
+            billRegistryContractRowId: billRegistryContractRowId,
+            billRegistryGroupProductId: billRegistryGroupProductId,
+            billRegistryClientId: $('#billRegistryClientId').val(),
+            mandatoryMonth: $('#mandatoryMonth').val(),
+            dateMandatoryMonth: $('#dateMandatoryMonth').val(),
+            amount: $('#amount').val(),
+            campaignId: campaignId,
+            socialId: socialId
 
         },
         dataType: 'json'
     }).done(function (res) {
 
         $.each(res, function (k, v) {
-            idRowPayment=v.billRegistryContractRowPaymentId;
-            month=v.mandatoryMonth;
+            idRowPayment = v.billRegistryContractRowPaymentId;
+            month = v.mandatoryMonth;
         });
-        $('#tableContractPaymentRowList').append('<tr id="paymentRow'+idRowPayment+'"><td>'+month+'</td><td>'+$('#dateMandatoryMonth').val()+'</td><td>'+$('#amount').val()+'</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + idRowPayment + '"></td><td><button class="success" id="deletePaymentDetailButton" onclick="deletePaymentDetail(' + idRowPayment +  ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
+        $('#tableContractPaymentRowList').append('<tr id="paymentRow' + idRowPayment + '"><td>' + month + '</td><td>' + $('#dateMandatoryMonth').val() + '</td><td>' + $('#amount').val() + '</td><td><input type="checkbox"  class="form-control"  name="selected_isSubmited[]" value="' + idRowPayment + '"></td><td><input type="checkbox"  class="form-control"  name="selected_isPaid[]" value="' + idRowPayment + '"></td><td><button class="success" id="deletePaymentDetailButton" onclick="deletePaymentDetail(' + idRowPayment + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>');
         $('#addPaymentRowSection').empty();
-        $('#addPaymentRowButton').attr('disabled',false);
+        $('#addPaymentRowButton').attr('disabled', false);
         $('#addPaymentRowDetailButton').attr("disabled", false);
         $('#addContractRowDetailButton').attr("disabled", false);
         $('#editContractRowDetailButton').attr("disabled", false);
@@ -3891,28 +4047,29 @@ function addPaymentRowDetail(billRegistryContractRowId,billRegistryGroupProductI
 
 }
 
-function deleteProductDetail(id){
-    var rowProductId='productRowTr'+id.toString();
+function deleteProductDetail(id) {
+    var rowProductId = 'productRowTr' + id.toString();
     $(rowProductId).remove();
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowDetailManageAjaxController',
         method: 'delete',
         data: {
-            billRegistryContractRowDetailId:id
+            billRegistryContractRowDetailId: id
         },
         dataType: 'json'
     }).done(function (res) {
     });
 
 }
-function deletePaymentDetail(id){
-var rowPaymentId='paymentRow'+id.toString();
+
+function deletePaymentDetail(id) {
+    var rowPaymentId = 'paymentRow' + id.toString();
     $(rowPaymentId).remove();
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractRowPaymentBillManageAjaxController',
         method: 'delete',
         data: {
-            billRegistryContractRowPaymentId:id
+            billRegistryContractRowPaymentId: id
         },
         dataType: 'json'
     }).done(function (res) {
