@@ -3582,7 +3582,7 @@ function addPayment(id, billRegistryGroupProductId) {
         let rawContractRowPayment = res;
         var counterRow = '1';
         if (rawContractRowPayment != '') {
-            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th>Mese</th><th>Numero e Data Mandato </th><th>Importo</th><th>Inviato</th><th>Pagato</th><th>Operazioni</th></tr>';
+            bodyListPaymentForm += '<table id="tableContractPaymentRowList"><tr class="header4"><th style="width:30%;">Mese</th><th style="width:30%;">Numero e Data Mandato </th><th style="width:20%;">Importo</th><th style="width:10%;">Inviato</th><th style="width:10%;">Pagato</th><th style="width:20%;">Operazioni</th></tr>';
             $.each(rawContractRowPayment, function (k, v) {
                 bodyListPaymentForm += '<tr  id="paymentRow' + v.id + '"><td>' + v.mandatoryMonth + '</td>';
                 bodyListPaymentForm += '<td>N. ' + v.id + ' del ' + v.dateMandatoryMonth + '</td>';
