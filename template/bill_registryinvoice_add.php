@@ -428,7 +428,7 @@
                                 </div>
                             </div>
                             <div class="row" id="rawProduct">
-                              <table id="myRowInvoice"> <tr class="header1"><th style="width:20%;">prodotto</th><th style="width:20%;">prezzo</th><th style="width:20%;">sconto</th><th style="width:20%;">iva</th><th style="width:20%;">totale Riga</th></tr>';
+                              <table id="myRowInvoice"> <tr class="header1"><th style="width:10%;">id Riga</th><th style="width:10%;">prodotto</th><th style="width:10%;">prezzo</th><th style="width:10%;">qti</th><th style="width:10%;">importo netto</th><th style="width:10%;">sconto %</th><th style="width:10%;">importo sconto </th><th style="width:10%;">iva %</th><th style="width:10%;">importo Iva</th><th style="width:10%;">totale Riga</th><th style="width:10%;">Elimina</th></tr>';
 
                               </table> </div>
                             <div class="row" id="rawProductGeneric">

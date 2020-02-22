@@ -13,9 +13,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#invoiceNumber');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectInvoiceNumber = $('#invoiceNumber');
+    if (typeof (selectInvoiceNumber[0].selectize) != 'undefined') selectInvoiceNumber[0].selectize.destroy();
+    selectInvoiceNumber.selectize({
         valueField: 'invoiceCounter',
         labelField: 'invoiceYear',
         searchField: 'invoiceYear',
@@ -52,9 +52,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#billRegistryClientId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectBillRegistryClientId = $('#billRegistryClientId');
+    if (typeof (selectBillRegistryClientId[0].selectize) != 'undefined') selectBillRegistryClientId[0].selectize.destroy();
+    selectBillRegistryClientId.selectize({
         valueField: 'id',
         labelField: 'companyName',
         searchField: 'companyName',
@@ -87,9 +87,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#userId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectUserId = $('#userId');
+    if (typeof (selectUserId[0].selectize) != 'undefined') selectUserId[0].selectize.destroy();
+    selectUserId.selectize({
         valueField: 'userId',
         labelField: 'name',
         searchField: ['name', 'surname'],
@@ -120,9 +120,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#idProduct');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectIdProduct = $('#idProduct');
+    if (typeof (selectIdProduct[0].selectize) != 'undefined') selectIdProduct[0].selectize.destroy();
+    selectIdProduct.selectize({
         valueField: 'id',
         labelField: 'codeProduct',
         searchField: 'codeProduct',
@@ -140,9 +140,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#countryId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectCountryId = $('#countryId');
+    if (typeof (selectCountryId[0].selectize) != 'undefined') selectCountryId[0].selectize.destroy();
+    selectCountryId.selectize({
         valueField: 'id',
         labelField: 'name',
         searchField: 'name',
@@ -150,25 +150,7 @@ $.ajax({
     });
 
 });
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'Country'
 
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    var select = $('#countryId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: 'name',
-        options: res2,
-    });
-
-});
 
 $.ajax({
     method: 'GET',
@@ -179,9 +161,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#currencyId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    let selectCurrencyId = $('#currencyId');
+    if (typeof (selectCurrencyId[0].selectize) != 'undefined') selectCurrencyId[0].selectize.destroy();
+    selectCurrencyId.selectize({
         valueField: 'id',
         labelField: 'code',
         searchField: 'code',
@@ -197,9 +179,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#bankRegistryId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    let selectBankRegistryId = $('#bankRegistryId');
+    if (typeof (selectBankRegistryId[0].selectize) != 'undefined') selectBankRegistryId[0].selectize.destroy();
+    selectBankRegistryId.selectize({
         valueField: 'id',
         labelField: 'name',
         searchField: ['name', 'location', 'abi', 'cab'],
@@ -230,9 +212,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#billRegistryTypeTaxesId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    let selectBillRegistryTypeTaxes = $('#billRegistryTypeTaxesId');
+    if (typeof (selectBillRegistryTypeTaxes[0].selectize) != 'undefined') selectBillRegistryTypeTaxes[0].selectize.destroy();
+    selectBillRegistryTypeTaxes.selectize({
         valueField: 'id',
         labelField: 'description',
         searchField: ['description'],
@@ -248,9 +230,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#billRegistryTypePaymentId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectBillRegistryTypePayment = $('#billRegistryTypePaymentId');
+    if (typeof (selectBillRegistryTypePayment[0].selectize) != 'undefined') selectBillRegistryTypePayment[0].selectize.destroy();
+    selectBillRegistryTypePayment.selectize({
         valueField: 'id',
         labelField: 'name',
         searchField: ['name'],
@@ -266,9 +248,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#billRegistryTypeTaxesProductId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectbillRegistryTypeTaxesProductId = $('#billRegistryTypeTaxesProductId');
+    if (typeof (selectbillRegistryTypeTaxesProductId[0].selectize) != 'undefined') selectbillRegistryTypeTaxesProductId[0].selectize.destroy();
+    selectbillRegistryTypeTaxesProductId.selectize({
         valueField: 'id',
         labelField: 'description',
         searchField: ['description'],
@@ -389,6 +371,7 @@ $('#idProduct').change(function() {
     document.getElementById('price').value = '';
     document.getElementById('description').value = '';
     document.getElementById('percVat').value = '';
+    document.getElementById('netTotalRow').value = '';
     var selectTaxesId = $("#billRegistryTypeTaxesProductId")[0].selectize;
     selectTaxesId.clear();
     $.ajax({
@@ -403,9 +386,10 @@ $('#idProduct').change(function() {
         $.each(res, function (k, v) {
             document.getElementById('nameProduct').value = v.nameProduct;
             document.getElementById('um').value = v.um;
-            document.getElementById('price').value = v.price;
+            document.getElementById('price').value = parseFloat(v.price).toFixed(2);
             document.getElementById('description').value = v.description;
             document.getElementById('qty').value = '1';
+            document.getElementById('netTotalRow').value = (parseFloat(v.price)*1).toFixed(2);
 
             document.getElementById('percVat').value = v.perc;
 
@@ -514,7 +498,8 @@ $(document).on('bs.invoice.save', function () {
             val = val + $(this).val() + ',';
         }
     });
-    var config = '?companyName=' + $("#companyName").val() + '&' +
+    var config = '?billRegistryClientId='+ $("#billRegistryClientId").val() + '&' +
+        'companyName=' + $("#companyName").val() + '&' +
         'address=' + $("#address").val() + '&' +
         'extra=' + $("#extra").val() + '&' +
         'city=' + $("#city").val() + '&' +
@@ -541,24 +526,26 @@ $(document).on('bs.invoice.save', function () {
         'currencyId=' + $("#currencyId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
         'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
-        'sdi=' + $("#sdi").val() + '&' +
-        'shopId=' + $("#shopId").val() + '&' +
-        'accountStatusId=' + $("#accountStatusId").val() + '&' +
-        'dateActivation=' + $("#dateActivation").val() + '&' +
-        'accountAsFriend=' + $("#accountAsFriend").val() + '&' +
-        'typeFriendId=' + $("#typeFriendId").val() + '&' +
-        'accountAsParallel=' + $("#accountAsParallel").val() + '&' +
-        'accountAsParallelSupplier=' + $("#accountAsParallelSupplier").val() + '&' +
-        'accountAsParallelSeller=' + $("#accountAsParallelSeller").val() + '&' +
-        'parallelFee=' + $("#parallelFee").val() + '&' +
-        'accountAsService=' + $("#accountAsService").val() + '&' +
-        'productList=' + val.substring(0, val.length - 1);
+        'sdi=' + $("#sdi").val()+
+        'rowInvoice='+rowInvoice;
 
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        var data = 1;
-        var urldef = "/blueseal/xhr/BillRegistryClientManageAjaxController" + config;
+        var data = {
+            rowInvoice:rowInvoice,
+            dateInvoice:$('#dateInvoice').val(),
+            invoiceNumber:$('#invoiceNumber').val(),
+            netTotal:$('#netTotal').val(),
+            discountTotal:$('#discountTotal').val(),
+            vatTotal:$('#vatTotal').val(),
+            grossTotal:$('#grossTotal').val(),
+
+
+
+
+        };
+        var urldef = "/blueseal/xhr/BillRegistryInvoiceManageAjaxController" + config;
         $.ajax({
             method: "POST",
             url: urldef,
@@ -586,12 +573,8 @@ $(document).on('bs.invoice.save', function () {
 });
 
 
-function addRowProduct() {
 
-}
-function addRowProductGeneric() {
 
-}
 $('#billRegistryTypeTaxesProductId').change(function() {
     idVat = $('#billRegistryTypeTaxesProductId').val();
     $.ajax({
@@ -648,13 +631,15 @@ $('#price').change(function () {
 
 });
 var rowInvoice=[];
+var counterRow=0;
 function addRowProduct(){
+    let counterRowView=counterRow+1;
     let vatRow=parseFloat($('#netTotalRow').val())/100*parseFloat($('#percVat').val());
     let discountRowAmount=parseFloat($('#netTotalRow').val())/100*parseFloat($('#discountRow').val());
     let grossTotalRow=parseFloat($('#netTotalRow').val())+vatRow;
     let rowInvoiceSingle=[];
-    rowInvoiceSingle.push($('#idProduct').val(),$('#price').val(),$('#description').val(),$('#qty').val(),$('#netTotalRow').val(),vatRow,discountRowAmount,grossTotalRow,$('#billRegistryTypeTaxesProductId').val());
-    rowInvoice.push(rowInvoiceSingle);
+    var insertRow={idRow:counterRow, idProduct:$('#idProduct').val(),price:$('#price').val(),description:$('#description').val(),qty:$('#qty').val(),netTotalRow:$('#netTotalRow').val(),vatRow:vatRow,discountRowAmount:discountRowAmount,grossTotalRow:grossTotalRow,billRegistryTypeTaxesProductId:$('#billRegistryTypeTaxesProductId').val()};
+    rowInvoice.push(insertRow);
     var oldGrossTotal=parseFloat($('#grossTotal').val());
     var grossTotal=oldGrossTotal+grossTotalRow;
     var oldNetTotal=parseFloat($('#netTotal').val());
@@ -663,20 +648,51 @@ function addRowProduct(){
     var discountTotal=oldDiscountTotal+discountRowAmount;
     var oldVatTotal=parseFloat($('#vatTotal').val());
     var vatTotal=oldVatTotal+vatRow;
-    var netTotalRow=parseFloat($('#price').val())*$('#qty').val();
-    var netTotalRowWiDiscount=
+    var netTotalRow=parseFloat($('#price').val())*parseInt($('#qty').val());
     $('#netTotal').val(netTotal.toFixed(2));
     $('#discountTotal').val(discountTotal.toFixed(2));
     $('#vatTotal').val(vatTotal.toFixed(2));
     $('#grossTotal').val(grossTotal.toFixed(2));
-    let myrowInvoice='<tr><td>'+$('#nameProduct').val()+' prezzo: '+$('#price').val()+'</td>';
-    myrowInvoice+='<td>Prezzo * '+$('#qty').val()+'='+netTotalRow+'</td>';
-    myrowInvoice+='<td>Sconto % '+$('#discountRow').val()+'='+discountRowAmount+'</td>';
-    myrowInvoice+='<td>Iva  '+$('#percVat').val()+'='+vatRow+'</td>';
-    myrowInvoice+='<td>Totale Riga  '+grossTotalRow+'</td></tr>';
+    let myrowInvoice='<tr id="productRowTr'+counterRow+'"><td>'+counterRowView+'</td>';
+    myrowInvoice+='<td>'+$('#nameProduct').val()+'</td>';
+    myrowInvoice+='<td>'+parseFloat($('#price').val()).toFixed(2)+' &euro;</td>';
+    myrowInvoice+='<td>'+$('#qty').val()+'</td>';
+    myrowInvoice+='<td>'+netTotalRow.toFixed(2)+' &euro;</td>';
+    myrowInvoice+='<td>'+$('#discountRow').val()+' %</td>';
+    myrowInvoice+='<td>'+discountRowAmount.toFixed(2)+' &euro;</td>';
+    myrowInvoice+='<td>'+$('#percVat').val()+' %</td>';
+    myrowInvoice+='<td>'+vatRow.toFixed(2)+' &euro;</td>';
+    myrowInvoice+='<td>'+grossTotalRow.toFixed(2)+' &euro;</td>';
+    myrowInvoice+='<td><button class="success" id="deleteRowInvoiceButton'+counterRowView+'" onclick="deleteRowInvoice(' + counterRow + ','+counterRowView+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
 
     $('#myRowInvoice').append(myrowInvoice);
+    counterRow=counterRow+1;
 
+
+
+
+
+
+}
+function deleteRowInvoice(counterRow,counterRowView){
+    var myNetTotalRow=parseFloat(rowInvoice[counterRow].netTotalRow);
+    var myVatTotalRow=parseFloat(rowInvoice[counterRow].vatRow);
+    var myDiscountRowAmount=parseFloat(rowInvoice[counterRow].discountRowAmount);
+    var myGrossTotalRow=parseFloat(rowInvoice[counterRow].grossTotalRow);
+    var myGrossTotal=parseFloat($('#grossTotal').val());
+    var myNetTotal=parseFloat($('#netTotal').val());
+    var myVatTotal=parseFloat($('#vatTotal').val());
+    var myDiscountTotal=parseFloat($('#discountTotal').val());
+    var newGrossTotal=myGrossTotal-myGrossTotalRow;
+    var newDiscountTotal=myDiscountTotal-myDiscountRowAmount;
+    var newNetTotal=myNetTotal-myNetTotalRow;
+    var newVatTotal=myVatTotal-myVatTotalRow;
+    $('#netTotal').val(newNetTotal.toFixed(2));
+    $('#vatTotal').val(newVatTotal.toFixed(2));
+    $('#discountTotal').val(newDiscountTotal.toFixed(2));
+    $('#grossTotal').val(newGrossTotal.toFixed(2));
+    var invoiceRowDetail='#productRowTr'+counterRow.toString();
+    $(invoiceRowDetail).remove();
 
 
 }

@@ -38,7 +38,7 @@ class CSelectBillRegistryProductToRowInvoiceAjaxController extends AAjaxControll
 
         $productDetail = [];
         $detailRow = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $id]);
-        $brt =\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $detailRow->billRegistryTypeTaxesId]);
+        $brt = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $detailRow->billRegistryTypeTaxesId]);
         $perc=$brt->perc;
             $description=$detailRow->description.'</br>';
             $brp = \Monkey::app()->repoFactory->create('BillRegistryProductDetail')->findBy(['billRegistryProductId' => $detailRow->id]);
