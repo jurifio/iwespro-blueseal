@@ -488,89 +488,6 @@ $('#billRegistryClientId').change(function () {
 
 
 
-$(document).on('bs.invoice.save', function () {
-    let bsModal = new $.bsModal('Inserimento Fatture', {
-        body: '<p>Confermare?</p>'
-    });
-    var val = '';
-    $(':checkbox:checked').each(function (i) {
-        if ($(this) != $('#checkedAll')) {
-            val = val + $(this).val() + ',';
-        }
-    });
-    var config = '?billRegistryClientId='+ $("#billRegistryClientId").val() + '&' +
-        'companyName=' + $("#companyName").val() + '&' +
-        'address=' + $("#address").val() + '&' +
-        'extra=' + $("#extra").val() + '&' +
-        'city=' + $("#city").val() + '&' +
-        'zipCode=' + $("#zipCode").val() + '&' +
-        'province=' + $("#province").val() + '&' +
-        'countryId=' + $("#countryId").val() + '&' +
-        'vatNumber=' + $("#vatNumber").val() + '&' +
-        'phone=' + $("#phone").val() + '&' +
-        'mobile=' + $("#mobile").val() + '&' +
-        'fax=' + $("#fax").val() + '&' +
-        'userId=' + $("#userId").val() + '&' +
-        'contactName=' + $("#contactName").val() + '&' +
-        'phoneAdmin=' + $("#phoneAdmin").val() + '&' +
-        'mobileAdmin=' + $("#mobileAdmin").val() + '&' +
-        'emailAdmin=' + $("#emailAdmin").val() + '&' +
-        'website=' + $("#website").val() + '&' +
-        'email=' + $("#email").val() + '&' +
-        'emailCc=' + $("#emailCc").val() + '&' +
-        'emailCcn=' + $("#emailCcn").val() + '&' +
-        'emailPec=' + $("#emailPec").val() + '&' +
-        'note=' + $("#note").val() + '&' +
-        'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
-        'iban=' + $("#iban").val() + '&' +
-        'currencyId=' + $("#currencyId").val() + '&' +
-        'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
-        'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
-        'sdi=' + $("#sdi").val()+
-        'rowInvoice='+rowInvoice;
-
-
-    bsModal.showCancelBtn();
-    bsModal.setOkEvent(function () {
-        var data = {
-            rowInvoice:rowInvoice,
-            dateInvoice:$('#dateInvoice').val(),
-            invoiceNumber:$('#invoiceNumber').val(),
-            netTotal:$('#netTotal').val(),
-            discountTotal:$('#discountTotal').val(),
-            vatTotal:$('#vatTotal').val(),
-            grossTotal:$('#grossTotal').val(),
-
-
-
-
-        };
-        var urldef = "/blueseal/xhr/BillRegistryInvoiceManageAjaxController" + config;
-        $.ajax({
-            method: "POST",
-            url: urldef,
-            data: data
-        }).done(function (res) {
-            if (res.includes('1-')) {
-                let billRegistryClientId = res.replace('1-', '');
-                bsModal.writeBody('Inserimento eseguito con successo');
-                setTimeout(function () {
-                    window.location.href = '/blueseal/anagrafica/clienti-modifica/' + billRegistryClientId;
-                }, 1000);
-
-            } else {
-                bsModal.writeBody(res);
-            }
-        }).fail(function (res) {
-            bsModal.writeBody(res);
-        }).always(function (res) {
-            bsModal.setOkEvent(function () {
-                bsModal.showOkBtn();
-            });
-            bsModal.showOkBtn();
-        });
-    });
-});
 
 
 
@@ -696,5 +613,92 @@ function deleteRowInvoice(counterRow,counterRowView){
 
 
 }
+
+
+
+$(document).on('bs.invoice.save', function () {
+    let bsModal = new $.bsModal('Inserimento Fatture', {
+        body: '<p>Confermare?</p>'
+    });
+    var val = '';
+    $(':checkbox:checked').each(function (i) {
+        if ($(this) != $('#checkedAll')) {
+            val = val + $(this).val() + ',';
+        }
+    });
+    var config = '?billRegistryClientId='+ $("#billRegistryClientId").val() + '&' +
+        'companyName=' + $("#companyName").val() + '&' +
+        'address=' + $("#address").val() + '&' +
+        'extra=' + $("#extra").val() + '&' +
+        'city=' + $("#city").val() + '&' +
+        'zipCode=' + $("#zipCode").val() + '&' +
+        'province=' + $("#province").val() + '&' +
+        'countryId=' + $("#countryId").val() + '&' +
+        'vatNumber=' + $("#vatNumber").val() + '&' +
+        'phone=' + $("#phone").val() + '&' +
+        'mobile=' + $("#mobile").val() + '&' +
+        'fax=' + $("#fax").val() + '&' +
+        'userId=' + $("#userId").val() + '&' +
+        'contactName=' + $("#contactName").val() + '&' +
+        'phoneAdmin=' + $("#phoneAdmin").val() + '&' +
+        'mobileAdmin=' + $("#mobileAdmin").val() + '&' +
+        'emailAdmin=' + $("#emailAdmin").val() + '&' +
+        'website=' + $("#website").val() + '&' +
+        'email=' + $("#email").val() + '&' +
+        'emailCc=' + $("#emailCc").val() + '&' +
+        'emailCcn=' + $("#emailCcn").val() + '&' +
+        'emailPec=' + $("#emailPec").val() + '&' +
+        'note=' + $("#note").val() + '&' +
+        'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
+        'iban=' + $("#iban").val() + '&' +
+        'currencyId=' + $("#currencyId").val() + '&' +
+        'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
+        'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
+        'sdi=' + $("#sdi").val()+
+        'rowInvoice='+JSON.stringify(rowInvoice);
+
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        var data = {
+            rowInvoice:JSON.stringify(rowInvoice),
+            dateInvoice:$('#dateInvoice').val(),
+            invoiceNumber:$('#invoiceNumber').val(),
+            netTotal:$('#netTotal').val(),
+            discountTotal:$('#discountTotal').val(),
+            vatTotal:$('#vatTotal').val(),
+            grossTotal:$('#grossTotal').val(),
+
+
+
+
+        };
+        var urldef = "/blueseal/xhr/BillRegistryInvoiceManageAjaxController" + config;
+        $.ajax({
+            method: "POST",
+            url: urldef,
+            data: data
+        }).done(function (res) {
+            if (res.includes('1-')) {
+                let billRegistryClientId = res.replace('1-', '');
+                bsModal.writeBody('Inserimento eseguito con successo');
+                setTimeout(function () {
+                    window.location.href = '/blueseal/anagrafica/clienti-modifica/' + billRegistryClientId;
+                }, 1000);
+
+            } else {
+                bsModal.writeBody(res);
+            }
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.showOkBtn();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});
+
 
 

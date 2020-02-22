@@ -31,21 +31,21 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
 
         $data = $this->app->router->request()->getRequestData();
-        $rowInvoice=$_GET['rowInvoice'];
+        $rowInvoice=$data['rowInvoice'];
         $netTotal=$data['netTotal'];
         $vatTotal=$data['vatTotal'];
         $grossTotal=$data['grossTotal'];
         $discountTotal=$data['discountTotal'];
-        if($_GET('BillRegistryClientId')==null ) {
-            if ($_GET['invoiceNumber'] == '') {
+        if($_GET['billRegistryClientId']=='' ) {
+            if ($data['invoiceNumber'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
             } else {
-                $invoiceNumber = $_GET['invoiceNumber'];
+                $invoiceNumber = $data['invoiceNumber'];
             }
-            if ($_GET['dateInvoice'] == '') {
+            if ($data['dateInvoice'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
             } else {
-                $dateInvoice =strtotime($_GET['dateInvoice']);
+                $dateInvoice =strtotime($data['dateInvoice']);
                 $invoiceDate=date('Y-m-d H:i:s', $dateInvoice);
                 $invoiceYear=date('Y', $dateInvoice);
             }
@@ -284,7 +284,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 $brcbiInsert->billRegistryClientId = $billRegistryClientId;
                 $brcbiInsert->insert();
 
-                $billRegistryClientBillingInfo=$billRegistyClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
+                $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
                 $billRegistryClientBillingInfoId=$billRegistryClientBillingInfo->id;
 
 
@@ -299,17 +299,17 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $billRegistryClientId=$billRegistryClient->id;
             $billRegistryTypePaymentId = $_GET['billRegistryTypePaymentId'];
             $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
-            $billRegistryClientBillingInfo=$billRegistyClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
+            $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
             $billRegistryClientBillingInfoId=$billRegistryClientBillingInfo->id;
-            if ($_GET['invoiceNumber'] == '') {
+            if ($data['invoiceNumber'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
             } else {
-                $invoiceNumber = $_GET['invoiceNumber'];
+                $invoiceNumber = $data['invoiceNumber'];
             }
-            if ($_GET['dateInvoice'] == '') {
+            if ($data['dateInvoice'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
             } else {
-                $dateInvoice =strtotime($_GET['dateInvoice']);
+                $dateInvoice =strtotime($data['dateInvoice']);
                 $invoiceDate=date('Y-m-d H:i:s', $dateInvoice);
                 $invoiceYear=date('Y', $dateInvoice);
             }
@@ -324,7 +324,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceInsert->invoiceSiteChar='W';
         $billRegistryInvoiceInsert->billRegistryClientId=$billRegistryClientId;
         $billRegistryInvoiceInsert->billRegistryTypePaymentId=$billRegistryTypePaymentId;
-        $billRegistryInvoiceInsert->billRegistryClientBillingInfo=$billRegistryClientBillingInfoId;
+        $billRegistryInvoiceInsert->billRegistryClientBillingInfoId=$billRegistryClientBillingInfoId;
         $billRegistryInvoiceInsert->netTotal=$netTotal;
         $billRegistryInvoiceInsert->vat=$vatTotal;
         $billRegistryInvoiceInsert->discountTotal=$discountTotal;
@@ -336,10 +336,10 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $lastBillRegistryInvoiceId = $result['id'];
         }
         $billRegistryInvoiceRowRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
-        foreach ($rowInvoice as $row){
+        foreach (json_decode($rowInvoice,false) as $row){
             $billRegistryInvoiceRowInsert=$billRegistryInvoiceRowRepo->getEmptyEntity();
             $billRegistryInvoiceRowInsert->bilRegistryInvoiceId=$lastBillRegistryInvoiceId;
-            if($row->billRegistryProductId!=null || $row->billRegistryProductId!=0)
+            if($row->idProduct!=null || $row->idProduct!=0)
             $billRegistryInvoiceRowInsert->billRegistryProductId=$row->idProduct;
 
         }
