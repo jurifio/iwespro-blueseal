@@ -701,6 +701,7 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                     $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
                                     $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
                                     $billRegistryTimeTable->amountPayment = $amountRate;
+                                    $billRegistryTimeTable->billRegistryClientId=$billRegistryClientId;
                                     $billRegistryTimeTable->insert();
 
                                 }
