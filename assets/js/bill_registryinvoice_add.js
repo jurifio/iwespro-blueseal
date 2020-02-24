@@ -696,7 +696,7 @@ $(document).on('bs.invoice.save', function () {
         }).always(function (res) {
             bsModal.setOkEvent(function () {
                 bsModal.showOkBtn();
-                bsModa.hide();
+                bsModal.hide();
             });
             bsModal.showOkBtn();
         });

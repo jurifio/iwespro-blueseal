@@ -925,18 +925,19 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $invoiceText .= 'Description';
         }
         $invoiceText .= '</th>';
-        $invoiceText .= '<th class="text-center small">';
-        if ($isExtraUe != "1") {
-            $invoiceText .= 'Sconto';
-        } else {
-            $invoiceText .= 'Discount';
-        }
-        $invoiceText .= '</th>';
+
         $invoiceText .= '<th class="text-center small">';
         if ($isExtraUe != "1") {
             $invoiceText .= 'Importo';
         } else {
             $invoiceText .= 'Amount';
+        }
+        $invoiceText .= '</th>';
+        $invoiceText .= '<th class="text-center small">';
+        if ($isExtraUe != "1") {
+            $invoiceText .= 'Sconto';
+        } else {
+            $invoiceText .= 'Discount';
         }
         $invoiceText .= '</th>';
         $invoiceText .= '<th class="text-center small">';
@@ -962,7 +963,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             foreach ($rowInvoiceDetail as $rowInvoice) {
                 $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
                 $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
-                $invoiceText .= '<td class="text-center">' . $rowInvoice['percDiscount'] . '%: ' . money_format('%.2n',$rowInvoice['discountRow']) . ' &euro;' . '</td>';
+                $invoiceText .= '<td class="text-center">sconto' . $rowInvoice['percDiscount'] . ' %: ' . money_format('%.2n',$rowInvoice['discountRow']) . ' &euro;' . '</td>';
                 $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
                 $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
                 $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
@@ -970,6 +971,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
 
         }
         $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
+                        <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
@@ -984,6 +986,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                             class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td>
                     </tr>';
         $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
+                        <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
@@ -1020,6 +1023,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
+                        <td style="border: 0px"></td>
                         <td style="border: 0px">
                             <strong>';
         if ($isExtraUe != "1") {
@@ -1034,7 +1038,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
         }
         $invoiceText .= '<tr style="border: 0px" class="text-center">
-                        <td colspan="2" style="border: 0px">';
+                        <td colspan="3" style="border: 0px">';
         if ($isExtraUe != "1") {
             $invoiceText .= 'Modalità di pagamento ' . $namePayment;
         } else {

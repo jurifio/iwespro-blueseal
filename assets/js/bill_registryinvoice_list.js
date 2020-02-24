@@ -13,7 +13,7 @@ $(document).on('bs.invoice.generate', function () {
             url: urldef,
             data: data
         }).done(function (res) {
-                bsModal.writeBody(res);
+            bsModal.writeBody(res);
         }).fail(function (res) {
             bsModal.writeBody(res);
         }).always(function (res) {
@@ -25,12 +25,11 @@ $(document).on('bs.invoice.generate', function () {
     });
 
 
-
 });
 $(document).on('bs.invoice.add', function () {
-    let url='/blueseal/anagrafica/fatture-inserisci';
+    let url = '/blueseal/anagrafica/fatture-inserisci';
 
-    window.location.href=url;
+    window.location.href = url;
 
 
 });
@@ -38,10 +37,10 @@ $(document).on('bs.invoice.add', function () {
 $(document).on('bs.invoice.print', function () {
     let invoice = (new URL(document.location)).searchParams.get("order");
 
-    if (invoice == null){
+    if (invoice == null) {
         let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-        if(selectedRows.length != 1) {
+        if (selectedRows.length != 1) {
             new Alert({
                 type: "warning",
                 message: "Seleziona una riga"
@@ -49,22 +48,22 @@ $(document).on('bs.invoice.print', function () {
             return false;
         }
 
-        invoice = selectedRows[0].DT_RowId.replace('Row__','');
+        invoice = selectedRows[0].DT_RowId.replace('row__', '');
     }
 
     let bsModal = new $.bsModal('Stampa ordine', {
         body: `Stampa Fattura`
     });
 
-
-
-                let extUrl = `/blueseal/xhr/BillInvoiceOnlyPrintAjaxController?invoiceId=${invoice}`;
-                window.open(extUrl, "_blank");
-
-
-
-    bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        bsModal.hide();
+
+        let extUrl = `/blueseal/xhr/BillInvoiceOnlyPrintAjaxController?invoiceId=${invoice}`;
+        window.open(extUrl, "_blank");
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            bsModal.hide();
+        });
     });
 });
