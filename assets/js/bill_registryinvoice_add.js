@@ -554,8 +554,10 @@ function addRowProduct(){
     let vatRow=parseFloat($('#netTotalRow').val())/100*parseFloat($('#percVat').val());
     let discountRowAmount=parseFloat($('#netTotalRow').val())/100*parseFloat($('#discountRow').val());
     let grossTotalRow=parseFloat($('#netTotalRow').val())+vatRow;
+    let percDiscountRow=parseFloat($('#discountRow').val());
+    percDiscountRow.toFixed(2);
     let rowInvoiceSingle=[];
-    var insertRow={idRow:counterRow, idProduct:$('#idProduct').val(),price:$('#price').val(),description:$('#description').val(),qty:$('#qty').val(),netTotalRow:$('#netTotalRow').val(),vatRow:vatRow,discountRowAmount:discountRowAmount,grossTotalRow:grossTotalRow,billRegistryTypeTaxesProductId:$('#billRegistryTypeTaxesProductId').val()};
+    var insertRow={idRow:counterRow, idProduct:$('#idProduct').val(),price:$('#price').val(),description:$('#description').val(),qty:$('#qty').val(),netTotalRow:$('#netTotalRow').val(),vatRow:vatRow,percDiscountRow:percDiscountRow,discountRowAmount:discountRowAmount,grossTotalRow:grossTotalRow,billRegistryTypeTaxesProductId:$('#billRegistryTypeTaxesProductId').val()};
     rowInvoice.push(insertRow);
     var oldGrossTotal=parseFloat($('#grossTotal').val());
     var grossTotal=oldGrossTotal+grossTotalRow;
@@ -694,6 +696,7 @@ $(document).on('bs.invoice.save', function () {
         }).always(function (res) {
             bsModal.setOkEvent(function () {
                 bsModal.showOkBtn();
+                bsModa.hide();
             });
             bsModal.showOkBtn();
         });

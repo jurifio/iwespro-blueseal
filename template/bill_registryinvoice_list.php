@@ -110,6 +110,16 @@
             data-title="Aggiungi Fattura"
             data-placement="bottom">
         </bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-print"
+            data-permission="/admin/product/add"
+            data-event="bs.invoice.print"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="stampa Fattura"
+            data-placement="bottom">
+        </bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

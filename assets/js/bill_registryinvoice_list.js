@@ -34,3 +34,37 @@ $(document).on('bs.invoice.add', function () {
 
 
 });
+
+$(document).on('bs.invoice.print', function () {
+    let invoice = (new URL(document.location)).searchParams.get("order");
+
+    if (invoice == null){
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if(selectedRows.length != 1) {
+            new Alert({
+                type: "warning",
+                message: "Seleziona una riga"
+            }).open();
+            return false;
+        }
+
+        invoice = selectedRows[0].DT_RowId.replace('Row__','');
+    }
+
+    let bsModal = new $.bsModal('Stampa ordine', {
+        body: `Stampa Fattura`
+    });
+
+
+
+                let extUrl = `/blueseal/xhr/BillInvoiceOnlyPrintAjaxController?invoiceId=${invoice}`;
+                window.open(extUrl, "_blank");
+
+
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        bsModal.hide();
+    });
+});
