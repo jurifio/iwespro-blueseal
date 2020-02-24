@@ -602,6 +602,7 @@ $(document).on('bs.client.save', function () {
         'phone=' + $("#phone").val() + '&' +
         'mobile=' + $("#mobile").val() + '&' +
         'fax=' + $("#fax").val() + '&' +
+        'typeClientId='+ $("#typeClientId").val() + '&' +
         'userId=' + $("#userId").val() + '&' +
         'contactName=' + $("#contactName").val() + '&' +
         'phoneAdmin=' + $("#phoneAdmin").val() + '&' +

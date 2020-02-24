@@ -207,13 +207,47 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="website"> WebSite</label>
                                         <input id="website" autocomplete="off" type="text"
                                                class="form-control" name="website" value="<?php echo $brc->website; ?>"
                                         />
                                     </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <select id="typeClientId" name="typeClientId"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+                                        <?php switch ($brc->typeClientId) {
+                                            case "1":
+                                                echo '"<option selected="selected" value="1">Contatto</option>"';
+                                                echo '"<option value="2">Cliente</option>"';
+                                                echo '"<option value="3">Fornitore</option>"';
+                                                echo '"<option value="4">Entrambi</option>"';
+                                                break;
+                                            case 2:
+                                                echo '"<option value="1">Contatto</option>"';
+                                                echo '"<option selected="selected" value="2">Cliente</option>"';
+                                                echo '"<option value="3">Fornitore</option>"';
+                                                echo '"<option value="4">Entrambi</option>"';
+                                                break;
+                                            case 3:
+                                                echo '"<option value="1">Contatto</option>"';
+                                                echo '"<option  value="2">Cliente</option>"';
+                                                echo '"<option selected="selected" value="3">Fornitore</option>"';
+                                                echo '"<option value="4">Entrambi</option>"';
+                                                break;
+                                            case 4:
+                                                echo '"<option value="1">Contatto</option>"';
+                                                echo '"<option  value="2">Cliente</option>"';
+                                                echo '"<option  value="3">Fornitore</option>"';
+                                                echo '"<option selected="selected" value="4">Entrambi</option>"';
+                                                break;
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -759,41 +793,41 @@
                 </div>
             </div>
         </div>
-            <div id="insertClientContract" class="tabcontent">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel-heading clearfix">
-                            <h5 class="m-t-12">Inserimento Contratti</h5>
-                        </div>
+        <div id="insertClientContract" class="tabcontent">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-heading clearfix">
+                        <h5 class="m-t-12">Inserimento Contratti</h5>
                     </div>
                 </div>
-                <div class="row">
-                    <?php
-                    $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
-                    $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Contratto"></div></div>';
+            </div>
+            <div class="row">
+                <?php
+                $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
+                $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Contratto"></div></div>';
 
-                    $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">Contratto</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Righe Contratto</th><th style="width:10%;">Lista<br>Righe Contratto</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
+                $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:20%;">id contratto</th><th style="width:20%;">Contratto</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Righe Contratto</th><th style="width:10%;">Lista<br>Righe Contratto</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
 
+                ?>
+                <div id="rawContract">
+                    <?php foreach ($brcContract as $contract) {
+                        $brcr = \Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId' => $contract->id]);
+                        $brp = \Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id' => $brcr->billRegistryGroupProductId]);
+                        $bodyContract .= '<tr id="trContract' . $contract->id . '"><td>' . $contract->id . '-' . $contract->billRegistryClientId . '-' . $contract->billRegistryClientAccountId . '</td>';
+                        $bodyContract .= '<td>' . $brp->name . '</td><td>' . $contract->dateContractExpire . '</td>';
+                        $bodyContract .= '<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                        $bodyContract .= '<td><button class="success" id="addContractDetail" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
+                        $bodyContract .= '<td><button class="success" id="listContractDetail" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
+                        $bodyContract .= '<td><button class="success" id="deleteContract"  onclick="deleteContract(' . $contract->id . ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                    }
+                    echo $bodyContract;
                     ?>
-                    <div id="rawContract">
-                        <?php foreach ($brcContract as $contract) {
-                            $brcr=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId'=>$contract->id]);
-                            $brp=\Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id'=>$brcr->billRegistryGroupProductId]);
-                            $bodyContract .='<tr id="trContract'.$contract->id.'"><td>'.$contract->id.'-'.$contract->billRegistryClientId.'-'.$contract->billRegistryClientAccountId.'</td>';
-                            $bodyContract .='<td>'.$brp->name.'</td><td>'.$contract->dateContractExpire.'</td>';
-                            $bodyContract.='<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                            $bodyContract.='<td><button class="success" id="addContractDetail" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
-                            $bodyContract.='<td><button class="success" id="listContractDetail" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
-                            $bodyContract.='<td><button class="success" id="deleteContract"  onclick="deleteContract('. $contract->id .')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
-                        }
-                        echo $bodyContract;
-                        ?>
-                    </div>
-                    </table>
                 </div>
+                </table>
             </div>
         </div>
     </div>
+</div>
 </div>
 <?php include "parts/footer.php" ?>
 </div>

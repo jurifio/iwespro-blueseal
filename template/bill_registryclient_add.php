@@ -182,12 +182,27 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="website">WebSite</label>
                                         <input id="website" autocomplete="off" type="text"
                                                class="form-control" name="website" value=""
                                         />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeClientId">Seleziona la Nazione </label>
+                                        <select id="typeClientId" name="typeClientId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option value=""></option>
+                                            <option value="1">Contatto</option>
+                                            <option value="2">Cliente</option>
+                                            <option value="3">Fornitore</option>
+                                            <option value="4">Entrambi</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

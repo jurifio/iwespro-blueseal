@@ -181,6 +181,11 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
         } else {
             $accountStatusId = $_GET['accountStatusId'];
         }
+        if ($_GET['typeClientId'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Tipo Cliente Non Selezionato</i>';
+        } else {
+            $typeClientId = $_GET['typeClientId'];
+        }
         if ($_GET['dateActivation'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
         } else {
@@ -262,6 +267,7 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
             $brcInsert->countryId = $countryId;
             $brcInsert->phone = $phone;
             $brcInsert->mobile = $mobile;
+            $brcInsert->typeClientId=$typeClientId;
             $brcInsert->vatNumber = $vatNumber;
             $brcInsert->fax = $fax;
             if($userId!=null){
