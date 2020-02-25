@@ -39,10 +39,20 @@ class CDayBillingJournalInsertAjaxController extends AAjaxController
     public function post()
     {
         try {
-           /* $sql = 'DELETE FROM `BillingJournal` WHERE userId=' . $id;
-            \Monkey::app()->dbAdapter->query($sql,[]);*/
-            $shops = \Monkey::app()->repoFactory->create('Shop') - findBy(['hasEcommerce' => 1]);
+            /* $sql = 'DELETE FROM `BillingJournal` WHERE userId=' . $id;
+             \Monkey::app()->dbAdapter->query($sql,[]);*/
+            $shops = \Monkey::app()->repoFactory->create('Shop') -> findBy(['hasEcommerce' => 1]);
             foreach ($shops as $shop) {
+                $shopId=$shop->id;
+                $totalUeNetReceipt =0;
+                $totalUeVatReceipt = 0;
+                $totalUeReceipt = 0;
+                $totalUeNetInvoice =0;
+                $totalUeVatInvoice = 0;
+                $totalUeInvoice = 0;
+                $totalXUeNetXInvoice = 0;
+                $totalXUeVatInvoice = 0;
+                $totalXUeInvoice = 0;
 
                 $today = new \DateTime();
                 $resultdate = $today->format('Y-m-d');
@@ -124,24 +134,24 @@ class CDayBillingJournalInsertAjaxController extends AAjaxController
 
                 $billingJournalRepo = \Monkey::app()->repoFactory->create('BillingJournal');
 
-                    /** var CRepo $billingJournalRepo */
+                /** var CRepo $billingJournalRepo */
 
-                    $billingJournalInsert = $billingJournalRepo->getEmptyEntity();
-                    $billingJournalInsert->date = $resultdate;
-                    $billingJournalInsert->totalUeNetReceipt = $totalUeNetReceipt;
-                    $billingJournalInsert->totalUeVatReceipt = $totalUeVatReceipt;
-                    $billingJournalInsert->totalUeReceipt = $totalUeReceipt;
-                    $billingJournalInsert->totalUeNetInvoice = $totalUeNetInvoice;
-                    $billingJournalInsert->totalUeVatInvoice = $totalUeVatInvoice;
-                    $billingJournalInsert->totalUeInvoice = $totalUeInvoice;
-                    $billingJournalInsert->totalXUeNetInvoice = $totalXUeNetXInvoice;
-                    $billingJournalInsert->totalXUeVatInvoice = $totalXUeVatInvoice;
-                    $billingJournalInsert->totalXUeInvoice = $totalXUeInvoice;
-                    $billingJournalInsert->groupUeTextReceipt = $groupUeTextReceipt;
-                    $billingJournalInsert->groupUeTextInvoice = $groupUeTextInvoice;
-                    $billingJournalInsert->groupXUeTextInvoice = $groupXUeTextInvoice;
-                    $billingJournalInsert->shopId=$shopId;
-                    $billingJournalInsert->insert();
+                $billingJournalInsert = $billingJournalRepo->getEmptyEntity();
+                $billingJournalInsert->date = $resultdate;
+                $billingJournalInsert->totalUeNetReceipt = $totalUeNetReceipt;
+                $billingJournalInsert->totalUeVatReceipt = $totalUeVatReceipt;
+                $billingJournalInsert->totalUeReceipt = $totalUeReceipt;
+                $billingJournalInsert->totalUeNetInvoice = $totalUeNetInvoice;
+                $billingJournalInsert->totalUeVatInvoice = $totalUeVatInvoice;
+                $billingJournalInsert->totalUeInvoice = $totalUeInvoice;
+                $billingJournalInsert->totalXUeNetInvoice = $totalXUeNetXInvoice;
+                $billingJournalInsert->totalXUeVatInvoice = $totalXUeVatInvoice;
+                $billingJournalInsert->totalXUeInvoice = $totalXUeInvoice;
+                $billingJournalInsert->groupUeTextReceipt = $groupUeTextReceipt;
+                $billingJournalInsert->groupUeTextInvoice = $groupUeTextInvoice;
+                $billingJournalInsert->groupXUeTextInvoice = $groupXUeTextInvoice;
+                $billingJournalInsert->shopId=$shopId;
+                $billingJournalInsert->insert();
 
 
             }

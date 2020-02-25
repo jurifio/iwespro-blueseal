@@ -48,8 +48,18 @@ class CDayBillingJournalInsertJob extends ACronJob
         try {
             /* $sql = 'DELETE FROM `BillingJournal` WHERE userId=' . $id;
              \Monkey::app()->dbAdapter->query($sql,[]);*/
-            $shops = \Monkey::app()->repoFactory->create('Shop') - findBy(['hasEcommerce' => 1]);
+            $shops = \Monkey::app()->repoFactory->create('Shop') -> findBy(['hasEcommerce' => 1]);
             foreach ($shops as $shop) {
+                $shopId=$shop->id;
+                $totalUeNetReceipt =0;
+                $totalUeVatReceipt = 0;
+                $totalUeReceipt = 0;
+                $totalUeNetInvoice =0;
+                $totalUeVatInvoice = 0;
+                $totalUeInvoice = 0;
+                $totalXUeNetXInvoice = 0;
+                $totalXUeVatInvoice = 0;
+                $totalXUeInvoice = 0;
 
                 $today = new \DateTime();
                 $resultdate = $today->format('Y-m-d');
