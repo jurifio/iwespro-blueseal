@@ -32,14 +32,15 @@ class CBillingJournalListAjaxController extends AAjaxController
                         b.groupUeTextReceipt as groupUeTextReceipt,
                         b.groupUeTextInvoice as groupUeTextInvoice,
                         b.groupXUeTextInvoice as groupXUeTextInvoice,
+                        s.shopName as shopName,
+                        s.shopId as shopId,
                         b.datePrint as datePrint
                          
-                        from BillingJournal b  order By `date` Asc
+                        from BillingJournal b join shop s on b.shopId=s.id order By `date` Asc
                     ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
-
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
             $date = new \DateTime($row['date']);

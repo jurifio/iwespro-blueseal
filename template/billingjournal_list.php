@@ -44,6 +44,11 @@
                                     data-orderable="true"
                                     class="center">id
                                 </th>
+                                <th data-slug="shop"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop
+                                </th>
                                 <th data-slug="date"
                                     data-searchable="true"
                                     data-orderable="true"
