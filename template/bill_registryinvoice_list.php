@@ -23,6 +23,43 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-1">gennaio</div>
+                            <div class="col-md-1">Febbraio</div>
+                            <div class="col-md-1">Marzo</div>
+                            <div class="col-md-1">Aprile</div>
+                            <div class="col-md-1">Maggio</div>
+                            <div class="col-md-1">Giugno</div>
+                            <div class="col-md-1">Luglio</div>
+                            <div class="col-md-1">Agosto</div>
+                            <div class="col-md-1">Settembre</div>
+                            <div class="col-md-1">Ottobre</div>
+                            <div class="col-md-1">Novembre</div>
+                            <div class="col-md-1">Dicembre</div>
+                        </div>
+                        <div class="row">
+                        <?php
+                        $currentYear = (new DateTime()) -> format('Y');
+
+
+                        for ($i=1;$i<13;$i++) {
+                            $sql = 'select sum(amountPayment) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
+                            $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach ($resultTotalPayment as $sumPayment) {
+                                echo '<div class="col-md-1">' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                            }
+                        }
+                        ?>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="bill_registryinvoice_list"
                                data-controller="BillRegistryInvoiceListAjaxController"
@@ -101,24 +138,24 @@
                 data-placement="bottom">
         </bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-plus-circle"
-            data-permission="/admin/product/add"
-            data-event="bs.invoice.add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi Fattura"
-            data-placement="bottom">
+                data-tag="a"
+                data-icon="fa-plus-circle"
+                data-permission="/admin/product/add"
+                data-event="bs.invoice.add"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi Fattura"
+                data-placement="bottom">
         </bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-print"
-            data-permission="/admin/product/add"
-            data-event="bs.invoice.print"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="stampa Fattura"
-            data-placement="bottom">
+                data-tag="a"
+                data-icon="fa-print"
+                data-permission="/admin/product/add"
+                data-event="bs.invoice.print"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="stampa Fattura"
+                data-placement="bottom">
         </bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
