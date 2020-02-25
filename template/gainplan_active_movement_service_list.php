@@ -25,8 +25,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="gainplanpassivemovement_list"
-                               data-controller="GainPlanPassiveMovementListAjaxController"
+                               data-datatable-name="gainplan_list"
+                               data-controller="GainPlanActiveMovementServiceListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500"
@@ -43,41 +43,65 @@
                                     data-default-order="desc"
                                     class="center dataFilterType">Data Movimento
                                 </th>
-                                <th data-slug="seasonName"
+                                <th data-slug="season"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione
                                 </th>
-                                <th data-slug="gainPlanId"
+                                <th data-slug="orderId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Contro Partiva Attiva
+                                    data-orderable="true" class="center">Numero Ordine
                                 </th>
-                                <th data-slug="invoice"
+                                <th data-slug="invoiceId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Fattura di acquisto
+                                    data-orderable="true" class="center">Fattura
                                 </th>
-                                <th data-slug="amount"
+                                <th data-slug="customerName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Imponibile
-                                </th>
-                                <th data-slug="amountVat"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">IVA
-                                </th>
-                                <th data-slug="amountTotal"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Totale
-                                </th>
-                                <th data-slug="fornitureName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Fornitore
-                                </th>
-                                <th data-slug="serviceName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Servizio
+                                    data-orderable="true" class="center">Cliente/Fornitore
                                 </th>
                                 <th data-slug="shopId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">ShopId
+                                    data-orderable="true" class="center">Shop Name
+                                </th>
+                                <th data-slug="country"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Nazione
+                                </th>
+                                <th data-slug="typeMovement"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">tipo Movimento
+                                </th>
+                                <th data-slug="MovementPassiveCollect"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Fattura Contro Partita/Fornitore
+                                </th>
+                                <th data-slug="amount"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo
+                                </th>
+                                <th data-slug="imp"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Imponibile
+                                </th>
+                                <th data-slug="cost"
+                                         data-searchable="true"
+                                         data-orderable="true" class="center">Costo
+                                </th>
+                                <th data-slug="deliveryCost"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Costo Di Spedizione
+                                </th>
+                                <th data-slug="paymentCommission"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Commissioni su Pagamento
+                                </th>
+                                <th data-slug="profit"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Margine
+                                </th>
+                                <th data-slug="isVisible"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Attivo
                                 </th>
                             </tr>
                             </thead>
@@ -94,47 +118,17 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione documenti di Acquisto">
+    <bs-toolbar-group data-group-label="Gestione Gain Plan">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="allShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi  un nuovo costo  manuale"
-            data-placement="bottom"
-            data-href="/blueseal/registri/gainplan-passivo/aggiungi/"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-eraser"
-                data-permission="allShops"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Cancella Acquisto (!!!)"
-                data-placement="bottom"
-                data-event="bs.gainplanpassivemovement.delete"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-toggle-off"
-            data-permission="allShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Disabilita Acquisto (!!!)"
-            data-placement="bottom"
-            data-event="bs.gainplanpassivemovement.disable"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-toggle-on"
-            data-permission="allShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Abilita Acquisto (!!!)"
-            data-placement="bottom"
-            data-event="bs.gainplanpassivemovement.enable"
-        ></bs-toolbar-button>
+                    data-tag="a"
+                    data-icon="fa-file-o fa-plus"
+                    data-permission="allShops"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-title="Aggiungi  un nuovo acquisto  manuale"
+                    data-placement="bottom"
+                    data-href="/blueseal/registri/gainplan-passivo/aggiungi"
+            ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

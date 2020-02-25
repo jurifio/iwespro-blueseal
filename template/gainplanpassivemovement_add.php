@@ -78,7 +78,7 @@
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="serviceName">Servizio</label>
                                             <input id="serviceName" class="form-control"
-                                                   placeholder="inserisci il numero Fattura" name="serviceName"
+                                                   placeholder="inserisci la descrizione del servizio" name="serviceName"
                                                    required="required">
                                             <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                         </div>
@@ -129,6 +129,14 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.gainplan.passivemovement.save"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-toggle-off"
+            data-permission="allShops"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-event="bs.gainplan.passivemovement.disable"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

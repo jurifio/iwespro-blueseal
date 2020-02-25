@@ -59,7 +59,7 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
             /** @var $val CGainPlanPassiveMovement */
             $val = \Monkey ::app() -> repoFactory -> create('GainPlanPassiveMovement') -> findOneBy($row);
             $row['DT_RowId'] = $val -> printId();
-            $row['id'] = '<a href="/blueseal/registri/gainplan-passivo/modifica/' . $val -> printId() . '">' . $val -> printId() . '</a>';
+            $row['id'] = '<a href="/blueseal/gainplan/gainplan-passivo/modifica/' . $val -> printId() . '">' . $val -> printId() . '</a>';
             $row['dateMovement'] = $val -> dateMovement;
             $row['gainPlanId'] = $val -> gainPlanId;
             $row['invoice'] = $val -> invoice;

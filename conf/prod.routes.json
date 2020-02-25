@@ -3141,7 +3141,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/registri/gainplan(/)?",
+            "pattern": "/blueseal/gainplan/gainplan(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanListController"
             },
@@ -3155,7 +3155,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/registri/gainplan-passivo(/)?",
+            "pattern": "/blueseal/gainplan/gainplan-passivo(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementListController"
             },
@@ -3169,7 +3169,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/registri/gainplan-passivo/aggiungi(/)?",
+            "pattern": "/blueseal/gainplan/gainplan-passivo/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementAddController"
             },
@@ -3183,13 +3183,41 @@
             ]
         },
         {
-            "pattern": "/blueseal/registri/gainplan-passivo/modifica/:id(/)?",
+            "pattern": "/blueseal/gainplan/gainplan-passivo/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanPassiveMovementEditController"
             },
             "filters": {
                 "id": "[0-9]+"
             },
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/gainplan/gainplan-attivo-ecommerce(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanActiveMovementEcommerceListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/gainplan/gainplan-attivo-servizi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CGainPlanActiveMovementServiceListController"
+            },
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",

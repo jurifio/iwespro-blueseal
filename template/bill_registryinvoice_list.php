@@ -23,30 +23,80 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-1">gennaio</div>
-                            <div class="col-md-1">Febbraio</div>
-                            <div class="col-md-1">Marzo</div>
-                            <div class="col-md-1">Aprile</div>
-                            <div class="col-md-1">Maggio</div>
-                            <div class="col-md-1">Giugno</div>
-                            <div class="col-md-1">Luglio</div>
-                            <div class="col-md-1">Agosto</div>
-                            <div class="col-md-1">Settembre</div>
-                            <div class="col-md-1">Ottobre</div>
-                            <div class="col-md-1">Novembre</div>
-                            <div class="col-md-1">Dicembre</div>
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Aprile</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Maggio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Giugno</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Luglio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Agosto</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Settembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Ottobre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Novembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
                         </div>
-                        <div class="row">
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1"  style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='1' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='2' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                        <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`  from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='3' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='4' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='5' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='6' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='7' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count` from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='8' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='9' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='10' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='11' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`  from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='12' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                        </div>
+                        <div class="row" align="center"">
                         <?php
-                        $currentYear = (new DateTime()) -> format('Y');
-
-
                         for ($i=1;$i<13;$i++) {
                             $sql = 'select sum(amountPayment) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
                             $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($resultTotalPayment as $sumPayment) {
-                                echo '<div class="col-md-1">' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
                             }
                         }
                         ?>
@@ -78,7 +128,7 @@
                                 </th>
                                 <th data-slug="invoiceNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">invoiceNumber
+                                    data-orderable="true" class="center">Numero Fattura
                                 </th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"

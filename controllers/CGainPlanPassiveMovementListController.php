@@ -21,10 +21,10 @@ class CGainPlanPassiveMovementListController extends ARestrictedAccessRootContro
 
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
-        $pageURL = $blueseal."/registri/gainplan-passivo";
+        $pageURL = $blueseal."/gainplan/gainplan-passivo";
 
-        $opera = $blueseal."/registri/gainplan-passivo";
-        $aggiungi = $blueseal."/registri/gainplan-passivo";
+        $opera = $blueseal."/gainplan/gainplan-passivo";
+        $aggiungi = $blueseal."/gainplan/gainplan-passivo";
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
