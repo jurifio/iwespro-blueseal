@@ -46,91 +46,90 @@ class CDayBillingJournalInsertJob extends ACronJob
     public function run($args = null)
     {
         try {
-            $today = new \DateTime();
-            $resultdate = $today->format('Y-m-d');
+            /* $sql = 'DELETE FROM `BillingJournal` WHERE userId=' . $id;
+             \Monkey::app()->dbAdapter->query($sql,[]);*/
+            $shops = \Monkey::app()->repoFactory->create('Shop') - findBy(['hasEcommerce' => 1]);
+            foreach ($shops as $shop) {
+
+                $today = new \DateTime();
+                $resultdate = $today->format('Y-m-d');
 // totale Ricevute
-            $sql = "SELECT sum(O.netTotal) AS netTotalReceipt,
+                $sql = "SELECT sum(O.netTotal) AS netTotalReceipt,
               sum(O.vat) AS vatTotalReceipt,
               sum(O.grossTotal)AS grossTotalReceipt ,
               I.invoiceDate as invoiceDate
               FROM Invoice I 
               JOIN `Order` O ON I.orderId = O.id  
-                WHERE invoiceDate between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59'  AND I.invoiceType='K' ";
+                WHERE I.invoiceDate >= '" . $resultdate . " 00:00:00' and I.invoiceDate <= '" . $resultdate . " 23:59:59'   AND I.invoiceType='".$shop->receipt."' ";
 
-            $resultTotalReceipt = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            forEach ($resultTotalReceipt as $resultTotalReceipts) {
-                $totalUeNetReceipt = $resultTotalReceipts['netTotalReceipt'];
-                $totalUeVatReceipt = $resultTotalReceipts['vatTotalReceipt'];
-                $totalUeReceipt = $resultTotalReceipts['grossTotalReceipt'];
-            }
-            $sql = "SELECT sum(O.netTotal) AS netTotalInvoice,
+                $resultTotalReceipt = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                forEach ($resultTotalReceipt as $resultTotalReceipts) {
+                    $totalUeNetReceipt = $resultTotalReceipts['netTotalReceipt'];
+                    $totalUeVatReceipt = $resultTotalReceipts['vatTotalReceipt'];
+                    $totalUeReceipt = $resultTotalReceipts['grossTotalReceipt'];
+                }
+                $sql = "SELECT sum(O.netTotal) AS netTotalInvoice,
               sum(O.vat) AS vatTotalInvoice,
               sum(O.grossTotal)AS grossTotalInvoice, 
               I.invoiceDate as invoiceDate
               FROM Invoice I 
              JOIN `Order` O ON I.orderId = O.id  
-                WHERE invoiceDate between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59' AND I.invoiceType='P' ";
+                WHERE I.invoiceDate >= '" . $resultdate . " 00:00:00' and I.invoiceDate <= '" . $resultdate . " 23:59:59'   AND I.invoiceType='".$shop->invoiceUe."' ";
 
-            $resultTotalInvoice = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            forEach ($resultTotalInvoice as $resultTotalInvoices) {
-                $totalUeNetInvoice = $resultTotalInvoices['netTotalInvoice'];
-                $totalUeVatInvoice = $resultTotalInvoices['vatTotalInvoice'];
-                $totalUeInvoice = $resultTotalInvoices['grossTotalInvoice'];
-            }
-            $sql = "SELECT sum(O.netTotal) AS netTotalXInvoice,
+                $resultTotalInvoice = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                forEach ($resultTotalInvoice as $resultTotalInvoices) {
+                    $totalUeNetInvoice = $resultTotalInvoices['netTotalInvoice'];
+                    $totalUeVatInvoice = $resultTotalInvoices['vatTotalInvoice'];
+                    $totalUeInvoice = $resultTotalInvoices['grossTotalInvoice'];
+                }
+                $sql = "SELECT sum(O.netTotal) AS netTotalXInvoice,
               sum(O.vat) AS vatTotalXInvoice,
               sum(O.grossTotal)AS grossTotalXInvoice,
               I.invoiceDate as InvoiceDate
               FROM Invoice I 
               JOIN `Order` O ON I.orderId = O.id  
-                WHERE invoiceDate between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59' AND I.invoiceType='X' ";
+                WHERE I.invoiceDate >= '" . $resultdate . " 00:00:00' and I.invoiceDate <= '" . $resultdate . " 23:59:59'   AND I.invoiceType='".$shop->invoiceExtraUe."' ";
 
-            $resultTotalXInvoice = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            forEach ($resultTotalXInvoice as $resultTotalXInvoices) {
-                $totalXUeNetXInvoice = $resultTotalXInvoices['netTotalXInvoice'];
-                $totalXUeVatInvoice = $resultTotalXInvoices['vatTotalXInvoice'];
-                $totalXUeInvoice = $resultTotalXInvoices['grossTotalXInvoice'];
-            }
-            $sql = "SELECT concat(I.invoiceNumber,'/',I.invoiceType) AS groupUeTextReceipt,
+                $resultTotalXInvoice = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                forEach ($resultTotalXInvoice as $resultTotalXInvoices) {
+                    $totalXUeNetXInvoice = $resultTotalXInvoices['netTotalXInvoice'];
+                    $totalXUeVatInvoice = $resultTotalXInvoices['vatTotalXInvoice'];
+                    $totalXUeInvoice = $resultTotalXInvoices['grossTotalXInvoice'];
+                }
+                $sql = "SELECT concat(I.invoiceNumber,'/',I.invoiceType) AS groupUeTextReceipt,
                 I.invoiceDate as InvoiceDate
         
               FROM Invoice I 
               JOIN `Order` O ON I.orderId = O.id  
-                WHERE invoiceDate between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59' AND I.invoiceType='K' ";
-            $groupUeTextReceipt = 'Ricevute UE Emesse Sezionali:<br> ';
-            $resultGroupUeTextReceipt = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            forEach ($resultGroupUeTextReceipt as $resultGroupUeTextReceipts) {
-                $groupUeTextReceipt .= $resultGroupUeTextReceipts['groupUeTextReceipt'] . "<br>";
-            }
+                 WHERE I.invoiceDate >= '" . $resultdate . " 00:00:00' and I.invoiceDate <= '" . $resultdate . " 23:59:59'   AND I.invoiceType='".$shop->receipt."' ";
+                $groupUeTextReceipt = 'Ricevute UE Emesse Sezionali '.$shop->name.' :<br> ';
+                $resultGroupUeTextReceipt = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                forEach ($resultGroupUeTextReceipt as $resultGroupUeTextReceipts) {
+                    $groupUeTextReceipt .= $resultGroupUeTextReceipts['groupUeTextReceipt'] . "<br>";
+                }
 
-            $sql = "SELECT concat(I.invoiceNumber,'/',I.invoiceType) AS groupUeTextInvoice,
+                $sql = "SELECT concat(I.invoiceNumber,'/',I.invoiceType) AS groupUeTextInvoice,
               I.invoiceDate AS invoiceDate
               FROM Invoice I 
               JOIN `Order` O ON I.orderId = O.id  
-                WHERE invoiceDate between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59' AND I.invoiceType='P' ";
-            $groupUeTextInvoice = 'Fatture UE Emesse Sezionali:<br>';
-            $resultGroupUeTextInvoice = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            forEach ($resultGroupUeTextInvoice as $resultGroupUeTextInvoices) {
-                $groupUeTextInvoice .= $resultGroupUeTextInvoices['groupUeTextInvoice'] . "<br>";
-            }
-            $sql = "SELECT concat(I.invoiceNumber,'/',I.invoiceType) AS groupXUeTextInvoice,
+                 WHERE I.invoiceDate >= '" . $resultdate . " 00:00:00' and I.invoiceDate <= '" . $resultdate . " 23:59:59'   AND I.invoiceType='".$shop->invoiceUe."' ";
+                $groupUeTextInvoice = 'Fatture UE Emesse Sezionali '.$shop->name.' :<br> ';
+                $resultGroupUeTextInvoice = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                forEach ($resultGroupUeTextInvoice as $resultGroupUeTextInvoices) {
+                    $groupUeTextInvoice .= $resultGroupUeTextInvoices['groupUeTextInvoice'] . "<br>";
+                }
+                $sql = "SELECT concat(I.invoiceNumber,'/',I.invoiceType) AS groupXUeTextInvoice,
             I.invoiceDate as InvoiceDate
               FROM Invoice I 
               JOIN `Order` O ON I.orderId = O.id  
-                WHERE invoiceDate between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59' AND I.invoiceType='X' ";
-            $groupXUeTextInvoice = 'Fatture ExtraUE Emesse Sezionali:<br>';
-            $resultGroupXUeTextInvoice = \Monkey::app()->dbAdapter->query($sql, [])->fetchAll();
-            forEach ($resultGroupXUeTextInvoice as $resultGroupXUeTextInvoices) {
-                $groupXUeTextInvoice .= $resultGroupXUeTextInvoices['groupXUeTextInvoice'] . "<br>";
-            }
-            $sql="select count(*) as totalRecord from BillingJournal 
-             WHERE date between '" . $resultdate . " 00:00:00' and '" . $resultdate . " 23:59:59'";
-            $checkBillingResultExist=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-            foreach ($checkBillingResultExist as $checkBillingResultExists){
-                $existRecord=$checkBillingResultExists['totalRecord'];
-            }
-            $billingJournalRepo = \Monkey::app()->repoFactory->create('BillingJournal');
-            if($existRecord==0){
+                 WHERE I.invoiceDate >= '" . $resultdate . " 00:00:00' and I.invoiceDate <= '" . $resultdate . " 23:59:59'   AND I.invoiceType='".$shop->invoiceExtraUe."' ";
+                $groupXUeTextInvoice = 'Fatture ExtraUE Emesse Sezionali '.$shop->name.' :<br> ';
+                $resultGroupXUeTextInvoice = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                forEach ($resultGroupXUeTextInvoice as $resultGroupXUeTextInvoices) {
+                    $groupXUeTextInvoice .= $resultGroupXUeTextInvoices['groupXUeTextInvoice'] . "<br>";
+                }
+
+                $billingJournalRepo = \Monkey::app()->repoFactory->create('BillingJournal');
 
                 /** var CRepo $billingJournalRepo */
 
@@ -148,16 +147,19 @@ class CDayBillingJournalInsertJob extends ACronJob
                 $billingJournalInsert->groupUeTextReceipt = $groupUeTextReceipt;
                 $billingJournalInsert->groupUeTextInvoice = $groupUeTextInvoice;
                 $billingJournalInsert->groupXUeTextInvoice = $groupXUeTextInvoice;
+                $billingJournalInsert->shopId=$shopId;
                 $billingJournalInsert->insert();
-            }            $res=" Registrazione Registro Incassi eseguita";
-            return $res;
+
+
+            }
+
         } catch (\Throwable $e) {
-            $res=$e;
-            return $res;
+            $res = $e;
+
+           \Monkey::app()->applicationReport('CDayBillingJournalInsertJob','Insert Day Billing Journal','error',$res);
         }
 
 
     }
-
 
 }
