@@ -32,16 +32,15 @@ class CBillingJournalListAjaxController extends AAjaxController
                         b.groupUeTextReceipt as groupUeTextReceipt,
                         b.groupUeTextInvoice as groupUeTextInvoice,
                         b.groupXUeTextInvoice as groupXUeTextInvoice,
-                        s.shopName as shopName,
-                        s.shopId as shopId,
+                        s.name as shopName,
+                        s.id as shopId,
                         b.datePrint as datePrint
-                         
-                        from BillingJournal b join shop s on b.shopId=s.id order By `date` Asc
+                        from BillingJournal b join Shop s on b.shopId=s.id order By `date` Asc
                     ";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings(true);
-
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         foreach ($datatable->getResponseSetData() as $key=>$row) {
             $date = new \DateTime($row['date']);
             $row['date'] = $date->format('d-m-Y');
@@ -54,6 +53,7 @@ class CBillingJournalListAjaxController extends AAjaxController
             $row['totalXUeNetInvoice']=money_format('%.2n',  $row['totalXUeNetInvoice']) . ' &euro;';
             $row['totalXUeVatInvoice']=money_format('%.2n',  $row['totalXUeVatInvoice']) . ' &euro;';
             $row['totalXUeInvoice']=money_format('%.2n',  $row['totalXUeInvoice']) . ' &euro;';
+
             if(is_null($row['datePrint'])){
                 $row['datePrint']='Da Stampare';
             }
