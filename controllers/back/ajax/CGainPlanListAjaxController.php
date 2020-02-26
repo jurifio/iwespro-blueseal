@@ -31,7 +31,7 @@ class CGainPlanListAjaxController extends AAjaxController
        gp.userId as userId,
        gp.shopId as shopId,
        gp.customerName as customerName,
-       gp.invoiceId as invoiceid,
+       gp.invoiceId as invoiceId,
        if(gp.typeMovement=1,"Ordini","Servizi") as typeMovement,
        gp.amount as amount,
        gp.imp as imp,
@@ -128,11 +128,10 @@ class CGainPlanListAjaxController extends AAjaxController
 
                         if ($orders != null) {
                             $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
-                            $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
-                            $extraue = ($country->extraue == 1) ? 'yes' : 'no';
+
                             $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
 
-                            $nation = $country->name;
+
                         }
 
                         foreach ($orderLines as $orderLine) {
@@ -143,7 +142,7 @@ class CGainPlanListAjaxController extends AAjaxController
                                 if ($orderLine->remoteShopSellerId == 44) {
                                     $typeOrder = 'dettaglio Prodotto Diretto';
                                     $amount += $orderLine->netPrice;
-                                    $imp = ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
+                                    $imp =  $orderLine->netPrice - $orderLine->vat;
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                     $shippingCost = $orderLine->shippingCharge;
@@ -188,7 +187,6 @@ class CGainPlanListAjaxController extends AAjaxController
             }
             $row['invoiceId'] = $findInvoice;
             $row['shoId']=$shopOrder;
-            $row['country'] = $nation;
             $row['customerName'] = $customer;
             $row['amount'] = money_format('%.2n',$amount) . ' &euro;';
             $row['cost'] = money_format('%.2n',$cost) . ' &euro;';

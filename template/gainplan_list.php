@@ -63,10 +63,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop Name
                                 </th>
-                                <th data-slug="country"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Nazione
-                                </th>
+
                                 <th data-slug="typeMovement"
                                     data-searchable="true"
                                     data-orderable="true" class="center">tipo Movimento
