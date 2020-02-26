@@ -58,13 +58,18 @@ class CImportGainPlanJob extends ACronJob
             $orderPaymentMethodRepo = \Monkey::app()->repoFactory->create('OrderPaymentMethod');
             $gainPlanRepo = \Monkey::app()->repoFactory->create('GainPlan');
 
-            $invoices = $invoiceRepo->findBy(['invoiceSiteChar' => 'P']);
+            $invoices = $invoiceRepo->findAll();
             foreach ($invoices as $invoice) {
                 $invoiceDate = $invoice->invoiceDate;
                 $orderId = $invoice->orderId;
                 $order = $orderRepo->findOneBy(['id' => $orderId]);
-                $userAddress = \bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
-                $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
+                if($order->frozenBillingAddress!=null) {
+                    $userAddress = json_decode($order->frozenBillingAddress,false);
+
+                    $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
+                }else{
+                    $customer='';
+                }
                 $invoiceId = $invoice->id;
                 $shopId=$invoice->invoiceShopId;
                 $seasons = $seasonRepo->findAll();
