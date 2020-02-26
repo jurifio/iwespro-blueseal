@@ -32,7 +32,7 @@ class CGainPlanListAjaxController extends AAjaxController
        gp.shopId as shopId,
        gp.customerName as customerName,
        gp.invoiceId as invoiceid,
-       gp.typeMovement as typeMovement,
+       if(gp.typeMovement=1,"Ordini","Servizi") as typeMovement,
        gp.amount as amount,
        gp.imp as imp,
        gp.cost as cost,
@@ -45,8 +45,7 @@ class CGainPlanListAjaxController extends AAjaxController
        gp.invoiceExternal as invoiceExternal,
        if(gp.isActive=1,"Si","No") as isActive
        from GainPlan gp ORDER BY dateMovement DESC
-                
-    
+      
         ';
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
@@ -118,6 +117,7 @@ class CGainPlanListAjaxController extends AAjaxController
             switch ($val->typeMovement) {
                 case 1:
                     $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
+                    $typeMovement = 'Ordini';
                     if ($orderLines != null) {
                         $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
                         if ($invoice != null) {
@@ -131,7 +131,7 @@ class CGainPlanListAjaxController extends AAjaxController
                             $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
                             $extraue = ($country->extraue == 1) ? 'yes' : 'no';
                             $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-                            $typeMovement = 'Ordini';
+
                             $nation = $country->name;
                         }
 

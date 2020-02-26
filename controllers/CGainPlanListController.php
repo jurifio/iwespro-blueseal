@@ -21,10 +21,10 @@ class CGainPlanListController extends ARestrictedAccessRootController
 
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
-        $pageURL = $blueseal."/registri/gainplan";
+        $pageURL = $blueseal."/gainplan/gainplan";
 
-        $opera = $blueseal."/registri/gainplan";
-        $aggiungi = $blueseal."/registri/gainplan";
+        $opera = $blueseal."/gainplan/gainplan";
+        $aggiungi = $blueseal."/gainplan/gainplan";
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

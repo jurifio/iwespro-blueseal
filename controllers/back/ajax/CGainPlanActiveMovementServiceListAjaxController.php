@@ -33,8 +33,8 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
        gp.userId as userId,
        gp.shopId as shopId,
        gp.customerName as customerName,
-       gp.invoiceid as invoiceid,
-       gp.typeMovement as typeMovement,
+       gp.invoiceId as invoiceid,
+       if(gp.typeMovement=1,"Ordini","Servizi") as typeMovement,
        gp.amount as amount,
        gp.imp as imp,
        gp.cost as cost,
@@ -120,6 +120,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
             switch ($val->typeMovement) {
                 case 1:
                     $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
+                    $typeMovement = 'Ordini';
                     if ($orderLines != null) {
                         $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
                         if ($invoice != null) {
@@ -133,7 +134,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
                             $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
                             $extraue = ($country->extraue == 1) ? 'yes' : 'no';
                             $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-                            $typeMovement = 'Ordini';
+
                             $nation = $country->name;
                         }
 
@@ -145,7 +146,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
                                 if ($orderLine->remoteShopSellerId == 44) {
                                     $typeOrder = 'dettaglio Prodotto Diretto';
                                     $amount += $orderLine->netPrice;
-                                    $imp = ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
+                                    $imp+= ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                     $shippingCost = $orderLine->shippingCharge;
@@ -162,7 +163,6 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
 
                                     } else {
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                        $paralellFee = $shop->paralellFee;
                                         $cost += $orderLine->friendRevenue;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $shippingCost = $orderLine->shippingCharge;
