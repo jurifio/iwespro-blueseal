@@ -296,7 +296,7 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Estrai">
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
+            data-remote="bs-lists-generate-csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

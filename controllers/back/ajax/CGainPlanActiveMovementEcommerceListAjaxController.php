@@ -126,8 +126,13 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                         }
 
                         if ($orders != null) {
-                            $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
-                            $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
+                            $userAddress = json_decode($orders->frozenBillingAddress,false);
+                            if($userAddress->countryId!=null){
+                                $countryId=$userAddress->countryId;
+                            }else{
+                                $countryId='101';
+                            }
+                            $country = $countryRepo->findOneBy(['id' => $countryId]);
                             $extraue = ($country->extraue == 1) ? 'yes' : 'no';
                             $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
 
