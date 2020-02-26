@@ -34,7 +34,7 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
                         gppm.gainPlanId as gainPlanId,
                         gppm .fornitureName as fornitureName,
                         gppm.serviceName as serviceName,
-                        gppm.isActive as isActive,
+                         if(gp.isActive=1,"Si","No") as isActive,
                         gppm.dateCreate as dateCreate,
                         gppm.shopId as shopId,
                         gppm.dateMovement as dateMovement
@@ -76,6 +76,12 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
                 $shop = '';
             }
             $row['shopId'] = $shop;
+            if($val->isActive==1) {
+                $isActive = 'Si';
+            }else {
+                $isActive = 'No';
+            }
+            $row['isActive']=$isActive;
 
             $datatable->setResponseDataSetRow($key,$row);
         }

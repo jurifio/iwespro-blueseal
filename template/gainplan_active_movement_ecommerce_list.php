@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -20,6 +20,144 @@
                     </div>
                 </div>
             </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Aprile</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Maggio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Giugno</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Luglio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Agosto</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Settembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Ottobre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Novembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
+                        </div>
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1"  style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='1' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='2' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='3' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='4' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='5' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='6' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='7' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='8' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='9' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='10' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='11' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
+                                           where MONTH(I.invoiceDate)='12' and YEAR(I.invoiceYear)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                        </div>
+                        <div class="row" align="center"">
+
+                        <?php
+                        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                        $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                        $countryRepo=\Monkey::app()->repoFactory->create('Country');
+                        for ($i=1;$i<13;$i++) {
+                            $amount=0;
+                            $cost=0;
+                            $imp=0;
+                            $paymentCommission=0;
+                            $shippingCost=0;
+                            $sql='select * FROM OrderLine where `status` not like \'%ORD_CANCEL%\' OR  `status` not like \'%ORD_FRND_CANC%\'  OR `status` not like \'%ORD_MISSING%\' AND MONTH(creationDate)=\''.$i.'\' and YEAR(creationDate)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach($resultTotalPayment as $ol){
+
+                                    $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $ol['orderId']]);
+                                    if (!is_null($order->orderDate)) {
+                                        $userAddress = json_decode($order->frozenBillingAddress,false);
+                                        $countryId=$userAddress->countryId;
+                                        $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
+                                        $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $order->orderPaymentMethodId]);
+                                        $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
+                                            if ($ol['remoteShopSellerId'] == 44) {
+
+                                                $amount += $ol['netPrice'];
+                                                $imp = ($country->extraue == 1) ? $ol['netPrice'] :  $ol['netPrice'] - $ol['vat'];
+                                                $cost += $ol['friendRevenue'];
+                                                $paymentCommission += ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                                $shippingCost = $ol['shippingCharge'];
+
+
+                                            } else {
+                                                if ($ol['remoteOrderSupplierId'] != null) {
+                                                    $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
+                                                    $paralellFee = $shop->paralellFee;
+                                                    $amount += $ol['netPrice'] - ($ol['netPrice'] / 100 * $paralellFee);
+                                                    $imp += $amount * 100 / 122;
+                                                    $paymentCommission += ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                                    $cost += $ol['friendRevenue'];
+
+                                                } else {
+                                                    $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
+                                                    $paralellFee = $shop->paralellFee;
+                                                    $cost += $ol['friendRevenue'];
+                                                    $paymentCommission += ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                                    $shippingCost = $ol['shippingCharge'];
+                                                    $imp += round($ol['netPrice'] * 0.11,2) + $paymentCommission;
+                                                    $amount += (round($ol['netPrice'] * 0.11,2) + $paymentCommission) + ((round($ol['netPrice'] * 0.11,2) + $paymentCommission) / 100 * 22);
+
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+
+                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission) . ' &euro;</div>';
+
+                        }
+                        ?>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -71,6 +209,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">tipo Movimento
                                 </th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Attivo
+                                </th>
                                 <th data-slug="MovementPassiveCollect"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura Contro Partita/Fornitore
@@ -84,8 +226,8 @@
                                     data-orderable="true" class="center">Imponibile
                                 </th>
                                 <th data-slug="cost"
-                                         data-searchable="true"
-                                         data-orderable="true" class="center">Costo
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Costo
                                 </th>
                                 <th data-slug="deliveryCost"
                                     data-searchable="true"
@@ -99,10 +241,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Margine
                                 </th>
-                                <th data-slug="isVisible"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Attivo
-                                </th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -120,15 +259,35 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Gain Plan">
         <bs-toolbar-button
-                    data-tag="a"
-                    data-icon="fa-file-o fa-plus"
-                    data-permission="allShops"
-                    data-class="btn btn-default"
-                    data-rel="tooltip"
-                    data-title="Aggiungi  un nuovo acquisto  manuale"
-                    data-placement="bottom"
-                    data-href="/blueseal/registri/gainplan-passivo/aggiungi"
-            ></bs-toolbar-button>
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi  un nuovo acquisto  manuale"
+                data-placement="bottom"
+                data-href="/blueseal/registri/gainplan-passivo/aggiungi"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-toggle-off"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Disabilita Vendita (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanactivemovement.disable"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-toggle-on"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Abilita Vendita (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanactivemovement.enable"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

@@ -124,6 +124,7 @@ class CImportGainPlanFattureInCloudJob extends ACronJob
                         $gainPlanInsert->invoiceExternal = $val->numero;
                         $gainPlanInsert->externalId = $val->id;
                         $gainPlanInsert->TypeMovement = 2;
+                        $gainPlanINsert->isActive=1;
                         $gainPlanInsert->insert();
                     }
                 }

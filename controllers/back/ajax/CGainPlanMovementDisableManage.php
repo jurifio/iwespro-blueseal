@@ -31,9 +31,9 @@ class CGainPlanMovementDisableManage extends AAjaxController
         $id = $request->getRequestData('id');
         try {
             $gainPlanMovement = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy(['id'=>$id]);
-            $gainPlanMovement->isVisible='0';
+            $gainPlanMovement->isActive='1';
             $gainPlanMovement->update();
-            $res = 'Disabilitazione Eseguita con Successo';
+            $res = 'Abilitazione Eseguita con Successo';
 
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CGainPlanMovementDisableManage','Error','disable Gainplan Movement',$e,'');
@@ -48,7 +48,7 @@ class CGainPlanMovementDisableManage extends AAjaxController
         $id = $request->getRequestData('id');
         try {
             $gainPlanMovement = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy(['id'=>$id]);
-            $gainPlanMovement->isVisible=1;
+            $gainPlanMovement->isActive=0;
             $gainPlanMovement->update();
             $res = 'Disabilitazione Eseguita con Successo';
 

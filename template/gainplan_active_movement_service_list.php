@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -20,6 +20,93 @@
                     </div>
                 </div>
             </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Aprile</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Maggio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Giugno</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Luglio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Agosto</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Settembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Ottobre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Novembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
+                        </div>
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1"  style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='1' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='2' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`  from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='3' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='4' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='5' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='6' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='7' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count` from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='8' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='9' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='10' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='11' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`  from BillRegistryInvoice 
+                                           where MONTH(invoiceDate)='12' and YEAR(invoiceDate)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                        </div>
+                        <div class="row" align="center"">
+                        <?php
+                        for ($i=1;$i<13;$i++) {
+                            $sql = 'select sum(amountPayment) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
+                            $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach ($resultTotalPayment as $sumPayment) {
+                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                            }
+                        }
+                        ?>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -71,6 +158,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">tipo Movimento
                                 </th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Attivo
+                                </th>
                                 <th data-slug="MovementPassiveCollect"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura Contro Partita/Fornitore
@@ -84,8 +175,8 @@
                                     data-orderable="true" class="center">Imponibile
                                 </th>
                                 <th data-slug="cost"
-                                         data-searchable="true"
-                                         data-orderable="true" class="center">Costo
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Costo
                                 </th>
                                 <th data-slug="deliveryCost"
                                     data-searchable="true"
@@ -99,10 +190,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Margine
                                 </th>
-                                <th data-slug="isVisible"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Attivo
-                                </th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -120,15 +208,35 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Gain Plan">
         <bs-toolbar-button
-                    data-tag="a"
-                    data-icon="fa-file-o fa-plus"
-                    data-permission="allShops"
-                    data-class="btn btn-default"
-                    data-rel="tooltip"
-                    data-title="Aggiungi  un nuovo acquisto  manuale"
-                    data-placement="bottom"
-                    data-href="/blueseal/registri/gainplan-passivo/aggiungi"
-            ></bs-toolbar-button>
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi  un nuovo acquisto  manuale"
+                data-placement="bottom"
+                data-href="/blueseal/registri/gainplan-passivo/aggiungi"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-toggle-off"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Disabilita Vendita (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanactivemovement.disable"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-toggle-on"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Abilita Vendita (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanactivemovement.enable"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

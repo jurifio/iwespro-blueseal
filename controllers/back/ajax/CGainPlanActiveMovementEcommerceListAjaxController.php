@@ -43,10 +43,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
        gp.dateMovement as dateMovement,
        gp.externalId as externalId,
        gp.invoiceExternal as invoiceExternal,
-       gp.isVisible as isVisible
-       from GainPlan gp  where gp.orderId is not null  ORDER  BY dateMovement DESC
-                
-    
+       if(gp.isActive=1,"Si","No") as isActive
+       from GainPlan gp  where gp.orderId !="0"  ORDER  BY dateMovement DESC
         ';
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
@@ -70,6 +68,12 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $val CGainPlan */
             $val = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy($row);
+            if($val->isActive==1) {
+                $isActive = 'Si';
+            }else {
+                $isActive = 'No';
+            }
+            $row['isActive']=$isActive;
             $row['DT_RowId'] = $val->printId();
             $row['id'] = $val->printId();
             $season = $seasonRepo->findOneBy(['id' => $val->seasonId]);
@@ -110,7 +114,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $nation = '';
 
             switch ($val->typeMovement) {
-                case 1:
+                case "1":
+                    $typeMovement = 'Ordini';
                     $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
                     if ($orderLines != null) {
                         $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
@@ -125,7 +130,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                             $country = $countryRepo->findOneBy(['id' => $userAddress->countryId]);
                             $extraue = ($country->extraue == 1) ? 'yes' : 'no';
                             $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-                            $typeMovement = 'Ordini';
+
                             $nation = $country->name;
                         }
 
@@ -168,7 +173,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                         }
                     }
                     break;
-                case 2:
+                case "2":
                     $findInvoice = $val->invoiceExternal;
                     $amount += $val->amount;
                     $cost += $val->cost;

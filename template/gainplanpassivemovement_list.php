@@ -43,6 +43,10 @@
                                     data-default-order="desc"
                                     class="center dataFilterType">Data Movimento
                                 </th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Attivo
+                                </th>
                                 <th data-slug="seasonName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione

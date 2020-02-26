@@ -45,7 +45,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
        gp.dateMovement as dateMovement,
        gp.externalId as externalId,
        gp.invoiceExternal as invoiceExternal,
-       gp.isVisible as isVisible
+      if(gp.isActive=1,"Si","No") as isActive
        from GainPlan gp  where gp.orderId =0  ORDER  BY dateMovement DESC
                 
     
@@ -74,6 +74,12 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
             $val = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy($row);
             $row['DT_RowId'] = $val->printId();
             $row['id'] = $val->printId();
+            if($val->isActive==1) {
+                $isActive = 'Si';
+            }else {
+                $isActive = 'No';
+            }
+            $row['isActive']=$isActive;
             $season = $seasonRepo->findOneBy(['id' => $val->seasonId]);
             $row['season'] = $season->name;
             $order = "";

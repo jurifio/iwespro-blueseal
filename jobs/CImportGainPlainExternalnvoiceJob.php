@@ -73,8 +73,8 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
                 $shopName = $value->title;
                 $shopId = $value->id;
                 try {
-                    $stmtOrder = $db_con->prepare('SELECT distinct SUM(ol.netPrice) AS amount,
-                                                                ' . $shopId . ' AS shopId,
+                    $stmtOrder = $db_con->prepare("SELECT distinct SUM(ol.netPrice) AS amount,
+                                                                " . $shopId . " AS shopId,
                                                                 ol.id as id,
                                                                 ol.orderId as orderId,
                                                                 o.frozenBillingAddress as frozenBillingAddress,
@@ -82,13 +82,13 @@ class CImportGainPlainExternalnvoiceJob extends ACronJob
                                                                 i.invoiceType AS invoiceType,
                                                                 i.invoiceNumber AS invoiceNumber,
                                                                 i.invoiceDate AS invoiceDate,
-                                                                \'' . $shopName . '\' AS fornitureName,
-                                                                \'Acquisto Ordine Parallelo\' AS serviceName
+                                                                '" . $shopName . "' AS fornitureName,
+                                                                'Acquisto Ordine Parallelo' AS serviceName
                                                                 FROM Invoice i JOIN `Order` o ON i.orderId=o.id
                                                                 LEFT JOIN OrderLine ol ON ol.orderId=o.id
-                                                                WHERE  ol.status IN(\'ORD_SENT\'
-                                                                ,ol.status=\'ORD_FRND_ORDSNT\'
-                                                                ,ol.status=\'ORD_FRND_PYD\') AND i.invoiceType=\'BP\' AND o.remoteIwesOrderId  IS NOT NULL GROUP BY i.id');
+                                                                WHERE  ol.status IN('ORD_SENT'
+                                                                ,ol.status='ORD_FRND_ORDSNT'
+                                                                ,ol.status='ORD_FRND_PYD') AND i.invoiceType='".$value->invoiceUe."' AND o.remoteIwesOrderId  IS NOT NULL GROUP BY i.id");
                     $stmtOrder->execute();
                     while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
                         $dateMovement = $rowOrder['invoiceDate'];
