@@ -49,55 +49,60 @@ class CImportGainPlanJob extends ACronJob
         try {
             $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
             $orderRepo = \Monkey::app()->repoFactory->create('Order');
-            $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
-            $shopRepo = \Monkey::app()->repoFactory->create('Shop');
-            $userRepo = \Monkey::app()->repoFactory->create('User');
-            $countryRepo = \Monkey::app()->repoFactory->create('Country');
-            $gpsmRepo = \Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+
             $seasonRepo = \Monkey::app()->repoFactory->create('ProductSeason');
-            $orderPaymentMethodRepo = \Monkey::app()->repoFactory->create('OrderPaymentMethod');
             $gainPlanRepo = \Monkey::app()->repoFactory->create('GainPlan');
+            $sql="select * from `Order`";
 
-            $invoices = $invoiceRepo->findAll();
-            foreach ($invoices as $invoice) {
-                $invoiceDate = $invoice->invoiceDate;
-                $orderId = $invoice->orderId;
-                $order = $orderRepo->findOneBy(['id' => $orderId]);
-                if($order->frozenBillingAddress!=null) {
-                    $userAddress = json_decode($order->frozenBillingAddress,false);
+            $orders=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+            foreach ($orders as $order) {
+                $orderId = $order['id'];
 
-                    $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-                }else{
-                    $customer='';
-                }
-                $invoiceId = $invoice->id;
-                $shopId=$invoice->invoiceShopId;
-                $seasons = $seasonRepo->findAll();
-                foreach ($seasons as $season) {
-                    $dateStart = strtotime($season->dateStart);
-                    $dateEnd = strtotime($season->dateEnd);
-                    $dateInvoice = strtotime($invoiceDate);
-                    if ($dateInvoice >= $dateStart && $dateInvoice <= $dateEnd) {
-                        $seasonId = $season->id;
+
+                    $invoice = $invoiceRepo->findOneBy(['orderId' => $orderId]);
+
+                    if ($invoice != null) {
+
+                        $invoiceId = $invoice->id;
                     }
-                }
-                $gainPlanFind = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy(['invoiceId' => $invoiceId]);
-                if ($gainPlanFind == null) {
-                    $gainPlanInsert = $gainPlanRepo->getEmptyEntity();
-                    $gainPlanInsert->invoiceId = $invoiceId;
-                    $gainPlanInsert->orderId = $orderId;
-                    $gainPlanInsert->seasonId = $seasonId;
-                    $gainPlanInsert->customerName = $customer;
-                    $gainPlanInsert->typeMovement = 1;
-                    $gainPlanInsert->dateMovement = $invoiceDate;
-                    $gainPlanInsert->shopId=$shopId;
-                    $gainPlanInsert->isActive=1;
-                    $gainPlanInsert->insert();
+                    if ($order['frozenBillingAddress'] != null) {
+                        $userAddress = json_decode($order['frozenBillingAddress'],false);
+
+                        $customer = addslashes($userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company);
+                    } else {
+                        $customer = '';
+                    }
+
+                    $shopId = $order['remoteShopSellerId'];
+                    $seasons = $seasonRepo->findAll();
+                    foreach ($seasons as $season) {
+                        $dateStart = strtotime($season->dateStart);
+                        $dateEnd = strtotime($season->dateEnd);
+                        $orderDate= strtotime($order['creationDate']);
+                        if ($orderDate >= $dateStart && $orderDate <= $dateEnd) {
+                            $seasonId = $season->id;
+                        }
+                    }
+                    $gainPlanFind = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy(['orderId' => $orderId]);
+                    if ($gainPlanFind == null) {
+                        $gainPlanInsert = $gainPlanRepo->getEmptyEntity();
+                        if ($invoice != null) {
+                            $gainPlanInsert->invoiceId = $invoiceId;
+                        }
+                        $gainPlanInsert->orderId = $orderId;
+                        $gainPlanInsert->seasonId = $seasonId;
+                        $gainPlanInsert->customerName = $customer;
+                        $gainPlanInsert->typeMovement = 1;
+                        $gainPlanInsert->dateMovement = $order['creationDate'];
+                        $gainPlanInsert->shopId = $shopId;
+                        $gainPlanInsert->isActive = 1;
+                        $gainPlanInsert->insert();
+                    }
+
                 }
 
-            }
         }catch(\Throwable $e){
-            $this -> report('CImportGainPlanJob', 'error', $e,'');
+            $this -> report('CImportGainPlanJob', 'error', $e);
         }
 
 
