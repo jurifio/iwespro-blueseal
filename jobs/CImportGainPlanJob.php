@@ -57,8 +57,7 @@ class CImportGainPlanJob extends ACronJob
             $orders = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($orders as $order) {
                 $orderId = $order['id'];
-                strpos($orderId, '11791398');
-
+                $customer='';
 
                 $invoice = $invoiceRepo->findOneBy(['orderId' => $orderId]);
 
