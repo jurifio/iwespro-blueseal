@@ -5,6 +5,7 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\asset\CAssetCollection;
 use bamboo\core\router\CInternalRequest;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\controllers\api\Helper\DateTime;
 
 /**
  * Class CGainPlanActiveMovementEcommerceListController
@@ -32,6 +33,13 @@ class CGainPlanActiveMovementEcommerceListController extends ARestrictedAccessRo
 
         $permission = \Monkey::app()->getUser()->hasPermission('allShops');
 
+
+
+        $currentYear= date('Y');
+        $valueRequest = \Monkey::app()->router->request()->getRequestData('countYear');
+        if($valueRequest!=false){
+            $currentYear=$valueRequest;
+        }
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $pageURL = $blueseal."/gainplan/gainplan-ecommerce-attivo";
@@ -45,6 +53,7 @@ class CGainPlanActiveMovementEcommerceListController extends ARestrictedAccessRo
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
+            'currentYear'=>$currentYear,
             'sidebar' => $this->sidebar->build(),
             'permission' => $permission
         ]);

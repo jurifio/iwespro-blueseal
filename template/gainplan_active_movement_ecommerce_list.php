@@ -24,7 +24,19 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row" align="center">
-                            <?php $currentYear = (new DateTime())->format('Y'); ?>
+                            <div class="col-md-4">
+                                <button class="success" id="lessYear" onclick="lessyear()" type="button"><span  class="fa fa-backward"></span></button>
+                            </div>
+                            <div id="year" class="col-md-4"><?php echo $currentYear?>
+                                <input type="hidden" id="currentYear" name="currentYear" value="<?php echo $currentYear?>"/>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="success" id="moreYear" onclick="moreyear()" type="button"><span  class="fa fa-forward"></span></button>
+                            </div>
+
+                        </div>
+                        <div class="row" align="center">
+
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
@@ -39,7 +51,7 @@
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
                         </div>
                         <div class="row" align="center">
-                            <?php $currentYear = (new DateTime())->format('Y'); ?>
+                            <?php //$currentYear = (new DateTime())->format('Y'); ?>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='1' and YEAR(I.invoiceYear)=" . $currentYear;
@@ -100,7 +112,7 @@
                         for ($i=1;$i<13;$i++) {
                             $netTotal=0;
 
-                            $sql='select * FROM OrderLine where (`status`!=\'ORD_CANCEL\'and  `status`!=\'ORD_FRND_CANC\' and  `status`!=\'ORD_MISSNG\') and MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $sql='select * FROM OrderLine where (`status` NOT LIKE \'%ORD_CANCEL%\' AND `status` NOT LIKE \'%ORD_FRND_CANC%\' AND `status` NOT LIKE \'%ORD_MISSNG%\')  and MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
                             $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach($resultTotalPayment as $ol) {
 
@@ -141,7 +153,7 @@
                             $profit=0;
                             $commissionSell=0;
                             $transParallel=0;
-                            $sql='select * FROM OrderLine where (`status`!=\'ORD_CANCEL\'or `status`!=\'ORD_FRND_CANC\'or `status`!=\'ORD_MISSNG\') AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $sql='select * FROM OrderLine where (`status` NOT LIKE \'%ORD_CANCEL%\' AND `status` NOT LIKE \'%ORD_FRND_CANC%\' AND `status` NOT LIKE \'%ORD_MISSNG%\')  AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
                             $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach($resultTotalPayment as $ol) {
 
@@ -174,7 +186,7 @@
                                             $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
                                             $cost = 0;
                                             $shippingCost=$ol['shippingCharge'];
-                                            $commissionSell=round($ol['netPrice'] * 0.11,2);
+                                            $commissionSell=$ol['netPrice'] * 0.11;
                                             $profit+=$commissionSell+$transParallel-$paymentCommission-$shippingCost;
 
 
@@ -187,7 +199,7 @@
                                             $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
                                             $cost = 0;
                                             $shippingCost=$ol['shippingCharge'];
-                                            $commissionSell=round($ol['netPrice'] * 0.11,2);
+                                            $commissionSell=$ol['netPrice'] * 0.11;
                                             $profit+=$commissionSell-$paymentCommission-$shippingCost;
 
                                         }

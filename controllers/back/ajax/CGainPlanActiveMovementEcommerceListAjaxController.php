@@ -133,7 +133,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                             $customer = $val->customerName;
 
                             foreach ($orderLines as $orderLine) {
-                                if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSNG') {
+                                if ($orderLine->status != 'ORD_CANCEL' && $orderLine->status != 'ORD_FRND_CANC' && $orderLine->status != 'ORD_MISSNG') {
                                     if ($orderLine->netPrice != null) {
                                         $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
                                         $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
