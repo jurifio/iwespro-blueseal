@@ -40,6 +40,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
        gp.deliveryCost as deliveryCost,
        gp.commission as commission,
        gp.commissionSell as commissionSell,
+       gp.transParallel as transparallel,
        gp.profit as profit,
        gp.dateCreate as dateCreate,
        gp.dateMovement as dateMovement,
@@ -138,33 +139,41 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                 if ($orderLine->remoteShopSellerId == 44) {
                                     $typeOrder = 'dettaglio Prodotto Diretto';
                                     $amount += $orderLine->netPrice;
-                                    $imp =  $orderLine->netPrice - $orderLine->vat;
+                                    $imp +=  $orderLine->netPrice - $orderLine->vat;
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                    $transparallel+=0;
                                     $shippingCost += $orderLine->shippingCharge;
                                     $commissionSell=0;
+                                    $profit=$imp-$cost-$shippingCost-$paymentCommission;
 
 
                                 } else {
                                     if ($orderLine->remoteShopSellerId != $orderLine->shopId) {
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                         $paralellFee = $shop->paralellFee;
-                                        $amount += $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
-                                        $imp += $amount * 100 / 122;
+                                        $imp +=  $orderLine->netPrice - $orderLine->vat;
+                                        $transParallel=(($orderLine->netPrice-($orderLine->netPrice/100*$paralellFee))*100/122)-$orderLine->friendRevenue;
+                                        $imp+= $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
+                                        $amount += $orderLine->netPrice;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $cost += $orderLine->friendRevenue;
+                                        $cost += 0;
                                         $shippingCost=$orderLine->shippingCharge;
                                         $commissionSell+=round($orderLine->netPrice * 0.11,2);
+                                        $profit+=$commissionSell+$transParallel-$paymentCommission-$shippingCost;
 
                                     }else{
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                         $paralellFee = $shop->paralellFee;
-                                        $cost += 0;
+                                        $imp +=  $orderLine->netPrice - $orderLine->vat;
+                                        $transParallel=0;
+                                        $imp+= $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
+                                        $amount += $orderLine->netPrice;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $shippingCost += $orderLine->shippingCharge;
-                                        $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission+$shippingCost;
-                                        $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
+                                        $cost += $orderLine->cost;
+                                        $shippingCost=$orderLine->shippingCharge;
                                         $commissionSell+=round($orderLine->netPrice * 0.11,2);
+                                        $profit+=$commissionSell-$paymentCommission-$shippingCost;
 
                                     }
                                 }
@@ -182,7 +191,9 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                     $paymentCommission += $val->commission;
                     $customer = $val->customerName;
                     $typeMovement = 'Servizi';
-                    $commissionSell=0;
+                    $commissionSell+=0;
+                    $transParallel+=0;
+                    $profit+=$amount-$cost;
 
                     break;
 
@@ -197,8 +208,9 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $row['MovementPassiveCollect'] = $rowCost;
             $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
             $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
-            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission + $commissionSell) . ' &euro;';
+            $row['profit'] = money_format('%.2n',$profit) . ' &euro;';
             $row['commissionSell']=money_format('%.2n',$commissionSell);
+            $row['transParallel']=money_format('%.2n',$transParallel);
             $row['typeMovement'] = $typeMovement;
             $dateMovement=strtotime($val->dateMovement);
             $dateMovement=date('d/m/Y',$dateMovement);

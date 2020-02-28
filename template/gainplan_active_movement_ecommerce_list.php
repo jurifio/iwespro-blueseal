@@ -239,10 +239,6 @@
                                 data-searchable="true"
                                 data-orderable="true" class="center">Shop Name
                             </th>
-                            <th data-slug="isActive"
-                                data-searchable="true"
-                                data-orderable="true" class="center">Attivo
-                            </th>
                             <th data-slug="amount"
                                 data-searchable="true"
                                 data-orderable="true" class="center">Importo
@@ -257,15 +253,19 @@
                             </th>
                             <th data-slug="deliveryCost"
                                 data-searchable="true"
-                                data-orderable="true" class="center">Costo Di Spedizione
+                                data-orderable="true" class="center">Costi<br>Sped.
                             </th>
                             <th data-slug="paymentCommission"
                                 data-searchable="true"
-                                data-orderable="true" class="center">Commissioni su Pagamento
+                                data-orderable="true" class="center">Commissioni<br>Pagamento
                             </th>
                             <th data-slug="commissionSell"
                                 data-searchable="true"
-                                data-orderable="true" class="center">Commissioni su Venduto
+                                data-orderable="true" class="center">Commissioni<br>Venduto
+                            </th>
+                            <th data-slug="transParallel"
+                                data-searchable="true"
+                                data-orderable="true" class="center">Trans<br>Parallela
                             </th>
                             <th data-slug="profit"
                                 data-searchable="true"
@@ -274,7 +274,10 @@
                             <th data-slug="id"
                                 data-searchable="true"
                                 data-orderable="true" class="center">id
-
+                            </th>
+                            <th data-slug="isActive"
+                                data-searchable="true"
+                                data-orderable="true" class="center">Attivo
                             </th>
                         </tr>
                         </thead>
