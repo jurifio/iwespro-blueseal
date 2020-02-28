@@ -113,6 +113,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $imp = 0;
             $customer = '';
             $nation = '';
+            $commissionSell=0;
 
             switch ($val->typeMovement) {
                 case 1:
@@ -150,6 +151,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                         $imp += $amount * 100 / 122;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $cost += $orderLine->friendRevenue;
+                                        $commissionSell+=round($orderLine->netPrice * 0.11,2);
+
                                     }else{
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                         $paralellFee = $shop->paralellFee;
@@ -158,6 +161,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                         $shippingCost += -abs($orderLine->shippingCharge);
                                         $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
                                         $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
+                                        $commissionSell+=round($orderLine->netPrice * 0.11,2);
 
                                     }
                                 }
@@ -175,6 +179,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                     $paymentCommission += $val->commission;
                     $customer = $val->customerName;
                     $typeMovement = 'Servizi';
+                    $commissionSell=0;
 
                     break;
 
@@ -189,7 +194,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $row['MovementPassiveCollect'] = $rowCost;
             $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
             $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
-            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission) . ' &euro;';
+            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission+$commisionSell) . ' &euro;';
+            $ow['commissionSell']=money_format('%.2n',$commissionSell);
             $row['typeMovement'] = $typeMovement;
             $dateMovement=strtotime($val->dateMovement);
             $dateMovement=date('d/m/Y',$dateMovement);

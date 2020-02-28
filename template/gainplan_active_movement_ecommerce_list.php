@@ -262,6 +262,10 @@
                                 data-searchable="true"
                                 data-orderable="true" class="center">Commissioni su Pagamento
                             </th>
+                            <th data-slug="commissionSell"
+                                data-searchable="true"
+                                data-orderable="true" class="center">Commissioni su Venduto
+                            </th>
                             <th data-slug="profit"
                                 data-searchable="true"
                                 data-orderable="true" class="center">Margine
