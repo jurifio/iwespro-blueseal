@@ -39,6 +39,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
        gp.cost as cost,
        gp.deliveryCost as deliveryCost,
        gp.commission as commission,
+       gp.commissionSell as commissionSell,
        gp.profit as profit,
        gp.dateCreate as dateCreate,
        gp.dateMovement as dateMovement,
@@ -141,16 +142,18 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                     $shippingCost += $orderLine->shippingCharge;
+                                    $commissionSell=0;
 
 
                                 } else {
-                                    if ($orderLine->remoteShopSellerId != $orderLine->remoteOrderSupplierId) {
+                                    if ($orderLine->remoteShopSellerId != $orderLine->shopId) {
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                         $paralellFee = $shop->paralellFee;
                                         $amount += $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
                                         $imp += $amount * 100 / 122;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $cost += $orderLine->friendRevenue;
+                                        $shippingCost=$orderLine->shippingCharge;
                                         $commissionSell+=round($orderLine->netPrice * 0.11,2);
 
                                     }else{
@@ -158,8 +161,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                         $paralellFee = $shop->paralellFee;
                                         $cost += 0;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $shippingCost += -abs($orderLine->shippingCharge);
-                                        $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
+                                        $shippingCost += $orderLine->shippingCharge;
+                                        $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission+$shippingCost;
                                         $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
                                         $commissionSell+=round($orderLine->netPrice * 0.11,2);
 
@@ -194,8 +197,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $row['MovementPassiveCollect'] = $rowCost;
             $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
             $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
-            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission+$commisionSell) . ' &euro;';
-            $ow['commissionSell']=money_format('%.2n',$commissionSell);
+            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission + $commissionSell) . ' &euro;';
+            $row['commissionSell']=money_format('%.2n',$commissionSell);
             $row['typeMovement'] = $typeMovement;
             $dateMovement=strtotime($val->dateMovement);
             $dateMovement=date('d/m/Y',$dateMovement);

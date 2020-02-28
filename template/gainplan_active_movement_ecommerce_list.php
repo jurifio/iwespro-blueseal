@@ -139,6 +139,7 @@
                             $paymentCommission=0;
                             $shippingCost=0;
                             $profit=0;
+                            $commissionSell=0;
                             $sql='select * FROM OrderLine where `status` not like \'%ORD_CANCEL%\' and  `status` not like \'%ORD_FRND_CANC%\' and `status` not like \'%ORD_MISSING%\' AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
                             $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach($resultTotalPayment as $ol) {
@@ -160,7 +161,7 @@
 
 
                                     } else {
-                                        if ($ol['remoteOrderSupplierId'] != $ol['remoteShopSellerId']) {
+                                        if ($ol['shopId'] != $ol['remoteShopSellerId']) {
                                             $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
                                             $paralellFee = $shop->paralellFee;
                                             $amount = $ol['netPrice'] - ($ol['netPrice'] / 100 * $paralellFee);
@@ -169,12 +170,12 @@
                                             $cost = $ol['friendRevenue'];
                                             $profit+=$imp-$cost-$paymentCommission+(round($ol['netPrice'] * 0.11,2)*100/122);
 
+
                                         } else {
                                             $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
                                             $cost = 0;
                                             $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
                                             $shippingCost = $ol['shippingCharge'];
-
                                             $profit+=$paymentCommission+(round($ol['netPrice'] * 0.11,2)*100/122)+$shippingCost;
 
                                         }

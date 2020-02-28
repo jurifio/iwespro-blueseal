@@ -144,7 +144,7 @@ class CGainPlanListAjaxController extends AAjaxController
 
 
                                     } else {
-                                        if ($orderLine->remoteOrderSupplierId != null) {
+                                        if ($orderLine->shopId != $orderLine->remoteShopSellerId) {
                                             $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                             $paralellFee = $shop->paralellFee;
                                             $amount += $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
