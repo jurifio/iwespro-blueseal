@@ -155,9 +155,9 @@ class CGainPlanListAjaxController extends AAjaxController
                                         } else {
                                             $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                             $paralellFee = $shop->paralellFee;
-                                            $cost += $orderLine->friendRevenue;
+                                            $cost += 0;
                                             $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                            $shippingCost = $orderLine->shippingCharge;
+                                            $shippingCost = -abs($orderLine->shippingCharge);
                                             $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
                                             $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
 

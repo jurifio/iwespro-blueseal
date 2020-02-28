@@ -160,7 +160,7 @@
 
 
                                     } else {
-                                        if ($ol['remoteOrderSupplierId'] != null) {
+                                        if ($ol['remoteOrderSupplierId'] != $ol['remoteShopSellerId']) {
                                             $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
                                             $paralellFee = $shop->paralellFee;
                                             $amount = $ol['netPrice'] - ($ol['netPrice'] / 100 * $paralellFee);
@@ -171,7 +171,7 @@
 
                                         } else {
                                             $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
-                                            $cost = $ol['friendRevenue'];
+                                            $cost = 0;
                                             $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
                                             $shippingCost = $ol['shippingCharge'];
 
