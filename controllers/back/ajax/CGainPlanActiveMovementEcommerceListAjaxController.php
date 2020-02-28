@@ -116,6 +116,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $customer = '';
             $nation = '';
             $commissionSell=0;
+            $profit=0;
+            $transParallel=0;
 
             switch ($val->typeMovement) {
                 case 1:
@@ -142,7 +144,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                     $imp +=  $orderLine->netPrice - $orderLine->vat;
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                    $transparallel+=0;
+                                    $transParallel+=0;
                                     $shippingCost += $orderLine->shippingCharge;
                                     $commissionSell=0;
                                     $profit=$imp-$cost-$shippingCost-$paymentCommission;
@@ -153,8 +155,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                         $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
                                         $paralellFee = $shop->paralellFee;
                                         $imp +=  $orderLine->netPrice - $orderLine->vat;
-                                        $transParallel=(($orderLine->netPrice-($orderLine->netPrice/100*$paralellFee))*100/122)-$orderLine->friendRevenue;
-                                        $imp+= $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
+                                        $par=$orderLine->netPrice/100*$paralellFee;
+                                        $transParallel+=(($orderLine->netPrice-$par)*100/122)-$orderLine->friendRevenue;
                                         $amount += $orderLine->netPrice;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $cost += 0;
@@ -167,10 +169,9 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                         $paralellFee = $shop->paralellFee;
                                         $imp +=  $orderLine->netPrice - $orderLine->vat;
                                         $transParallel=0;
-                                        $imp+= $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
                                         $amount += $orderLine->netPrice;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $cost += $orderLine->cost;
+                                        $cost += 0;
                                         $shippingCost=$orderLine->shippingCharge;
                                         $commissionSell+=round($orderLine->netPrice * 0.11,2);
                                         $profit+=$commissionSell-$paymentCommission-$shippingCost;

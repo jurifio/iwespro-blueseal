@@ -33,10 +33,7 @@
                                data-display-length="50">
                             <thead>
                             <tr>
-                                <th data-slug="id"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">id
-                                </th>
+
                                 <th data-slug="dateMovement"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -68,10 +65,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">tipo Movimento
                                 </th>
-                                <th data-slug="isActive"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Attivo
-                                </th>
+
                                 <th data-slug="MovementPassiveCollect"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura Contro Partita/Fornitore
@@ -99,6 +93,14 @@
                                 <th data-slug="profit"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Margine
+                                </th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Attivo
+                                </th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">id
                                 </th>
 
                             </tr>

@@ -102,6 +102,7 @@ class CImportGainPlanJob extends ACronJob
                     $gainPlanInsert->typeMovement = 1;
                     $gainPlanInsert->dateMovement = $order['creationDate'];
                     $gainPlanInsert->shopId = $shopId;
+                    $gainPlanInsert->isActive=1;
                     $gainPlanInsert->insert();
                 }
 
