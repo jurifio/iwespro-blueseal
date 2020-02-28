@@ -43,53 +43,88 @@
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='1' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?>
                             </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='2' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='3' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='4' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='5' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . '<b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='6' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='7' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='8' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='9' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='10' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' <b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='11' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . '<b>doc</b>'; ?></div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
                                 <?php $sql = "SELECT count(`o`.`id`)  as `count`   from `Order` `o` join `Invoice` `I` on `o`.`id`=`I`.`orderId`    
                                            where MONTH(I.invoiceDate)='12' and YEAR(I.invoiceYear)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?></div>
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . '  <b>doc</b>'; ?></div>
                         </div>
+                        <div class="row" align="center"
+                        ">
+
+                        <?php
+                        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                        $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                        $countryRepo=\Monkey::app()->repoFactory->create('Country');
+                        for ($i=1;$i<13;$i++) {
+                            $netTotal=0;
+
+                            $sql='select * FROM OrderLine where `status` not like \'%ORD_CANCEL%\' and  `status` not like \'%ORD_FRND_CANC%\' and `status` not like \'%ORD_MISSING%\' AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach($resultTotalPayment as $ol) {
+
+                                $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $ol['orderId']]);
+
+                                if ( $ol['netPrice']!=null) {
+
+
+                                    $netTotal += $ol['netPrice'];
+
+
+                                }
+                            }
+
+
+
+
+                            echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($netTotal,'0',',','.') . ' &euro; <b>ord</b></div>';
+
+                        }
+                        ?>
+
+
+                    </div>
                         <div class="row" align="center"
                         ">
 
@@ -152,7 +187,7 @@
 
 
 
-                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . money_format('%.2n',$profit) . ' &euro;</div>';
+                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($profit,'0',',','.') . ' &euro; <b>marg</b></div>';
 
                         }
                         ?>
@@ -176,10 +211,7 @@
                            data-display-length="50">
                         <thead>
                         <tr>
-                            <th data-slug="id"
-                                data-searchable="true"
-                                data-orderable="true" class="center">id
-                            </th>
+
                             <th data-slug="dateMovement"
                                 data-searchable="true"
                                 data-orderable="true"
@@ -206,21 +238,9 @@
                                 data-searchable="true"
                                 data-orderable="true" class="center">Shop Name
                             </th>
-                            <th data-slug="country"
-                                data-searchable="true"
-                                data-orderable="true" class="center">Nazione
-                            </th>
-                            <th data-slug="typeMovement"
-                                data-searchable="true"
-                                data-orderable="true" class="center">tipo Movimento
-                            </th>
                             <th data-slug="isActive"
                                 data-searchable="true"
                                 data-orderable="true" class="center">Attivo
-                            </th>
-                            <th data-slug="MovementPassiveCollect"
-                                data-searchable="true"
-                                data-orderable="true" class="center">Fattura Contro Partita/Fornitore
                             </th>
                             <th data-slug="amount"
                                 data-searchable="true"
@@ -246,7 +266,11 @@
                                 data-searchable="true"
                                 data-orderable="true" class="center">Margine
                             </th>
+                            <th data-slug="id"
+                                data-searchable="true"
+                                data-orderable="true" class="center">id
 
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
