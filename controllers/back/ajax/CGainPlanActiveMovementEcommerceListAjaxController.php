@@ -114,9 +114,10 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $nation = '';
 
             switch ($val->typeMovement) {
-                case "1":
+                case 1:
+                $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
+                if($orderLines!=null){
                     $typeMovement = 'Ordini';
-                    $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
                     if ($orderLines != null) {
                         $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
                         if ($invoice != null) {
@@ -124,20 +125,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                         } else {
                             $findInvoice = '';
                         }
-
-                        if ($orders != null) {
-                            $userAddress = json_decode($orders->frozenBillingAddress,false);
-                            if($userAddress->countryId!=null){
-                                $countryId=$userAddress->countryId;
-                            }else{
-                                $countryId='101';
-                            }
-                            $country = $countryRepo->findOneBy(['id' => $countryId]);
-                            $extraue = ($country->extraue == 1) ? 'yes' : 'no';
-                            $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-
-                            $nation = $country->name;
-                        }
+                        $customer=$val->customerName;
 
                         foreach ($orderLines as $orderLine) {
                             if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
@@ -147,7 +135,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                 if ($orderLine->remoteShopSellerId == 44) {
                                     $typeOrder = 'dettaglio Prodotto Diretto';
                                     $amount += $orderLine->netPrice;
-                                    $imp = ($country->extraue == 1) ? $orderLine->netPrice : $orderLine->netPrice - $orderLine->vat;
+                                    $imp =  $orderLine->netPrice - $orderLine->vat;
                                     $cost += $orderLine->friendRevenue;
                                     $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                     $shippingCost = $orderLine->shippingCharge;
@@ -177,7 +165,8 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                             }
                         }
                     }
-                    break;
+                }
+                break;
                 case "2":
                     $findInvoice = $val->invoiceExternal;
                     $amount += $val->amount;

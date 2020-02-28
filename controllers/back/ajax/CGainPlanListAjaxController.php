@@ -117,65 +117,53 @@ class CGainPlanListAjaxController extends AAjaxController
             switch ($val->typeMovement) {
                 case 1:
                     $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
-                    $typeMovement = 'Ordini';
-                    if ($orderLines != null) {
-                        $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
-                        if ($invoice != null) {
-                            $findInvoice = $invoice->invoiceNumber . '/' . $invoice->invoiceType;
-                        } else {
-                            $findInvoice = '';
-                        }
-
-                        if ($orders != null) {
-                            if($orders->frozenBillingAddress!=null) {
-                                $userAddress = json_decode($orders->frozenBillingAddress,false);
-                                if($userAddress->name==null ||  $userAddress->surname==null || $userAddress->company ){
-                                    $customer='';
-                                }else {
-                                    $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
-                                }
-                            }else{
-                                $customer='';
+                    if($orderLines!=null){
+                        $typeMovement = 'Ordini';
+                        if ($orderLines != null) {
+                            $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
+                            if ($invoice != null) {
+                                $findInvoice = $invoice->invoiceNumber . '/' . $invoice->invoiceType;
+                            } else {
+                                $findInvoice = '';
                             }
+                           $customer=$val->customerName;
 
+                            foreach ($orderLines as $orderLine) {
+                                if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
+                                    $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
+                                    $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
 
-                        }
-
-                        foreach ($orderLines as $orderLine) {
-                            if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
-                                $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
-                                $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
-
-                                if ($orderLine->remoteShopSellerId == 44) {
-                                    $typeOrder = 'dettaglio Prodotto Diretto';
-                                    $amount += $orderLine->netPrice;
-                                    $imp =  $orderLine->netPrice - $orderLine->vat;
-                                    $cost += $orderLine->friendRevenue;
-                                    $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                    $shippingCost = $orderLine->shippingCharge;
-
-
-                                } else {
-                                    if ($orderLine->remoteOrderSupplierId != null) {
-                                        $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                        $paralellFee = $shop->paralellFee;
-                                        $amount += $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
-                                        $imp+= $amount*100/122;
-                                        $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $cost += $orderLine->friendRevenue;
-
-                                    } else {
-                                        $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                        $paralellFee = $shop->paralellFee;
+                                    if ($orderLine->remoteShopSellerId == 44) {
+                                        $typeOrder = 'dettaglio Prodotto Diretto';
+                                        $amount += $orderLine->netPrice;
+                                        $imp =  $orderLine->netPrice - $orderLine->vat;
                                         $cost += $orderLine->friendRevenue;
                                         $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
                                         $shippingCost = $orderLine->shippingCharge;
-                                        $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
-                                        $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
 
+
+                                    } else {
+                                        if ($orderLine->remoteOrderSupplierId != null) {
+                                            $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                            $paralellFee = $shop->paralellFee;
+                                            $amount += $orderLine->netPrice - ($orderLine->netPrice / 100 * $paralellFee);
+                                            $imp+= $amount*100/122;
+                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                            $cost += $orderLine->friendRevenue;
+
+                                        } else {
+                                            $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                            $paralellFee = $shop->paralellFee;
+                                            $cost += $orderLine->friendRevenue;
+                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                            $shippingCost = $orderLine->shippingCharge;
+                                            $imp += round($orderLine->netPrice * 0.11,2) + $paymentCommission;
+                                            $amount += (round($orderLine->netPrice * 0.11,2) + $paymentCommission)+((round($orderLine->netPrice * 0.11,2) + $paymentCommission)/100*22);
+
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                     }
