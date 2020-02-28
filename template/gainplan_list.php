@@ -59,7 +59,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cliente/Fornitore
                                 </th>
-                                <th data-slug="shopId"
+                                <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop Name
                                 </th>

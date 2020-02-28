@@ -30,9 +30,10 @@ class CGainPlanListAjaxController extends AAjaxController
                         gp.orderId as orderId,
        gp.userId as userId,
        gp.shopId as shopId,
+       s.name as shopName,
        gp.customerName as customerName,
-       gp.invoiceId as invoiceId,
-       if(gp.typeMovement=1,"Ordini","Servizi") as typeMovement,
+       gp.invoiceId as invoiceid,
+        if(gp.typeMovement=1,"Ordini","Servizi") as typeMovement,
        gp.amount as amount,
        gp.imp as imp,
        gp.cost as cost,
@@ -44,7 +45,7 @@ class CGainPlanListAjaxController extends AAjaxController
        gp.externalId as externalId,
        gp.invoiceExternal as invoiceExternal,
        if(gp.isActive=1,"Si","No") as isActive
-       from GainPlan gp ORDER BY dateMovement DESC
+       from GainPlan gp  left join Shop s on s.id=gp.shopId where gp.orderId !="0"  ORDER  BY dateMovement DESC
       
         ';
         $datatable = new CDataTables($sql,['id'],$_GET,true);
