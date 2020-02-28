@@ -128,9 +128,19 @@
                     data-href="/blueseal/registri/gainplan-passivo/aggiungi"
             ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Estrai">
+    <bs-toolbar-group data-group-label="Operazioni sui Dati">
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-download"
+            data-permission="allShops"
+            data-event="bs.import.gainplan"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Aggiungi"
+            data-placement="bottom">
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

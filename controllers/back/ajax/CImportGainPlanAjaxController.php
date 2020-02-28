@@ -1,51 +1,18 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
-use bamboo\core\base\CObjectCollection;
-use bamboo\core\db\pandaorm\repositories\ARepo;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CPrestashopHasProduct;
-use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
-use bamboo\domain\entities\CProductPublicSku;
-use bamboo\domain\entities\CProductEan;
-use bamboo\domain\entities\CProductSku;
-use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductBrand;
-use bamboo\domain\entities\CShop;
-use bamboo\domain\entities\CUserAddress;
-use bamboo\ecommerce\views\VBase;
-use bamboo\blueseal\business\CBlueSealPage;
-use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use PDO;
-use prepare;
-use AEntity;
-use bamboo\domain\entities\CSite;
-use bamboo\domain\entities\CUserHasShop;
-use bamboo\domain\repositories\CUserAddressRepo;
-use bamboo\domain\entities\CUser;
-use PDOException;
+use bamboo\blueseal\business\CDataTables;
+use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CGainPlan;
+use bamboo\domain\entities\CGainPlanPassiveMovement;
 
 
-class CImportGainPlanJob extends ACronJob
+class CImportGainPlanAjaxController extends AAjaxController
 {
-
-    /**
-     * @param null $args
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    public function run($args = null)
+    public function get()
     {
-        $this -> importMovement();
-    }
 
-
-    private function importMovement()
-    {
         try {
             $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
             $orderRepo = \Monkey::app()->repoFactory->create('Order');
@@ -68,13 +35,13 @@ class CImportGainPlanJob extends ACronJob
                 }
                 if ($order['frozenBillingAddress'] != null) {
                     $userAddress = json_decode($order['frozenBillingAddress'],false);
-                    if ($userAddress!=null ) {
-                        if($userAddress->company==null){
-                            $customer = addslashes($userAddress->name . ' ' . $userAddress->surname );
-                        }else{
-                            $customer= addslashes($userAddress->name . ' ' . $userAddress->surname. ' ' . $userAddress->company);
-                        }
+                if ($userAddress!=null ) {
+                    if($userAddress->company==null){
+                    $customer = addslashes($userAddress->name . ' ' . $userAddress->surname );
+                }else{
+                    $customer= addslashes($userAddress->name . ' ' . $userAddress->surname. ' ' . $userAddress->company);
                     }
+                }
                 } else {
                     $customer = '';
                 }
@@ -107,12 +74,9 @@ class CImportGainPlanJob extends ACronJob
 
             }
 
-        }catch(\Throwable $e){
-            $this -> report('CImportGainPlanJob', 'error', $e);
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CImportGainPlanAjaxController','error','Import Gain Plan Error',$e);
         }
-
-
+        return 'prova';
     }
-
-
 }

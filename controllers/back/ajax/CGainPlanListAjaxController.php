@@ -129,8 +129,11 @@ class CGainPlanListAjaxController extends AAjaxController
                         if ($orders != null) {
                             if($orders->frozenBillingAddress!=null) {
                                 $userAddress = \bamboo\domain\entities\CUserAddress::defrost($orders->frozenBillingAddress);
-
-                                $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
+                                if($userAddress->name==null ||  $userAddress->surname==null || $userAddress->company ){
+                                    $customer='';
+                                }else {
+                                    $customer = $userAddress->name . ' ' . $userAddress->surname . ' ' . $userAddress->company;
+                                }
                             }else{
                                 $customer='';
                             }
