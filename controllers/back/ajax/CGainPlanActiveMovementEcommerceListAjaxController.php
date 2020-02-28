@@ -71,12 +71,12 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $val CGainPlan */
             $val = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy($row);
-            if($val->isActive==1) {
+            if ($val->isActive == 1) {
                 $isActive = 'Si';
-            }else {
+            } else {
                 $isActive = 'No';
             }
-            $row['isActive']=$isActive;
+            $row['isActive'] = $isActive;
             $row['DT_RowId'] = $val->printId();
             $row['id'] = $val->printId();
             $season = $seasonRepo->findOneBy(['id' => $val->seasonId]);
@@ -87,7 +87,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                 $findShopOrder = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $val->shopId]);
                 $shopOrder = $findShopOrder->name;
             } else {
-                $shopOrder='';
+                $shopOrder = '';
             }
             if ($orders != null) {
                 $order = $orders->id;
@@ -96,12 +96,11 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             }
             $row['userId'] = $val->userId;
 
-            $row['amount'] = $val->amount;
             $cost = 0;
             $rowCost = '';
             $collectCost = $gpsmRepo->findBy(['gainPlanId' => $val->id]);
             foreach ($collectCost as $costs) {
-                if($costs->isActive==1) {
+                if ($costs->isActive == 1) {
                     if ($costs->typeMovement == 2) {
                         $cost += $costs->amount;
                     }
@@ -115,75 +114,77 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $imp = 0;
             $customer = '';
             $nation = '';
-            $commissionSell=0;
-            $profit=0;
-            $transParallel=0;
+            $commissionSell = 0;
+            $profit = 0;
+            $transParallel = 0;
 
             switch ($val->typeMovement) {
                 case 1:
-                $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
-                if($orderLines!=null){
-                    $typeMovement = 'Ordini';
+                    $orderLines = $orderLineRepo->findBy(['orderId' => $val->orderId]);
                     if ($orderLines != null) {
-                        $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
-                        if ($invoice != null) {
-                            $findInvoice = $invoice->invoiceNumber . '/' . $invoice->invoiceType;
-                        } else {
-                            $findInvoice = '';
-                        }
-                        $customer=$val->customerName;
+                        $typeMovement = 'Ordini';
+                        if ($orderLines != null) {
+                            $invoice = $invoiceRepo->findOneBy(['id' => $val->invoiceId]);
+                            if ($invoice != null) {
+                                $findInvoice = $invoice->invoiceNumber . '/' . $invoice->invoiceType;
+                            } else {
+                                $findInvoice = '';
+                            }
+                            $customer = $val->customerName;
 
-                        foreach ($orderLines as $orderLine) {
-                            if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSING') {
-                                $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
-                                $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
+                            foreach ($orderLines as $orderLine) {
+                                if ($orderLine->status != 'ORD_CANCEL' || $orderLine->status != 'ORD_FRND_CANC' || $orderLine->status != 'ORD_MISSNG') {
+                                    if ($orderLine->netPrice != null) {
+                                        $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $orders->orderPaymentMethodId]);
+                                        $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
 
-                                if ($orderLine->remoteShopSellerId == 44) {
-                                    $typeOrder = 'dettaglio Prodotto Diretto';
-                                    $amount += $orderLine->netPrice;
-                                    $imp +=  $orderLine->netPrice - $orderLine->vat;
-                                    $cost += $orderLine->friendRevenue;
-                                    $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                    $transParallel+=0;
-                                    $shippingCost += $orderLine->shippingCharge;
-                                    $commissionSell=0;
-                                    $profit=$imp-$cost-$shippingCost-$paymentCommission;
+                                        if ($orderLine->remoteShopSellerId == 44) {
+                                            $typeOrder = 'dettaglio Prodotto Diretto';
+                                            $amount += $orderLine->netPrice;
+                                            $imp += $orderLine->netPrice - $orderLine->vat;
+                                            $cost += $orderLine->friendRevenue;
+                                            $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                            $transParallel += 0;
+                                            $shippingCost += $orderLine->shippingCharge;
+                                            $commissionSell = 0;
+                                            $profit = $imp - $cost - $shippingCost - $paymentCommission;
 
 
-                                } else {
-                                    if ($orderLine->remoteShopSellerId != $orderLine->shopId) {
-                                        $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                        $paralellFee = $shop->paralellFee;
-                                        $imp +=  $orderLine->netPrice - $orderLine->vat;
-                                        $par=$orderLine->netPrice/100*$paralellFee;
-                                        $transParallel+=(($orderLine->netPrice-$par)*100/122)-$orderLine->friendRevenue;
-                                        $amount += $orderLine->netPrice;
-                                        $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $cost += 0;
-                                        $shippingCost=$orderLine->shippingCharge;
-                                        $commissionSell+=round($orderLine->netPrice * 0.11,2);
-                                        $profit+=$commissionSell+$transParallel-$paymentCommission-$shippingCost;
+                                        } else {
+                                            if ($orderLine->remoteShopSellerId != $orderLine->shopId) {
+                                                $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                                $paralellFee = $shop->paralellFee;
+                                                $imp += $orderLine->netPrice - $orderLine->vat;
+                                                $par = $orderLine->netPrice / 100 * $paralellFee;
+                                                $transParallel += (($orderLine->netPrice - $par) * 100 / 122) - $orderLine->friendRevenue;
+                                                $amount += $orderLine->netPrice;
+                                                $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                                $cost += 0;
+                                                $shippingCost = $orderLine->shippingCharge;
+                                                $commissionSell += round($orderLine->netPrice * 0.11,2);
+                                                $profit += $commissionSell + $transParallel - $paymentCommission - $shippingCost;
 
-                                    }else{
-                                        $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
-                                        $paralellFee = $shop->paralellFee;
-                                        $imp +=  $orderLine->netPrice - $orderLine->vat;
-                                        $transParallel=0;
-                                        $amount += $orderLine->netPrice;
-                                        $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
-                                        $cost += 0;
-                                        $shippingCost=$orderLine->shippingCharge;
-                                        $commissionSell+=round($orderLine->netPrice * 0.11,2);
-                                        $profit+=$commissionSell-$paymentCommission-$shippingCost;
+                                            } else {
+                                                $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
+                                                $paralellFee = $shop->paralellFee;
+                                                $imp += $orderLine->netPrice - $orderLine->vat;
+                                                $transParallel = 0;
+                                                $amount += $orderLine->netPrice;
+                                                $paymentCommission += ($orderLine->netPrice / 100) * $paymentCommissionRate;
+                                                $cost += 0;
+                                                $shippingCost = $orderLine->shippingCharge;
+                                                $commissionSell += round($orderLine->netPrice * 0.11,2);
+                                                $profit += $commissionSell - $paymentCommission - $shippingCost;
+
+                                            }
+                                        }
 
                                     }
                                 }
-
                             }
                         }
                     }
-                }
-                break;
+                    break;
                 case "2":
                     $findInvoice = $val->invoiceExternal;
                     $amount += $val->amount;
@@ -192,15 +193,15 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                     $paymentCommission += $val->commission;
                     $customer = $val->customerName;
                     $typeMovement = 'Servizi';
-                    $commissionSell+=0;
-                    $transParallel+=0;
-                    $profit+=$amount-$cost;
+                    $commissionSell += 0;
+                    $transParallel += 0;
+                    $profit += $amount - $cost;
 
                     break;
 
             }
             $row['invoiceId'] = $findInvoice;
-            $row['shoId']=$shopOrder;
+            $row['shoId'] = $shopOrder;
             $row['country'] = $nation;
             $row['customerName'] = $customer;
             $row['amount'] = money_format('%.2n',$amount) . ' &euro;';
@@ -210,12 +211,12 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
             $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
             $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
             $row['profit'] = money_format('%.2n',$profit) . ' &euro;';
-            $row['commissionSell']=money_format('%.2n',$commissionSell);
-            $row['transParallel']=money_format('%.2n',$transParallel);
+            $row['commissionSell'] = money_format('%.2n',$commissionSell);
+            $row['transParallel'] = money_format('%.2n',$transParallel);
             $row['typeMovement'] = $typeMovement;
-            $dateMovement=strtotime($val->dateMovement);
-            $dateMovement=date('d/m/Y',$dateMovement);
-            $row['dateMovement'] =$dateMovement;
+            $dateMovement = strtotime($val->dateMovement);
+            $dateMovement = date('d/m/Y',$dateMovement);
+            $row['dateMovement'] = $dateMovement;
 
             $row['orderId'] = $order;
             $datatable->setResponseDataSetRow($key,$row);

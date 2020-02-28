@@ -100,7 +100,7 @@
                         for ($i=1;$i<13;$i++) {
                             $netTotal=0;
 
-                            $sql='select * FROM OrderLine where `status` not like \'%ORD_CANCEL%\' and  `status` not like \'%ORD_FRND_CANC%\' and `status` not like \'%ORD_MISSING%\' AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $sql='select * FROM OrderLine where (`status`!=\'ORD_CANCEL\'and  `status`!=\'ORD_FRND_CANC\' and  `status`!=\'ORD_MISSNG\') and MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
                             $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach($resultTotalPayment as $ol) {
 
@@ -141,7 +141,7 @@
                             $profit=0;
                             $commissionSell=0;
                             $transParallel=0;
-                            $sql='select * FROM OrderLine where `status` not like \'%ORD_CANCEL%\' and  `status` not like \'%ORD_FRND_CANC%\' and `status` not like \'%ORD_MISSING%\' AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $sql='select * FROM OrderLine where (`status`!=\'ORD_CANCEL\'or `status`!=\'ORD_FRND_CANC\'or `status`!=\'ORD_MISSNG\') AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
                             $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach($resultTotalPayment as $ol) {
 
