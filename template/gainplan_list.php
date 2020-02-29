@@ -20,6 +20,355 @@
                     </div>
                 </div>
             </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center">
+                            <div class="col-md-4">
+                                <button class="success" id="lessYear" onclick="lessyear()" type="button"><span  class="fa fa-backward"></span></button>
+                            </div>
+                            <div id="year" class="col-md-4"><?php echo $currentYear?>
+                                <input type="hidden" id="currentYear" name="currentYear" value="<?php echo $currentYear?>"/>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="success" id="moreYear" onclick="moreyear()" type="button"><span  class="fa fa-forward"></span></button>
+                            </div>
+
+                        </div>
+                        <div class="row" align="center">
+
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Aprile</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Maggio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Giugno</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Luglio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Agosto</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Settembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Ottobre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Novembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
+                        </div>
+                        <div class="row" align="center">
+                            <?php //$currentYear = (new DateTime())->format('Y'); ?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='1' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='2' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='3' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where 
+                                            MONTH(I.dateMovement)='4' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='5' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='6' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='7' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='8' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='9' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  
+                                            MONTH(I.dateMovement)='10' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where 
+                                            MONTH(I.dateMovement)='11' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where 
+                                            MONTH(I.dateMovement)='12' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+
+                        </div>
+                        <div class="row" align="center"">
+
+                        <?php
+
+                        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                        $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                        $countryRepo=\Monkey::app()->repoFactory->create('Country');
+                        for ($i=1;$i<13;$i++) {
+                            $netTotal=0;
+                            $granTotal=0;
+                            $profit=0;
+                            $sql='select * FROM OrderLine where (`status` NOT LIKE \'%ORD_CANCEL%\' AND `status` NOT LIKE \'%ORD_FRND_CANC%\' AND `status` NOT LIKE \'%ORD_MISSNG%\')  and MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach($resultTotalPayment as $ol) {
+
+                                $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $ol['orderId']]);
+
+                                if ( $ol['netPrice']!=null) {
+
+
+                                    $netTotal += $ol['netPrice'];
+
+
+                                }
+                            }
+
+                            $sql='select * FROM GainPlan where typeMovement=2  AND MONTH(dateMovement)='.$i.' and YEAR(dateMovement)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            $gpmRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+
+                            foreach($resultTotalPayment as $ol) {
+                                $gpm=$gpmRepo->findBy(['gainPlanId'=>$ol['id']]);
+
+                                $imp =  $ol['amount']*100/122;
+
+
+                                $profit+=$imp;
+
+                            }
+
+                            $granTotal+=$profit+$netTotal;
+
+
+
+                            echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($granTotal,'0',',','.') . ' &euro; Ven</div>';
+
+                        }
+                        ?>
+
+
+                    </div>
+                    <div class="row" align="center">
+
+                        <?php
+                        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                        $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                        $countryRepo=\Monkey::app()->repoFactory->create('Country');
+                        for ($i=1;$i<13;$i++) {
+                            $amount=0;
+                            $granCost=0;
+                            $cost=0;
+                            $imp=0;
+                            $paymentCommission=0;
+                            $shippingCost=0;
+                            $profit=0;
+                            $commissionSell=0;
+                            $transParallel=0;
+                            $sql='select * FROM OrderLine where (`status` NOT LIKE \'%ORD_CANCEL%\' AND `status` NOT LIKE \'%ORD_FRND_CANC%\' AND `status` NOT LIKE \'%ORD_MISSNG%\')  AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach($resultTotalPayment as $ol) {
+
+                                $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $ol['orderId']]);
+
+                                if ( $ol['netPrice']!=null)  {
+
+                                    $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $order->orderPaymentMethodId]);
+                                    $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
+                                    if ($ol['remoteShopSellerId'] == 44) {
+
+                                        $amount = $ol['netPrice'];
+                                        $imp =$ol['netPrice'] - $ol['vat'];
+                                        $cost = $ol['friendRevenue'];
+                                        $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                        $transParallel =0;
+                                        $shippingCost = $ol['shippingCharge'];
+                                        $commissionSell=0;
+                                        $profit+=$imp-$shippingCost-$cost-$paymentCommission;
+                                        $granCost+=$cost+$shippingCost+$paymentCommission;
+
+
+                                    } else {
+                                        if ($ol['shopId'] != $ol['remoteShopSellerId']) {
+                                            $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
+                                            $paralellFee = $shop->paralellFee;
+                                            $imp =  $ol['netPrice'] - $ol['vat'];
+                                            $par=$ol['netPrice']/100*$paralellFee;
+                                            $transParallel=(($ol['netPrice']-$par)*100/122)-$ol['friendRevenue'];
+                                            $amount = $ol['netPrice'];
+                                            $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                            $cost = 0;
+                                            $shippingCost=$ol['shippingCharge'];
+                                            $commissionSell=$ol['netPrice'] * 0.11;
+                                            $profit+=$commissionSell+$transParallel-$paymentCommission-$shippingCost;
+                                            $granCost+=$cost+$shippingCost+$paymentCommission;
+
+
+                                        } else {
+                                            $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
+                                            $paralellFee = $shop->paralellFee;
+                                            $imp =  $ol['netPrice'] - $ol['vat'];
+                                            $transParallel=0;
+                                            $amount = $ol['netPrice'];
+                                            $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                            $cost = 0;
+                                            $shippingCost=$ol['shippingCharge'];
+                                            $commissionSell=$ol['netPrice'] * 0.11;
+                                            $profit+=$commissionSell-$paymentCommission-$shippingCost;
+                                            $granCost+=$cost+$shippingCost+$paymentCommission;
+
+                                        }
+                                    }
+                                }else{
+                                    continue;
+                                }
+                            }
+                            $sql='select * FROM GainPlan where typeMovement=2  AND MONTH(dateMovement)='.$i.' and YEAR(dateMovement)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            $gpmRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+
+                            foreach($resultTotalPayment as $ol) {
+                                $gpm=$gpmRepo->findBy(['gainPlanId'=>$ol['id']]);
+                                foreach($gpm as $mcost){
+                                    $cost+=$mcost->amount;
+                                }
+
+
+                                $imp =  $ol['amount']*100/122;
+
+
+                                $profit+=$imp-$cost;
+                                $granCost+=$cost;
+
+                            }
+
+
+
+                            echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($granCost,'0',',','.') . ' &euro; cost</div>';
+
+                        }
+                        ?>
+
+
+                    </div>
+                    <div class="row" align="center">
+
+                    <?php
+                    $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                    $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                    $countryRepo=\Monkey::app()->repoFactory->create('Country');
+                    for ($i=1;$i<13;$i++) {
+                        $granCost=0;
+                        $amount=0;
+                        $cost=0;
+                        $imp=0;
+                        $paymentCommission=0;
+                        $shippingCost=0;
+                        $profit=0;
+                        $commissionSell=0;
+                        $transParallel=0;
+                        $sql='select * FROM OrderLine where (`status` NOT LIKE \'%ORD_CANCEL%\' AND `status` NOT LIKE \'%ORD_FRND_CANC%\' AND `status` NOT LIKE \'%ORD_MISSNG%\')  AND MONTH(creationDate)='.$i.' and YEAR(creationDate)=' . $currentYear ;
+                        $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                        foreach($resultTotalPayment as $ol) {
+
+                            $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $ol['orderId']]);
+
+                            if ( $ol['netPrice']!=null)  {
+
+                                $orderPaymentMethod = $orderPaymentMethodRepo->findOneBy(['id' => $order->orderPaymentMethodId]);
+                                $paymentCommissionRate = $orderPaymentMethod->paymentCommissionRate;
+                                if ($ol['remoteShopSellerId'] == 44) {
+
+                                    $amount = $ol['netPrice'];
+                                    $imp =$ol['netPrice'] - $ol['vat'];
+                                    $cost = $ol['friendRevenue'];
+                                    $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                    $transParallel =0;
+                                    $shippingCost = $ol['shippingCharge'];
+                                    $commissionSell=0;
+                                    $profit+=$imp-$shippingCost-$cost-$paymentCommission;
+
+
+                                } else {
+                                    if ($ol['shopId'] != $ol['remoteShopSellerId']) {
+                                        $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
+                                        $paralellFee = $shop->paralellFee;
+                                        $imp =  $ol['netPrice'] - $ol['vat'];
+                                        $par=$ol['netPrice']/100*$paralellFee;
+                                        $transParallel=(($ol['netPrice']-$par)*100/122)-$ol['friendRevenue'];
+                                        $amount = $ol['netPrice'];
+                                        $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                        $cost = 0;
+                                        $shippingCost=$ol['shippingCharge'];
+                                        $commissionSell=$ol['netPrice'] * 0.11;
+                                        $profit+=$commissionSell+$transParallel-$paymentCommission-$shippingCost;
+
+
+                                    } else {
+                                        $shop = $shopRepo->findOneBy(['id' => $ol['shopId']]);
+                                        $paralellFee = $shop->paralellFee;
+                                        $imp =  $ol['netPrice'] - $ol['vat'];
+                                        $transParallel=0;
+                                        $amount = $ol['netPrice'];
+                                        $paymentCommission = ($ol['netPrice'] / 100) * $paymentCommissionRate;
+                                        $cost = 0;
+                                        $shippingCost=$ol['shippingCharge'];
+                                        $commissionSell=$ol['netPrice'] * 0.11;
+                                        $profit+=$commissionSell-$paymentCommission-$shippingCost;
+
+                                    }
+                                }
+                            }else{
+                                continue;
+                            }
+                        }
+                        $sql='select * FROM GainPlan where typeMovement=2  AND MONTH(dateMovement)='.$i.' and YEAR(dateMovement)=' . $currentYear ;
+                        $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                        $gpmRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+
+                        foreach($resultTotalPayment as $ol) {
+                            $gpm=$gpmRepo->findBy(['gainPlanId'=>$ol['id']]);
+                            foreach($gpm as $mcost){
+                                $cost+=$mcost->amount;
+                            }
+
+
+                            $imp =  $ol['amount']*100/122;
+
+
+                            $profit+=$imp-$cost;
+
+                        }
+
+
+
+                        echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($profit,'0',',','.') . ' &euro; marg</div>';
+
+                    }
+                    ?>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -38,7 +387,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc"
-                                    class="center dataFilterType">Data Movimento
+                                    class="center dataFilterType">Data<br>Movimento
                                 </th>
                                 <th data-slug="season"
                                     data-searchable="true"
@@ -46,49 +395,38 @@
                                 </th>
                                 <th data-slug="orderId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Numero Ordine
+                                    data-orderable="true" class="center">Numero<br>Ordine
                                 </th>
                                 <th data-slug="invoiceId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Fattura
+                                    data-orderable="true" class="center">Fattura<br>Cliente
                                 </th>
                                 <th data-slug="customerName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Cliente/Fornitore
+                                    data-orderable="true" class="center">Cliente
                                 </th>
                                 <th data-slug="shopName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Shop Name
+                                    data-orderable="true" class="center">Shop
                                 </th>
 
                                 <th data-slug="typeMovement"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">tipo Movimento
+                                    data-orderable="true" class="center">Tipo<br>Mov.
                                 </th>
 
                                 <th data-slug="MovementPassiveCollect"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Fattura Contro Partita/Fornitore
+                                    data-orderable="true" class="center">Fattura Contro<br> Partita/Costo
                                 </th>
-                                <th data-slug="amount"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Importo
-                                </th>
+
                                 <th data-slug="imp"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Imponibile
+                                    data-orderable="true" class="center">Ricavo
                                 </th>
                                 <th data-slug="cost"
                                          data-searchable="true"
                                          data-orderable="true" class="center">Costo
-                                </th>
-                                <th data-slug="deliveryCost"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Costo Di Spedizione
-                                </th>
-                                <th data-slug="paymentCommission"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Commissioni su Pagamento
                                 </th>
                                 <th data-slug="profit"
                                     data-searchable="true"
@@ -154,6 +492,9 @@
             data-title="Preleva Fatture di Acquisto"
             data-placement="bottom">
             ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

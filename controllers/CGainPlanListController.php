@@ -18,6 +18,11 @@ class CGainPlanListController extends ARestrictedAccessRootController
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/gainplan_list.php');
 
         $permission = \Monkey::app()->getUser()->hasPermission('allShops');
+        $currentYear= date('Y');
+        $valueRequest = \Monkey::app()->router->request()->getRequestData('countYear');
+        if($valueRequest!=false){
+            $currentYear=$valueRequest;
+        }
 
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
@@ -32,6 +37,7 @@ class CGainPlanListController extends ARestrictedAccessRootController
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
+            'currentYear'=>$currentYear,
             'sidebar' => $this->sidebar->build(),
             'permission' => $permission
         ]);

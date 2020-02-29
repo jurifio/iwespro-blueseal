@@ -35,3 +35,18 @@ $(document).on('bs.import.gainplanFattureInCloud', function () {
         });
     })
 });
+
+function lessyear(){
+    currentYear=parseInt($('#currentYear').val());
+    newYear=currentYear-1;
+    link='/blueseal/gainplan/gainplan?countYear='+newYear;
+    window.open(link,'_self');
+
+}
+function moreyear(){
+    currentYear=parseInt($('#currentYear').val());
+    newYear=currentYear+1;
+    link='/blueseal/gainplan/gainplan?countYear='+newYear;
+    window.open(link,'_self');
+
+}
