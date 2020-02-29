@@ -27,7 +27,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
 
         $sql = 'SELECT gp.id as id,
                         gp.seasonId as seasonId,
-                        gp.orderId as orderId,
+                        if(ol.shopId!=ol.remoteShopSellerId,concat("P | ",gp.orderId),gp.orderId) as orderId,
        gp.userId as userId,
        gp.shopId as shopId,
        s.name as shopName,
@@ -47,7 +47,10 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
        gp.externalId as externalId,
        gp.invoiceExternal as invoiceExternal,
        if(gp.isActive=1,"Si","No") as isActive
-       from GainPlan gp  left join Shop s on s.id=gp.shopId where gp.orderId !="0"  ORDER  BY dateMovement DESC
+       from GainPlan gp  left join Shop s on s.id=gp.shopId
+        left join `Order` o on gp.orderId=o.id
+        left join `OrderLine` ol on o.id=ol.orderId
+        where gp.orderId is not null  group by gp.orderId ORDER  BY dateMovement  DESC 
         ';
         $datatable = new CDataTables($sql,['id'],$_GET,true);
 
@@ -163,6 +166,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                                                 $shippingCost = $orderLine->shippingCharge;
                                                 $commissionSell += round($orderLine->netPrice * 0.11,2);
                                                 $profit += $commissionSell + $transParallel - $paymentCommission - $shippingCost;
+                                                $order='<i style="color:green"><b>P | '.$order.'</b></i>';
 
                                             } else {
                                                 $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);

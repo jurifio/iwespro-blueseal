@@ -50,7 +50,7 @@ class CGainPlanListAjaxController extends AAjaxController
        from GainPlan gp  left join Shop s on s.id=gp.shopId
         left join `Order` o on gp.orderId=o.id
         left join `OrderLine` ol on o.id=ol.orderId
-        where gp.orderId !="0"  group by gp.orderId ORDER  BY dateMovement  DESC 
+         group by gp.orderId ORDER  BY dateMovement  DESC 
       
         ';
         $datatable = new CDataTables($sql,['id'],$_GET,true);
@@ -167,7 +167,7 @@ class CGainPlanListAjaxController extends AAjaxController
                                             $shippingCost=$orderLine->shippingCharge;
                                             $commissionSell+=round($orderLine->netPrice * 0.11,2);
                                             $profit+=$commissionSell+$transParallel-$paymentCommission-$shippingCost;
-                                            $order='<i style="color:green"><b>P | '.$orderId.'</b></i>';
+                                            $order='<i style="color:green"><b>P | '.$order.'</b></i>';
 
                                         }else{
                                             $shop = $shopRepo->findOneBy(['id' => $orderLine->shopId]);
