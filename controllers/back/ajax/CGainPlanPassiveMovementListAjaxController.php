@@ -31,15 +31,19 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
                         gppm.amount as amount,
                         gppm.amountVat as amountVat,
                         gppm.amountTotal as amountTotal,
-                        gppm.gainPlanId as gainPlanId,
+                        if( gppm.gainPlanId is null, "non Associato", gppm.gainPlanId) as gainPlanId,
+                        if(gppm.gainPlanId is null, "non Associato",concat(gp.invoiceExternal, " | ",gp.customerName)) as  invoiceExternal,
+                        if(gppm.gainPlanId is null, "non Associato",gp.amount) as  gpAmount,
                         gppm .fornitureName as fornitureName,
                         gppm.serviceName as serviceName,
                          if(gp.isActive=1,"Si","No") as isActive,
                         gppm.dateCreate as dateCreate,
                         gppm.shopId as shopId,
+                        s.name as ShopName,
                         gppm.dateMovement as dateMovement
         from GainPlanPassiveMovement gppm left join GainPlan gp on gppm.gainPlanId=gp.id 
-                                         left  join ProductSeason ps on  gppm.seasonId=ps.id ORDER BY dateMovement DESC
+                                         left  join ProductSeason ps on  gppm.seasonId=ps.id 
+                                            left join Shop s on s.id=gppm.shopId ORDER BY dateMovement DESC
         ';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
         $datatable -> doAllTheThings('true');
@@ -55,17 +59,33 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
         $gpsmRepo = \Monkey ::app() -> repoFactory -> create('GainPlanPassiveMovement');
         $seasonRepo = \Monkey ::app() -> repoFactory -> create('ProductSeason');
         $orderPaymentMethodRepo = \Monkey ::app() -> repoFactory -> create('OrderPaymentMethod');
+        $gainPlanRepo=\Monkey::app()->repoFactory ->create('GainPlan');
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $val CGainPlanPassiveMovement */
             $val = \Monkey ::app() -> repoFactory -> create('GainPlanPassiveMovement') -> findOneBy($row);
             $row['DT_RowId'] = $val -> printId();
             $row['id'] = '<a href="/blueseal/gainplan/gainplan-passivo/modifica/' . $val -> printId() . '">' . $val -> printId() . '</a>';
             $row['dateMovement'] = $val -> dateMovement;
-            $row['gainPlanId'] = $val -> gainPlanId;
+
             $row['invoice'] = $val -> invoice;
-            $row['amount'] = money_format('%.2n',$val -> amount) . ' &euro;';
-            $row['amountVat']= money_format('%.2n',$val->amountVat) . ' &euro;';
-            $row['amountTotal']= money_format('%.2n',$val->amountTotal) . ' &euro;';
+            if($val->gainPlanId!=null){
+                $gainPlan=$gainPlanRepo->findOneBy(['id'=>$val->gainPlanId]);
+
+                  $invoiceExternal=$gainPlan->invoiceExternal.'/'.$gainPlan->customerName;
+                  $gpAmount=$val->amount-($gainPlan->amount*100/122);
+                  $gpTotalAmount=$gainPlan->amount*100/122;
+
+            }else{
+                $invoiceExternal='Non Associato';
+                $gpAmount=0;
+                $gpTotalAmount=0;
+            }
+            $row['invoiceExternal'] = $invoiceExternal;
+            $row['gpTotalAmount']=number_format($gpTotalAmount,'2',',','.') . ' &euro;';
+            $row['gpAmount']=number_format($gpAmount,'2',',','.') . ' &euro;';
+            $row['amount'] = number_format($val -> amount,'2',',','.') . ' &euro;';
+            $row['amountVat']= number_format($val->amountVat,'2',',','.') . ' &euro;';
+            $row['amountTotal']= number_format($val->amountTotal,'2',',','.') . ' &euro;';
             $row['serviceName'] = $val -> serviceName;
             $row['fornitureName'] = $val -> fornitureName;
             $shop='';
@@ -75,7 +95,7 @@ class CGainPlanPassiveMovementListAjaxController extends AAjaxController
             } else {
                 $shop = '';
             }
-            $row['shopId'] = $shop;
+            $row['shopName'] = $shop;
             if($val->isActive==1) {
                 $isActive = 'Si';
             }else {

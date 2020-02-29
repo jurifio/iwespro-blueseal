@@ -102,8 +102,7 @@
                                            where MONTH(I.invoiceDate)='12' and YEAR(I.invoiceYear)=" . $currentYear;
                                 echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc '; ?></div>
                         </div>
-                        <div class="row" align="center"
-                        ">
+                        <div class="row" align="center"">
 
                         <?php
                         $shopRepo=\Monkey::app()->repoFactory->create('Shop');

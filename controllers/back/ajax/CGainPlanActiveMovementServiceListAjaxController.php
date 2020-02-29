@@ -72,7 +72,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $val CGainPlan */
             $val = \Monkey::app()->repoFactory->create('GainPlan')->findOneBy($row);
-            $row['DT_RowId'] = $val->printId();
+            $row['DT_RowId'] =$val->id;
             $row['id'] = $val->printId();
             if($val->isActive==1) {
                 $isActive = 'Si';
@@ -103,10 +103,8 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
             $collectCost = $gpsmRepo->findBy(['gainPlanId' => $val->id]);
             foreach ($collectCost as $costs) {
                 if($costs->isActive==1) {
-                    if ($costs->typeMovement == 2) {
                         $cost += $costs->amount;
-                    }
-                    $rowCost .= ' fattura:' . $costs->invoice . ' -' . $costs->fornitureName . '<br>';
+                    $rowCost .=  $costs->fornitureName . '|' . $costs->Invoice . '<br>';
                 }
             }
 
@@ -179,6 +177,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
                 case 2:
                     $findInvoice = $val->invoiceExternal;
                     $amount += $val->amount;
+                    $imp+=$val->amount*100/122;
                     $cost += $val->cost;
                     $shippingCost += $val->deliveryCost;
                     $paymentCommission += $val->commission;
@@ -192,13 +191,13 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
             $row['shoId']=$shopOrder;
             $row['country'] = $nation;
             $row['customerName'] = $customer;
-            $row['amount'] = money_format('%.2n',$amount) . ' &euro;';
-            $row['cost'] = money_format('%.2n',$cost) . ' &euro;';
-            $row['imp'] = money_format('%.2n',$imp) . ' &euro;';
+            $row['amount'] = number_format($amount,2,',','.') . ' &euro;';
+            $row['cost'] = number_format($cost,2,',','.') . ' &euro;';
+            $row['imp'] = number_format($imp,2,',','.') . ' &euro;';
             $row['MovementPassiveCollect'] = $rowCost;
-            $row['deliveryCost'] = money_format('%.2n',$shippingCost) . ' &euro;';
-            $row['paymentCommission'] = money_format('%.2n',$paymentCommission) . ' &euro;';
-            $row['profit'] = money_format('%.2n',$imp - $cost - $shippingCost - $paymentCommission) . ' &euro;';
+            $row['deliveryCost'] = number_format($shippingCost,2,',','.') . ' &euro;';
+            $row['paymentCommission'] = number_format($paymentCommission,2,',','.') . ' &euro;';
+            $row['profit'] = number_format($imp - $cost - $shippingCost - $paymentCommission,2,',','.') . ' &euro;';
             $row['typeMovement'] = $typeMovement;
             $dateMovement=strtotime($val->dateMovement);
             $dateMovement=date('d/m/Y',$dateMovement);

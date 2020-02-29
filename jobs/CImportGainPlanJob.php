@@ -62,11 +62,12 @@ class CImportGainPlanJob extends ACronJob
 
 
 
-                    $invoice = $invoiceRepo->findOneBy(['orderId' => $orderId]);
+                    $invoice = $invoiceRepo->findOneBy(['orderId' => $orderId,'invoiceSiteChar'=>'P']);
 
                     if ($invoice != null) {
 
                         $invoiceId = $invoice->id;
+                        $invoiceExternal=$invoice->invoiceNumber.'/'.$invoice->invoiceSiteChar;
                     }
                     if ($order['frozenBillingAddress'] != null) {
                         $userAddress = json_decode($order['frozenBillingAddress'],false);
@@ -97,6 +98,7 @@ class CImportGainPlanJob extends ACronJob
                         $gainPlanInsert = $gainPlanRepo->getEmptyEntity();
                         if ($invoice != null) {
                             $gainPlanInsert->invoiceId = $invoiceId;
+                            $gainPlanInsert->invoiceExternal=$invoiceExternal;
                         }
                         $gainPlanInsert->orderId = $orderId;
                         $gainPlanInsert->seasonId = $seasonId;

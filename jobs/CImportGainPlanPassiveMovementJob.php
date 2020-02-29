@@ -59,6 +59,7 @@ class CImportGainPlanPassiveMovementJob extends ACronJob
             $gainPlanRepo = \Monkey::app()->repoFactory->create('GainPlan');
             $gainPlanPassiveMovementRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
             $yearNow = date('Y');
+            $yearNow="2019";
             $api_uid = '34021';
             $api_key = '443884d05056b5f0831446538c6e840f';
             $insertJson = '{

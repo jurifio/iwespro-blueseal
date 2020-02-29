@@ -104,7 +104,7 @@ class CGainPlanActiveMovementEcommerceListAjaxController extends AAjaxController
                     if ($costs->typeMovement == 2) {
                         $cost += $costs->amount;
                     }
-                    $rowCost .= ' fattura:' . $costs->invoice . ' -' . $costs->fornitureName . '<br>';
+                    $rowCost .=  $costs->fornitureName . '|' . $costs->Invoice . '<br>';
                 }
             }
 

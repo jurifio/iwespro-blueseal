@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -20,94 +20,279 @@
                     </div>
                 </div>
             </div>
-
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="gainplanpassivemovement_list"
-                               data-controller="GainPlanPassiveMovementListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
-                               data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 200, 500"
-                               data-display-length="50">
-                            <thead>
-                            <tr>
-                                <th data-slug="id"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">id
-                                </th>
-                                <th data-slug="dateMovement"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc"
-                                    class="center dataFilterType">Data Movimento
-                                </th>
-                                <th data-slug="isActive"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Attivo
-                                </th>
-                                <th data-slug="seasonName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Stagione
-                                </th>
-                                <th data-slug="gainPlanId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Contro Partiva Attiva
-                                </th>
-                                <th data-slug="invoice"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Fattura di acquisto
-                                </th>
-                                <th data-slug="amount"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Imponibile
-                                </th>
-                                <th data-slug="amountVat"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">IVA
-                                </th>
-                                <th data-slug="amountTotal"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Totale
-                                </th>
-                                <th data-slug="fornitureName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Fornitore
-                                </th>
-                                <th data-slug="serviceName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Servizio
-                                </th>
-                                <th data-slug="shopId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">ShopId
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="row" align="center">
+                            <div class="col-md-4">
+                                <button class="success" id="lessYear" onclick="lessyear()" type="button"><span
+                                            class="fa fa-backward"></span></button>
+                            </div>
+                            <div id="year" class="col-md-4"><?php echo $currentYear ?>
+                                <input type="hidden" id="currentYear" name="currentYear"
+                                       value="<?php echo $currentYear ?>"/>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="success" id="moreYear" onclick="moreyear()" type="button"><span
+                                            class="fa fa-forward"></span></button>
+                            </div>
+
+                        </div>
+                        <div class="row" align="center">
+
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Aprile</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Maggio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Giugno</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Luglio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Agosto</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Settembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Ottobre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Novembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
+                        </div>
+                        <div class="row" align="center">
+                            <?php //$currentYear = (new DateTime())->format('Y'); ?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='1' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='2' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='3' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='4' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='5' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='6' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='7' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='8' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='9' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='10' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='11' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlanPassiveMovement` I where  
+                                            MONTH(I.dateMovement)='12' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+                        </div>
+                        <div class="row" align="center"
+                        ">
+
+                        <?php
+                        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+                        $orderPaymentMethodRepo = \Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                        $countryRepo = \Monkey::app()->repoFactory->create('Country');
+                        for ($i = 1; $i < 13; $i++) {
+                            $amount = 0;
+                            $cost = 0;
+                            $imp = 0;
+                            $paymentCommission = 0;
+                            $shippingCost = 0;
+                            $profit = 0;
+                            $commissionSell = 0;
+                            $transParallel = 0;
+                            $sql = 'select sum(amount) as amount FROM GainPlanPassiveMovement where  MONTH(dateMovement)=' . $i . ' and YEAR(dateMovement)=' . $currentYear;
+                            $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+
+
+                            foreach ($resultTotalPayment as $ol) {
+
+
+                                $imp = $ol['amount'] * 100 / 122;
+
+
+                            }
+
+
+                            echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($imp,'0',',','.') . ' &euro; Costo</div>';
+
+                        }
+                        ?>
+
+
                     </div>
+                    <div class="row" align="center"
+                    ">
+
+                    <?php
+                    $shopRepo = \Monkey::app()->repoFactory->create('Shop');
+                    $orderPaymentMethodRepo = \Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                    $countryRepo = \Monkey::app()->repoFactory->create('Country');
+                    for ($i = 1; $i < 13; $i++) {
+                        $amount = 0;
+                        $cost = 0;
+                        $imp = 0;
+                        $paymentCommission = 0;
+                        $shippingCost = 0;
+                        $profit = 0;
+                        $commissionSell = 0;
+                        $transParallel = 0;
+                        $sql = 'select *  FROM GainPlanPassiveMovement where  MONTH(dateMovement)=' . $i . ' and YEAR(dateMovement)=' . $currentYear;
+                        $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                        $gpmRepo = \Monkey::app()->repoFactory->create('GainPlan');
+
+                        foreach ($resultTotalPayment as $ol) {
+                            if($ol['gainPlanId']!=null){
+                            $gpm = $gpmRepo->findOneBy(['id' => $ol['gainPlanId']]);
+
+                                $amount += $gpm->amount*100/122;
+                            }else{
+                                $amount+=0;
+                            }
+                            $cost+=$ol['amount'];
+
+
+                            $profit +=  $cost-$amount;
+
+                        }
+
+
+                        echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($profit,'0',',','.') . ' &euro; Cos Net.</div>';
+
+                    }
+                    ?>
                 </div>
             </div>
         </div>
     </div>
-    <?php include "parts/footer.php" ?>
+
+
+    <div class="container-fluid container-fixed-lg bg-white">
+        <div class="panel panel-transparent">
+            <div class="panel-body">
+                <table class="table table-striped responsive" width="100%"
+                       data-datatable-name="gainplanpassivemovement_list"
+                       data-controller="GainPlanPassiveMovementListAjaxController"
+                       data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                       data-inner-setup="true"
+                       data-length-menu-setup="50, 100, 200, 500"
+                       data-display-length="50">
+                    <thead>
+                    <tr>
+
+                        <th data-slug="dateMovement"
+                            data-searchable="true"
+                            data-orderable="true"
+                            data-default-order="desc"
+                            class="center dataFilterType">Data Movimento
+                        </th>
+
+                        <th data-slug="seasonName"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Stagione
+                        </th>
+                        <th data-slug="invoice"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Fattura di acquisto
+                        </th>
+                        <th data-slug="fornitureName"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Fornitore
+                        </th>
+                        <th data-slug="shopName"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Shop
+                        </th>
+                        <th data-slug="invoiceExternal"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Fattura Contro<BR>Partita/Fornitore
+                        </th>
+                        <th data-slug="serviceName"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Dettaglio<br>Costo
+                        </th>
+                        <th data-slug="amountTotal"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Importo
+                        </th>
+                        <th data-slug="amount"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Imponibile
+                        </th>
+                        <th data-slug="gpTotalAmount"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Ricavo
+                        </th>
+                        <th data-slug="gpAmount"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Costo Netto<br> da Ricavo
+                        </th>
+
+
+                        <th data-slug="isActive"
+                            data-searchable="true"
+                            data-orderable="true" class="center">Attivo
+                        </th>
+                        <th data-slug="id"
+                            data-searchable="true"
+                            data-orderable="true" class="center">id
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione documenti di Acquisto">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="allShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi  un nuovo costo  manuale"
-            data-placement="bottom"
-            data-href="/blueseal/registri/gainplan-passivo/aggiungi/"
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi  un nuovo costo  manuale"
+                data-placement="bottom"
+                data-href="/blueseal/registri/gainplan-passivo/aggiungi/"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
@@ -120,24 +305,27 @@
                 data-event="bs.gainplanpassivemovement.delete"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-toggle-off"
-            data-permission="allShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Disabilita Acquisto (!!!)"
-            data-placement="bottom"
-            data-event="bs.gainplanpassivemovement.disable"
+                data-tag="a"
+                data-icon="fa-toggle-off"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Disabilita Acquisto (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanpassivemovement.disable"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-toggle-on"
-            data-permission="allShops"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Abilita Acquisto (!!!)"
-            data-placement="bottom"
-            data-event="bs.gainplanpassivemovement.enable"
+                data-tag="a"
+                data-icon="fa-toggle-on"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Abilita Acquisto (!!!)"
+                data-placement="bottom"
+                data-event="bs.gainplanpassivemovement.enable"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

@@ -24,7 +24,19 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row" align="center">
-                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-4">
+                                <button class="success" id="lessYear" onclick="lessyear()" type="button"><span  class="fa fa-backward"></span></button>
+                            </div>
+                            <div id="year" class="col-md-4"><?php echo $currentYear?>
+                                <input type="hidden" id="currentYear" name="currentYear" value="<?php echo $currentYear?>"/>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="success" id="moreYear" onclick="moreyear()" type="button"><span  class="fa fa-forward"></span></button>
+                            </div>
+
+                        </div>
+                        <div class="row" align="center">
+
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
@@ -39,74 +51,152 @@
                             <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
                         </div>
                         <div class="row" align="center">
-                            <?php $currentYear = (new DateTime()) -> format('Y');?>
-                            <div class="col-md-1"  style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='1' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?>
+                            <?php //$currentYear = (new DateTime())->format('Y'); ?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='1' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
                             </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='2' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='2' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`  from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='3' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='3' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='4' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='4' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='5' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='5' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='6' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='6' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='7' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='7' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count` from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='8' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='8' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='9' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='9' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='10' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='10' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='11' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='11' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
                             <div class="col-md-1" style="border-style: solid;  border-color: beige;">
-                                <?php  $sql="SELECT count(id)  as `count`  from BillRegistryInvoice 
-                                           where MONTH(invoiceDate)='12' and YEAR(invoiceDate)=" . $currentYear;
-                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'].' doc';?></div>
+                                <?php $sql = "SELECT count(`I`.`id`)  as `count`   from `GainPlan` I where  typeMovement=2  and
+                                            MONTH(I.dateMovement)='12' and YEAR(I.dateMovement)=" . $currentYear;
+                                echo \Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'] . ' doc'; ?>
+                            </div>
+
                         </div>
                         <div class="row" align="center"">
+
                         <?php
+                        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                        $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                        $countryRepo=\Monkey::app()->repoFactory->create('Country');
                         for ($i=1;$i<13;$i++) {
-                            $sql = 'select sum(amountPayment) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
-                            $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-                            foreach ($resultTotalPayment as $sumPayment) {
-                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                            $amount=0;
+                            $cost=0;
+                            $imp=0;
+                            $paymentCommission=0;
+                            $shippingCost=0;
+                            $profit=0;
+                            $commissionSell=0;
+                            $transParallel=0;
+                            $sql='select * FROM GainPlan where typeMovement=2  AND MONTH(dateMovement)='.$i.' and YEAR(dateMovement)=' . $currentYear ;
+                            $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            $gpmRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+
+                            foreach($resultTotalPayment as $ol) {
+                                $gpm=$gpmRepo->findBy(['gainPlanId'=>$ol['id']]);
+
+                                $imp =  $ol['amount']*100/122;
+
+
+                                $profit+=$imp;
+
                             }
+
+
+                            echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($imp,'0',',','.') . ' &euro; Fatt</div>';
+
                         }
                         ?>
 
 
                     </div>
+                    <div class="row" align="center"
+                    ">
+
+                    <?php
+                    $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+                    $orderPaymentMethodRepo=\Monkey::app()->repoFactory->create('OrderPaymentMethod');
+                    $countryRepo=\Monkey::app()->repoFactory->create('Country');
+                    for ($i=1;$i<13;$i++) {
+                        $amount=0;
+                        $cost=0;
+                        $imp=0;
+                        $paymentCommission=0;
+                        $shippingCost=0;
+                        $profit=0;
+                        $commissionSell=0;
+                        $transParallel=0;
+                        $sql='select * FROM GainPlan where typeMovement=2  AND MONTH(dateMovement)='.$i.' and YEAR(dateMovement)=' . $currentYear ;
+                        $resultTotalPayment=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                        $gpmRepo=\Monkey::app()->repoFactory->create('GainPlanPassiveMovement');
+
+                        foreach($resultTotalPayment as $ol) {
+                                        $gpm=$gpmRepo->findBy(['gainPlanId'=>$ol['id']]);
+                                        foreach($gpm as $mcost){
+                                            $cost+=$mcost->amount;
+                                        }
+
+
+                                        $imp =  $ol['amount']*100/122;
+
+
+                                        $profit+=$imp-$cost;
+
+                        }
+
+
+                        echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;fontsize:xx-small;">' . number_format($profit,'0',',','.') . ' &euro; marg</div>';
+
+                    }
+                    ?>
+
 
                 </div>
+
             </div>
         </div>
+    </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -134,10 +224,6 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione
                                 </th>
-                                <th data-slug="orderId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero Ordine
-                                </th>
                                 <th data-slug="invoiceId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fattura
@@ -150,21 +236,13 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop Name
                                 </th>
-                                <th data-slug="country"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Nazione
-                                </th>
-                                <th data-slug="typeMovement"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">tipo Movimento
-                                </th>
                                 <th data-slug="isActive"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Attivo
                                 </th>
                                 <th data-slug="MovementPassiveCollect"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Fattura Contro Partita/Fornitore
+                                    data-orderable="true" class="center">Fattura Contro<BR>Partita/Fornitore
                                 </th>
                                 <th data-slug="amount"
                                     data-searchable="true"
@@ -177,14 +255,6 @@
                                 <th data-slug="cost"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Costo
-                                </th>
-                                <th data-slug="deliveryCost"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Costo Di Spedizione
-                                </th>
-                                <th data-slug="paymentCommission"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Commissioni su Pagamento
                                 </th>
                                 <th data-slug="profit"
                                     data-searchable="true"
@@ -216,6 +286,16 @@
                 data-title="Aggiungi  un nuovo acquisto  manuale"
                 data-placement="bottom"
                 data-href="/blueseal/registri/gainplan-passivo/aggiungi"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-handshake-o"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Associa un acquisto esistente ad una vendita"
+                data-placement="bottom"
+                data-event="bs.gainplanassociations.cost"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
