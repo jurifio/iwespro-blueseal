@@ -135,15 +135,25 @@
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-download"
+                data-permission="allShops"
+                data-event="bs.import.gainplan"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Preleva Fatture di Vendita"
+                data-placement="bottom">
+            ></bs-toolbar-button>
+        <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-download"
+            data-icon="fa-briefcase"
             data-permission="allShops"
-            data-event="bs.import.gainplan"
+            data-event="bs.import.gainplanFattureInCloud"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Aggiungi"
+            data-title="Preleva Fatture di Acquisto"
             data-placement="bottom">
-        ></bs-toolbar-button>
+            ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

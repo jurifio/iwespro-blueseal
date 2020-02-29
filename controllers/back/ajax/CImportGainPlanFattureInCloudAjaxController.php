@@ -1,35 +1,15 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
-use bamboo\core\base\CObjectCollection;
-use bamboo\core\db\pandaorm\repositories\ARepo;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CPrestashopHasProduct;
-use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
-use bamboo\domain\entities\CProductPublicSku;
-use bamboo\domain\entities\CProductEan;
-use bamboo\domain\entities\CProductSku;
-use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductBrand;
-use bamboo\domain\entities\CShop;
-use bamboo\domain\entities\CUserAddress;
-use bamboo\ecommerce\views\VBase;
-use bamboo\blueseal\business\CBlueSealPage;
-use bamboo\core\theming\CRestrictedAccessWidgetHelper;
-use PDO;
-use prepare;
-use AEntity;
-use bamboo\domain\entities\CSite;
-use bamboo\domain\entities\CUserHasShop;
-use bamboo\domain\repositories\CUserAddressRepo;
-use bamboo\domain\entities\CUser;
-use PDOException;
+use bamboo\blueseal\business\CDataTables;
+use bamboo\core\intl\CLang;
+use bamboo\domain\entities\CGainPlan;
+use bamboo\domain\entities\CGainPlanPassiveMovement;
 
 /**
- * Class CImportGainPlanFattureInCloudJob
- * @package bamboo\blueseal\jobs
+ * Class CImportGainPlanFattureInCloudAjaxController
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -37,27 +17,15 @@ use PDOException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 02/12/2019
+ * @date 29/02/2020
  * @since 1.0
  */
-class CImportGainPlanFattureInCloudJob extends ACronJob
+
+class CImportGainPlanFattureInCloudAjaxController extends AAjaxController
 {
-
-    /**
-     * @param null $args
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
-    public function run($args = null)
+    public function get()
     {
-        $this->importMovementFattureInCloud();
-    }
 
-
-    private function importMovementFattureInCloud()
-    {
         try {
             $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
             $orderRepo = \Monkey::app()->repoFactory->create('Order');
@@ -70,6 +38,7 @@ class CImportGainPlanFattureInCloudJob extends ACronJob
             $orderPaymentMethodRepo = \Monkey::app()->repoFactory->create('OrderPaymentMethod');
             $gainPlanRepo = \Monkey::app()->repoFactory->create('GainPlan');
             $yearNow = date('Y');
+            $yearNow='2019';
             $api_uid = '34021';
             $api_key = '443884d05056b5f0831446538c6e840f';
             $insertJson = '{
@@ -133,11 +102,10 @@ class CImportGainPlanFattureInCloudJob extends ACronJob
             }
 
         } catch (\Throwable $e) {
-            $this->report('CImportGainPlanFattureInCloudJob','error',$e,'');
+            \Monkey::app()->applicationLog('CImportGainPlanFattureInCloudAjaxController','error','Import Gain Plan Error',$e);
         }
 
 
+        return 'prova';
     }
-
-
 }
