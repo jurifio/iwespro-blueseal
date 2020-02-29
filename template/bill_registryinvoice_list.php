@@ -118,25 +118,22 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="id"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Codice
-                                </th>
                                 <th data-slug="companyName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cliente
                                 </th>
                                 <th data-slug="invoiceNumber"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Numero Fattura
+                                    data-orderable="true" class="center">Numero<br>Fattura
                                 </th>
                                 <th data-slug="invoiceDate"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Fattura
+                                    data-orderable="true" class="center">Data<br>Fattura
                                 </th>
+
                                 <th data-slug="netPrice"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Importo Netto
+                                    data-orderable="true" class="center">Imponibile
                                 </th>
                                 <th data-slug="vat"
                                     data-searchable="true"
@@ -144,13 +141,19 @@
                                 </th>
                                 <th data-slug="grossTotal"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Totale
+                                    data-orderable="true" class="center">Importo<br>Fattura
                                 </th>
                                 <th data-slug="typePayment"
                                     data-is-visible="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Tipo Pagamento
                                 </th>
+                                <th data-slug="rowPayment"
+                                    data-is-visible="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Scadenze
+                                </th>
+
                                 <th data-slug="isPaid"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Pagata
@@ -159,6 +162,10 @@
                                     data-is-visible="false"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Inviata
+                                </th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Codice
                                 </th>
                             </tr>
 
