@@ -104,7 +104,7 @@ class CGainPlanActiveMovementServiceListAjaxController extends AAjaxController
             foreach ($collectCost as $costs) {
                 if($costs->isActive==1) {
                         $cost += $costs->amount;
-                    $rowCost .=  $costs->fornitureName . '|' . $costs->Invoice . '<br>';
+                    $rowCost .=  $costs->fornitureName . '|' . $costs->invoice . '<br>';
                 }
             }
 

@@ -106,7 +106,7 @@ class CGainPlanListAjaxController extends AAjaxController
                     if ($costs->typeMovement == 2) {
                         $cost += $costs->amount;
                     }
-                    $rowCost .=  $costs->fornitureName . '|' . $costs->Invoice . '<br>';
+                    $rowCost .=  $costs->fornitureName . '|' . $costs->invoice . '<br>';
                 }
             }
 
