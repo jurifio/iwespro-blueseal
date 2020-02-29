@@ -72,13 +72,13 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                 $dateNow=new \DateTime();
                 $dateEstimated=new \dateTime($bt->dateEstimated);
                 if($dateNow>$dateEstimated && $bt->amountPaid==0 ){
-                    $rowPayment.='<i style="color:red"><b>€'.number_format($btt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
-                }elseif($dateNow>=$dateEstimated && $BT->amountPaid!=0){
-                    $rowPayment.='<i style="color:green"><b>€'.number_format($btt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
-                }elseif($dateNow<$dateEstimated && $BT->amountPaid==0){
-                    $rowPayment.='<i style="color:orange"><b>€'.number_format($btt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
-                }elseif($dateNow<=$dateEstimated && $BT->amountPaid!=0) {
-                    $rowPayment .= '<i style="color:green"><b>€' . number_format($btt->amountPayment,2,',','.') . ' ' . $dateEstimated->format('d-m-Y') . ' </b><i></br>';
+                    $rowPayment.='<i style="color:red"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
+                }elseif($dateNow>=$dateEstimated && $bt->amountPaid!=0){
+                    $rowPayment.='<i style="color:green"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
+                }elseif($dateNow<$dateEstimated && $bt->amountPaid==0){
+                    $rowPayment.='<i style="color:orange"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
+                }elseif($dateNow<=$dateEstimated && $bt->amountPaid!=0) {
+                    $rowPayment .= '<i style="color:green"><b>€' . number_format($bt->amountPayment,2,',','.') . ' ' . $dateEstimated->format('d-m-Y') . ' </b><i></br>';
                 }
 
             }
