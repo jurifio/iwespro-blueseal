@@ -154,14 +154,9 @@
                                     data-orderable="true" class="center">Scadenze
                                 </th>
 
-                                <th data-slug="isPaid"
+                                <th data-slug="status"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Pagata
-                                </th>
-                                <th data-slug="isSent"
-                                    data-is-visible="false"
-                                    data-searchable="false"
-                                    data-orderable="false" class="center">Inviata
+                                    data-orderable="true" class="center">Stato
                                 </th>
                                 <th data-slug="id"
                                     data-searchable="true"

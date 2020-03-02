@@ -55,8 +55,8 @@ class CBillRegistryTimeTableManageController extends AAjaxController
             }
 
         }
-        if($grossTotal<=0.1){
-            $findBillRegistryInvoice->isPaid=1;
+        if($grossTotal>=0 && $grossTotal<=0.1){
+            $findBillRegistryInvoice->statusId=3;
             $findBillRegistryInvoice->update();
         }
 

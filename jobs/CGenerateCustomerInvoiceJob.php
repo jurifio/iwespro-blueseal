@@ -625,6 +625,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 }
                                 $billRegistryInvoice->invoiceDate = $invoiceDate;
                                 $billRegistryInvoice->automaticInvoice = $automaticInvoice;
+                                $billRegistryInvoice->statusId=1;
                                 $billRegistryInvoice->insert();
                                 $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
                                 foreach ($res as $result) {

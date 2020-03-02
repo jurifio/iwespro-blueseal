@@ -334,6 +334,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceInsert->discountTotal=$discountTotal;
         $billRegistryInvoiceInsert->grossTotal=$grossTotal;
         $billRegistryInvoiceInsert->invoiceDate=$invoiceDate;
+        $billRegistryInvoiceInsert->statusId=1;
         $billRegistryInvoiceInsert->insert();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {

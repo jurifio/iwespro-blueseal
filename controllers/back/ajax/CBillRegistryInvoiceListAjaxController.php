@@ -33,19 +33,19 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                       `bri`.`grossTotal`             AS `grossTotal`,
                       `bri`.`invoiceDate`             AS `invoiceDate`,
                       `brtp`.`name` AS typePayment,
-                      if(`bri`.`isPaid`=1,'Pagata','Non Pagata')             AS `isPaid`,
-                      if(`bri`.`isSent`=1,'inviata','No')             AS `isSent`
+                      `bris`.status as status
                     FROM `BillRegistryInvoice` `bri`
                       JOIN `BillRegistryClient` `brc` on `bri`.`billRegistryClientId`=`brc`.`id`
                         join `BillRegistryClientBillingInfo` `brcbi` on `bri`.`billRegistryClientId`
                       JOIN `BillRegistryTypePayment` `brtp` on `brcbi`.`billRegistryTypePaymentId`= `brtp`.`id`
-                      JOIN `BillRegistryTimeTable` btt on bri.id=btt.billRegistryInvoiceId GROUP BY id";
+                      JOIN `BillRegistryTimeTable` btt on bri.id=btt.billRegistryInvoiceId
+                   left  JOIN `BillRegistryInvoiceStatus` bris on bri.statusId=bris.id GROUP BY id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings();
 
         $invoiceEdit = $this->app->baseUrl(false) . "/blueseal/anagrafica/fatture-modifica?id=";
-
+        $billRegistryInvoiceStatusRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoiceStatus');
         $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
         $billRegistryClientRepo=\Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
@@ -64,10 +64,12 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
            $row['netPrice']=money_format('%.2n',$billRegistryInvoice->netTotal).' &euro;';
             $row['vat']=money_format('%.2n',$billRegistryInvoice->vat).' &euro;';
             $row['grossTotal']=money_format('%.2n',$billRegistryInvoice->grossTotal).' &euro;';
+
             $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBY(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
             $btt=$billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId'=>$billRegistryInvoice->id]);
+           $bris=$billRegistryInvoiceStatusRepo->findOneBy(['id'=>$billRegistryInvoice->statusId]);
+           $row['status']=$bris->status;
             $rowPayment="";
-
             foreach($btt as $bt){
                 $dateNow=new \DateTime();
                 $dateEstimated=new \dateTime($bt->dateEstimated);
@@ -82,18 +84,10 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                 }
 
             }
+
             $row['rowPayment']=$rowPayment;
             $row['typePayment']=$billRegistryTypePayment->name;
-            if($billRegistryInvoice->isPaid==1){
-                $row['isPaid']='Si';
-            }else{
-                $row['isPaid']='No';
-            }
-            if($billRegistryInvoice->isSent==1){
-                $row['isSent']='Si';
-            }else{
-                $row['isSent']='No';
-            }
+
 
 
             $datatable->setResponseDataSetRow($key, $row);
