@@ -3634,6 +3634,21 @@
                 "DELETE",
                 "PUT"
             ]
+        },
+        {
+            "pattern": "/blueseal/contabilita/distinte-attive-lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBillRegistryActivePaymentSlipListController"
+            },
+            "filters": {}
+        ,
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

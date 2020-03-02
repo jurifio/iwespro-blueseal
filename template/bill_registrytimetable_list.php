@@ -31,66 +31,54 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
-                                <th data-slug="id"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Codice
-                                </th>
-                                <th data-slug="invoiceNumber"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Numero Fattura
-                                </th>
-                                <th data-slug="invoiceDate"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data Fattura
-                                </th>
-                                <th data-slug="description"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">descrizione Pagamento
-                                </th>
-                                <th data-slug="typePayment"
-                                    data-is-visible="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Tipo Pagamento
-                                </th>
-                                <th data-slug="dateEstimated"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Data Stimata
-                                </th>
-                                <th data-slug="amountPayment"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Importo
-                                </th>
                                 <th data-slug="companyName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cliente
                                 </th>
 
+                                <th data-slug="invoiceNumber"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Numero<br>Fattura
+                                </th>
+                                <th data-slug="invoiceDate"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data<br>Fattura
+                                </th>
 
-                                <th data-slug="netPrice"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Importo Netto
-                                </th>
-                                <th data-slug="vat"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Iva
-                                </th>
                                 <th data-slug="grossTotal"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Totale
+                                    data-orderable="true" class="center">Importo<br>Fattura
+                                </th>
+                                <th data-slug="typePayment"
+                                    data-is-visible="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Tipo<br>Pagamento
+                                </th>
+                                <th data-slug="dateEstimated"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Data<br>Scadenza
                                 </th>
 
-                                <th data-slug="isPaid"
+                                <th data-slug="paymentSlipId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Pagata
+                                    data-orderable="true" class="center">Distinta
+                                </th>
+                                <th data-slug="amountPayment"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>Scadenza
                                 </th>
                                 <th data-slug="datePayment"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Data Pagamento
+                                    data-orderable="true" class="center">Data<br>Pagamento
                                 </th>
-                                <th data-slug="isSent"
+                                <th data-slug="status"
                                     data-is-visible="false"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Inviata
+                                    data-orderable="false" class="center">Stato
+                                </th>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Codice
                                 </th>
                             </tr>
 

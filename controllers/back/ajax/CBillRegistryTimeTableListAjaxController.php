@@ -37,13 +37,18 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                       `bri`.`grossTotal`             AS `grossTotal`,
                       `bri`.`invoiceDate`             AS `invoiceDate`,
                       `brtp`.`name` as typePayment,  
-                      if(`bri`.`isPaid`=1,'Si','No')             AS `isPaid`,
-                      if(`bri`.`isSent`=1,'Si','No')             AS `isSent`
+                      `bris`.status as status ,     
+                       if(brtt is null,'non Presente',brpb.id) as paymentSlipId  
+       
                     FROM `BillRegistryTimeTable` `brtt`
-                        left join `BillRegistryInvoice` `bri` on `brtt`.`billRegistryInvoiceId`=`bri`.`id` 
+                        left join `BillRegistryInvoice` `bri` on `brtt`.`billRegistryInvoiceId`=`bri`.`id`
+                        left  join `BillRegistryInvoiceStatus` `bris`on bri.statusId=bris.id
                       JOIN `BillRegistryClient` `brc` on `bri`.`billRegistryClientId`=`brc`.`id`
                         join `BillRegistryClientBillingInfo` `brcbi` on `bri`.`billRegistryClientId`
-                      JOIN `BillRegistryTypePayment` `brtp` on `brcbi`.`billRegistryTypePaymentId`= `brtp`.`id`";
+                      JOIN `BillRegistryTypePayment` `brtp` on `brcbi`.`billRegistryTypePaymentId`= `brtp`.`id`
+                      left JOIN `BillRegistryActivePaymentSlip` brpb on brtt.billRegistryActivePaymentSlipId=brpb.id
+                      ";
+
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings();
@@ -51,8 +56,10 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
         $timeTableEdit = $this->app->baseUrl(false) . "/blueseal/anagrafica/scadenziario-modifica?id=";
         $billRegistryTimeTableRepo=\Monkey::app()->repoFactory->create('BillRegistryTimeTable');
         $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+        $billRegistryInvoiceStatusRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoiceStatus');
         $billRegistryClientRepo=\Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
+        $billRegistryActivePaymentSlipRepo=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
         foreach ($datatable->getResponseSetData() as $key => $row) {
             $billRegistryTimeTable = $billRegistryTimeTableRepo->findOne([$row['id']]);
             $row = [];
@@ -72,6 +79,13 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
             $row['amountPayment']=money_format('%.2n',$billRegistryTimeTable->amountPayment).' &euro;';
             $row['description']=$billRegistryTimeTable->description;
             $billRegistryInvoice=$billRegistryInvoiceRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistryInvoiceId]);
+            if($billRegistryTimeTable->billRegistryActivePaymentSlipId!=null) {
+                $paymentSlip = $billRegistryActivePaymentSlipRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistActivePaymentSlipId]);
+                $paymentSlipId=$paymentSlip->id;
+            }else{
+                $paymentSlipId='non Presente';
+            }
+            $row['paymentSlipId']=$paymentSlipId;
             $billRegistryClient=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryClientId]);
             $date=new \DateTime($billRegistryInvoice->invoiceDate);
             $row['invoiceDate']=$date->format('d-m-Y');
@@ -81,19 +95,103 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
            $row['netPrice']=money_format('%.2n',$billRegistryInvoice->netTotal).' &euro;';
             $row['vat']=money_format('%.2n',$billRegistryInvoice->vat).' &euro;';
             $row['grossTotal']=money_format('%.2n',$billRegistryInvoice->grossTotal).' &euro;';
-            $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBY(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
+            $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
             $row['typePayment']=$billRegistryTypePayment->name;
-            if($billRegistryInvoice->isPaid==1){
-                $row['isPaid']='Si';
-            }else{
-                $row['isPaid']='No';
+            $dateNow=new \DateTime();
+            $dateEstimated=new \dateTime($billRegistryTimeTable->dateEstimated);
+            if($dateNow>$dateEstimated && $billRegistryTimeTable->amountPaid==0 ){
+                $rowPayment='<i style="color:white;
+                    font-size: 12px;
+                    font-style: normal;
+                    display: inline-block;
+                    border: red;
+                     border-radius: 5px;
+                    background-color:red;    
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;">
+<b>Scaduto</b></i></br>';
+            }elseif($dateNow>=$dateEstimated && $billRegistryTimeTable->amountPaid==$billRegistryTimeTable->amountPayment){
+                $rowPayment='<i style="
+                    color:white;
+                    font-style: normal;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: #4cff00;
+                     border-radius: 5px;
+                    background-color:#4cff00;                       
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;">
+<b></b></i></br>';
+            }elseif($dateNow<$dateEstimated && $billRegistryTimeTable->amountPaid==0){
+                $rowPayment='<i style="
+                    color:white;
+                    font-size: 12px;
+                    font-style: normal;
+                    display: inline-block;
+                    border: #ff6c00;
+                    background-color:#ff6c00;   
+                    border-style: solid;
+                   border-radius: 5px;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;"><b>Da Saldare</b></i></br>';
+            }elseif($dateNow<=$dateEstimated && $billRegistryTimeTable->amountPaid==$billRegistryTimeTable->amountPayment) {
+                $rowPayment = '<i style="
+                    color:white;
+                    font-style: normal;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: #4cff00;
+                    border-radius: 5px;
+                    background-color:#4cff00;                       
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;"><b>Saldato</b></i></br>';
+            }elseif($dateNow>=$dateEstimated && $billRegistryTimeTable->amountPaid<=$billRegistryTimeTable->amountPayment) {
+                $rowPayment = '<i style="
+                    color:white;
+                    font-style: normal;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: #ff00cc;
+                   border-radius: 5px;
+                    background-color:#ff00cc;                       
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;"><b>Saldato P.</b></i></br>';
+            }elseif($dateNow<=$dateEstimated && $billRegistryTimeTable->amountPaid<=$billRegistryTimeTable->amountPayment) {
+                $rowPayment = '<i style="
+                    color:white;
+                    font-style: normal;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: #ff00cc;
+                   border-radius: 5px;
+                    background-color:#ff00cc;                       
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;"><b>Saldato P.</b></i></br>';
             }
-            if($billRegistryInvoice->isSent==1){
-                $row['isSent']='Si';
-            }else{
-                $row['isSent']='No';
-            }
-
+            $row['status']=$rowPayment;
 
             $datatable->setResponseDataSetRow($key, $row);
         }
