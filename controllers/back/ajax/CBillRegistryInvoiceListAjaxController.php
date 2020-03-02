@@ -74,13 +74,53 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                 $dateNow=new \DateTime();
                 $dateEstimated=new \dateTime($bt->dateEstimated);
                 if($dateNow>$dateEstimated && $bt->amountPaid==0 ){
-                    $rowPayment.='<i style="color:red"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
+                    $rowPayment.='<i style="color:red;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: red;
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;">
+<b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b></i></br>';
                 }elseif($dateNow>=$dateEstimated && $bt->amountPaid!=0){
-                    $rowPayment.='<i style="color:green"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
+                    $rowPayment.='<i style="
+                    color:green;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: green;
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;">
+<b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b></i></br>';
                 }elseif($dateNow<$dateEstimated && $bt->amountPaid==0){
-                    $rowPayment.='<i style="color:orange"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b><i></br>';
+                    $rowPayment.='<i style="
+                    color:orange;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: orange;
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b></i></br>';
                 }elseif($dateNow<=$dateEstimated && $bt->amountPaid!=0) {
-                    $rowPayment .= '<i style="color:green"><b>€' . number_format($bt->amountPayment,2,',','.') . ' ' . $dateEstimated->format('d-m-Y') . ' </b><i></br>';
+                    $rowPayment .= '<i style="color:green;
+                    font-size: 12px;
+                    display: inline-block;
+                    border: green;
+                    border-style: solid;
+                    border-width: 1.2px;
+                    padding: 0.1em;
+                    margin-top: 0.5em;
+                    padding-right: 4px;
+                    padding-left: 4px;"><b>€' . number_format($bt->amountPayment,2,',','.') . ' ' . $dateEstimated->format('d-m-Y') . ' </b></i></br>';
                 }
 
             }
