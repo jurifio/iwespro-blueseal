@@ -35,7 +35,7 @@
                                id="orderTable">
                             <thead>
                             <tr>
-                                <th data-slug="recipients"
+                                <th data-slug="companyName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cliente</th>
                                 <th data-slug="typePayment"
@@ -59,7 +59,16 @@
                                     data-orderable="true" class="center">Importo<br>Fatture</th>
                                 <th data-slug="impSlip"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Importo<br>Distinta</th>
+                                    data-orderable="true" class="center">Importo<br>Distinta<br>Attiva</th>
+                                <th data-slug="paymentBillId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Pagamento<br> con <br>Distinta<br>Passiva N.</th>
+                                <th data-slug="impPassive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>Distinta<br>Passiva</th>
+                                <th data-slug="negativeAmount"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>a Saldo<br>Distinte<br>Attivo-Passivo</th>
                                 <th data-slug="submissionDate"
                                     data-searchable="true"
                                     data-orderable="true" class="center dataFilterType">Sottomesso<br>Banca</th>
@@ -85,6 +94,16 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Distinte">
+        <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-floppy-o"
+            data-permission="/admin/product/add"
+            data-event="btn.assoc.paymentBillNegative"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Salva"
+            data-placement="bottom">
+        ></bs-toolbar-button>
         <bs-toolbar-button
             data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>

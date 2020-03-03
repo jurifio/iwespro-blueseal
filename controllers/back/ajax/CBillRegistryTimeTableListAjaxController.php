@@ -25,7 +25,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
-                      `brtt`.`id`                                            AS `id`,
+                        `brtt`.`id`                                            AS `id`,
                         `brtt`.`dateEstimated` as `dateEstimated`,
                         `brtt`.`amountPayment` as `amountPayment`,
                         `brtt`.`description` as description,
@@ -37,9 +37,12 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                       `bri`.`grossTotal`             AS `grossTotal`,
                       `bri`.`invoiceDate`             AS `invoiceDate`,
                       `brtp`.`name` as typePayment,  
-                      `bris`.status as status ,     
-                       if(brtt is null,'non Presente',brpb.id) as paymentSlipId  
-       
+                      `bris`.status as status , 
+                         if(`brtt`.`billRegistryActivePaymentSlipId` is null,'non Presente',brpb.paymentBillId) as paymentSlipId,
+                        if(`brpb`.`PaymentBillId` is null,'non Presente',pb.id) as paymentBillId,          
+                        if(`brpb`.`PaymentBillId` is null,'non Presente',pb.amount) as amountNegative,
+                       (`brtt`.amountPayment-`brtt`.`amountPaid`) as restPaid 
+    
                     FROM `BillRegistryTimeTable` `brtt`
                         left join `BillRegistryInvoice` `bri` on `brtt`.`billRegistryInvoiceId`=`bri`.`id`
                         left  join `BillRegistryInvoiceStatus` `bris`on bri.statusId=bris.id
@@ -47,6 +50,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                         join `BillRegistryClientBillingInfo` `brcbi` on `bri`.`billRegistryClientId`
                       JOIN `BillRegistryTypePayment` `brtp` on `brcbi`.`billRegistryTypePaymentId`= `brtp`.`id`
                       left JOIN `BillRegistryActivePaymentSlip` brpb on brtt.billRegistryActivePaymentSlipId=brpb.id
+                        left JOIN `PaymentBill` `pb` on `brpb`.`paymentBillId`=`pb`.`id`
                       ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
@@ -60,6 +64,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
         $billRegistryClientRepo=\Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
         $billRegistryActivePaymentSlipRepo=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
+        $paymentBillRepo=\Monkey::app()->repoFactory->create('PaymentBill');
         foreach ($datatable->getResponseSetData() as $key => $row) {
             $billRegistryTimeTable = $billRegistryTimeTableRepo->findOne([$row['id']]);
             $row = [];
@@ -76,27 +81,42 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                 $row['datePayment']='';
                     
             }
+
             $row['amountPayment']=money_format('%.2n',$billRegistryTimeTable->amountPayment).' &euro;';
             $row['description']=$billRegistryTimeTable->description;
             $billRegistryInvoice=$billRegistryInvoiceRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistryInvoiceId]);
             if($billRegistryTimeTable->billRegistryActivePaymentSlipId!=null) {
-                $paymentSlip = $billRegistryActivePaymentSlipRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistActivePaymentSlipId]);
+                $paymentSlip = $billRegistryActivePaymentSlipRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistryActivePaymentSlipId]);
                 $paymentSlipId=$paymentSlip->id;
+                if($paymentSlip->paymentBillId!=null) {
+                    $paymentBill = $paymentBillRepo->findOneBy(['id' => $paymentSlip->paymentBillId]);
+                    $amountNegative = $paymentBill->amount;
+                    $paymentBillId = $paymentSlip->paymentBillId;
+                }else{
+                    $amountNegative=0;
+                    $paymentBillId='Non Presente';
+                }
             }else{
                 $paymentSlipId='non Presente';
+                $amountNegative=0;
+                $paymentBillId='Non Presente';
             }
             $row['paymentSlipId']=$paymentSlipId;
+            $row['paymentBillId']=$paymentBillId;
+            $row['amountNegative']=number_format($amountNegative,2,',','.').' &euro;';
             $billRegistryClient=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryClientId]);
             $date=new \DateTime($billRegistryInvoice->invoiceDate);
             $row['invoiceDate']=$date->format('d-m-Y');
             $year=$date->format('Y');
+            $row['amountPaid']=number_format($billRegistryTimeTable->amountPaid,2,',','.').' &euro;';
            $row['invoiceNumber']=$billRegistryInvoice->invoiceNumber.'/'.$billRegistryInvoice->invoiceType.'-'.$year;
            $row['companyName']=$billRegistryClient->companyName;
-           $row['netPrice']=money_format('%.2n',$billRegistryInvoice->netTotal).' &euro;';
-            $row['vat']=money_format('%.2n',$billRegistryInvoice->vat).' &euro;';
-            $row['grossTotal']=money_format('%.2n',$billRegistryInvoice->grossTotal).' &euro;';
+           $row['netPrice']=number_format($billRegistryInvoice->netTotal,2,',','.').' &euro;';
+            $row['vat']=number_format($billRegistryInvoice->vat,2,',','.').' &euro;';
+            $row['grossTotal']=number_format($billRegistryInvoice->grossTotal,2,',','.').' &euro;';
             $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
             $row['typePayment']=$billRegistryTypePayment->name;
+            $row['restPaid']=number_format($billRegistryTimeTable->amountPayment-$billRegistryTimeTable->amountPaid,2,',','.').' &euro;';
             $dateNow=new \DateTime();
             $dateEstimated=new \dateTime($billRegistryTimeTable->dateEstimated);
             if($dateNow>$dateEstimated && $billRegistryTimeTable->amountPaid==0 ){

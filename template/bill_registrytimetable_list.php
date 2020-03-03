@@ -61,15 +61,29 @@
 
                                 <th data-slug="paymentSlipId"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Distinta
+                                    data-orderable="true" class="center">Distinta<br>Attiva
                                 </th>
                                 <th data-slug="amountPayment"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Importo<br>Scadenza
                                 </th>
+                                <th data-slug="paymentBillId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Pagamento<br> con <br>Distinta<br>Passiva N.</th>
+                                <th data-slug="amountNegative"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>Distinta<br>Passiva</th>
+                                <th data-slug="amountPaid"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>Pagato
+                                </th>
                                 <th data-slug="datePayment"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data<br>Pagamento
+                                </th>
+                                <th data-slug="restPaid"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>da Saldare
                                 </th>
                                 <th data-slug="status"
                                     data-is-visible="false"

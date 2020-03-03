@@ -7,7 +7,7 @@ use bamboo\core\router\CInternalRequest;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
- * Class CBillRegistryActivePaymentSlipController
+ * Class CBillRegistryActivePaymentSlipListController
  * @package bamboo\blueseal\controllers
  *
  * @author Iwes Team <it@iwes.it>
@@ -19,7 +19,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
  * @date 02/03/2020
  * @since 1.0
  */
-class CBillRegistryActivePaymentSlipController extends ARestrictedAccessRootController
+class CBillRegistryActivePaymentSlipListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "bill_registryactivepaymentslip_list";

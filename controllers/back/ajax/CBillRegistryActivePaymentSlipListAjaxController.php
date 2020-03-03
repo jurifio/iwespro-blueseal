@@ -24,24 +24,34 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $sql = "pb.id,
-                    `pb`.`numberSlip` as `numberSlip`,
-                  `pb`.`amount` AS `total`,
-                  `pb`.`creationDate` as `creationDate`,
-                  `pb`.`paymentDate` as `PaymentDate`,
-                  `pb`.`submissionDate` as `submissionDate`,
-                  `pb`.`note` as `note`,
+        $sql = "select `braps`.`id`,
+                    `braps`.`numberSlip` as `numberSlip`,
+                  `braps`.`amount` AS `total`,
+                  `braps`.`creationDate` as `creationDate`,
+                  `braps`.`paymentDate` as `PaymentDate`,
+                  `braps`.`submissionDate` as `submissionDate`,
+                  `braps`.`note` as `note`,
                   `brps`.`name` as `statusId`,
+                  `brca`.`shopId` as shopId, 
+                  `pb`.id as paymentBillId,
+                  `pb`.amount as negativeAmount,  
+                  `braps`.`amount` as positiveAmount,  
                   count(DISTINCT `bri`.`billRegistryClientId`) AS `transfers`,
-                  group_concat(DISTINCT   `brc`.`companyName`) AS `recipients`,
+                  group_concat(DISTINCT   `brc`.`companyName`) AS `companyName`,
                   group_concat(DISTINCT concat(`bri`.`invoiceNumber`,'-', `bri`.`invoiceType`, '-',`bri`.`invoiceYear`)) AS `invoices`
-                FROM `BillRegistryActivePaymentSlip` `pb`
-                 JOIN `BillRegistryTimeTable` `brtt`  on `pb`.`id` = `brtt`.`billRegistryActivePaymentSlipId` 
-                LEFT JOIN `BillRegistryInvoice` `bri` on `brtt`.`billRegistryInvoiceId` =`bri`.`id`
+                FROM `BillRegistryActivePaymentSlip` `braps`
+                 JOIN `BillRegistryTimeTable` `brtt`  on `braps`.`id` = `brtt`.`billRegistryActivePaymentSlipId` 
+                LEFT JOIN `BillRegistryInvoice` `bri` on `brtt`.`billRegistryInvoiceId` =`bri`.`id`      
+                 LEFT JOIN `BillRegistryClientAccount` `brca` on `bri`.`id`=`brca`.`billRegistryClientId`   
                 LEFT JOIN `BillRegistryTypePayment` `brtp` on `bri`.`billRegistryTypePaymentId` = `brtp`.`id`
                 LEFT JOIN `BillRegistryClient` `brc` on `bri`.`billRegistryClientId`=`brc`.`id`
-                join `BillRegistryPaymentSlipStatus` `brps` on `pb`.`statusId`=`brps`.`id`
-                GROUP BY `pb`.`id`";
+                join `BillRegistryActivePaymentSlipStatus` `brps` on `braps`.`statusId`=`brps`.`id`
+                LEFT JOIN PaymentBill pb on braps.paymentBillId=pb.id
+                LEFT JOIN Document d on pb.id=d.id      
+                LEFT JOIN AddressBook a on d.shopRecipientId=a.id
+
+
+                GROUP BY `braps`.`id`";
 
         $datatable = new CDataTables($sql,['id'],$_GET,true);
         $datatable->doAllTheThings(true);
@@ -51,7 +61,12 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
         $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
         $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
-        $billRegistryPaymentSlipRepo=\Monkey::app()->repoFactory->create('BillRegistryPaymentSlip');
+        $billRegistryPaymentSlipRepo=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlipStatus');
+        $billRegistryClientAccountRepo=\Monkey::app()->repoFactory->create('BillRegistryClientAccount');
+        $pbRepo=\Monkey::app()->repoFactory->create('PaymentBill');
+        $documentRepo=\Monkey::app()->repoFactory->create('BillRegistryClientAccount');
+        $userAddressRepo=\Monkey::app()->repoFactory->create('UserAddress');
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var CBillRegistryActivePaymentSlip $paymentBill */
@@ -63,32 +78,52 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $rec = [];
             $invoiceList='';
             $clientList='';
-            $impAmountTot=0;
+            $impAmount=0;
             $amountSlip=0;
             $typePayment='';
             $bps=$billRegistryPaymentSlipRepo->findOneBy(['id'=>$paymentBill->statusId]);
-            $timeTable=$billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentBillId'=>$paymentBill->id]);
+            $timeTable=$billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentSlipId'=>$paymentBill->id]);
             foreach($timeTable as $tt){
                 $amountSlip+=$tt->amountPayment;
                 $invoice=$billRegistryInvoiceRepo->findOneBy(['id'=>$tt->billRegistryInvoiceId]);
                 $typePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$invoice->billRegistryTypePaymentId]);
                 $client=$billRegistryClientRepo->findOneBy(['id'=>$invoice->billRegistryClientId]);
-                $invoiceList.=$invoice->invoiceNumber.'-'.$invoiceType.'-'.$invoice->invoiceYear.'<br>' ;
+                $clientAccount=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$client->id]);
+                if($clientAccount!=null){
+                    $shopIdFind=$clientAccount->shopId;
+                    $shop=$shopRepo->findOneBy(['id'=>$shopIdFind]);
+                    $shopId=$shop->billingAddressBookId;
+                }else{
+                    $shopId='';
+                }
+                $invoiceList.=$invoice->invoiceNumber.'-'.$invoice->invoiceType.'-'.$invoice->invoiceYear.'<br>' ;
                 $impAmount+=$invoice->grossTotal;
+            }
+            $pb=$pbRepo->findOneBy(['id'=>$paymentBill->paymentBillId]);
+            if($pb!=null){
+                $numSlipPass=$pb->id;
+                $negativeAmount=$pb->amount;
+            }else{
+                $numSlipPass='';
+                $negativeAmount=0;
             }
 
 
-           $row['numberSlip']=$paymentBill->numberSlip;
-            $row['recipients']=$client->companyName;
+            $row['numberSlip']=$paymentBill->id;
+            $row['companyName']=$client->companyName;
             $row['invoices'] = $invoiceList;
             $row['statusId']=$bps->name;
+            $row['paymentBillId']=$numSlipPass;
             $row['creationDate']=STimeToolbox::FormatDateFromDBValue($paymentBill->creationDate,STimeToolbox::ANGLO_DATE_FORMAT);
             $row['paymentDate'] = STimeToolbox::FormatDateFromDBValue($paymentBill->paymentDate,STimeToolbox::ANGLO_DATE_FORMAT);
             $row['submissionDate'] = $paymentBill->submissionDate ?? 'Non Sottomessa';
-            $row['impAmount']=$impAmount;
-            $row['amountSlip']=$amountSlip;
+            $row['impAmount']=number_format($impAmount,'2',',','.').' &euro;';
+            $row['impSlip']=number_format($amountSlip,'2',',','.').' &euro;';
             $row['typePayment']=$typePayment->name;
+            $row['impPassive']=number_format($negativeAmount,'2',',','.').' &euro;';
+            $row['negativeAmount']=number_format($paymentBill->amount-$negativeAmount,'2',',','.').' &euro;';
             $row['note'] = $paymentBill->note;
+            $row["DT_RowShopId"]=$shopId;
             $datatable->setResponseDataSetRow($key,$row);
         }
 
