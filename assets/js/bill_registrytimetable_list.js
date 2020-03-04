@@ -53,3 +53,18 @@ $(document).on('bs.timetable.modify', function () {
     });
 
 });
+
+function lessyear(){
+    currentYear=parseInt($('#currentYear').val());
+    newYear=currentYear-1;
+    link='/blueseal/anagrafica/scadenziario-lista?countYear='+newYear;
+    window.open(link,'_self');
+
+}
+function moreyear(){
+    currentYear=parseInt($('#currentYear').val());
+    newYear=currentYear+1;
+    link='/blueseal/anagrafica/scadenziario-lista?countYear='+newYear;
+    window.open(link,'_self');
+
+}

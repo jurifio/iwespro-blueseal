@@ -28,10 +28,15 @@ class CBillRegistryActivePaymentSlipListController extends ARestrictedAccessRoot
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryactivepaymentslip_list.php');
-
+        $currentYear= date('Y');
+        $valueRequest = \Monkey::app()->router->request()->getRequestData('countYear');
+        if($valueRequest!=false){
+            $currentYear=$valueRequest;
+        }
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'currentYear'=>$currentYear,
             'sidebar' => $this->sidebar->build()
         ]);
     }

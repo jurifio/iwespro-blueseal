@@ -78,3 +78,18 @@ var  data1= { shopRecipientId:shopId };
     });
 
 });
+
+function lessyear(){
+    currentYear=parseInt($('#currentYear').val());
+    newYear=currentYear-1;
+    link='/blueseal/contabilita/distinte-attive-lista?countYear='+newYear;
+    window.open(link,'_self');
+
+}
+function moreyear(){
+    currentYear=parseInt($('#currentYear').val());
+    newYear=currentYear+1;
+    link='/blueseal/contabilita/distinte-attive-lista?countYear='+newYear;
+    window.open(link,'_self');
+
+}

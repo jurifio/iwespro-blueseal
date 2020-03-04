@@ -20,7 +20,145 @@
                     </div>
                 </div>
             </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center">
+                            <div class="col-md-4">
+                                <button class="success" id="lessYear" onclick="lessyear()" type="button"><span
+                                            class="fa fa-backward"></span></button>
+                            </div>
+                            <div id="year" class="col-md-4"><?php echo $currentYear ?>
+                                <input type="hidden" id="currentYear" name="currentYear"
+                                       value="<?php echo $currentYear ?>"/>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="success" id="moreYear" onclick="moreyear()" type="button"><span
+                                            class="fa fa-forward"></span></button>
+                            </div>
 
+                        </div>
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Gennaio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Febbraio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Marzo</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Aprile</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Maggio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Giugno</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Luglio</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Agosto</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Settembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Ottobre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Novembre</div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: grey;">Dicembre</div>
+                        </div>
+                        <div class="row" align="center">
+                            <?php $currentYear = (new DateTime()) -> format('Y');?>
+                            <div class="col-md-1"  style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='1' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='2' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='3' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='4' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='5' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='6' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='7' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='8' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='9' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='10' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='11' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                            <div class="col-md-1" style="border-style: solid;  border-color: beige;">
+                                <?php  $sql="SELECT count(id)  as `count`   from BillRegistryTimeTable
+                                           where MONTH(dateEstimated)='12' and YEAR(dateEstimated)=" . $currentYear;
+                                echo 'N.scad: '.\Monkey::app()->dbAdapter->query($sql,[])->fetchAll()[0]['count'];?>
+                            </div>
+                        </div>
+                        <div class="row" align="center"">
+                        <?php
+                        for ($i=1;$i<13;$i++) {
+                            $sql = 'select sum(amountPayment) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
+                            $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach ($resultTotalPayment as $sumPayment) {
+                                echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">Scad: ' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                            }
+                        }
+                        ?>
+
+
+                    </div>
+                    <div class="row" align="center"">
+                    <?php
+                    for ($i=1;$i<13;$i++) {
+                        $sql = 'select sum(amountPaid) as amountPayment from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
+                        $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                        foreach ($resultTotalPayment as $sumPayment) {
+                            echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;">Sald: ' . money_format('%.2n',$sumPayment['amountPayment']) . ' &euro;</div>';
+                        }
+                    }
+                    ?>
+
+
+                </div>
+                <div class="row" align="center"">
+                <?php
+                for ($i=1;$i<13;$i++) {
+                    $sql = 'select (sum(amountPayment)-sum(amountPaid)) as diff from BillRegistryTimeTable where MONTH(dateEstimated)=' . $i . ' and YEAR(dateEstimated)=' . $currentYear;
+                    $resultTotalPayment = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                    foreach ($resultTotalPayment as $sumPayment) {
+                        echo '<div class="col-md-1" style="border-style: solid;  border-color: gainsboro;"> Da Sald:' . money_format('%.2n',$sumPayment['diff']) . ' &euro;</div>';
+                    }
+                }
+                ?>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
