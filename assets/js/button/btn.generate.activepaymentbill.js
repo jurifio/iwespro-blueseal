@@ -49,14 +49,17 @@ var isProgrammable='0';
                 '</div>'+
                 '</div>'+
                 '<div class="col-xs-12">'+
-                '<div className="form-group form-group-default">'+
-                '<label htmlFor="onlyBankable">solo bancabile</label>'+
-                '<input  type="checkbox" class="form-control"  id="isBankable" name="isBankable">'+
-                '</div></div>'+
-                '<div class="col-xs-12">'+
-                '<div className="form-group form-group-default">'+
-                '<label htmlFor="checkedAll">Rimesse</label>'+
-                '<input  type="checkbox" class="form-control"  id="checkedAll" name="checkedAll">'+
+                '<div className="form-group form-group-default selectize-enabled">'+
+                '<label htmlFor="typePayment">Tipo Pagamento</label>'+
+                '<select id="typePayment" name="typePayment"'+
+                'className="full-width selectpicker"'+
+                'placeholder="Seleziona la Lista"'+
+                'data-init-plugin="selectize">'+
+                '<option value="1">tutte</option>'+
+                '<option value="2">solo Bancabili</option>'+
+                '<option value="3">solo Rimesse</option>'+
+                '</select>'+
+
                 '</div></div></div>'
 
 
@@ -125,12 +128,7 @@ var isProgrammable='0';
     modal.setOkEvent(function () {
         modal.showCancelBtn();
             $('.table').DataTable().ajax.reload(null, false);
-        let isBankable='0';
-        if($('#isBankable').prop('checked')){
-            isBankable='1';
-        }else{
-            isBankable='0';
-        }
+
         let clientId;
         if($('#billRegistryClientId').val()==null){
             clientId=0;
@@ -139,6 +137,7 @@ var isProgrammable='0';
         }
         let paymentStartDate = $('#paymentStartDate').val();
         let paymentEndDate =$('#paymentEndDate').val();
+        let typePayment=$('#typePayment').val();
 
 
         $.ajax({
@@ -148,7 +147,7 @@ var isProgrammable='0';
                 paymentStartDate: paymentStartDate,
                 paymentEndDate: paymentEndDate,
                 clientId:clientId,
-                isBankable:isBankable,
+                isBankable:typePayment,
                 isProgrammable:isProgrammable
 
             }

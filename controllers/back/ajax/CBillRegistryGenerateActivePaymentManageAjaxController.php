@@ -39,19 +39,18 @@ class CBillRegistryGenerateActivePaymentManageAjaxController extends AAjaxContro
         $paymentEndDate = new \DateTime($data['paymentEndDate']);
         $startDate = $paymentStartDate->format('Y-m-d 00:00:00');
         $endDate = $paymentEndDate->format('Y-m-d 23:59:00');
-        $isBankable = $data['isBankable'];
+        $typePayment = $data['typePayment'];
         $isProgrammable = $data['isProgrammable'];
         if ($isProgrammable == "1") {
-            try{
-                $job=\Monkey::app()->repoFactory->create('Job')->findOneBy(['command'=>'bamboo\blueseal\jobs\CGenerateActivePaymentSlipJob']);
-                $job->isActive=1;
+            try {
+                $job = \Monkey::app()->repoFactory->create('Job')->findOneBy(['command' => 'bamboo\blueseal\jobs\CGenerateActivePaymentSlipJob']);
+                $job->isActive = 1;
                 $job->update();
 
-            } catch (\Throwable $e){
+            } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('CBillRegistryActivePaymentSlipManagaAjaxController','error','Active ',$e,'');
                 $res = 'errore ' . $e;
             }
-
 
 
         } else {
@@ -62,7 +61,19 @@ class CBillRegistryGenerateActivePaymentManageAjaxController extends AAjaxContro
                 } else {
                     $sqlFilter = '';
                 }
-                $typePaymentId = $data['typePaymentId'];
+                switch ($typePayment) {
+                    case "1":
+                        $sqlbankable='';
+                        break;
+                    case "2":
+                        $sqlbankable=' and brtp.isBankable=1 ';
+                        break;
+                    case "3":
+                        $sqlbankable=' and brtp.isBankable=0 ';
+                        break;
+
+
+                }
 
 
                 $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
@@ -73,7 +84,7 @@ class CBillRegistryGenerateActivePaymentManageAjaxController extends AAjaxContro
                 $res = $this->app->dbAdapter->query('SELECT   group_concat(btt.id) as id,SUM(btt.amountPayment) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
 JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillRegistryTypePayment brtp ON bri.billRegistryTypePaymentId=brtp.id 
  where btt.amountPaid =0 and btt.dateEstimated >=\'' . $startDate . '\' and btt.dateEstimated <=\'' . $endDate . '\'
-and brtp.codice_modalita_pagamento_fe like\'%' . $typePaymentId . '%\' ' . $sqlFilter . '  group BY bri.billRegistryClientId,date_format(btt.dateEstimated,"%d-%c-%Y"),bri.billRegistryTypePaymentId',[])->fetchAll();
+'.$sqlbankable . $sqlFilter . '  group BY bri.billRegistryClientId,date_format(btt.dateEstimated,"%d-%c-%Y"),bri.billRegistryTypePaymentId',[])->fetchAll();
                 if ($res == null) {
                     return "non ci sono scadenze utili per la generazione delle distinte";
                 }
