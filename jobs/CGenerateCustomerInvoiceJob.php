@@ -641,6 +641,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
                                     $billRegistryTimeTable->typeDocument = '7';
                                     $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
+                                    $billRegistryTimeTable->billRegistryTypePaymentId=$billRegistryTypePaymentId;
                                     $amountRate = $realTotal / 100 * $rowsPayment->prc;
                                     $dateNow=new \DateTime();
                                     if ($rowsPayment->day == '0') {

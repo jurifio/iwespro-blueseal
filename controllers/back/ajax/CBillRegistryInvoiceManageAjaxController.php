@@ -394,6 +394,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         foreach ($filterBillRegistryTypePayment as $rowsPayment) {
             $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
             $billRegistryTimeTable->typeDocument = '7';
+            $billRegistryTimeTable->billRegistryTypePaymentId=$billRegistryTypePaymentId;
             $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
             $amountRate = $grossTotal / 100 * $rowsPayment->prc;
             $dateNow=new \DateTime($invoiceDate);

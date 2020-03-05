@@ -233,13 +233,19 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Distinte">
         <bs-toolbar-button
+                data-remote="btn.add.activepaymentbill"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="btn.generate.activepaymentbill"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-tag="a"
-            data-icon="fa-floppy-o"
+            data-icon="fa-hand-lizard-o"
             data-permission="/admin/product/add"
             data-event="btn.assoc.paymentBillNegative"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Salva"
+            data-title="Associazione Con Distinta Passiva"
             data-placement="bottom">
         ></bs-toolbar-button>
         <bs-toolbar-button
@@ -254,9 +260,7 @@
         <bs-toolbar-button
             data-remote="bs.paymentBill.print"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-            data-remote="btn.add.paymentbill"
-        ></bs-toolbar-button>
+
         <bs-toolbar-button
             data-remote="btn.check.paymentbill"
         ></bs-toolbar-button>

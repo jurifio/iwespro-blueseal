@@ -20,7 +20,7 @@
                         <span class="arrow <?php echo (isset($groups['sidebarGroups'])) ? "open" : ""; ?>"></span>
                     </a>
                     <span class="icon-thumbnail"><i class="fa <?php echo $groups['icon']; ?>"></i></span>
-                <ul class="sub-menu">
+                <ul class="sub-menu" style="display:none;">
                     <?php $i = 1;
                     foreach ($groups['sidebarGroups'] as $group=>  $content): ?>
                         <?php if (count($content['pages']) == 1): ?>
@@ -40,7 +40,7 @@
                                     <span class="arrow <?php echo (isset($content['pages'][$page->getSlug()])) ? "open" : ""; ?>"></span>
                                 </a>
                                 <span class="icon-thumbnail"><i class="fa <?php echo $content['icon']; ?>"></i></span>
-                                <ul class="sub-menu">
+                                <ul class="sub-menu" style="display:none;">
                                     <?php foreach ($content['pages'] as $slug => $groupPage): ?>
                                         <li class="<?php echo ($page->getSlug() == $slug) ? "active" : "" ?>">
                                             <a href="<?php echo $groupPage['url']; ?>"><?php echo $groupPage['title']; ?></a>

@@ -68,7 +68,7 @@ $(document).ready(function () {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Shop',
-            condition :{hasEcommerce:1}
+             condition :{isBankable:1}
         },
         dataType: 'json'
     }).done(function (res2) {
