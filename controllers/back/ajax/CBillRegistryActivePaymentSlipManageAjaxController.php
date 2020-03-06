@@ -191,7 +191,7 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
                 $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
                 $braps->amount = $result['amountPayment'];
-                $braps->numberSlip = $numberDocument;
+                $braps->numberSlip = $numberDocument['AUTO_INCREMENT'];
                 $braps->creationDate = $creationDate;
                 $braps->paymentDate = $result['paymentDate'];
                 $braps->statusId = 6;
@@ -209,13 +209,14 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
 
 
             }
-            $newNumber=$numberDocument+1;
-            $this->app->dbAdapter->query('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+            $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+            $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+            $updateNumberDocument->execute();
 
             $res= 'generazione Eseguita';
 
         }catch(\Throwable $e){
-            \Monkey::app()->applicationLog('CBillRegistryActivePaymentSlipManagaAjaxController','error', 'Active ',$e,'');
+            \Monkey::app()->applicationLog('CBillRegistryActivePaymentSlipManageAjaxController','error', 'Active ',$e,'');
             $res= 'errore '.$e;
         }
         return $res;

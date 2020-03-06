@@ -16,7 +16,7 @@ var isProgrammable='0';
 
 
     let today = new Date().toISOString().slice(0, 10);
-    let modal = new $.bsModal('Crea Bank Slip | Distinta di Presentazione in Banca', {
+    let modal = new $.bsModal('Crea clientSlip | Distinta Attiva', {
             body: '<div class="col-xs-12">'+
                 '<div className="form-group form-group-default">'+
                 '<label htmlFor="isProgrammable">Programmato Ogni 15 GG ?</label>'+
@@ -147,7 +147,7 @@ var isProgrammable='0';
                 paymentStartDate: paymentStartDate,
                 paymentEndDate: paymentEndDate,
                 clientId:clientId,
-                isBankable:typePayment,
+                typePayment:typePayment,
                 isProgrammable:isProgrammable
 
             }

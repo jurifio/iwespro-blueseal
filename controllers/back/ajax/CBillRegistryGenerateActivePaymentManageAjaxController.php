@@ -95,7 +95,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
 
                 if (ENV === 'dev') {
                     $db_host = 'localhost';
-                    $db_name = 'information_schema';
+                    $db_name = 'pickyshop_dev';
                     $db_user = 'root';
                     $db_pass = 'geh44fed';
                     $dbnamesel = 'pickyshop_dev';
@@ -119,7 +119,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                                                                  WHERE TABLE_SCHEMA = \'' . $dbnamesel . '\' AND TABLE_NAME = \'PaymentBill\';');
                 $rowNumberDocument->execute();
                 $numberDocument = $rowNumberDocument->fetch(PDO::FETCH_ASSOC);
-
+                $numberDocument['AUTO_INCREMENT'];
 
                 foreach ($res as $result) {
 
@@ -127,7 +127,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                     $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
                     $braps->amount = $result['amountPayment'];
-                    $braps->numberSlip = $numberDocument;
+                    $braps->numberSlip = $numberDocument['AUTO_INCREMENT'];
                     $braps->creationDate = $creationDate;
                     $braps->paymentDate = $result['paymentDate'];
                     $braps->statusId = 6;
@@ -144,14 +144,17 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
 
 
                 }
-                $newNumber = $numberDocument + 1;
-                $this->app->dbAdapter->query('ALTER TABLE PaymentBill auto_increment=' . $newNumber);
+                $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+                $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+                $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+                $updateNumberDocument->execute();
+
 
                 $res = 'generazione Eseguita';
 
             } catch
             (\Throwable $e) {
-                \Monkey::app()->applicationLog('CBillRegistryActivePaymentSlipManagaAjaxController','error','Active ',$e,'');
+                \Monkey::app()->applicationLog('CBillRegistryGenerateActivePaymentSlipManageAjaxController','error','Active ',$e,'');
                 $res = 'errore ' . $e;
             }
         }
