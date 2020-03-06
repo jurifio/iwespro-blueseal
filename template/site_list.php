@@ -102,6 +102,9 @@
                 data-remote="bs.dictionarysizerenameimage.run"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.dictionarysizerenametometaimage.run"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.getfattureincloud.list"
         ></bs-toolbar-button>
     </bs-toolbar-group>
