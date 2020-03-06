@@ -8,12 +8,12 @@ $.ajax({
     url: '/blueseal/xhr/GetTableContent',
     data: {
         table: 'ShopHasCounter',
-        condition: {shopId: 57,invoiceYear:yyyy}
+        condition: {shopId: 57}
 
     },
     dataType: 'json'
 }).done(function (res2) {
-    var selectInvoiceNumber = $('#invoiceNumber');
+    var selectInvoiceNumber = $('#invoiceSelectNumber');
     if (typeof (selectInvoiceNumber[0].selectize) != 'undefined') selectInvoiceNumber[0].selectize.destroy();
     selectInvoiceNumber.selectize({
         valueField: 'invoiceCounter',
@@ -546,6 +546,9 @@ $('#price').change(function () {
     }
     $('#netTotalRow').val(netTotalRow.toFixed(2));
 
+});
+$('#invoiceSelectNumber').change(function(){
+   $('#invoiceNumber').val(parseInt($('#invoiceSelectNumber').val())+1);
 });
 var rowInvoice=[];
 var counterRow=0;

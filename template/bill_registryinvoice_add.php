@@ -60,12 +60,20 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="invoiceNumber">Seleziona la Numerazione</label>
-                                        <select id="invoiceNumber" name="invoiceNumber"
+                                        <label for="invoiceSelectNumber">Seleziona la Numerazione</label>
+                                        <select id="invoiceSelectNumber" name="invoiceSelectNumber"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="invoiceNumber">Numero Fattura</label>
+                                        <input id="invoiceNumber" autocomplete="off" type="text"
+                                               class="form-control" name="invoiceNumber" value=""
+                                        />
                                     </div>
                                 </div>
                             </div>
