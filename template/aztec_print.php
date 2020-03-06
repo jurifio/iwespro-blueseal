@@ -239,7 +239,6 @@ foreach ($products as $product):
         <div class="col-md-12">
             <div class="col-md-4" style="margin-top:10px">
                 <?php
-
                 $findDirtyProductInt=$dirtyProductRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
                 $dirtyProductId = $findDirtyProductInt->id;
                 $findBarcodeInt=$dirtySKuRepo->findOneBy(['dirtyProductId'=>$dirtyProductId]);
@@ -248,23 +247,46 @@ foreach ($products as $product):
                 <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode ; ?>" width="140" height="140"/>
                 <?php else: ?>
                 <img src="<?php echo $aztecFactoryEndpoint.$product->aztecCode.'__'.$barcodeInt ; ?>" width="140" height="140"/>
-                <?php endif; ?>
+                <?php endif;
+                \Monkey::app()->vendorLibraries->load("barcode");
+                if(ENV=="dev") {
+                    $pathlocal = '/media/sf_sites/iwespro/back/assets/img/barcode/';
+                }else{
+                    $pathlocal ='/home/iwespro/public_html/back/assets/img/barcode/';
+                }
+                $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+                $generated = $generator->getBarcode($product->id.'-'.$product->productVariantId, $generator::TYPE_CODE_128);
+                $files = glob($pathlocal.'*'); // get all file names
+                foreach($files as $file){ // iterate files
+                    if(is_file($file))
+                        unlink($file); // delete file
+                }
+
+                $fileGen=rand(1500000,0).'.png';
+                $fileNew = $pathlocal.$fileGen;
+                file_put_contents($fileNew, $generated);
+
+                ?>
+
             </div>
             <div class="col-md-4" style="border-right: 1px dotted #c0c0c0;">
                 <ul>
-                    <li><strong>INT</strong> <?php echo $product->printId(); ?></li>
+                    <li><strong>INT</strong> <?php echo $product->printId();?></li>
                     <li><strong>CPF</strong> <?php echo $product->itemno; ?> # <?php echo $product->productVariant->name; ?></li>
                     <li><strong>BRD</strong> <?php echo $product->productBrand->slug; ?></li>
                     <li><strong>SHP</strong> <?php echo $product->getShops() ?></li>
                     <li><strong>SEX</strong> <?php echo implode(', ',$product->getGendersName()) ?></li>
                     <li><strong>DDT</strong> <?php echo $product->getDdt() ?></li>
                     <li><strong>NOTE</strong> <?php echo $temp ?></li>
+
                 </ul>
             </div>
             <div class="col-md-4">
                 <ul>
                     <li><strong>BARCODE_INT</strong> <?php echo (!empty($barcodeInt) ? $barcodeInt : "---" ) ?></li>
                     <li><strong>EXTID</strong> <?php echo $product->getShopExtenalIds('<br />') ?></li>
+                    <br>
+                    <img src="/assets/img/barcode/<?php echo $fileGen;?>" />
                 </ul>
             </div>
         </div>

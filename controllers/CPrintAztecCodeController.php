@@ -1,6 +1,7 @@
 <?php
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\barcode\CBarCodeEan13;
 use bamboo\domain\entities\CProduct;
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\base\CArrayCollection;
@@ -54,6 +55,10 @@ class CPrintAztecCodeController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/aztec_print.php');
         $aztecFactoryEndpoint = $this->app->baseUrl(false).'/blueseal/xhr/GetAztecCode?src=';
+
+
+
+
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
