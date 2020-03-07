@@ -98,9 +98,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#shopId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectshopId = $('#shopId');
+    if (typeof (selectshopId[0].selectize) != 'undefined') selectshopId[0].selectize.destroy();
+    selectshopId.selectize({
         valueField: 'id',
         labelField: 'name',
         searchField: ['name'],
@@ -117,9 +117,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#billRegistryTypeTaxesId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectTypeTaxes = $('#billRegistryTypeTaxesId');
+    if (typeof (selectTypeTaxes[0].selectize) != 'undefined') selectTypeTaxes[0].selectize.destroy();
+    selectTypeTaxes.selectize({
         valueField: 'id',
         labelField: 'description',
         searchField: ['description'],
@@ -135,9 +135,9 @@ $.ajax({
     },
     dataType: 'json'
 }).done(function (res2) {
-    var select = $('#billRegistryTypePaymentId');
-    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-    select.selectize({
+    var selectTypePayment = $('#billRegistryTypePaymentId');
+    if (typeof (selectTypePayment[0].selectize) != 'undefined') selectTypePayment[0].selectize.destroy();
+    selectTypePayment.selectize({
         valueField: 'id',
         labelField: 'name',
         searchField: ['name'],
@@ -424,9 +424,9 @@ $('#addLocation').click(function () {
         },
         dataType: 'json'
     }).done(function (res2) {
-        var select = $('#countryIdLocation');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
+        var selectcountryIdLocation = $('#countryIdLocation');
+        if (typeof (selectcountryIdLocation[0].selectize) != 'undefined') selectcountryIdLocation[0].selectize.destroy();
+        selectcountryIdLocation.selectize({
             valueField: 'id',
             labelField: 'name',
             searchField: 'name',
@@ -1215,9 +1215,9 @@ function editLocation(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#countryIdLocationEdit');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var selectcountryIdLocationEdit = $('#countryIdLocationEdit');
+            if (typeof (selectcountryIdLocationEdit[0].selectize) != 'undefined') selectcountryIdLocationEdit[0].selectize.destroy();
+            selectcountryIdLocationEdit.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: 'name',
@@ -3027,9 +3027,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#1paymentTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select1paymentTypePaymentId = $('#1paymentTypePaymentId');
+            if (typeof (select1paymentTypePaymentId[0].selectize) != 'undefined') select1paymentTypePaymentId[0].selectize.destroy();
+            select1paymentTypePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3045,9 +3045,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#1deliveryTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select1deliveryTypePaymentId = $('#1deliveryTypePaymentId');
+            if (typeof (select1deliveryTypePaymentId[0].selectize) != 'undefined') select1deliveryTypePaymentId[0].selectize.destroy();
+            select1deliveryTypePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3063,9 +3063,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#1typePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select1typePaymentId = $('#1typePaymentId');
+            if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+            select1typePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3153,9 +3153,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#5deliveryTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select5deliveryTypePaymentId = $('#5deliveryTypePaymentId');
+            if (typeof (select5deliveryTypePaymentId[0].selectize) != 'undefined') select5deliveryTypePaymentId[0].selectize.destroy();
+            select5deliveryTypePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3171,9 +3171,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#5typePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select5typePaymentId = $('#5typePaymentId');
+            if (typeof (select5typePaymentId[0].selectize) != 'undefined') select5typePaymentId[0].selectize.destroy();
+            select5typePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3189,9 +3189,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#6paymentTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select6paymentTypePaymentId = $('#6paymentTypePaymentId');
+            if (typeof (select6paymentTypePaymentId[0].selectize) != 'undefined') select6paymentTypePaymentId[0].selectize.destroy();
+            select6paymentTypePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3207,9 +3207,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#6deliveryTypePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select6deliveryTypePaymentId = $('#6deliveryTypePaymentId');
+            if (typeof (select6deliveryTypePaymentId[0].selectize) != 'undefined') select6deliveryTypePaymentId[0].selectize.destroy();
+            select6deliveryTypePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3225,9 +3225,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#6typePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select6typePaymentId = $('#6typePaymentId');
+            if (typeof (select6typePaymentId[0].selectize) != 'undefined') select6typePaymentId[0].selectize.destroy();
+            select6typePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3243,9 +3243,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#3typePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select3typePaymentId = $('#3typePaymentId');
+            if (typeof (select3typePaymentId[0].selectize) != 'undefined') select3typePaymentId[0].selectize.destroy();
+            select3typePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
@@ -3261,9 +3261,9 @@ function addContractDetail(id) {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#4typePaymentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
+            var select4typePaymentId = $('#4typePaymentId');
+            if (typeof (select4typePaymentId[0].selectize) != 'undefined') select4typePaymentId[0].selectize.destroy();
+            select4typePaymentId.selectize({
                 valueField: 'id',
                 labelField: 'name',
                 searchField: ['name'],
