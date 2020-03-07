@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <div class="form-group form-group-default">
                                         <label for="descriptionTemp">Descrizione</label>
                                         <input id="descriptionTemp" autocomplete="off" type="text"
@@ -131,9 +131,21 @@
                                         />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
+                                </div>
                                 <div class="col-md-2">
                                     <button class="btn btn-primary" id="addDescription" onclick="addDescription()" type="button"><span
-                                                class="fa fa-plus-circle">Aggiungi Descrizione</span></button>
+                                                class="fa fa-plus-circle">Aggiungi Dettagli</span></button>
                                     <input type="hidden" id="descriptionArray"  name="descriptionArray" value=""/>
                                 </div>
                             </div>

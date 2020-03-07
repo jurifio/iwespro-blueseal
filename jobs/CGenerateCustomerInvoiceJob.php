@@ -36,6 +36,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
         $billRegistryContractRowRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRow');
         $billRegistryContractRowDetailRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRowDetail');
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
+        $billRegistryContractRowPaymentBillRepo=\Monkey::app()->repoFactory->create('BillRegistryContractRowPaymentBill');
         $billRegistryGroupProductRepo = \Monkey::app()->repoFactory->create('BillRegistryGroupProductRepo');
         $billRegistryPriceListRepo = \Monkey::app()->repoFactory->create('BillRegistryPriceList');
         $billRegistryProductRepo = \Monkey::app()->repoFactory->create('BillRegistryProduct');
@@ -83,7 +84,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             case 1:
                                 //definizione dei parametri del tipo di contratto
                                 $billRegistryRowMonkSource = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
-                                if ($billRegistryRowMonkSource!=null) {
+                                if ($billRegistryRowMonkSource != null) {
                                     $automaticInvoice = $billRegistryRowMonkSource->automaticInvoice;
                                     $valueContractRow = $billRegistryRowMonkSource->value;
                                     $billingDay = $billRegistryRowMonkSource->billingDay;
@@ -115,16 +116,16 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 
                                                 switch ($order->orderPaymentMethodId) {
                                                     case 1:
-                                                        $paypalCommission += $orl->netPrice /100 * $feePaypalCommission;
+                                                        $paypalCommission += $orl->netPrice / 100 * $feePaypalCommission;
                                                         break;
                                                     case 2:
-                                                        $creditCardCommission += $orl->netPrice/100 * $feeCreditCardCommission;
+                                                        $creditCardCommission += $orl->netPrice / 100 * $feeCreditCardCommission;
                                                         break;
                                                     case 3:
-                                                        $bankTransferCommission += $orl->netPrice /100* $feeBankTransferCommission;
+                                                        $bankTransferCommission += $orl->netPrice / 100 * $feeBankTransferCommission;
                                                         break;
                                                     case 5:
-                                                        $codCommission += $orl->netPrice /100 * $feeCodCommission;
+                                                        $codCommission += $orl->netPrice / 100 * $feeCodCommission;
                                                         break;
 
                                                 }
@@ -254,7 +255,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             'billRegistryContractRowDetailId' => 0
                                         ];
                                     }
-                                }else{
+                                } else {
                                     continue 2;
                                 }
 
@@ -393,7 +394,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 break;
                             case 4:
                                 $billRegistryRowMonkEntryTraffic = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
-                                if($billRegistryRowMonkEntryTraffic!=null) {
+                                if ($billRegistryRowMonkEntryTraffic != null) {
                                     $automaticInvoice = $billRegistryRowMonkEntryTraffic->automaticInvoice;
                                     $descriptionInvoice = $billRegistryRowMonkEntryTraffic->descriptionInvoice;
                                     $startUpCostCampaign = $billRegistryRowMonkEntryTraffic->startUpCostCampaign;
@@ -467,13 +468,13 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             'billRegistryContractRowDetailId' => 0
                                         ];
                                     }
-                                }else{
+                                } else {
                                     continue 2;
                                 }
                                 break;
                             case 5:
                                 $billRegistryRowSocialMonk = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
-                                if ($billRegistryRowSocialMonk!=null){
+                                if ($billRegistryRowSocialMonk != null) {
                                     $automaticInvoice = $billRegistryRowSocialMonk->automaticInvoice;
                                     $valueContractRow = $billRegistryRowSocialMonk->value;
                                     $billingDay = $billRegistryRowSocialMonk->billingDay;
@@ -496,7 +497,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $feeCostCommissionPayment = $billRegistryRowSocialMonk->feeCostCommissionPayment;
                                     $periodTypeChargePayment = $billRegistryRowSocialMonk->periodTypeChargePayment;
                                     $paymentTypePaymentId = $billRegistryRowSocialMonk->paymentTypePaymentId;
-                                } else{
+                                } else {
                                     continue 2;
                                 }
                                 break;
@@ -540,8 +541,6 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                             $billRegistryProductDetail = $billRegistryProductDetailRepo->findBy(['billRegistryProductId' => $billRegistryProduct->id]);
                             foreach ($billRegistryProductDetail as $productDetailDescription) {
                                 $detailProductDescription .= $productDetailDescription->detailDescription . '<br>';
-
-
                             }
                             $billRegistryPriceList = $billRegistryPriceListRepo->findOneBy(['billRegistryProductId' => $billRegistryProduct->id,'billRegistryClientId' => $billRegistryClientId,'isActive' => 1]);
                             $priceRow = $billRegistryPriceList->price;
@@ -625,7 +624,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 }
                                 $billRegistryInvoice->invoiceDate = $invoiceDate;
                                 $billRegistryInvoice->automaticInvoice = $automaticInvoice;
-                                $billRegistryInvoice->statusId=1;
+                                $billRegistryInvoice->statusId = 1;
                                 $billRegistryInvoice->insert();
                                 $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
                                 foreach ($res as $result) {
@@ -641,9 +640,9 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
                                     $billRegistryTimeTable->typeDocument = '7';
                                     $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
-                                    $billRegistryTimeTable->billRegistryTypePaymentId=$billRegistryTypePaymentId;
+                                    $billRegistryTimeTable->billRegistryTypePaymentId = $billRegistryTypePaymentId;
                                     $amountRate = $realTotal / 100 * $rowsPayment->prc;
-                                    $dateNow=new \DateTime();
+                                    $dateNow = new \DateTime();
                                     if ($rowsPayment->day == '0') {
 
                                         $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . ' day');
@@ -705,10 +704,10 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 
                                     }
 
-                                    $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
+                                    $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrispondere entro il ' . $estimatedPayment;
                                     $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
                                     $billRegistryTimeTable->amountPayment = $amountRate;
-                                    $billRegistryTimeTable->billRegistryClientId=$billRegistryClientId;
+                                    $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;
                                     $billRegistryTimeTable->insert();
 
                                 }
@@ -1090,10 +1089,10 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 $invoiceText .= '</strong>';
                                 $date = new \DateTime($billRegistryContract->dateCreate);
                                 if ($isExtraUe != '1') {
-                                    $invoiceHeaderText='Fattura';
+                                    $invoiceHeaderText = 'Fattura';
                                     $refertOrderIdandDate = '  ' . $billRegistryContract->id . ' del ' . $date->format('d-m-Y');
                                 } else {
-                                    $invoiceHeaderText='Invoice';
+                                    $invoiceHeaderText = 'Invoice';
                                     $refertOrderIdandDate = '  ' . $billRegistryContract->id . ' date ' . $date->format('Y-d-m');
                                 }
                                 $invoiceText .= $refertOrderIdandDate . '</div>
@@ -1196,115 +1195,181 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                         $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
                                         $rowInvoiceInsert->billRegistryInvoiceId = $invoiceNumber;
                                         $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
-                                        $rowInvoiceInsert->description = $rowInvoice['description'];
-                                        $rowInvoiceInsert->qty = $rowInvoice['qty'];
-                                        $rowInvoiceInsert->priceRow = $rowInvoice['priceRow'];
-                                        $rowInvoiceInsert->vatRow = $rowInvoice['vatRow'];
-                                        $rowInvoiceInsert->grossTotalRow = $rowInvoice['grossTotalRow'];
-                                        $rowInvoiceInsert->billRegistryTypeTaxesId = $rowInvoice['billRegistryTypeTaxesId'];
-                                        $rowInvoiceInsert->billRegistryContractId = $rowInvoice['billRegistryContractId'];
-                                        $rowInvoiceInsert->billRegistryContractRowId = $rowInvoice['billRegistryContractRowId'];
-                                        $rowInvoiceInsert->billRegistryContractRowDetailId = $rowInvoice['billRegistryContractRowDetailId'];
-                                        $rowInvoiceInsert->insert();
-                                        $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
-                                        $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
-                                        $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
-                                    }
+                                        $descriptionRow=$rowInvoice['description'];
+                                        if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129){
+
+                                            if (strpos($descriptionRow,'{mandato}') !== false) {
+                                                $sqlRowP='select id, mandatoryMonth,dateMandatoryMonth from BillRegistryContractRowPaymentBill where month(dateMandatoryMonth)=\''.$date->format('d').'\'
+                                                and mandatoryMonth=\''.$date->format('d').'\' and Year(dateMandatoryMonth)=\''.$date->format('Y').'\' and billRegistryContractRowId='.$rowInvoice['billRegistryContractRowId'].' 
+                                                and billRegistryClientId='.$billRegistryClientId;
+                                                $mandate=\Monkey::app()->dbAdapter->query($sqlRowP,[])->fetchAll();
+                                                foreach($mandate as $man){
+                                                    $dateMandate=new \DateTime($man['dateMandatoryMonth']);
+                                                   $desMan= ' mandato n. '.$man['id'].'/'.$dateMandate->format('d-m-Y'). '<br>';
+                                                }
+                                            str_replace('{mandato}',$desMan,$descriptionRow);
+
+                                            } else {
+                                               $descriptionRow;
+                                            }
+                                        }else{
+                                            if (strpos($descriptionRow,'{mandato}') !== false) {
+                                                str_replace('{mandato}','',$descriptionRow);
+                                            }
+                                        }
+
+                                        if (strpos($descriptionRow,'{periodo}') !== false) {
+
+                                                $desMan= ' periodo  '.$date->format('d').'/'.$date->format('Y'). '<br>';
+
+                                            str_replace('{periodo}',$desMan,$descriptionRow);
+
+                                        } else {
+                                            $descriptionRow;
+                                        }
+
+
+                                    $rowInvoiceInsert->description = $descriptionRow;
+                                    $rowInvoiceInsert->qty = $rowInvoice['qty'];
+                                    $rowInvoiceInsert->priceRow = $rowInvoice['priceRow'];
+                                    $rowInvoiceInsert->vatRow = $rowInvoice['vatRow'];
+                                    $rowInvoiceInsert->grossTotalRow = $rowInvoice['grossTotalRow'];
+                                    $rowInvoiceInsert->billRegistryTypeTaxesId = $rowInvoice['billRegistryTypeTaxesId'];
+                                    $rowInvoiceInsert->billRegistryContractId = $rowInvoice['billRegistryContractId'];
+                                    $rowInvoiceInsert->billRegistryContractRowId = $rowInvoice['billRegistryContractRowId'];
+                                    $rowInvoiceInsert->billRegistryContractRowDetailId = $rowInvoice['billRegistryContractRowDetailId'];
+                                    $rowInvoiceInsert->insert();
+                                    $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
+                                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
+                                    $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
+                                    $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
+                                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
                                 }
-                                if ($rowInvoiceDetail != null) {
-                                    foreach ($rowInvoiceDetail as $rowInvoice) {
-                                        $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
-                                        $rowInvoiceInsert->billRegistryInvoiceId = $invoiceNumber;
-                                        $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
-                                        $rowInvoiceInsert->description = $rowInvoice['description'];
-                                        $rowInvoiceInsert->qty = $rowInvoice['qty'];
-                                        $rowInvoiceInsert->priceRow = $rowInvoice['priceRow'];
-                                        $rowInvoiceInsert->vatRow = $rowInvoice['vatRow'];
-                                        $rowInvoiceInsert->grossTotalRow = $rowInvoice['grossTotalRow'];
-                                        $rowInvoiceInsert->billRegistryTypeTaxesId = $rowInvoice['billRegistryTypeTaxesId'];
-                                        $rowInvoiceInsert->billRegistryContractId = $rowInvoice['billRegistryContractId'];
-                                        $rowInvoiceInsert->billRegistryContractRowId = $rowInvoice['billRegistryContractRowId'];
-                                        $rowInvoiceInsert->billRegistryContractRowDetailId = $rowInvoice['billRegistryContractRowDetailId'];
-                                        $rowInvoiceInsert->insert();
-                                        $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
-                                        $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
-                                        $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
-                                        $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
+                            }
+                            if ($rowInvoiceDetail != null) {
+                                foreach ($rowInvoiceDetail as $rowInvoice) {
+                                    $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
+                                    $rowInvoiceInsert->billRegistryInvoiceId = $invoiceNumber;
+                                    $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
+                                    $descriptionRow=$rowInvoice['description'];
+                                    if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129){
+
+                                        if (strpos($descriptionRow,'{mandato}') !== false) {
+                                            $sqlRowP='select id, mandatoryMonth,dateMandatoryMonth from BillRegistryContractRowPaymentBill where month(dateMandatoryMonth)=\''.$date->format('d').'\'
+                                                and mandatoryMonth=\''.$date->format('d').'\' and Year(dateMandatoryMonth)=\''.$date->format('Y').'\' and billRegistryContractRowId='.$rowInvoice['billRegistryContractRowId'].' 
+                                                and billRegistryClientId='.$billRegistryClientId;
+                                            $mandate=\Monkey::app()->dbAdapter->query($sqlRowP,[])->fetchAll();
+                                            foreach($mandate as $man){
+                                                $dateMandate=new \DateTime($man['dateMandatoryMonth']);
+                                                $desMan= ' mandato n. '.$man['id'].'/'.$dateMandate->format('d-m-Y'). '<br>';
+                                            }
+                                            str_replace('{mandato}',$desMan,$descriptionRow);
+
+                                        } else {
+                                            $descriptionRow;
+                                        }
+                                    }else{
+                                        if (strpos($descriptionRow,'{mandato}') !== false) {
+                                            str_replace('{mandato}','',$descriptionRow);
+                                        }
+                                    }
+                                    if (strpos($descriptionRow,'{periodo}') !== false) {
+
+                                        $desMan= ' periodo  '.$date->format('M').'/'.$date->format('Y'). '<br>';
+
+                                        str_replace('{periodo}',$desMan,$descriptionRow);
+
+                                    } else {
+                                        $descriptionRow;
                                     }
 
+                                    $rowInvoiceInsert->description = $descriptionRow;
+                                    $rowInvoiceInsert->qty = $rowInvoice['qty'];
+                                    $rowInvoiceInsert->priceRow = $rowInvoice['priceRow'];
+                                    $rowInvoiceInsert->vatRow = $rowInvoice['vatRow'];
+                                    $rowInvoiceInsert->grossTotalRow = $rowInvoice['grossTotalRow'];
+                                    $rowInvoiceInsert->billRegistryTypeTaxesId = $rowInvoice['billRegistryTypeTaxesId'];
+                                    $rowInvoiceInsert->billRegistryContractId = $rowInvoice['billRegistryContractId'];
+                                    $rowInvoiceInsert->billRegistryContractRowId = $rowInvoice['billRegistryContractRowId'];
+                                    $rowInvoiceInsert->billRegistryContractRowDetailId = $rowInvoice['billRegistryContractRowDetailId'];
+                                    $rowInvoiceInsert->insert();
+                                    $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
+                                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
+                                    $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
+                                    $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
+                                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
                                 }
-                                $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
+
+                            }
+                            $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
                             <strong>';
-                                if ($isExtraUe != 1) {
-                                    $invoiceText .= 'Totale Netto';
-                                } else {
-                                    $invoiceText .= 'Total Amount ';
-                                }
-                                $invoiceText .= '</strong></td>
+                            if ($isExtraUe != 1) {
+                                $invoiceText .= 'Totale Netto';
+                            } else {
+                                $invoiceText .= 'Total Amount ';
+                            }
+                            $invoiceText .= '</strong></td>
                         <td style="border: 0px"
                             class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td>
                     </tr>';
 
-                                $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
+                            $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
                             <strong>';
-                                if ($isExtraUe != "1") {
-                                    $invoiceText .= 'Totale Tasse';
-                                } else {
-                                    $invoiceText .= 'Total Taxes non imponibile ex art 8/A  D.P.R. n. 633/72 ';
-                                }
-                                $invoiceText .= '</strong></td>';
-                                if ($isExtraUe != 1) {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$vat) . ' &euro;' . '</td></tr>';
-                                } else {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',0) . ' &euro;' . '</td></tr>';
-                                }
+                            if ($isExtraUe != "1") {
+                                $invoiceText .= 'Totale Tasse';
+                            } else {
+                                $invoiceText .= 'Total Taxes non imponibile ex art 8/A  D.P.R. n. 633/72 ';
+                            }
+                            $invoiceText .= '</strong></td>';
+                            if ($isExtraUe != 1) {
+                                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$vat) . ' &euro;' . '</td></tr>';
+                            } else {
+                                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',0) . ' &euro;' . '</td></tr>';
+                            }
 
-                                $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
+                            $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td style="border: 0px"></td>
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
                             <strong>';
-                                if ($isExtraUe != "1") {
-                                    $invoiceText .= 'Totale Dovuto';
-                                } else {
-                                    $invoiceText .= 'Total Invoice';
-                                }
-                                $invoiceText .= '</strong></td>';
-                                if ($isExtraUe != "1") {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$grossTotal) . ' &euro;' . '</td></tr>';
-                                } else {
-                                    $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
-                                }
+                            if ($isExtraUe != "1") {
+                                $invoiceText .= 'Totale Dovuto';
+                            } else {
+                                $invoiceText .= 'Total Invoice';
+                            }
+                            $invoiceText .= '</strong></td>';
+                            if ($isExtraUe != "1") {
+                                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$grossTotal) . ' &euro;' . '</td></tr>';
+                            } else {
+                                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
+                            }
+                            $invoiceText .= '<tr style="border: 0px" class="text-center">
+                        <td colspan="2" style="border: 0px">';
+                            if ($isExtraUe != "1") {
+                                $invoiceText .= 'Modalità di pagamento ' . $namePayment;
+                            } else {
+                                $invoiceText .= 'Type Payment';
+                            }
+
+                            $invoiceText .= '</td>';
+                            $invoiceText .= ' <td style="border: 0px"></td>';
+                            $invoiceText .= ' <td style="border: 0px"></td></tr>';
+                            $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $lastBillRegistryInvoiceId]);
+                            foreach ($billRegistryTimeTableFind as $paymentInvoice) {
                                 $invoiceText .= '<tr style="border: 0px" class="text-center">
                         <td colspan="2" style="border: 0px">';
-                                if ($isExtraUe != "1") {
-                                    $invoiceText .= 'Modalità di pagamento ' . $namePayment;
-                                } else {
-                                    $invoiceText .= 'Type Payment';
-                                }
-
+                                $invoiceText .= $paymentInvoice->description;
                                 $invoiceText .= '</td>';
                                 $invoiceText .= ' <td style="border: 0px"></td>';
                                 $invoiceText .= ' <td style="border: 0px"></td></tr>';
-                                $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $lastBillRegistryInvoiceId]);
-                                foreach ($billRegistryTimeTableFind as $paymentInvoice) {
-                                    $invoiceText .= '<tr style="border: 0px" class="text-center">
-                        <td colspan="2" style="border: 0px">';
-                                    $invoiceText .= $paymentInvoice->description;
-                                    $invoiceText .= '</td>';
-                                    $invoiceText .= ' <td style="border: 0px"></td>';
-                                    $invoiceText .= ' <td style="border: 0px"></td></tr>';
-                                }
-                                $invoiceText .= '</table>
+                            }
+                            $invoiceText .= '</table>
             </div>
             <br>
             <br>
@@ -1322,7 +1387,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
     </div>
 </div><!--end-->';
 
-                                $invoiceText .= addslashes('<script type="application/javascript">
+                            $invoiceText .= addslashes('<script type="application/javascript">
     $(document).ready(function () {
 
         Pace.on(\'done\', function () {
@@ -1341,28 +1406,30 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 </script>
 </body>
 </html>');
-                                $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegistryInvoiceId]);
-                                $updateBillRegistryInvoice->invoiceText = stripslashes($invoiceText);
-                                $updateBillRegistryInvoice->update();
-                                $shopHasCounter=\Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId'=>57,'invoiceYear'=>$year]);
-                                if($isExtraUe!="1"){
-                                    $shopHasCounter->invoiceCounter=$invoiceNumber;
-                                }else{
-                                    $shopHasCounter->invoiceextraUeCounter=$invoiceNumber;
-                                }
-                                $shopHasCounter->update();
-
+                            $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegistryInvoiceId]);
+                            $updateBillRegistryInvoice->invoiceText = stripslashes($invoiceText);
+                            $updateBillRegistryInvoice->update();
+                            $shopHasCounter = \Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId' => 57,'invoiceYear' => $year]);
+                            if ($isExtraUe != "1") {
+                                $shopHasCounter->invoiceCounter = $invoiceNumber;
+                            } else {
+                                $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
                             }
+                            $shopHasCounter->update();
+
                         }
                     }
-                } else {
-                    continue;
                 }
             }
-        } catch (\Throwable $e) {
-            $this->report('CGenerateCustomerInvoiceJob','error ',$e);
+        else {
+                continue;
+            }
         }
+        } catch (\Throwable $e)
+{
+$this->report('CGenerateCustomerInvoiceJob','error ',$e);
+}
 
 
-    }
+}
 }

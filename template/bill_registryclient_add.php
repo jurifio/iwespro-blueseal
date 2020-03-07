@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="typeClientId">Seleziona la Nazione </label>
+                                        <label for="typeClientId">Tipo Contatto</label>
                                         <select id="typeClientId" name="typeClientId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"

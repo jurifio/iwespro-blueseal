@@ -216,6 +216,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
+                                    <label for="typeClientId">Tipo Contatto</label>
                                     <select id="typeClientId" name="typeClientId"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
