@@ -26,6 +26,40 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="billRegistryGroupProductId">Seleziona il Gruppo Prodotti </label>
+                                        <select id="billRegistryGroupProductId" name="billRegistryGroupProductId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <button class="btn btn-primary" id="addGroupProductId" onclick="addGroupProduct()" type="button"><span
+                                                class="fa fa-plus-circle">Aggiungi Gruppo Prodotti</span></button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="billRegistryCategoryProductId">Categoria Gruppo Prodotti</label>
+                                        <select id="billRegistryCategoryProductId" name="billRegistryCategoryProductId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <button class="btn btn-primary" id="addCategoryProductId" onclick="addCategoryProduct()" type="button"><span
+                                                class="fa fa-plus-circle">Aggiungi Categoria Gruppo  Prodotti</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="codeProduct">Codice Prodotto</label>
                                         <input id="codeProduct" autocomplete="off" type="text"
@@ -33,7 +67,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="nameProduct">Nome Prodotto</label>
                                         <input id="nameProduct" autocomplete="off" type="text"
@@ -41,15 +75,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group form-group-default">
-                                        <label for="um">unità di misura</label>
-                                        <input id="um" autocomplete="off" type="text"
-                                               class="form-control" name="um" value=""
-                                        />
 
-                                    </div>
-                                </div>
                                 <div class="col-md-3">
                                     <button type="button" class="btn btn-primary" name="uploadLogo"
                                             id="uploadLogo">carica Immagine Prodotto
@@ -59,6 +85,15 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="um">unità di misura</label>
+                                        <input id="um" autocomplete="off" type="text"
+                                               class="form-control" name="um" value=""
+                                        />
+
+                                    </div>
+                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="cost">prezzo d'Acquisto</label>
@@ -75,16 +110,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-default selectize-enabled">
-                                        <label for="billRegistryGroupProductId">Seleziona il Gruppo Prodotti </label>
-                                        <select id="billRegistryGroupProductId" name="billRegistryGroupProductId"
-                                                class="full-width selectpicker"
-                                                placeholder="Seleziona la Lista"
-                                                data-init-plugin="selectize">
-                                        </select>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="billRegistryTypeTaxesId">Seleziona Aliquota Iva</label>

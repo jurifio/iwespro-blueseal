@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    var groupProductId;
+    var groupUm;
+    var groupCost;
+    var groupPrice;
+    var groupTaxes;
+    var groupName;
 
     $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
@@ -48,6 +54,7 @@ $(document).ready(function () {
             $(document).trigger('bs.load.photo');
         });
     });
+
     $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
@@ -58,6 +65,7 @@ $(document).ready(function () {
         },
         dataType: 'json'
     }).done(function (res2) {
+
         var select = $('#billRegistryGroupProductId');
         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
@@ -65,7 +73,34 @@ $(document).ready(function () {
             labelField: 'name',
             searchField: 'name',
             options: res2,
+            render: {
+                item: function (item, escape) {
+                    groupProductId=item.billRegistryCategoryProductId;
+                    groupUm=item.um;
+                    groupCost=parseFloat(item.cost).toFixed(2);
+                    groupPrice=parseFloat(item.price).toFixed(2);
+                    groupTaxes=item.billRegistryTypeTaxesId;
+                    groupName=item.name;
+                    return '<div>' +
+                        '<span class="label">' + escape(item.codeProduct) + ' ' + escape(item.name) + '</span> - ' +
+                        '<span class="caption">desc:' + escape(item.description) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    groupProductId=item.billRegistryCategoryProductId;
+                    groupUm=item.um;
+                    groupName=item.name;
+                    groupCost=parseFloat(item.cost).toFixed(2);
+                    groupPrice=parseFloat(item.price).toFixed(2);
+                    groupTaxes=parseFloat(item.billRegistryTypeTaxesId).toFixed(2);
+                    return '<div>' +
+                        '<span class="label">' + escape(item.codeProduct) + ' ' + escape(item.name) + '</span> - ' +
+                        '<span class="caption">desc:' + escape(item.description) + '</span>' +
+                        '</div>'
+                }
+            }
         });
+
 
     });
     $.ajax({
@@ -88,7 +123,40 @@ $(document).ready(function () {
         });
 
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BillRegistryCategoryProduct'
+
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var selectCategoryProduct = $('#billRegistryCategoryProductId');
+        if (typeof (selectCategoryProduct[0].selectize) != 'undefined') selectCategoryProduct[0].selectize.destroy();
+        selectCategoryProduct.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+
+    $('#billRegistryGroupProductId').change(function(){
+        $('#billRegistryCategoryProductId').data('selectize').setValue(groupProductId);
+        $('#um').val(groupUm);
+        $('#price').val(groupPrice);
+        $('#cost').val(groupPrice);
+        $('#nameProduct').val(groupName);
+        $('#billRegistryTypeTaxesId').data('selectize').setValue(groupTaxes);
+    });
+
 });
+
+
+
 function addDescription(){
 
     var listDescription=$('#descriptionArray').val();
@@ -146,6 +214,251 @@ $(document).on('bs.productIwes.save', function () {
         });
     });
 });
+function addGroupProduct(){
+    let bsModal = new $.bsModal('Inserimento Gruppo Prodotti', {
+        body: `<p>Confermare?</p>
+ <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="groupCodeProduct">Codice Gruppo Prodotti</label>
+                                        <input id="groupCodeProduct" autocomplete="off" type="text"
+                                               class="form-control" name="groupCodeProduct"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="groupNameProduct">Nome Gruppo Prodotti</label>
+                                        <input id="groupNameProduct" autocomplete="off" type="text"
+                                               class="form-control" name="groupNameProduct" value=""
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="groupBillRegistryCategoryProductId">Seleziona La Categoria </label>
+                                        <select id="groupBillRegistryCategoryProductId" name="groupBillRegistryCategoryProductId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="groupBillRegistryTypeTaxesId">Seleziona L'aliquota </label>
+                                        <select id="groupBillRegistryTypeTaxesId" name="groupBillRegistryTypeTaxesId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="groupIsActive">attivo</label>
+                                        <input  type="checkbox" checked class="form-control"  id="groupIsActive" name="groupIsActive">
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="groupUm">Unita di misura</label>
+                                        <input id="groupUm" autocomplete="off" type="text"
+                                               class="form-control" name="groupUm"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="groupDescription">Descrizione</label>
+                                        <input id="groupDescription" autocomplete="off" type="text"
+                                               class="form-control" name="groupDescription" value=""
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="groupPriceType">Seleziona il tipo Gruppo Prodotto </label>
+                                        <select id="groupPriceType" name="groupPriceType"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                                <option value="Service">Servizio</option>
+                                                <option value="Product">Prodotto</option>
+                                                <option value="Module">Modulo</option>
+                                        </select>
+                                        
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default">
+                                        <label for="groupCost">Prezzo acquisto</label>
+                                        <input id="groupCost" autocomplete="off" type="text"
+                                               class="form-control" name="groupCost"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default">
+                                        <label for="groupPrice">Prezzo Vendita</label>
+                                        <input id="groupPrice" autocomplete="off" type="text"
+                                               class="form-control" name="groupPrice"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                </div>`
+                                });
+
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BillRegistryCategoryProduct'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var selectgroupBillRegistryCategoryProductId = $('#groupBillRegistryCategoryProductId');
+        if (typeof (selectgroupBillRegistryCategoryProductId[0].selectize) != 'undefined') selectgroupBillRegistryCategoryProductId[0].selectize.destroy();
+        selectgroupBillRegistryCategoryProductId.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BillRegistryTypeTaxes'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var selectgroupBillRegistryTypeTaxesId = $('#groupBillRegistryTypeTaxesId');
+        if (typeof (selectgroupBillRegistryTypeTaxesId[0].selectize) != 'undefined') selectgroupBillRegistryTypeTaxesId[0].selectize.destroy();
+        selectgroupBillRegistryTypeTaxesId.selectize({
+            valueField: 'id',
+            labelField: 'description',
+            searchField: 'description',
+            options: res2,
+        });
+
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.addClass('modal-wide');
+    bsModal.addClass('modal-high');
+    bsModal.setOkEvent(function () {
+        var isActive;
+        if ($('#groupIsActive').prop('checked',true)){
+            isActive=1;
+
+        }else{
+            isActive=0;
+        }
+        const data = {
+
+            codeProduct: $('#groupCodeProduct').val(),
+            nameProduct: $('#groupNameProduct').val(),
+            billRegistryCategoryProductId: $('#groupBillRegistryCategoryProductId').val(),
+            billRegistryTypeTaxesId: $('#groupBillRegistryTypeTaxesId').val(),
+            um: $('#groupUm').val(),
+            description: $('#groupDescription').val(),
+            price: $('#groupPrice').val(),
+            cost: $('#groupCost').val(),
+            productType: $('#groupProductType').val(),
+            isActive:isActive
+
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/BillRegistryGroupProductManageAjaxController',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
+
+}
+
+function addCategoryProduct(){
+    let bsModal = new $.bsModal('Inserimento Gruppo Prodotti', {
+        body: `<p>Confermare?</p>
+ <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameCategory">Categoria</label>
+                                        <input id="nameCategory" autocomplete="off" type="text"
+                                               class="form-control" name="nameCategory"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionCategory">Descrizione </label>
+                                        <textarea id="descriptionCategory" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionCategory" value=""
+                                        ></textarea>
+                                    </div>
+                                </div>
+                              
+                                </div>`
+    });
+
+
+
+    bsModal.showCancelBtn();
+    bsModal.addClass('modal-wide');
+    bsModal.addClass('modal-high');
+    bsModal.setOkEvent(function () {
+
+        const data = {
+
+            nameCategory: $('#nameCategory').val(),
+            descriptionCategory: $('#descriptionCategory').val(),
+
+
+        };
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/BillRegistryCategoryProductManageAjaxController',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
+
+}
 
 
 
