@@ -174,7 +174,18 @@ $(document).on('bs.productIwes.save', function () {
         body: '<p>Confermare?</p>'
     });
     var val = $('#descriptionArray').val();
-    var config = '?codeProduct=' + $("#codeProduct").val() + '&' +
+    var n;
+    var descdet='#descdet';
+    var i;
+    var descdetf='';
+    var o=parseInt($('#descdet').val());
+
+    for(i=0;i=o;i++){
+        descdetf=descdet+n;
+        val+=$(descdetf).val()+',';
+    }
+    var config = '?billRegistryProductId'+$("#billRegistryProductId").val()+'&'+'' +
+        'codeProduct=' + $("#codeProduct").val() + '&' +
         'nameProduct=' + $("#nameProduct").val() + '&' +
         'um=' + $("#um").val() + '&' +
         'logoFile=' + $("#logoFile").val() + '&' +
@@ -190,7 +201,7 @@ $(document).on('bs.productIwes.save', function () {
         var data = 1;
         var urldef = "/blueseal/xhr/BillRegistryProductManageAjaxController" + config;
         $.ajax({
-            method: "POST",
+            method: "PUT",
             url: urldef,
             data: data
         }).done(function (res) {

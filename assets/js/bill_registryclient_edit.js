@@ -3645,10 +3645,11 @@ function addProduct(id, billRegistryGroupProductId) {
         let rawContractRowDetail = res;
         var counterRow = '1';
         if (rawContractRowDetail != '') {
-            bodyListDetailForm += '<table id="tableContractDetailRowList"><tr class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Aggiungi</th></tr>';
+            bodyListDetailForm += '<table id="tableContractDetailRowList"><tr align="center" class="header4"><th style="width:20%;">id Prodotto</th><th style="width:20%;">Codice Prodotto -Nome Prodotto </th><th style="width:20%;">dettagli Prodotto</th><th style="width:20%;">um</th><th style="width:10%;">quantità</th><th style="width:10%;">prezzo</th><th style="width:10%;">aliquota</th><th style="width:10%;">Aggiungi</th></tr>';
             $.each(rawContractRowDetail, function (k, v) {
                 bodyListDetailForm += '<tr id="productRowTr' + v.billRegistryContractRowDetailId + '"><td>' + v.billRegistryContractRowDetailId + '</td>';
                 bodyListDetailForm += '<td>' + v.codeProduct + '-' + v.nameProduct + '</td>';
+                bodyListDetailForm += '<td>' + v.detailDescription + '</td>';
                 bodyListDetailForm += '<td>' + v.um + '</td>';
                 bodyListDetailForm += '<td>' + v.qty + '</td>';
                 bodyListDetailForm += '<td>' + v.price + '</td>';
