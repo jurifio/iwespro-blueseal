@@ -84,6 +84,8 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
                        'nameProduct'=> $brp -> name,
                        'dateAlertRenewal' => $dateAlertRenewal,
                        'dateActivation'=>$dateActivation,
+                       'nameContract'=>$brc->nameContract,
+                       'contractCodeInt'=>$brc->contractCodeInt,
                         'billRegistryContractRowId'=>$brcr->id,
                        'billRegistryGroupProductId'=>$brcr->billRegistryGroupProductId
 
@@ -99,6 +101,8 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
         $dateActivation = $data["dateActivation"];
         $dateContractExpire = $data["dateContractExpire"];
         $dateAlertRenewal= $data["dateAlertRenewal"];
+        $nameContract=$data['nameContract'];
+        $contractCodeInt=$data['contractCodeInt'];
 
         $typeValidityId=$data["typeValidityId"];
         $statusId=$data['statusId'];
@@ -116,6 +120,8 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
             $brcUpdate->typeValidityId=$typeValidityId;
             $brcUpdate->dateContractExpire=$dateContractExpire;
             $brcUpdate->dateAlertRenewal=$dateAlertRenewal;
+            $brcUpdate->nameContract=$nameContract;
+            $brcUpdate->contractCodeInt=$contractCodeInt;
             $brcUpdate->update();
             $brcrUpdate=\Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['id'=>$billRegistryContractRowId,'billRegistryContractId'=>$id]);
             $brcrUpdate->dateActivation=$dateActivation;
@@ -129,14 +135,6 @@ class CBillRegistryContractManageAjaxController extends AAjaxController
 
         }
 
-
-        $data = $this->app->router->request()->getRequestData();
-        $id=$data['id'];
-        $contact=[];
-        $brc=\Monkey::app()->repoFactory->create('BillRegistryContact')->findOneBy(['id'=>$id]);
-        $contact[] = ['id' => $brc -> id, 'billRegistryClientId' => $brc -> billRegistryClientId, 'name' => $brc -> name, 'phone' => $brc -> phone, 'email' => $brc -> email, 'fax' => $brc -> fax, 'mobile' => $brc -> mobile, 'role' => $brc -> role];
-
-        return json_encode($contact);
 
     }
     public function delete()

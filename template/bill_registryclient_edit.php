@@ -35,273 +35,268 @@
                         </div>
                     </div>
                 </div>
+
                 <div id="insertClient" class="tabcontent">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel-heading clearfix">
-                            <h5 class="m-t-12">Informazioni di base</h5>
+                                <h5 class="m-t-12">Informazioni di base</h5>
+                                <input type="hidden" id="billRegistryClientId" name="billRegistryClientId"
+                                       value="<?php echo $brc->id ?>"/>
+                                <input type="hidden" id="billRegistryClientAccountId" name="billRegistryClientAccountId"
+                                       value="<?php echo $brca->id ?>"/>
                             </div>
-                            <input type="hidden" id="billRegistryClientId" name="billRegistryClientId"
-                                   value="<?php echo $brc->id ?>"/>
-                            <input type="hidden" id="billRegistryClientAccountId" name="billRegistryClientAccountId"
-                                   value="<?php echo $brca->id ?>"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <br>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group form-group-default" style="background-color:#f55753">
-                                <label for="typeClientId">Cli/For/C.Liker</label>
-                                <select id="typeClientId" name="typeClientId"
-                                        class="full-width selectpicker" style="background-color:#f55753"
-                                        placeholder="Seleziona la Lista"
-                                        data-init-plugin="selectize">
-                                    <?php switch ($brc->typeClientId) {
-                                        case "1":
-                                            echo '"<option selected="selected" value="1">Company Liker</option>"';
-                                            echo '"<option value="2">Cliente</option>"';
-                                            echo '"<option value="3">Fornitore</option>"';
-                                            echo '"<option value="4">Entrambi</option>"';
-                                            break;
-                                        case 2:
-                                            echo '"<option value="1">Company Liker</option>"';
-                                            echo '"<option selected="selected" value="2">Cliente</option>"';
-                                            echo '"<option value="3">Fornitore</option>"';
-                                            echo '"<option value="4">Entrambi</option>"';
-                                            break;
-                                        case 3:
-                                            echo '"<option value="1">Company Liker</option>"';
-                                            echo '"<option  value="2">Cliente</option>"';
-                                            echo '"<option selected="selected" value="3">Fornitore</option>"';
-                                            echo '"<option value="4">Entrambi</option>"';
-                                            break;
-                                        case 4:
-                                            echo '"<option value="1">Company Liker</option>"';
-                                            echo '"<option  value="2">Cliente</option>"';
-                                            echo '"<option  value="3">Fornitore</option>"';
-                                            echo '"<option selected="selected" value="4">Entrambi</option>"';
-                                            break;
-                                    }
-                                    ?>
-                                </select>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeClientId">Cli/for/C.Liker</label>
+                                        <select id="typeClientId" name="typeClientId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <?php switch ($brc->typeClientId) {
+                                                case "1":
+                                                    echo '"<option selected="selected" value="1">Company Liker</option>"';
+                                                    echo '"<option value="2">Cliente</option>"';
+                                                    echo '"<option value="3">Fornitore</option>"';
+                                                    echo '"<option value="4">Entrambi</option>"';
+                                                    break;
+                                                case 2:
+                                                    echo '"<option value="1">Company Liker</option>"';
+                                                    echo '"<option selected="selected" value="2">Cliente</option>"';
+                                                    echo '"<option value="3">Fornitore</option>"';
+                                                    echo '"<option value="4">Entrambi</option>"';
+                                                    break;
+                                                case 3:
+                                                    echo '"<option value="1">Company Liker</option>"';
+                                                    echo '"<option  value="2">Cliente</option>"';
+                                                    echo '"<option selected="selected" value="3">Fornitore</option>"';
+                                                    echo '"<option value="4">Entrambi</option>"';
+                                                    break;
+                                                case 4:
+                                                    echo '"<option value="1">Company Liker</option>"';
+                                                    echo '"<option  value="2">Cliente</option>"';
+                                                    echo '"<option  value="3">Fornitore</option>"';
+                                                    echo '"<option selected="selected" value="4">Entrambi</option>"';
+                                                    break;
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <br>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
                                 <label for="companyName">Ragione Sociale</label>
-                                <input id="companyName" autocomplete="off" type="text"
-                                       class="form-control" name="companyName"
-                                       value="<?php echo $brc->companyName; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="address">indirizzo</label>
-                                <input id="address" autocomplete="off" type="text"
-                                       class="form-control" name="address" value="<?php echo $brc->address; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="extra">Indirizzo 2</label>
-                                <input id="extra" autocomplete="off" type="text"
-                                       class="form-control" name="extra" value="<?php echo $brc->extra; ?>"
-                                />
+                                        <input id="companyName" autocomplete="off" type="text"
+                                               class="form-control" name="companyName"
+                                               value="<?php echo $brc->companyName; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="address">indirizzo</label>
+                                        <input id="address" autocomplete="off" type="text"
+                                               class="form-control" name="address" value="<?php echo $brc->address; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="extra">Indirizzo 2</label>
+                                        <input id="extra" autocomplete="off" type="text"
+                                               class="form-control" name="extra" value="<?php echo $brc->extra; ?>"
+                                        />
 
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="city">città</label>
-                                <input id="city" autocomplete="off" type="text"
-                                       class="form-control" name="city" value="<?php echo $brc->city; ?>"
-                                />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="city">città</label>
+                                        <input id="city" autocomplete="off" type="text"
+                                               class="form-control" name="city" value="<?php echo $brc->city; ?>"
+                                        />
 
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="zipCode">CAP</label>
-                                <input id="zipCode" autocomplete="off" type="text"
-                                       class="form-control" name="zipCode" value="<?php echo $brc->zipcode; ?>"
-                                />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="zipCode">CAP</label>
+                                        <input id="zipCode" autocomplete="off" type="text"
+                                               class="form-control" name="zipCode" value="<?php echo $brc->zipcode; ?>"
+                                        />
 
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="province">Provincia</label>
+                                        <input id="province" autocomplete="off" type="text"
+                                               class="form-control" name="province"
+                                               value="<?php echo $brc->province; ?>"
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="province">Provincia</label>
-                                <input id="province" autocomplete="off" type="text"
-                                       class="form-control" name="province"
-                                       value="<?php echo $brc->province; ?>"
-                                />
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="countryId">Seleziona la Nazione </label>
+                                        <select id="countryId" name="countryId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <?php foreach ($country as $countries) {
+                                                if ($countries->id == $brc->countryId) {
+                                                    echo '<option  selected="selected" value="' . $countries->id . '">' . $countries->name . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $countries->id . '">' . $countries->name . '</option>';
+                                                }
+                                            }; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="vatNumber">Partita Iva/Codice Fiscale</label>
+                                        <input id="vatNumber" autocomplete="off" type="text"
+                                               class="form-control" name="vatNumber"
+                                               value="<?php echo $brc->vatNumber; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phone">Telefono</label>
+                                        <input id="phone" autocomplete="off" type="text"
+                                               class="form-control" name="phone" value="<?php echo $brc->phone; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default ">
+                                        <label for="mobile">Mobile</label>
+                                        <input id="mobile" autocomplete="off" type="text"
+                                               class="form-control" name="mobile" value="<?php echo $brc->mobile; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="fax">Fax</label>
+                                        <input id="fax" autocomplete="off" type="text"
+                                               class="form-control" name="fax" value="<?php echo $brc->fax; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="userId">Seleziona l'utente </label>
+                                        <select id="userId" name="userId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <?php foreach ($userDetails as $userDetail) {
+                                                if ($userDetail->userId == $brc->userId) {
+                                                    echo '<option  selected="selected" value="' . $userDetail->userId . '">' . $userDetail->name . '-' . $userDetail->surname . ' </option>';
+                                                } else {
+                                                    echo '<option  value="' . $userDetail->userId . '">' . $userDetail->name . '-' . $userDetail->surname . ' </option>';
+                                                }
+                                            }; ?>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default selectize-enabled">
-                                <label for="countryId">Seleziona la Nazione </label>
-                                <select id="countryId" name="countryId"
-                                        class="full-width selectpicker"
-                                        placeholder="Seleziona la Lista"
-                                        data-init-plugin="selectize">
-                                    <?php foreach ($country as $countries) {
-                                        if ($countries->id == $brc->countryId) {
-                                            echo '<option  selected="selected" value="' . $countries->id . '">' . $countries->name . '</option>';
-                                        } else {
-                                            echo '<option value="' . $countries->id . '">' . $countries->name . '</option>';
-                                        }
-                                    }; ?>
-                                </select>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="contactName"> Nome Contatto </label>
+                                        <input id="contactName" autocomplete="off" type="text"
+                                               class="form-control" name="contactName"
+                                               value="<?php echo $brc->contactName; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="phoneAdmin"> Telefono contatto Amministratore </label>
+                                        <input id="phoneAdmin" autocomplete="off" type="text"
+                                               class="form-control" name="phoneAdmin"
+                                               value="<?php echo $brc->phoneAdmin; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="mobileAdmin"> Mobile Contatto Amministratore </label>
+                                        <input id="mobileAdmin" autocomplete="off" type="text"
+                                               class="form-control" name="mobileAdmin"
+                                               value="<?php echo $brc->mobileAdmin; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailAdmin"> Email Amministratore </label>
+                                        <input id="emailAdmin" autocomplete="off" type="text"
+                                               class="form-control" name="emailAdmin"
+                                               value="<?php echo $brc->emailAdmin; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="website"> WebSite</label>
+                                        <input id="website" autocomplete="off" type="text"
+                                               class="form-control" name="website" value="<?php echo $brc->website; ?>"
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="vatNumber">Partita Iva/Codice Fiscale</label>
-                                <input id="vatNumber" autocomplete="off" type="text"
-                                       class="form-control" name="vatNumber"
-                                       value="<?php echo $brc->vatNumber; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="phone">Telefono</label>
-                                <input id="phone" autocomplete="off" type="text"
-                                       class="form-control" name="phone" value="<?php echo $brc->phone; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default ">
-                                <label for="mobile">Mobile</label>
-                                <input id="mobile" autocomplete="off" type="text"
-                                       class="form-control" name="mobile" value="<?php echo $brc->mobile; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="fax">Fax</label>
-                                <input id="fax" autocomplete="off" type="text"
-                                       class="form-control" name="fax" value="<?php echo $brc->fax; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default selectize-enabled">
-                                <label for="userId">Seleziona l'utente </label>
-                                <select id="userId" name="userId"
-                                        class="full-width selectpicker"
-                                        placeholder="Seleziona la Lista"
-                                        data-init-plugin="selectize">
-                                    <?php foreach ($userDetails as $userDetail) {
-                                        if ($userDetail->userId == $brc->userId) {
-                                            echo '<option  selected="selected" value="' . $userDetail->userId . '">' . $userDetail->name . '-' . $userDetail->surname . ' </option>';
-                                        } else {
-                                            echo '<option  value="' . $userDetail->userId . '">' . $userDetail->name . '-' . $userDetail->surname . ' </option>';
-                                        }
-                                    }; ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="contactName"> Nome Contatto </label>
-                                <input id="contactName" autocomplete="off" type="text"
-                                       class="form-control" name="contactName"
-                                       value="<?php echo $brc->contactName; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="phoneAdmin"> Telefono contatto Amministratore </label>
-                                <input id="phoneAdmin" autocomplete="off" type="text"
-                                       class="form-control" name="phoneAdmin"
-                                       value="<?php echo $brc->phoneAdmin; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="mobileAdmin"> Mobile Contatto Amministratore </label>
-                                <input id="mobileAdmin" autocomplete="off" type="text"
-                                       class="form-control" name="mobileAdmin"
-                                       value="<?php echo $brc->mobileAdmin; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="emailAdmin"> Email Amministratore </label>
-                                <input id="emailAdmin" autocomplete="off" type="text"
-                                       class="form-control" name="emailAdmin"
-                                       value="<?php echo $brc->emailAdmin; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group form-group-default">
-                                <label for="website"> WebSite</label>
-                                <input id="website" autocomplete="off" type="text"
-                                       class="form-control" name="website" value="<?php echo $brc->website; ?>"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="email"> email Azienda </label>
-                                <input id="email" autocomplete="off" type="text"
-                                       class="form-control" name="email" value="<?php echo $brc->email; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="emailCc"> email Azienda CC </label>
-                                <input id="emailCc" autocomplete="off" type="text"
-                                       class="form-control" name="emailCc" value="<?php echo $brc->emailCc; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="emailCcn"> email Azienda CCn </label>
-                                <input id="emailCcn" autocomplete="off" type="text"
-                                       class="form-control" name="emailCcn"
-                                       value="<?php echo $brc->emailCcn; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default">
-                                <label for="emailPec"> PEC</label>
-                                <input id="emailPec" autocomplete="off" type="text"
-                                       class="form-control" name="emailPec"
-                                       value="<?php echo $brc->emailPec; ?>"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group form-group-default">
-                                <label for="note"> Note</label>
-                                <textarea class="form-control" name="note" id="note"
-                                          value="<?php echo $brc->note; ?>"></textarea>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="email"> email Azienda </label>
+                                        <input id="email" autocomplete="off" type="text"
+                                               class="form-control" name="email" value="<?php echo $brc->email; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCc"> email Azienda CC </label>
+                                        <input id="emailCc" autocomplete="off" type="text"
+                                               class="form-control" name="emailCc" value="<?php echo $brc->emailCc; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailCcn"> email Azienda CCn </label>
+                                        <input id="emailCcn" autocomplete="off" type="text"
+                                               class="form-control" name="emailCcn"
+                                               value="<?php echo $brc->emailCcn; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailPec"> PEC</label>
+                                        <input id="emailPec" autocomplete="off" type="text"
+                                               class="form-control" name="emailPec"
+                                               value="<?php echo $brc->emailPec; ?>"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="note"> Note</label>
+                                        <textarea class="form-control" name="note" id="note"
+                                                  value="<?php echo $brc->note; ?>"></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -733,7 +728,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="insertClientLocation" class="tabcontent">
                     <div class="row">
                         <div class="col-md-12">
@@ -768,82 +762,82 @@
                         </table>
                     </div>
                 </div>
-
-                <div id="insertClientContact" class="tabcontent">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel-heading clearfix">
-                                <h5 class="m-t-12">Inserimento Contatti</h5>
-                            </div>
+            </div>
+            <div id="insertClientContact" class="tabcontent">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-heading clearfix">
+                            <h5 class="m-t-12">Inserimento Contatti</h5>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button class="success" id="addContact" type="button"><span
-                                        class="fa fa-plus-circle">Aggiungi contatto</span></button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <?php
-                        $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
-                        $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
-
-                        $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email-Telefono</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
-
-                        ?>
-                        <div id="rawContact">
-                            <?php foreach ($brcc as $contact) {
-                                $bodyContact .= '<tr id="trContact' . $contact->id . '"><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact(' . $contact->id . ')" type="button"><span
-                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact(' . $contact->id . ')" type="button"><span
-                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
-                            }
-                            echo $bodyContact;
-                            ?>
-                        </div>
-                        </table>
                     </div>
                 </div>
-                <div id="insertClientContract" class="tabcontent">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel-heading clearfix">
-                                <h5 class="m-t-12">Inserimento Contratti</h5>
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="success" id="addContact" type="button"><span
+                                    class="fa fa-plus-circle">Aggiungi contatto</span></button>
                     </div>
-                    <div class="row">
-                        <?php
-                        $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
-                        $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Contratto"></div></div>';
+                </div>
+                <div class="row">
+                    <?php
+                    $bodyContact = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContact" onkeyup="myFunctionContact()" placeholder="ricerca per nome"></div>';
+                    $bodyContact .= '<div class="col-md-6"><input type="text" id="myShopContact" onkeyup="myShopFunctionContact()" placeholder="ricerca per Email"></div></div>';
 
-                        $bodyContract .= '<table id="myTableContract"><tr class="header4"><th style="width:10%;">Id Contratto</th><th style="width:10%;">Num<br>Interno<br>Contratto</th><th style="width:20%;">Nome<br>Contratto</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Righe Contratto</th><th style="width:10%;">Lista<br>Righe Contratto</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
+                    $bodyContact .= '<table id="myTableContact"> <tr class="header3"><th style="width:20%;">id</th><th style="width:20%;">Nome Contatto</th><th style="width:20%;">Email-Telefono</th><th style="width:20%;">Modifica</th><th style="width:20%;">Elimina</th></tr>';
 
+                    ?>
+                    <div id="rawContact">
+                        <?php foreach ($brcc as $contact) {
+                            $bodyContact .= '<tr id="trContact' . $contact->id . '"><td>' . $contact->id . '</td><td>' . $contact->name . '</td><td>' . $contact->email . '-' . $contact->phone . '</td><td><button class="success" id="editContact" onclick="editContact(' . $contact->id . ')" type="button"><span
+                                        class="fa fa-pencil">Modifica</span></button></td><td><button class="success" id="deleteContact"  onclick="deleteContact(' . $contact->id . ')" type="button"><span
+                                        class="fa fa-eraser">Elimina</span></button></td></tr>';
+                        }
+                        echo $bodyContact;
                         ?>
-                        <div id="rawContract">
-                            <?php foreach ($brcContract as $contract) {
-                                $brcr = \Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId' => $contract->id]);
-                                $brp = \Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id' => $brcr->billRegistryGroupProductId]);
-                                $bodyContract .= '<tr id="trContract' . $contract->id . '"><td>' . $contract->id . '-' . $contract->billRegistryClientId . '-' . $contract->billRegistryClientAccountId . '</td>';
+                    </div>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="insertClientContract" class="tabcontent">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-heading clearfix">
+                        <h5 class="m-t-12">Inserimento Contratti</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <?php
+                $bodyContract = '<div class="row"><div class="col-md-6"><input type="text" id="myInputContract" onkeyup="myFunctionContract()" placeholder="ricerca per id contratto"></div>';
+                $bodyContract .= '<div class="col-md-6"><input type="text" id="myShopContract" onkeyup="myShopFunctionContract()" placeholder="ricerca per Contratto"></div></div>';
+
+                        $bodyContract .= '<table id="myTableContract" align="center"><tr class="header4"><th style="width:10%;">Id Contratto</th><th style="width:10%;">Num<br>Interno<br>Contratto</th><th style="width:10%;">Nome<br>Contratto</th><th style="width:10%;">Tipo<br>Contratto</th><th style="width:20%;">data Scadenza</th><th style="width:10%;">Modifica<br>Testata</th><th style="width:10%;">Inserisci<br>Righe Contratto</th><th style="width:10%;">Lista<br>Righe Contratto</th><th style="width:10%;">Elimina<br>Contratto</th></tr>';
+
+                ?>
+                <div id="rawContract">
+                    <?php foreach ($brcContract as $contract) {
+                        $brcr = \Monkey::app()->repoFactory->create('BillRegistryContractRow')->findOneBy(['billRegistryContractId' => $contract->id]);
+                        $brp = \Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id' => $brcr->billRegistryGroupProductId]);
+                        $bodyContract .= '<tr id="trContract' . $contract->id . '"><td>' . $contract->id . '-' . $contract->billRegistryClientId . '-' . $contract->billRegistryClientAccountId . '</td>';
+                        $bodyContract .= '<td>' . $contract->nameContract . '</td>';
                                 $bodyContract .= '<td>' . $contract->contractCodeInt . '</td>';
                                 $date = new \DateTime($contract->dateContractExpire);
                                 $bodyContract .= '<td>' . $brp->name . '</td><td>' . $date->format('d-m-Y') . '</td>';
-                                $bodyContract .= '<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
-                                $bodyContract .= '<td><button class="success" id="addContractDetail" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
-                                $bodyContract .= '<td><button class="success" id="listContractDetail" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
-                                $bodyContract .= '<td><button class="success" id="deleteContract"  onclick="deleteContract(' . $contract->id . ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
-                            }
-                            echo $bodyContract;
-                            ?>
-                        </div>
-                        </table>
-                    </div>
+                        $bodyContract .= '<td><button class="success" id="editContract" onclick="editContract(' . $contract->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                        $bodyContract .= '<td><button class="success" id="addContractDetail" onclick="addContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-plus-circle">Aggiungi</span></button></td>';
+                        $bodyContract .= '<td><button class="success" id="listContractDetail" onclick="listContractDetail(' . $contract->id . ')" type="button"><span class="fa fa-list">Elenca</span></button></td>';
+                        $bodyContract .= '<td><button class="success" id="deleteContract"  onclick="deleteContract(' . $contract->id . ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                    }
+                    echo $bodyContract;
+                    ?>
                 </div>
+                </table>
             </div>
         </div>
     </div>
 </div>
+</div>
 <?php include "parts/footer.php" ?>
-    </div>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>

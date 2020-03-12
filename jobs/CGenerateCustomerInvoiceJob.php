@@ -91,6 +91,10 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $typePaymentId = $billRegistryRowMonkSource->typePaymentId;
                                     $periodTypeCharge = $billRegistryRowMonkSource->periodTypeCharge;
                                     $sellingFeeCommision = $billRegistryRowMonkSource->sellingFeeCommision;
+                                    $descfeeCodCommission = $billRegistryRowMonkSource->descfeeCodCommission;
+                                    $descfeeCreditCardCommission = $billRegistryRowMonkSource->descfeeCreditCardCommission;
+                                    $descfeeBankTransferCommission = $billRegistryRowMonkSource->descfeeBankTransferCommission;
+                                    $descfeePaypalCommission = $billRegistryRowMonkSource->descfeePaypalCommission;
                                     $feeCreditCardCommission = $billRegistryRowMonkSource->feeCreditCardCommission;
                                     $dayChargeFeeCreditCardCommission = $billRegistryRowMonkSource->dayChargeFeeCreditCardCommission;
                                     $feeCodCommission = $billRegistryRowMonkSource->feeCodCommission;
@@ -157,7 +161,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     if ($paypalCommission != 0) {
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
-                                            'description' => 'commissioni Pagamenti Paypal',
+                                            'description' => $descfeePaypalCommission,
                                             'qty' => 1,
                                             'priceRow' => $paypalCommission,
                                             'netPrice' => $paypalCommission,
@@ -173,7 +177,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     if ($codCommission != 0) {
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
-                                            'description' => 'commissioni Pagamenti Contrassegni',
+                                            'description' => $descfeeCodCommission,
                                             'qty' => 1,
                                             'priceRow' => $codCommission,
                                             'netPrice' => $codCommission,
@@ -189,7 +193,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     if ($bankTransferCommission != 0) {
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
-                                            'description' => 'commissioni Pagamenti Bonifici Sepa',
+                                            'description' => $descfeeBankTransferCommission,
                                             'qty' => 1,
                                             'priceRow' => $bankTransferCommission,
                                             'netPrice' => $bankTransferCommission,
@@ -205,7 +209,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     if ($creditCardCommission != 0) {
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
-                                            'description' => 'commissioni Pagamenti Carte di Credito',
+                                            'description' => $descfeeCreditCardCommission,
                                             'qty' => 1,
                                             'priceRow' => $creditCardCommission,
                                             'netPrice' => $creditCardCommission,
@@ -218,15 +222,15 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             'billRegistryContractRowDetailId' => 0
                                         ];
                                     }
-                                    if ($creditCardCommission != 0) {
+                                    if ($feeCostDeliveryCommission != 0) {
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
                                             'description' => 'commissioni su Spedizioni',
                                             'qty' => 1,
-                                            'priceRow' => $creditCardCommission,
-                                            'netPrice' => $creditCardCommission,
-                                            'vatRow' => $creditCardCommission / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $creditCardCommission + ($creditCardCommission / 100 * $customerTaxes->perc),
+                                            'priceRow' => $feeCostDeliveryCommission,
+                                            'netPrice' => $feeCostDeliveryCommission,
+                                            'vatRow' => $feeCostDeliveryCommission / 100 * $customerTaxes->perc,
+                                            'grossTotalRow' => $feeCostDeliveryCommission + ($feeCostDeliveryCommission / 100 * $customerTaxes->perc),
                                             'billRegistryTypeTaxesId' => $customerTaxes->id,
                                             'billRegistryTypeTaxesDesc' => $customerTaxes->description,
                                             'billRegistryContractId' => $contractId,

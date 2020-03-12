@@ -1365,6 +1365,8 @@ function editContract(id) {
     var statusId = '';
     var billRegistryGroupProductId = '';
     var nameProduct = '';
+    var contractCodeInt='';
+    var nameContract='';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
         method: 'get',
@@ -1387,6 +1389,8 @@ function editContract(id) {
             statusId = v.statusId;
             billRegistryGroupProductId = v.billRegistryGroupProductId;
             nameProduct = v.nameProduct;
+            nameContract=v.nameContract;
+            contractCodeInt=v.contractCodeInt;
             billRegistryContractRowId = v.billRegistryContractRowId;
 
 
@@ -1478,7 +1482,27 @@ function editContract(id) {
                                     </div>
                                 </div>
                                
-                            </div>`
+                            </div>
+ <div class="row">
+ <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="nameContract">Nome Contratto</label>
+                                        <input  id="nameContract" autocomplete="off" type="text"
+                                               class="form-control" name="nameContract"
+                                               value="` + nameContract + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default">
+                                        <label for="contractCodeInt">Codice interno Contratto</label>
+                                        <input  id="contractCodeInt" autocomplete="off" type="text"
+                                               class="form-control" name="contractCodeInt"
+                                               value="` + contractCodeInt + `"
+                                        />
+                                    </div>
+                                </div>
+</div>`
         });
 
 
@@ -1496,6 +1520,8 @@ function editContract(id) {
                 statusId: $('#statusId').val(),
                 dateContractExpire: $('#dateContractExpire').val(),
                 dateAlertRenewal: $('#dateAlertRenewal').val(),
+                nameContract:$('#nameContract').val(),
+                contractCodeInt:$('#contractCodeInt').val(),
                 billRegistryGroupProductId: billRegistryGroupProductId,
                 statusId: $('#statusId').val()
 
@@ -1506,18 +1532,21 @@ function editContract(id) {
                 url: '/blueseal/xhr/BillRegistryContractManageAjaxController',
                 data: data
             }).done(function (res) {
+
                 $(`#trContract` + id).remove();
-                var bodyContract = '<tr id="trContract' + res + '"><td>' + res + '</td><td>' + nameProduct + '</td><td>' + $('#dateContractExpire').val() + '</td>';
-                bodyContract = bodyContract + '<td><button class="success" id="editContractButton" onclick="editContract(' + res + ')" type="button"><span class="fa fa-pencil">Modifica Testata</span></button></td>';
+                var bodyContract = '<tr id="trContract' + res + '"><td>' +contractId+'-'+billRegistryClientId +'-'+ $('#billRegistryClientAccountId').val() + '</td><td>' + $('#contractCodeInt').val() + '</td><td>' + $('#nameContract').val() + '</td><td>' + nameProduct + '</td><td>' + $('#dateContractExpire').val() + '</td>';
+                bodyContract = bodyContract + '<td><button class="success" id="editContractButton" onclick="editContract(' + res + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                 bodyContract = bodyContract + '<td><button class="success" id="addContractDetailButton" onclick="addContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Aggiungi</span></button></td>';
                 bodyContract = bodyContract + '<td><button class="success" id="listContractDetailButton" onclick="listContractDetail(' + res + ')" type="button"><span class="fa fa-pencil">Elenca</span></button></td>';
                 bodyContract = bodyContract + '<td><button class="success" id="deleteLocationButton"  onclick="deleteLocation(' + res + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                 $('#myTableContract').append(bodyContract);
+                bsModalContract.writeBody('Aggiornamento Eseguito');
             }).fail(function (res) {
                 bsModalContract.writeBody('Errore grave');
             }).always(function (res) {
                 bsModalContract.setOkEvent(function () {
                     bsModalContract.hide();
+
                     //window.location.reload();
                 });
                 bsModalContract.showOkBtn();
@@ -1618,7 +1647,8 @@ function addContractDetail(id) {
         var bodyForm = '';
         switch (billRegistryGroupProductId) {
             case "1":
-                bodyForm = `<div class="row">
+                bodyForm = `   
+                                <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="nameRow">Nome Dettaglio Contratto</label>
@@ -1628,24 +1658,11 @@ function addContractDetail(id) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
                                         <input id="descriptionRow" autocomplete="off" type="text"
                                                class="form-control" name="descriptionRow"
-                                               value=""
-                                        />
-                                    </div>
-                                </div>
-                             </div>
-                                <div class="row">
-                                <div class="col-md-2">
-                                <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
-                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
-                                    <div class="form-group form-group-default">
-                                        <label for="value">Valore Canone</label>
-                                        <input id="value" autocomplete="off" type="text"
-                                               class="form-control" name="value"
                                                value=""
                                         />
                                     </div>
@@ -1698,6 +1715,39 @@ function addContractDetail(id) {
                                          </select>       
                                     </div>
                                 </div>
+                             </div>
+                                <div class="row">
+                                <div class="col-md-2">
+                                <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="value">Valore Canone</label>
+                                        <input id="value" autocomplete="off" type="text"
+                                               class="form-control" name="value"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeProductAssocId">Associa Prodotto</label>
+                                        <select id="typeProductAssocId" name="typeProductAssocId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionValue">descrizione Canone</label>
+                                        <input id="descriptionValue" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionValue"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                
                                  <div class="col-md-2">
                                    <div class="form-group form-group-default">
                                         <label for="sellingFeeCommision">Commissione sul Venduto</label>
@@ -1709,6 +1759,44 @@ function addContractDetail(id) {
                                 </div>
                               
                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommission">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommission">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommission">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommission">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group form-group-default">
@@ -1883,6 +1971,7 @@ function addContractDetail(id) {
                                     </div>
                                 </div>
                             </div>
+                            </div>                    
 `;
                 break;
             case "2":
@@ -1977,6 +2066,44 @@ function addContractDetail(id) {
                                 </div>
                               
                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommission">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommission">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommission">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommission">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group form-group-default">
@@ -2470,6 +2597,44 @@ function addContractDetail(id) {
                                 </div>
                               
                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommission">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommission">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommission">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommission">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group form-group-default">
@@ -2711,6 +2876,7 @@ function addContractDetail(id) {
                 break;
             case "7":
                 bodyForm = `
+
 <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
@@ -2836,7 +3002,44 @@ function addContractDetail(id) {
                                     </div>
                                 </div>
                             </div>  
-                          
+                           <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommission">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommission">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommission">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommission">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommission" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group form-group-default">
@@ -3019,6 +3222,7 @@ function addContractDetail(id) {
         let bsModalDetailContract = new $.bsModal('Aggiungi Dettaglio  Contratto al Servizio ' + nameProduct + ' associato', {
             body: bodyForm
         });
+
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -3091,6 +3295,7 @@ function addContractDetail(id) {
             });
 
         });
+
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -3271,6 +3476,41 @@ function addContractDetail(id) {
             });
 
         });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct',
+                condition :{billRegistryGroupProductId:1}
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var selecttypeProductAssocId = $('#typeProductAssocId');
+            if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            selecttypeProductAssocId.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+
+
+
 
         bsModalDetailContract.showCancelBtn();
         bsModalDetailContract.addClass('modal-wide');
@@ -3291,6 +3531,10 @@ function addContractDetail(id) {
                         typePaymentId: $('#1typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
                         sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommission').val(),
+                        descfeeCodCommission: $('#descfeeCodCommission').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommission').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
                         feeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         feeCodCommission: $('#feeCodCommission').val(),
@@ -3322,6 +3566,10 @@ function addContractDetail(id) {
                         typePaymentId: $('#2typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
                         sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommission').val(),
+                        descfeeCodCommission: $('#descfeeCodCommission').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommission').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
                         feeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         feeCodCommission: $('#feeCodCommission').val(),
@@ -3388,6 +3636,10 @@ function addContractDetail(id) {
                         typePaymentId: $('#5typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
                         sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommission').val(),
+                        descfeeCodCommission: $('#descfeeCodCommission').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommission').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
                         feeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         feeCodCommission: $('#feeCodCommission').val(),
@@ -3434,6 +3686,10 @@ function addContractDetail(id) {
                         typePaymentId: $('#6typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
                         sellingFeeCommision: $('#sellingFeeCommision').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommission').val(),
+                        descfeeCodCommission: $('#descfeeCodCommission').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommission').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
                         feeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         dayChargeFeeCreditCardCommission: $('#feeCreditCardCommission').val(),
                         feeCodCommission: $('#feeCodCommission').val(),
@@ -3473,6 +3729,28 @@ function addContractDetail(id) {
 
     });
 }
+$('#typeProductAssocId').change(function () {
+    $.ajax({
+        url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+        method: 'GET',
+        data: {
+            typeProductAssocId: $('#typeProductAssocId').val(),
+
+        },
+        dataType:'json'
+    }).done(function (res) {
+
+        $.each(res, function (k, v) {
+            $('#descriptionValue').val(res.description);
+            $('#value').val(res.price)
+
+        });
+
+
+    });
+
+
+});
 
 function listContractDetail(id) {
     var contractId = '';
@@ -3483,6 +3761,8 @@ function listContractDetail(id) {
     var billRegistryGroupProductId = '';
     var nameProduct = '';
     var nameRow='';
+    var nameContract='';
+    var contractCodeInt='';
     var descriptionRow='';
     var isContractDetailRow = '';
     var exist = '';
@@ -3499,13 +3779,16 @@ function listContractDetail(id) {
         var bodyListForm = '';
         if (rawContractrow != '') {
             var bodyListForm = '';
-            bodyListForm += '<table id="tableContractRowList"><tr class="header4"><th style="width:20%;">id</th><th style="width:10%;">id Contratto</th><th style="width:10%;">id Dettaglio Contratto</th><th style="width:10%;">Nome Contratto</th><th style="width:10%;">Nome Dettaglio Contratto</th><th style="width:10%;">Descrizione Dettaglio Contratto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
+            bodyListForm += '<table id="tableContractRowList"><tr class="header4"><th style="width:10%;">id</th><th style="width:10%;">id Contratto</th><th style="width:10%;">Codice <br>interno<br>Contratto</th><th style="width:10%;">Nome<br>Contratto</th><th style="width:10%;">id Dettaglio Contratto</th><th style="width:10%;">Tipo Contratto</th><th style="width:10%;">Nome Dettaglio Contratto</th><th style="width:10%;">Descrizione Dettaglio Contratto</th><th style="width:10%;">Modifica</th><th style="width:10%;">Prodotti</th><th style="width:10%;">Mandati</th><th style="width:10%;">Elimina</th></tr>';
             $.each(rawContractrow, function (k, v) {
                 exist = v.exist;
                 contractId = id;
                 billRegistryContractRowId = v.billRegistryContractRowId;
                 billRegistryGroupProductId = v.billRegistryGroupProductId;
+
                 nameProduct = v.nameProduct;
+                nameContract =v.nameContract;
+                contractCodeInt=v.contractCodeInt;
                 nameRow=v.nameRow;
                 descriptionRow=v.descriptionRow;
                 contractDetailId = v.contractDetailId;
@@ -3513,14 +3796,14 @@ function listContractDetail(id) {
                 if (exist == '1') {
                     if (isContractDetailRow == '0') {
                         bodyListForm += '<tr><td>' + contractDetailId + '</td>';
-                        bodyListForm += '<td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td><td>' + nameRow + '</td><td>' + descriptionRow + '</td>';
+                        bodyListForm += '<td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + contractCodeInt + '</td><td>' + nameContract + '</td><td>' + nameProduct + '</td><td>' + nameRow + '</td><td>' + descriptionRow + '</td>';
                         bodyListForm += '<td><button class="success" id="editContractRowDetailButton" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addContractRowDetailButton" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addPaymentRowDetailButton" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
                         bodyListForm += '<td><button class="success" id="deleteContractRowDetailButton" onclick="deleteContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                     } else {
                         bodyListForm += '<tr><td>' + contractDetailId + '</td>';
-                        bodyListForm += '<td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + nameProduct + '</td>';
+                        bodyListForm += '<td>' + id + '</td><td>' + billRegistryContractRowId + '</td><td>' + contractCodeInt + '</td><td>' + nameContract + '</td><td>' + nameProduct + '</td>';
                         bodyListForm += '<td><button class="success" id="editContractRowDetailButton" onclick="editContractDetail(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addContractRowDetailButton" onclick="addProduct(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-product-hunt">Prodotti</span></button></td>';
                         bodyListForm += '<td><button class="success" id="addPaymentRowDetailButton" onclick="addPayment(' + billRegistryContractRowId + ',' + billRegistryGroupProductId + ')" type="button"><span class="fa fa-money">Pagamenti</span></button></td>';
@@ -3550,7 +3833,8 @@ function listContractDetail(id) {
 }
 
 
-function editContractDetail(id) {
+function editContractDetail(id,billRegistryGroupProductId) {
+
 
 }
 

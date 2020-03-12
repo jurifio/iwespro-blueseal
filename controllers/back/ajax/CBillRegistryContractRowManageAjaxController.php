@@ -43,7 +43,11 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
-                    $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                    $rowInsert->feePaypalCommission = $data['feePaypalCommission'];
                     $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
                     $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
@@ -85,6 +89,10 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
                     $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
                     $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
@@ -184,6 +192,10 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
                     $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
                     $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
@@ -254,6 +266,10 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
                     $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
                     $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
@@ -317,7 +333,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                 'descriptionRow'=>$tableData->descriptionRow,
                                 'contractDetailId' => $contractDetailId,
                                 'isContractDetailRow' => $isContractDetailRow,
-                                'nameProduct' => $brp->name];
+                                'nameProduct' => $brp->name,
+                                'nameContract'=>$brc->nameContract,
+                                'contractCodeInt'=>$brc->contractCodeInt];
                         }
                     }
 
@@ -337,7 +355,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                'descriptionRow'=>$tableData->descriptionRow,
                                'contractDetailId' => $contractDetailId,
                                'isContractDetailRow' => $isContractDetailRow,
-                               'nameProduct' => $brp->name];
+                               'nameProduct' => $brp->name,
+                               'nameContract'=>$brc->nameContract,
+                               'contractCodeInt'=>$brc->contractCodeInt];
                        }
                    }
                     break;
@@ -355,7 +375,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                 'descriptionRow'=>$tableData->descriptionRow,
                                 'contractDetailId' => $contractDetailId,
                                 'isContractDetailRow' => $isContractDetailRow,
-                                'nameProduct' => $brp->name];
+                                'nameProduct' => $brp->name,
+                                'nameContract'=>$brc->nameContract,
+                                'contractCodeInt'=>$brc->contractCodeInt];
                         }
                     }
                     break;
@@ -373,7 +395,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                 'descriptionRow'=>$tableData->descriptionRow,
                                 'contractDetailId' => $contractDetailId,
                                 'isContractDetailRow' => $isContractDetailRow,
-                                'nameProduct' => $brp->name];
+                                'nameProduct' => $brp->name,
+                                'nameContract'=>$brc->nameContract,
+                                'contractCodeInt'=>$brc->contractCodeInt];
                         }
                     }
                     break;
@@ -391,7 +415,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                 'descriptionRow'=>$tableData->descriptionRow,
                                 'contractDetailId' => $contractDetailId,
                                 'isContractDetailRow' => $isContractDetailRow,
-                                'nameProduct' => $brp->name];
+                                'nameProduct' => $brp->name,
+                                'nameContract'=>$brc->nameContract,
+                                'contractCodeInt'=>$brc->contractCodeInt];
                         }
                     }
                     break;
@@ -409,7 +435,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                 'descriptionRow'=>$tableData->descriptionRow,
                                 'contractDetailId' => $contractDetailId,
                                 'isContractDetailRow' => $isContractDetailRow,
-                                'nameProduct' => $brp->name];
+                                'nameProduct' => $brp->name,
+                                'nameContract'=>$brc->nameContract,
+                                'contractCodeInt'=>$brc->contractCodeInt];
                         }
                     }
                     break;
@@ -427,7 +455,9 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                                 'descriptionRow'=>$tableData->descriptionRow,
                                 'contractDetailId' => $contractDetailId,
                                 'isContractDetailRow' => $isContractDetailRow,
-                                'nameProduct' => $brp->name];
+                                'nameProduct' => $brp->name,
+                                'nameContract'=>$brc->nameContract,
+                                'contractCodeInt'=>$brc->contractCodeInt];
                         }
                     }
                     break;
