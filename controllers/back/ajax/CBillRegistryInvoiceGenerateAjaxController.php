@@ -26,6 +26,8 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
 
     public function post()
     {
+
+
         $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryContractRepo = \Monkey::app()->repoFactory->create('BillRegistryContract');
         $billRegistryContractRowRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRow');
@@ -1602,11 +1604,9 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
             }
         } catch (\Throwable $e){
             \Monkey::app()->applicationLog('CBillRegistryInvoiceGenerateAjaxController','error ','Error Generate invoice Customer',$e,'');
-        return $e;
+            return $e;
         }
-
-
-return 'Generazione Fatture Servizi eseguita';
+        return 'Generazione Fatture Servizi eseguita';
     }
 
 
