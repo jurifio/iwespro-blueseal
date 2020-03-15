@@ -93,9 +93,9 @@ class CSelectBillRegistryProductDetailAjaxController extends AAjaxController
         foreach ($brcrd as $detailRow) {
          $description.=$detailRow->detailDescription.'<br>';
             }
-        $product=['price'=>$price->price,'description'=>$description];
+        $product[]=['price'=>$price->price,'description'=>$description];
 
-return json_encode($description);
+return json_encode($product);
 
 }
 

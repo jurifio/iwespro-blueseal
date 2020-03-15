@@ -43,12 +43,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
-                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
-                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
-                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
-                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
-                    $rowInsert->feePaypalCommission = $data['feePaypalCommission'];
-                    $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                    $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
+                    $rowInsert->dayChargeFeeCreditCardCommission=$data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
                     $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
                     $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
@@ -63,6 +59,21 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
                     $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
                     $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descriptionValue=$data['descriptionValue'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                    $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                    $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                    $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                    $rowInsert->billRegistryProductFeeCodCommission=$data['productfeeCodCommission'];
+                    $rowInsert->billRegistryProductFeePaypalCommission=$data['productfeePaypalCommission'];
+                    $rowInsert->billRegistryProductFeeBankTransferCommission=$data['productfeeBankTransferCommission'];
+                    $rowInsert->billRegistryProductFeeCreditCardCommission=$data['productfeeCreditCardCommision'];
+                    $rowInsert->billRegistryProductFeeCostDeliveryCommission=$data['productfeeCostDeliveryCommission'];
+                    $rowInsert->billRegistryProductFeeCostCommissionPayment=$data['productfeeCostCommissionPayment'];
                     $rowInsert->insert();
 
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowMonkSource ',[])->fetchAll();
@@ -89,12 +100,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
-                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
-                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
-                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
-                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
                     $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
-                    $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                    $rowInsert->dayChargeFeeCreditCardCommission=$data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
                     $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
                     $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
@@ -109,6 +116,23 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
                     $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
                     $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descriptionValue=$data['descriptionValue'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                    $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                    $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                    $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                    $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                    $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                    $rowInsert->billRegistryProductFeeCodCommission=$data['productfeeCodCommission'];
+                    $rowInsert->billRegistryProductFeePaypalCommission=$data['productfeePaypalCommission'];
+                    $rowInsert->billRegistryProductFeeBankTransferCommission=$data['productfeeBankTransferCommission'];
+                    $rowInsert->billRegistryProductFeeCreditCardCommission=$data['productfeeCreditCardCommision'];
+                    $rowInsert->billRegistryProductFeeCostDeliveryCommission=$data['productfeeCostDeliveryCommission'];
+                    $rowInsert->billRegistryProductFeeCostCommissionPayment=$data['productfeeCostCommissionPayment'];
                     $rowInsert->insert();
 
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowMonkAir ',[])->fetchAll();
@@ -137,6 +161,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->feeAgencyCommision = $data['feeAgencyCommision'];
                     $rowInsert->prepaidPaymentIsActive = $data['prepaidPaymentIsActive'];
                     $rowInsert->prepaidCost = $data['prepaidCost'];
+                    $rowInsert->billRegistryProductStartUpCostCampaign=$data['productStartUpCostCampaign'];
+                    $rowInsert->billRegistryProductFeeAgencyCommision=$data['productFeeAgencyCommision'];
                     $rowInsert->insert();
 
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowMonkEntrySocial ',[])->fetchAll();
@@ -165,6 +191,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->feeAgencyCommision = $data['feeAgencyCommision'];
                     $rowInsert->prepaidPaymentIsActive = $data['prepaidPaymentIsActive'];
                     $rowInsert->prepaidCost = $data['prepaidCost'];
+                    $rowInsert->billRegistryProductStartUpCostCampaign=$data['productStartUpCostCampaign'];
+                    $rowInsert->billRegistryProductFeeAgencyCommision=$data['productFeeAgencyCommision'];
                     $rowInsert->insert();
 
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowMonkEntryTraffic ',[])->fetchAll();
@@ -185,19 +213,15 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->getEmptyEntity();
                     $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
                     $rowInsert->automaticInvoice = $data['automaticInvoice'];
-                    $rowInsert->value = $data['value'];
                     $rowInsert->nameRow=$data['nameRow'];
                     $rowInsert->descriptionRow=$data['descriptionRow'];
+                    $rowInsert->value = $data['value'];
                     $rowInsert->billingDay = $data['billingDay'];
                     $rowInsert->typePaymentId = $data['typePaymentId'];
                     $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
                     $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
-                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
-                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
-                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
-                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
                     $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
-                    $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                    $rowInsert->dayChargeFeeCreditCardCommission=$data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
                     $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
                     $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
@@ -212,6 +236,21 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
                     $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
                     $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                    $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                    $rowInsert->descriptionValue=$data['descriptionValue'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                    $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                    $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                    $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                    $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                    $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                    $rowInsert->billRegistryProductFeeCodCommission=$data['productfeeCodCommission'];
+                    $rowInsert->billRegistryProductFeePaypalCommission=$data['productfeePaypalCommission'];
+                    $rowInsert->billRegistryProductFeeBankTransferCommission=$data['productfeeBankTransferCommission'];
+                    $rowInsert->billRegistryProductFeeCreditCardCommission=$data['productfeeCreditCardCommision'];
+                    $rowInsert->billRegistryProductFeeCostDeliveryCommission=$data['productfeeCostDeliveryCommission'];
+                    $rowInsert->billRegistryProductFeeCostCommissionPayment=$data['productfeeCostCommissionPayment'];
                     $rowInsert->insert();
 
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowSocialMonk ',[])->fetchAll();
@@ -236,6 +275,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->descriptionRow=$data['descriptionRow'];
                     $rowInsert->valueMarkUpFullPrice = $data['valueMarkUpFullPrice'];
                     $rowInsert->valueMarkUpSalePrice = $data['valueMarkUpSalePrice'];
+                    $rowInsert->billingDay=$data['billingDay'];
+                    $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
                     $rowInsert->insert();
 
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryContractRowFriends ',[])->fetchAll();
@@ -270,6 +311,8 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
                     $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
                     $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                    $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                    $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
                     $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
                     $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
                     $rowInsert->feeCodCommission = $data['feeCodCommission'];
@@ -342,7 +385,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
             break;
         case
             "2":
-                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findBy(['billRegistryContractRowId' => $brcr->id]);
                    if ($tableDatas != null) {
                        foreach ($tableDatas as $tableData) {
                            $contractDetailId = $tableData->id;
@@ -362,7 +405,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                    }
                     break;
                 case "3":
-                    $tableDataa = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->findBy(['billRegistryContractRowId' => $brcr->id]);
                     if ($tableDatas != null) {
                         foreach ($tableDatas as $tableData) {
                             $contractDetailId = $tableData->id;
@@ -382,7 +425,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     }
                     break;
                 case "4":
-                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findBy(['billRegistryContractRowId' => $brcr->id]);
                     if ($tableDatas != null) {
                         foreach ($tableDatas as $tableData) {
                             $contractDetailId = $tableData->id;
@@ -402,7 +445,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     }
                     break;
                 case "5":
-                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findBy(['billRegistryContractRowId' => $brcr->id]);
                     if ($tableDatas != null) {
                         foreach ($tableDatas as $tableData) {
                             $contractDetailId = $tableData->id;
@@ -422,7 +465,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     }
                     break;
                 case "6":
-                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->findBy(['billRegistryContractRowId' => $brcr->id]);
                     if ($tableDatas != null) {
                         foreach ($tableDatas as $tableData) {
                             $contractDetailId = $tableData->id;
@@ -442,7 +485,7 @@ class CBillRegistryContractRowManageAjaxController extends AAjaxController
                     }
                     break;
                 case "7":
-                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findOneBy(['billRegistryContractRowId' => $brcr->id]);
+                    $tableDatas = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findBy(['billRegistryContractRowId' => $brcr->id]);
                     if ($tableDatas != null) {
                         foreach ($tableDatas as $tableData) {
                             $contractDetailId = $tableData->id;

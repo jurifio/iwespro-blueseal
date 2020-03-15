@@ -91,11 +91,21 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $typePaymentId = $billRegistryRowMonkSource->typePaymentId;
                                     $periodTypeCharge = $billRegistryRowMonkSource->periodTypeCharge;
                                     $sellingFeeCommision = $billRegistryRowMonkSource->sellingFeeCommision;
+                                    $descriptionValue=$billRegistryRowMonkSource->descriptionValue;
                                     $descfeeCodCommission = $billRegistryRowMonkSource->descfeeCodCommission;
                                     $descfeeCreditCardCommission = $billRegistryRowMonkSource->descfeeCreditCardCommission;
                                     $descfeeBankTransferCommission = $billRegistryRowMonkSource->descfeeBankTransferCommission;
                                     $descfeePaypalCommission = $billRegistryRowMonkSource->descfeePaypalCommission;
                                     $feeCreditCardCommission = $billRegistryRowMonkSource->feeCreditCardCommission;
+                                    $descfeeCostDeliveryCommission=$billRegistryRowMonkSource->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment=$billRegistryRowMonkSource->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue=$billRegistryRowMonkSource->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission=$billRegistryRowMonkSource->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission=$billRegistryRowMonkSource->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowMonkSource->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowMonkSource->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMonkSource->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMonkSource->billRegistryProductFeeCostCommissionPayment;
                                     $dayChargeFeeCreditCardCommission = $billRegistryRowMonkSource->dayChargeFeeCreditCardCommission;
                                     $feeCodCommission = $billRegistryRowMonkSource->feeCodCommission;
                                     $dayChargeFeeCodCommission = $billRegistryRowMonkSource->dayChargeFeeCodCommission;
@@ -114,22 +124,54 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findBy(['remoteShopSellerId' => $shopId]);
 
                                     foreach ($orderLine as $orl) {
+                                        $isBillService=null;
+                                        $isBillPayment=null;
+                                        $isBillDeliveryCost=null;
+                                        $isBill=null;
+
+
                                         if ($orl->status == 'ORD_DELIVERED' || $orl->status == 'ORD_SENT' || $orl->status == 'ORD_FRND_PYD') {
                                             if ($orl->isBill == null) {
                                                 $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orl->orderId]);
-
+                                                if($billingDay==$day){
+                                                    $isBillService=1;
+                                                }
                                                 switch ($order->orderPaymentMethodId) {
                                                     case 1:
+                                                        if($day==$dayChargeFeePaypalCommission){
                                                         $paypalCommission += $orl->netPrice / 100 * $feePaypalCommission;
+                                                            $isBillPayment=1;
+                                                        }else{
+                                                            $paypalCommission+=0;
+                                                            $isBillPayment=null;
+                                                        }
                                                         break;
                                                     case 2:
-                                                        $creditCardCommission += $orl->netPrice / 100 * $feeCreditCardCommission;
+                                                        if($day==$dayChargeFeeCreditCardCommission) {
+                                                            $creditCardCommission += $orl->netPrice / 100 * $feeCreditCardCommission;
+                                                            $isBillPayment=1;
+                                                        }else{
+                                                            $creditCardCommission=0;
+                                                            $isBillPayment=null;
+                                                        }
                                                         break;
                                                     case 3:
-                                                        $bankTransferCommission += $orl->netPrice / 100 * $feeBankTransferCommission;
+                                                        if($day==$dayChargeFeeBankTransferCommission) {
+                                                            $bankTransferCommission += $orl->netPrice / 100 * $feeBankTransferCommission;
+                                                            $isBillPayment=1;
+                                                        }else{
+                                                            $bankTransferCommission+=0;
+                                                            $isBillPayment=null;
+                                                        }
                                                         break;
                                                     case 5:
-                                                        $codCommission += $orl->netPrice / 100 * $feeCodCommission;
+                                                        if($day==$dayChargeFeeCodCommission) {
+                                                            $codCommission += $orl->netPrice / 100 * $feeCodCommission;
+                                                            $isBillPayment = 1;
+                                                        }else{
+                                                            $codCommission+=0;
+                                                            $isBillPayment=null;
+                                                        }
                                                         break;
 
                                                 }
@@ -138,12 +180,26 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                                 $orderLineHasShipment = \Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId' => $orl->id,'orderId' => $orl->orderId]);
                                                 foreach ($orderLineHasShipment as $olhs) {
                                                     $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id' => $olhs->shipmentId]);
-                                                    if ($shipment->realShipmentPrice != null) {
-                                                        $costDeliveryCommission += $shipment->realShipmentPrice + ($shipment->realShipmentPrice / 100 * $feeCostDeliveryCommission);
+                                                    if($day==$periodTypeChargeDelivery) {
+                                                        $isBillDeliveryCost=1;
+                                                        if ($shipment->realShipmentPrice != null) {
+                                                            $costDeliveryCommission += $shipment->realShipmentPrice + ($shipment->realShipmentPrice / 100 * $feeCostDeliveryCommission);
+                                                        }
+                                                    }else{
+                                                        $costDeliveryCommission=0;
+                                                        $isBillDeliveryCost=1;
                                                     }
 
                                                 }
-                                                $orl->isBill = 1;
+                                                if($isBillDeliveryCost==1 && $isBillPayment==1 && $isBillService==1){
+                                                    $isBill=1;
+                                                }else{
+                                                    $isBill=null;
+                                                }
+                                                $orl->isBillService=$isBillService;
+                                                $orl->isBillPayment=$isBillPayment;
+                                                $orl->isBillDeliveryCost=$isBillDeliveryCost;
+                                                $orl->isBill = $isBill;
                                                 $orl->update();
                                             }
                                         } else {
@@ -158,106 +214,119 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $vatRowTotalExtra = ($paypalCommission + $codCommission + $bankTransferCommission + $creditCardCommission + $costDeliveryCommission) / 100 * $customerTaxes->perc;
                                     $vat += $vatRowTotalExtra;
                                     $grossTotal += $netTotalRow + $vatRowTotalExtra;
-                                    if ($paypalCommission != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => $descfeePaypalCommission,
-                                            'qty' => 1,
-                                            'priceRow' => $paypalCommission,
-                                            'netPrice' => $paypalCommission,
-                                            'vatRow' => $paypalCommission / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $paypalCommission + ($paypalCommission / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+                                    if($day==$dayChargeFeePaypalCommission) {
+                                        if ($paypalCommission != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descfeePaypalCommission,
+                                                'qty' => 1,
+                                                'priceRow' => $paypalCommission,
+                                                'netPrice' => $paypalCommission,
+                                                'vatRow' => $paypalCommission / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $paypalCommission + ($paypalCommission / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
-                                    if ($codCommission != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => $descfeeCodCommission,
-                                            'qty' => 1,
-                                            'priceRow' => $codCommission,
-                                            'netPrice' => $codCommission,
-                                            'vatRow' => $codCommission / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $codCommission + ($codCommission / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+                                    if($day==$dayChargeFeeCodCommission) {
+                                        if ($codCommission != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descfeeCodCommission,
+                                                'qty' => 1,
+                                                'priceRow' => $codCommission,
+                                                'netPrice' => $codCommission,
+                                                'vatRow' => $codCommission / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $codCommission + ($codCommission / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
-                                    if ($bankTransferCommission != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => $descfeeBankTransferCommission,
-                                            'qty' => 1,
-                                            'priceRow' => $bankTransferCommission,
-                                            'netPrice' => $bankTransferCommission,
-                                            'vatRow' => $bankTransferCommission / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $bankTransferCommission + ($bankTransferCommission / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+                                    if($day==$dayChargeFeeBankTransferCommission) {
+                                        if ($bankTransferCommission != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descfeeBankTransferCommission,
+                                                'qty' => 1,
+                                                'priceRow' => $bankTransferCommission,
+                                                'netPrice' => $bankTransferCommission,
+                                                'vatRow' => $bankTransferCommission / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $bankTransferCommission + ($bankTransferCommission / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
-                                    if ($creditCardCommission != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => $descfeeCreditCardCommission,
-                                            'qty' => 1,
-                                            'priceRow' => $creditCardCommission,
-                                            'netPrice' => $creditCardCommission,
-                                            'vatRow' => $creditCardCommission / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $creditCardCommission + ($creditCardCommission / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+                                    if($day==$dayChargeFeeCreditCardCommission) {
+                                        if ($creditCardCommission != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descfeeCreditCardCommission,
+                                                'qty' => 1,
+                                                'priceRow' => $creditCardCommission,
+                                                'netPrice' => $creditCardCommission,
+                                                'vatRow' => $creditCardCommission / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $creditCardCommission + ($creditCardCommission / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
-                                    if ($feeCostDeliveryCommission != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => 'commissioni su Spedizioni',
-                                            'qty' => 1,
-                                            'priceRow' => $feeCostDeliveryCommission,
-                                            'netPrice' => $feeCostDeliveryCommission,
-                                            'vatRow' => $feeCostDeliveryCommission / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $feeCostDeliveryCommission + ($feeCostDeliveryCommission / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+                                    if($day==$periodTypeChargeDelivery) {
+                                        if ($feeCostDeliveryCommission != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => 'commissioni su Spedizioni',
+                                                'qty' => 1,
+                                                'priceRow' => $feeCostDeliveryCommission,
+                                                'netPrice' => $feeCostDeliveryCommission,
+                                                'vatRow' => $feeCostDeliveryCommission / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $feeCostDeliveryCommission + ($feeCostDeliveryCommission / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
-                                    $netTotalRowContract = $valueContractRow;
-                                    $netTotal += $netTotalRowContract;
-                                    $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
-                                    $vat += $vatRowTotalExtra;
-                                    $grossTotal += $netTotalRowContract + $vatRowTotalExtra;
-                                    if ($valueContractRow != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => 'Servizio MonkSource',
-                                            'qty' => 1,
-                                            'priceRow' => $valueContractRow,
-                                            'netPrice' => $valueContractRow,
-                                            'vatRow' => $valueContractRow / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $valueContractRow + ($valueContractRow / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+
+                                    if($day==$billingDay) {
+                                        $netTotalRowContract = $valueContractRow;
+                                        $netTotal += $netTotalRowContract;
+                                        $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
+                                        $vat += $vatRowTotalExtra;
+                                        $grossTotal += $netTotalRowContract + $vatRowTotalExtra;
+                                        if ($valueContractRow != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descriptionValue,
+                                                'qty' => 1,
+                                                'priceRow' => $valueContractRow,
+                                                'netPrice' => $valueContractRow,
+                                                'vatRow' => $valueContractRow / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $valueContractRow + ($valueContractRow / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
                                 } else {
                                     continue 2;
@@ -289,29 +358,46 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $feeCostCommissionPayment = $billRegistryRowMonkAir->feeCostCommissionPayment;
                                     $periodTypeChargePayment = $billRegistryRowMonkAir->periodTypeChargePayment;
                                     $paymentTypePaymentId = $billRegistryRowMonkAir->paymentTypePaymentId;
+                                    $descfeeCodCommission = $billRegistryRowMonkAir->descfeeCodCommission;
+                                    $descfeeCreditCardCommission = $billRegistryRowMonkAir->descfeeCreditCardCommission;
+                                    $descfeeBankTransferCommission = $billRegistryRowMonkAir->descfeeBankTransferCommission;
+                                    $descfeePaypalCommission = $billRegistryRowMonkAir->descfeePaypalCommission;
+                                    $feeCreditCardCommission = $billRegistryRowMonkAir->feeCreditCardCommission;
+                                    $descfeeCostDeliveryCommission=$billRegistryRowMonkAir->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment=$billRegistryRowMonkAir->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue=$billRegistryRowMonkAir->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission=$billRegistryRowMonkAir->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission=$billRegistryRowMonkAir->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowMonkAir->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowMonkAir->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMonkAir->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMonkAir->billRegistryProductFeeCostCommissionPayment;
 
 
                                     $customerTaxes = $billRegistryTypeTaxesRepo->findOneBy(['id' => $billRegistryClientBillingInfo->billRegistryTypeTaxesId]);
-                                    $netTotalRow = $valueContractRow;
-                                    $netTotal += $netTotalRow;
-                                    $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
-                                    $vat += $vatRowTotalExtra;
-                                    $grossTotal += $netTotalRow + $vatRowTotalExtra;
-                                    if ($valueContractRow != 0) {
-                                        $rowInvoiceExtraFee[] = [
-                                            'billRegistryProductId' => 0,
-                                            'description' => 'Servizio Monk Air',
-                                            'qty' => 1,
-                                            'priceRow' => $valueContractRow,
-                                            'netPrice' => $valueContractRow,
-                                            'vatRow' => $valueContractRow / 100 * $customerTaxes->perc,
-                                            'grossTotalRow' => $valueContractRow + ($valueContractRow / 100 * $customerTaxes->perc),
-                                            'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                            'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                            'billRegistryContractId' => $contractId,
-                                            'billRegistryContractRowId' => $contractRowId,
-                                            'billRegistryContractRowDetailId' => 0
-                                        ];
+
+                                    if($day==$billingDay) {
+                                        $netTotalRow = $valueContractRow;
+                                        $netTotal += $netTotalRow;
+                                        $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
+                                        $vat += $vatRowTotalExtra;
+                                        $grossTotal += $netTotalRow + $vatRowTotalExtra;
+                                        if ($valueContractRow != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => 'Servizio Monk Air',
+                                                'qty' => 1,
+                                                'priceRow' => $valueContractRow,
+                                                'netPrice' => $valueContractRow,
+                                                'vatRow' => $valueContractRow / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $valueContractRow + ($valueContractRow / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
                                     }
                                 } else {
                                     continue 2;
@@ -329,95 +415,20 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 $prepaidPaymentIsActive = $billRegistryRowMonkEntrySocial->prepaidPaymentIsActive;
                                 $prepaidCost = $billRegistryRowMonkEntrySocial->prepaidCost;
                                 $startUpCostIsPaid = $billRegistryRowMonkEntrySocial->startUpCostIsPaid;
-
-                                if ($startUpCostIsPaid == null || $startUpCostIsPaid == 0) {
-                                    $netTotalRowStartUpCost = $startUpCostIsPaid;
-                                    $vatTotalRowStartUPCost = $netTotalRowStartUpCost / 100 * $customerTaxes->perc;
-                                    $vat += $vatTotalRowStartUPCost;
-                                    $netTotal += $netTotalRowStartUpCost;
-                                    $grossTotal += $netTotalRowStartUpCost + $vatTotalRowStartUPCost;
-                                    $rowInvoiceExtraFee[] = [
-                                        'billRegistryProductId' => 0,
-                                        'description' => 'Costo di StartUp Campagna',
-                                        'qty' => 1,
-                                        'priceRow' => $startUpCostIsPaid,
-                                        'netPrice' => $startUpCostIsPaid,
-                                        'vatRow' => $startUpCostIsPaid / 100 * $customerTaxes->perc,
-                                        'grossTotalRow' => $startUpCostIsPaid + ($startUpCostIsPaid / 100 * $customerTaxes->perc),
-                                        'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                        'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                        'billRegistryContractId' => $contractId,
-                                        'billRegistryContractRowId' => $contractRowId,
-                                        'billRegistryContractRowDetailId' => 0
-                                    ];
-                                }
-                                $netTotalRowPrepaidCost = $prepaidCost;
-                                $netTotal += $netTotalRowPrepaidCost;
-                                $vatRowTotalPrepaidCost = $netTotalRowPrepaidCost / 100 * $customerTaxes->perc;
-                                $vat += $vatRowTotalPrepaidCost;
-                                $grossTotal += $netTotalRowPrepaidCost + $vatRowTotalPrepaidCost;
-                                if ($prepaidCost != 0) {
-                                    $rowInvoiceExtraFee[] = [
-                                        'billRegistryProductId' => 0,
-                                        'description' => 'Servizio MonkEntrySocial',
-                                        'qty' => 1,
-                                        'priceRow' => $prepaidCost,
-                                        'netPrice' => $prepaidCost,
-                                        'vatRow' => $prepaidCost / 100 * $customerTaxes->perc,
-                                        'grossTotalRow' => $prepaidCost + ($prepaidCost / 100 * $customerTaxes->perc),
-                                        'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                        'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                        'billRegistryContractId' => $contractId,
-                                        'billRegistryContractRowId' => $contractRowId,
-                                        'billRegistryContractRowDetailId' => 0
-                                    ];
-                                }
-                                $netTotalRowAgencyCommision = $prepaidCost / 100 * $feeAgencyCommision;
-                                $netTotal += $netTotalRowAgencyCommision;
-                                $vatRowTotalAgencyCommision = $netTotalRowAgencyCommision / 100 * $customerTaxes->perc;
-                                $vat += $vatRowTotalAgencyCommision;
-                                $grossTotal += $netTotalRowAgencyCommision + $vatRowTotalAgencyCommision;
-                                if ($prepaidCost != 0) {
-                                    $rowInvoiceExtraFee[] = [
-                                        'billRegistryProductId' => 0,
-                                        'description' => 'Servizio MonkEntrySocial',
-                                        'qty' => 1,
-                                        'priceRow' => $netTotalRowAgencyCommision,
-                                        'netPrice' => $netTotalRowAgencyCommision,
-                                        'vatRow' => $vatRowTotalAgencyCommision,
-                                        'grossTotalRow' => $netTotalRowAgencyCommision + $vatRowTotalAgencyCommision,
-                                        'billRegistryTypeTaxesId' => $customerTaxes->id,
-                                        'billRegistryTypeTaxesDesc' => $customerTaxes->description,
-                                        'billRegistryContractId' => $contractId,
-                                        'billRegistryContractRowId' => $contractRowId,
-                                        'billRegistryContractRowDetailId' => 0
-                                    ];
-                                }
-
-
-                                break;
-                            case 4:
-                                $billRegistryRowMonkEntryTraffic = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
-                                if ($billRegistryRowMonkEntryTraffic != null) {
-                                    $automaticInvoice = $billRegistryRowMonkEntryTraffic->automaticInvoice;
-                                    $descriptionInvoice = $billRegistryRowMonkEntryTraffic->descriptionInvoice;
-                                    $startUpCostCampaign = $billRegistryRowMonkEntryTraffic->startUpCostCampaign;
-                                    $billingDay = $billRegistryRowMonkEntryTraffic->billingDay;
-                                    $typePaymentId = $billRegistryRowMonkEntryTraffic->typePaymentId;
-                                    $feeAgencyCommision = $billRegistryRowMonkEntryTraffic->feeAgencyCommision;
-                                    $prepaidPaymentIsActive = $billRegistryRowMonkEntryTraffic->prepaidPaymentIsActive;
-                                    $prepaidCost = $billRegistryRowMonkEntryTraffic->prepaidCost;
-                                    $startUpCostIsPaid = $billRegistryRowMonkEntryTraffic->startUpCostIsPaid;
-
+                                $descriptionContractRow=$billRegistryRowMonkEntrySocial->descriptionRow;
+                                $nameContractRow=$billRegistryRowMonkEntrySocial->nameRow;
+                                $billRegistryProductStartUpCostCampaign=$billRegistryRowMonkEntrySocial->billRegistryProductStartUpCostCampaign;
+                                $billRegistryProductFeeAgencyCommision=$billRegistryRowMonkEntrySocial->billRegistryProductFeeAgencyCommision;
+                                if($billingDay==$today) {
                                     if ($startUpCostIsPaid == null || $startUpCostIsPaid == 0) {
                                         $netTotalRowStartUpCost = $startUpCostIsPaid;
-                                        $vatTotalRowStartUpCost = $netTotalRowStartUpCost / 100 * $customerTaxes->perc;
-                                        $vat += $vatTotalRowStartUpCost;
+                                        $vatTotalRowStartUPCost = $netTotalRowStartUpCost / 100 * $customerTaxes->perc;
+                                        $vat += $vatTotalRowStartUPCost;
                                         $netTotal += $netTotalRowStartUpCost;
-                                        $grossTotal += $netTotalRowStartUpCost + $vatTotalRowStartUpCost;
+                                        $grossTotal += $netTotalRowStartUpCost + $vatTotalRowStartUPCost;
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
-                                            'description' => 'Costo di StartUp Campagna',
+                                            'description' => 'Costo di StartUp Campagna ' . $descriptionInvoice,
                                             'qty' => 1,
                                             'priceRow' => $startUpCostIsPaid,
                                             'netPrice' => $startUpCostIsPaid,
@@ -459,7 +470,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     if ($prepaidCost != 0) {
                                         $rowInvoiceExtraFee[] = [
                                             'billRegistryProductId' => 0,
-                                            'description' => 'Commissioni Agenzia MonkEntrySocial',
+                                            'description' => 'Servizio MonkEntrySocial',
                                             'qty' => 1,
                                             'priceRow' => $netTotalRowAgencyCommision,
                                             'netPrice' => $netTotalRowAgencyCommision,
@@ -472,7 +483,92 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             'billRegistryContractRowDetailId' => 0
                                         ];
                                     }
-                                } else {
+                                }
+
+
+                                break;
+                            case 4:
+                                $billRegistryRowMonkEntryTraffic = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
+                                if ($billRegistryRowMonkEntryTraffic != null) {
+                                    $automaticInvoice = $billRegistryRowMonkEntryTraffic->automaticInvoice;
+                                    $descriptionInvoice = $billRegistryRowMonkEntryTraffic->descriptionInvoice;
+                                    $startUpCostCampaign = $billRegistryRowMonkEntryTraffic->startUpCostCampaign;
+                                    $billingDay = $billRegistryRowMonkEntryTraffic->billingDay;
+                                    $typePaymentId = $billRegistryRowMonkEntryTraffic->typePaymentId;
+                                    $feeAgencyCommision = $billRegistryRowMonkEntryTraffic->feeAgencyCommision;
+                                    $prepaidPaymentIsActive = $billRegistryRowMonkEntryTraffic->prepaidPaymentIsActive;
+                                    $prepaidCost = $billRegistryRowMonkEntryTraffic->prepaidCost;
+                                    $startUpCostIsPaid = $billRegistryRowMonkEntryTraffic->startUpCostIsPaid;
+                                    $descriptionContractRow = $billRegistryRowMonkEntrySocial->descriptionRow;
+                                    $nameContractRow = $billRegistryRowMonkEntrySocial->nameRow;
+                                    $billRegistryProductStartUpCostCampaign = $billRegistryRowMonkEntrySocial->billRegistryProductStartUpCostCampaign;
+                                    $billRegistryProductFeeAgencyCommision = $billRegistryRowMonkEntrySocial->billRegistryProductFeeAgencyCommision;
+                                    if ($billingDay == $today) {
+                                        if ($startUpCostIsPaid == null || $startUpCostIsPaid == 0) {
+                                            $netTotalRowStartUpCost = $startUpCostIsPaid;
+                                            $vatTotalRowStartUpCost = $netTotalRowStartUpCost / 100 * $customerTaxes->perc;
+                                            $vat += $vatTotalRowStartUpCost;
+                                            $netTotal += $netTotalRowStartUpCost;
+                                            $grossTotal += $netTotalRowStartUpCost + $vatTotalRowStartUpCost;
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => 'Costo di StartUp Campagna',
+                                                'qty' => 1,
+                                                'priceRow' => $startUpCostIsPaid,
+                                                'netPrice' => $startUpCostIsPaid,
+                                                'vatRow' => $startUpCostIsPaid / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $startUpCostIsPaid + ($startUpCostIsPaid / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
+                                        $netTotalRowPrepaidCost = $prepaidCost;
+                                        $netTotal += $netTotalRowPrepaidCost;
+                                        $vatRowTotalPrepaidCost = $netTotalRowPrepaidCost / 100 * $customerTaxes->perc;
+                                        $vat += $vatRowTotalPrepaidCost;
+                                        $grossTotal += $netTotalRowPrepaidCost + $vatRowTotalPrepaidCost;
+                                        if ($prepaidCost != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => 'Servizio MonkEntrySocial',
+                                                'qty' => 1,
+                                                'priceRow' => $prepaidCost,
+                                                'netPrice' => $prepaidCost,
+                                                'vatRow' => $prepaidCost / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $prepaidCost + ($prepaidCost / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
+                                        $netTotalRowAgencyCommision = $prepaidCost / 100 * $feeAgencyCommision;
+                                        $netTotal += $netTotalRowAgencyCommision;
+                                        $vatRowTotalAgencyCommision = $netTotalRowAgencyCommision / 100 * $customerTaxes->perc;
+                                        $vat += $vatRowTotalAgencyCommision;
+                                        $grossTotal += $netTotalRowAgencyCommision + $vatRowTotalAgencyCommision;
+                                        if ($prepaidCost != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => 'Commissioni Agenzia MonkEntrySocial',
+                                                'qty' => 1,
+                                                'priceRow' => $netTotalRowAgencyCommision,
+                                                'netPrice' => $netTotalRowAgencyCommision,
+                                                'vatRow' => $vatRowTotalAgencyCommision,
+                                                'grossTotalRow' => $netTotalRowAgencyCommision + $vatRowTotalAgencyCommision,
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
+                                    }
+                                }else {
                                     continue 2;
                                 }
                                 break;
@@ -484,6 +580,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $billingDay = $billRegistryRowSocialMonk->billingDay;
                                     $typePaymentId = $billRegistryRowSocialMonk->typePaymentId;
                                     $periodTypeCharge = $billRegistryRowSocialMonk->periodTypeCharge;
+                                    $descriptionValue=$billRegistryRowSocialMonk->descriptionValue;
                                     $sellingFeeCommision = $billRegistryRowSocialMonk->sellingFeeCommision;
                                     $feeCreditCardCommission = $billRegistryRowSocialMonk->feeCreditCardCommission;
                                     $dayChargeFeeCreditCardCommission = $billRegistryRowSocialMonk->dayChargeFeeCreditCardCommission;
@@ -501,17 +598,56 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $feeCostCommissionPayment = $billRegistryRowSocialMonk->feeCostCommissionPayment;
                                     $periodTypeChargePayment = $billRegistryRowSocialMonk->periodTypeChargePayment;
                                     $paymentTypePaymentId = $billRegistryRowSocialMonk->paymentTypePaymentId;
+                                    $descfeeCodCommission = $billRegistryRowMonkAir->descfeeCodCommission;
+                                    $descfeeCreditCardCommission = $billRegistryRowMonkAir->descfeeCreditCardCommission;
+                                    $descfeeBankTransferCommission = $billRegistryRowMonkAir->descfeeBankTransferCommission;
+                                    $descfeePaypalCommission = $billRegistryRowMonkAir->descfeePaypalCommission;
+                                    $feeCreditCardCommission = $billRegistryRowMonkAir->feeCreditCardCommission;
+                                    $descfeeCostDeliveryCommission=$billRegistryRowMonkAir->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment=$billRegistryRowMonkAir->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue=$billRegistryRowMonkAir->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission=$billRegistryRowMonkAir->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission=$billRegistryRowMonkAir->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowMonkAir->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowMonkAir->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMonkAir->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMonkAir->billRegistryProductFeeCostCommissionPayment;
+                                    if($day==$billingDay) {
+                                        $netTotalRow = $valueContractRow;
+                                        $netTotal += $netTotalRow;
+                                        $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
+                                        $vat += $vatRowTotalExtra;
+                                        $grossTotal += $netTotalRow + $vatRowTotalExtra;
+                                        if ($valueContractRow != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descriptionValue,
+                                                'qty' => 1,
+                                                'priceRow' => $valueContractRow,
+                                                'netPrice' => $valueContractRow,
+                                                'vatRow' => $valueContractRow / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $valueContractRow + ($valueContractRow / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
+                                    }
                                 } else {
                                     continue 2;
                                 }
                                 break;
                             case 7:
                                 $billRegistryRowMailMonk = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findOneBy(['billRegistryContractRowId' => $contractRowId]);
+                                if ($billRegistryRowMailMonk != null) {
                                 $automaticInvoice = $billRegistryRowMailMonk->automaticInvoice;
                                 $emailAccount = $billRegistryRowMailMonk->emailAccount;
                                 $emailAccountSendQty = $billRegistryRowMailMonk->emailAccountSendQty;
                                 $emailAccountCampaignQty = $billRegistryRowMailMonk->emailAccountCampaignQty;
                                 $valueContractRow = $billRegistryRowMailMonk->value;
+                                $descriptionValue=$billRegistryRowMailMonk->descriptionValue;
                                 $billingDay = $billRegistryRowMailMonk->billingDay;
                                 $typePaymentId = $billRegistryRowMailMonk->typePaymentId;
                                 $periodTypeCharge = $billRegistryRowMailMonk->periodTypeCharge;
@@ -532,6 +668,46 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 $feeCostCommissionPayment = $billRegistryRowMailMonk->feeCostCommissionPayment;
                                 $periodTypeChargePayment = $billRegistryRowMailMonk->periodTypeChargePayment;
                                 $paymentTypePaymentId = $billRegistryRowMailMonk->paymentTypePaymentId;
+                                $descfeeCodCommission = $billRegistryRowMonkAir->descfeeCodCommission;
+                                $descfeeCreditCardCommission = $billRegistryRowMonkAir->descfeeCreditCardCommission;
+                                $descfeeBankTransferCommission = $billRegistryRowMonkAir->descfeeBankTransferCommission;
+                                $descfeePaypalCommission = $billRegistryRowMonkAir->descfeePaypalCommission;
+                                $feeCreditCardCommission = $billRegistryRowMonkAir->feeCreditCardCommission;
+                                $descfeeCostDeliveryCommission=$billRegistryRowMonkAir->descfeeCostDeliveryCommission;
+                                $descfeeCostCommissionPayment=$billRegistryRowMonkAir->descfeeCostCommissionPayment;
+                                $billRegistryProductValue=$billRegistryRowMonkAir->billRegistryProductValue;
+                                $billRegistryProductFeeCodCommission=$billRegistryRowMonkAir->billRegistryProductFeeCodCommission;
+                                $billRegistryProductFeePaypalCommission=$billRegistryRowMonkAir->billRegistryProductFeePaypalCommission;
+                                $billRegistryProductFeeBankTransferCommission=$billRegistryRowMonkAir->billRegistryProductFeeBankTransferCommission;
+                                $billRegistryProductFeeCreditCardCommission=$billRegistryRowMonkAir->billRegistryProductFeeCreditCardCommission;
+                                $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMonkAir->billRegistryProductFeeCostDeliveryCommission;
+                                $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMonkAir->billRegistryProductFeeCostCommissionPayment;
+                                    if($day==$billingDay) {
+                                        $netTotalRow = $valueContractRow;
+                                        $netTotal += $netTotalRow;
+                                        $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
+                                        $vat += $vatRowTotalExtra;
+                                        $grossTotal += $netTotalRow + $vatRowTotalExtra;
+                                        if ($valueContractRow != 0) {
+                                            $rowInvoiceExtraFee[] = [
+                                                'billRegistryProductId' => 0,
+                                                'description' => $descriptionValue,
+                                                'qty' => 1,
+                                                'priceRow' => $valueContractRow,
+                                                'netPrice' => $valueContractRow,
+                                                'vatRow' => $valueContractRow / 100 * $customerTaxes->perc,
+                                                'grossTotalRow' => $valueContractRow + ($valueContractRow / 100 * $customerTaxes->perc),
+                                                'billRegistryTypeTaxesId' => $customerTaxes->id,
+                                                'billRegistryTypeTaxesDesc' => $customerTaxes->description,
+                                                'billRegistryContractId' => $contractId,
+                                                'billRegistryContractRowId' => $contractRowId,
+                                                'billRegistryContractRowDetailId' => 0
+                                            ];
+                                        }
+                                    }
+                                } else {
+                                    continue 2;
+                                }
                                 break;
 
                         }
