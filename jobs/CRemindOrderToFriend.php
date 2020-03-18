@@ -49,7 +49,7 @@ class CRemindOrderToFriend extends ACronJob
                     /** @var CEmailRepo $emailRepo */
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
                     $emailRepo->newPackagedTemplateMail('friendorderreminder','no-reply@iwes.pro', $to,[],[],
-                        ['lines'=>$orderGetLines]);
+                        ['lines'=>$orderGetLines],'MailGun',null);
 
                     $this->report('Working Shop ' . $shop->name . ' End', 'Reminder Sent ended');
                 }

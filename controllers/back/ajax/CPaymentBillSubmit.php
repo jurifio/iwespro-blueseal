@@ -49,7 +49,7 @@ class CPaymentBillSubmit extends AAjaxController
                 $mailRepo->newPackagedTemplateMail('friendpaymentmail', 'no-reply@iwes.pro', $to, [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
                     'name' => $name,
                     'total' => $total,
-                    'payment' => $payment]);
+                    'payment' => $payment],'MailGun',null);
             }
         }
 

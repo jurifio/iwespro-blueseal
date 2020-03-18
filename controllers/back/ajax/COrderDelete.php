@@ -58,7 +58,7 @@ class COrderDelete extends AAjaxController
                 'lang' => $lang->lang,
                 'userNameOrder'=>$order->user->getName(),
                 'couponAmount'=>$coupon->amount,
-                'couponCode'=>$coupon->code]);
+                'couponCode'=>$coupon->code],'Mailgun',null);
 
         if ($res) return 'ok';
         return false;

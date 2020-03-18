@@ -74,7 +74,7 @@ class CDispatchInvoiceToAdministrativeShopContactJobs extends ACronJob
 
                 /** @var CEmailRepo $emailRepo */
                 $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                $emailRepo->newPackagedTemplateMail('sendinvoicetoshop','no-reply@iwes.pro',$to,[],[],['shopName'=>$shopName,'bodyList' => $bodyList,'bodyInvoice' => $bodyInvoice,'bodyMail' => $bodyMail]);
+                $emailRepo->newPackagedTemplateMail('sendinvoicetoshop','no-reply@iwes.pro',$to,[],[],['shopName'=>$shopName,'bodyList' => $bodyList,'bodyInvoice' => $bodyInvoice,'bodyMail' => $bodyMail],'MailGun',null);
                 $this->report('CDispatchInvoiceToAdministrativeShopContactJobs', $bodyLog,'');
             }catch(\Throwable $e){
                 $this->report('CDispatchInvoiceToAdministrativeShopContactJobs', 'Error',$e);

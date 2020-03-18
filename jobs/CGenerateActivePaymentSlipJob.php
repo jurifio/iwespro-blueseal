@@ -32,7 +32,7 @@ class CGenerateActivePaymentSlipJob extends ACronJob
             $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
             $res = $this->app->dbAdapter->query('SELECT group_concat(btt.id) as id,SUM(btt.amountPayment) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
 JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id where btt.amountPaid =0 and btt.datePayment is null
-GROUP BY bri.billRegistryClientId,date_format(btt.dateEstimated,"%d-%c-%Y"),bri.billRegistryTypePaymentId',[])->fetchAll();
+GROUP BY bri.billRegistryClientId,bri.billRegistryTypePaymentId',[])->fetchAll();
             $today = new \DateTime();
             $creationDate = $today->format('Y-m-d H:i:s');
             $numberPaymentBankSlip=$this->app->dbAdapter->query("SELECT ifnull(MAX(bankSlipNumberId),0)+1 as bankSlipNumberId

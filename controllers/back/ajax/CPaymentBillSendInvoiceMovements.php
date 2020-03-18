@@ -61,7 +61,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
                 'billId' => $paymentBillId,
                 'name' => $name,
                 'total' => abs($total),
-                'payment' => $payment]);
+                'payment' => $payment],'Mailgun',null);
         }
 
         return true;

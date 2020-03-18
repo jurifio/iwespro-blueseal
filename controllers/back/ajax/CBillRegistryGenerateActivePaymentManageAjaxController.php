@@ -145,7 +145,6 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
 
                 }
                 $newNumber= $numberDocument['AUTO_INCREMENT']+1;
-                $newNumber= $numberDocument['AUTO_INCREMENT']+1;
                 $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
                 $updateNumberDocument->execute();
 
