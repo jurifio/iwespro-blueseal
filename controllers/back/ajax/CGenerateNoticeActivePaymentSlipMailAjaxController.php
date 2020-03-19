@@ -23,7 +23,7 @@ use Monkey;
  * @date 16/03/2020
  * @since 1.0
  */
-class CGenerateCustomerActivePaymentSlipMailAjaxController extends AAjaxController
+class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
 {
 
     public function post()
@@ -99,7 +99,7 @@ class CGenerateCustomerActivePaymentSlipMailAjaxController extends AAjaxControll
 
                 $daynotice=new \DateTime($slip['dateEstimated']);
                 $dateToStart=$daynotice->add(new \DateInterval('P10D'));
-                if($today>=$dayToStart) {
+                if($today>=$dateToStart) {
 
                     $slipArray = explode(',',$slip['id']);
                     $invoiceIds = explode(',',$slip['invoiceId']);
