@@ -60,6 +60,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
         $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlipRepo');
         $today = new \DateTime();
         $day = (new \DateTime())->format('d');
+
         try {
             $sql = "select 
                     brc.id as billRegistryClientId,    
@@ -68,12 +69,15 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                   `braps`.`creationDate` as `creationDate`,
                   `braps`.`paymentDate` as `PaymentDate`,
                   `braps`.`submissionDate` as `submissionDate`,
+                  `brtt`.dateEstimated as dateEstimated,  
                   `braps`.`note` as `note`,
                   `brps`.`name` as `statusId`,
                   `brca`.`shopId` as shopId, 
                   `pb`.id as paymentBillId,
+                  `brtt`.amountPayment as amountPayment,                
                   `pb`.amount as negativeAmount,  
                   `braps`.`amount` as positiveAmount, 
+                   braps.noticeCounter as noticeCounter, 
                   GROUP_CONCAT(brtp.name) AS typePayment,
 						GROUP_CONCAT(brtt.description) AS descriptionRow, 
                   GROUP_CONCAT(DISTINCT `braps`.`id`) AS id,
@@ -90,7 +94,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                 join `BillRegistryActivePaymentSlipStatus` `brps` on `braps`.`statusId`=`brps`.`id`
                 LEFT JOIN PaymentBill pb on braps.paymentBillId=pb.id
                 LEFT JOIN Document d on pb.id=d.id      
-                LEFT JOIN AddressBook a on d.shopRecipientId=a.id where braps.statusId=6
+                LEFT JOIN AddressBook a on d.shopRecipientId=a.id where braps.statusId=6 AND brtt.amountPaid=0 AND brtt.dateEstimated <=NOW()
                 GROUP BY brc.id
               ";
             $attachmentRoot = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempMail') ;
@@ -99,37 +103,159 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
             $attachment=[];
             foreach ($slips as $slip) {
 
-                $slipArray = explode(',',$slip['id']);
-                $invoiceIds = explode(',',$slip['invoiceId']);
-                $numberSlip=$slip['numberSlip'];
-                $slipTotalAmount=$slip['totalAmount'];
-                $slipFinalDate=$slip['PaymentDate'];
-                foreach($invoiceIds as $invoiceId){
-                    $bri=$billRegistryInvoiceRepo->findOneBy(['id'=>$invoiceId]);
-                    $attachment[] = ['filePath'=>$attachmentRoot . '/' . $bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html','fileName'=>$bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html'];
-                    $attachmentFile=fopen($attachmentRoot.'/'.$bri->invoiceNumber.$bri->invoiceType.$bri->invoiceYear.'.html','w');
-                    fwrite($attachmentFile,$bri->invoiceText);
-                    fclose($attachmentFile);
-                }
-                $billRegistryClient=$billRegistryClientRepo->findOneBy(['id'=>$slip['billRegistryClientId']]);
+                $daynotice=new \DateTime($slip['dateEstimated']);
+                $dateToStart=$daynotice->add(new \DateInterval('P10D'));
+                if($today>=$dateToStart) {
 
-                $to=[$billRegistryClient->emailAdmin];
-                $tobcc=['gianluca@iwes.it'];
-                /** @var CEmailRepo $mailRepo */
-                $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                $mailRepo->newPackagedMail('sendactivesliptocustomer', 'no-reply@pickyshop.com', $to, $tobcc, ['amministrazione@iwes.it'], ['invoiceIds' => $invoiceIds,
-                    'slipArray' => $slipArray,
-                    'numberSlip' => $numberSlip,
-                    'slipTotalAmount' => $slipTotalAmount,
-                    'slipFinalDate' =>$slipFinalDate,
-                ],'MailGun',$attachment);
-                $braps=$billRegistryActivePaymentSlipRepo->findBy(['numberSlip'=>$numberSlip]);
-                foreach($braps as $paymentBill){
-                    $paymentBill->statusId=1;
-                    $paymentBill->udpate();
-                }
+                    $slipArray = explode(',',$slip['id']);
+                    $invoiceIds = explode(',',$slip['invoiceId']);
+                    $numberSlip = $slip['numberSlip'];
+                    $slipTotalAmount = 0;
+                    $braps = $billRegistryActivePaymentSlipRepo->findBy(['numberSlip' => $numberSlip]);
+                    foreach ($braps as $totalslip) {
+                        $slipTotalAmount += $totalslip->amount;
+                    }
+                    $amountPayment = $slip['amountPayment'];
+                    $slipFinalDate = $slip['PaymentDate'];
+                    $noticeCounter = $slip['noticeCounter'];
+                    $dateEstimated = $slip['dateEstimated'];
+                    foreach ($invoiceIds as $invoiceId) {
+                        $bri = $billRegistryInvoiceRepo->findOneBy(['id' => $invoiceId]);
+                        $attachment[] = ['filePath' => $attachmentRoot . '/' . $bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html','fileName' => $bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html'];
+                        $attachmentFile = fopen($attachmentRoot . '/' . $bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html','w');
+                        fwrite($attachmentFile,$bri->invoiceText);
+                        fclose($attachmentFile);
+                    }
+                    $billRegistryClient = $billRegistryClientRepo->findOneBy(['id' => $slip['billRegistryClientId']]);
 
+                    $to = [$billRegistryClient->emailAdmin];
+                    $braps = $billRegistryActivePaymentSlipRepo->findBy(['numberSlip' => $numberSlip]);
+                    switch (true) {
+                        case ($today== $daynotice->add(new \DateInterval('P10D'))):
+                            $noticeCounter=1;
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('sendnoticesliptocustomer','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' => $slipFinalDate,
+                                'dateEstimated' => $dateEstimated,
+                                'noticeCounter' => $noticeCounter,
+                                'amount' => $amountPayment
+                            ],'MailGun',$attachment);
+
+                            foreach ($braps as $paymentBill) {
+                                $paymentBill->statusId = 3;
+                                $paymentBill->noticeCounter = $noticeCounter;
+                                $paymentBill->udpate();
+                            }
+                            break;
+                        case ($today== $daynotice->add(new \DateInterval('P20D'))):
+                            $noticeCounter=2;
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('sendnoticesliptocustomer','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' => $slipFinalDate,
+                                'dateEstimated' => $dateEstimated,
+                                'noticeCounter' => $noticeCounter,
+                                'amount' => $amountPayment
+                            ],'MailGun',$attachment);
+
+                            foreach ($braps as $paymentBill) {
+                                $paymentBill->statusId = 3;
+                                $paymentBill->noticeCounter = $noticeCounter;
+                                $paymentBill->udpate();
+                            }
+                            break;
+                        case ($today== $daynotice->add(new \DateInterval('P30D'))):
+                            $noticeCounter=3;
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('sendnoticesliptocustomer','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' => $slipFinalDate,
+                                'dateEstimated' => $dateEstimated,
+                                'noticeCounter' => $noticeCounter,
+                                'amount' => $amountPayment
+                            ],'MailGun',$attachment);
+
+                            foreach ($braps as $paymentBill) {
+                                $paymentBill->statusId = 3;
+                                $paymentBill->noticeCounter = $noticeCounter;
+                                $paymentBill->udpate();
+                            }
+                            break;
+                        case ($today== $daynotice->add(new \DateInterval('P40D'))):
+                            $noticeCounter=4;
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('sendnoticesliptocustomer','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' => $slipFinalDate,
+                                'dateEstimated' => $dateEstimated,
+                                'noticeCounter' => $noticeCounter,
+                                'amount' => $amountPayment
+                            ],'MailGun',$attachment);
+
+                            foreach ($braps as $paymentBill) {
+                                $paymentBill->statusId = 3;
+                                $paymentBill->noticeCounter = $noticeCounter;
+                                $paymentBill->udpate();
+                            }
+                            break;
+                        case ($today== $daynotice->add(new \DateInterval('P50D'))):
+                            $noticeCounter=5;
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('sendlastadvisesliptocustomer','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' => $slipFinalDate,
+                                'dateEstimated' => $dateEstimated,
+                                'noticeCounter' => $noticeCounter,
+                                'amount' => $amountPayment
+                            ],'MailGun',$attachment);
+                            foreach ($braps as $paymentBill) {
+                                $paymentBill->statusId = 4;
+                                $paymentBill->noticeCounter = $noticeCounter;
+                                $paymentBill->udpate();
+                            }
+                            break;
+                        case ($today== $daynotice->add(new \DateInterval('P60D'))):
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('senddismissservice','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' => $slipFinalDate,
+                                'dateEstimated' => $dateEstimated,
+                                'noticeCounter' => $noticeCounter,
+                                'amount' => $amountPayment
+                            ],'MailGun',$attachment);
+                            foreach ($braps as $paymentBill) {
+                                $paymentBill->statusId = 4;
+                                $paymentBill->noticeCounter = $noticeCounter;
+                                $paymentBill->udpate();
+                            }
+                            break;
+                    }
+                }else{
+                    continue;
+                }
             }
+
+
+
 
         } catch (\Throwable $e) {
 
