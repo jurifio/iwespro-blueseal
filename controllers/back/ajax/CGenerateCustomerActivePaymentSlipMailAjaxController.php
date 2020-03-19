@@ -70,9 +70,10 @@ class CGenerateCustomerActivePaymentSlipMailAjaxController extends AAjaxControll
                   `braps`.`amount` as positiveAmount, 
                   GROUP_CONCAT(brtp.name) AS typePayment,
 						GROUP_CONCAT(brtt.description) AS descriptionRow, 
-                  GROUP_CONCAT(DISTINCT `braps`.`id`) AS id,
+                  `braps`.`id` AS id,
                   count(DISTINCT `bri`.`billRegistryClientId`) AS `transfers`,
                   group_concat(DISTINCT   `brc`.`companyName`) AS `companyName`,
+                  group_concat(distinct DATE_FORMAT(brtt.dateEstimated,'%d-%m-%Y')) as dateEstimated,
                   group_concat(DISTINCT concat(`bri`.`invoiceNumber`,'-', `bri`.`invoiceType`, '-',`bri`.`invoiceYear`)) AS `invoicesNumber`,
                   group_concat(distinct bri.id) as invoiceId   
                 FROM `BillRegistryActivePaymentSlip` `braps`
@@ -85,22 +86,29 @@ class CGenerateCustomerActivePaymentSlipMailAjaxController extends AAjaxControll
                 LEFT JOIN PaymentBill pb on braps.paymentBillId=pb.id
                 LEFT JOIN Document d on pb.id=d.id      
                 LEFT JOIN AddressBook a on d.shopRecipientId=a.id where braps.statusId=6
-                GROUP BY brc.id
+                GROUP BY brc.id,brtt.dateEstimated,braps.id
               ";
             $attachmentRoot = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempMail') ;
             //$attachmentRoot = \Monkey::app()->rootPath() . $config['templateFolder'] . '/attachment';
             $slips = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-            $attachment=[];
-            foreach ($slips as $slip) {
 
-                $slipArray = explode(',',$slip['id']);
+            $i=0;
+            foreach ($slips as $slip) {
+                $attachment=[];
+                $slipArray = $slip['id'];
                 $invoiceIds = explode(',',$slip['invoiceId']);
+                $dateEstimated=$slip['dateEstimated'];
+                str_replace(',','<br>',$dateEstimated);
+
                 $numberSlip=$slip['numberSlip'];
                 $slipTotalAmount=$slip['totalAmount'];
                 $slipFinalDate=$slip['PaymentDate'];
                 foreach($invoiceIds as $invoiceId){
                     $bri=$billRegistryInvoiceRepo->findOneBy(['id'=>$invoiceId]);
                     $attachment[] = ['filePath'=>$attachmentRoot . '/' . $bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html','fileName'=>$bri->invoiceNumber . $bri->invoiceType . $bri->invoiceYear . '.html'];
+                    if (file_exists($attachmentRoot.'/'.$bri->invoiceNumber.$bri->invoiceType.$bri->invoiceYear.'.html')) {
+                        unlink($attachmentRoot.'/'.$bri->invoiceNumber.$bri->invoiceType.$bri->invoiceYear.'.html');
+                    }
                     $attachmentFile=fopen($attachmentRoot.'/'.$bri->invoiceNumber.$bri->invoiceType.$bri->invoiceYear.'.html','w');
                     fwrite($attachmentFile,$bri->invoiceText);
                     fclose($attachmentFile);
@@ -116,11 +124,12 @@ class CGenerateCustomerActivePaymentSlipMailAjaxController extends AAjaxControll
                     'numberSlip' => $numberSlip,
                     'slipTotalAmount' => $slipTotalAmount,
                     'slipFinalDate' =>$slipFinalDate,
+                    'dateEstimated'=>$dateEstimated
                 ],'MailGun',$attachment);
                $braps=$billRegistryActivePaymentSlipRepo->findBy(['numberSlip'=>$numberSlip]);
                foreach($braps as $paymentBill){
                    $paymentBill->statusId=1;
-                   $paymentBill->udpate();
+                   $paymentBill->update();
                }
 
             }

@@ -32,7 +32,7 @@ class CGenerateActivePaymentSlipJob extends ACronJob
             $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
             $res = $this->app->dbAdapter->query('SELECT group_concat(btt.id) as id,SUM(btt.amountPayment) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
 JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id where btt.amountPaid =0 and btt.datePayment is null
-GROUP BY bri.billRegistryClientId,bri.billRegistryTypePaymentId',[])->fetchAll();
+GROUP BY bri.billRegistryClientId,bri.billRegistryTypePaymentId,bri.dateEstimated',[])->fetchAll();
             $today = new \DateTime();
             $creationDate = $today->format('Y-m-d H:i:s');
             $numberPaymentBankSlip=$this->app->dbAdapter->query("SELECT ifnull(MAX(bankSlipNumberId),0)+1 as bankSlipNumberId
@@ -60,36 +60,37 @@ GROUP BY bri.billRegistryClientId,bri.billRegistryTypePaymentId',[])->fetchAll()
                 $rest = $e -> getMessage();
             }
 
-            $rowNumberDocument = $db_con->prepare('SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES
-                                                                 WHERE TABLE_SCHEMA = \''.$dbnamesel.'\' AND TABLE_NAME = \'PaymentBill\';');
-            $rowNumberDocument->execute();
-            $numberDocument=$rowNumberDocument->fetch(PDO::FETCH_ASSOC);
+
 
             foreach ($res as $result) {
-                $numberDocument = $this->app->dbAdapter->query("SELECT ifnull(MAX(id),0)+1 as new
-            FROM PaymentBill",[])->fetchAll()[0]['new'];
+                $rowNumberDocument = $db_con->prepare('SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES
+                                                                 WHERE TABLE_SCHEMA = \''.$dbnamesel.'\' AND TABLE_NAME = \'PaymentBill\';');
+                $rowNumberDocument->execute();
+                $numberDocument=$rowNumberDocument->fetch(PDO::FETCH_ASSOC);
 
                 $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
                 $braps->amount = $result['amountPayment'];
-                $braps->numberSlip = $numberDocument;
+                $braps->numberSlip = $numberDocument['AUTO_INCREMENT'];
                 $braps->creationDate = $creationDate;
                 $braps->paymentDate = $result['paymentDate'];
+                $braps->bankSlipNumberId = $numberPaymentBankSlip;
                 $braps->statusId = 6;
                 $braps->insert();
-                $numberActivePayment = $this->app->dbAdapter->query("SELECT max(id)  as billRegistryActivePaymentSlipId
-            FROM BillRegistryActivePaymentSlip",[])->fetchAll()[0]['billRegistryActivePaymentSlipId'];
+                $numberActivePayment = $this->app->dbAdapter->query('SELECT max(id)  as billRegistryActivePaymentSlipId
+            FROM BillRegistryActivePaymentSlip',[])->fetchAll()[0]['billRegistryActivePaymentSlipId'];
                 $array = explode(',',$result['id']);
                 foreach ($array as $values) {
                     $btt = $billRegistryTimeTableRepo->findOneBy(['id' => $values]);
                     $btt->billRegistryActivePaymentSlipId = $numberActivePayment;
                     $btt->update();
                 }
-
+                $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+                $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+                $updateNumberDocument->execute();
 
             }
-            $newNumber=$numberDocument+1;
-            $this->app->dbAdapter->query('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+
 
         }catch(\Throwable $e){
             \Monkey::app()->applicationLog('CGenerateActivePaymentSlipJob','error', 'Active ',$e,'');

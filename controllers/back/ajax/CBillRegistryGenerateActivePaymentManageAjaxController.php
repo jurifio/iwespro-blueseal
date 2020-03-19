@@ -115,26 +115,26 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                     $rest = $e->getMessage();
                 }
 
-                $rowNumberDocument = $db_con->prepare('SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES
-                                                                 WHERE TABLE_SCHEMA = \'' . $dbnamesel . '\' AND TABLE_NAME = \'PaymentBill\';');
-                $rowNumberDocument->execute();
-                $numberDocument = $rowNumberDocument->fetch(PDO::FETCH_ASSOC);
-                $numberDocument['AUTO_INCREMENT'];
+
 
                 foreach ($res as $result) {
+                    $rowNumberDocument = $db_con->prepare('SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES
+                                                                 WHERE TABLE_SCHEMA = \'' . $dbnamesel . '\' AND TABLE_NAME = \'PaymentBill\';');
+                    $rowNumberDocument->execute();
+                    $numberDocument = $rowNumberDocument->fetch(PDO::FETCH_ASSOC);
 
 
                     $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
                     $braps->amount = $result['amountPayment'];
-                    $braps->numberSlip = $numberDocument['AUTO_INCREMENT'];
+                    $braps->numberSlip =  $numberDocument['AUTO_INCREMENT'];
                     $braps->creationDate = $creationDate;
                     $braps->paymentDate = $result['paymentDate'];
                     $braps->statusId = 6;
                     $braps->bankSlipNumberId = $numberPaymentBankSlip;
                     $braps->insert();
-                    $numberActivePayment = $this->app->dbAdapter->query("SELECT max(id)  as billRegistryActivePaymentSlipId
-                FROM BillRegistryActivePaymentSlip",[])->fetchAll()[0]['billRegistryActivePaymentSlipId'];
+                    $numberActivePayment = $this->app->dbAdapter->query('SELECT max(id)  as billRegistryActivePaymentSlipId
+                FROM BillRegistryActivePaymentSlip',[])->fetchAll()[0]['billRegistryActivePaymentSlipId'];
                     $array = explode(',',$result['id']);
                     foreach ($array as $values) {
                         $btt = $billRegistryTimeTableRepo->findOneBy(['id' => $values]);
@@ -142,11 +142,11 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                         $btt->update();
                     }
 
-
+                    $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+                    $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+                    $updateNumberDocument->execute();
                 }
-                $newNumber= $numberDocument['AUTO_INCREMENT']+1;
-                $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
-                $updateNumberDocument->execute();
+
 
 
                 $res = 'generazione Eseguita';
