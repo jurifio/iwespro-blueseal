@@ -98,7 +98,19 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
             foreach ($slips as $slip) {
 
                 $daynotice=new \DateTime($slip['dateEstimated']);
-                $dateToStart=$daynotice->add(new \DateInterval('P10D'));
+                $dateToStart=$daynotice->modify('+10 day');
+                $date1sol=new \DateTime($slip['dateEstimated']);
+                $date1sol->modify('+10 day');
+                $date2sol=new \DateTime($slip['dateEstimated']);
+                $date2sol->modify('+20 day');
+                $date3sol=new \DateTime($slip['dateEstimated']);
+                $date3sol->modify('+30 day');
+                $date4sol=new \DateTime($slip['dateEstimated']);
+                $date4sol->modify('+40 day');
+                $date5sol=new \DateTime($slip['dateEstimated']);
+                $date5sol->modify('+50 day');
+                $date6sol=new \DateTime($slip['dateEstimated']);
+                $date6sol->modify('+60 day');
                 if($today>=$dateToStart) {
 
                     $slipArray = explode(',',$slip['id']);
@@ -125,7 +137,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                     $to = [$billRegistryClient->emailAdmin];
                     $braps = $billRegistryActivePaymentSlipRepo->findBy(['numberSlip' => $numberSlip]);
                     switch (true) {
-                        case ($today== $daynotice->add(new \DateInterval('P10D'))):
+                        case ($today>=  $date1sol && $today< $date2sol):
                             $noticeCounter=1;
                             /** @var CEmailRepo $mailRepo */
                             $mailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -136,7 +148,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 'slipFinalDate' => $slipFinalDate,
                                 'dateEstimated' => $dateEstimated,
                                 'noticeCounter' => $noticeCounter,
-                                'amount' => $amountPayment
+                                'amountPayment' => $amountPayment
                             ],'MailGun',$attachment);
 
                             foreach ($braps as $paymentBill) {
@@ -145,7 +157,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 $paymentBill->udpate();
                             }
                             break;
-                        case ($today== $daynotice->add(new \DateInterval('P20D'))):
+                        case ($today>=  $date2sol && $today< $date3sol):
                             $noticeCounter=2;
                             /** @var CEmailRepo $mailRepo */
                             $mailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -156,7 +168,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 'slipFinalDate' => $slipFinalDate,
                                 'dateEstimated' => $dateEstimated,
                                 'noticeCounter' => $noticeCounter,
-                                'amount' => $amountPayment
+                                'amountPayment' => $amountPayment
                             ],'MailGun',$attachment);
 
                             foreach ($braps as $paymentBill) {
@@ -165,7 +177,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 $paymentBill->udpate();
                             }
                             break;
-                        case ($today== $daynotice->add(new \DateInterval('P30D'))):
+                        case ($today>=  $date3sol && $today< $date4sol):
                             $noticeCounter=3;
                             /** @var CEmailRepo $mailRepo */
                             $mailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -176,7 +188,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 'slipFinalDate' => $slipFinalDate,
                                 'dateEstimated' => $dateEstimated,
                                 'noticeCounter' => $noticeCounter,
-                                'amount' => $amountPayment
+                                'amountPayment' => $amountPayment
                             ],'MailGun',$attachment);
 
                             foreach ($braps as $paymentBill) {
@@ -185,7 +197,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 $paymentBill->udpate();
                             }
                             break;
-                        case ($today== $daynotice->add(new \DateInterval('P40D'))):
+                        case ($today>=  $date4sol && $today< $date5sol):
                             $noticeCounter=4;
                             /** @var CEmailRepo $mailRepo */
                             $mailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -196,7 +208,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 'slipFinalDate' => $slipFinalDate,
                                 'dateEstimated' => $dateEstimated,
                                 'noticeCounter' => $noticeCounter,
-                                'amount' => $amountPayment
+                                'amountPayment' => $amountPayment
                             ],'MailGun',$attachment);
 
                             foreach ($braps as $paymentBill) {
@@ -205,7 +217,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 $paymentBill->udpate();
                             }
                             break;
-                        case ($today== $daynotice->add(new \DateInterval('P50D'))):
+                        case ($today>=  $date5sol && $today< $date6sol):
                             $noticeCounter=5;
                             /** @var CEmailRepo $mailRepo */
                             $mailRepo = \Monkey::app()->repoFactory->create('Email');
@@ -216,7 +228,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 'slipFinalDate' => $slipFinalDate,
                                 'dateEstimated' => $dateEstimated,
                                 'noticeCounter' => $noticeCounter,
-                                'amount' => $amountPayment
+                                'amountPayment' => $amountPayment
                             ],'MailGun',$attachment);
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 4;
@@ -224,7 +236,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 $paymentBill->udpate();
                             }
                             break;
-                        case ($today== $daynotice->add(new \DateInterval('P60D'))):
+                        case ($today>=  $date6sol):
                             /** @var CEmailRepo $mailRepo */
                             $mailRepo = \Monkey::app()->repoFactory->create('Email');
                             $mailRepo->newPackagedMail('senddismissservice','no-reply@pickyshop.com',$to,['gianluca@iwes.it'],['amministrazione@iwes.it'],['invoiceIds' => $invoiceIds,
@@ -234,7 +246,7 @@ class CGenerateNoticeActivePaymentSlipMailAjaxController extends AAjaxController
                                 'slipFinalDate' => $slipFinalDate,
                                 'dateEstimated' => $dateEstimated,
                                 'noticeCounter' => $noticeCounter,
-                                'amount' => $amountPayment
+                                'amountPayment' => $amountPayment
                             ],'MailGun',$attachment);
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 4;
