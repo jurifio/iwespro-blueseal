@@ -1597,6 +1597,15 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
                                 }
                                 $shopHasCounter->update();
+                                $attachmentRoot = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempMail') ;
+                                $attachment=[];
+                                $attachment[] = ['filePath'=>$attachmentRoot . '/' . $invoiceNumber .   $invoiceType . $year . '.html','fileName'=>$invoiceNumber .   $invoiceType . $year . '.html'];
+                                if (file_exists($attachmentRoot.'/'.$invoiceNumber .   $invoiceType . $year.'.html')) {
+                                    unlink($attachmentRoot.'/'.$invoiceNumber .   $invoiceType . $year.'.html');
+                                }
+                                $attachmentFile=fopen($attachmentRoot.'/'.$invoiceNumber .   $invoiceType . $year.'.html','w');
+                                fwrite($attachmentFile,stripslashes($invoiceText));
+                                fclose($attachmentFile);
                                 $billRegistryClientEmail=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryClientId]);
                                 $invoiceDate=$todaInvoice;
                                 $to=[$billRegistryClientEmail->emailAdmin];
