@@ -4,6 +4,7 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\controllers\api\Helper\DateTime;
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\repositories\CEmailRepo;
 
 /**
  * Class CDispatchPreorderToFriend
@@ -1596,6 +1597,24 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
                                 }
                                 $shopHasCounter->update();
+                                $billRegistryClientEmail=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryClientId]);
+                                $invoiceDate=$todaInvoice;
+                                $to=[$billRegistryClientEmail->emailAdmin];
+                                if ($isExtraUe != "1") {
+                                    $amountTotal= $grossTotal;
+                                } else {
+                                    $amountTotal = $netTotal;
+                                }
+                                $btt=\Monkey::app()->repoFactory->create('BillERgistryTimeTable')->findBy(['billRegistryInvoiceId'=>$lastBillRegistryInvoiceId]);
+                                $tobcc=['gianluca@iwes.it'];
+                                /** @var CEmailRepo $mailRepo */
+                                $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                                $mailRepo->newPackagedMail('sendinvoicetocustomer', 'no-reply@pickyshop.com', $to, $tobcc, ['amministrazione@iwes.it'], [
+                                    'numberInvoice' => $numberInvoice,
+                                    'invoiceDate' => $invoiceDate,
+                                    'amountTotal' => $amountTotal,
+                                    'btt'=>$btt
+                                ],'MailGun',$attachment);
 
                             }
                         }

@@ -6,6 +6,7 @@ use bamboo\controllers\api\Helper\DateTime;
 use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CBillRegistryContract;
 use bamboo\domain\entities\CBillRegistryContractRow;
+use bamboo\domain\repositories\CEmailRepo;
 
 
 /**
@@ -1585,6 +1586,7 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
 </html>');
                                 $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegistryInvoiceId]);
                                 $updateBillRegistryInvoice->invoiceText = stripslashes($invoiceText);
+                                $updateBillRegistryInvoice->statusId=2;
                                 $updateBillRegistryInvoice->update();
                                 $shopHasCounter = \Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId' => 57,'invoiceYear' => $year]);
                                 if ($isExtraUe != "1") {
@@ -1593,6 +1595,26 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                     $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
                                 }
                                 $shopHasCounter->update();
+                                $billRegistryClientEmail=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryClientId]);
+                                $invoiceDate=$todaInvoice;
+                                $to=[$billRegistryClientEmail->emailAdmin];
+                                if ($isExtraUe != "1") {
+                                    $amountTotal= $grossTotal;
+                                } else {
+                                    $amountTotal = $netTotal;
+                                }
+                                $btt=\Monkey::app()->repoFactory->create('BillERgistryTimeTable')->findBy(['billRegistryInvoiceId'=>$lastBillRegistryInvoiceId]);
+                                $tobcc=['gianluca@iwes.it'];
+                                /** @var CEmailRepo $mailRepo */
+                                $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                                $mailRepo->newPackagedMail('sendinvoicetocustomer', 'no-reply@pickyshop.com', $to, $tobcc, ['amministrazione@iwes.it'], [
+                                    'numberInvoice' => $numberInvoice,
+                                    'invoiceDate' => $invoiceDate,
+                                    'amountTotal' => $amountTotal,
+                                    'btt'=>$btt
+                                ],'MailGun',$attachment);
+
+
 
                             }
                         }
