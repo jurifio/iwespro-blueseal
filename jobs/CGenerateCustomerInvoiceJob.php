@@ -1607,14 +1607,15 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 fwrite($attachmentFile,stripslashes($invoiceText));
                                 fclose($attachmentFile);
                                 $billRegistryClientEmail=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryClientId]);
-                                $invoiceDate=$todaInvoice;
+                                $invoiceDate=$todayInvoice;
+                                $numberInvoice=$invoiceNumber;
                                 $to=[$billRegistryClientEmail->emailAdmin];
                                 if ($isExtraUe != "1") {
                                     $amountTotal= $grossTotal;
                                 } else {
                                     $amountTotal = $netTotal;
                                 }
-                                $btt=\Monkey::app()->repoFactory->create('BillERgistryTimeTable')->findBy(['billRegistryInvoiceId'=>$lastBillRegistryInvoiceId]);
+                                $btt=\Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findBy(['billRegistryInvoiceId'=>$lastBillRegistryInvoiceId]);
                                 $tobcc=['gianluca@iwes.it'];
                                 /** @var CEmailRepo $mailRepo */
                                 $mailRepo = \Monkey::app()->repoFactory->create('Email');

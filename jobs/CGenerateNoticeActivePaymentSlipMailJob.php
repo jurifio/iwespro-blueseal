@@ -160,7 +160,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 3;
                                 $paymentBill->noticeCounter = $noticeCounter;
-                                $paymentBill->udpate();
+                                $paymentBill->update();
                             }
                             break;
                         case ($today>=  $date2sol && $today< $date3sol):
@@ -180,7 +180,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 3;
                                 $paymentBill->noticeCounter = $noticeCounter;
-                                $paymentBill->udpate();
+                                $paymentBill->update();
                             }
                             break;
                         case ($today>=  $date3sol && $today< $date4sol):
@@ -200,7 +200,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 3;
                                 $paymentBill->noticeCounter = $noticeCounter;
-                                $paymentBill->udpate();
+                                $paymentBill->update();
                             }
                             break;
                         case ($today>=  $date4sol && $today< $date5sol):
@@ -220,7 +220,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 3;
                                 $paymentBill->noticeCounter = $noticeCounter;
-                                $paymentBill->udpate();
+                                $paymentBill->update();
                             }
                             break;
                         case ($today>=  $date5sol && $today< $date6sol):
@@ -239,7 +239,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 4;
                                 $paymentBill->noticeCounter = $noticeCounter;
-                                $paymentBill->udpate();
+                                $paymentBill->update();
                             }
                             break;
                         case ($today>=  $date6sol):
@@ -257,7 +257,7 @@ class CGenerateNoticeActivePaymentSlipMailJob extends ACronJob
                             foreach ($braps as $paymentBill) {
                                 $paymentBill->statusId = 4;
                                 $paymentBill->noticeCounter = $noticeCounter;
-                                $paymentBill->udpate();
+                                $paymentBill->update();
                             }
                             break;
                     }
