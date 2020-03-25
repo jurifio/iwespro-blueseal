@@ -180,11 +180,11 @@ $(document).on('bs.productIwes.save', function () {
     var descdetf='';
     var o=parseInt($('#descdet').val());
 
-    for(i=0;i=o;i++){
+    for(i=0;i<o;i++){
         descdetf=descdet+n;
         val+=$(descdetf).val()+',';
     }
-    var config = '?billRegistryProductId'+$("#billRegistryProductId").val()+'&'+'' +
+    var config = '?billRegistryProductId='+$("#billRegistryProductId").val()+'&'+'' +
         'codeProduct=' + $("#codeProduct").val() + '&' +
         'nameProduct=' + $("#nameProduct").val() + '&' +
         'um=' + $("#um").val() + '&' +

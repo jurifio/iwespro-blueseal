@@ -151,7 +151,7 @@ function put()
 {
     $data = $this->app->router->request()->getRequestData();
     $billRegistryProductRepo=\Monkey::app()->repoFactory->create('BillRegistryProduct');
-    $billRegistryProductId=$_GET['billRegistryProductId'];
+    $billRegistryProductId = $_GET['billRegistryProductId'];
     if ($_GET['codeProduct'] == '') {
         return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> codice Prodotto non inserito non inserita</i>';
     } else {
@@ -228,7 +228,7 @@ function put()
         }
         foreach($productDescriptions as $description){
             $billRegistryProductDetail=\Monkey::app()->repoFactory->create('BillRegistryProductDetail')->getEmptyEntity();
-            $billRegistryProductDetail->billRegistryProductId=$productId;
+            $billRegistryProductDetail->billRegistryProductId=$billRegistryProductId;
             $billRegistryProductDetail->detailDescription=$description;
             $billRegistryProductDetail->insert();
 

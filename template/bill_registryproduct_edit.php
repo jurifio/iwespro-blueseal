@@ -204,7 +204,7 @@
                                 echo'</div>';
                                 $i++;
                             }
-                                echo 'input type="hidden" id="descdet" name"descdet" value="'.$i.'"/>';
+                                echo '<input type="hidden" id="descdet" name"descdet" value="'.$i.'"/>';
 
                             ?>
                         </div>
