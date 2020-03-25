@@ -54,7 +54,7 @@
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
                                             data-init-plugin="selectize">
-                                        <?php foreach ($brtt as $category) {
+                                        <?php foreach ($brg as $category) {
 
                                             if ($category->id == $brgp->billRegistryCategoryProductId) {
                                                 echo '<option value="' . $category->id . '" selected="selected">' . $category->name . '</option>';

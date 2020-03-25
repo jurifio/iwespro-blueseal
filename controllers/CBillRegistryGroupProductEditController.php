@@ -32,7 +32,7 @@ class CBillRegistryGroupProductEditController extends ARestrictedAccessRootContr
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registrygroupproduct_edit.php');
         $id = \Monkey::app()->router->request()->getRequestData('id');
         $brgp=\Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findOneBy(['id'=>$id]);
-        $brg=\Monkey::app()->repoFactory->create('BillRegistryGroupProduct')->findAll();
+        $brg=\Monkey::app()->repoFactory->create('BillRegistryCategoryProduct')->findAll();
         $brtt=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findAll();
 
         return $view->render([
