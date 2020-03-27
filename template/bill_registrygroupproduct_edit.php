@@ -105,7 +105,7 @@
                                     <label for="groupUm">Unita di misura</label>
                                     <input id="groupUm" autocomplete="off" type="text"
                                            class="form-control" name="groupUm"
-                                           value=""
+                                           value="<?php echo $brgp->um;?>"
                                     />
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
                                 <div class="form-group form-group-default">
                                     <label for="groupDescription">Descrizione</label>
                                     <input id="groupDescription" autocomplete="off" type="text"
-                                           class="form-control" name="groupDescription" value=""
+                                           class="form-control" name="groupDescription" value="<?php echo $brgp->description;?>"
                                     />
                                 </div>
                             </div>
@@ -124,9 +124,21 @@
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
                                             data-init-plugin="selectize">
-                                        <option value="Service">Servizio</option>
-                                        <option value="Product">Prodotto</option>
-                                        <option value="Module">Modulo</option>
+                                        <?php
+                                        $productSel='';
+                                        $moduleSel='';
+                                        $serviceSel='';
+                                        if ($brgp->productType=='Service'){
+                                         $serviceSel='selected="selected"';
+                                        }elseif($brgp->productType=='Product') {
+                                            $productSel='selected="selected"';
+                                        }elseif($brgp->productType=='Module'){
+                                            $moduleSel='selected="selected"';
+                                        }
+                                        ?>
+                                        <option  <?php echo  $serviceSel;?> value="Service">Servizio</option>
+                                        <option <?php echo  $productSel;?> value="Product">Prodotto</option>
+                                        <option<?php echo  $moduleSel;?> value="Module">Modulo</option>
                                     </select>
 
                                 </div>
@@ -136,7 +148,7 @@
                                     <label for="groupCost">Prezzo acquisto</label>
                                     <input id="groupCost" autocomplete="off" type="text"
                                            class="form-control" name="groupCost"
-                                           value=""
+                                           value="<?php echo number_format($brgp->cost,2,'.','');?>"
                                     />
                                 </div>
                             </div>
@@ -145,7 +157,7 @@
                                     <label for="groupPrice">Prezzo Vendita</label>
                                     <input id="groupPrice" autocomplete="off" type="text"
                                            class="form-control" name="groupPrice"
-                                           value=""
+                                           value="<?php echo number_format($brgp->price,2,'.','');?>"
                                     />
                                 </div>
                             </div>

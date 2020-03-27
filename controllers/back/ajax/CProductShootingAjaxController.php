@@ -205,7 +205,7 @@ class CProductShootingAjaxController extends AAjaxController
 
             $date = date("Y-m-d H:i:s");
             $dateTime = new \DateTime($date);
-            $bs->lastSelection = $dateTime->format('Y-m-d  H:i:s');;
+            $bs->lastSelection = $dateTime->format('Y-m-d  H:i:s');
             $bs->update();
 
             return json_encode($res);
