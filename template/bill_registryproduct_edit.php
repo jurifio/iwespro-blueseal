@@ -183,7 +183,7 @@
                                 <button class="btn btn-primary" id="addDescription" onclick="addDescription()"
                                         type="button"><span
                                             class="fa fa-plus-circle">Aggiungi Dettagli</span></button>
-                                <input type="hidden" id="descriptionArray" name="descriptionArray" value=""/>
+
                             </div>
                         </div>
                         <div Class="row">
@@ -193,6 +193,7 @@
                         <div id="divDescription">
                             <?php
                             $i=1;
+                            $descriptionArray='';
                             foreach ($brpd as $detaildesc) {
                                 echo '<div class="row">';
                                 echo '<div id="'.$i.'detaildiv" class="col-md-12">';
@@ -203,8 +204,10 @@
                                 echo'</div>';
                                 echo'</div>';
                                 $i++;
+                                $descriptionArray.= $detaildesc->detailDescription.',';
                             }
                                 echo '<input type="hidden" id="descdet" name"descdet" value="'.$i.'"/>';
+                             echo '<input type="hidden" id="descriptionArray" name="descriptionArray" value="'.$descriptionArray.'"/>';
 
                             ?>
                         </div>
