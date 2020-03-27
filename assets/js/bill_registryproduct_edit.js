@@ -182,8 +182,14 @@ $(document).on('bs.productIwes.save', function () {
 
     for(i=0;i<o;i++){
         descdetf=descdet+n;
-        val+=$(descdetf).val()+',';
+        if($('#descdetf').length) {
+            if ($(descdetf).val() != '') {
+                val += $(descdetf).val() + ',';
+            }
+        }
     }
+        var productList = val.substring(0, val.length - 1);
+
     var config = '?billRegistryProductId='+$("#billRegistryProductId").val()+'&'+'' +
         'codeProduct=' + $("#codeProduct").val() + '&' +
         'nameProduct=' + $("#nameProduct").val() + '&' +
@@ -193,7 +199,7 @@ $(document).on('bs.productIwes.save', function () {
         'price=' + $("#price").val() + '&' +
         'billRegistryGroupProductId=' + $("#billRegistryGroupProductId").val() + '&' +
         'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
-        'productList=' + val.substring(0, val.length - 1);
+        'productList=' +productList ;
 
 
     bsModal.showCancelBtn();

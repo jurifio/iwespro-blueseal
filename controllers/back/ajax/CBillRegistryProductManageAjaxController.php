@@ -28,7 +28,7 @@ class CBillRegistryProductManageAjaxController extends AAjaxController
     {
 
         $data = $this->app->router->request()->getRequestData();
-        $billRegistryProductRepo=\Monkey::app()->repoFactory->create('BillRegistryProduct');
+        $billRegistryProductRepo = \Monkey::app()->repoFactory->create('BillRegistryProduct');
         if ($_GET['codeProduct'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> codice Prodotto non inserito non inserita</i>';
         } else {
@@ -72,51 +72,50 @@ class CBillRegistryProductManageAjaxController extends AAjaxController
         }
 
         if ($_GET['productList'] == '') {
-           $productList='';
+            $productList = '';
         } else {
             $productList = $_GET['productList'];
         }
-try {
-    $brpFindCodeProduct=$billRegistryProductRepo->findOneBy(['codeProduct'=>$codeProduct]);
-        if($brpFindCodeProduct!=null){
-            return 'Codice Prodotto esistente ';
-    }
+        try {
+            $brpFindCodeProduct = $billRegistryProductRepo->findOneBy(['codeProduct' => $codeProduct]);
+            if ($brpFindCodeProduct != null) {
+                return 'Codice Prodotto esistente ';
+            }
 
-    $brpInsert = $billRegistryProductRepo->getEmptyEntity();
-    $brpInsert->codeProduct = $codeProduct;
-    $brpInsert->nameProduct = $nameProduct;
-    $brpInsert->um = $um;
-    if ($logoFile != null) {
-        $brpInsert->image = $logoFile;
-    }
-    $brpInsert->price = $price;
-    $brpInsert->cost = $cost;
-    $brpInsert->billRegistryGroupProductId = $billRegistryGroupProductId;
-    $brpInsert->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
-    $brpInsert->insert();
-    $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryProduct ',[])->fetchAll();
-    foreach ($res as $result) {
-        $productId = $result['id'];
-    }
-    if($productList!=null){
-        $productDescriptions=explode(',',$productList);
-    }
-    foreach($productDescriptions as $description){
-        $billRegistryProductDetail=\Monkey::app()->repoFactory->create('BillRegistryProductDetail')->getEmptyEntity();
-        $billRegistryProductDetail->billRegistryProductId=$productId;
-        $billRegistryProductDetail->detailDescription=$description;
-        $billRegistryProductDetail->insert();
+            $brpInsert = $billRegistryProductRepo->getEmptyEntity();
+            $brpInsert->codeProduct = $codeProduct;
+            $brpInsert->nameProduct = $nameProduct;
+            $brpInsert->um = $um;
+            if ($logoFile != null) {
+                $brpInsert->image = $logoFile;
+            }
+            $brpInsert->price = $price;
+            $brpInsert->cost = $cost;
+            $brpInsert->billRegistryGroupProductId = $billRegistryGroupProductId;
+            $brpInsert->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
+            $brpInsert->insert();
+            $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryProduct ',[])->fetchAll();
+            foreach ($res as $result) {
+                $productId = $result['id'];
+            }
+            if ($productList != null) {
+                $productDescriptions = explode(',',$productList);
+            }
+            foreach ($productDescriptions as $description) {
+                $billRegistryProductDetail = \Monkey::app()->repoFactory->create('BillRegistryProductDetail')->getEmptyEntity();
+                $billRegistryProductDetail->billRegistryProductId = $productId;
+                $billRegistryProductDetail->detailDescription = $description;
+                $billRegistryProductDetail->insert();
 
-    }
+            }
 
-         \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','insert Product',$productId.'-'.$codeProduct,'');
-return 'Inserimento eseguito con Successo ';
+            \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','insert Product',$productId . '-' . $codeProduct,'');
+            return 'Inserimento eseguito con Successo ';
 
-}catch(\Throwable $e){
-    \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','insert Product',$e,'');
-    return 'Errore inserimento  '.$e;
-}
-
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','insert Product',$e,'');
+            return 'Errore inserimento  ' . $e;
+        }
 
 
     }
@@ -125,128 +124,126 @@ return 'Inserimento eseguito con Successo ';
     {
         $data = $this->app->router->request()->getRequestData();
         $billRegistryProductId = $data['id'];
-        $billRegistryClientId =$data['billRegistryClientId'];
+        $billRegistryClientId = $data['billRegistryClientId'];
 
 
         $ProductRowDetail = [];
         $brp = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['billRegistryGroupProductId' => $billRegistryProductId]);
 
 
-            $bpl= \Monkey::app()->repoFactory->create('BillRegistryPriceList')->findOneBy(['billRegistryProductId'=>$brp->id,'billRegistryClientId'=>$billRegistryClientId,'isActive'=>1]);
-            if($bpl!=null){
-                $price=$bpl->price;
-            }else{
-                $price=$product->price;
+        $bpl = \Monkey::app()->repoFactory->create('BillRegistryPriceList')->findOneBy(['billRegistryProductId' => $brp->id,'billRegistryClientId' => $billRegistryClientId,'isActive' => 1]);
+        if ($bpl != null) {
+            $price = $bpl->price;
+        } else {
+            $price = $product->price;
+        }
+        $brt = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $brp->billRegistryTypeTaxesId]);
+        $contractRowDetail[] = ['productId' => $brp->id,'codeProduct' => $brp->codeProduct,'nameProduct' => $brp->nameProduct,'um' => $brp->um,'price' => $price,'idTaxes' => $brp->billRegistryTypeTaxesId,'taxesDescription' => $brt->description];
+
+
+        return json_encode($contractRowDetail);
+
+    }
+
+    public
+    function put()
+    {
+        $data = $this->app->router->request()->getRequestData();
+        $billRegistryProductRepo = \Monkey::app()->repoFactory->create('BillRegistryProduct');
+        $billRegistryProductId = $_GET['billRegistryProductId'];
+        if ($_GET['codeProduct'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> codice Prodotto non inserito non inserita</i>';
+        } else {
+            $codeProduct = $_GET['codeProduct'];
+        }
+        if ($_GET['nameProduct'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">nome Prodotto  non inserito</i>';
+        } else {
+            $nameProduct = $_GET['nameProduct'];
+        }
+        if ($_GET['um'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Unità di misura  non inserita</i>';
+        } else {
+            $um = $_GET['um'];
+        }
+
+        if ($_GET['logoFile'] == '') {
+            $logoFile = '';
+        } else {
+            $logoFile = $_GET['logoFile'];
+        }
+        if ($_GET['cost'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Prezzo di Acquisto   non inserito</i>';
+        } else {
+            $cost = $_GET['cost'];
+        }
+        if ($_GET['price'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Prezzo di Vendita  non inserito</i>';
+        } else {
+            $price = $_GET['price'];
+        }
+        if ($_GET['billRegistryGroupProductId'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Gruppo Prodotto Non Selezionata</i>';
+        } else {
+            $billRegistryGroupProductId = $_GET['billRegistryGroupProductId'];
+        }
+        if ($_GET['billRegistryTypeTaxesId'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Aliquota Iva non Selezionata</i>';
+        } else {
+            $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
+        }
+
+        if ($_GET['productList'] == '') {
+            $productList = '';
+        } else {
+            $productList = $_GET['productList'];
+        }
+        try {
+
+
+            $brpInsert = $billRegistryProductRepo->findOneBy(['id' => $billRegistryProductId]);
+            $brpInsert->codeProduct = $codeProduct;
+            $brpInsert->nameProduct = $nameProduct;
+            $brpInsert->um = $um;
+            if ($logoFile != null) {
+                $brpInsert->image = $logoFile;
             }
-            $brt= \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $brp->billRegistryTypeTaxesId]);
-            $contractRowDetail[]=['productId'=>$brp->id,'codeProduct'=>$brp->codeProduct,'nameProduct'=>$brp->nameProduct,'um'=>$brp->um,'price'=>$price,'idTaxes'=>$brp->billRegistryTypeTaxesId,'taxesDescription'=>$brt->description];
+            $brpInsert->price = $price;
+            $brpInsert->cost = $cost;
+            $brpInsert->billRegistryGroupProductId = $billRegistryGroupProductId;
+            $brpInsert->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
+            $brpInsert->update();
+            $billRegistryProductDetailDelete = \Monkey::app()->repoFactory->create('BillRegistryProductDetail')->findBy(['billRegistryProductId' => $billRegistryProductId]);
+            foreach ($billRegistryProductDetailDelete as $brpdDelete) {
+                $brpdDelete->delete();
+            }
 
 
-return json_encode($contractRowDetail);
+            if ($productList!="") {
+                $productDescriptions = explode(',',$productList);
 
-}
+                foreach ($productDescriptions as $description) {
+                    $billRegistryProductDetail = \Monkey::app()->repoFactory->create('BillRegistryProductDetail')->getEmptyEntity();
+                    $billRegistryProductDetail->billRegistryProductId = $billRegistryProductId;
+                    $billRegistryProductDetail->detailDescription = $description;
+                    $billRegistryProductDetail->insert();
 
-public
-function put()
-{
-    $data = $this->app->router->request()->getRequestData();
-    $billRegistryProductRepo=\Monkey::app()->repoFactory->create('BillRegistryProduct');
-    $billRegistryProductId = $_GET['billRegistryProductId'];
-    if ($_GET['codeProduct'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> codice Prodotto non inserito non inserita</i>';
-    } else {
-        $codeProduct = $_GET['codeProduct'];
-    }
-    if ($_GET['nameProduct'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">nome Prodotto  non inserito</i>';
-    } else {
-        $nameProduct = $_GET['nameProduct'];
-    }
-    if ($_GET['um'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Unità di misura  non inserita</i>';
-    } else {
-        $um = $_GET['um'];
-    }
+                }
+            }
 
-    if ($_GET['logoFile'] == '') {
-        $logoFile = '';
-    } else {
-        $logoFile = $_GET['logoFile'];
-    }
-    if ($_GET['cost'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Prezzo di Acquisto   non inserito</i>';
-    } else {
-        $cost = $_GET['cost'];
-    }
-    if ($_GET['price'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Prezzo di Vendita  non inserito</i>';
-    } else {
-        $price = $_GET['price'];
-    }
-    if ($_GET['billRegistryGroupProductId'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Gruppo Prodotto Non Selezionata</i>';
-    } else {
-        $billRegistryGroupProductId = $_GET['billRegistryGroupProductId'];
-    }
-    if ($_GET['billRegistryTypeTaxesId'] == '') {
-        return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Aliquota Iva non Selezionata</i>';
-    } else {
-        $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
-    }
+            \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','Update Product',$billRegistryProductId . '-' . $codeProduct,'');
+            return 'Aggiornamento eseguito con Successo ';
 
-    if ($_GET['productList'] == '') {
-        $productList='';
-    } else {
-        $productList = $_GET['productList'];
-    }
-    try {
-        $brpFindCodeProduct=$billRegistryProductRepo->findOneBy(['codeProduct'=>$codeProduct]);
-        if($brpFindCodeProduct!=null){
-            return 'Codice Prodotto esistente ';
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','update Product',$e,'');
+            return 'Errore Aggiornamento  ' . $e;
         }
 
-        $brpInsert = $billRegistryProductRepo->findOneBy(['id'=>$billRegistryProductId]);
-        $brpInsert->codeProduct = $codeProduct;
-        $brpInsert->nameProduct = $nameProduct;
-        $brpInsert->um = $um;
-        if ($logoFile != null) {
-            $brpInsert->image = $logoFile;
-        }
-        $brpInsert->price = $price;
-        $brpInsert->cost = $cost;
-        $brpInsert->billRegistryGroupProductId = $billRegistryGroupProductId;
-        $brpInsert->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
-        $brpInsert->update();
-        $billRegistryProductDetailDelete=\Monkey::app()->repoFactory->create('BillRegistryProductDetail')->findBy(['billRegistryProductId'=>$billRegistryProductId]);
-        foreach($billRegistryProductDetailDelete as $brpdDelete){
-            $brpdDelete->delete();
-        }
-
-
-        if($productList!=null){
-            $productDescriptions=explode(',',$productList);
-        }
-        foreach($productDescriptions as $description){
-            $billRegistryProductDetail=\Monkey::app()->repoFactory->create('BillRegistryProductDetail')->getEmptyEntity();
-            $billRegistryProductDetail->billRegistryProductId=$billRegistryProductId;
-            $billRegistryProductDetail->detailDescription=$description;
-            $billRegistryProductDetail->insert();
-
-        }
-
-        \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','Update Product',$billRegistryProductId.'-'.$codeProduct,'');
-        return 'Aggiornamento eseguito con Successo ';
-
-    }catch(\Throwable $e){
-        \Monkey::app()->applicationLog('CBillRegistryProductManageAjaxController','Error','update Product',$e,'');
-        return 'Errore Aggiornamento  '.$e;
     }
 
-}
+    public
+    function delete()
+    {
 
-public
-function delete()
-{
-
-}
+    }
 }
