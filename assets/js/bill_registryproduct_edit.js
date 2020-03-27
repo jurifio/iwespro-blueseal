@@ -55,7 +55,7 @@ $(document).ready(function () {
         });
     });
 
-    $.ajax({
+    /*$.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -102,8 +102,8 @@ $(document).ready(function () {
         });
 
 
-    });
-    $.ajax({
+    });*/
+   /* $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -122,8 +122,8 @@ $(document).ready(function () {
             options: res2,
         });
 
-    });
-    $.ajax({
+    });*/
+   /* $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
@@ -142,7 +142,7 @@ $(document).ready(function () {
             options: res2,
         });
 
-    });
+    });*/
 
     $('#billRegistryGroupProductId').change(function(){
         $('#billRegistryCategoryProductId').data('selectize').setValue(groupProductId);

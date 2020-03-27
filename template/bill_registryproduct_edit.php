@@ -36,10 +36,10 @@
                                             data-init-plugin="selectize">
                                         <?php foreach ($brgp as $groupProduct) {
 
-                                            if ($groupProduct->id == $brp->billRegistryGroupProductId) {
-                                                echo '<option value="' . $groupProduct->id . '" selected="selected">' . $groupProduct->name . '</option>';
+                                            if ($brp->billRegistryGroupProductId==$groupProduct->id) {
+                                                echo '<option selected="selected" value="' .$groupProduct->codeProduct .'-'. $groupProduct->name . '</option>';
                                             } else {
-                                                echo '<option value="' . $groupProduct->id . '">' . $groupProduct->name . '</option>';
+                                                echo '<option value="' . $groupProduct->id . '">'.$groupProduct->codeProduct .'-'. $groupProduct->name . '</option>';
                                             }
                                         }
                                         ?>
