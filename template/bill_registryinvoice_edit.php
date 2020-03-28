@@ -45,13 +45,21 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach(\Monkey::app()->repoFactory->create('BillRegistryClient')->findAll() as $client){
+                                              if($client->id==$bri->billRegistryClientId){
+                                                  echo '<option value="' . $client->id . '" selected="selected">' . $client->companyName . '</option>';
+                                              } else {
+                                                  echo '<option value="' . $client->id . '">' . $client->companyName . '</option>';
+                                              }
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="dateInvoice">Data Fattura</label>
-                                        <?php $date = new \DateTime();
+                                        <?php $date = new \DateTime($bri->invoiceDate);
                                         $dateNow = $date->format('Y-m-d\TH:i')
                                         ?>
                                         <input type="datetime-local" class="form-control" id="dateInvoice"

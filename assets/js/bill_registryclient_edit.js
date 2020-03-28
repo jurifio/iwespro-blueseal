@@ -67,7 +67,7 @@ $.ajax({
     dataType: 'json'
 }).done(function (res2) {
     let select = $('#bankRegistryId');
-    //   if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+       if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
     select.selectize({
         valueField: 'id',
         labelField: 'name',
@@ -119,7 +119,7 @@ $.ajax({
     dataType: 'json'
 }).done(function (res2) {
     let selectTypeTaxes = $('#billRegistryTypeTaxesId');
-    //  if (typeof (selectTypeTaxes[0].selectize) != 'undefined') selectTypeTaxes[0].selectize.destroy();
+      if (typeof (selectTypeTaxes[0].selectize) != 'undefined') selectTypeTaxes[0].selectize.destroy();
     selectTypeTaxes.selectize({
         valueField: 'id',
         labelField: 'description',
@@ -137,7 +137,7 @@ $.ajax({
     dataType: 'json'
 }).done(function (res2) {
     let selectTypePayment = $('#billRegistryTypePaymentId');
-    //  if (typeof (selectTypePayment[0].selectize) != 'undefined') selectTypePayment[0].selectize.destroy();
+      if (typeof (selectTypePayment[0].selectize) != 'undefined') selectTypePayment[0].selectize.destroy();
     selectTypePayment.selectize({
         valueField: 'id',
         labelField: 'name',

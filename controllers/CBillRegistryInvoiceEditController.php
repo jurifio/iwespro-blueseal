@@ -30,10 +30,19 @@ class CBillRegistryInvoiceEditController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryinvoice_edit.php');
+        $id =\Monkey::app()->router->request()->getRequestData('id');
+        $bri=\Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id'=>$id]);
+        $brc=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$bri->billRegistryClientId]);
+        $brir=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findBy(['billRegistryInvoiceId'=>$bri->id]);
+        $brtt=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findAll();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'bri' => $bri,
+            'brc' => $brc,
+            'brir' => $brir,
+            'brtt' => $brtt,
             'sidebar' => $this->sidebar->build()
         ]);
     }
