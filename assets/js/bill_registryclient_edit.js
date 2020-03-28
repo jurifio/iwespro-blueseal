@@ -583,7 +583,7 @@ $('#addContact').click(function () {
 });
 
 $(document).on('bs.client.save', function () {
-    let bsModal = new $.bsModal('Inserimento Aggregatore', {
+    let bsModal = new $.bsModal('Modifica Cliente', {
         body: '<p>Confermare?</p>'
     });
     var val = '';
@@ -592,7 +592,8 @@ $(document).on('bs.client.save', function () {
             val = val + $(this).val() + ',';
         }
     });
-    var config = '?companyName=' + $("#companyName").val() + '&' +
+    var config = '?billRegistryClientId=' + $('#billRegistryClientId').val() +'&'+
+        'companyName=' + $("#companyName").val() + '&' +
         'address=' + $("#address").val() + '&' +
         'extra=' + $("#extra").val() + '&' +
         'city=' + $("#city").val() + '&' +
@@ -639,7 +640,7 @@ $(document).on('bs.client.save', function () {
         var data = 1;
         var urldef = "/blueseal/xhr/BillRegistryClientManageAjaxController" + config;
         $.ajax({
-            method: "POST",
+            method: "put",
             url: urldef,
             data: data
         }).done(function (res) {
