@@ -55,7 +55,8 @@ class CChangeOrderStatus extends AAjaxController
             } else {
                 $orders = $oR->findBySql('SELECT id FROM `Order` WHERE id in ( ? )', [implode(',', $datas['orders'])]);
             }
-
+            $now=new \DateTime();
+            $dateNow=$now->format('Y-m-d H:i:s');
             foreach($orders as $order) {
                 $oR->updateStatus($order, $datas['order_status']);
                 $orderStatus=\Monkey::app()->repoFactory->create('OrderStatus')->findOneBy(['id'=>$datas['order_status']]);
@@ -78,6 +79,30 @@ class CChangeOrderStatus extends AAjaxController
                 try{
                     $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$codeStatus.'\' WHERE id='.$remoteOrderSellerId);
                     $stmtUpdateOrder->execute();
+                    if ($codeStatus=='ORDER_CANCEL' || $codeStatus=='ORD_RETURNED'){
+                        if ($codestatus='ORDER_CANCEL'){
+                            $codeToDelete=2;
+                        }else{
+                            $codeToDelete=3;
+                        }
+                        $stmtUpdateRemoteShopMovements=$db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
+                    values(
+                         '".$remoteOrdeSellerId."',
+                          null,
+                          null,
+                          '".$order->netTotal."',
+                          '".$dateNow."',
+                          '".$dateNow."',
+                         '".$codeToDelete."',
+                          1,
+                          'ordine Cancellato',
+                          1,
+                          '".$order->id."'
+                                                                                                                                                                                
+                                                                                                                                                               
+) ");
+                        $stmtUpdateRemoteShopMovements->execute();
+                    }
                 }catch (\Throwable $e){
                     $this->report('CChangeStatusOrder', 'error change Status  remote Order',$e);
 

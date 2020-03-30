@@ -24,7 +24,7 @@
                         <div class="col-md-12">
                             <div class="panel panel-default clearfix">
                                 <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Modifica Acquisto</h5>
+                                    <h5 class="m-t-10">Modifica Fattura</h5>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
@@ -105,7 +105,7 @@
                                 //$productSku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $orderLine->productId , 'productVariantId '=> $orderLine->productVariantId , 'productSizeId' => $orderLine->productSizeId]);
 
 
-                                $productNameTranslation = $productRepo->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
+                                $productNameTranslation = \Monkey::app()->repoFactory->create('ProductNameTranslation')->findOneBy(['productId' => $productSku->productId, 'productVariantId' => $productSku->productVariantId, 'langId' => '1']);
                                 echo (($productNameTranslation) ? $productNameTranslation->name : '') . ($orderLine->warehouseShelfPosition ? ' / ' . $orderLine->warehouseShelfPosition->printPosition() : '') . '<br />' . $productSku->product->productBrand->name . ' - ' . $productSku->productId . '-' . $productSku->productVariantId;
 
                                     echo '</div>';
