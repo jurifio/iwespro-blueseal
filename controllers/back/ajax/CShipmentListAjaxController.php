@@ -99,10 +99,10 @@ class CShipmentListAjaxController extends AAjaxController
             }
 
             $row['fromAddress'] = addslashes($val->fromAddress ? ($val->fromAddress->subject . '<br />' . $val->fromAddress->address . '<br />' . $val->fromAddress->city) : '---');
-            $row['predictedShipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d');
-            $row['shipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d');
-            $row['predictedDeliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedDeliveryDate,'Y-m-d');
-            $row['deliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->deliveryDate,'Y-m-d');
+            $row['predictedShipmentDate'] = ($val->predictedShipmentDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d'): '' ;
+            $row['shipmentDate'] =  ($val->shipmentDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d'):'';
+            $row['predictedDeliveryDate'] = ($val->predictedDeliveryDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->predictedDeliveryDate,'Y-m-d'): '' ;
+            $row['deliveryDate'] =  ($val->deliveryDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->deliveryDate,'Y-m-d'):'';
             if ($val->cancellationDate != null) {
                 $cancellationDate = '<span style="color-red">' . $val->cancellationDate . '<br />' . $val->shipmentFault->description . '</span>';
             } else {
@@ -110,9 +110,9 @@ class CShipmentListAjaxController extends AAjaxController
             }
 
             $row['cancellationDate'] = $cancellationDate;
-            $row['creationDate'] = $val->creationDate;
+            $row['creationDate'] = ($val->creationDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->creationDate,'Y-m-d'):'';
             $row['productContent'] = "";
-            $row["shipmentInvoiceNumber"] = $val->shipmentInvoiceNumber;
+            $row["shipmentInvoiceNumber"] = ($val->shipmentInvoiceNumber!=null)? $val->shipmentInvoiceNumber:'';
 
 
             $orderlineIds = [];
@@ -131,7 +131,7 @@ class CShipmentListAjaxController extends AAjaxController
 
             }
 
-            $row['orderShipmentPrice'] = $shippingSum;
+            $row['orderShipmentPrice'] = ($shippingSum!=0)?number_format($shippingSum,2,',','.'):'0,00';
             $row['orderContent'] = implode('<br />',$orderlineIds);
             $row['note'] = $val->note;
 
