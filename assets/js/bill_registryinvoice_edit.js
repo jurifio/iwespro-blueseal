@@ -96,7 +96,7 @@ $.ajax({
 
 });
 
-
+/*
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -150,7 +150,7 @@ $.ajax({
 
 });
 
-$.ajax({
+/*$.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
     data: {
@@ -169,6 +169,8 @@ $.ajax({
     });
 
 });
+
+
 
 
 /*$.ajax({

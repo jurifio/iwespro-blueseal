@@ -149,6 +149,15 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach (\Monkey::app()->repoFactory->create('Country')->findAll() as $country) {
+                                                if ($country->id ==  $brc->countryId) {
+                                                    echo '<option value="'.$country->id.'" selected="selected">'.$country->name.'<option>';
+                                                } else {
+                                                    echo '<option value="'.$country->id.'">'.$country->name.'<option>';
+                                                }
+                                            }
+                                            ?>
+
                                         </select>
                                     </div>
                                 </div>
@@ -192,6 +201,14 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach (\Monkey::app()->repoFactory->create('User')->findAll() as $user) {
+                                                if ($user->id ==  $brc->userId) {
+                                                    echo '<option value="'.$user->id.'" selected="selected">'.$user->email.'<option>';
+                                                } else {
+                                                    echo '<option value="'.$user->id.'">'.$user->email.'<option>';
+                                                }
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -309,7 +326,7 @@
                                                     echo '<option value="'.$bank->id.'">'.$bank->name.' '.$bank->location.'<option>';
                                                 }
                                             }
-                                            ?>
+                                           ?>
                                         </select>
                                     </div>
                                 </div>
@@ -329,13 +346,13 @@
                                         <select id="currencyId" name="currencyId"
                                                 class="full-width selectpicker"
                                                 data-init-plugin="selectize">
-                                            <?php/* foreach (\Monkey::app()->repoFactory->create('Currency')->findAll() as $currency) {
+                                            <?php foreach (\Monkey::app()->repoFactory->create('Currency')->findAll() as $currency) {
                                                 if ($currency->id == $brcbi->currencyId) {
                                                     echo '<option value="'.$currency->id.'" selected="selected">'.$currency->code.'<option>';
                                                 } else {
                                                     echo '<option value="'.$currency->id.'">'.$currency->code.'<option>';
                                                 }
-                                            }*/
+                                            }
                                             ?>
                                         </select>
                                     </div>
@@ -501,7 +518,6 @@
                                         <th style="width:10%;">totale Riga</th>
                                         <th style="width:10%;">Elimina</th>
                                     </tr>
-                                    ';
 
                                 </table>
                             </div>

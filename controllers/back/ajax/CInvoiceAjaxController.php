@@ -12,7 +12,7 @@ use PDO;
 use PDOException;
 
 /**
- * Class CChangeOrderStatus
+ * Class CInvoiceAjaxController
  * @package bamboo\blueseal\controllers\ajax
  *
  * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}

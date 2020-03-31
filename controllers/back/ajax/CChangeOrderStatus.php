@@ -79,8 +79,8 @@ class CChangeOrderStatus extends AAjaxController
                 try{
                     $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$codeStatus.'\' WHERE id='.$remoteOrderSellerId);
                     $stmtUpdateOrder->execute();
-                    if ($codeStatus=='ORDER_CANCEL' || $codeStatus=='ORD_RETURNED'){
-                        if ($codestatus='ORDER_CANCEL'){
+                    if ($codeStatus=='ORD_CANCEL' || $codeStatus=='ORD_RETURNED'){
+                        if ($codestatus='ORD_CANCEL'){
                             $codeToDelete=2;
                         }else{
                             $codeToDelete=3;
