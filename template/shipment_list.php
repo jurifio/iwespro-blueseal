@@ -98,12 +98,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Numero di fattura
                                 </th>
-                                <th data-slug="creationDate"
-                                    data-isVisible="false"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc" class="center dataFilterType">Data Creazione
-                                </th>
+
                                 <th data-slug="note"
                                     data-is-visible="false"
                                     data-searchable="true"
