@@ -87,7 +87,7 @@ class CChangeOrderStatus extends AAjaxController
                         }
                         $stmtUpdateRemoteShopMovements=$db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
                     values(
-                         '".$remoteOrdeSellerId."',
+                         '".$remoteOrderSellerId."',
                           null,
                           null,
                           '".$order->netTotal."',
@@ -104,7 +104,7 @@ class CChangeOrderStatus extends AAjaxController
                         $stmtUpdateRemoteShopMovements->execute();
                     }
                 }catch (\Throwable $e){
-                    $this->report('CChangeStatusOrder', 'error change Status  remote Order',$e);
+                    \Monkey::app()->applicationLog('CChangeStatusOrder','error', 'error change Status  remote Order',$e);
 
                 }
 

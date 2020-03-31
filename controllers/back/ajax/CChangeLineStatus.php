@@ -102,6 +102,25 @@ class CChangeLineStatus extends AAjaxController
                     $stmtOrderLine->execute();
                     $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
                     $stmtOrder->execute();
+                    if($orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status=='ORD_MISSNG' || $orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status== 'ORD_ERR_SEND' || $orderLine->Status== 'ORD_QLTY_KO'){
+                        $stmtUpdateRemoteShopMovements=$db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
+                    values(
+                         '".$orderLine->remoteOrderSellerId."',
+                          null,
+                          null,
+                          '".$orderLine->netPrice."',
+                          '".$dateNow."',
+                          '".$dateNow."',
+                         '2',
+                          1,
+                          'ordine Cancellato',
+                          1,
+                          '".$orderLine->orderId."'
+                                                                                                                                                                                
+                                                                                                                                                               
+) ");
+                        $stmtUpdateRemoteShopMovements->execute();
+                    }
                 }
             }
 
