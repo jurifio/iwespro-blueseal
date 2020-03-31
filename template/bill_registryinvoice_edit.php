@@ -302,6 +302,14 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach (\Monkey::app()->repoFactory->create('BankRegistry')->findAll() as $bank) {
+                                                if ($bank->id ==  $brcbi->bankRegistryId) {
+                                                    echo '<option value="'.$bank->id.'" selected="selected">'.$bank->name.' '.$bank->location.'<option>';
+                                                } else {
+                                                    echo '<option value="'.$bank->id.'">'.$bank->name.' '.$bank->location.'<option>';
+                                                }
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -321,6 +329,14 @@
                                         <select id="currencyId" name="currencyId"
                                                 class="full-width selectpicker"
                                                 data-init-plugin="selectize">
+                                            <?php/* foreach (\Monkey::app()->repoFactory->create('Currency')->findAll() as $currency) {
+                                                if ($currency->id == $brcbi->currencyId) {
+                                                    echo '<option value="'.$currency->id.'" selected="selected">'.$currency->code.'<option>';
+                                                } else {
+                                                    echo '<option value="'.$currency->id.'">'.$currency->code.'<option>';
+                                                }
+                                            }*/
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -349,6 +365,14 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <?php foreach (\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findAll() as $taxes) {
+                                                if ($taxes->id == $brcbi->billRegistryTypeTaxesId) {
+                                                    echo '<option value="'.$taxes->id.'" selected="selected">'.$taxes->description.'<option>';
+                                                } else {
+                                                    echo '<option value="'.$taxes->id.'">'.$taxes->description.'<option>';
+                                                }
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -356,7 +380,7 @@
                                     <div class="form-group form-group-default required">
                                         <label for="sdi">Codice UNIVOCO SDI</label>
                                         <input id="sdi" autocomplete="off" type="text"
-                                               class="form-control" name="sdi" value=""
+                                               class="form-control" name="sdi" value="<?php echo $brcbi->sdi;?>"
                                                required="required"/>
                                     </div>
                                 </div>

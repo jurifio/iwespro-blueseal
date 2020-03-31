@@ -171,7 +171,7 @@ $.ajax({
 });
 
 
-$.ajax({
+/*$.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
     data: {
@@ -189,7 +189,8 @@ $.ajax({
         options: res2,
     });
 
-});
+});*/
+/**
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -277,7 +278,7 @@ $.ajax({
     });
 
 });
-
+*/
 
 
 
