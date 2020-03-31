@@ -102,13 +102,15 @@ class CChangeLineStatus extends AAjaxController
                     $stmtOrderLine->execute();
                     $stmtOrder = $db_con->prepare("UPDATE `Order` SET `status`='" . $orderRepo->status . "' WHERE id=" . $orderRepo->remoteOrderSellerId);
                     $stmtOrder->execute();
+                    $typePayment=\Monkey::app()->repoFactory->create('OrderPaymentMethod')->findOneBy(['id'=>$orderRepo->orderPaymentMethodId]);
+                    $amountToReturn=$orderLine->netPrice-($orderLine->netPrice/100*$typePayment->paymentCommissionRate)-($orderLine->netPrice/100*11);
                     if($orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status=='ORD_MISSNG' || $orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status== 'ORD_ERR_SEND' || $orderLine->Status== 'ORD_QLTY_KO'){
                         $stmtUpdateRemoteShopMovements=$db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
                     values(
                          '".$orderLine->remoteOrderSellerId."',
                           null,
                           null,
-                          '".$orderLine->netPrice."',
+                          '".$amountToReturn."',
                           '".$dateNow."',
                           '".$dateNow."',
                          '2',
