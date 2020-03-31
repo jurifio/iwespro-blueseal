@@ -93,12 +93,12 @@ class CShipmentListAjaxController extends AAjaxController
             if ($findOhs != null) {
                 $toAddress = json_decode($row['frozenShippingAddress'],true);
 
-                $row['toAddress'] = $toAddress['name'] . ' ' . $toAddress['surname'] . ' ' . $toAddress['company'] . '<br />' . $toAddress['address'] . '<br/>' . $toAddress['postcode'] . ' ' . $toAddress['city'] . ' ' . $toAddress['province'];
+                $row['toAddress'] = addslashes($toAddress['name'] . ' ' . $toAddress['surname'] . ' ' . $toAddress['company'] . '<br />' . $toAddress['address'] . '<br/>' . $toAddress['postcode'] . ' ' . $toAddress['city'] . ' ' . $toAddress['province']);
             } else {
-                $row['toAddress'] = $val->toAddress ? ($val->toAddress->subject . '<br />' . $val->toAddress->address . '<br />' . $val->toAddress->city) : '---';
+                $row['toAddress'] =  addslashes($val->toAddress ? ($val->toAddress->subject . '<br />' . $val->toAddress->address . '<br />' . $val->toAddress->city) : '---');
             }
 
-            $row['fromAddress'] = $val->fromAddress ? ($val->fromAddress->subject . '<br />' . $val->fromAddress->address . '<br />' . $val->fromAddress->city) : '---';
+            $row['fromAddress'] = addslashes($val->fromAddress ? ($val->fromAddress->subject . '<br />' . $val->fromAddress->address . '<br />' . $val->fromAddress->city) : '---');
             $row['predictedShipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedShipmentDate,'Y-m-d');
             $row['shipmentDate'] = STimeToolbox::FormatDateFromDBValue($val->shipmentDate,'Y-m-d');
             $row['predictedDeliveryDate'] = STimeToolbox::FormatDateFromDBValue($val->predictedDeliveryDate,'Y-m-d');
@@ -109,48 +109,48 @@ class CShipmentListAjaxController extends AAjaxController
                 $cancellationDate = '';
             }
 
-        $row['cancellationDate'] = $cancellationDate;
-        $row['creationDate'] = $val->creationDate;
-        $row['productContent'] = "";
-        $row["shipmentInvoiceNumber"] = $val->shipmentInvoiceNumber;
+            $row['cancellationDate'] = $cancellationDate;
+            $row['creationDate'] = $val->creationDate;
+            $row['productContent'] = "";
+            $row["shipmentInvoiceNumber"] = $val->shipmentInvoiceNumber;
 
 
-        $orderlineIds = [];
-        $shippingSum = 0;
-        foreach ($val->orderLine as $orderLine) {
-            if ($allShop) $orderlineIds[] = '<a href="/blueseal/ordini/aggiungi?order=' . $orderLine->orderId . '">' . $orderLine->printId() . '</a>';
-            else $orderlineIds[] = $orderLine->printId();
+            $orderlineIds = [];
+            $shippingSum = 0;
+            foreach ($val->orderLine as $orderLine) {
+                if ($allShop) $orderlineIds[] = '<a href="/blueseal/ordini/aggiungi?order=' . $orderLine->orderId . '">' . $orderLine->printId() . '</a>';
+                else $orderlineIds[] = $orderLine->printId();
 
-            //SE LA SPEDIZIONE VA DAL FRIEND A IWES NON FARE LA SOMMMA E MOSTRA 0 SU COSTO DI SPEDIZIONE
-            if ($val->scope === "supplierToUs") {
-                $shippingSum = 0;
-            } else {
-                $shippingSum += $orderLine->shippingCharge;
+                //SE LA SPEDIZIONE VA DAL FRIEND A IWES NON FARE LA SOMMMA E MOSTRA 0 SU COSTO DI SPEDIZIONE
+                if ($val->scope === "supplierToUs") {
+                    $shippingSum = 0;
+                } else {
+                    $shippingSum += $orderLine->shippingCharge;
+                }
+
+
             }
 
+            $row['orderShipmentPrice'] = $shippingSum;
+            $row['orderContent'] = implode('<br />',$orderlineIds);
+            $row['note'] = $val->note;
 
+            $row['shipmentInvoiceNumber'] = $val->shipmentInvoiceNumber;
+            $row['realShipmentPrice'] = $val->realShipmentPrice;
+
+            $margin = $shippingSum - $val->realShipmentPrice;
+
+            if ($margin > 0) {
+                $row['shipmentPriceMargin'] = "<p style='color:green'>" . $margin . "</p>";
+            } else if ($margin < 0) {
+                $row['shipmentPriceMargin'] = "<p style='color:red'>" . $margin . "</p>";
+            } else {
+                $row['shipmentPriceMargin'] = $margin;
+            }
+
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
-        $row['orderShipmentPrice'] = $shippingSum;
-        $row['orderContent'] = implode('<br />',$orderlineIds);
-        $row['note'] = $val->note;
-
-        $row['shipmentInvoiceNumber'] = $val->shipmentInvoiceNumber;
-        $row['realShipmentPrice'] = $val->realShipmentPrice;
-
-        $margin = $shippingSum - $val->realShipmentPrice;
-
-        if ($margin > 0) {
-            $row['shipmentPriceMargin'] = "<p style='color:green'>" . $margin . "</p>";
-        } else if ($margin < 0) {
-            $row['shipmentPriceMargin'] = "<p style='color:red'>" . $margin . "</p>";
-        } else {
-            $row['shipmentPriceMargin'] = $margin;
-        }
-
-        $datatable->setResponseDataSetRow($key,$row);
+        return $datatable->responseOut();
     }
-
-return $datatable->responseOut();
-}
 }

@@ -518,27 +518,27 @@
                                         <th style="width:10%;">totale Riga</th>
                                         <th style="width:10%;">Elimina</th>
                                     </tr>
-
+                                    <?php
+                                    foreach($brir as $invoiceRow){
+                                        echo '<tr><td>'.$invoiceRow->id.'</td>';
+                                        echo '<td>'.$invoiceRow->description.'</td>';
+                                        echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','.').'&euro;</td>';
+                                        echo '<td>'.$invoiceRow->qty.'</td>';
+                                        echo '<td>'.number_format($invoiceRow->priceRow,2,',','.').'&euro;</td>';
+                                        echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
+                                        echo '<td>'.number_format($invoiceRow->discountRow,2,',','.').'&percnt;</td>';
+                                        echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
+                                        $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxesId')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
+                                        echo '<td>'.number_format($vat->perc,2,',','.').'&percnt;</td>';
+                                        echo '<td>'.number_format($invoiceRow->vatRow,2,',','.').'&euro;</td>';
+                                        echo '<td>'.number_format($invoiceRow->grossTotal,2,',','.').'&euro;</td>';
+                                        echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoice('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                                    }
+                                    ?>
                                 </table>
                             </div>
                             <div class="row" id="rawProductGeneric">
-            <?php
-                          foreach($brir as $invoiceRow){
-                              echo '<td>'.$invoiceRow->id.'</td>';
-                              echo '<td>'.$invoiceRow->description.'</td>';
-                              echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','.').'&euro;</td>';
-                              echo '<td>'.$invoiceRow->qty.'</td>';
-                              echo '<td>'.number_format($invoiceRow->priceRow,2,',','.').'&euro;</td>';
-                              echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
-                              echo '<td>'.number_format($invoiceRow->discountRow,2,',','.').'&percnt;</td>';
-                              echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
-                              $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxesId')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
-                              echo '<td>'.number_format($vat->perc,2,',','.').'&percnt;</td>';
-                              echo '<td>'.number_format($invoiceRow->vatRow,2,',','.').'&euro;</td>';
-                              echo '<td>'.number_format($invoiceRow->grossTotal,2,',','.').'&euro;</td>';
-                              echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoice('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
-                          }
-            ?>
+
                             </div>
                         </div>
                         <div class="col-md-4">
