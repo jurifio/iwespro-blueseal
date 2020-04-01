@@ -528,7 +528,7 @@
                                         echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
                                         echo '<td>'.number_format($invoiceRow->discountRow,2,',','.').'&percnt;</td>';
                                         echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
-                                        $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxesId')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
+                                        $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
                                         echo '<td>'.number_format($vat->perc,2,',','.').'&percnt;</td>';
                                         echo '<td>'.number_format($invoiceRow->vatRow,2,',','.').'&euro;</td>';
                                         echo '<td>'.number_format($invoiceRow->grossTotal,2,',','.').'&euro;</td>';

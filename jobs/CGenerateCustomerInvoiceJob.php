@@ -1374,7 +1374,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 if ($rowInvoiceExtraFee != null) {
                                     foreach ($rowInvoiceExtraFee as $rowInvoice) {
                                         $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
-                                        $rowInvoiceInsert->billRegistryInvoiceId = $invoiceNumber;
+                                        $rowInvoiceInsert->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
                                         $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
                                         $descriptionRow=$rowInvoice['description'];
                                         if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129){
@@ -1430,7 +1430,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 if ($rowInvoiceDetail != null) {
                                     foreach ($rowInvoiceDetail as $rowInvoice) {
                                         $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
-                                        $rowInvoiceInsert->billRegistryInvoiceId = $invoiceNumber;
+                                        $rowInvoiceInsert->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
                                         $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
                                         $descriptionRow=$rowInvoice['description'];
                                         if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129){
