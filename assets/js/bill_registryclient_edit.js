@@ -89,6 +89,9 @@ $.ajax({
         }
     });
 });
+var $select = $("#bankRegistryId").selectize();
+var selectize = $select[0].selectize;
+selectize.setValue(selectize.search($("#bankRegistryIdTemp").val()).items[0].id);
 
 
 $.ajax({
@@ -150,39 +153,7 @@ $.ajax({
 
 document.getElementById('insertClient').style.display = "block";
 
-$('#bankRegistryId').change(function () {
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BankRegistry'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        let select = $('#bankRegistryId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name', 'location', 'abi', 'cab'],
-            options: res2,
-            render: {
-                item: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                        '</div>'
-                },
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                        '</div>'
-                }
-            }
-        });
-    });
-});
+
 
 $('#typeFriendId').change(function () {
     let ratingValue = $('#typeFriendId').val();
@@ -5615,5 +5586,6 @@ function deletePaymentDetail(id) {
     }).done(function (res) {
     });
 }
+
 
 
