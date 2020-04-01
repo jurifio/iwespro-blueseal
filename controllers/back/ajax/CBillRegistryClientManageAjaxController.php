@@ -647,6 +647,18 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
             }
             $brcaInsert->update();
 
+            $brcbi = $billRegistryClientBillingInfoRepo->findOneBy(['id'=>$_GET['billRegistryClientBillingInfoId']]);
+            $brcbi->bankRegistryId=$bankRegistryId;
+            $brcbi->currencyId=$currencyId;
+            $brcbi->billRegistryTypePaymentId=$billRegistryTypePaymentId;
+            $brcbi->billRegistryTypeTaxesId=$billRegistryTypeTaxesId;
+            $brcbi->iban=$iban;
+            $brcbi->sdi=$sdi;
+            $brcbi->billRegistryClientId=$billRegistryClientId;
+            $brci->update();
+
+
+
             \Monkey::app()->applicationLog('CRegistryClientManageAjaxController','Report','Update Client','update id-Client Account ' . $billRegistryClientId . '-' . $companyName);
             return '1-' . $billRegistryClientId;
 

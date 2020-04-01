@@ -309,6 +309,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
+                                    <input type="hidden" id="billRegistryClientBillingInfoId" name="billRegistryClientBillingInfoId" value="<?php echo $brcbi->id;?> "/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="bankRegistryId">Seleziona la Banca di Appoggio</label>
                                         <select id="bankRegistryId" name="bankRegistryId"

@@ -619,6 +619,7 @@ $(document).on('bs.client.save', function () {
         'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +
+        'billRegistryClientBillingInfoId='+ $("#billRegistryClientBillingInfoId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
         'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
         'sdi=' + $("#sdi").val() + '&' +
