@@ -310,13 +310,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="hidden" id="billRegistryClientBillingInfoId" name="billRegistryClientBillingInfoId" value="<?php echo $brcbi->id;?> "/>
-                                    <input type="hidden" id="bankRegistryIdTemp" name="bankRegistryIdTemp" value="<?php echo $brcbi->bankRegistryId;?>";
+                                    <input type="hidden" id="bankRegistryIdTemp" name="bankRegistryIdTemp" value="<?php echo $brcbi->bankRegistryId;?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="bankRegistryId">Seleziona la Banca di Appoggio</label>
                                         <select id="bankRegistryId" name="bankRegistryId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
+                                            <option value="<?php echo $bankRegistry->id ;?>"><?php echo $bankRegistry->name.' '.$bankRegistry->location.' abi:'.$bankRegistry->abi.' cab:'.$bankRegistry->cab;?></option>
 
                                         </select>
                                     </div>

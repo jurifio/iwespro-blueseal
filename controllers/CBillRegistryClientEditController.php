@@ -50,7 +50,7 @@ class CBillRegistryClientEditController extends ARestrictedAccessRootController
         $brcl=$billRegistryClientLocationRepo->findBy(['billRegistryClientId'=>$id]);
         $brcc=$billRegistryClientContactRepo->findBy(['billRegistryClientId'=>$id]);
         $brcContract=$billRegistryClientContractRepo->findBy(['billRegistryClientId'=>$id,'billRegistryClientAccountId'=>$billRegistryClientAccountId]);
-        $bankRegistry=\Monkey::app()->repoFactory->create('BankRegistry')->findBy(['id'=>$brcbi->bankRegistryId]);
+        $bankRegistry=\Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id'=>$brcbi->bankRegistryId]);
         $currency=\Monkey::app()->repoFactory->create('Currency')->findBy(['id'=>$brcbi->currencyId]);
         $billRegistryTypePayment=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findBy(['id'=>$brcbi->billRegistryTypePaymentId]);
         $billRegistryTypeTaxes=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findBy(['id'=>$brcbi->billRegistryTypeTaxesId]);

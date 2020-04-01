@@ -89,9 +89,8 @@ $.ajax({
         }
     });
 });
-var $select = $("#bankRegistryId").selectize();
-var selectize = $select[0].selectize;
-selectize.setValue(selectize.search($("#bankRegistryIdTemp").val()).items[0].id);
+let tempbankRegistry=$('#bankRegistryIdTemp').val();
+$('#bankRegistryId').val(tempbankRegistry);
 
 
 $.ajax({
