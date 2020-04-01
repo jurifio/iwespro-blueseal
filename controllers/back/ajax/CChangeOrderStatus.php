@@ -86,7 +86,7 @@ class CChangeOrderStatus extends AAjaxController
                             $codeToDelete=3;
                         }
                         $typePayment=\Monkey::app()->repoFactory->create('OrderPaymentMethod')->findOneBy(['id'=>$order->orderPaymentMethodId]);
-                        $amountToReturn=$order->netTotal-($order->netTotal/100*$typePayment->paymentCommissionRate)-($order/100*11);
+                        $amountToReturn=$order->netTotal-($order->netTotal/100*$typePayment->paymentCommissionRate)-($order->netTotal/100*11);
                         $stmtUpdateRemoteShopMovements=$db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
                     values(
                          '".$remoteOrderSellerId."',
