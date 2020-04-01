@@ -655,7 +655,7 @@ class CBillRegistryClientManageAjaxController extends AAjaxController
             $brcbi->iban=$iban;
             $brcbi->sdi=$sdi;
             $brcbi->billRegistryClientId=$billRegistryClientId;
-            $brci->update();
+            $brcbi->update();
 
 
 
