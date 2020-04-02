@@ -23,11 +23,13 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 class CBillRegistryInvoiceEditController extends ARestrictedAccessRootController
 {
+
     protected $fallBack = "blueseal";
     protected $pageSlug = "bill_registryinvoice_edit";
 
     public function get()
     {
+        ini_set("memory_limit", "2000M");
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryinvoice_edit.php');
         $id =\Monkey::app()->router->request()->getRequestData('id');

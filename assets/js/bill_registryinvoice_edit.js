@@ -2,7 +2,7 @@ var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
-today = yyyy + '-' + mm + '-' + dd+'T00:00';
+today = yyyy + '-' + mm + '-' + dd + 'T00:00';
 document.getElementById('insertInvoice').style.display = "block";
 
 
@@ -19,7 +19,6 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-
 
 
 $.ajax({
@@ -41,14 +40,14 @@ $.ajax({
         options: res2,
         render: {
             item: function (item, escape) {
-                var invoiceNew=parseInt(item.invoiceCounter)+1;
+                var invoiceNew = parseInt(item.invoiceCounter) + 1;
                 return '<div>' +
                     '<span class="label">' + escape(invoiceNew) + ' ' + escape(item.invoiceYear) + '</span> - ' +
                     '<span class="caption">Numero Fatt: ' + escape(invoiceNew) + '</span>' +
                     '</div>'
             },
             option: function (item, escape) {
-                var invoiceNew1=parseInt(item.invoiceCounter)+1;
+                var invoiceNew1 = parseInt(item.invoiceCounter) + 1;
                 return '<div>' +
                     '<span class="label">' + escape(invoiceNew1) + ' ' + escape(item.invoiceYear) + '</span> - ' +
                     '<span class="caption">Numero Fatt: ' + escape(invoiceNew1) + '</span>' +
@@ -58,8 +57,6 @@ $.ajax({
     });
 
 });
-
-
 
 
 $.ajax({
@@ -171,7 +168,7 @@ $.ajax({
 
 });
 
-
+*/
 
 
 /*$.ajax({
@@ -193,97 +190,100 @@ $.ajax({
     });
 
 });*/
-$("#bankRegistryId").change(function () {
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'BankRegistry'
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    let selectBankRegistryId = $('#bankRegistryId');
-    if (typeof (selectBankRegistryId[0].selectize) != 'undefined') selectBankRegistryId[0].selectize.destroy();
-    selectBankRegistryId.selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: ['name', 'location', 'abi', 'cab'],
-        options: res2,
-        render: {
-            item: function (item, escape) {
-                return '<div>' +
-                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                    '</div>'
-            },
-            option: function (item, escape) {
-                return '<div>' +
-                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                    '</div>'
+
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BankRegistry'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        let selectBankRegistryId = $('#bankRegistryId');
+        if (typeof (selectBankRegistryId[0].selectize) != 'undefined') selectBankRegistryId[0].selectize.destroy();
+        selectBankRegistryId.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name', 'location', 'abi', 'cab'],
+            options: res2,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                        '</div>'
+                }
             }
-        }
-    });
-});
-});
-
-
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'BillRegistryTypeTaxes'
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    let selectBillRegistryTypeTaxes = $('#billRegistryTypeTaxesId');
-    if (typeof (selectBillRegistryTypeTaxes[0].selectize) != 'undefined') selectBillRegistryTypeTaxes[0].selectize.destroy();
-    selectBillRegistryTypeTaxes.selectize({
-        valueField: 'id',
-        labelField: 'description',
-        searchField: ['description'],
-        options: res2
+        });
     });
 
-});
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'BillRegistryTypePayment'
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    var selectBillRegistryTypePayment = $('#billRegistryTypePaymentId');
-    if (typeof (selectBillRegistryTypePayment[0].selectize) != 'undefined') selectBillRegistryTypePayment[0].selectize.destroy();
-    selectBillRegistryTypePayment.selectize({
-        valueField: 'id',
-        labelField: 'name',
-        searchField: ['name'],
-        options: res2
+
+
+
+$("#billRegistryTypeTaxesId").change(function () {
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BillRegistryTypeTaxes'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        let selectBillRegistryTypeTaxes = $('#billRegistryTypeTaxesId');
+        if (typeof (selectBillRegistryTypeTaxes[0].selectize) != 'undefined') selectBillRegistryTypeTaxes[0].selectize.destroy();
+        selectBillRegistryTypeTaxes.selectize({
+            valueField: 'id',
+            labelField: 'description',
+            searchField: ['description'],
+            options: res2
+        });
+
     });
-
 });
-$.ajax({
-    method: 'GET',
-    url: '/blueseal/xhr/GetTableContent',
-    data: {
-        table: 'BillRegistryTypeTaxes'
-    },
-    dataType: 'json'
-}).done(function (res2) {
-    var selectbillRegistryTypeTaxesProductId = $('#billRegistryTypeTaxesProductId');
-    if (typeof (selectbillRegistryTypeTaxesProductId[0].selectize) != 'undefined') selectbillRegistryTypeTaxesProductId[0].selectize.destroy();
-    selectbillRegistryTypeTaxesProductId.selectize({
-        valueField: 'id',
-        labelField: 'description',
-        searchField: ['description'],
-        options: res2
+$("#billRegistryTypePaymentId").change(function () {
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BillRegistryTypePayment'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var selectBillRegistryTypePayment = $('#billRegistryTypePaymentId');
+        if (typeof (selectBillRegistryTypePayment[0].selectize) != 'undefined') selectBillRegistryTypePayment[0].selectize.destroy();
+        selectBillRegistryTypePayment.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name'],
+            options: res2
+        });
+
     });
-
 });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'BillRegistryTypeTaxes'
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var selectbillRegistryTypeTaxesProductId = $('#billRegistryTypeTaxesProductId');
+        if (typeof (selectbillRegistryTypeTaxesProductId[0].selectize) != 'undefined') selectbillRegistryTypeTaxesProductId[0].selectize.destroy();
+        selectbillRegistryTypeTaxesProductId.selectize({
+            valueField: 'id',
+            labelField: 'description',
+            searchField: ['description'],
+            options: res2
+        });
 
-
+    });
 
 
 
@@ -372,7 +372,7 @@ $(document).on('click', '#checkedAll', function () {
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
-$('#idProduct').change(function() {
+$('#idProduct').change(function () {
     var selectionProductId = $('#idProduct').val();
     document.getElementById('nameProduct').value = '';
     document.getElementById('um').value = '';
@@ -397,7 +397,7 @@ $('#idProduct').change(function() {
             document.getElementById('price').value = parseFloat(v.price).toFixed(2);
             document.getElementById('description').value = v.description;
             document.getElementById('qty').value = '1';
-            document.getElementById('netTotalRow').value = (parseFloat(v.price)*1).toFixed(2);
+            document.getElementById('netTotalRow').value = (parseFloat(v.price) * 1).toFixed(2);
 
             document.getElementById('percVat').value = v.perc;
 
@@ -413,7 +413,7 @@ $('#billRegistryClientId').change(function () {
     document.getElementById('address').value = '';
     document.getElementById('zipCode').value = '';
     document.getElementById('province').value = '';
-    document.getElementById('extra').value = '' ;
+    document.getElementById('extra').value = '';
     document.getElementById('city').value = '';
     document.getElementById('vatNumber').value = '';
     document.getElementById('phone').value = '';
@@ -421,7 +421,7 @@ $('#billRegistryClientId').change(function () {
     document.getElementById('fax').value = '';
     document.getElementById('mobile').value = '';
 
-    var selectUserId= $("#userId")[0].selectize;
+    var selectUserId = $("#userId")[0].selectize;
     selectUserId.clear();
 
     var selectizetoCountryId = $("#countryId")[0].selectize;
@@ -439,17 +439,14 @@ $('#billRegistryClientId').change(function () {
     document.getElementById('iban').value = '';
 
 
-    var selectBankRegistryId= $("#bankRegistryId")[0].selectize;
+    var selectBankRegistryId = $("#bankRegistryId")[0].selectize;
     selectBankRegistryId.clear();
-    var selectCurrencyId= $("#currencyId")[0].selectize;
+    var selectCurrencyId = $("#currencyId")[0].selectize;
     selectCurrencyId.clear();
-    var selectBillRegistryTypePaymentId= $("#billRegistryTypePaymentId")[0].selectize;
+    var selectBillRegistryTypePaymentId = $("#billRegistryTypePaymentId")[0].selectize;
     selectBillRegistryTypePaymentId.clear();
-    var selectBillRegistryTypeTaxesId= $("#billRegistryTypeTaxesId")[0].selectize;
+    var selectBillRegistryTypeTaxesId = $("#billRegistryTypeTaxesId")[0].selectize;
     selectBillRegistryTypeTaxesId.clear();
-
-
-
 
 
     $.ajax({
@@ -495,12 +492,7 @@ $('#billRegistryClientId').change(function () {
 });
 
 
-
-
-
-
-
-$('#billRegistryTypeTaxesProductId').change(function() {
+$('#billRegistryTypeTaxesProductId').change(function () {
     idVat = $('#billRegistryTypeTaxesProductId').val();
     $.ajax({
         url: '/blueseal/xhr/SelectBillRegistryTypeTaxesToRowInvoiceAjaxController',
@@ -510,123 +502,133 @@ $('#billRegistryTypeTaxesProductId').change(function() {
         },
         dataType: 'json'
     }).done(function (res) {
-            $('#percVat').val(res);
-        });
+        $('#percVat').val(res);
     });
-
+});
 
 
 $('#qty').change(function () {
-    let price=parseFloat($('#price').val());
-    let qty=parseInt($('#qty').val());
-    let discountRow=parseFloat($('#discountRow').val());
-    let netTotalRow=0;
-    if(discountRow==null || discountRow==0){
-        netTotalRow=price*qty;
-    }else{
-        netTotalRow=(price-(price/100*discountRow))*qty;
+    let price = parseFloat($('#price').val());
+    let qty = parseInt($('#qty').val());
+    let discountRow = parseFloat($('#discountRow').val());
+    let netTotalRow = 0;
+    if (discountRow == null || discountRow == 0) {
+        netTotalRow = price * qty;
+    } else {
+        netTotalRow = (price - (price / 100 * discountRow)) * qty;
     }
     $('#netTotalRow').val(netTotalRow.toFixed(2));
 
 })
 $('#discountRow').change(function () {
-    let price=parseFloat($('#price').val());
-    let qty=parseInt($('#qty').val());
-    let discountRow=parseFloat($('#discountRow').val());
-    let netTotalRow=0;
-    if(discountRow==null || discountRow==0){
-        netTotalRow=price*qty;
-    }else{
-        netTotalRow=(price-(price/100*discountRow))*qty;
+    let price = parseFloat($('#price').val());
+    let qty = parseInt($('#qty').val());
+    let discountRow = parseFloat($('#discountRow').val());
+    let netTotalRow = 0;
+    if (discountRow == null || discountRow == 0) {
+        netTotalRow = price * qty;
+    } else {
+        netTotalRow = (price - (price / 100 * discountRow)) * qty;
     }
     $('#netTotalRow').val(netTotalRow.toFixed(2));
 
 });
 $('#price').change(function () {
-    let price=parseFloat($('#price').val());
-    let qty=parseInt($('#qty').val());
-    let discountRow=parseFloat($('#discountRow').val());
-    let netTotalRow=0;
-    if(discountRow==null || discountRow==0){
-        netTotalRow=price*qty;
-    }else{
-        netTotalRow=(price-(price/100*discountRow))*qty;
+    let price = parseFloat($('#price').val());
+    let qty = parseInt($('#qty').val());
+    let discountRow = parseFloat($('#discountRow').val());
+    let netTotalRow = 0;
+    if (discountRow == null || discountRow == 0) {
+        netTotalRow = price * qty;
+    } else {
+        netTotalRow = (price - (price / 100 * discountRow)) * qty;
     }
     $('#netTotalRow').val(netTotalRow.toFixed(2));
 
 });
-$('#invoiceSelectNumber').change(function(){
-   $('#invoiceNumber').val(parseInt($('#invoiceSelectNumber').val())+1);
+$('#invoiceSelectNumber').change(function () {
+    $('#invoiceNumber').val(parseInt($('#invoiceSelectNumber').val()) + 1);
 });
-var rowInvoice=[];
-var counterRow=0;
-function addRowProduct(){
-    let counterRowView=counterRow+1;
-    let vatRow=parseFloat($('#netTotalRow').val())/100*parseFloat($('#percVat').val());
-    let discountRowAmount=parseFloat($('#netTotalRow').val())/100*parseFloat($('#discountRow').val());
-    let grossTotalRow=parseFloat($('#netTotalRow').val())+vatRow;
-    let percDiscountRow=parseFloat($('#discountRow').val());
+var rowInvoice = [];
+var counterRow = 0;
+
+function addRowProduct() {
+    let counterRowView = counterRow + 1;
+    let vatRow = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#percVat').val());
+    let discountRowAmount = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#discountRow').val());
+    let grossTotalRow = parseFloat($('#netTotalRow').val()) + vatRow;
+    let percDiscountRow = parseFloat($('#discountRow').val());
     percDiscountRow.toFixed(2);
-    let rowInvoiceSingle=[];
-    var insertRow={idRow:counterRow, idProduct:$('#idProduct').val(),price:$('#price').val(),description:$('#description').val(),qty:$('#qty').val(),netTotalRow:$('#netTotalRow').val(),vatRow:vatRow,percDiscountRow:percDiscountRow,discountRowAmount:discountRowAmount,grossTotalRow:grossTotalRow,billRegistryTypeTaxesProductId:$('#billRegistryTypeTaxesProductId').val()};
+    let rowInvoiceSingle = [];
+    var insertRow = {
+        idRow: counterRow,
+        idProduct: $('#idProduct').val(),
+        price: $('#price').val(),
+        description: $('#description').val(),
+        qty: $('#qty').val(),
+        netTotalRow: $('#netTotalRow').val(),
+        vatRow: vatRow,
+        percDiscountRow: percDiscountRow,
+        discountRowAmount: discountRowAmount,
+        grossTotalRow: grossTotalRow,
+        billRegistryTypeTaxesProductId: $('#billRegistryTypeTaxesProductId').val()
+    };
     rowInvoice.push(insertRow);
-    var oldGrossTotal=parseFloat($('#grossTotal').val());
-    var grossTotal=oldGrossTotal+grossTotalRow;
-    var oldNetTotal=parseFloat($('#netTotal').val());
-    var netTotal=oldNetTotal+parseFloat($('#netTotalRow').val());
-    var oldDiscountTotal=parseFloat($('#discountTotal').val());
-    var discountTotal=oldDiscountTotal+discountRowAmount;
-    var oldVatTotal=parseFloat($('#vatTotal').val());
-    var vatTotal=oldVatTotal+vatRow;
-    var netTotalRow=parseFloat($('#price').val())*parseInt($('#qty').val());
+    var oldGrossTotal = parseFloat($('#grossTotal').val());
+    var grossTotal = oldGrossTotal + grossTotalRow;
+    var oldNetTotal = parseFloat($('#netTotal').val());
+    var netTotal = oldNetTotal + parseFloat($('#netTotalRow').val());
+    var oldDiscountTotal = parseFloat($('#discountTotal').val());
+    var discountTotal = oldDiscountTotal + discountRowAmount;
+    var oldVatTotal = parseFloat($('#vatTotal').val());
+    var vatTotal = oldVatTotal + vatRow;
+    var netTotalRow = parseFloat($('#price').val()) * parseInt($('#qty').val());
     $('#netTotal').val(netTotal.toFixed(2));
     $('#discountTotal').val(discountTotal.toFixed(2));
     $('#vatTotal').val(vatTotal.toFixed(2));
     $('#grossTotal').val(grossTotal.toFixed(2));
-    let myrowInvoice='<tr id="productRowTr'+counterRow+'"><td>'+counterRowView+'</td>';
-    myrowInvoice+='<td>'+$('#nameProduct').val()+'</td>';
-    myrowInvoice+='<td>'+parseFloat($('#price').val()).toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+$('#qty').val()+'</td>';
-    myrowInvoice+='<td>'+netTotalRow.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+$('#discountRow').val()+' %</td>';
-    myrowInvoice+='<td>'+discountRowAmount.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+$('#percVat').val()+' %</td>';
-    myrowInvoice+='<td>'+vatRow.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+grossTotalRow.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td><button class="success" id="deleteRowInvoiceButton'+counterRowView+'" onclick="deleteRowInvoice(' + counterRow + ','+counterRowView+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+    let myrowInvoice = '<tr id="productRowTr' + counterRow + '"><td>' + counterRowView + '</td>';
+    myrowInvoice += '<td>' + $('#nameProduct').val() + '</td>';
+    myrowInvoice += '<td>' + parseFloat($('#price').val()).toFixed(2) + ' &euro;</td>';
+    myrowInvoice += '<td>' + $('#qty').val() + '</td>';
+    myrowInvoice += '<td>' + netTotalRow.toFixed(2) + ' &euro;</td>';
+    myrowInvoice += '<td>' + $('#discountRow').val() + ' %</td>';
+    myrowInvoice += '<td>' + discountRowAmount.toFixed(2) + ' &euro;</td>';
+    myrowInvoice += '<td>' + $('#percVat').val() + ' %</td>';
+    myrowInvoice += '<td>' + vatRow.toFixed(2) + ' &euro;</td>';
+    myrowInvoice += '<td>' + grossTotalRow.toFixed(2) + ' &euro;</td>';
+    myrowInvoice += '<td><button class="success" id="deleteRowInvoiceButton' + counterRowView + '" onclick="deleteRowInvoice(' + counterRow + ',' + counterRowView + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
 
     $('#myRowInvoice').append(myrowInvoice);
-    counterRow=counterRow+1;
-
-
-
-
+    counterRow = counterRow + 1;
 
 
 }
-function deleteRowInvoice(counterRow,counterRowView){
-    var myNetTotalRow=parseFloat(rowInvoice[counterRow].netTotalRow);
-    var myVatTotalRow=parseFloat(rowInvoice[counterRow].vatRow);
-    var myDiscountRowAmount=parseFloat(rowInvoice[counterRow].discountRowAmount);
-    var myGrossTotalRow=parseFloat(rowInvoice[counterRow].grossTotalRow);
-    var myGrossTotal=parseFloat($('#grossTotal').val());
-    var myNetTotal=parseFloat($('#netTotal').val());
-    var myVatTotal=parseFloat($('#vatTotal').val());
-    var myDiscountTotal=parseFloat($('#discountTotal').val());
-    var newGrossTotal=myGrossTotal-myGrossTotalRow;
-    var newDiscountTotal=myDiscountTotal-myDiscountRowAmount;
-    var newNetTotal=myNetTotal-myNetTotalRow;
-    var newVatTotal=myVatTotal-myVatTotalRow;
+
+function deleteRowInvoice(counterRow, counterRowView) {
+    var myNetTotalRow = parseFloat(rowInvoice[counterRow].netTotalRow);
+    var myVatTotalRow = parseFloat(rowInvoice[counterRow].vatRow);
+    var myDiscountRowAmount = parseFloat(rowInvoice[counterRow].discountRowAmount);
+    var myGrossTotalRow = parseFloat(rowInvoice[counterRow].grossTotalRow);
+    var myGrossTotal = parseFloat($('#grossTotal').val());
+    var myNetTotal = parseFloat($('#netTotal').val());
+    var myVatTotal = parseFloat($('#vatTotal').val());
+    var myDiscountTotal = parseFloat($('#discountTotal').val());
+    var newGrossTotal = myGrossTotal - myGrossTotalRow;
+    var newDiscountTotal = myDiscountTotal - myDiscountRowAmount;
+    var newNetTotal = myNetTotal - myNetTotalRow;
+    var newVatTotal = myVatTotal - myVatTotalRow;
     $('#netTotal').val(newNetTotal.toFixed(2));
     $('#vatTotal').val(newVatTotal.toFixed(2));
     $('#discountTotal').val(newDiscountTotal.toFixed(2));
     $('#grossTotal').val(newGrossTotal.toFixed(2));
-    var invoiceRowDetail='#productRowTr'+counterRow.toString();
+    var invoiceRowDetail = '#productRowTr' + counterRow.toString();
     $(invoiceRowDetail).remove();
 
 
 }
-function deleteRowInvoiceEdit(counterRow,counterRowView){
+
+function deleteRowInvoiceEdit(counterRow, counterRowView) {
 
     $.ajax({
         url: '/blueseal/xhr/BillRegistryInvoiceRowManageAjaxController',
@@ -638,33 +640,30 @@ function deleteRowInvoiceEdit(counterRow,counterRowView){
     }).done(function (res) {
 
         $.each(res, function (k, v) {
-            var myNetTotalRow=parseInt(v.netTotalRow).toFixed(2);
-            var myVatTotalRow=parseInt(v.vatRow).toFixed(2);
-            var myDiscountRowAmount=parseInt(v.discountRowAmount).toFixed(2);
-            var myGrossTotalRow=parseInt(v.grossTotalRow).toFixed(2);
-            var myGrossTotal=$('#grossTotal').val().replace(',','.');
-            var myNetTotal=$('#netTotal').val().replace(',','.');
-            var myVatTotal=$('#vatTotal').val().replace(',','.');
-            var myDiscountTotal=$('#discountTotal').val().replace(',','.');
-            var newGrossTotal=parseFloat(myGrossTotal)-myGrossTotalRow;
-            var newDiscountTotal=parseFloat(myDiscountTotal)-myDiscountRowAmount;
-            var newNetTotal=parseFloat(myNetTotal)-myNetTotalRow;
-            var newVatTotal=parseFloat(myVatTotal)-myVatTotalRow;
+            var myNetTotalRow = parseInt(v.netTotalRow).toFixed(2);
+            var myVatTotalRow = parseInt(v.vatRow).toFixed(2);
+            var myDiscountRowAmount = parseInt(v.discountRowAmount).toFixed(2);
+            var myGrossTotalRow = parseInt(v.grossTotalRow).toFixed(2);
+            var myGrossTotal = $('#grossTotal').val().replace(',', '.');
+            var myNetTotal = $('#netTotal').val().replace(',', '.');
+            var myVatTotal = $('#vatTotal').val().replace(',', '.');
+            var myDiscountTotal = $('#discountTotal').val().replace(',', '.');
+            var newGrossTotal = parseFloat(myGrossTotal) - myGrossTotalRow;
+            var newDiscountTotal = parseFloat(myDiscountTotal) - myDiscountRowAmount;
+            var newNetTotal = parseFloat(myNetTotal) - myNetTotalRow;
+            var newVatTotal = parseFloat(myVatTotal) - myVatTotalRow;
             $('#netTotal').val(newNetTotal.toFixed(2));
             $('#vatTotal').val(newVatTotal.toFixed(2));
             $('#discountTotal').val(newDiscountTotal.toFixed(2));
             $('#grossTotal').val(newGrossTotal.toFixed(2));
-            var invoiceRowDetail='#productRowTr'+counterRow.toString();
+            var invoiceRowDetail = '#productRowTr' + counterRow.toString();
             $(invoiceRowDetail).remove();
 
         });
     });
 
 
-
-
 }
-
 
 
 $(document).on('bs.invoice.save', function () {
@@ -677,7 +676,7 @@ $(document).on('bs.invoice.save', function () {
             val = val + $(this).val() + ',';
         }
     });
-    var config = '?billRegistryInvoiceId='+$("#billRegistryInvoiceId").val()+'&billRegistryClientId='+ $("#billRegistryClientId").val() + '&' +
+    var config = '?billRegistryInvoiceId=' + $("#billRegistryInvoiceId").val() + '&billRegistryClientId=' + $("#billRegistryClientId").val() + '&' +
         'companyName=' + $("#companyName").val() + '&' +
         'address=' + $("#address").val() + '&' +
         'extra=' + $("#extra").val() + '&' +
@@ -705,22 +704,20 @@ $(document).on('bs.invoice.save', function () {
         'currencyId=' + $("#currencyId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
         'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
-        'sdi=' + $("#sdi").val()+
-        'rowInvoice='+JSON.stringify(rowInvoice);
+        'sdi=' + $("#sdi").val() +
+        'rowInvoice=' + JSON.stringify(rowInvoice);
 
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         var data = {
-            rowInvoice:JSON.stringify(rowInvoice),
-            dateInvoice:$('#dateInvoice').val(),
-            invoiceNumber:$('#invoiceNumber').val(),
-            netTotal:$('#netTotal').val(),
-            discountTotal:$('#discountTotal').val(),
-            vatTotal:$('#vatTotal').val(),
-            grossTotal:$('#grossTotal').val(),
-
-
+            rowInvoice: JSON.stringify(rowInvoice),
+            dateInvoice: $('#dateInvoice').val(),
+            invoiceNumber: $('#invoiceNumber').val(),
+            netTotal: $('#netTotal').val(),
+            discountTotal: $('#discountTotal').val(),
+            vatTotal: $('#vatTotal').val(),
+            grossTotal: $('#grossTotal').val(),
 
 
         };

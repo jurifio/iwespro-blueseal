@@ -1124,7 +1124,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryTypeTaxesRepo=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes');
         $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
         $billRegistryTimeTableRepo=\Monkey::app()->repoFactory->create('BillRegistryTimeTable');
-        $billRegistryInvoiceId=$_GET_['billRegistryInvoiceId'];
+        $billRegistryInvoiceId=$_GET['billRegistryInvoiceId'];
         $data = $this->app->router->request()->getRequestData();
         $rowInvoice=$data['rowInvoice'];
         $netTotal=$data['netTotal'];
@@ -1225,6 +1225,8 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 break;
             }
         }
+        $billRegistryTypePayment = \Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findOneBy(['id' => $billRegistryTypePaymentId]);
+        $namePayment = $billRegistryTypePayment->name;
         if($isCalculated==0) {
             $billRegistryTimeTable = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
             foreach ($billRegistryTimeTable as $payment) {
@@ -1232,8 +1234,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             }
 
 
-            $billRegistryTypePayment = $billRegistryTypePaymentRepo->findOneBy(['id' => $billRegistryTypePaymentId]);
-            $namePayment = $billRegistryTypePayment->name;
+
 
             $filterBillRegistryTypePayment = $billRegistryTypePaymentRepo->findBy(['name' => $namePayment]);
             $numberRate = 1;
@@ -1810,7 +1811,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             foreach ($rowInvoiceDetail as $rowInvoice) {
                 $invoiceText .= '<tr><td class="text-center">' . $rowInvoice->description . '</td>';
                 $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice->priceRow) . ' &euro;' . '</td>';
-                $invoiceText .= '<td class="text-center">sconto' . $rowInvoice->percDiscount . ' %: ' . money_format('%.2n',$rowInvoice->discountRow) . ' &euro;' . '</td>';
+                $invoiceText .= '<td class="text-center">sconto' . $rowInvoice->percentDiscount . ' %: ' . money_format('%.2n',$rowInvoice->discountRow) . ' &euro;' . '</td>';
                 $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice->billRegistryTypeTaxesId]);
                 $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice->vatRow) . ' &euro;' . '</td>';
                 $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice->grossTotalRow) . ' &euro;' . '</td></tr>';
