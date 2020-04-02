@@ -59,8 +59,6 @@ $.ajax({
 
 });
 
-let tempbankRegistry=$('#bankRegistryIdTemp').val();
-$('#bankRegistryId').val(tempbankRegistry);
 
 
 $.ajax({
@@ -124,7 +122,8 @@ document.getElementById('insertClient').style.display = "block";
 
 
 $('#bankRegistryId').change(function(){
-
+    let selectizetobankRegistryId = $("#bankRegistryId")[0].selectize;
+    selectizetobankRegistryId.clear();
     $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',

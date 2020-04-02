@@ -341,7 +341,7 @@
                 </div>
                 <div id="insertInvoiceRow" class="tabcontent">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-10">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Inserimento Righe Corpo Documento</h5>
                             </div>
@@ -443,7 +443,7 @@
 
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Riepilogo</h5>
                             </div>

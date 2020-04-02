@@ -33,7 +33,7 @@ class CBillRegistryInvoiceEditController extends ARestrictedAccessRootController
         $id =\Monkey::app()->router->request()->getRequestData('id');
         $bri=\Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id'=>$id]);
         $brc=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$bri->billRegistryClientId]);
-        $brir=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findBy(['billRegistryInvoiceId'=>$bri->invoiceNumber]);
+        $brir=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findBy(['billRegistryInvoiceId'=>$bri->id]);
         $brtp=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findAll();
         $brca=\Monkey::app()->repoFactory->create('BillRegistryClientAccount')->findOneBy(['billRegistryClientId'=>$bri->billRegistryClientId]);
         $brcbi=\Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo')->findOneBy(['id'=>$bri->billRegistryClientBillingInfoId]);
