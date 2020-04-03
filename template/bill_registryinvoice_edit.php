@@ -523,15 +523,15 @@
                                     foreach($brir as $invoiceRow){
                                         echo '<tr id="productRowTr'.$invoiceRow->id.'"><td>'.$invoiceRow->id.'</td>';
                                         echo '<td>'.$invoiceRow->description.'</td>';
-                                        echo '<td>'.number_format($invoiceRow->priceRow,2,',','').'&euro;</td>';
+                                        echo '<td>'.number_format($invoiceRow->priceRow,2,',','.').'&euro;</td>';
                                         echo '<td>'.$invoiceRow->qty.'</td>';
-                                        echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','').'&euro;</td>';
-                                        echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','').'&percnt;</td>';
-                                        echo '<td>'.number_format($invoiceRow->discountRow,2,',','').'&euro;</td>';
+                                        echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','.').'&euro;</td>';
+                                        echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','.').'&percnt;</td>';
+                                        echo '<td>'.number_format($invoiceRow->discountRow,2,',','.').'&euro;</td>';
                                         $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
                                         echo '<td>'.number_format($vat->perc,2,',','').'&percnt;</td>';
-                                        echo '<td>'.number_format($invoiceRow->vatRow,2,',','').'&euro;</td>';
-                                        echo '<td>'.number_format($invoiceRow->grossTotalRow,2,',','').'&euro;</td>';
+                                        echo '<td>'.number_format($invoiceRow->vatRow,2,',','.').'&euro;</td>';
+                                        echo '<td>'.number_format($invoiceRow->grossTotalRow,2,',','.').'&euro;</td>';
                                         echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                                     }
                                     ?>
@@ -550,7 +550,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="netTotal">importo Netto Totale</label>
                                         <input id="netTotal" autocomplete="off" type="text"
-                                               class="form-control" name="netTotal" value="<?php echo number_format($bri->netTotal,2,',','');?> "
+                                               class="form-control" name="netTotal" value="<?php echo number_format($bri->netTotal,2,',','.');?> "
                                         />
                                     </div>
                                 </div>
@@ -560,7 +560,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="discountTotal">Sconto Totale</label>
                                         <input id="discountTotal" autocomplete="off" type="text"
-                                               class="form-control" name="discountTotal" value="<?php echo number_format($bri->discountTotal,2,',','');?>"
+                                               class="form-control" name="discountTotal" value="<?php echo number_format($bri->discountTotal,2,',','.');?>"
                                         />
                                     </div>
                                 </div>
@@ -570,7 +570,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="vatTotal">Iva Totale</label>
                                         <input id="vatTotal" autocomplete="off" type="text"
-                                               class="form-control" name="vatTotal" value="<?php echo number_format($bri->vat,2,',','');?>"
+                                               class="form-control" name="vatTotal" value="<?php echo number_format($bri->vat,2,',','.');?>"
                                         />
                                     </div>
                                 </div>
@@ -580,7 +580,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="grossTotal">Totale da Pagare</label>
                                         <input id="grossTotal" autocomplete="off" type="text"
-                                               class="form-control" name="grossTotal" value="<?php echo number_format($bri->grossTotal,2,',','');?>"
+                                               class="form-control" name="grossTotal" value="<?php echo number_format($bri->grossTotal,2,',','.');?>"
                                         />
                                     </div>
                                 </div>
