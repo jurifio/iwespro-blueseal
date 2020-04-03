@@ -60,7 +60,6 @@ $.ajax({
 });
 
 
-
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -89,7 +88,7 @@ $.ajax({
     dataType: 'json'
 }).done(function (res2) {
     let selectTypeTaxes = $('#billRegistryTypeTaxesId');
-      if (typeof (selectTypeTaxes[0].selectize) != 'undefined') selectTypeTaxes[0].selectize.destroy();
+    if (typeof (selectTypeTaxes[0].selectize) != 'undefined') selectTypeTaxes[0].selectize.destroy();
     selectTypeTaxes.selectize({
         valueField: 'id',
         labelField: 'description',
@@ -107,7 +106,7 @@ $.ajax({
     dataType: 'json'
 }).done(function (res2) {
     let selectTypePayment = $('#billRegistryTypePaymentId');
-      if (typeof (selectTypePayment[0].selectize) != 'undefined') selectTypePayment[0].selectize.destroy();
+    if (typeof (selectTypePayment[0].selectize) != 'undefined') selectTypePayment[0].selectize.destroy();
     selectTypePayment.selectize({
         valueField: 'id',
         labelField: 'name',
@@ -121,7 +120,7 @@ $.ajax({
 document.getElementById('insertClient').style.display = "block";
 
 
-$('#bankRegistryId').change(function(){
+$('#bankRegistryId').change(function () {
     let selectizetobankRegistryId = $("#bankRegistryId")[0].selectize;
     selectizetobankRegistryId.clear();
     $.ajax({
@@ -597,7 +596,7 @@ $(document).on('bs.client.save', function () {
             val = val + $(this).val() + ',';
         }
     });
-    var config = '?billRegistryClientId=' + $('#billRegistryClientId').val() +'&'+
+    var config = '?billRegistryClientId=' + $('#billRegistryClientId').val() + '&' +
         'companyName=' + $("#companyName").val() + '&' +
         'address=' + $("#address").val() + '&' +
         'extra=' + $("#extra").val() + '&' +
@@ -624,7 +623,7 @@ $(document).on('bs.client.save', function () {
         'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +
-        'billRegistryClientBillingInfoId='+ $("#billRegistryClientBillingInfoId").val() + '&' +
+        'billRegistryClientBillingInfoId=' + $("#billRegistryClientBillingInfoId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
         'billRegistryTypeTaxesId=' + $("#billRegistryTypeTaxesId").val() + '&' +
         'sdi=' + $("#sdi").val() + '&' +
@@ -1431,6 +1430,31 @@ function editContract(id) {
                 checkedStatusSuspend = 'checked="checked"';
                 break;
         }
+        var todayN = new Date();
+        var ddN = String(todayN.getDate()).padStart(2, '0');
+        var mmN = String(todayN.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyyN = todayN.getFullYear();
+
+        todayN = yyyyN + '-' + mmN + '-' + ddN + 'T00:00';
+        if (dateActivation == null) {
+            dateActivation = todayN;
+        }
+        if (dateContractExpire == null) {
+            dateContractExpire = todayN;
+        }
+        if (dateContractExpire == null) {
+            dateContractExpire = todayN;
+        }
+        if (nameContract == null) {
+            nameContract = '';
+        }
+        if (dateAlertRenewal == null) {
+            dateAlertRenewal = todayN;
+        }
+        if (contractCodeInt == null) {
+            contractCodeInt = '';
+        }
+
         let bsModalContract = new $.bsModal('Modifica Contratto Servizio ' + nameProduct, {
             body: `<p>Confermare?</p>
  <div class="row">
@@ -1653,7 +1677,7 @@ function addContractDetail(id) {
         }
         var bodyForm = '';
         switch (billRegistryGroupProductId) {
-            case 1:
+            case "1":
                 bodyForm = `   
                                 <div class="row">
                                 <div class="col-md-2">
@@ -2113,7 +2137,7 @@ function addContractDetail(id) {
                             </div>                    
 `;
                 break;
-            case 2:
+            case "2":
                 bodyForm = `<div class="row">
                                 <div class="col-md-2">
                                    <input type="hidden" id="contractId" name="contractId" value="` + contractId + `"/>
@@ -2574,7 +2598,7 @@ function addContractDetail(id) {
 
 
                 break;
-            case 3:
+            case "3":
                 bodyForm = `
                             <div class="row">
                                 <div class="col-md-2">
@@ -2713,7 +2737,7 @@ function addContractDetail(id) {
                             </div>
 `;
                 break;
-            case 4:
+            case "4":
                 bodyForm = `
 <div class="row">
                                 <div class="col-md-2">
@@ -2853,7 +2877,7 @@ function addContractDetail(id) {
                             </div>
 `;
                 break;
-            case 5:
+            case "5":
                 bodyForm = `
 <div class="row">
                                 <div class="col-md-2">
@@ -3317,7 +3341,7 @@ function addContractDetail(id) {
                 break;
 
 
-            case 6:
+            case "6":
                 bodyForm = `
 <div class="row">
                                 <div class="col-md-2">
@@ -3401,7 +3425,7 @@ function addContractDetail(id) {
             `;
 
                 break;
-            case 7:
+            case "7":
                 bodyForm = `
 
 <div class="row">
@@ -3888,7 +3912,6 @@ function addContractDetail(id) {
         let bsModalDetailContract = new $.bsModal('Aggiungi Dettaglio  Contratto al Servizio ' + nameProduct + ' associato', {
             body: bodyForm
         });
-
 
 
         $.ajax({
@@ -4721,8 +4744,8 @@ function addContractDetail(id) {
                         descriptionRow: $('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         value: $('#valueDes').val(),
-                        billRegistryProductValue:$('#typeProductAssocId').val(),
-                        descriptionValue:$('#descriptionValue').val(),
+                        billRegistryProductValue: $('#typeProductAssocId').val(),
+                        descriptionValue: $('#descriptionValue').val(),
                         billingDay: $('#billingDay').val(),
                         typePaymentId: $('#1typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
@@ -4731,8 +4754,8 @@ function addContractDetail(id) {
                         descfeeCodCommission: $('#descfeeCodCommission').val(),
                         descfeePaypalCommission: $('#descfeePaypalCommission').val(),
                         descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
-                        descfeeCostDeliveryCommission:$('#descfeeCostDeliveryCommission').val(),
-                        descfeeCostCommissionPayment:$('#descfeeCostCommissionPayment').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommission').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPayment').val(),
                         dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommission').val(),
                         dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
                         dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
@@ -4745,12 +4768,12 @@ function addContractDetail(id) {
                         feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
                         periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommission').val(),
                         deliveryTypePaymentId: $('#1deliveryTypePaymentId').val(),
-                        productfeePaypalCommission:$('#productfeePaypalCommission').val(),
-                        productfeeBankTransferCommission:$('#productfeeBankTransferCommission').val(),
-                        productfeeCodCommission:$('#productfeeCodCommission').val(),
-                        productfeeCreditCardCommision:$('#productfeeCreditCardCommision').val(),
-                        productfeeCostDeliveryCommission:$('#productfeeCostDeliveryCommission').val(),
-                        productfeeCostCommissionPayment:$('#productfeeCostCommissionPayment').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommission').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommission').val(),
+                        productfeeCodCommission: $('#productfeeCodCommission').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommision').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommission').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPayment').val(),
                         chargePaymentIsActive: $('#chargePaymentIsActive').val(),
                         feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
                         periodTypeChargePayment: $('#dayChargeFeeCostCommissionPayment').val(),
@@ -4766,8 +4789,8 @@ function addContractDetail(id) {
                         descriptionRow: $('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         value: $('#valueDes').val(),
-                        billRegistryProductValue:$('#typeProductAssocId').val(),
-                        descriptionValue:$('#descriptionValue').val(),
+                        billRegistryProductValue: $('#typeProductAssocId').val(),
+                        descriptionValue: $('#descriptionValue').val(),
                         billingDay: $('#billingDay').val(),
                         typePaymentId: $('#1typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
@@ -4776,8 +4799,8 @@ function addContractDetail(id) {
                         descfeeCodCommission: $('#descfeeCodCommission').val(),
                         descfeePaypalCommission: $('#descfeePaypalCommission').val(),
                         descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
-                        descfeeCostDeliveryCommission:$('#descfeeCostDeliveryCommission').val(),
-                        descfeeCostCommissionPayment:$('#descfeeCostCommissionPayment').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommission').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPayment').val(),
                         dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommission').val(),
                         dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
                         dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
@@ -4790,12 +4813,12 @@ function addContractDetail(id) {
                         feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
                         periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommission').val(),
                         deliveryTypePaymentId: $('#1deliveryTypePaymentId').val(),
-                        productfeePaypalCommission:$('#productfeePaypalCommission').val(),
-                        productfeeBankTransferCommission:$('#productfeeBankTransferCommission').val(),
-                        productfeeCodCommission:$('#productfeeCodCommission').val(),
-                        productfeeCreditCardCommision:$('#productfeeCreditCardCommision').val(),
-                        productfeeCostDeliveryCommission:$('#productfeeCostDeliveryCommission').val(),
-                        productfeeCostCommissionPayment:$('#productfeeCostCommissionPayment').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommission').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommission').val(),
+                        productfeeCodCommission: $('#productfeeCodCommission').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommision').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommission').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPayment').val(),
                         chargePaymentIsActive: $('#chargePaymentIsActive').val(),
                         feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
                         periodTypeChargePayment: $('#dayChargeFeeCostCommissionPayment').val(),
@@ -4817,8 +4840,8 @@ function addContractDetail(id) {
                         feeAgencyCommision: $('#feeAgencyCommision').val(),
                         prepaidPaymentIsActive: $('#prepaidPaymentIsActive').val(),
                         prepaidCost: $('#prepaidCost').val(),
-                        productStartUpCostCampaign:$('#productStartUpCostCampaign').val(),
-                        productFeeAgencyCommision:$('#productFeeAgencyCommision').val(),
+                        productStartUpCostCampaign: $('#productStartUpCostCampaign').val(),
+                        productFeeAgencyCommision: $('#productFeeAgencyCommision').val(),
 
 
                     };
@@ -4838,8 +4861,8 @@ function addContractDetail(id) {
                         feeAgencyCommision: $('#feeAgencyCommision').val(),
                         prepaidPaymentIsActive: $('#prepaidPaymentIsActive').val(),
                         prepaidCost: $('#prepaidCost').val(),
-                        productStartUpCostCampaign:$('#productStartUpCostCampaign').val(),
-                        productFeeAgencyCommision:$('#productFeeAgencyCommision').val(),
+                        productStartUpCostCampaign: $('#productStartUpCostCampaign').val(),
+                        productFeeAgencyCommision: $('#productFeeAgencyCommision').val(),
                     };
                     break;
                 case 5:
@@ -4851,8 +4874,8 @@ function addContractDetail(id) {
                         descriptionRow: $('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         value: $('#valueDes').val(),
-                        billRegistryProductValue:$('#typeProductAssocId').val(),
-                        descriptionValue:$('#descriptionValue').val(),
+                        billRegistryProductValue: $('#typeProductAssocId').val(),
+                        descriptionValue: $('#descriptionValue').val(),
                         billingDay: $('#billingDay').val(),
                         typePaymentId: $('#1typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
@@ -4863,8 +4886,8 @@ function addContractDetail(id) {
                         descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
                         descfeePaypalCommission: $('#descfeePaypalCommission').val(),
                         descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
-                        descfeeCostDeliveryCommission:$('#descfeeCostDeliveryCommission').val(),
-                        descfeeCostCommissionPayment:$('#descfeeCostCommissionPayment').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommission').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPayment').val(),
                         dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommission').val(),
                         dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
                         dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
@@ -4877,12 +4900,12 @@ function addContractDetail(id) {
                         feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
                         periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommission').val(),
                         deliveryTypePaymentId: $('#1deliveryTypePaymentId').val(),
-                        productfeePaypalCommission:$('#productfeePaypalCommission').val(),
-                        productfeeBankTransferCommission:$('#productfeeBankTransferCommission').val(),
-                        productfeeCodCommission:$('#productfeeCodCommission').val(),
-                        productfeeCreditCardCommision:$('#productfeeCreditCardCommision').val(),
-                        productfeeCostDeliveryCommission:$('#productfeeCostDeliveryCommission').val(),
-                        productfeeCostCommissionPayment:$('#productfeeCostCommissionPayment').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommission').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommission').val(),
+                        productfeeCodCommission: $('#productfeeCodCommission').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommision').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommission').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPayment').val(),
                         chargePaymentIsActive: $('#chargePaymentIsActive').val(),
                         feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
                         periodTypeChargePayment: $('#dayChargeFeeCostCommissionPayment').val(),
@@ -4899,8 +4922,8 @@ function addContractDetail(id) {
                         typeContractId: $('#typeContractId').val(),
                         valueMarkUpFullPrice: $('#valueMarkUpFullPrice').val(),
                         valueMarkUpSalePrice: $('#valueMarkUpSalePrice').val(),
-                        billingDay:$('#billingDay').val(),
-                        billRegistryProductValue:$('#billRegistryProductValue').val()
+                        billingDay: $('#billingDay').val(),
+                        billRegistryProductValue: $('#billRegistryProductValue').val()
                     };
                     break;
                 case 7:
@@ -4916,8 +4939,8 @@ function addContractDetail(id) {
                         descriptionRow: $('#descriptionRow').val(),
                         automaticInvoice: $('#automaticInvoice').val(),
                         value: $('#valueDes').val(),
-                        billRegistryProductValue:$('#typeProductAssocId').val(),
-                        descriptionValue:$('#descriptionValue').val(),
+                        billRegistryProductValue: $('#typeProductAssocId').val(),
+                        descriptionValue: $('#descriptionValue').val(),
                         billingDay: $('#billingDay').val(),
                         typePaymentId: $('#1typePaymentId').val(),
                         periodTypeCharge: $('#periodTypeCharge').val(),
@@ -4928,8 +4951,8 @@ function addContractDetail(id) {
                         descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
                         descfeePaypalCommission: $('#descfeePaypalCommission').val(),
                         descfeeBankTransferCommission: $('#descfeeBankTransferCommission').val(),
-                        descfeeCostDeliveryCommission:$('#descfeeCostDeliveryCommission').val(),
-                        descfeeCostCommissionPayment:$('#descfeeCostCommissionPayment').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommission').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPayment').val(),
                         dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommission').val(),
                         dayChargeFeeCodCommission: $('#dayChargeFeeCodCommission').val(),
                         dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommission').val(),
@@ -4942,12 +4965,12 @@ function addContractDetail(id) {
                         feeCostDeliveryCommission: $('#feeCostDeliveryCommission').val(),
                         periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommission').val(),
                         deliveryTypePaymentId: $('#1deliveryTypePaymentId').val(),
-                        productfeePaypalCommission:$('#productfeePaypalCommission').val(),
-                        productfeeBankTransferCommission:$('#productfeeBankTransferCommission').val(),
-                        productfeeCodCommission:$('#productfeeCodCommission').val(),
-                        productfeeCreditCardCommision:$('#productfeeCreditCardCommision').val(),
-                        productfeeCostDeliveryCommission:$('#productfeeCostDeliveryCommission').val(),
-                        productfeeCostCommissionPayment:$('#productfeeCostCommissionPayment').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommission').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommission').val(),
+                        productfeeCodCommission: $('#productfeeCodCommission').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommision').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommission').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPayment').val(),
                         chargePaymentIsActive: $('#chargePaymentIsActive').val(),
                         feeCostCommissionPayment: $('#feeCostCommissionPayment').val(),
                         periodTypeChargePayment: $('#dayChargeFeeCostCommissionPayment').val(),
@@ -5059,7 +5082,3662 @@ function listContractDetail(id) {
 
 
 function editContractDetail(id, billRegistryGroupProductId) {
+    var idDetail='';
+    var billRegistryContractRowId = id;
+    var automaticInvoice = '';
+    var nameRow = '';
+    var nameProduct = '';
+    var descriptionRow = '';
+    var value = '';
+    var billingDay = '';
+    var typePaymentId = '';
+    var periodTypeCharge = '';
+    var sellingFeeCommision = '';
+    var feeCreditCardCommission = '';
+    var dayChargeFeeCreditCardCommission = '';
+    var feeCodCommission = '';
+    var dayChargeFeeCodCommission = '';
+    var feeBankTransferCommission = '';
+    var dayChargeFeeBankTransferCommission = '';
+    var feePaypalCommission = '';
+    var dayChargeFeePaypalCommission = '';
+    var chargeDeliveryIsActive = '';
+    var feeCostDeliveryCommission = '';
+    var periodTypeChargeDelivery = '';
+    var deliveryTypePaymentId = '';
+    var chargePaymentIsActive = '';
+    var feeCostCommissionPayment = '';
+    var periodTypeChargePayment = '';
+    var paymentTypePaymentId = '';
+    var descfeeCodCommission = '';
+    var descriptionValue = '';
+    var descfeeCreditCardCommission = '';
+    var descfeePaypalCommission = '';
+    var descfeeBankTransferCommission = '';
+    var descfeeCostDeliveryCommission = '';
+    var descfeeCostCommissionPayment = '';
+    var billRegistryProductValue = '';
+    var billRegistryProductFeeCodCommission = '';
+    var billRegistryProductFeePaypalCommission = '';
+    var billRegistryProductFeeBankTransferCommission = '';
+    var billRegistryProductFeeCreditCardCommission = '';
+    var billRegistryProductFeeCostDeliveryCommission = '';
+    var billRegistryProductFeeCostCommissionPayment = '';
+    var checkAutomaticInvoice = '';
+    var notCheckAutomaticInvoice = '';
+    var checkMonth = '';
+    var check3Month = '';
+    var check6Month = '';
+    var checkYear = '';
+    var descriptionInvoice = '';
+    var startUpCostCampaign = '';
+    var feeAgencyCommision = '';
+    var prepaidPaymentIsActive = '';
+    var prepaidCost = '';
+    var billRegistryProductStartUpCostCampaign = '';
+    var billRegistryProductFeeAgencyCommision = '';
+    var typeContractId = '';
+    var valueMarkUpFullPrice = '';
+    var valueMarkUpSalePrice = '';
+    var emailAccount = '';
+    var emailAccountSendQty = '';
+    var emailAccountCampaignQty = '';
 
+
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryContractRowDetailEditManageAjaxController',
+        method: 'get',
+        data: {
+            id: id,
+            billRegistryGroupProductId: billRegistryGroupProductId
+        },
+        dataType: 'json'
+    }).done(function (res) {
+
+        let rawContractDetailEdit = res;
+        $.each(rawContractDetailEdit, function (k, v) {
+            switch (billRegistryGroupProductId) {
+                case 1:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    automaticInvoice = v.automaticInvoice;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    value = v.value;
+                    billingDay = v.billingDay;
+                    typePaymentId = v.typePaymentId;
+                    periodTypeCharge = v.periodTypeCharge;
+                    sellingFeeCommision = v.sellingFeeCommision;
+                    feeCreditCardCommission = v.feeCreditCardCommission;
+                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                    feeCodCommission = v.feeCodCommission;
+                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                    feeBankTransferCommission = v.feeBankTransferCommission;
+                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                    feePaypalCommission = v.feePaypalCommission;
+                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                    deliveryTypePaymentId = v.deliveryTypePaymentId;
+                    chargePaymentIsActive = v.chargePaymentIsActive;
+                    feeCostCommissionPayment = v.feeCostCommissionPayment;
+                    periodTypeChargePayment = v.periodTypeChargePayment;
+                    paymentTypePaymentId = v.paymentTypePaymentId;
+                    descfeeCodCommission = v.descfeeCodCommission;
+                    descriptionValue = v.descriptionValue;
+                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                    descfeePaypalCommission = v.descfeePaypalCommission;
+                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                    billRegistryProductValue = v.billRegistryProductValue;
+                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+
+
+                    break;
+                case 2:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    automaticInvoice = v.automaticInvoice;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    value = v.value;
+                    billingDay = v.billingDay;
+                    typePaymentId = v.typePaymentId;
+                    periodTypeCharge = v.periodTypeCharge;
+                    sellingFeeCommision = v.sellingFeeCommision;
+                    feeCreditCardCommission = v.feeCreditCardCommission;
+                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                    feeCodCommission = v.feeCodCommission;
+                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                    feeBankTransferCommission = v.feeBankTransferCommission;
+                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                    feePaypalCommission = v.feePaypalCommission;
+                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                    deliveryTypePaymentId = v.deliveryTypePaymentId;
+                    chargePaymentIsActive = v.chargePaymentIsActive;
+                    feeCostCommissionPayment = v.feeCostCommissionPayment;
+                    periodTypeChargePayment = v.periodTypeChargePayment;
+                    paymentTypePaymentId = v.paymentTypePaymentId;
+                    descfeeCodCommission = v.descfeeCodCommission;
+                    descriptionValue = v.descriptionValue;
+                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                    descfeePaypalCommission = v.descfeePaypalCommission;
+                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                    billRegistryProductValue = v.billRegistryProductValue;
+                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                    break;
+                case 3:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    descriptionInvoice = v.descriptionInvoice;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    startUpCostCampaign = v.startUpCostCampaign;
+                    automaticInvoice = v.automaticInvoice;
+                    billingDay = v.billingDay;
+                    typePaymentId = v.typePaymentId;
+                    feeAgencyCommision = v.feeAgencyCommision;
+                    prepaidPaymentIsActive = v.prepaidPaymentIsActive;
+                    prepaidCost = v.prepaidCost;
+                    billRegistryProductStartUpCostCampaign = v.billRegistryProductStartUpCostCampaign;
+                    billRegistryProductFeeAgencyCommision = v.billRegistryProductFeeAgencyCommision;
+
+
+                    break;
+                case 4:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    descriptionInvoice = v.descriptionInvoice;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    startUpCostCampaign = v.startUpCostCampaign;
+                    automaticInvoice = v.automaticInvoice;
+                    billingDay = v.billingDay;
+                    typePaymentId = v.typePaymentId;
+                    feeAgencyCommision = v.feeAgencyCommision;
+                    prepaidPaymentIsActive = v.prepaidPaymentIsActive;
+                    prepaidCost = v.prepaidCost;
+                    billRegistryProductStartUpCostCampaign = v.billRegistryProductStartUpCostCampaign;
+                    billRegistryProductFeeAgencyCommision = v.billRegistryProductFeeAgencyCommision;
+                    break;
+                case 5:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    automaticInvoice = v.automaticInvoice;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    value = v.value;
+                    billingDay = v.billingDay;
+                    typePaymentId = v.typePaymentId;
+                    periodTypeCharge = v.periodTypeCharge;
+                    sellingFeeCommision = v.sellingFeeCommision;
+                    feeCreditCardCommission = v.feeCreditCardCommission;
+                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                    feeCodCommission = v.feeCodCommission;
+                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                    feeBankTransferCommission = v.feeBankTransferCommission;
+                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                    feePaypalCommission = v.feePaypalCommission;
+                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                    deliveryTypePaymentId = v.deliveryTypePaymentId;
+                    chargePaymentIsActive = v.chargePaymentIsActive;
+                    feeCostCommissionPayment = v.feeCostCommissionPayment;
+                    periodTypeChargePayment = v.periodTypeChargePayment;
+                    paymentTypePaymentId = v.paymentTypePaymentId;
+                    descfeeCodCommission = v.descfeeCodCommission;
+                    descriptionValue = v.descriptionValue;
+                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                    descfeePaypalCommission = v.descfeePaypalCommission;
+                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                    billRegistryProductValue = v.billRegistryProductValue;
+                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                    break;
+                case 6:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    typeContractId = v.typeContractId;
+                    valueMarkUpFullPrice = v.valueMarkUpFullPrice;
+                    valueMarkUpSalePrice = v.valueMarkUpSalePrice;
+                    billingDay = v.billingDay;
+                    billRegistryProductValue = v.billRegistryProductValue;
+
+                    break;
+                case 7:
+                    idDetail=v.idDetail;
+                    billRegistryContractRowId = v.billRegistryContractRowId;
+                    automaticInvoice = v.automaticInvoice;
+                    emailAccount = v.emailAccount;
+                    emailAccountSendQty = v.emailAccountSendQty;
+                    emailAccountCampaignQty = v.emailAccountSendQty;
+                    nameRow = v.nameRow;
+                    descriptionRow = v.descriptionRow;
+                    value = v.value;
+                    billingDay = v.billingDay;
+                    typePaymentId = v.typePaymentId;
+                    periodTypeCharge = v.periodTypeCharge;
+                    sellingFeeCommision = v.sellingFeeCommision;
+                    feeCreditCardCommission = v.feeCreditCardCommission;
+                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                    feeCodCommission = v.feeCodCommission;
+                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                    feeBankTransferCommission = v.feeBankTransferCommission;
+                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                    feePaypalCommission = v.feePaypalCommission;
+                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                    deliveryTypePaymentId = v.deliveryTypePaymentId;
+                    chargePaymentIsActive = v.chargePaymentIsActive;
+                    feeCostCommissionPayment = v.feeCostCommissionPayment;
+                    periodTypeChargePayment = v.periodTypeChargePayment;
+                    paymentTypePaymentId = v.paymentTypePaymentId;
+                    descfeeCodCommission = v.descfeeCodCommission;
+                    descriptionValue = v.descriptionValue;
+                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                    descfeePaypalCommission = v.descfeePaypalCommission;
+                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                    billRegistryProductValue = v.billRegistryProductValue;
+                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                    break;
+
+            }
+            if (automaticInvoice == '1') {
+                checkAutomaticInvoice = 'selected="selected"';
+            } else {
+                notCheckAutomaticInvoice = 'selected="selected"';
+            }
+
+            switch (periodTypeCharge) {
+                case "1":
+                    checkMonth = 'selected="selected"';
+                    check3Month = '';
+                    check6Month = '';
+                    checkYear = '';
+
+                    break;
+                case "2":
+                    checkMonth = '';
+                    check3Month = 'selected="selected"';
+                    check6Month = '';
+                    checkYear = '';
+                    break;
+                case "3":
+                    checkMonth = '';
+                    check3Month = '';
+                    check6Month = 'selected="selected"';
+                    checkYear = '';
+
+                    break;
+                case "4":
+                    checkMonth = '';
+                    check3Month = '';
+                    check6Month = '';
+                    checkYear = 'selected="selected"';
+                    break;
+            }
+
+
+            // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+        });
+
+        /*switch (statusId) {
+            case '1':
+                checkedStatusActive = 'checked="checked"';
+                break;
+            case 2:
+                checkedStatusNotActive = 'checked="checked"';
+                break;
+            case 3:
+                checkedStatusSuspend = 'checked="checked"';
+                break;
+        }*/
+        var bodyForm = '';
+        switch (billRegistryGroupProductId) {
+            case 1:
+                bodyForm = `   
+                                <div class="row">
+                                <div class="col-md-2">
+                                
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRowEdit">Nome Dettaglio Contratto</label>
+                                        <input id="nameRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameRowEdit"
+                                               value="` + nameRow + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRowEdit"
+                                               value="` + descriptionRow + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="automaticInvoiceEdit">Fatturazione automatica</label>
+                                        <select id="automaticInvoiceEdit" name="automaticInvoiceEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option value=""></option>
+                                         <option value="1" ` + checkAutomaticInvoice + ` >Si</option>
+                                         <option value="0" ` + notCheckAutomaticInvoice + ` >No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="periodTypeChargeEdit">Periodicità di addebito</label>
+                                        <select id="periodTypeChargeEdit" name="periodTypeChargeEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1" ` + checkMonth + `>Mensile</option>
+                                         <option value="2" ` + check3Month + `>Trimestrale</option>
+                                         <option value="4" ` + check6Month + `>Semestrale</option>
+                                         <option value="4" ` + checkYear + ` >Annuale</option>
+                                           
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDayEdit">Giorno di Fatturazione</label>
+                                        <input id="billingDayEdit" autocomplete="off" type="text"
+                                               class="form-control" name="billingDayEdit"
+                                               value="` + billingDay + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1typePaymentIdEdit">Tipo di pagamento Associato</label>
+                                        <select id="1typePaymentIdEdit" name="1typePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                         </div>
+                         <div class="row">
+                                <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                        <label for="valueDesEdit">Valore Canone</label>
+                                        <input id="valueDesEdit" autocomplete="off" type="text"
+                                               class="form-control" name="valueDesEdit"
+                                               value="` + value + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeProductAssocIdEdit">Associa Prodotto</label>
+                                        <select id="typeProductAssocIdEdit" name="typeProductAssocIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionValueEdit">descrizione Canone</label>
+                                       <textarea class="form-control" name="descriptionValueEdit" id="descriptionValueEdit"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="descriptionDetailEdit">
+                                       
+                                    </div>
+                                </div>
+                                
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="sellingFeeCommisionEdit">Commissione sul Venduto</label>
+                                        <input id="sellingFeeCommisionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="sellingFeeCommisionEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                              
+                            </div> 
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommissionEdit"
+                                               value="`+descfeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
+                                        <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCreditCardCommissionEdit"
+                                               value="`+feeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCreditCardCommisionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCreditCardCommisionEdit" name="productfeeCreditCardCommisionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCreditCardCommisionEdit">   
+                                    </div>
+                                </div>
+                             </div>
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommissionEdit"
+                                               value="`+descfeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
+                                        <input id="feeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCodCommissionEdit"
+                                               value="`+feeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCodCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCodCommissionEdit" name="feeCodCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCodCommissionEdit">    
+                                    </div>
+                                </div> 
+                           </div>
+                            <div class="row"> 
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommissionEdit"
+                                               value="`+descfeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
+                                        <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeBankTransferCommissionEdit"
+                                               value="`+feeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeBankTransferCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeBankTransferCommissionEdit" name="productfeeBankTransferCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeBankTransferCommissionEdit">    
+                                    </div>
+                                </div> 
+                             </div>
+                           <div class="row">
+                            <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value="`+descfeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            <div class="col-md-2">
+                                 <div class="form-group form-group-default">
+                                        <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
+                                        <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feePaypalCommissionEdit"
+                                               value="`+feePaypalCommission+`"
+                                        /> 
+                                </div>
+                            </div>
+                             <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                             </div>
+                            <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeePaypalCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeePaypalCommissionEdit" name="productfeePaypalCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                         <div id="divfeePaypalCommissionEdit">    
+                                        </div>
+                                 </div>
+                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargeDeliveryIsActiveEdit">Addebitare Costi di Spedizione</label>
+                                        <select id="chargeDeliveryIsActiveEdit" name="chargeDeliveryIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
+                                        <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostDeliveryCommissionEdit"
+                                               value="`+feeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
+                                        <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostDeliveryCommissionEdit"
+                                               value="`+descfeeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostDeliveryCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostDeliveryCommissionEdit" name="productfeeCostDeliveryCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostDeliveryCommissionEdit">    
+                                    </div>
+                             </div>
+                                  <div class="col-md-2">
+                                       <div class="form-group form-group-default">
+                                            <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
+                                            <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                                   class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
+                                                   value="`+periodTypeChargeDelivery+`"
+                                            />
+                                        </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1deliveryTypePaymentIdEdit">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="1deliveryTypePaymentIdEdit" name="1deliveryTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargePaymentIsActiveEdit">Addebitare Costi su Pagamenti</label>
+                                        <select id="chargePaymentIsActiveEdit" name="chargePaymentIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
+                                        <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostCommissionPaymentEdit"
+                                               value="`+feeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
+                                        <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostCommissionPaymentEdit"
+                                               value="`+descfeeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostCommissionPaymentEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostCommissionPaymentEdit" name="productfeeCostCommissionPaymentEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostCommissionPaymentEdit">    
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
+                                               value="`+periodTypeChargePayment+`"
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1paymentTypePaymentIdEdit">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="1paymentTypePaymentIdEdit" name="1paymentTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            </div>                    
+`;
+                break;
+            case 2:
+                bodyForm = `   
+                                <div class="row">
+                                <div class="col-md-2">
+                                
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRowEdit">Nome Dettaglio Contratto</label>
+                                        <input id="nameRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameRowEdit"
+                                               value="` + nameRow + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRowEdit"
+                                               value="` + descriptionRow + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="automaticInvoiceEdit">Fatturazione automatica</label>
+                                        <select id="automaticInvoiceEdit" name="automaticInvoiceEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option value=""></option>
+                                         <option value="1" ` + checkAutomaticInvoice + ` >Si</option>
+                                         <option value="0" ` + notCheckAutomaticInvoice + ` >No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="periodTypeChargeEdit">Periodicità di addebito</label>
+                                        <select id="periodTypeChargeEdit" name="periodTypeChargeEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1" ` + checkMonth + `>Mensile</option>
+                                         <option value="2" ` + check3Month + `>Trimestrale</option>
+                                         <option value="4" ` + check6Month + `>Semestrale</option>
+                                         <option value="4" ` + checkYear + ` >Annuale</option>
+                                           
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDayEdit">Giorno di Fatturazione</label>
+                                        <input id="billingDayEdit" autocomplete="off" type="text"
+                                               class="form-control" name="billingDayEdit"
+                                               value="` + billingDay + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1typePaymentIdEdit">Tipo di pagamento Associato</label>
+                                        <select id="1typePaymentIdEdit" name="1typePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                         </div>
+                         <div class="row">
+                                <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                        <label for="valueDesEdit">Valore Canone</label>
+                                        <input id="valueDesEdit" autocomplete="off" type="text"
+                                               class="form-control" name="valueDesEdit"
+                                               value="` + value + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeProductAssocIdEdit">Associa Prodotto</label>
+                                        <select id="typeProductAssocIdEdit" name="typeProductAssocIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionValueEdit">descrizione Canone</label>
+                                       <textarea class="form-control" name="descriptionValueEdit" id="descriptionValueEdit"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="descriptionDetailEdit">
+                                       
+                                    </div>
+                                </div>
+                                
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="sellingFeeCommisionEdit">Commissione sul Venduto</label>
+                                        <input id="sellingFeeCommisionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="sellingFeeCommisionEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                              
+                            </div> 
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommissionEdit"
+                                               value="`+descfeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
+                                        <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCreditCardCommissionEdit"
+                                               value="`+feeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCreditCardCommisionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCreditCardCommisionEdit" name="productfeeCreditCardCommisionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCreditCardCommisionEdit">   
+                                    </div>
+                                </div>
+                             </div>
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommissionEdit"
+                                               value="`+descfeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
+                                        <input id="feeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCodCommissionEdit"
+                                               value="`+feeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCodCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCodCommissionEdit" name="feeCodCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCodCommissionEdit">    
+                                    </div>
+                                </div> 
+                           </div>
+                            <div class="row"> 
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommissionEdit"
+                                               value="`+descfeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
+                                        <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeBankTransferCommissionEdit"
+                                               value="`+feeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeBankTransferCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeBankTransferCommissionEdit" name="productfeeBankTransferCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeBankTransferCommissionEdit">    
+                                    </div>
+                                </div> 
+                             </div>
+                           <div class="row">
+                            <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value="`+descfeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            <div class="col-md-2">
+                                 <div class="form-group form-group-default">
+                                        <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
+                                        <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feePaypalCommissionEdit"
+                                               value="`+feePaypalCommission+`"
+                                        /> 
+                                </div>
+                            </div>
+                             <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                             </div>
+                            <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeePaypalCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeePaypalCommissionEdit" name="productfeePaypalCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                         <div id="divfeePaypalCommissionEdit">    
+                                        </div>
+                                 </div>
+                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargeDeliveryIsActiveEdit">Addebitare Costi di Spedizione</label>
+                                        <select id="chargeDeliveryIsActiveEdit" name="chargeDeliveryIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
+                                        <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostDeliveryCommissionEdit"
+                                               value="`+feeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
+                                        <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostDeliveryCommissionEdit"
+                                               value="`+descfeeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostDeliveryCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostDeliveryCommissionEdit" name="productfeeCostDeliveryCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostDeliveryCommissionEdit">    
+                                    </div>
+                             </div>
+                                  <div class="col-md-2">
+                                       <div class="form-group form-group-default">
+                                            <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
+                                            <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                                   class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
+                                                   value="`+periodTypeChargeDelivery+`"
+                                            />
+                                        </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1deliveryTypePaymentIdEdit">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="1deliveryTypePaymentIdEdit" name="1deliveryTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargePaymentIsActiveEdit">Addebitare Costi su Pagamenti</label>
+                                        <select id="chargePaymentIsActiveEdit" name="chargePaymentIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
+                                        <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostCommissionPaymentEdit"
+                                               value="`+feeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
+                                        <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostCommissionPaymentEdit"
+                                               value="`+descfeeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostCommissionPaymentEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostCommissionPaymentEdit" name="productfeeCostCommissionPaymentEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostCommissionPaymentEdit">    
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
+                                               value="`+periodTypeChargePayment+`"
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1paymentTypePaymentIdEdit">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="1paymentTypePaymentIdEdit" name="1paymentTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            </div>                    
+`;
+
+
+                break;
+            case 3:
+                bodyForm = `
+                            <div class="row">
+                                <div class="col-md-2">
+                                
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRowEdit">Nome Dettaglio Contratto</label>
+                                        <input id="nameRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameRowEdit"
+                                               value="`+nameRow+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRowEdit"
+                                               value="`+descriptionRow+`"
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default">
+                                        <label for="descriptionInvoiceEdit">Descrizione Fattura</label>
+                                        <input id="descriptionInvoiceEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionInvoiceEdit"
+                                               value="`+descriptionInvoice+`"
+                                        />
+                                     </div> 
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                <label for="startUpCostCampaignEdit">Costo Impianto Campagna</label>
+                                <input id="startUpCostCampaignEdit" autocomplete="off" type="text"
+                                        class="form-control" name="startUpCostCampaignEdit"
+                                        value="`+startUpCostCampaign+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productStartUpCostCampaignEdit">Associa Prodotto</label>
+                                        <select id="productStartUpCostCampaignEdit" name="productStartUpCostCampaignEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="divStartUpCostCampaignEdit">
+                                    </div>
+                              </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="automaticInvoiceEdit">Fatturazione automatica</label>
+                                        <select id="automaticInvoiceEdit" name="automaticInvoiceEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option value=""></option>
+                                         <option value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDay">Giorno di Fatturazione</label>
+                                        <input id="billingDay" autocomplete="off" type="text"
+                                               class="form-control" name="billingDay"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="3typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="3typePaymentId" name="3typePaymentId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="feeAgencyCommision">Commissione Agenzia</label>
+                                        <input id="feeAgencyCommision" autocomplete="off" type="text"
+                                               class="form-control" name="feeAgencyCommision"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productFeeAgencyCommision">Associa Prodotto</label>
+                                        <select id="productFeeAgencyCommision" name="productFeeAgencyCommision"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                              <div class="col-md-2">
+                                <div id="divFeeAgencyCommisionEdit">
+                                </div>
+                              </div>
+                             <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="prepaidPaymentIsActive">Prepagamento</label>
+                                        <select id="prepaidPaymentIsActive" name="prepaidPaymentIsActive"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="prepaidCost">Importo Prepagamento</label>
+                                        <input id="prepaidCost" autocomplete="off" type="text"
+                                               class="form-control" name="prepaidCost"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+`;
+                break;
+            case 4:
+                bodyForm = `
+<div class="row">
+                                <div class="col-md-2">
+                                   
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRow">Nome Dettaglio Contratto</label>
+                                        <input id="nameRow" autocomplete="off" type="text"
+                                               class="form-control" name="nameRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRow">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRow" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRow"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+<div class="row">
+                                <div class="col-md-2">
+                            
+                                   <div class="form-group form-group-default">
+                                        <label for="descriptionInvoice">Descrizione Fattura</label>
+                                        <input id="descriptionInvoice" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionInvoice"
+                                               value=""
+                                        />
+                                    </div> 
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                <label for="startUpCostCampaign">Costo Impianto Campagna</label>
+                                <input id="startUpCostCampaign" autocomplete="off" type="text"
+                                        class="form-control" name="startUpCostCampaign"
+                                        value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productStartUpCostCampaign">Associa Prodotto</label>
+                                        <select id="productStartUpCostCampaign" name="productStartUpCostCampaign"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                             <div class="col-md-2">
+                                <div id="divStartUpCostCampaignEdit">
+                                </div>
+                              </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="automaticInvoice">Fatturazione automatica</label>
+                                        <select id="automaticInvoice" name="automaticInvoice"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option value=""></option>
+                                         <option value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDay">Giorno di Fatturazione</label>
+                                        <input id="billingDay" autocomplete="off" type="text"
+                                               class="form-control" name="billingDay"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="4typePaymentId">Tipo di pagamento Associato</label>
+                                        <select id="4typePaymentId" name="4typePaymentId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="feeAgencyCommision">Commissione Agenzia</label>
+                                        <input id="feeAgencyCommision" autocomplete="off" type="text"
+                                               class="form-control" name="feeAgencyCommision"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productFeeAgencyCommision">Associa Prodotto</label>
+                                        <select id="productFeeAgencyCommision" name="productFeeAgencyCommision"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                              <div class="col-md-2">
+                                <div id="divFeeAgencyCommisionEdit">
+                                </div>
+                              </div>
+                             <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="prepaidPaymentIsActive">Prepagamento</label>
+                                        <select id="prepaidPaymentIsActive" name="prepaidPaymentIsActive"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="prepaidCost">Importo Prepagamento</label>
+                                        <input id="prepaidCost" autocomplete="off" type="text"
+                                               class="form-control" name="prepaidCost"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+`;
+                break;
+            case 5:
+                bodyForm = `   
+                                <div class="row">
+                                <div class="col-md-2">
+                                
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRowEdit">Nome Dettaglio Contratto</label>
+                                        <input id="nameRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameRowEdit"
+                                               value="` + nameRow + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRowEdit"
+                                               value="` + descriptionRow + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="automaticInvoiceEdit">Fatturazione automatica</label>
+                                        <select id="automaticInvoiceEdit" name="automaticInvoiceEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option value=""></option>
+                                         <option value="1" ` + checkAutomaticInvoice + ` >Si</option>
+                                         <option value="0" ` + notCheckAutomaticInvoice + ` >No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="periodTypeChargeEdit">Periodicità di addebito</label>
+                                        <select id="periodTypeChargeEdit" name="periodTypeChargeEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1" ` + checkMonth + `>Mensile</option>
+                                         <option value="2" ` + check3Month + `>Trimestrale</option>
+                                         <option value="4" ` + check6Month + `>Semestrale</option>
+                                         <option value="4" ` + checkYear + ` >Annuale</option>
+                                           
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDayEdit">Giorno di Fatturazione</label>
+                                        <input id="billingDayEdit" autocomplete="off" type="text"
+                                               class="form-control" name="billingDayEdit"
+                                               value="` + billingDay + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1typePaymentIdEdit">Tipo di pagamento Associato</label>
+                                        <select id="1typePaymentIdEdit" name="1typePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                         </div>
+                         <div class="row">
+                                <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                        <label for="valueDesEdit">Valore Canone</label>
+                                        <input id="valueDesEdit" autocomplete="off" type="text"
+                                               class="form-control" name="valueDesEdit"
+                                               value="` + value + `"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeProductAssocIdEdit">Associa Prodotto</label>
+                                        <select id="typeProductAssocIdEdit" name="typeProductAssocIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionValueEdit">descrizione Canone</label>
+                                       <textarea class="form-control" name="descriptionValueEdit" id="descriptionValueEdit"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="descriptionDetailEdit">
+                                       
+                                    </div>
+                                </div>
+                                
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="sellingFeeCommisionEdit">Commissione sul Venduto</label>
+                                        <input id="sellingFeeCommisionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="sellingFeeCommisionEdit"
+                                               value="`+sellingFeeCommision+`"
+                                        />
+                                    </div>
+                                </div>
+                              
+                            </div> 
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommissionEdit"
+                                               value="`+descfeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
+                                        <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCreditCardCommissionEdit"
+                                               value="`+feeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCreditCardCommisionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCreditCardCommisionEdit" name="productfeeCreditCardCommisionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCreditCardCommisionEdit">   
+                                    </div>
+                                </div>
+                             </div>
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommissionEdit"
+                                               value="`+descfeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
+                                        <input id="feeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCodCommissionEdit"
+                                               value="`+feeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCodCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCodCommissionEdit" name="feeCodCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCodCommission">    
+                                    </div>
+                                </div> 
+                           </div>
+                            <div class="row"> 
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommissionEdit"
+                                               value="`+descfeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
+                                        <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeBankTransferCommissionEdit"
+                                               value="`+feeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeBankTransferCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeBankTransferCommissionEdit" name="productfeeBankTransferCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeBankTransferCommissionEdit">    
+                                    </div>
+                                </div> 
+                             </div>
+                           <div class="row">
+                            <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommission"
+                                               value="`+descfeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            <div class="col-md-2">
+                                 <div class="form-group form-group-default">
+                                        <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
+                                        <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feePaypalCommissionEdit"
+                                               value="`+feePaypalCommission+`"
+                                        /> 
+                                </div>
+                            </div>
+                             <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                             </div>
+                            <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeePaypalCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeePaypalCommissionEdit" name="productfeePaypalCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                         <div id="divfeePaypalCommissionEdit">    
+                                        </div>
+                                 </div>
+                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargeDeliveryIsActiveEdit">Addebitare Costi di Spedizione</label>
+                                        <select id="chargeDeliveryIsActiveEdit" name="chargeDeliveryIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
+                                        <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostDeliveryCommissionEdit"
+                                               value="`+feeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
+                                        <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostDeliveryCommissionEdit"
+                                               value="`+descfeeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostDeliveryCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostDeliveryCommissionEdit" name="productfeeCostDeliveryCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostDeliveryCommissionEdit">    
+                                    </div>
+                             </div>
+                                  <div class="col-md-2">
+                                       <div class="form-group form-group-default">
+                                            <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
+                                            <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                                   class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
+                                                   value="`+periodTypeChargeDelivery+`"
+                                            />
+                                        </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1deliveryTypePaymentIdEdit">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="1deliveryTypePaymentIdEdit" name="1deliveryTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargePaymentIsActiveEdit">Addebitare Costi su Pagamenti</label>
+                                        <select id="chargePaymentIsActiveEdit" name="chargePaymentIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
+                                        <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostCommissionPaymentEdit"
+                                               value="`+feeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
+                                        <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostCommissionPaymentEdit"
+                                               value="`+descfeeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostCommissionPaymentEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostCommissionPaymentEdit" name="productfeeCostCommissionPaymentEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostCommissionPaymentEdit">    
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
+                                               value="`+periodTypeChargePayment+`"
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1paymentTypePaymentIdEdit">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="1paymentTypePaymentIdEdit" name="1paymentTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            </div>                    
+`;
+
+
+                break;
+
+
+            case 6:
+                bodyForm = `
+<div class="row">
+                                <div class="col-md-2">
+                                 
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRowEdit">Nome Dettaglio Contratto</label>
+                                        <input id="nameRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameRowEdit"
+                                               value="`+nameRow+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRowEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                             </div>
+<div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group form-group-default selectize-enabled">
+                            <label for="typeContractIdEdit">Tipo di Contratto</label>
+                            <select id="typeContractIdEdit" name="typeContractIdEdit"
+                                    class="full-width selectpicker"
+                                    placeholder="Seleziona la Lista"
+                                    data-init-plugin="selectize">
+                                <option  value=""></option>
+                                <option  value="1">Commissione Sul Venduto</option>
+                                <option value="2">Markup sul Wholesale</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDayEdit">Giorno di Fatturazione</label>
+                                        <input id="billingDayEdit" autocomplete="off" type="text"
+                                               class="form-control" name="billingDayEdit"
+                                               value=""
+                                        />
+                                    </div>
+                                </div>
+                    <div class="col-md-2">
+                        <div class="form-group form-group-default">
+                            <label for="valueMarkUpFullPriceEdit">Valore markup commissione su prezzi pieni</label>
+                            <input id="valueMarkUpFullPriceEdit" autocomplete="off" type="text"
+                                   class="form-control" name="valueMarkUpFullPriceEdit"
+                                   value="`+valueMarkUpFullPrice+`"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group form-group-default">
+                            <label for="valueMarkUpSalePriceEdit">Valore markup commissione su prezzi in Saldo</label>
+                            <input id="valueMarkUpSalePriceEdit" autocomplete="off" type="text"
+                                   class="form-control" name="valueMarkUpSalePriceEdit"
+                                   value="`+valueMarkUpSalePrice+`"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="billRegistryProductValueEdit">Associa Prodotto</label>
+                                        <select id="billRegistryProductValueEdit" name="billRegistryProductValueEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                              <div class="col-md-2">
+                                <div id="divBillRegistryProductValueEdit">
+                                <div>
+                              </div>
+                   
+            </div>
+            `;
+
+                break;
+            case 7:
+                bodyForm = `
+
+<div class="row">
+                                <div class="col-md-2">
+                                 
+                                <input type="hidden" id="billRegistryContractRowId" value="` + billRegistryContractRowId + `"/>
+                                    <div class="form-group form-group-default">
+                                        <label for="nameRowEdit">Nome Dettaglio Contratto</label>
+                                        <input id="nameRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="nameRowEdit"
+                                               value="`+nameRow+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
+                                        <input id="descriptionRowEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descriptionRowEdit"
+                                               value="`+descriptionRow+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="automaticInvoiceEdit">Fatturazione automatica</label>
+                                        <select id="automaticInvoiceEdit" name="automaticInvoiceEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option value=""></option>
+                                         <option value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+ </div>
+ <div class="row">                               
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailAccountSendQtyEdit">Pubblicazioni Previste</label>
+                                        <input id="emailAccountSendQtyEdit" autocomplete="off" type="text"
+                                               class="form-control" name="emailAccountSendQtyEdit"
+                                               value="`+emailAccountSendQty+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="emailAccountCampaignQtyEdit">Campagne Email Previste</label>
+                                        <input id="emailAccountCampaignQtyEdit" autocomplete="off" type="text"
+                                               class="form-control" name="emailAccountCampaignQtyEdit"
+                                               value="`+emailAccountCampaignQty+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="periodTypeCharge">Periodicità di addebito</label>
+                                        <select id="periodTypeCharge" name="periodTypeCharge"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Mensile</option>
+                                         <option value="2">Trimestrale</option>
+                                         <option value="4">Semestrale</option>
+                                         <option value="4">Annuale</option>
+                                           
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="billingDayEdit">Giorno di Fatturazione</label>
+                                        <input id="billingDayEdit" autocomplete="off" type="text"
+                                               class="form-control" name="billingDayEdit"
+                                               value="`+billingDay+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="6typePaymentIdEdit">Tipo di pagamento Associato</label>
+                                        <select id="6typePaymentIdEdit" name="6typePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+ </div>
+<div class="row">
+                                <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                        <label for="valueDesEdit">Valore Canone</label>
+                                        <input id="valueDesEdit" autocomplete="off" type="text"
+                                               class="form-control" name="valueDesEdit"
+                                               value="`+value+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="typeProductAssocIdEdit">Associa Prodotto</label>
+                                        <select id="typeProductAssocIdEdit" name="typeProductAssocIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descriptionValueEdit">descrizione Canone</label>
+                                       <textarea class="form-control" name="descriptionValueEdit" id="descriptionValueEdit">`+descriptionValue+`</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="descriptionDetailEdit">
+                                       
+                                    </div>
+                                </div>
+                                
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="sellingFeeCommisionEdit">Commissione sul Venduto</label>
+                                        <input id="sellingFeeCommisionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="sellingFeeCommisionEdit"
+                                               value="`+sellingFeeCommision+`"
+                                        />
+                                    </div>
+                                </div>
+                              
+                            </div> 
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
+                                        <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCreditCardCommissionEdit"
+                                               value="`+descfeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
+                                        <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCreditCardCommissionEdit"
+                                               value="`+feeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCreditCardCommisionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCreditCardCommisionEdit" name="productfeeCreditCardCommisionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCreditCardCommisionEdit">   
+                                    </div>
+                                </div>
+                             </div>
+                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
+                                        <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCodCommissionEdit"
+                                               value="`+descfeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
+                                        <input id="feeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCodCommissionEdit"
+                                               value="`+feeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCodCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCodCommissionEdit" name="feeCodCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeCodCommissionEdit">    
+                                    </div>
+                                </div> 
+                           </div>
+                            <div class="row"> 
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
+                                        <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeBankTransferCommissionEdit"
+                                               value="`+descfeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
+                                        <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeBankTransferCommissionEdit"
+                                               value="`+feeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeBankTransferCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeBankTransferCommissionEdit" name="productfeeBankTransferCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div id="divfeeBankTransferCommissionEdit">    
+                                    </div>
+                                </div> 
+                             </div>
+                           <div class="row">
+                            <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
+                                        <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeePaypalCommissionEdit"
+                                               value="`+descfeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            <div class="col-md-2">
+                                 <div class="form-group form-group-default">
+                                        <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
+                                        <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feePaypalCommissionEdit"
+                                               value="`+feePaypalCommission+`"
+                                        /> 
+                                </div>
+                            </div>
+                             <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                             </div>
+                            <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeePaypalCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeePaypalCommissionEdit" name="productfeePaypalCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                         <div id="divfeePaypalCommissionEdit">    
+                                        </div>
+                                 </div>
+                             </div> 
+                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
+                                        <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
+                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
+                                        <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCodCommissionEdit"
+                                               value="`+dayChargeFeeCodCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeBankTransferCommissionEdit">Valuta pagamento Bonifico</label>
+                                        <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
+                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
+                                        <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeePaypalCommissionEdit"
+                                               value="`+dayChargeFeePaypalCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargeDeliveryIsActiveEdit">Addebitare Costi di Spedizione</label>
+                                        <select id="chargeDeliveryIsActiveEdit" name="chargeDeliveryIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
+                                        <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostDeliveryCommissionEdit"
+                                               value="`+feeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
+                                        <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostDeliveryCommissionEdit"
+                                               value="`+descfeeCostDeliveryCommission+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostDeliveryCommissionEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostDeliveryCommissionEdit" name="productfeeCostDeliveryCommissionEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostDeliveryCommissionEdit">    
+                                    </div>
+                             </div>
+                                  <div class="col-md-2">
+                                       <div class="form-group form-group-default">
+                                            <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
+                                            <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
+                                                   class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
+                                                   value="`+periodTypeChargeDelivery+`"
+                                            />
+                                        </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1deliveryTypePaymentIdEdit">Tipo di pagamento Associato Costi di Spedizione</label>
+                                        <select id="1deliveryTypePaymentIdEdit" name="1deliveryTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="chargePaymentIsActiveEdit">Addebitare Costi su Pagamenti</label>
+                                        <select id="chargePaymentIsActiveEdit" name="chargePaymentIsActiveEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         <option  value=""></option>
+                                         <option  value="1">Si</option>
+                                         <option value="0">No</option>  
+                                         </select>       
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
+                                        <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="feeCostCommissionPaymentEdit"
+                                               value="`+feeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group form-group-default">
+                                        <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
+                                        <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="descfeeCostCommissionPaymentEdit"
+                                               value="`+descfeeCostCommissionPayment+`"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="productfeeCostCommissionPaymentEdit">Associa Prodotto</label>
+                                        <select id="productfeeCostCommissionPaymentEdit" name="productfeeCostCommissionPaymentEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                             </div>
+                            <div class="col-md-1">
+                                     <div id="divfeeCostCommissionPaymentEdit">    
+                                    </div>
+                             </div>
+                                <div class="col-md-2">
+                                   <div class="form-group form-group-default">
+                                        <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
+                                        <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
+                                               class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
+                                               value="`+periodTypeChargePayment+`"
+                                        />
+                                    </div>
+                                </div>
+                               <div class="col-md-2">
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="1paymentTypePaymentIdEdit">Tipo di pagamento Associato Costi di Pagamenti</label>
+                                        <select id="1paymentTypePaymentIdEdit" name="1paymentTypePaymentIdEdit"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                         </select>       
+                                    </div>
+                                </div>
+                            </div>
+                            </div>                    
+`;
+                break;
+
+
+        }
+        let bsModalDetailContractEdit = new $.bsModal('Modifica Dettaglio  Contratto al Servizio  associato', {
+            body: bodyForm
+        });
+
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct',
+                condition: {billRegistryGroupProductId: 1}
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let selecttypeProductAssocId = $('#typeProductAssocIdEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            selecttypeProductAssocId.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeeCreditCardCommision = $('#productfeeCreditCardCommisionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeeCreditCardCommision.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let billRegistryProductValue = $('#billRegistryProductValueEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            billRegistryProductValue.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeeCodCommission = $('#productfeeCodCommissionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeeCodCommission.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeeBankTransferCommission = $('#productfeeBankTransferCommissionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeeBankTransferCommission.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeePaypalCommission = $('#productfeePaypalCommissionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeePaypalCommission.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeePaypalCommission = $('#productfeePaypalCommissionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeePaypalCommission.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select1paymentTypePaymentId = $('#1paymentTypePaymentIdEdit');
+            // if (typeof (select1paymentTypePaymentId[0].selectize) != 'undefined') select1paymentTypePaymentId[0].selectize.destroy();
+            select1paymentTypePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select1deliveryTypePaymentId = $('#1deliveryTypePaymentIdEdit');
+            //   if (typeof (select1deliveryTypePaymentId[0].selectize) != 'undefined') select1deliveryTypePaymentId[0].selectize.destroy();
+            select1deliveryTypePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select1typePaymentId = $('#1typePaymentIdEdit');
+            //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+            select1typePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeeCostDeliveryCommission = $('#productfeeCostDeliveryCommissionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeeCostDeliveryCommission.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productfeeCostCommissionPayment = $('#productfeeCostCommissionPaymentEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productfeeCostCommissionPayment.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productStartUpCostCampaign = $('#productStartUpCostCampaignEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productStartUpCostCampaign.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryProduct'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let productFeeAgencyCommision = $('#productFeeAgencyCommisionEdit');
+            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+            productFeeAgencyCommision.selectize({
+                valueField: 'id',
+                labelField: 'codeProduct',
+                searchField: ['codeProduct'],
+                options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select1typePaymentId = $('#1typePaymentIdEdit');
+            //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+            select1typePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select1 = $('#2paymentTypePaymentIdEdit');
+            //if (typeof (select1[0].selectize) != 'undefined') select1[0].selectize.destroy();
+            select1.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select2 = $('#2deliveryTypePaymentIdEdit');
+            //  if (typeof (select2[0].selectize) != 'undefined') select2[0].selectize.destroy();
+            select2.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select3 = $('#2typePaymentIdEdit');
+            //    if (typeof (select3[0].selectize) != 'undefined') select3[0].selectize.destroy();
+            select3.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select4 = $('#5paymentTypePaymentIdEdit');
+            //  if (typeof (select4[0].selectize) != 'undefined') select4[0].selectize.destroy();
+            select4.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select5deliveryTypePaymentId = $('#5deliveryTypePaymentIdEdit');
+            // if (typeof (select5deliveryTypePaymentId[0].selectize) != 'undefined') select5deliveryTypePaymentId[0].selectize.destroy();
+            select5deliveryTypePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select5typePaymentId = $('#5typePaymentIdEdit');
+            //   if (typeof (select5typePaymentId[0].selectize) != 'undefined') select5typePaymentId[0].selectize.destroy();
+            select5typePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select6paymentTypePaymentId = $('#6paymentTypePaymentIdEdit');
+            //  if (typeof (select6paymentTypePaymentId[0].selectize) != 'undefined') select6paymentTypePaymentId[0].selectize.destroy();
+            select6paymentTypePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select6deliveryTypePaymentId = $('#6deliveryTypePaymentIdEdit');
+            // if (typeof (select6deliveryTypePaymentId[0].selectize) != 'undefined') select6deliveryTypePaymentId[0].selectize.destroy();
+            select6deliveryTypePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select6typePaymentId = $('#6typePaymentIdEdit');
+            //   if (typeof (select6typePaymentId[0].selectize) != 'undefined') select6typePaymentId[0].selectize.destroy();
+            select6typePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select3typePaymentId = $('#3typePaymentIdEdit');
+            //   if (typeof (select3typePaymentId[0].selectize) != 'undefined') select3typePaymentId[0].selectize.destroy();
+            select3typePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'BillRegistryTypePayment'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            let select4typePaymentId = $('#4typePaymentIdEdit');
+            //   if (typeof (select4typePaymentId[0].selectize) != 'undefined') select4typePaymentId[0].selectize.destroy();
+            select4typePaymentId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+
+        });
+
+        $('#typeProductAssocIdEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#typeProductAssocIdEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                let canoneEdit = res;
+                $.each(canoneEdit, function (k, v) {
+                    $('#descriptionDetailEdit').empty();
+                    $('#descriptionDetailEdit').append(v.description);
+                    $('#valueDesEdit').val(parseInt(v.price).toFixed(2));
+
+                });
+
+            });
+        });
+        $('#productfeePaypalCommissionEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productfeePaypalCommissionEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divfeePaypalCommissionEdit').empty();
+                    $('#divfeePaypalCommissionEdit').append(v.description);
+
+                });
+
+            });
+        });
+
+        $('#productfeeBankTransferCommissionEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productfeeBankTransferCommissionEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divfeeBankTransferCommissionEdit').empty();
+                    $('#divfeeBankTransferCommissionEdit').append(v.description);
+
+                });
+
+            });
+        });
+        //billRegistryProductValue
+        $('#billRegistryProductValueEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#billRegistryProductValueEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divBillRegistryProductValueEdit').empty();
+                    $('#divBillRegistryProductValueEdit').append(v.description);
+
+                });
+            });
+        });
+        $('#productfeeCodCommissionEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productfeeCodCommissionEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divfeeCodCommissionEdit').empty();
+                    $('#divfeeCodCommissionEdit').append(v.description);
+
+                });
+
+            });
+        });
+        $('#productfeeCreditCardCommisionEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productfeeCreditCardCommisionEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divfeeCreditCardCommisionEdit').empty();
+                    $('#divfeeCreditCardCommisionEdit').append(v.description);
+
+                });
+
+            });
+        });
+        $('#productfeeCostDeliveryCommissionEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productfeeCostDeliveryCommissionEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divfeeCostDeliveryCommissionEdit').empty();
+                    $('#divfeeCostDeliveryCommissionEdit').append(v.description);
+
+                });
+
+            });
+        });
+        $('#productfeeCostCommissionPaymentEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productfeeCostCommissionPaymentEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divfeeCostCommissionPaymentEdit').empty();
+                    $('#divfeeCostCommissionPaymentEdit').append(v.description);
+
+                });
+
+            });
+        });
+        //productStartUpCostCampaign
+        $('#productStartUpCostCampaignEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productStartUpCostCampaignEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divStartUpCostCampaignEdit').empty();
+                    $('#divStartUpCostCampaignEdit').append(v.description);
+
+                });
+
+            });
+        });
+        //productFeeAgencyCommision
+        $('#productFeeAgencyCommisionEdit').change(function () {
+            $.ajax({
+                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                method: 'GET',
+                data: {
+                    typeProductAssocId: $('#productFeeAgencyCommisionEdit').val()
+
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                $.each(res, function (k, v) {
+                    $('#divFeeAgencyCommisionEdit').empty();
+                    $('#divFeeAgencyCommisionEdit').append(v.description);
+
+                });
+
+            });
+        });
+
+        bsModalDetailContractEdit.showCancelBtn();
+        bsModalDetailContractEdit.addClass('modal-wide');
+        bsModalDetailContractEdit.addClass('modal-high');
+        bsModalDetailContractEdit.setOkEvent(function () {
+            var data = '';
+            switch (billRegistryGroupProductId) {
+                case 1:
+                    data = {
+                        idDetail:idDetail,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        automaticInvoice: $('#automaticInvoiceEdit').val(),
+                        value: $('#valueDesEdit').val(),
+                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                        descriptionValue: $('#descriptionValueEdit').val(),
+                        billingDay: $('#billingDayEdit').val(),
+                        typePaymentId: $('#1typePaymentIdEdit').val(),
+                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                        feeCodCommission: $('#feeCodCommissionEdit').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                    };
+                    break;
+                case 2:
+                    data = {
+                        idDetail:idDetail,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        automaticInvoice: $('#automaticInvoiceEdit').val(),
+                        value: $('#valueDesEdit').val(),
+                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                        descriptionValue: $('#descriptionValueEdit').val(),
+                        billingDay: $('#billingDayEdit').val(),
+                        typePaymentId: $('#1typePaymentIdEdit').val(),
+                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                        feeCodCommission: $('#feeCodCommissionEdit').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                    };
+                    break;
+                case 3:
+                    data = {
+                        idDetail:idDetail,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        automaticInvoice: $('#automaticInvoiceEdit').val(),
+                        descriptionInvoice: $('#descriptionInvoiceEdit').val(),
+                        billingDay: $('#billingDayEdit').val(),
+                        typePaymentId: $('#3typePaymentIdEdit').val(),
+                        startUpCostCampaign: $('#startUpCostCampaignEdit').val(),
+                        feeAgencyCommision: $('#feeAgencyCommisionEdit').val(),
+                        prepaidPaymentIsActive: $('#prepaidPaymentIsActiveEdit').val(),
+                        prepaidCost: $('#prepaidCostEdit').val(),
+                        productStartUpCostCampaign: $('#productStartUpCostCampaignEdit').val(),
+                        productFeeAgencyCommision: $('#productFeeAgencyCommisionEdit').val(),
+
+
+                    };
+                    break;
+                case 4:
+                    data = {
+                        idDetail:idDetail,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        automaticInvoice: $('#automaticInvoiceEdit').val(),
+                        descriptionInvoice: $('#descriptionInvoiceEdit').val(),
+                        billingDay: $('#billingDayEdit').val(),
+                        typePaymentId: $('#4typePaymentIdEdit').val(),
+                        startUpCostCampaign: $('#startUpCostCampaignEdit').val(),
+                        feeAgencyCommision: $('#feeAgencyCommisionEdit').val(),
+                        prepaidPaymentIsActive: $('#prepaidPaymentIsActiveEdit').val(),
+                        prepaidCost: $('#prepaidCostEdit').val(),
+                        productStartUpCostCampaign: $('#productStartUpCostCampaignEdit').val(),
+                        productFeeAgencyCommision: $('#productFeeAgencyCommisionEdit').val(),
+                    };
+                    break;
+                case 5:
+                    data = {
+                        idDetail:idDetail,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        automaticInvoice: $('#automaticInvoiceEdit').val(),
+                        value: $('#valueDesEdit').val(),
+                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                        descriptionValue: $('#descriptionValueEdit').val(),
+                        billingDay: $('# ').val(),
+                        typePaymentId: $('#1typePaymentIdEdit').val(),
+                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                        feeCodCommission: $('#feeCodCommissionEdit').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                    };
+                    break;
+                case 6:
+                    data = {
+                        idDetail:idDetail,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        typeContractId: $('#typeContractIdEdit').val(),
+                        valueMarkUpFullPrice: $('#valueMarkUpFullPriceEdit').val(),
+                        valueMarkUpSalePrice: $('#valueMarkUpSalePriceEdit').val(),
+                        billingDay: $('#billingDayEdit').val(),
+                        billRegistryProductValue: $('#billRegistryProductValueEdit').val()
+                    };
+                    break;
+                case 7:
+                    data = {
+                        idDetail:idDetail,
+                        emailAccount: $('#emailAccountEdit').val(),
+                        emailAccountSendQty: $('#emailAccountSendQtyEdit').val(),
+                        emailAccountCampaignQty: $('#emailAccountCampaignQtyEdit').val(),
+
+                        billRegistryGroupProductId: billRegistryGroupProductId,
+                        billRegistryContractRowId: billRegistryContractRowId,
+                        nameRow: $('#nameRowEdit').val(),
+                        descriptionRow: $('#descriptionRowEdit').val(),
+                        automaticInvoice: $('#automaticInvoiceEdit').val(),
+                        value: $('#valueDesEdit').val(),
+                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                        descriptionValue: $('#descriptionValueEdit').val(),
+                        billingDay: $('#billingDayEdit').val(),
+                        typePaymentId: $('#1typePaymentIdEdit').val(),
+                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                        feeCodCommission: $('#feeCodCommissionEdit').val(),
+                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                    };
+                    break;
+            }
+            $.ajax({
+                method: 'put',
+                url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModalDetailContractEdit.writeBody(res);
+            }).fail(function (res) {
+                bsModalDetailContractEdit.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModalDetailContractEdit.setOkEvent(function () {
+                    bsModalDetailContractEdit.hide();
+                    //window.location.reload();
+                });
+                bsModalDetailContractEdit.showOkBtn();
+            });
+        });
+
+
+    });
 
 }
 

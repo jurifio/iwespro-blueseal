@@ -515,6 +515,302 @@ return json_encode($contractRow);
 public
 function put()
 {
+    $data = $this->app->router->request()->getRequestData();
+    $billRegistryGroupProductId = $data['billRegistryGroupProductId'];
+    $id = $data['idDetail'];
+    $billRegistryContractRowId = $data['billRegistryContractRowId'];
+    switch ($billRegistryGroupProductId) {
+        case "1":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkSource')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->value = $data['value'];
+                $rowInsert->billingDay = $data['billingDay'];
+                $rowInsert->typePaymentId = $data['typePaymentId'];
+                $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
+                $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission=$data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->feeCodCommission = $data['feeCodCommission'];
+                $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
+                $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
+                $rowInsert->dayChargeFeeBankTransferCommission = $data['dayChargeFeeBankTransferCommission'];
+                $rowInsert->feePaypalCommission = $data['feePaypalCommission'];
+                $rowInsert->dayChargeFeePaypalCommission = $data['dayChargeFeePaypalCommission'];
+                $rowInsert->chargeDeliveryIsActive = $data['chargeDeliveryIsActive'];
+                $rowInsert->feeCostDeliveryCommission = $data['feeCostDeliveryCommission'];
+                $rowInsert->periodTypeChargeDelivery = $data['periodTypeChargeDelivery'];
+                $rowInsert->deliveryTypePaymentId = $data['deliveryTypePaymentId'];
+                $rowInsert->chargePaymentIsActive = $data['chargePaymentIsActive'];
+                $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
+                $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
+                $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                $rowInsert->descriptionValue=$data['descriptionValue'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                $rowInsert->billRegistryProductFeeCodCommission=$data['productfeeCodCommission'];
+                $rowInsert->billRegistryProductFeePaypalCommission=$data['productfeePaypalCommission'];
+                $rowInsert->billRegistryProductFeeBankTransferCommission=$data['productfeeBankTransferCommission'];
+                $rowInsert->billRegistryProductFeeCreditCardCommission=$data['productfeeCreditCardCommision'];
+                $rowInsert->billRegistryProductFeeCostDeliveryCommission=$data['productfeeCostDeliveryCommission'];
+                $rowInsert->billRegistryProductFeeCostCommissionPayment=$data['productfeeCostCommissionPayment'];
+                $rowInsert->update();
+
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report','update BillRegistryContractRowMonkSource','update 1 ContractRow' . $id,'');
+                return $lastId;
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','update BillRegistryContractRowMonkSource','update 1 contactRow',$e);
+                return 'Errore Inserimento' . $e;
+
+            }
+            break;
+        case "2":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkAir')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->value = $data['value'];
+                $rowInsert->billingDay = $data['billingDay'];
+                $rowInsert->typePaymentId = $data['typePaymentId'];
+                $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
+                $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission=$data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->feeCodCommission = $data['feeCodCommission'];
+                $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
+                $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
+                $rowInsert->dayChargeFeeBankTransferCommission = $data['dayChargeFeeBankTransferCommission'];
+                $rowInsert->feePaypalCommission = $data['feePaypalCommission'];
+                $rowInsert->dayChargeFeePaypalCommission = $data['dayChargeFeePaypalCommission'];
+                $rowInsert->chargeDeliveryIsActive = $data['chargeDeliveryIsActive'];
+                $rowInsert->feeCostDeliveryCommission = $data['feeCostDeliveryCommission'];
+                $rowInsert->periodTypeChargeDelivery = $data['periodTypeChargeDelivery'];
+                $rowInsert->deliveryTypePaymentId = $data['deliveryTypePaymentId'];
+                $rowInsert->chargePaymentIsActive = $data['chargePaymentIsActive'];
+                $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
+                $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
+                $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                $rowInsert->descriptionValue=$data['descriptionValue'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                $rowInsert->billRegistryProductFeeCodCommission=$data['productfeeCodCommission'];
+                $rowInsert->billRegistryProductFeePaypalCommission=$data['productfeePaypalCommission'];
+                $rowInsert->billRegistryProductFeeBankTransferCommission=$data['productfeeBankTransferCommission'];
+                $rowInsert->billRegistryProductFeeCreditCardCommission=$data['productfeeCreditCardCommision'];
+                $rowInsert->billRegistryProductFeeCostDeliveryCommission=$data['productfeeCostDeliveryCommission'];
+                $rowInsert->billRegistryProductFeeCostCommissionPayment=$data['productfeeCostCommissionPayment'];
+                $rowInsert->update();
+
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report','update BillRegistryContractRowMonkAir','update ContractRow' . $id,'');
+                return "Modifica Eseguita";
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','update BillRegistryContractRowMonkAir','update contactRow',$e);
+                return 'Errore Aggiornamento' . $e;
+
+            }
+            break;
+        case "3":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntrySocial')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->descriptionInvoice = $data['descriptionInvoice'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->startUpCostCampaign = $data['startUpCostCampaign'];
+                $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                $rowInsert->billingDay = $data['billingDay'];
+                $rowInsert->typePaymentId = $data['typePaymentId'];
+                $rowInsert->feeAgencyCommision = $data['feeAgencyCommision'];
+                $rowInsert->prepaidPaymentIsActive = $data['prepaidPaymentIsActive'];
+                $rowInsert->prepaidCost = $data['prepaidCost'];
+                $rowInsert->billRegistryProductStartUpCostCampaign=$data['productStartUpCostCampaign'];
+                $rowInsert->billRegistryProductFeeAgencyCommision=$data['productFeeAgencyCommision'];
+                $rowInsert->update();
+
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report','update BillRegistryContractRowMonkEntrySocial','update ContractRow' . $lastId,'');
+                return 'Modifica Eseguita';
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','update BillRegistryContractRowMonkEntrySocial','update contactRow',$e);
+                return 'Errore Aggiornamento' . $e;
+
+            }
+            break;
+        case "4":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMonkEntryTraffic')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->descriptionInvoice = $data['descriptionInvoice'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->startUpCostCampaign = $data['startUpCostCampaign'];
+                $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                $rowInsert->billingDay = $data['billingDay'];
+                $rowInsert->typePaymentId = $data['typePaymentId'];
+                $rowInsert->feeAgencyCommision = $data['feeAgencyCommision'];
+                $rowInsert->prepaidPaymentIsActive = $data['prepaidPaymentIsActive'];
+                $rowInsert->prepaidCost = $data['prepaidCost'];
+                $rowInsert->billRegistryProductStartUpCostCampaign=$data['productStartUpCostCampaign'];
+                $rowInsert->billRegistryProductFeeAgencyCommision=$data['productFeeAgencyCommision'];
+                $rowInsert->update();
+
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report','update 4 BillRegistryContractRowMonkEntryTraffic','update ContractRow' . $id,'');
+                return "Modifica Eseguita";
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','update 4 BillRegistryContractRowMonkEntryTraffic','update contactRow',$e);
+                return 'Errore Aggiornamento' . $e;
+
+            }
+            break;
+
+        case "5":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowSocialMonk')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->value = $data['value'];
+                $rowInsert->billingDay = $data['billingDay'];
+                $rowInsert->typePaymentId = $data['typePaymentId'];
+                $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
+                $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission=$data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->feeCodCommission = $data['feeCodCommission'];
+                $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
+                $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
+                $rowInsert->dayChargeFeeBankTransferCommission = $data['dayChargeFeeBankTransferCommission'];
+                $rowInsert->feePaypalCommission = $data['feePaypalCommission'];
+                $rowInsert->dayChargeFeePaypalCommission = $data['dayChargeFeePaypalCommission'];
+                $rowInsert->chargeDeliveryIsActive = $data['chargeDeliveryIsActive'];
+                $rowInsert->feeCostDeliveryCommission = $data['feeCostDeliveryCommission'];
+                $rowInsert->periodTypeChargeDelivery = $data['periodTypeChargeDelivery'];
+                $rowInsert->deliveryTypePaymentId = $data['deliveryTypePaymentId'];
+                $rowInsert->chargePaymentIsActive = $data['chargePaymentIsActive'];
+                $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
+                $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
+                $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                $rowInsert->descriptionValue=$data['descriptionValue'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                $rowInsert->billRegistryProductFeeCodCommission=$data['productfeeCodCommission'];
+                $rowInsert->billRegistryProductFeePaypalCommission=$data['productfeePaypalCommission'];
+                $rowInsert->billRegistryProductFeeBankTransferCommission=$data['productfeeBankTransferCommission'];
+                $rowInsert->billRegistryProductFeeCreditCardCommission=$data['productfeeCreditCardCommision'];
+                $rowInsert->billRegistryProductFeeCostDeliveryCommission=$data['productfeeCostDeliveryCommission'];
+                $rowInsert->billRegistryProductFeeCostCommissionPayment=$data['productfeeCostCommissionPayment'];
+                $rowInsert->update();
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report',' 5 update BillRegistryContractRowSocialMonk','update ContractRow' . $id,'');
+                return "Modifica Eseguita";
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','5 update BillRegistryContractRowSocialMonk','update contactRow',$e);
+                return 'Errore Aggiornamento' . $e;
+
+            }
+            break;
+
+        case "6":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowFriends')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->typeContractId = $data['typeContractId'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->valueMarkUpFullPrice = $data['valueMarkUpFullPrice'];
+                $rowInsert->valueMarkUpSalePrice = $data['valueMarkUpSalePrice'];
+                $rowInsert->billingDay=$data['billingDay'];
+                $rowInsert->billRegistryProductValue=$data['billRegistryProductValue'];
+                $rowInsert->update();
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report','update BillRegistryContractRowFriends','update ContractRow' . $id,'');
+                return "Modifica Eseguita";
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','update BillRegistryContractRowFriends','update contactRow',$e);
+                return 'Errore Inserimento' . $e;
+
+            }
+            break;
+
+        case "7":
+            try {
+                $rowInsert = \Monkey::app()->repoFactory->create('BillRegistryContractRowMailMonk')->findOneBy(['billRegistryContractRowId'=>$billRegistryContractRowId,'id'=>$id]);
+                $rowInsert->billRegistryContractRowId = $data['billRegistryContractRowId'];
+                $rowInsert->automaticInvoice = $data['automaticInvoice'];
+                $rowInsert->nameRow=$data['nameRow'];
+                $rowInsert->descriptionRow=$data['descriptionRow'];
+                $rowInsert->emailAccount = $data['emailAccount'];
+                $rowInsert->emailAccountSendQty = $data['emailAccountSendQty'];
+                $rowInsert->emailAccountCampaignQty = $data['emailAccountCampaignQty'];
+                $rowInsert->value = $data['value'];
+                $rowInsert->billingDay = $data['billingDay'];
+                $rowInsert->typePaymentId = $data['typePaymentId'];
+                $rowInsert->periodTypeCharge = $data['periodTypeCharge'];
+                $rowInsert->sellingFeeCommision = $data['sellingFeeCommision'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->descfeeCodCommission = $data['descfeeCodCommission'];
+                $rowInsert->descfeeCreditCardCommission = $data['descfeeCreditCardCommission'];
+                $rowInsert->descfeeBankTransferCommission = $data['descfeeBankTransferCommission'];
+                $rowInsert->descfeeCostDeliveryCommission=$data['descfeeCostDeliveryCommission'];
+                $rowInsert->descfeeCostCommissionPayment=$data['descfeeCostCommissionPayment'];
+                $rowInsert->feeCreditCardCommission = $data['feeCreditCardCommission'];
+                $rowInsert->dayChargeFeeCreditCardCommission = $data['dayChargeFeeCreditCardCommission'];
+                $rowInsert->feeCodCommission = $data['feeCodCommission'];
+                $rowInsert->dayChargeFeeCodCommission = $data['dayChargeFeeCodCommission'];
+                $rowInsert->feeBankTransferCommission = $data['feeBankTransferCommission'];
+                $rowInsert->dayChargeFeeBankTransferCommission = $data['dayChargeFeeBankTransferCommission'];
+                $rowInsert->feePaypalCommission = $data['feePaypalCommission'];
+                $rowInsert->dayChargeFeePaypalCommission = $data['dayChargeFeePaypalCommission'];
+                $rowInsert->chargeDeliveryIsActive = $data['chargeDeliveryIsActive'];
+                $rowInsert->feeCostDeliveryCommission = $data['feeCostDeliveryCommission'];
+                $rowInsert->periodTypeChargeDelivery = $data['periodTypeChargeDelivery'];
+                $rowInsert->deliveryTypePaymentId = $data['deliveryTypePaymentId'];
+                $rowInsert->chargePaymentIsActive = $data['chargePaymentIsActive'];
+                $rowInsert->feeCostCommissionPayment = $data['feeCostCommissionPayment'];
+                $rowInsert->periodTypeChargePayment = $data['periodTypeChargePayment'];
+                $rowInsert->paymentTypePaymentId = $data['paymentTypePaymentId'];
+                $rowInsert->update();
+
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Report','update 7 BillRegistryContractRowMailMonk','update ContractRow' . $id,'');
+                 return "Modifica Eseguita";
+            } catch (\Throwable $e) {
+                \Monkey::app()->applicationLog('CBillRegistryContractRowManageAjaxController','Error','update 7 BillRegistryContractRowMailMonk','update contactRow',$e);
+                return 'Errore Inserimento' . $e;
+
+            }
+            break;
+
+
+    }
 
 
 }
