@@ -550,7 +550,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="netTotal">importo Netto Totale</label>
                                         <input id="netTotal" autocomplete="off" type="text"
-                                               class="form-control" name="netTotal" value="<?php echo number_format($bri->netTotal,2,',','.');?> "
+                                               class="form-control" name="netTotal" value="<?php echo number_format($bri->netTotal,2,',','.');?>"
                                         />
                                     </div>
                                 </div>

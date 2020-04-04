@@ -61,7 +61,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
             $year=$date->format('Y');
             $row['invoiceNumber']='<a href="'.$invoiceEdit.$billRegistryInvoice->id.'">'.$billRegistryInvoice->invoiceNumber.'/'.$billRegistryInvoice->invoiceType.'-'.$year.'</a>';
            $row['companyName']=$billRegistryClient->companyName;
-           $row['netPrice']=number_format($billRegistryInvoice->netTotal,2,',','.').' &euro;';
+            $row['netPrice']= number_format(trim($billRegistryInvoice->netTotal),2,',','.').' &euro;';
             $row['vat']=number_format($billRegistryInvoice->vat,2,',','.').' &euro;';
             $row['grossTotal']=number_format($billRegistryInvoice->grossTotal,2,',','.').' &euro;';
 
