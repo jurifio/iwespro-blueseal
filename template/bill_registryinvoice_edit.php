@@ -315,12 +315,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <?php $bankSelected='';
-                                 $bank=\Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id'=>$brcbi->bankRegistryId]);
+                                 $bank=\Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id'=>$bri->bankRegistryId]);
 
                                             $bankSelected = $bank->name . ' ' . $bank->location. ' abi:'.$bank->abi. ' cab:'.$bank->cab;
 
                                            ?>
-                                    <input type="hidden" id="bankRegistryIdDef" name="bankRegistryIdDef" value="<?php echo $brcbi->bankRegistryId;?>"/>
+                                    <input type="hidden" id="bankRegistryIdDef" name="bankRegistryIdDef" value="<?php echo $bri->bankRegistryId;?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="bankRegistryId">Seleziona la Banca di Appoggio Vecchio Valore <?php echo $bankSelected;?></label>
                                         <select id="bankRegistryId" name="bankRegistryId"
