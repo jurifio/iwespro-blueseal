@@ -1137,6 +1137,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $billRegistryClientId=$billRegistryClient->id;
             $billRegistryTypePaymentId = $_GET['billRegistryTypePaymentId'];
             $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
+            $bankRegistryId=$_GET['bankRegistryId'];
             $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
             $billRegistryClientBillingInfoId=$billRegistryClientBillingInfo->id;
             if ($data['invoiceNumber'] == '') {
@@ -1169,7 +1170,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceUpdate->discountTotal=str_replace(',','.',$discountTotal);
         $billRegistryInvoiceUpdate->grossTotal=str_replace(',','.',$grossTotal);
         $billRegistryInvoiceUpdate->invoiceDate=$invoiceDate;
-        $billRegistryInvoiceInsert->bankRegistryId=$_GET['bankRegistryId'];
+        $billRegistryInvoiceUpdate->bankRegistryId=$bankRegistryId;
         $billRegistryInvoiceUpdate->statusId=1;
         $billRegistryInvoiceUpdate->update();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
