@@ -790,6 +790,7 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
                                 $billRegistryInvoice->billRegistryClientId = $billRegistryClientId;
                                 $billRegistryInvoice->billRegistryTypePaymentId = $typePaymentId;
                                 $billRegistryInvoice->billRegistryClientBillingInfoId = $billRegistryClientBillingInfo->id;
+                                $billRegistryInvoiceInsert->bankRegistryId=$billRegistryClientBillingInfo->bankRegistryId;
                                 $billRegistryInvoice->netTotal = $netTotal;
                                 if ($isExtraUe != '1') {
                                     $billRegistryInvoice->vat = $vat;
