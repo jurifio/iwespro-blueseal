@@ -133,6 +133,7 @@ $('#bankRegistryId').change(function () {
     }).done(function (res2) {
         let select = $('#bankRegistryId');
         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+
         select.selectize({
             valueField: 'id',
             labelField: 'name',

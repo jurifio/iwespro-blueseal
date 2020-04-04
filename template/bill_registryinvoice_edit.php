@@ -314,20 +314,20 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
+                                    <?php $bankSelected='';
+                                 $bank=\Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id'=>$brcbi->bankRegistryId]);
+
+                                            $bankSelected = $bank->name . ' ' . $bank->location. ' abi:'.$bank->abi. ' cab:'.$bank->cab;
+
+                                           ?>
+                                    <input type="hidden" id="bankRegistryIdDef" name="bankRegistryIdDef" value="<?php echo $brcbi->bankRegistryId;?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="bankRegistryId">Seleziona la Banca di Appoggio</label>
+                                        <label for="bankRegistryId">Seleziona la Banca di Appoggio Vecchio Valore <?php echo $bankSelected;?></label>
                                         <select id="bankRegistryId" name="bankRegistryId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                            <?php foreach (\Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id'=>$brcbi->bankRegistryId]) as $bank) {
-                                                if ($bank->id ==  $brcbi->bankRegistryId) {
-                                                    echo '<option value="'.$bank->id.'" selected="selected">'.$bank->name.' '.$bank->location.'<option>';
-                                                } else {
-                                                    echo '<option value="'.$bank->id.'">'.$bank->name.' '.$bank->location.'<option>';
-                                                }
-                                            }
-                                           ?>
+
                                         </select>
                                     </div>
                                 </div>

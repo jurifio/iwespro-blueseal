@@ -1,3 +1,5 @@
+
+
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -199,6 +201,7 @@ $.ajax({
         },
         dataType: 'json'
     }).done(function (res2) {
+
         let selectBankRegistryId = $('#bankRegistryId');
         if (typeof (selectBankRegistryId[0].selectize) != 'undefined') selectBankRegistryId[0].selectize.destroy();
         selectBankRegistryId.selectize({
@@ -221,7 +224,14 @@ $.ajax({
                 }
             }
         });
+
     });
+
+
+
+
+
+
 
 
 
@@ -676,6 +686,12 @@ $(document).on('bs.invoice.save', function () {
             val = val + $(this).val() + ',';
         }
     });
+    var selectedBankDef='';
+    if($('#bankRegistryId').val()==null){
+        selectedBankDef=$('#bankRegistryIdDef').val();
+    }else{
+        selectedBankDef=$('#bankRegistryId').val();
+    }
     var config = '?billRegistryInvoiceId=' + $("#billRegistryInvoiceId").val() + '&billRegistryClientId=' + $("#billRegistryClientId").val() + '&' +
         'companyName=' + $("#companyName").val() + '&' +
         'address=' + $("#address").val() + '&' +
@@ -699,7 +715,7 @@ $(document).on('bs.invoice.save', function () {
         'emailCcn=' + $("#emailCcn").val() + '&' +
         'emailPec=' + $("#emailPec").val() + '&' +
         'note=' + $("#note").val() + '&' +
-        'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
+        'bankRegistryId=' + selectedBankDef + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
