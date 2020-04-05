@@ -675,6 +675,64 @@ function deleteRowInvoiceEdit(counterRow, counterRowView) {
 
 }
 
+function modifyRowInvoiceEdit(counterRow, counterRowView) {
+    let billRegistryInvoiceId='';
+    let billRegistryProductId='';
+    let description='';
+        let qty='';
+        let priceRow='';
+        let netPriceRow='';
+        let vatRow = '';
+        let percentDiscount='';
+        let discountRow = '';
+        let grossTotalRow ='';
+        let billRegistryTypeTaxesId='';
+    $.ajax({
+        url: '/blueseal/xhr/BillRegistryInvoiceRowManageAjaxController',
+        method: 'get',
+        data: {
+            id: counterRow
+        },
+        dataType: 'json'
+    }).done(function (res) {
+
+        $.each(res, function (k, v) {
+            billRegistryProductId=v.billRegistryProductId;
+            description=v.description;
+            qty=v.qty;
+            priceRow = parseInt(v.priceRow).toFixed(2);
+            netPriceRow = parseInt(v.netPriceRow).toFixed(2);
+            vatRow= parseInt(v.vatRow).toFixed(2);
+            percentDiscount=parseInt(v.percentDiscount).toFixed(2);
+            discountRow=parseInt(v.discountRow).toFixed(2);
+            grossTotalRow=parseInt(v.grossTotalRow).toFixed(2);
+            billRegistryTypeTaxesId=v.billRegistryTypeTaxesId;
+            var myGrossTotal = $('#grossTotal').val().replace(',', '.');
+            var myNetTotal = $('#netTotal').val().replace(',', '.');
+            var myVatTotal = $('#vatTotal').val().replace(',', '.');
+            var myDiscountTotal = $('#discountTotal').val().replace(',', '.');
+            var newGrossTotal = parseFloat(myGrossTotal) - grossTotalRow;
+            var newDiscountTotal = parseFloat(myDiscountTotal) - discountRow;
+            var newNetTotal = parseFloat(myNetTotal) - netPriceRow;
+            var newVatTotal = parseFloat(myVatTotal) - vatRow;
+            $('#netTotal').val(newNetTotal.toFixed(2));
+            $('#vatTotal').val(newVatTotal.toFixed(2));
+            $('#discountTotal').val(newDiscountTotal.toFixed(2));
+            $('#grossTotal').val(newGrossTotal.toFixed(2));
+            var invoiceRowDetail = '#productRowTr' + counterRow.toString();
+            $(invoiceRowDetail).remove();
+
+        });
+        $('#idProduct').data('selectize').setValue(billRegistryProductId);
+        $('#qty').val(qty);
+        $('#priceRow').val(priceRow);
+        $('#description').val(description);
+        $('#discountRow').val(discountRow);
+        $('#netTotalRow').val(netPriceRow);
+
+    });
+}
+
 
 $(document).on('bs.invoice.save', function () {
     let bsModal = new $.bsModal('Modifica Fatture', {
@@ -715,7 +773,7 @@ $(document).on('bs.invoice.save', function () {
         'emailCcn=' + $("#emailCcn").val() + '&' +
         'emailPec=' + $("#emailPec").val() + '&' +
         'note=' + $("#note").val() + '&' +
-        'bankRegistryId=' + selectedBankDef + '&' +
+        'bankRegistryIdbankRegistryId=' + selectedBankDef + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +

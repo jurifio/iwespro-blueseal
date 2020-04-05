@@ -22,6 +22,27 @@ use bamboo\controllers\api\Helper\DateTime;
  */
 class CBillRegistryInvoiceRowManageAjaxController extends AAjaxController
 {
+    public function get()
+    {
+        $invoiceRow = [];
+        $data = $this->app->router->request()->getRequestData();
+        $rowInvoiceId = $data['id'];
+        $brir = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findOneBy(['id' => $rowInvoiceId]);
+        $invoiceRow[] = ['billRegistryInvoiceId'=>$brir->billRegistryInvoiceId,
+                         'billRegistryProductId'=>$brir->billRegistryProductId,
+                         'description'=> $brir->description,
+                         'qty'=>$brir->qty,
+                         'priceRow'=>$brir->priceRow,
+                         'netPriceRow'=>$brir->netPriceRow,
+                         'vatRow' => $brir->vatRow,
+                         'percentDiscount'=>$brir->percentDiscount,
+                         'discountRow' => $brir->discountRow,
+                         'grossTotalRow' => $brir->grossTotalRow,
+                         'billRegistryTypeTaxesId'=>$brir->billRegistryTypeTaxesId];
+                         $brir->delete();
+        return json_encode($invoiceRow);
+
+    }
 
     public function post()
     {

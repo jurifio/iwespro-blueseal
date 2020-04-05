@@ -525,6 +525,7 @@
                                         <th style="width:10%;">iva %</th>
                                         <th style="width:10%;">importo Iva</th>
                                         <th style="width:10%;">totale Riga</th>
+                                        <th style="width:10%;">Modifica</th>
                                         <th style="width:10%;">Elimina</th>
                                     </tr>
                                     <?php
@@ -540,6 +541,7 @@
                                         echo '<td>'.number_format($vat->perc,2,',','').'&percnt;</td>';
                                         echo '<td>'.number_format($invoiceRow->vatRow,2,',','.').'&euro;</td>';
                                         echo '<td>'.number_format($invoiceRow->grossTotalRow,2,',','.').'&euro;</td>';
+                                        echo '<td><button class="success" id="modifyRowInvoiceButton'.$invoiceRow->id.'" onclick="modifyRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
                                         echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                                     }
                                     ?>
