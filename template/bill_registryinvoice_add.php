@@ -440,7 +440,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                             </div>
 
                         </div>
-                        <div class="col-md-2" style="border-width: 1px 1px 1px 1px;
+                        <div class="col-md-2" style="border-width: 1px 1px 0px 1px;
                                                      border-style: solid;
                                                      border-color: darkgrey darkgrey darkgrey darkgrey;">
                             <div class="panel-heading clearfix">
@@ -489,7 +489,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                         </div>
                     </div>
                     <div class="row" id="rawProduct">
-                        <div class="col-md-10" style="border-width: 1px 1px 1px 1px;
+                        <div class="col-md-12" style="border-width: 1px 1px 1px 1px;
 border-style: solid;
 border-color: darkgrey darkgrey darkgrey darkgrey;">
                         <table id="myRowInvoice">
@@ -513,7 +513,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                     </div>
 
                     <div class="row" id="rawProductGeneric">
-                        <div class="col-md-10">
+                        <div class="col-md-12">
                         </div>
                     </div>
 
