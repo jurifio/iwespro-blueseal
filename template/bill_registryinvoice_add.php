@@ -202,7 +202,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group form-group-defaul">
+                                    <div class="form-group form-group-default">
                                         <label for="mobileAdmin">Mobile Contatto Amministratore</label>
                                         <input id="mobileAdmin" autocomplete="off" type="text"
                                                class="form-control" name="mobileAdmin" value=""
@@ -341,11 +341,13 @@
                 </div>
                 <div id="insertInvoiceRow" class="tabcontent">
                     <div class="row">
-                        <div class="col-md-10" style="border-width: 1px 0px 1px 1px;
+                        <div class="col-md-10" style="border-width: 1px 0px 0px 1px;
 border-style: solid;
 border-color: darkgrey darkgrey darkgrey darkgrey;">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Inserimento Righe Corpo Documento</h5>
+                            </div>
+                            <div class="row panel-heading clearfix" style="padding: 48px">
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
