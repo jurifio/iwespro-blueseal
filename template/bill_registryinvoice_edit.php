@@ -417,7 +417,9 @@
                 </div>
                 <div id="insertInvoiceRow" class="tabcontent">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-10" style="border-width: 1px 0px 1px 1px;
+border-style: solid;
+border-color: darkgrey darkgrey darkgrey darkgrey;">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Inserimento Righe Corpo Documento</h5>
                             </div>
@@ -512,57 +514,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" id="rawProduct">
-                                <table id="myRowInvoice">
-                                    <tr class="header1">
-                                        <th style="width:10%;">id Riga</th>
-                                        <th style="width:10%;">nome Prodotto</th>
-                                        <th style="width:10%;">descrizione</th>
-                                        <th style="width:10%;">prezzo</th>
-                                        <th style="width:10%;">qta</th>
-                                        <th style="width:10%;">importo netto</th>
-                                        <th style="width:10%;">sconto %</th>
-                                        <th style="width:10%;">importo sconto</th>
-                                        <th style="width:10%;">iva %</th>
-                                        <th style="width:10%;">importo Iva</th>
-                                        <th style="width:10%;">totale Riga</th>
-                                        <th style="width:10%;">Modifica</th>
-                                        <th style="width:10%;">Elimina</th>
-                                    </tr>
-                                    <?php
-                                    $nameProduct='';
-                                    $codeProduct='';
-                                    foreach($brir as $invoiceRow){
-                                        if($invoiceRow->billRegistryProductId!=0 || $invoiceRow->billRegistryProductId!=null) {
-                                            $brpFind = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $invoiceRow->billRegistryProductId]);
-                                            if ($brpFind != null) {
-                                                $nameProduct = $brpFind->nameProduct;
-                                                $codeProduct = $brpFind->codeProduct;
-                                            }
-                                        }
-                                        echo '<tr id="productRowTr'.$invoiceRow->id.'"><td>'.$invoiceRow->id.'</td>';
-                                        echo '<td>'.$nameProduct.'</td>';
-                                        echo '<td>'.$invoiceRow->description.'</td>';
-                                        echo '<td>'.number_format($invoiceRow->priceRow,2,',','').'&euro;</td>';
-                                        echo '<td>'.$invoiceRow->qty.'</td>';
-                                        echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','').'&euro;</td>';
-                                        echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','').'&percnt;</td>';
-                                        echo '<td>'.number_format($invoiceRow->discountRow,2,',','').'&euro;</td>';
-                                        $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
-                                        echo '<td>'.number_format($vat->perc,2,',','').'&percnt;</td>';
-                                        echo '<td>'.number_format($invoiceRow->vatRow,2,',','').'&euro;</td>';
-                                        echo '<td>'.number_format($invoiceRow->grossTotalRow,2,',','').'&euro;</td>';
-                                        echo '<td><button class="success" id="modifyRowInvoiceButton'.$invoiceRow->id.'" onclick="modifyRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
-                                        echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
-                                    }
-                                    ?>
-                                </table>
-                            </div>
-                            <div class="row" id="rawProductGeneric">
 
-                            </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2" style="border-width: 1px 1px 1px 1px;
+                                                     border-style: solid;
+                                                     border-color: darkgrey darkgrey darkgrey darkgrey;">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Riepilogo</h5>
                             </div>
@@ -607,6 +563,62 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row" id="rawProduct">
+                        <div class="col-md-10" style="border-width: 1px 1px 1px 1px;
+                                                     border-style: solid;
+                                                     border-color: darkgrey darkgrey darkgrey darkgrey;">
+                        <table id="myRowInvoice">
+                            <tr class="header1">
+                                <th style="width:10%;">id Riga</th>
+                                <th style="width:10%;">nome Prodotto</th>
+                                <th style="width:10%;">descrizione</th>
+                                <th style="width:10%;">prezzo</th>
+                                <th style="width:10%;">qta</th>
+                                <th style="width:10%;">importo netto</th>
+                                <th style="width:10%;">sconto %</th>
+                                <th style="width:10%;">importo sconto</th>
+                                <th style="width:10%;">iva %</th>
+                                <th style="width:10%;">importo Iva</th>
+                                <th style="width:10%;">totale Riga</th>
+                                <th style="width:10%;">Modifica</th>
+                                <th style="width:10%;">Elimina</th>
+                            </tr>
+                            <?php
+                            $nameProduct='';
+                            $codeProduct='';
+                            foreach($brir as $invoiceRow){
+                                if($invoiceRow->billRegistryProductId!=0 || $invoiceRow->billRegistryProductId!=null) {
+                                    $brpFind = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $invoiceRow->billRegistryProductId]);
+                                    if ($brpFind != null) {
+                                        $nameProduct = $brpFind->nameProduct;
+                                        $codeProduct = $brpFind->codeProduct;
+                                    }
+                                }
+                                echo '<tr id="productRowTr'.$invoiceRow->id.'"><td>'.$invoiceRow->id.'</td>';
+                                echo '<td>'.$nameProduct.'</td>';
+                                echo '<td>'.$invoiceRow->description.'</td>';
+                                echo '<td>'.number_format($invoiceRow->priceRow,2,',','').'&euro;</td>';
+                                echo '<td>'.$invoiceRow->qty.'</td>';
+                                echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','').'&euro;</td>';
+                                echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','').'&percnt;</td>';
+                                echo '<td>'.number_format($invoiceRow->discountRow,2,',','').'&euro;</td>';
+                                $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
+                                echo '<td>'.number_format($vat->perc,2,',','').'&percnt;</td>';
+                                echo '<td>'.number_format($invoiceRow->vatRow,2,',','').'&euro;</td>';
+                                echo '<td>'.number_format($invoiceRow->grossTotalRow,2,',','').'&euro;</td>';
+                                echo '<td><button class="success" id="modifyRowInvoiceButton'.$invoiceRow->id.'" onclick="modifyRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
+                                echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+                            }
+                            ?>
+                        </table>
+                    </div>
+                    </div>
+                    <div class="row" id="rawProductGeneric">
+                        <div class="col-md-10">
+
+                        </div>
+
                     </div>
                 </div>
             </div>

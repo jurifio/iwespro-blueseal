@@ -615,6 +615,16 @@ function addRowProduct() {
 
     $('#myRowInvoice').append(myrowInvoice);
     counterRow = counterRow + 1;
+    $('#idProduct').data('selectize').setValue('');
+    $('#nameProduct').val('');
+    $('#qty').val('');
+    $('#um').val('');
+    $('#price').val('');
+    $('#netTotal').val('');
+    $('#description').val('');
+    $('#discountRow').val('0.00');
+    $('#billRegistryTypeTaxesProductId').data('selectize').setValue('');
+    $('#netTotalRow').val('');
 
 
 }

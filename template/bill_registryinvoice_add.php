@@ -341,7 +341,9 @@
                 </div>
                 <div id="insertInvoiceRow" class="tabcontent">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-10" style="border-width: 1px 0px 1px 1px;
+border-style: solid;
+border-color: darkgrey darkgrey darkgrey darkgrey;">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Inserimento Righe Corpo Documento</h5>
                             </div>
@@ -393,7 +395,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default">
                                         <label for="description">descrizione</label>
-                                        <textarea id="description" name="description" rows="3" cols="50" value""></textarea>
+                                        <textarea id="description" name="description" rows="3" cols="50"
+                                                  value""></textarea>
 
                                     </div>
                                 </div>
@@ -435,15 +438,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" id="rawProduct">
-                              <table id="myRowInvoice"> <tr class="header1"><th style="width:10%;">id Riga</th><th style="width:10%;">prodotto</th><th style="width:10%;">prezzo</th><th style="width:10%;">qti</th><th style="width:10%;">importo netto</th><th style="width:10%;">sconto %</th><th style="width:10%;">importo sconto </th><th style="width:10%;">iva %</th><th style="width:10%;">importo Iva</th><th style="width:10%;">totale Riga</th><th style="width:10%;">Elimina</th></tr>';
 
-                              </table> </div>
-                            <div class="row" id="rawProductGeneric">
-
-                            </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2" style="border-width: 1px 1px 1px 1px;
+                                                     border-style: solid;
+                                                     border-color: darkgrey darkgrey darkgrey darkgrey;">
                             <div class="panel-heading clearfix">
                                 <h5 class="m-t-12">Riepilogo</h5>
                             </div>
@@ -489,6 +488,35 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" id="rawProduct">
+                        <div class="col-md-10" style="border-width: 1px 1px 1px 1px;
+border-style: solid;
+border-color: darkgrey darkgrey darkgrey darkgrey;">
+                        <table id="myRowInvoice">
+                            <tr class="header1">
+                                <th style="width:10%;">id Riga</th>
+                                <th style="width:10%;">Nome Prodotto</th>
+                                <th style="width:10%;">Descrizione</th>
+                                <th style="width:10%;">prezzo</th>
+                                <th style="width:10%;">qti</th>
+                                <th style="width:10%;">importo netto</th>
+                                <th style="width:10%;">sconto %</th>
+                                <th style="width:10%;">importo sconto</th>
+                                <th style="width:10%;">iva %</th>
+                                <th style="width:10%;">importo Iva</th>
+                                <th style="width:10%;">totale Riga</th>
+                                <th style="width:10%;">Elimina</th>
+                            </tr>
+
+                        </table>
+                        </div>
+                    </div>
+
+                    <div class="row" id="rawProductGeneric">
+                        <div class="col-md-10">
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
