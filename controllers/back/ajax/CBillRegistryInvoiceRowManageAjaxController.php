@@ -28,8 +28,20 @@ class CBillRegistryInvoiceRowManageAjaxController extends AAjaxController
         $data = $this->app->router->request()->getRequestData();
         $rowInvoiceId = $data['id'];
         $brir = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findOneBy(['id' => $rowInvoiceId]);
+        $brp =\Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id'=>$brir->billRegistryProductId]);
+        $nameProduct=' ';
+        $codeProduct=' ';
+
+        if($brp!=null){
+            $nameProduct=$brp->nameProduct;
+            $codeProduct=$brp->codeProduct;
+        }
+
+
         $invoiceRow[] = ['billRegistryInvoiceId'=>$brir->billRegistryInvoiceId,
                          'billRegistryProductId'=>$brir->billRegistryProductId,
+                         'nameProduct'=>$nameProduct,
+                         'codeProduct'=>$codeProduct,
                          'description'=> $brir->description,
                          'qty'=>$brir->qty,
                          'priceRow'=>$brir->priceRow,

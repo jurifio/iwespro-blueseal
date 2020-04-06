@@ -574,6 +574,8 @@ function addRowProduct() {
         idRow: counterRow,
         idProduct: $('#idProduct').val(),
         price: $('#price').val(),
+        nameProduct:$('#nameProduct').val(),
+        codeProduct:$('#codeProduct').val(),
         description: $('#description').val(),
         qty: $('#qty').val(),
         netTotalRow: $('#netTotalRow').val(),
@@ -599,6 +601,7 @@ function addRowProduct() {
     $('#grossTotal').val(grossTotal.toFixed(2));
     let myrowInvoice = '<tr id="productRowTr' + counterRow + '"><td>' + counterRowView + '</td>';
     myrowInvoice += '<td>' + $('#nameProduct').val() + '</td>';
+    myrowInvoice += '<td>' + $('#description').val() + '</td>';
     myrowInvoice += '<td>' + parseFloat($('#price').val()).toFixed(2) + ' &euro;</td>';
     myrowInvoice += '<td>' + $('#qty').val() + '</td>';
     myrowInvoice += '<td>' + netTotalRow.toFixed(2) + ' &euro;</td>';
@@ -607,6 +610,7 @@ function addRowProduct() {
     myrowInvoice += '<td>' + $('#percVat').val() + ' %</td>';
     myrowInvoice += '<td>' + vatRow.toFixed(2) + ' &euro;</td>';
     myrowInvoice += '<td>' + grossTotalRow.toFixed(2) + ' &euro;</td>';
+    myrowInvoice += '<td><button class="success" id="modifyRowInvoiceButton' + counterRowView + '" onclick="modifyRowInvoiceEdit(' + counterRow + ',' + counterRowView + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
     myrowInvoice += '<td><button class="success" id="deleteRowInvoiceButton' + counterRowView + '" onclick="deleteRowInvoice(' + counterRow + ',' + counterRowView + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
 
     $('#myRowInvoice').append(myrowInvoice);
@@ -678,6 +682,7 @@ function deleteRowInvoiceEdit(counterRow, counterRowView) {
 function modifyRowInvoiceEdit(counterRow, counterRowView) {
     let billRegistryInvoiceId='';
     let billRegistryProductId='';
+    let nameProduct='';
     let description='';
         let qty='';
         let priceRow='';
@@ -699,15 +704,16 @@ function modifyRowInvoiceEdit(counterRow, counterRowView) {
         $.each(res, function (k, v) {
             billRegistryProductId=v.billRegistryProductId;
             description=v.description;
+            nameProduct=v.nameProduct;
             qty=v.qty;
-            priceRow = parseInt(v.priceRow).toFixed(2);
-            netPriceRow = parseInt(v.netPriceRow).toFixed(2);
-            vatRow= parseInt(v.vatRow).toFixed(2);
-            percentDiscount=parseInt(v.percentDiscount).toFixed(2);
-            discountRow=parseInt(v.discountRow).toFixed(2);
-            grossTotalRow=parseInt(v.grossTotalRow).toFixed(2);
+            priceRow = parseFloat(v.priceRow).toFixed(2);
+            netPriceRow = parseFloat(v.netPriceRow).toFixed(2);
+            vatRow= parseFloat(v.vatRow).toFixed(2);
+            percentDiscount=parseFloat(v.percentDiscount).toFixed(2);
+            discountRow=parseFloat(v.discountRow).toFixed(2);
+            grossTotalRow=parseFloat(v.grossTotalRow).toFixed(2);
             billRegistryTypeTaxesId=v.billRegistryTypeTaxesId;
-            var myGrossTotal = $('#grossTotal').val().replace(',', '.');
+            var  myGrossTotal = $('#grossTotal').val().replace(',', '.');
             var myNetTotal = $('#netTotal').val().replace(',', '.');
             var myVatTotal = $('#vatTotal').val().replace(',', '.');
             var myDiscountTotal = $('#discountTotal').val().replace(',', '.');
@@ -726,6 +732,7 @@ function modifyRowInvoiceEdit(counterRow, counterRowView) {
         $('#idProduct').data('selectize').setValue(billRegistryProductId);
         $('#qty').val(qty);
         $('#priceRow').val(priceRow);
+        $('#nameProduct').val(nameProduct);
         $('#description').val(description);
         $('#discountRow').val(discountRow);
         $('#netTotalRow').val(netPriceRow);
@@ -745,7 +752,7 @@ $(document).on('bs.invoice.save', function () {
         }
     });
     var selectedBankDef='';
-    if($('#bankRegistryId').val()==null){
+    if($('#bankRegistryId').val()=="" || $('#bankRegistryId').val()==null ){
         selectedBankDef=$('#bankRegistryIdDef').val();
     }else{
         selectedBankDef=$('#bankRegistryId').val();
@@ -773,7 +780,7 @@ $(document).on('bs.invoice.save', function () {
         'emailCcn=' + $("#emailCcn").val() + '&' +
         'emailPec=' + $("#emailPec").val() + '&' +
         'note=' + $("#note").val() + '&' +
-        'bankRegistryIdbankRegistryId=' + selectedBankDef + '&' +
+        'bankRegistryId=' + selectedBankDef + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +
         'billRegistryTypePaymentId=' + $("#billRegistryTypePaymentId").val() + '&' +
