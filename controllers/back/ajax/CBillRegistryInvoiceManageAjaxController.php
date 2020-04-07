@@ -331,7 +331,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceInsert->billRegistryClientBillingInfoId=$billRegistryClientBillingInfoId;
         $billRegistryInvoiceInsert->netTotal=$netTotal;
         $billRegistryInvoiceInsert->vat=$vatTotal;
-        $billRegistryInvoiceInsert->bankRegistryId=$bankRegistryId;
+        $billRegistryInvoiceInsert->bankRegistryId=$_GET['bankRegistryId'];
         $billRegistryInvoiceInsert->discountTotal=$discountTotal;
         $billRegistryInvoiceInsert->grossTotal=$grossTotal;
         $billRegistryInvoiceInsert->invoiceDate=$invoiceDate;

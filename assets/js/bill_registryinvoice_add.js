@@ -705,7 +705,7 @@ $(document).on('bs.invoice.save', function () {
                 let billRegistryClientId = res.replace('1-', '');
                 bsModal.writeBody('Inserimento eseguito con successo');
                 setTimeout(function () {
-                    window.location.href = '/blueseal/anagrafica/clienti-modifica/' + billRegistryClientId;
+                    window.location.href = '/blueseal/anagrafica/fatture-lista';
                 }, 1000);
 
             } else {
