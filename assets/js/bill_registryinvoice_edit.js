@@ -246,26 +246,7 @@ $("#billRegistryTypeTaxesId").change(function () {
 
     });
 });
-$("#billRegistryTypePaymentId").change(function () {
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BillRegistryTypePayment'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var selectBillRegistryTypePayment = $('#billRegistryTypePaymentId');
-        if (typeof (selectBillRegistryTypePayment[0].selectize) != 'undefined') selectBillRegistryTypePayment[0].selectize.destroy();
-        selectBillRegistryTypePayment.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name'],
-            options: res2
-        });
 
-    });
-});
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',

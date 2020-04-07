@@ -376,11 +376,11 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                            <?php foreach ($brtp as $payment) {
-                                                if ($payment->id == $bri->billRegistryTypePaymentId) {
-                                                    echo '<option value="' . $payment->id . '" selected="selected">' . $payment->name . '<option>';
+                                            <?php foreach ($brtp as $payments) {
+                                                if ($payments->id == $bri->billRegistryTypePaymentId) {
+                                                    echo '<option value="' . $payments->id . '" selected="selected">' . $payments->name . '<option>';
                                                 } else {
-                                                    echo '<option value="' . $payment->id . '">' . $payment->name . '<option>';
+                                                    echo '<option value="' . $payments->id . '">' . $payments->name . '<option>';
                                                 }
                                             }
                                             ?>
@@ -639,13 +639,13 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
 
                             <?php
                             $covidGianluca=1;
-                            foreach ($brtt as $payment){
+                            foreach ($brtt as $picacciu){
                                 echo '<div class="row">';
                                 echo '<div class="col-md-2">';
-                                echo '<input type="hidden" id="'.$covidGianluca.'rowId"  name="'.$covidGianluca.'rowId" value="'.$payment->id.'"/>';
+                                echo '<input type="hidden" id="'.$covidGianluca.'rowId"  name="'.$covidGianluca.'rowId" value="'.$picacciu->id.'"/>';
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowTime">Data</label>';
-                                $date=new \DateTime($payment->dateEstimated);
+                                $date=new \DateTime($picacciu->dateEstimated);
                                 $dateEstimated=$date->format('Y-m-d');
                                 echo '<input type="date" id="'.$covidGianluca.'rowTime"  name="'.$covidGianluca.'rowTime" value="'.$dateEstimated.'"/>';
                                 echo '</div>';
@@ -653,21 +653,21 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 echo '<div class="col-md-4">';
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowdescription">Descrizione</label>';
-                                echo '<textarea  id="'.$covidGianluca.'rowdescription"  name="'.$covidGianluca.'rowdescription" rows="3" cols="50" value="">'.$payment->description.'</textarea>';
+                                echo '<textarea  id="'.$covidGianluca.'rowdescription"  name="'.$covidGianluca.'rowdescription" rows="3" cols="50" value="">'.$picacciu->description.'</textarea>';
                                 echo '</div>';
                                 echo '</div>';
                                 echo '<div class="col-md-4">';
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowAmountPayment">Importo Scadenza</label>';
 
-                                echo '<input type="text" id="'.$covidGianluca.'rowAmountPayment"  name="'.$covidGianluca.'rowAmountPayment" value="'.number_format($payment->amountPayment,2,'.','').'"/>';
+                                echo '<input type="text" id="'.$covidGianluca.'rowAmountPayment"  name="'.$covidGianluca.'rowAmountPayment" value="'.number_format($picacciu->amountPayment,2,'.','').'"/>';
                                 echo '</div>';
                                 echo '</div>';
                                 echo '<div class="col-md-2">';
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowdAmountPayment">Modifica</label>';
 
-                                echo '<td><button class="success" id="modifyRowPaymentInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowPaymnetInvoiceEdit(' . $covidGianluca . ',' . $payment->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                                echo '<td><button class="success" id="modifyRowPaymentInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowPaymnetInvoiceEdit(' . $covidGianluca . ',' . $picacciu->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
                                 echo '</div>';
                                 echo '</div>';
                                 echo '</div>';
