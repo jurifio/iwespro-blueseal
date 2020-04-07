@@ -374,6 +374,7 @@
                                         <label for="billRegistryTypePaymentId">Seleziona il Pagamento desiderato</label>
                                         <select id="billRegistryTypePaymentId" name="billRegistryTypePaymentId"
                                                 class="full-width selectpicker"
+
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                             <?php foreach ($brtp as $payments) {
@@ -650,13 +651,20 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 echo '<input type="date" id="'.$covidGianluca.'rowTime"  name="'.$covidGianluca.'rowTime" value="'.$dateEstimated.'"/>';
                                 echo '</div>';
                                 echo '</div>';
-                                echo '<div class="col-md-4">';
+                                echo '<div class="col-md-2">';
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowdescription">Descrizione</label>';
-                                echo '<textarea  id="'.$covidGianluca.'rowdescription"  name="'.$covidGianluca.'rowdescription" rows="3" cols="50" value="">'.$picacciu->description.'</textarea>';
+                                echo '<textarea  id="'.$covidGianluca.'rowdescription"  name="'.$covidGianluca.'rowdescription" rows="3" cols="25">'.$picacciu->description.'</textarea>';
                                 echo '</div>';
                                 echo '</div>';
-                                echo '<div class="col-md-4">';
+                                $typePayment=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findOneBy(['id'=>$picacciu->billRegistryTypePaymentId]);
+                                echo '<div class="col-md-2">';
+                                echo '<div class="form-group form-group-default">';
+                                echo '<label for="'.$covidGianluca.'rowTypePayment">Tipo Pagamento</label>';
+                                echo '<textarea  id="'.$covidGianluca.'rowTypePayment" disabled  name="'.$covidGianluca.'rowTypePayment" rows="3" cols="25">'.$typePayment->name.'</textarea>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '<div class="col-md-2">';
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowAmountPayment">Importo Scadenza</label>';
 
@@ -667,7 +675,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowdAmountPayment">Modifica</label>';
 
-                                echo '<td><button class="success" id="modifyRowPaymentInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowPaymnetInvoiceEdit(' . $covidGianluca . ',' . $picacciu->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                                echo '<button class="success" id="modifyRowPaymentInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowPaymnetInvoiceEdit(' . $covidGianluca . ',' . $picacciu->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button>';
                                 echo '</div>';
                                 echo '</div>';
                                 echo '</div>';
