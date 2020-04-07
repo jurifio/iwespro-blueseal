@@ -354,38 +354,40 @@ $(document).on('click', '#checkedAll', function () {
 });
 $('#idProduct').change(function () {
     var selectionProductId = $('#idProduct').val();
-    document.getElementById('nameProduct').value = '';
-    document.getElementById('um').value = '';
-    document.getElementById('price').value = '';
-    document.getElementById('description').value = '';
-    document.getElementById('percVat').value = '';
-    document.getElementById('netTotalRow').value = '';
-    var selectTaxesId = $("#billRegistryTypeTaxesProductId")[0].selectize;
-    selectTaxesId.clear();
-    $.ajax({
-        url: '/blueseal/xhr/SelectBillRegistryProductToRowInvoiceAjaxController',
-        method: 'get',
-        data: {
-            id: selectionProductId
-        },
-        dataType: 'json'
-    }).done(function (res) {
+    if(selectionProductId!=null) {
+        document.getElementById('nameProduct').value = '';
+        document.getElementById('um').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('percVat').value = '';
+        document.getElementById('netTotalRow').value = '';
+        var selectTaxesId = $("#billRegistryTypeTaxesProductId")[0].selectize;
+        selectTaxesId.clear();
+        $.ajax({
+            url: '/blueseal/xhr/SelectBillRegistryProductToRowInvoiceAjaxController',
+            method: 'get',
+            data: {
+                id: selectionProductId
+            },
+            dataType: 'json'
+        }).done(function (res) {
 
-        $.each(res, function (k, v) {
-            document.getElementById('nameProduct').value = v.nameProduct;
-            document.getElementById('um').value = v.um;
-            document.getElementById('price').value = parseFloat(v.price).toFixed(2);
-            document.getElementById('description').value = v.description;
-            document.getElementById('qty').value = '1';
-            document.getElementById('netTotalRow').value = (parseFloat(v.price) * 1).toFixed(2);
+            $.each(res, function (k, v) {
+                document.getElementById('nameProduct').value = v.nameProduct;
+                document.getElementById('um').value = v.um;
+                document.getElementById('price').value = parseFloat(v.price).toFixed(2);
+                document.getElementById('description').value = v.description;
+                document.getElementById('qty').value = '1';
+                document.getElementById('netTotalRow').value = (parseFloat(v.price) * 1).toFixed(2);
 
-            document.getElementById('percVat').value = v.perc;
+                document.getElementById('percVat').value = v.perc;
 
-            $('#billRegistryTypeTaxesProductId').data('selectize').setValue(v.taxes);
+                $('#billRegistryTypeTaxesProductId').data('selectize').setValue(v.taxes);
 
-        })
+            })
 
-    });
+        });
+    }
 });
 $('#billRegistryClientId').change(function () {
     var selectionBillRegistryClientId = $('#billRegistryClientId').val();
@@ -473,17 +475,19 @@ $('#billRegistryClientId').change(function () {
 
 
 $('#billRegistryTypeTaxesProductId').change(function () {
-    idVat = $('#billRegistryTypeTaxesProductId').val();
-    $.ajax({
-        url: '/blueseal/xhr/SelectBillRegistryTypeTaxesToRowInvoiceAjaxController',
-        method: 'get',
-        data: {
-            id: idVat
-        },
-        dataType: 'json'
-    }).done(function (res) {
-        $('#percVat').val(res);
-    });
+    var idVat = $('#billRegistryTypeTaxesProductId').val();
+    if(idVat!="") {
+        $.ajax({
+            url: '/blueseal/xhr/SelectBillRegistryTypeTaxesToRowInvoiceAjaxController',
+            method: 'get',
+            data: {
+                id: idVat
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            $('#percVat').val(res);
+        });
+    }
 });
 
 
