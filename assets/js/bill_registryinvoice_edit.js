@@ -731,16 +731,15 @@ function modifyRowPaymnetInvoiceEdit(counterRow, idPayment) {
     });
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
+        var data={ id: billRegistryTimeTableId,
+            paymentDescription: $(paymentDescription).val(),
+            dateEstimated: $(dateEstimated).val(),
+            amountPayment: $(amountPayment).val()
+        }
         $.ajax({
             url: '/blueseal/xhr/BillRegistryTimeTableManageController',
             method: 'put',
-            data: {
-                id: billRegistryTimeTableId,
-                paymentDescription: $(paymentDescription).val(),
-                dateEstimated: $(dateEstimated).val(),
-                amountPayment: $(amountPayment).val()
-            },
-            dataType: 'json'
+            data: data
         }).done(function (res) {
             bsModal.writeBody(res);
         }).fail(function (res) {
@@ -825,9 +824,9 @@ $(document).on('bs.invoice.save', function () {
         }).done(function (res) {
             if (res.includes('1-')) {
                 let billRegistryClientId = res.replace('1-', '');
-                bsModal.writeBody('Inserimento eseguito con successo');
+                bsModal.writeBody('Modifica eseguito con successo');
                 setTimeout(function () {
-                    window.location.href = '/blueseal/anagrafica/clienti-modifica/' + billRegistryClientId;
+                    window.location.reload()
                 }, 1000);
 
             } else {

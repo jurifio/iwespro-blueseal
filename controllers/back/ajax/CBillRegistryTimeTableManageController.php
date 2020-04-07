@@ -75,11 +75,13 @@ class CBillRegistryTimeTableManageController extends AAjaxController
         $date=$data['dateEstimated'];
         $dateP=new \DateTime($date);
         $amountPayment=$data['amountPayment'];
+        $description=$data['paymentDescription'];
         $datePayment = $dateP->format('Y-m-d H:i:s');
         $billRegistryTimeTable = \Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findOneBy(['id'=>$billRegistryTimeTableId]);
         if($billRegistryTimeTable->billRegistryActivePaymentSlipId == null) {
-            $billRegistryTimeTable->amountPaid = $amountPayment;
-            $billRegistryTimeTable->datePayment = $datePayment;
+            $billRegistryTimeTable->amountPayment = $amountPayment;
+            $billRegistryTimeTable->dateEstimated = $datePayment;
+            $billRegistryTimeTable->description=$description;
             $billRegistryTimeTable->update();
             $res = 'Scadenza Modificata con successo';
             }else{
