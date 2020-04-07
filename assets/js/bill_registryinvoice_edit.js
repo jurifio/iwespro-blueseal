@@ -1,5 +1,3 @@
-
-
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -193,47 +191,39 @@ $.ajax({
 
 });*/
 
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BankRegistry'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BankRegistry'
+    },
+    dataType: 'json'
+}).done(function (res2) {
 
-        let selectBankRegistryId = $('#bankRegistryId');
-        if (typeof (selectBankRegistryId[0].selectize) != 'undefined') selectBankRegistryId[0].selectize.destroy();
-        selectBankRegistryId.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name', 'location', 'abi', 'cab'],
-            options: res2,
-            render: {
-                item: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                        '</div>'
-                },
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
-                        '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
-                        '</div>'
-                }
+    let selectBankRegistryId = $('#bankRegistryId');
+    if (typeof (selectBankRegistryId[0].selectize) != 'undefined') selectBankRegistryId[0].selectize.destroy();
+    selectBankRegistryId.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name', 'location', 'abi', 'cab'],
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.location) + '</span> - ' +
+                    '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
+                    '</div>'
             }
-        });
-
+        }
     });
 
-
-
-
-
-
-
-
+});
 
 
 $("#billRegistryTypeTaxesId").change(function () {
@@ -276,25 +266,24 @@ $("#billRegistryTypePaymentId").change(function () {
 
     });
 });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'BillRegistryTypeTaxes'
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var selectbillRegistryTypeTaxesProductId = $('#billRegistryTypeTaxesProductId');
-        if (typeof (selectbillRegistryTypeTaxesProductId[0].selectize) != 'undefined') selectbillRegistryTypeTaxesProductId[0].selectize.destroy();
-        selectbillRegistryTypeTaxesProductId.selectize({
-            valueField: 'id',
-            labelField: 'description',
-            searchField: ['description'],
-            options: res2
-        });
-
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BillRegistryTypeTaxes'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var selectbillRegistryTypeTaxesProductId = $('#billRegistryTypeTaxesProductId');
+    if (typeof (selectbillRegistryTypeTaxesProductId[0].selectize) != 'undefined') selectbillRegistryTypeTaxesProductId[0].selectize.destroy();
+    selectbillRegistryTypeTaxesProductId.selectize({
+        valueField: 'id',
+        labelField: 'description',
+        searchField: ['description'],
+        options: res2
     });
 
+});
 
 
 $("#accountAsService").change(function () {
@@ -574,8 +563,8 @@ function addRowProduct() {
         idRow: counterRow,
         idProduct: $('#idProduct').val(),
         price: $('#price').val(),
-        nameProduct:$('#nameProduct').val(),
-        codeProduct:$('#codeProduct').val(),
+        nameProduct: $('#nameProduct').val(),
+        codeProduct: $('#codeProduct').val(),
         description: $('#description').val(),
         qty: $('#qty').val(),
         netTotalRow: $('#netTotalRow').val(),
@@ -690,18 +679,18 @@ function deleteRowInvoiceEdit(counterRow, counterRowView) {
 }
 
 function modifyRowInvoiceEdit(counterRow, counterRowView) {
-    let billRegistryInvoiceId='';
-    let billRegistryProductId='';
-    let nameProduct='';
-    let description='';
-        let qty='';
-        let priceRow='';
-        let netPriceRow='';
-        let vatRow = '';
-        let percentDiscount='';
-        let discountRow = '';
-        let grossTotalRow ='';
-        let billRegistryTypeTaxesId='';
+    let billRegistryInvoiceId = '';
+    let billRegistryProductId = '';
+    let nameProduct = '';
+    let description = '';
+    let qty = '';
+    let priceRow = '';
+    let netPriceRow = '';
+    let vatRow = '';
+    let percentDiscount = '';
+    let discountRow = '';
+    let grossTotalRow = '';
+    let billRegistryTypeTaxesId = '';
     $.ajax({
         url: '/blueseal/xhr/BillRegistryInvoiceRowManageAjaxController',
         method: 'get',
@@ -712,18 +701,18 @@ function modifyRowInvoiceEdit(counterRow, counterRowView) {
     }).done(function (res) {
 
         $.each(res, function (k, v) {
-            billRegistryProductId=v.billRegistryProductId;
-            description=v.description;
-            nameProduct=v.nameProduct;
-            qty=v.qty;
+            billRegistryProductId = v.billRegistryProductId;
+            description = v.description;
+            nameProduct = v.nameProduct;
+            qty = v.qty;
             priceRow = parseFloat(v.priceRow).toFixed(2);
             netPriceRow = parseFloat(v.netPriceRow).toFixed(2);
-            vatRow= parseFloat(v.vatRow).toFixed(2);
-            percentDiscount=parseFloat(v.percentDiscount).toFixed(2);
-            discountRow=parseFloat(v.discountRow).toFixed(2);
-            grossTotalRow=parseFloat(v.grossTotalRow).toFixed(2);
-            billRegistryTypeTaxesId=v.billRegistryTypeTaxesId;
-            var  myGrossTotal = $('#grossTotal').val().replace(',', '.');
+            vatRow = parseFloat(v.vatRow).toFixed(2);
+            percentDiscount = parseFloat(v.percentDiscount).toFixed(2);
+            discountRow = parseFloat(v.discountRow).toFixed(2);
+            grossTotalRow = parseFloat(v.grossTotalRow).toFixed(2);
+            billRegistryTypeTaxesId = v.billRegistryTypeTaxesId;
+            var myGrossTotal = $('#grossTotal').val().replace(',', '.');
             var myNetTotal = $('#netTotal').val().replace(',', '.');
             var myVatTotal = $('#vatTotal').val().replace(',', '.');
             var myDiscountTotal = $('#discountTotal').val().replace(',', '.');
@@ -750,6 +739,41 @@ function modifyRowInvoiceEdit(counterRow, counterRowView) {
     });
 }
 
+function modifyRowPaymnetInvoiceEdit(counterRow, idPayment) {
+    let billRegistryTimeTableId = idPayment;
+    let paymentDescription = '#' + counterRow + 'rowdescription';
+    let dateEstimated = '#' + counterRow + 'rowTime';
+    let amountPayment = '#' + counterRow + 'rowAmountPayment';
+    let bsModal = new $.bsModal('Modifica Scadenza', {
+        body: '<p>Confermi la Modifica della Scadenza Attenzione ?</p>' +
+            '<p>Attenzione se modifichi invece  il pagamento dalla sezione Dati Pagamenti  verranno rigenerate le scadenze</p>'
+    });
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        $.ajax({
+            url: '/blueseal/xhr/BillRegistryTimeTableManageController',
+            method: 'put',
+            data: {
+                id: billRegistryTimeTableId,
+                paymentDescription: $(paymentDescription).val(),
+                dateEstimated: $(dateEstimated).val(),
+                amountPayment: $(amountPayment).val()
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.showOkBtn();
+                bsModal.hide();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+}
+
 
 $(document).on('bs.invoice.save', function () {
     let bsModal = new $.bsModal('Modifica Fatture', {
@@ -761,11 +785,11 @@ $(document).on('bs.invoice.save', function () {
             val = val + $(this).val() + ',';
         }
     });
-    var selectedBankDef='';
-    if($('#bankRegistryId').val()=="" || $('#bankRegistryId').val()==null ){
-        selectedBankDef=$('#bankRegistryIdDef').val();
-    }else{
-        selectedBankDef=$('#bankRegistryId').val();
+    var selectedBankDef = '';
+    if ($('#bankRegistryId').val() == "" || $('#bankRegistryId').val() == null) {
+        selectedBankDef = $('#bankRegistryIdDef').val();
+    } else {
+        selectedBankDef = $('#bankRegistryId').val();
     }
     var config = '?billRegistryInvoiceId=' + $("#billRegistryInvoiceId").val() + '&billRegistryClientId=' + $("#billRegistryClientId").val() + '&' +
         'companyName=' + $("#companyName").val() + '&' +

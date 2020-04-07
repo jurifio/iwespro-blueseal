@@ -25,8 +25,8 @@
                             <button class="tablinks" onclick="openTab(event, 'insertInvoice')">Intestazione Fattura
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertInvoiceRow')">Righe Fatture</button>
-                            <button class="tablinks" onclick="openTab(event, 'insertInvoiceBillingInfo')">Dati Pagamenti
-                            </button>
+                            <button class="tablinks" onclick="openTab(event, 'insertInvoiceBillingInfo')">Dati Pagamenti</button>
+                            <button class="tablinks" onclick="openTab(event, 'insertInvoiceTimeTable')">Scadenze</button>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="hidden" id="billRegistryInvoiceId" name="billRegistryInvoiceId" value="<?php echo $bri->id;?>"/>
+                                    <input type="hidden" id="billRegistryInvoiceId" name="billRegistryInvoiceId"
+                                           value="<?php echo $bri->id; ?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="invoiceSelectNumber">Seleziona la Numerazione</label>
                                         <select id="invoiceSelectNumber" name="invoiceSelectNumber"
@@ -151,10 +152,10 @@
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                             <?php foreach (\Monkey::app()->repoFactory->create('Country')->findAll() as $country) {
-                                                if ($country->id ==  $brc->countryId) {
-                                                    echo '<option value="'.$country->id.'" selected="selected">'.$country->name.'<option>';
+                                                if ($country->id == $brc->countryId) {
+                                                    echo '<option value="' . $country->id . '" selected="selected">' . $country->name . '<option>';
                                                 } else {
-                                                    echo '<option value="'.$country->id.'">'.$country->name.'<option>';
+                                                    echo '<option value="' . $country->id . '">' . $country->name . '<option>';
                                                 }
                                             }
                                             ?>
@@ -202,11 +203,11 @@
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                            <?php foreach (\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$brc->userId]) as $user) {
-                                                if ($user->id ==  $brc->userId) {
-                                                    echo '<option value="'.$user->id.'" selected="selected">'.$user->email.'<option>';
+                                            <?php foreach (\Monkey::app()->repoFactory->create('User')->findOneBy(['id' => $brc->userId]) as $user) {
+                                                if ($user->id == $brc->userId) {
+                                                    echo '<option value="' . $user->id . '" selected="selected">' . $user->email . '<option>';
                                                 } else {
-                                                    echo '<option value="'.$user->id.'">'.$user->email.'<option>';
+                                                    echo '<option value="' . $user->id . '">' . $user->email . '<option>';
                                                 }
                                             }
                                             ?>
@@ -314,23 +315,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <?php $bankSelected='';
-                                          $bankDefault='';
-                                    if($bri->bankRegistryId!=null) {
+                                    <?php $bankSelected = '';
+                                    $bankDefault = '';
+                                    if ($bri->bankRegistryId != null) {
                                         $bankDefault = $bri->bankRegistryId;
-                                    }else{
+                                    } else {
                                         $bankDefault = $brcbi->bankRegistryId;
                                     }
-                                 $bank=\Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id'=>$bankDefault]);
-                                            if($bank!=null) {
-                                                $bankSelected = $bank->name . ' ' . $bank->location . ' abi:' . $bank->abi . ' cab:' . $bank->cab;
-                                            }
+                                    $bank = \Monkey::app()->repoFactory->create('BankRegistry')->findOneBy(['id' => $bankDefault]);
+                                    if ($bank != null) {
+                                        $bankSelected = $bank->name . ' ' . $bank->location . ' abi:' . $bank->abi . ' cab:' . $bank->cab;
+                                    }
 
-                                           ?>
+                                    ?>
 
-                                    <input type="hidden" id="bankRegistryIdDef" name="bankRegistryIdDef" value="<?php echo $bankDefault;?>"/>
+                                    <input type="hidden" id="bankRegistryIdDef" name="bankRegistryIdDef"
+                                           value="<?php echo $bankDefault; ?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="bankRegistryId">Seleziona la Banca di Appoggio Vecchio Valore <?php echo $bankSelected;?></label>
+                                        <label for="bankRegistryId">Seleziona la Banca di Appoggio Vecchio
+                                            Valore <?php echo $bankSelected; ?></label>
                                         <select id="bankRegistryId" name="bankRegistryId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
@@ -357,9 +360,9 @@
                                                 data-init-plugin="selectize">
                                             <?php foreach (\Monkey::app()->repoFactory->create('Currency')->findAll() as $currency) {
                                                 if ($currency->id == $brcbi->currencyId) {
-                                                    echo '<option value="'.$currency->id.'" selected="selected">'.$currency->code.'<option>';
+                                                    echo '<option value="' . $currency->id . '" selected="selected">' . $currency->code . '<option>';
                                                 } else {
-                                                    echo '<option value="'.$currency->id.'">'.$currency->code.'<option>';
+                                                    echo '<option value="' . $currency->id . '">' . $currency->code . '<option>';
                                                 }
                                             }
                                             ?>
@@ -375,9 +378,9 @@
                                                 data-init-plugin="selectize">
                                             <?php foreach ($brtp as $payment) {
                                                 if ($payment->id == $bri->billRegistryTypePaymentId) {
-                                                   echo '<option value="'.$payment->id.'" selected="selected">'.$payment->name.'<option>';
+                                                    echo '<option value="' . $payment->id . '" selected="selected">' . $payment->name . '<option>';
                                                 } else {
-                                                    echo '<option value="'.$payment->id.'">'.$payment->name.'<option>';
+                                                    echo '<option value="' . $payment->id . '">' . $payment->name . '<option>';
                                                 }
                                             }
                                             ?>
@@ -393,9 +396,9 @@
                                                 data-init-plugin="selectize">
                                             <?php foreach (\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findAll() as $taxes) {
                                                 if ($taxes->id == $brcbi->billRegistryTypeTaxesId) {
-                                                    echo '<option value="'.$taxes->id.'" selected="selected">'.$taxes->description.'<option>';
+                                                    echo '<option value="' . $taxes->id . '" selected="selected">' . $taxes->description . '<option>';
                                                 } else {
-                                                    echo '<option value="'.$taxes->id.'">'.$taxes->description.'<option>';
+                                                    echo '<option value="' . $taxes->id . '">' . $taxes->description . '<option>';
                                                 }
                                             }
                                             ?>
@@ -406,7 +409,7 @@
                                     <div class="form-group form-group-default required">
                                         <label for="sdi">Codice UNIVOCO SDI</label>
                                         <input id="sdi" autocomplete="off" type="text"
-                                               class="form-control" name="sdi" value="<?php echo $brcbi->sdi;?>"
+                                               class="form-control" name="sdi" value="<?php echo $brcbi->sdi; ?>"
                                                required="required"/>
                                     </div>
                                 </div>
@@ -529,7 +532,8 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="netTotal">importo Netto Totale</label>
                                         <input id="netTotal" autocomplete="off" type="text"
-                                               class="form-control" name="netTotal" value="<?php echo number_format($bri->netTotal,2,',','');?>"
+                                               class="form-control" name="netTotal"
+                                               value="<?php echo number_format($bri->netTotal,2,',',''); ?>"
                                         />
                                     </div>
                                 </div>
@@ -539,7 +543,8 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="discountTotal">Sconto Totale</label>
                                         <input id="discountTotal" autocomplete="off" type="text"
-                                               class="form-control" name="discountTotal" value="<?php echo number_format($bri->discountTotal,2,',','');?>"
+                                               class="form-control" name="discountTotal"
+                                               value="<?php echo number_format($bri->discountTotal,2,',',''); ?>"
                                         />
                                     </div>
                                 </div>
@@ -549,7 +554,8 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="vatTotal">Iva Totale</label>
                                         <input id="vatTotal" autocomplete="off" type="text"
-                                               class="form-control" name="vatTotal" value="<?php echo number_format($bri->vat,2,',','');?>"
+                                               class="form-control" name="vatTotal"
+                                               value="<?php echo number_format($bri->vat,2,',',''); ?>"
                                         />
                                     </div>
                                 </div>
@@ -559,7 +565,8 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="grossTotal">Totale da Pagare</label>
                                         <input id="grossTotal" autocomplete="off" type="text"
-                                               class="form-control" name="grossTotal" value="<?php echo number_format($bri->grossTotal,2,',','');?>"
+                                               class="form-control" name="grossTotal"
+                                               value="<?php echo number_format($bri->grossTotal,2,',',''); ?>"
                                         />
                                     </div>
                                 </div>
@@ -570,57 +577,105 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                         <div class="col-md-12" style="border-width: 1px 1px 1px 1px;
                                                      border-style: solid;
                                                      border-color: darkgrey darkgrey darkgrey darkgrey;">
-                        <table id="myRowInvoice">
-                            <tr class="header1">
-                                <th style="width:10%;">id Riga</th>
-                                <th style="width:10%;">nome Prodotto</th>
-                                <th style="width:10%;">descrizione</th>
-                                <th style="width:10%;">prezzo</th>
-                                <th style="width:10%;">qta</th>
-                                <th style="width:10%;">importo netto</th>
-                                <th style="width:10%;">sconto %</th>
-                                <th style="width:10%;">importo sconto</th>
-                                <th style="width:10%;">iva %</th>
-                                <th style="width:10%;">importo Iva</th>
-                                <th style="width:10%;">totale Riga</th>
-                                <th style="width:10%;">Modifica</th>
-                                <th style="width:10%;">Elimina</th>
-                            </tr>
-                            <?php
-                            $nameProduct='';
-                            $codeProduct='';
-                            foreach($brir as $invoiceRow){
-                                if($invoiceRow->billRegistryProductId!=0 || $invoiceRow->billRegistryProductId!=null) {
-                                    $brpFind = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $invoiceRow->billRegistryProductId]);
-                                    if ($brpFind != null) {
-                                        $nameProduct = $brpFind->nameProduct;
-                                        $codeProduct = $brpFind->codeProduct;
+                            <table id="myRowInvoice">
+                                <tr class="header1">
+                                    <th style="width:10%;">id Riga</th>
+                                    <th style="width:10%;">nome Prodotto</th>
+                                    <th style="width:10%;">descrizione</th>
+                                    <th style="width:10%;">prezzo</th>
+                                    <th style="width:10%;">qta</th>
+                                    <th style="width:10%;">importo netto</th>
+                                    <th style="width:10%;">sconto %</th>
+                                    <th style="width:10%;">importo sconto</th>
+                                    <th style="width:10%;">iva %</th>
+                                    <th style="width:10%;">importo Iva</th>
+                                    <th style="width:10%;">totale Riga</th>
+                                    <th style="width:10%;">Modifica</th>
+                                    <th style="width:10%;">Elimina</th>
+                                </tr>
+                                <?php
+                                $nameProduct = '';
+                                $codeProduct = '';
+                                foreach ($brir as $invoiceRow) {
+                                    if ($invoiceRow->billRegistryProductId != 0 || $invoiceRow->billRegistryProductId != null) {
+                                        $brpFind = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $invoiceRow->billRegistryProductId]);
+                                        if ($brpFind != null) {
+                                            $nameProduct = $brpFind->nameProduct;
+                                            $codeProduct = $brpFind->codeProduct;
+                                        }
                                     }
+                                    echo '<tr id="productRowTr' . $invoiceRow->id . '"><td>' . $invoiceRow->id . '</td>';
+                                    echo '<td>' . $nameProduct . '</td>';
+                                    echo '<td>' . $invoiceRow->description . '</td>';
+                                    echo '<td>' . number_format($invoiceRow->priceRow,2,',','') . '&euro;</td>';
+                                    echo '<td>' . $invoiceRow->qty . '</td>';
+                                    echo '<td>' . number_format(($invoiceRow->priceRow + $invoiceRow->discountRow + $invoiceRow->vatRow) / $invoiceRow->qty,2,',','') . '&euro;</td>';
+                                    echo '<td>' . number_format($invoiceRow->percentDiscount,2,',','') . '&percnt;</td>';
+                                    echo '<td>' . number_format($invoiceRow->discountRow,2,',','') . '&euro;</td>';
+                                    $vat = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $invoiceRow->billRegistryTypeTaxesId]);
+                                    echo '<td>' . number_format($vat->perc,2,',','') . '&percnt;</td>';
+                                    echo '<td>' . number_format($invoiceRow->vatRow,2,',','') . '&euro;</td>';
+                                    echo '<td>' . number_format($invoiceRow->grossTotalRow,2,',','') . '&euro;</td>';
+                                    echo '<td><button class="success" id="modifyRowInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowInvoiceEdit(' . $invoiceRow->id . ',' . $invoiceRow->id . ')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
+                                    echo '<td><button class="success" id="deleteRowInvoiceButton' . $invoiceRow->id . '" onclick="deleteRowInvoiceEdit(' . $invoiceRow->id . ',' . $invoiceRow->id . ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                                 }
-                                echo '<tr id="productRowTr'.$invoiceRow->id.'"><td>'.$invoiceRow->id.'</td>';
-                                echo '<td>'.$nameProduct.'</td>';
-                                echo '<td>'.$invoiceRow->description.'</td>';
-                                echo '<td>'.number_format($invoiceRow->priceRow,2,',','').'&euro;</td>';
-                                echo '<td>'.$invoiceRow->qty.'</td>';
-                                echo '<td>'.number_format(($invoiceRow->priceRow+$invoiceRow->discountRow+$invoiceRow->vatRow)/$invoiceRow->qty,2,',','').'&euro;</td>';
-                                echo '<td>'.number_format($invoiceRow->percentDiscount,2,',','').'&percnt;</td>';
-                                echo '<td>'.number_format($invoiceRow->discountRow,2,',','').'&euro;</td>';
-                                $vat=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id'=>$invoiceRow->billRegistryTypeTaxesId]);
-                                echo '<td>'.number_format($vat->perc,2,',','').'&percnt;</td>';
-                                echo '<td>'.number_format($invoiceRow->vatRow,2,',','').'&euro;</td>';
-                                echo '<td>'.number_format($invoiceRow->grossTotalRow,2,',','').'&euro;</td>';
-                                echo '<td><button class="success" id="modifyRowInvoiceButton'.$invoiceRow->id.'" onclick="modifyRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
-                                echo '<td><button class="success" id="deleteRowInvoiceButton'.$invoiceRow->id.'" onclick="deleteRowInvoiceEdit('.$invoiceRow->id. ','.$invoiceRow->id.')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
-                            }
-                            ?>
-                        </table>
-                    </div>
+                                ?>
+                            </table>
+                        </div>
                     </div>
                     <div class="row" id="rawProductGeneric">
                         <div class="col-md-12">
 
                         </div>
 
+                    </div>
+                </div>
+                <div id="insertInvoiceTimeTable" class="tabcontent">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel-heading clearfix">
+                                <h5 class="m-t-12">Scadenze</h5>
+                            </div>
+
+                            <?php
+                            $covidGianluca=1;
+                            foreach ($brtt as $payment){
+                                echo '<div class="row">';
+                                echo '<div class="col-md-2">';
+                                echo '<input type="hidden" id="'.$covidGianluca.'rowId"  name="'.$covidGianluca.'rowId" value="'.$payment->id.'"/>';
+                                echo '<div class="form-group form-group-default">';
+                                echo '<label for="'.$covidGianluca.'rowTime">Data</label>';
+                                $date=new \DateTime($payment->dateEstimated);
+                                $dateEstimated=$date->format('Y-m-d');
+                                echo '<input type="date" id="'.$covidGianluca.'rowTime"  name="'.$covidGianluca.'rowTime" value="'.$dateEstimated.'"/>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '<div class="col-md-4">';
+                                echo '<div class="form-group form-group-default">';
+                                echo '<label for="'.$covidGianluca.'rowdescription">Descrizione</label>';
+                                echo '<textarea  id="'.$covidGianluca.'rowdescription"  name="'.$covidGianluca.'rowdescription" rows="3" cols="50" value="">'.$payment->description.'</textarea>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '<div class="col-md-4">';
+                                echo '<div class="form-group form-group-default">';
+                                echo '<label for="'.$covidGianluca.'rowAmountPayment">Importo Scadenza</label>';
+
+                                echo '<input type="text" id="'.$covidGianluca.'rowAmountPayment"  name="'.$covidGianluca.'rowAmountPayment" value="'.number_format($payment->amountPayment,2,'.','').'"/>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '<div class="col-md-2">';
+                                echo '<div class="form-group form-group-default">';
+                                echo '<label for="'.$covidGianluca.'rowdAmountPayment">Modifica</label>';
+
+                                echo '<td><button class="success" id="modifyRowPaymentInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowPaymnetInvoiceEdit(' . $covidGianluca . ',' . $payment->id . ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '</div>';
+                                $covidGianluca++;
+                            }
+
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -70,6 +70,23 @@ class CBillRegistryTimeTableManageController extends AAjaxController
      */
     public function put()
     {
+        $data = $this->app->router->request()->getRequestData();
+        $billRegistryTimeTableId = $data['id'];
+        $date=$data['dateEstimated'];
+        $dateP=new \DateTime($date);
+        $amountPayment=$data['amountPayment'];
+        $datePayment = $dateP->format('Y-m-d H:i:s');
+        $billRegistryTimeTable = \Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findOneBy(['id'=>$billRegistryTimeTableId]);
+        if($billRegistryTimeTable->billRegistryActivePaymentSlipId==null) {
+            $billRegistryTimeTable->amountPaid = $amountPayment;
+            $billRegistryTimeTable->datePayment = $datePayment;
+            $billRegistryTimeTable->update();
+            $res = 'Scadenza Modificata con successo';
+            }else{
+
+            $res ='Non è possibile  modificare la scadenza in quanto esiste una distinta associata ad essa';
+        }
+        return $res;
 
     }
 

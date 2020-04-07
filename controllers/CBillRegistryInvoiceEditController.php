@@ -39,7 +39,7 @@ class CBillRegistryInvoiceEditController extends ARestrictedAccessRootController
         $brtp=\Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findAll();
         $brca=\Monkey::app()->repoFactory->create('BillRegistryClientAccount')->findOneBy(['billRegistryClientId'=>$bri->billRegistryClientId]);
         $brcbi=\Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo')->findOneBy(['id'=>$bri->billRegistryClientBillingInfoId]);
-        $brtt=\Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findAll();
+        $brtt=\Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findBy(['billRegistryInvoiceId'=>$id]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
@@ -50,7 +50,7 @@ class CBillRegistryInvoiceEditController extends ARestrictedAccessRootController
             'brtp' => $brtp,
             'brca' =>$brca,
             'brcbi'=>$brcbi,
-            'brttt'=> $brtt,
+            'brtt'=> $brtt,
             'sidebar' => $this->sidebar->build()
         ]);
     }
