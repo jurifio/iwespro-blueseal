@@ -8455,6 +8455,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
 
             });
         });
+
         //productFeeAgencyCommision
         $('#productFeeAgencyCommisionEdit').change(function () {
             $.ajax({
@@ -8474,6 +8475,13 @@ function editContractDetail(id, billRegistryGroupProductId) {
 
             });
         });
+        switch(billRegistryGroupProductId){
+            case 1:
+                $('#typeProductAssocIdEdit').val(billRegistryProductValue);
+                break;
+            case 2:
+                break;
+        }
 
         bsModalDetailContractEdit.showCancelBtn();
         bsModalDetailContractEdit.addClass('modal-wide');

@@ -40,7 +40,8 @@ class CSelectBillRegistryTypeTaxesToRowInvoiceAjaxController extends AAjaxContro
         $id = $data['id'];
 
         $brt =\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $id]);
-        $perc=$brt->perc;
+        $perc=number_format($brt->perc,2,'.','');
+
 
 
 

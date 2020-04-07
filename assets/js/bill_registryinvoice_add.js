@@ -595,7 +595,6 @@ function addRowProduct(){
     $('#qty').val('');
     $('#um').val('');
     $('#price').val('');
-    $('#netTotal').val('');
     $('#description').val('');
     $('#discountRow').val('0.00');
     $('#billRegistryTypeTaxesProductId').data('selectize').setValue('');

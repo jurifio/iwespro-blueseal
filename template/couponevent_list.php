@@ -65,7 +65,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione evento coupon">
-       <!-- <bs-toolbar-button
+        <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
             data-permission="/admin/marketing"
@@ -73,8 +73,7 @@
             data-rel="tooltip"
             data-title="Aggiungi un nuovo evento coupon"
             data-placement="bottom"
-            data-href="/blueseal/eventocoupon/aggiungi"
-        ></bs-toolbar-button>
+            data-href="/blueseal/eventocoupon/aggiungi"></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
@@ -84,8 +83,7 @@
             data-rel="tooltip"
             data-title="Elimina evento coupon"
             data-placement="bottom"
-            data-toggle="modal"
-        ></bs-toolbar-button>-->
+            data-toggle="modal"></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
