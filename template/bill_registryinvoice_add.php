@@ -452,7 +452,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="netTotal">importo Netto Totale</label>
-                                        <input id="netTotal" autocomplete="off" type="text"
+                                        <input id="netTotal" disabled autocomplete="off" type="text"
                                                class="form-control" name="netTotal" value="0.00"
                                         />
                                     </div>
@@ -462,7 +462,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="discountTotal">Sconto Totale</label>
-                                        <input id="discountTotal" autocomplete="off" type="text"
+                                        <input id="discountTotal" disabled autocomplete="off" type="text"
                                                class="form-control" name="discountTotal" value="0.00"
                                         />
                                     </div>
@@ -472,7 +472,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="vatTotal">Iva Totale</label>
-                                        <input id="vatTotal" autocomplete="off" type="text"
+                                        <input id="vatTotal" disabled autocomplete="off" type="text"
                                                class="form-control" name="vatTotal" value="0.00"
                                         />
                                     </div>
@@ -482,7 +482,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="grossTotal">Totale da Pagare</label>
-                                        <input id="grossTotal" autocomplete="off" type="text"
+                                        <input id="grossTotal" disabled autocomplete="off" type="text"
                                                class="form-control" name="grossTotal" value="0.00"
                                         />
                                     </div>
