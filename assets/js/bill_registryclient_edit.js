@@ -7698,6 +7698,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductValue);
                 }
             });
         });
@@ -7730,6 +7734,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeCreditCardCommission);
                 }
             });
         });
@@ -7761,6 +7769,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeCreditCardCommission);
                 }
             });
         });
@@ -7793,6 +7805,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeCodCommission);
                 }
             });
         });
@@ -7825,6 +7841,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeBankTransferCommission);
                 }
             });
         });
@@ -7856,40 +7876,14 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeePaypalCommission);
                 }
             });
         });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeePaypalCommission = $('#productfeePaypalCommissionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeePaypalCommission.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                }
-            });
-        });
+
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -7974,6 +7968,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeCostDeliveryCommission);
                 }
             });
         });
@@ -8006,6 +8004,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeCostCommissionPayment);
                 }
             });
         });
@@ -8037,6 +8039,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductStartUpCostCampaign);
                 }
             });
         });
@@ -8068,6 +8074,10 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
                             '</div>'
                     }
+                },
+                onInitialize:function(){
+                    var selectize=this;
+                    selectize.setValue(billRegistryProductFeeAgencyCommision);
                 }
             });
         });
@@ -8475,13 +8485,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
 
             });
         });
-        switch(billRegistryGroupProductId){
-            case 1:
-                $('#typeProductAssocIdEdit').val(billRegistryProductValue);
-                break;
-            case 2:
-                break;
-        }
+
 
         bsModalDetailContractEdit.showCancelBtn();
         bsModalDetailContractEdit.addClass('modal-wide');
