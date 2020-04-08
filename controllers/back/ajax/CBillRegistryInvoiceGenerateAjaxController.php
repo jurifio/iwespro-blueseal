@@ -1566,25 +1566,9 @@ class CBillRegistryInvoiceGenerateAjaxController extends AAjaxController
     </div>
 </div><!--end-->';
 
-                                $invoiceText .= addslashes('<script type="application/javascript">
-    $(document).ready(function () {
-
-        Pace.on(\'done\', function () {
-
-            setTimeout(function () {
-                window.print();
-
-                setTimeout(function () {
-                    window.close();
-                }, 1);
-
-            }, 200);
-
-        });
-    });
-</script>
+                                $invoiceText .= '
 </body>
-</html>');
+</html>';
                                 $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegistryInvoiceId]);
                                 $updateBillRegistryInvoice->invoiceText = stripslashes($invoiceText);
                                 $updateBillRegistryInvoice->statusId=2;
