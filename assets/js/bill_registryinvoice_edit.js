@@ -220,6 +220,10 @@ $.ajax({
                     '<span class="caption">abi:' + escape(item.abi + ' cab:' + item.cab) + '</span>' +
                     '</div>'
             }
+        },
+        onInitialize: function () {
+            var selectize = this;
+            selectize.setValue($('#bankRegistryIdDef').val());
         }
     });
 
