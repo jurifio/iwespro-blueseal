@@ -5083,7 +5083,7 @@ function listContractDetail(id) {
 
 
 function editContractDetail(id, billRegistryGroupProductId) {
-    var idDetail='';
+    var idDetail = '';
     var billRegistryContractRowId = id;
     var automaticInvoice = '';
     var nameRow = '';
@@ -5143,6 +5143,11 @@ function editContractDetail(id, billRegistryGroupProductId) {
     var emailAccount = '';
     var emailAccountSendQty = '';
     var emailAccountCampaignQty = '';
+    var checkchargeDeliveryIsActive = '';
+
+    var notcheckchargeDeliveryIsActive = '';
+    var checkchargePaymentIsActive = '';
+    var notcheckchargePaymentIsActive = '';
 
 
     $.ajax({
@@ -5155,284 +5160,297 @@ function editContractDetail(id, billRegistryGroupProductId) {
         dataType: 'json'
     }).done(function (res) {
 
-        let rawContractDetailEdit = res;
-        $.each(rawContractDetailEdit, function (k, v) {
-            switch (billRegistryGroupProductId) {
-                case 1:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    automaticInvoice = v.automaticInvoice;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    value = v.value;
-                    billingDay = v.billingDay;
-                    typePaymentId = v.typePaymentId;
-                    periodTypeCharge = v.periodTypeCharge;
-                    sellingFeeCommision = v.sellingFeeCommision;
-                    feeCreditCardCommission = v.feeCreditCardCommission;
-                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
-                    feeCodCommission = v.feeCodCommission;
-                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
-                    feeBankTransferCommission = v.feeBankTransferCommission;
-                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
-                    feePaypalCommission = v.feePaypalCommission;
-                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
-                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
-                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
-                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
-                    deliveryTypePaymentId = v.deliveryTypePaymentId;
-                    chargePaymentIsActive = v.chargePaymentIsActive;
-                    feeCostCommissionPayment = v.feeCostCommissionPayment;
-                    periodTypeChargePayment = v.periodTypeChargePayment;
-                    paymentTypePaymentId = v.paymentTypePaymentId;
-                    descfeeCodCommission = v.descfeeCodCommission;
-                    descriptionValue = v.descriptionValue;
-                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
-                    descfeePaypalCommission = v.descfeePaypalCommission;
-                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
-                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
-                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
-                    billRegistryProductValue = v.billRegistryProductValue;
-                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
-                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
-                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
-                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
-                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
-                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+            let rawContractDetailEdit = res;
+            $.each(rawContractDetailEdit, function (k, v) {
+                switch (billRegistryGroupProductId) {
+                    case 1:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        automaticInvoice = v.automaticInvoice;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        value = v.value;
+                        billingDay = v.billingDay;
+                        typePaymentId = v.typePaymentId;
+                        periodTypeCharge = v.periodTypeCharge;
+                        sellingFeeCommision = v.sellingFeeCommision;
+                        feeCreditCardCommission = v.feeCreditCardCommission;
+                        dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                        feeCodCommission = v.feeCodCommission;
+                        dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                        feeBankTransferCommission = v.feeBankTransferCommission;
+                        dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                        feePaypalCommission = v.feePaypalCommission;
+                        dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                        chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                        feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                        periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                        deliveryTypePaymentId = v.deliveryTypePaymentId;
+                        chargePaymentIsActive = v.chargePaymentIsActive;
+                        feeCostCommissionPayment = v.feeCostCommissionPayment;
+                        periodTypeChargePayment = v.periodTypeChargePayment;
+                        paymentTypePaymentId = v.paymentTypePaymentId;
+                        descfeeCodCommission = v.descfeeCodCommission;
+                        descriptionValue = v.descriptionValue;
+                        descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                        descfeePaypalCommission = v.descfeePaypalCommission;
+                        descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                        descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                        descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                        billRegistryProductValue = v.billRegistryProductValue;
+                        billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                        billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                        billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                        billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                        billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                        billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
 
 
+                        break;
+                    case 2:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        automaticInvoice = v.automaticInvoice;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        value = v.value;
+                        billingDay = v.billingDay;
+                        typePaymentId = v.typePaymentId;
+                        periodTypeCharge = v.periodTypeCharge;
+                        sellingFeeCommision = v.sellingFeeCommision;
+                        feeCreditCardCommission = v.feeCreditCardCommission;
+                        dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                        feeCodCommission = v.feeCodCommission;
+                        dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                        feeBankTransferCommission = v.feeBankTransferCommission;
+                        dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                        feePaypalCommission = v.feePaypalCommission;
+                        dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                        chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                        feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                        periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                        deliveryTypePaymentId = v.deliveryTypePaymentId;
+                        chargePaymentIsActive = v.chargePaymentIsActive;
+                        feeCostCommissionPayment = v.feeCostCommissionPayment;
+                        periodTypeChargePayment = v.periodTypeChargePayment;
+                        paymentTypePaymentId = v.paymentTypePaymentId;
+                        descfeeCodCommission = v.descfeeCodCommission;
+                        descriptionValue = v.descriptionValue;
+                        descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                        descfeePaypalCommission = v.descfeePaypalCommission;
+                        descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                        descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                        descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                        billRegistryProductValue = v.billRegistryProductValue;
+                        billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                        billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                        billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                        billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                        billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                        billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                        break;
+                    case 3:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        descriptionInvoice = v.descriptionInvoice;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        startUpCostCampaign = v.startUpCostCampaign;
+                        automaticInvoice = v.automaticInvoice;
+                        billingDay = v.billingDay;
+                        typePaymentId = v.typePaymentId;
+                        feeAgencyCommision = v.feeAgencyCommision;
+                        prepaidPaymentIsActive = v.prepaidPaymentIsActive;
+                        prepaidCost = v.prepaidCost;
+                        billRegistryProductStartUpCostCampaign = v.billRegistryProductStartUpCostCampaign;
+                        billRegistryProductFeeAgencyCommision = v.billRegistryProductFeeAgencyCommision;
+
+
+                        break;
+                    case 4:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        descriptionInvoice = v.descriptionInvoice;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        startUpCostCampaign = v.startUpCostCampaign;
+                        automaticInvoice = v.automaticInvoice;
+                        billingDay = v.billingDay;
+                        typePaymentId = v.typePaymentId;
+                        feeAgencyCommision = v.feeAgencyCommision;
+                        prepaidPaymentIsActive = v.prepaidPaymentIsActive;
+                        prepaidCost = v.prepaidCost;
+                        billRegistryProductStartUpCostCampaign = v.billRegistryProductStartUpCostCampaign;
+                        billRegistryProductFeeAgencyCommision = v.billRegistryProductFeeAgencyCommision;
+                        break;
+                    case 5:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        automaticInvoice = v.automaticInvoice;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        value = v.value;
+                        billingDay = v.billingDay;
+                        typePaymentId = v.typePaymentId;
+                        periodTypeCharge = v.periodTypeCharge;
+                        sellingFeeCommision = v.sellingFeeCommision;
+                        feeCreditCardCommission = v.feeCreditCardCommission;
+                        dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                        feeCodCommission = v.feeCodCommission;
+                        dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                        feeBankTransferCommission = v.feeBankTransferCommission;
+                        dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                        feePaypalCommission = v.feePaypalCommission;
+                        dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                        chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                        feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                        periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                        deliveryTypePaymentId = v.deliveryTypePaymentId;
+                        chargePaymentIsActive = v.chargePaymentIsActive;
+                        feeCostCommissionPayment = v.feeCostCommissionPayment;
+                        periodTypeChargePayment = v.periodTypeChargePayment;
+                        paymentTypePaymentId = v.paymentTypePaymentId;
+                        descfeeCodCommission = v.descfeeCodCommission;
+                        descriptionValue = v.descriptionValue;
+                        descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                        descfeePaypalCommission = v.descfeePaypalCommission;
+                        descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                        descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                        descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                        billRegistryProductValue = v.billRegistryProductValue;
+                        billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                        billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                        billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                        billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                        billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                        billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                        break;
+                    case 6:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        typeContractId = v.typeContractId;
+                        valueMarkUpFullPrice = v.valueMarkUpFullPrice;
+                        valueMarkUpSalePrice = v.valueMarkUpSalePrice;
+                        billingDay = v.billingDay;
+                        billRegistryProductValue = v.billRegistryProductValue;
+
+                        break;
+                    case 7:
+                        idDetail = v.idDetail;
+                        billRegistryContractRowId = v.billRegistryContractRowId;
+                        automaticInvoice = v.automaticInvoice;
+                        emailAccount = v.emailAccount;
+                        emailAccountSendQty = v.emailAccountSendQty;
+                        emailAccountCampaignQty = v.emailAccountSendQty;
+                        nameRow = v.nameRow;
+                        descriptionRow = v.descriptionRow;
+                        value = v.value;
+                        billingDay = v.billingDay;
+                        typePaymentId = v.typePaymentId;
+                        periodTypeCharge = v.periodTypeCharge;
+                        sellingFeeCommision = v.sellingFeeCommision;
+                        feeCreditCardCommission = v.feeCreditCardCommission;
+                        dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
+                        feeCodCommission = v.feeCodCommission;
+                        dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
+                        feeBankTransferCommission = v.feeBankTransferCommission;
+                        dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
+                        feePaypalCommission = v.feePaypalCommission;
+                        dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
+                        chargeDeliveryIsActive = v.chargeDeliveryIsActive;
+                        feeCostDeliveryCommission = v.feeCostDeliveryCommission;
+                        periodTypeChargeDelivery = v.periodTypeChargeDelivery;
+                        deliveryTypePaymentId = v.deliveryTypePaymentId;
+                        chargePaymentIsActive = v.chargePaymentIsActive;
+                        feeCostCommissionPayment = v.feeCostCommissionPayment;
+                        periodTypeChargePayment = v.periodTypeChargePayment;
+                        paymentTypePaymentId = v.paymentTypePaymentId;
+                        descfeeCodCommission = v.descfeeCodCommission;
+                        descriptionValue = v.descriptionValue;
+                        descfeeCreditCardCommission = v.descfeeCreditCardCommission;
+                        descfeePaypalCommission = v.descfeePaypalCommission;
+                        descfeeBankTransferCommission = v.descfeeBankTransferCommission;
+                        descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
+                        descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
+                        billRegistryProductValue = v.billRegistryProductValue;
+                        billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
+                        billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
+                        billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
+                        billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
+                        billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
+                        billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                        break;
+
+                }
+                if (automaticInvoice == '1') {
+                    checkAutomaticInvoice = 'selected="selected"';
+                } else {
+                    notCheckAutomaticInvoice = 'selected="selected"';
+                }
+
+                switch (periodTypeCharge) {
+                    case "1":
+                        checkMonth = 'selected="selected"';
+                        check3Month = '';
+                        check6Month = '';
+                        checkYear = '';
+
+                        break;
+                    case "2":
+                        checkMonth = '';
+                        check3Month = 'selected="selected"';
+                        check6Month = '';
+                        checkYear = '';
+                        break;
+                    case "3":
+                        checkMonth = '';
+                        check3Month = '';
+                        check6Month = 'selected="selected"';
+                        checkYear = '';
+
+                        break;
+                    case "4":
+                        checkMonth = '';
+                        check3Month = '';
+                        check6Month = '';
+                        checkYear = 'selected="selected"';
+                        break;
+                }
+
+
+                if (chargeDeliveryIsActive == '1') {
+                    checkchargeDeliveryIsActive = 'selected="selected"';
+                } else {
+                    notcheckchargeDeliveryIsActive = 'selected="selected"';
+                }
+
+                if (chargePaymentIsActive == '1') {
+                    checkchargePaymentIsActive = 'selected="selected"';
+                } else {
+                    notcheckchargePaymentIsActive = 'selected="selected"';
+                }
+
+
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+
+            /*switch (statusId) {
+                case '1':
+                    checkedStatusActive = 'checked="checked"';
                     break;
                 case 2:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    automaticInvoice = v.automaticInvoice;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    value = v.value;
-                    billingDay = v.billingDay;
-                    typePaymentId = v.typePaymentId;
-                    periodTypeCharge = v.periodTypeCharge;
-                    sellingFeeCommision = v.sellingFeeCommision;
-                    feeCreditCardCommission = v.feeCreditCardCommission;
-                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
-                    feeCodCommission = v.feeCodCommission;
-                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
-                    feeBankTransferCommission = v.feeBankTransferCommission;
-                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
-                    feePaypalCommission = v.feePaypalCommission;
-                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
-                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
-                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
-                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
-                    deliveryTypePaymentId = v.deliveryTypePaymentId;
-                    chargePaymentIsActive = v.chargePaymentIsActive;
-                    feeCostCommissionPayment = v.feeCostCommissionPayment;
-                    periodTypeChargePayment = v.periodTypeChargePayment;
-                    paymentTypePaymentId = v.paymentTypePaymentId;
-                    descfeeCodCommission = v.descfeeCodCommission;
-                    descriptionValue = v.descriptionValue;
-                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
-                    descfeePaypalCommission = v.descfeePaypalCommission;
-                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
-                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
-                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
-                    billRegistryProductValue = v.billRegistryProductValue;
-                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
-                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
-                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
-                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
-                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
-                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
+                    checkedStatusNotActive = 'checked="checked"';
                     break;
                 case 3:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    descriptionInvoice = v.descriptionInvoice;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    startUpCostCampaign = v.startUpCostCampaign;
-                    automaticInvoice = v.automaticInvoice;
-                    billingDay = v.billingDay;
-                    typePaymentId = v.typePaymentId;
-                    feeAgencyCommision = v.feeAgencyCommision;
-                    prepaidPaymentIsActive = v.prepaidPaymentIsActive;
-                    prepaidCost = v.prepaidCost;
-                    billRegistryProductStartUpCostCampaign = v.billRegistryProductStartUpCostCampaign;
-                    billRegistryProductFeeAgencyCommision = v.billRegistryProductFeeAgencyCommision;
-
-
+                    checkedStatusSuspend = 'checked="checked"';
                     break;
-                case 4:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    descriptionInvoice = v.descriptionInvoice;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    startUpCostCampaign = v.startUpCostCampaign;
-                    automaticInvoice = v.automaticInvoice;
-                    billingDay = v.billingDay;
-                    typePaymentId = v.typePaymentId;
-                    feeAgencyCommision = v.feeAgencyCommision;
-                    prepaidPaymentIsActive = v.prepaidPaymentIsActive;
-                    prepaidCost = v.prepaidCost;
-                    billRegistryProductStartUpCostCampaign = v.billRegistryProductStartUpCostCampaign;
-                    billRegistryProductFeeAgencyCommision = v.billRegistryProductFeeAgencyCommision;
-                    break;
-                case 5:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    automaticInvoice = v.automaticInvoice;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    value = v.value;
-                    billingDay = v.billingDay;
-                    typePaymentId = v.typePaymentId;
-                    periodTypeCharge = v.periodTypeCharge;
-                    sellingFeeCommision = v.sellingFeeCommision;
-                    feeCreditCardCommission = v.feeCreditCardCommission;
-                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
-                    feeCodCommission = v.feeCodCommission;
-                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
-                    feeBankTransferCommission = v.feeBankTransferCommission;
-                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
-                    feePaypalCommission = v.feePaypalCommission;
-                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
-                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
-                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
-                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
-                    deliveryTypePaymentId = v.deliveryTypePaymentId;
-                    chargePaymentIsActive = v.chargePaymentIsActive;
-                    feeCostCommissionPayment = v.feeCostCommissionPayment;
-                    periodTypeChargePayment = v.periodTypeChargePayment;
-                    paymentTypePaymentId = v.paymentTypePaymentId;
-                    descfeeCodCommission = v.descfeeCodCommission;
-                    descriptionValue = v.descriptionValue;
-                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
-                    descfeePaypalCommission = v.descfeePaypalCommission;
-                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
-                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
-                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
-                    billRegistryProductValue = v.billRegistryProductValue;
-                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
-                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
-                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
-                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
-                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
-                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
-                    break;
-                case 6:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    typeContractId = v.typeContractId;
-                    valueMarkUpFullPrice = v.valueMarkUpFullPrice;
-                    valueMarkUpSalePrice = v.valueMarkUpSalePrice;
-                    billingDay = v.billingDay;
-                    billRegistryProductValue = v.billRegistryProductValue;
-
-                    break;
-                case 7:
-                    idDetail=v.idDetail;
-                    billRegistryContractRowId = v.billRegistryContractRowId;
-                    automaticInvoice = v.automaticInvoice;
-                    emailAccount = v.emailAccount;
-                    emailAccountSendQty = v.emailAccountSendQty;
-                    emailAccountCampaignQty = v.emailAccountSendQty;
-                    nameRow = v.nameRow;
-                    descriptionRow = v.descriptionRow;
-                    value = v.value;
-                    billingDay = v.billingDay;
-                    typePaymentId = v.typePaymentId;
-                    periodTypeCharge = v.periodTypeCharge;
-                    sellingFeeCommision = v.sellingFeeCommision;
-                    feeCreditCardCommission = v.feeCreditCardCommission;
-                    dayChargeFeeCreditCardCommission = v.dayChargeFeeCreditCardCommission;
-                    feeCodCommission = v.feeCodCommission;
-                    dayChargeFeeCodCommission = v.dayChargeFeeCodCommission;
-                    feeBankTransferCommission = v.feeBankTransferCommission;
-                    dayChargeFeeBankTransferCommission = v.dayChargeFeeBankTransferCommission;
-                    feePaypalCommission = v.feePaypalCommission;
-                    dayChargeFeePaypalCommission = v.dayChargeFeePaypalCommission;
-                    chargeDeliveryIsActive = v.chargeDeliveryIsActive;
-                    feeCostDeliveryCommission = v.feeCostDeliveryCommission;
-                    periodTypeChargeDelivery = v.periodTypeChargeDelivery;
-                    deliveryTypePaymentId = v.deliveryTypePaymentId;
-                    chargePaymentIsActive = v.chargePaymentIsActive;
-                    feeCostCommissionPayment = v.feeCostCommissionPayment;
-                    periodTypeChargePayment = v.periodTypeChargePayment;
-                    paymentTypePaymentId = v.paymentTypePaymentId;
-                    descfeeCodCommission = v.descfeeCodCommission;
-                    descriptionValue = v.descriptionValue;
-                    descfeeCreditCardCommission = v.descfeeCreditCardCommission;
-                    descfeePaypalCommission = v.descfeePaypalCommission;
-                    descfeeBankTransferCommission = v.descfeeBankTransferCommission;
-                    descfeeCostDeliveryCommission = v.descfeeCostDeliveryCommission;
-                    descfeeCostCommissionPayment = v.descfeeCostCommissionPayment;
-                    billRegistryProductValue = v.billRegistryProductValue;
-                    billRegistryProductFeeCodCommission = v.billRegistryProductFeeCodCommission;
-                    billRegistryProductFeePaypalCommission = v.billRegistryProductFeePaypalCommission;
-                    billRegistryProductFeeBankTransferCommission = v.billRegistryProductFeeBankTransferCommission;
-                    billRegistryProductFeeCreditCardCommission = v.billRegistryProductFeeCreditCardCommission;
-                    billRegistryProductFeeCostDeliveryCommission = v.billRegistryProductFeeCostDeliveryCommission;
-                    billRegistryProductFeeCostCommissionPayment = v.billRegistryProductFeeCostCommissionPayment;
-                    break;
-
-            }
-            if (automaticInvoice == '1') {
-                checkAutomaticInvoice = 'selected="selected"';
-            } else {
-                notCheckAutomaticInvoice = 'selected="selected"';
-            }
-
-            switch (periodTypeCharge) {
-                case "1":
-                    checkMonth = 'selected="selected"';
-                    check3Month = '';
-                    check6Month = '';
-                    checkYear = '';
-
-                    break;
-                case "2":
-                    checkMonth = '';
-                    check3Month = 'selected="selected"';
-                    check6Month = '';
-                    checkYear = '';
-                    break;
-                case "3":
-                    checkMonth = '';
-                    check3Month = '';
-                    check6Month = 'selected="selected"';
-                    checkYear = '';
-
-                    break;
-                case "4":
-                    checkMonth = '';
-                    check3Month = '';
-                    check6Month = '';
-                    checkYear = 'selected="selected"';
-                    break;
-            }
-
-
-            // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
-        });
-
-        /*switch (statusId) {
-            case '1':
-                checkedStatusActive = 'checked="checked"';
-                break;
-            case 2:
-                checkedStatusNotActive = 'checked="checked"';
-                break;
-            case 3:
-                checkedStatusSuspend = 'checked="checked"';
-                break;
-        }*/
-        var bodyForm = '';
-        switch (billRegistryGroupProductId) {
-            case 1:
-                bodyForm = `   
+            }*/
+            var bodyForm = '';
+            switch (billRegistryGroupProductId) {
+                case 1:
+                    bodyForm = `   
                                 <div class="row">
                                 <div class="col-md-2">
                                 
@@ -5552,7 +5570,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
                                         <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCreditCardCommissionEdit"
-                                               value="`+descfeeCreditCardCommission+`"
+                                               value="` + descfeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5561,7 +5579,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
                                         <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCreditCardCommissionEdit"
-                                               value="`+feeCreditCardCommission+`"
+                                               value="` + feeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5570,7 +5588,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5595,7 +5613,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
                                         <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCodCommissionEdit"
-                                               value="`+descfeeCodCommission+`"
+                                               value="` + descfeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5604,7 +5622,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
                                         <input id="feeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCodCommissionEdit"
-                                               value="`+feeCodCommission+`"
+                                               value="` + feeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5613,7 +5631,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5638,7 +5656,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
                                         <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeBankTransferCommissionEdit"
-                                               value="`+descfeeBankTransferCommission+`"
+                                               value="` + descfeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5647,7 +5665,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
                                         <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeBankTransferCommissionEdit"
-                                               value="`+feeBankTransferCommission+`"
+                                               value="` + feeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5656,7 +5674,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
-                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                               value="` + dayChargeFeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5681,7 +5699,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
                                         <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeePaypalCommission"
-                                               value="`+descfeePaypalCommission+`"
+                                               value="` + descfeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5690,7 +5708,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
                                         <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feePaypalCommissionEdit"
-                                               value="`+feePaypalCommission+`"
+                                               value="` + feePaypalCommission + `"
                                         /> 
                                 </div>
                             </div>
@@ -5699,7 +5717,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                              </div>
@@ -5724,7 +5742,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5733,7 +5751,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5751,7 +5769,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5765,8 +5783,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1" ` + checkchargeDeliveryIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargeDeliveryIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -5775,7 +5793,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
                                         <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostDeliveryCommissionEdit"
-                                               value="`+feeCostDeliveryCommission+`"
+                                               value="` + feeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5784,7 +5802,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
                                         <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostDeliveryCommissionEdit"
-                                               value="`+descfeeCostDeliveryCommission+`"
+                                               value="` + descfeeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -5807,7 +5825,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                             <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
                                             <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                    class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
-                                                   value="`+periodTypeChargeDelivery+`"
+                                                   value="` + periodTypeChargeDelivery + `"
                                             />
                                         </div>
                                 </div>
@@ -5831,8 +5849,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1" ` + checkchargePaymentIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargePaymentIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -5841,7 +5859,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
                                         <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostCommissionPaymentEdit"
-                                               value="`+feeCostCommissionPayment+`"
+                                               value="` + feeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -5850,7 +5868,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
                                         <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostCommissionPaymentEdit"
-                                               value="`+descfeeCostCommissionPayment+`"
+                                               value="` + descfeeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -5873,7 +5891,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
-                                               value="`+periodTypeChargePayment+`"
+                                               value="` + periodTypeChargePayment + `"
                                         />
                                     </div>
                                 </div>
@@ -5890,9 +5908,9 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             </div>
                             </div>                    
 `;
-                break;
-            case 2:
-                bodyForm = `   
+                    break;
+                case 2:
+                    bodyForm = `   
                                 <div class="row">
                                 <div class="col-md-2">
                                 
@@ -6012,7 +6030,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
                                         <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCreditCardCommissionEdit"
-                                               value="`+descfeeCreditCardCommission+`"
+                                               value="` + descfeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6021,7 +6039,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
                                         <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCreditCardCommissionEdit"
-                                               value="`+feeCreditCardCommission+`"
+                                               value="` + feeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6030,7 +6048,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6055,7 +6073,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
                                         <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCodCommissionEdit"
-                                               value="`+descfeeCodCommission+`"
+                                               value="` + descfeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6064,7 +6082,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
                                         <input id="feeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCodCommissionEdit"
-                                               value="`+feeCodCommission+`"
+                                               value="` + feeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6073,7 +6091,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6098,7 +6116,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
                                         <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeBankTransferCommissionEdit"
-                                               value="`+descfeeBankTransferCommission+`"
+                                               value="` + descfeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6107,7 +6125,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
                                         <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeBankTransferCommissionEdit"
-                                               value="`+feeBankTransferCommission+`"
+                                               value="` + feeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6116,7 +6134,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
-                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                               value="` + dayChargeFeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6141,7 +6159,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
                                         <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeePaypalCommission"
-                                               value="`+descfeePaypalCommission+`"
+                                               value="` + descfeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6150,7 +6168,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
                                         <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feePaypalCommissionEdit"
-                                               value="`+feePaypalCommission+`"
+                                               value="` + feePaypalCommission + `"
                                         /> 
                                 </div>
                             </div>
@@ -6159,7 +6177,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                              </div>
@@ -6184,7 +6202,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6193,7 +6211,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6211,7 +6229,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6225,8 +6243,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1"  ` + checkchargeDeliveryIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargeDeliveryIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -6235,7 +6253,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
                                         <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostDeliveryCommissionEdit"
-                                               value="`+feeCostDeliveryCommission+`"
+                                               value="` + feeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6244,7 +6262,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
                                         <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostDeliveryCommissionEdit"
-                                               value="`+descfeeCostDeliveryCommission+`"
+                                               value="` + descfeeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6267,7 +6285,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                             <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
                                             <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                    class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
-                                                   value="`+periodTypeChargeDelivery+`"
+                                                   value="` + periodTypeChargeDelivery + `"
                                             />
                                         </div>
                                 </div>
@@ -6291,8 +6309,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1" ` + checkchargePaymentIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargePaymentIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -6301,7 +6319,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
                                         <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostCommissionPaymentEdit"
-                                               value="`+feeCostCommissionPayment+`"
+                                               value="` + feeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -6310,7 +6328,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
                                         <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostCommissionPaymentEdit"
-                                               value="`+descfeeCostCommissionPayment+`"
+                                               value="` + descfeeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -6333,7 +6351,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
-                                               value="`+periodTypeChargePayment+`"
+                                               value="` + periodTypeChargePayment + `"
                                         />
                                     </div>
                                 </div>
@@ -6352,9 +6370,9 @@ function editContractDetail(id, billRegistryGroupProductId) {
 `;
 
 
-                break;
-            case 3:
-                bodyForm = `
+                    break;
+                case 3:
+                    bodyForm = `
                             <div class="row">
                                 <div class="col-md-2">
                                 
@@ -6363,7 +6381,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="nameRowEdit">Nome Dettaglio Contratto</label>
                                         <input id="nameRowEdit" autocomplete="off" type="text"
                                                class="form-control" name="nameRowEdit"
-                                               value="`+nameRow+`"
+                                               value="` + nameRow + `"
                                         />
                                     </div>
                                 </div>
@@ -6372,7 +6390,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
                                         <input id="descriptionRowEdit" autocomplete="off" type="text"
                                                class="form-control" name="descriptionRowEdit"
-                                               value="`+descriptionRow+`"
+                                               value="` + descriptionRow + `"
                                         />
                                     </div>
                                 </div>
@@ -6383,7 +6401,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descriptionInvoiceEdit">Descrizione Fattura</label>
                                         <input id="descriptionInvoiceEdit" autocomplete="off" type="text"
                                                class="form-control" name="descriptionInvoiceEdit"
-                                               value="`+descriptionInvoice+`"
+                                               value="` + descriptionInvoice + `"
                                         />
                                      </div> 
                                 </div>
@@ -6392,7 +6410,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                 <label for="startUpCostCampaignEdit">Costo Impianto Campagna</label>
                                 <input id="startUpCostCampaignEdit" autocomplete="off" type="text"
                                         class="form-control" name="startUpCostCampaignEdit"
-                                        value="`+startUpCostCampaign+`"
+                                        value="` + startUpCostCampaign + `"
                                         />
                                     </div>
                                 </div>
@@ -6491,9 +6509,9 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                 </div>
                             </div>
 `;
-                break;
-            case 4:
-                bodyForm = `
+                    break;
+                case 4:
+                    bodyForm = `
 <div class="row">
                                 <div class="col-md-2">
                                    
@@ -6631,9 +6649,9 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                 </div>
                             </div>
 `;
-                break;
-            case 5:
-                bodyForm = `   
+                    break;
+                case 5:
+                    bodyForm = `   
                                 <div class="row">
                                 <div class="col-md-2">
                                 
@@ -6741,7 +6759,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="sellingFeeCommisionEdit">Commissione sul Venduto</label>
                                         <input id="sellingFeeCommisionEdit" autocomplete="off" type="text"
                                                class="form-control" name="sellingFeeCommisionEdit"
-                                               value="`+sellingFeeCommision+`"
+                                               value="` + sellingFeeCommision + `"
                                         />
                                     </div>
                                 </div>
@@ -6753,7 +6771,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
                                         <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCreditCardCommissionEdit"
-                                               value="`+descfeeCreditCardCommission+`"
+                                               value="` + descfeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6762,7 +6780,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
                                         <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCreditCardCommissionEdit"
-                                               value="`+feeCreditCardCommission+`"
+                                               value="` + feeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6771,7 +6789,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6796,7 +6814,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
                                         <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCodCommissionEdit"
-                                               value="`+descfeeCodCommission+`"
+                                               value="` + descfeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6805,7 +6823,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
                                         <input id="feeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCodCommissionEdit"
-                                               value="`+feeCodCommission+`"
+                                               value="` + feeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6814,7 +6832,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6839,7 +6857,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
                                         <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeBankTransferCommissionEdit"
-                                               value="`+descfeeBankTransferCommission+`"
+                                               value="` + descfeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6848,7 +6866,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
                                         <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeBankTransferCommissionEdit"
-                                               value="`+feeBankTransferCommission+`"
+                                               value="` + feeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6857,7 +6875,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
-                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                               value="` + dayChargeFeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6882,7 +6900,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
                                         <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeePaypalCommission"
-                                               value="`+descfeePaypalCommission+`"
+                                               value="` + descfeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6891,7 +6909,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
                                         <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feePaypalCommissionEdit"
-                                               value="`+feePaypalCommission+`"
+                                               value="` + feePaypalCommission + `"
                                         /> 
                                 </div>
                             </div>
@@ -6900,7 +6918,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                              </div>
@@ -6925,7 +6943,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6934,7 +6952,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6952,7 +6970,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6966,8 +6984,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1" ` + checkchargeDeliveryIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargeDeliveryIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -6976,7 +6994,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
                                         <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostDeliveryCommissionEdit"
-                                               value="`+feeCostDeliveryCommission+`"
+                                               value="` + feeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -6985,7 +7003,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
                                         <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostDeliveryCommissionEdit"
-                                               value="`+descfeeCostDeliveryCommission+`"
+                                               value="` + descfeeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7008,7 +7026,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                             <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
                                             <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                    class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
-                                                   value="`+periodTypeChargeDelivery+`"
+                                                   value="` + periodTypeChargeDelivery + `"
                                             />
                                         </div>
                                 </div>
@@ -7031,9 +7049,9 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                         <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="" ></option>
+                                         <option  value="1" ` + checkchargePaymentIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargePaymentIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -7042,7 +7060,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
                                         <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostCommissionPaymentEdit"
-                                               value="`+feeCostCommissionPayment+`"
+                                               value="` + feeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -7051,7 +7069,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
                                         <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostCommissionPaymentEdit"
-                                               value="`+descfeeCostCommissionPayment+`"
+                                               value="` + descfeeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -7074,7 +7092,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
-                                               value="`+periodTypeChargePayment+`"
+                                               value="` + periodTypeChargePayment + `"
                                         />
                                     </div>
                                 </div>
@@ -7093,11 +7111,11 @@ function editContractDetail(id, billRegistryGroupProductId) {
 `;
 
 
-                break;
+                    break;
 
 
-            case 6:
-                bodyForm = `
+                case 6:
+                    bodyForm = `
 <div class="row">
                                 <div class="col-md-2">
                                  
@@ -7106,7 +7124,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="nameRowEdit">Nome Dettaglio Contratto</label>
                                         <input id="nameRowEdit" autocomplete="off" type="text"
                                                class="form-control" name="nameRowEdit"
-                                               value="`+nameRow+`"
+                                               value="` + nameRow + `"
                                         />
                                     </div>
                                 </div>
@@ -7148,7 +7166,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             <label for="valueMarkUpFullPriceEdit">Valore markup commissione su prezzi pieni</label>
                             <input id="valueMarkUpFullPriceEdit" autocomplete="off" type="text"
                                    class="form-control" name="valueMarkUpFullPriceEdit"
-                                   value="`+valueMarkUpFullPrice+`"
+                                   value="` + valueMarkUpFullPrice + `"
                             />
                         </div>
                     </div>
@@ -7157,7 +7175,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             <label for="valueMarkUpSalePriceEdit">Valore markup commissione su prezzi in Saldo</label>
                             <input id="valueMarkUpSalePriceEdit" autocomplete="off" type="text"
                                    class="form-control" name="valueMarkUpSalePriceEdit"
-                                   value="`+valueMarkUpSalePrice+`"
+                                   value="` + valueMarkUpSalePrice + `"
                             />
                         </div>
                     </div>
@@ -7179,9 +7197,9 @@ function editContractDetail(id, billRegistryGroupProductId) {
             </div>
             `;
 
-                break;
-            case 7:
-                bodyForm = `
+                    break;
+                case 7:
+                    bodyForm = `
 
 <div class="row">
                                 <div class="col-md-2">
@@ -7191,7 +7209,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="nameRowEdit">Nome Dettaglio Contratto</label>
                                         <input id="nameRowEdit" autocomplete="off" type="text"
                                                class="form-control" name="nameRowEdit"
-                                               value="`+nameRow+`"
+                                               value="` + nameRow + `"
                                         />
                                     </div>
                                 </div>
@@ -7200,7 +7218,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descriptionRowEdit">Descrizione Dettaglio Contratto</label>
                                         <input id="descriptionRowEdit" autocomplete="off" type="text"
                                                class="form-control" name="descriptionRowEdit"
-                                               value="`+descriptionRow+`"
+                                               value="` + descriptionRow + `"
                                         />
                                     </div>
                                 </div>
@@ -7212,8 +7230,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option value=""></option>
-                                         <option value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option value="1" ` + checkAutomaticInvoice + `>Si</option>
+                                         <option value="0" ` + notCheckAutomaticInvoice + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -7224,7 +7242,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="emailAccountSendQtyEdit">Pubblicazioni Previste</label>
                                         <input id="emailAccountSendQtyEdit" autocomplete="off" type="text"
                                                class="form-control" name="emailAccountSendQtyEdit"
-                                               value="`+emailAccountSendQty+`"
+                                               value="` + emailAccountSendQty + `"
                                         />
                                     </div>
                                 </div>
@@ -7233,7 +7251,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="emailAccountCampaignQtyEdit">Campagne Email Previste</label>
                                         <input id="emailAccountCampaignQtyEdit" autocomplete="off" type="text"
                                                class="form-control" name="emailAccountCampaignQtyEdit"
-                                               value="`+emailAccountCampaignQty+`"
+                                               value="` + emailAccountCampaignQty + `"
                                         />
                                     </div>
                                 </div>
@@ -7258,7 +7276,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="billingDayEdit">Giorno di Fatturazione</label>
                                         <input id="billingDayEdit" autocomplete="off" type="text"
                                                class="form-control" name="billingDayEdit"
-                                               value="`+billingDay+`"
+                                               value="` + billingDay + `"
                                         />
                                     </div>
                                 </div>
@@ -7279,7 +7297,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="valueDesEdit">Valore Canone</label>
                                         <input id="valueDesEdit" autocomplete="off" type="text"
                                                class="form-control" name="valueDesEdit"
-                                               value="`+value+`"
+                                               value="` + value + `"
                                         />
                                     </div>
                                 </div>
@@ -7296,7 +7314,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                   <div class="col-md-2">
                                     <div class="form-group form-group-default">
                                         <label for="descriptionValueEdit">descrizione Canone</label>
-                                       <textarea class="form-control" name="descriptionValueEdit" id="descriptionValueEdit">`+descriptionValue+`</textarea>
+                                       <textarea class="form-control" name="descriptionValueEdit" id="descriptionValueEdit">` + descriptionValue + `</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -7310,7 +7328,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="sellingFeeCommisionEdit">Commissione sul Venduto</label>
                                         <input id="sellingFeeCommisionEdit" autocomplete="off" type="text"
                                                class="form-control" name="sellingFeeCommisionEdit"
-                                               value="`+sellingFeeCommision+`"
+                                               value="` + sellingFeeCommision + `"
                                         />
                                     </div>
                                 </div>
@@ -7322,7 +7340,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCreditCardCommissionEdit">Descrizione Commissione pagamento carte di credito</label>
                                         <input id="descfeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCreditCardCommissionEdit"
-                                               value="`+descfeeCreditCardCommission+`"
+                                               value="` + descfeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7331,7 +7349,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCreditCardCommissionEdit">Commissione pagamento carte di credito</label>
                                         <input id="feeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCreditCardCommissionEdit"
-                                               value="`+feeCreditCardCommission+`"
+                                               value="` + feeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7340,7 +7358,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7365,7 +7383,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCodCommissionEdit">Descrizione Commissione pagamento contrassegno</label>
                                         <input id="descfeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCodCommissionEdit"
-                                               value="`+descfeeCodCommission+`"
+                                               value="` + descfeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7374,7 +7392,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCodCommissionEdit">Commissione pagamento contrassegno</label>
                                         <input id="feeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCodCommissionEdit"
-                                               value="`+feeCodCommission+`"
+                                               value="` + feeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7383,7 +7401,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7408,7 +7426,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeBankTransferCommissionEdit">Descrizione Commissione pagamento Bonifico</label>
                                         <input id="descfeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeBankTransferCommissionEdit"
-                                               value="`+descfeeBankTransferCommission+`"
+                                               value="` + descfeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7417,7 +7435,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeBankTransferCommissionEdit">Commissione pagamento Bonifico</label>
                                         <input id="feeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeBankTransferCommissionEdit"
-                                               value="`+feeBankTransferCommission+`"
+                                               value="` + feeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7426,7 +7444,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeBankTransferCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
-                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                               value="` + dayChargeFeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7451,7 +7469,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeePaypalCommissionEdit">Descrizione Commissione pagamento paypal</label>
                                         <input id="descfeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeePaypalCommissionEdit"
-                                               value="`+descfeePaypalCommission+`"
+                                               value="` + descfeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7460,7 +7478,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feePaypalCommissionEdit">Commissione pagamento paypal</label>
                                         <input id="feePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feePaypalCommissionEdit"
-                                               value="`+feePaypalCommission+`"
+                                               value="` + feePaypalCommission + `"
                                         /> 
                                 </div>
                             </div>
@@ -7469,7 +7487,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                              </div>
@@ -7494,7 +7512,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCreditCardCommissionEdit">Valuta pagamento carte di credito</label>
                                         <input id="dayChargeFeeCreditCardCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCreditCardCommissionEdit"
-                                               value="`+dayChargeFeeCreditCardCommission+`"
+                                               value="` + dayChargeFeeCreditCardCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7503,7 +7521,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCodCommissionEdit">Valuta pagamento contrassegno</label>
                                         <input id="dayChargeFeeCodCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCodCommissionEdit"
-                                               value="`+dayChargeFeeCodCommission+`"
+                                               value="` + dayChargeFeeCodCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7512,7 +7530,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeBankTransferCommissionEdit">Valuta pagamento Bonifico</label>
                                         <input id="dayChargeFeeBankTransferCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeBankTransferCommissionEdit"
-                                               value="`+dayChargeFeeBankTransferCommission+`"
+                                               value="` + dayChargeFeeBankTransferCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7521,7 +7539,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeePaypalCommissionEdit">Valuta pagamento paypal</label>
                                         <input id="dayChargeFeePaypalCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeePaypalCommissionEdit"
-                                               value="`+dayChargeFeePaypalCommission+`"
+                                               value="` + dayChargeFeePaypalCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7535,8 +7553,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1" ` + checkchargeDeliveryIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargeDeliveryIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -7545,7 +7563,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostDeliveryCommissionEdit">Commissioni Costi Su Spedizione</label>
                                         <input id="feeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostDeliveryCommissionEdit"
-                                               value="`+feeCostDeliveryCommission+`"
+                                               value="` + feeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7554,7 +7572,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostDeliveryCommissionEdit">Descrizione Commissioni Costi Su Spedizione</label>
                                         <input id="descfeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostDeliveryCommissionEdit"
-                                               value="`+descfeeCostDeliveryCommission+`"
+                                               value="` + descfeeCostDeliveryCommission + `"
                                         />
                                     </div>
                                 </div>
@@ -7577,7 +7595,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                             <label for="dayChargeFeeCostDeliveryCommissionEdit">Giorno di Fatturazione</label>
                                             <input id="dayChargeFeeCostDeliveryCommissionEdit" autocomplete="off" type="text"
                                                    class="form-control" name="dayChargeFeeCostDeliveryCommissionEdit"
-                                                   value="`+periodTypeChargeDelivery+`"
+                                                   value="` + periodTypeChargeDelivery + `"
                                             />
                                         </div>
                                 </div>
@@ -7601,8 +7619,8 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
                                          <option  value=""></option>
-                                         <option  value="1">Si</option>
-                                         <option value="0">No</option>  
+                                         <option  value="1" ` + checkchargePaymentIsActive + `>Si</option>
+                                         <option value="0" ` + notcheckchargePaymentIsActive + `>No</option>  
                                          </select>       
                                     </div>
                                 </div>
@@ -7611,7 +7629,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="feeCostCommissionPaymentEdit">Commissione su costi  Pagamenti</label>
                                         <input id="feeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="feeCostCommissionPaymentEdit"
-                                               value="`+feeCostCommissionPayment+`"
+                                               value="` + feeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -7620,7 +7638,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="descfeeCostCommissionPaymentEdit">Descrizione Commissioni Costi Su Pagamenti</label>
                                         <input id="descfeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="descfeeCostCommissionPaymentEdit"
-                                               value="`+descfeeCostCommissionPayment+`"
+                                               value="` + descfeeCostCommissionPayment + `"
                                         />
                                     </div>
                                 </div>
@@ -7643,7 +7661,7 @@ function editContractDetail(id, billRegistryGroupProductId) {
                                         <label for="dayChargeFeeCostCommissionPaymentEdit">Giorno di Fatturazione</label>
                                         <input id="dayChargeFeeCostCommissionPaymentEdit" autocomplete="off" type="text"
                                                class="form-control" name="dayChargeFeeCostCommissionPaymentEdit"
-                                               value="`+periodTypeChargePayment+`"
+                                               value="` + periodTypeChargePayment + `"
                                         />
                                     </div>
                                 </div>
@@ -7660,1097 +7678,1354 @@ function editContractDetail(id, billRegistryGroupProductId) {
                             </div>
                             </div>                    
 `;
-                break;
+                    break;
+
+
+            }
+            let bsModalDetailContractEdit = new $.bsModal('Modifica Dettaglio  Contratto al Servizio  associato', {
+                body: bodyForm
+            });
+
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct',
+                    condition: {billRegistryGroupProductId: 1}
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let selecttypeProductAssocId = $('#typeProductAssocIdEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                selecttypeProductAssocId.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductValue);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productfeeCreditCardCommision = $('#productfeeCreditCardCommisionEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productfeeCreditCardCommision.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeCreditCardCommission);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let billRegistryProductValue = $('#billRegistryProductValueEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                billRegistryProductValue.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeCreditCardCommission);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productfeeCodCommission = $('#productfeeCodCommissionEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productfeeCodCommission.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeCodCommission);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productfeeBankTransferCommission = $('#productfeeBankTransferCommissionEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productfeeBankTransferCommission.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeBankTransferCommission);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productfeePaypalCommission = $('#productfeePaypalCommissionEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productfeePaypalCommission.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeePaypalCommission);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select1paymentTypePaymentId = $('#1paymentTypePaymentIdEdit');
+                // if (typeof (select1paymentTypePaymentId[0].selectize) != 'undefined') select1paymentTypePaymentId[0].selectize.destroy();
+                select1paymentTypePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(paymentTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select1deliveryTypePaymentId = $('#1deliveryTypePaymentIdEdit');
+                //   if (typeof (select1deliveryTypePaymentId[0].selectize) != 'undefined') select1deliveryTypePaymentId[0].selectize.destroy();
+                select1deliveryTypePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(deliveryTypePaymentId);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select1typePaymentId = $('#1typePaymentIdEdit');
+                //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                select1typePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(paymentTypePaymentId);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productfeeCostDeliveryCommission = $('#productfeeCostDeliveryCommissionEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productfeeCostDeliveryCommission.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeCostDeliveryCommission);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productfeeCostCommissionPayment = $('#productfeeCostCommissionPaymentEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productfeeCostCommissionPayment.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeCostCommissionPayment);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productStartUpCostCampaign = $('#productStartUpCostCampaignEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productStartUpCostCampaign.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductStartUpCostCampaign);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryProduct'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let productFeeAgencyCommision = $('#productFeeAgencyCommisionEdit');
+                //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
+                productFeeAgencyCommision.selectize({
+                    valueField: 'id',
+                    labelField: 'codeProduct',
+                    searchField: ['codeProduct'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
+                                '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(billRegistryProductFeeAgencyCommision);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select1typePaymentId = $('#1typePaymentIdEdit');
+                //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                select1typePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(typePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select1 = $('#2paymentTypePaymentIdEdit');
+                //if (typeof (select1[0].selectize) != 'undefined') select1[0].selectize.destroy();
+                select1.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(paymentTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select2 = $('#2deliveryTypePaymentIdEdit');
+                //  if (typeof (select2[0].selectize) != 'undefined') select2[0].selectize.destroy();
+                select2.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(deliveryTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select3 = $('#2typePaymentIdEdit');
+                //    if (typeof (select3[0].selectize) != 'undefined') select3[0].selectize.destroy();
+                select3.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(typePaymentId);
+                    }
+                });
+            });
+
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select4 = $('#5paymentTypePaymentIdEdit');
+                //  if (typeof (select4[0].selectize) != 'undefined') select4[0].selectize.destroy();
+                select4.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(paymentTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select5deliveryTypePaymentId = $('#5deliveryTypePaymentIdEdit');
+                // if (typeof (select5deliveryTypePaymentId[0].selectize) != 'undefined') select5deliveryTypePaymentId[0].selectize.destroy();
+                select5deliveryTypePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(deliveryTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select5typePaymentId = $('#5typePaymentIdEdit');
+                //   if (typeof (select5typePaymentId[0].selectize) != 'undefined') select5typePaymentId[0].selectize.destroy();
+                select5typePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(typePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select6paymentTypePaymentId = $('#6paymentTypePaymentIdEdit');
+                //  if (typeof (select6paymentTypePaymentId[0].selectize) != 'undefined') select6paymentTypePaymentId[0].selectize.destroy();
+                select6paymentTypePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(paymentTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select6deliveryTypePaymentId = $('#6deliveryTypePaymentIdEdit');
+                // if (typeof (select6deliveryTypePaymentId[0].selectize) != 'undefined') select6deliveryTypePaymentId[0].selectize.destroy();
+                select6deliveryTypePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(deliveryTypePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select6typePaymentId = $('#6typePaymentIdEdit');
+                //   if (typeof (select6typePaymentId[0].selectize) != 'undefined') select6typePaymentId[0].selectize.destroy();
+                select6typePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(typePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select3typePaymentId = $('#3typePaymentIdEdit');
+                //   if (typeof (select3typePaymentId[0].selectize) != 'undefined') select3typePaymentId[0].selectize.destroy();
+                select3typePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(typePaymentId);
+                    }
+                });
+            });
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'BillRegistryTypePayment'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select4typePaymentId = $('#4typePaymentIdEdit');
+                //   if (typeof (select4typePaymentId[0].selectize) != 'undefined') select4typePaymentId[0].selectize.destroy();
+                select4typePaymentId.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + ' | ' + escape(item.codice_modalita_pagamento_fe) + '</span> - ' +
+                                '<span class="caption">numero giorni:' + escape(item.numDay) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(typePaymentId);
+                    }
+                });
+            });
+
+            $('#typeProductAssocIdEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#typeProductAssocIdEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    let canoneEdit = res;
+                    $.each(canoneEdit, function (k, v) {
+                        $('#descriptionDetailEdit').empty();
+                        $('#descriptionDetailEdit').append(v.description);
+                        $('#valueDesEdit').val(parseInt(v.price).toFixed(2));
+
+                    });
+
+                });
+            });
+            $('#productfeePaypalCommissionEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productfeePaypalCommissionEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divfeePaypalCommissionEdit').empty();
+                        $('#divfeePaypalCommissionEdit').append(v.description);
+
+                    });
+
+                });
+            });
+
+            $('#productfeeBankTransferCommissionEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productfeeBankTransferCommissionEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divfeeBankTransferCommissionEdit').empty();
+                        $('#divfeeBankTransferCommissionEdit').append(v.description);
+
+                    });
+
+                });
+            });
+            //billRegistryProductValue
+            $('#billRegistryProductValueEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#billRegistryProductValueEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divBillRegistryProductValueEdit').empty();
+                        $('#divBillRegistryProductValueEdit').append(v.description);
+
+                    });
+                });
+            });
+            $('#productfeeCodCommissionEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productfeeCodCommissionEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divfeeCodCommissionEdit').empty();
+                        $('#divfeeCodCommissionEdit').append(v.description);
+
+                    });
+
+                });
+            });
+            $('#productfeeCreditCardCommisionEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productfeeCreditCardCommisionEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divfeeCreditCardCommisionEdit').empty();
+                        $('#divfeeCreditCardCommisionEdit').append(v.description);
+
+                    });
+
+                });
+            });
+            $('#productfeeCostDeliveryCommissionEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productfeeCostDeliveryCommissionEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divfeeCostDeliveryCommissionEdit').empty();
+                        $('#divfeeCostDeliveryCommissionEdit').append(v.description);
+
+                    });
+
+                });
+            });
+            $('#productfeeCostCommissionPaymentEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productfeeCostCommissionPaymentEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divfeeCostCommissionPaymentEdit').empty();
+                        $('#divfeeCostCommissionPaymentEdit').append(v.description);
+
+                    });
+
+                });
+            });
+            //productStartUpCostCampaign
+            $('#productStartUpCostCampaignEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productStartUpCostCampaignEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divStartUpCostCampaignEdit').empty();
+                        $('#divStartUpCostCampaignEdit').append(v.description);
+
+                    });
+
+                });
+            });
+
+            //productFeeAgencyCommision
+            $('#productFeeAgencyCommisionEdit').change(function () {
+                $.ajax({
+                    url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
+                    method: 'GET',
+                    data: {
+                        typeProductAssocId: $('#productFeeAgencyCommisionEdit').val()
+
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    $.each(res, function (k, v) {
+                        $('#divFeeAgencyCommisionEdit').empty();
+                        $('#divFeeAgencyCommisionEdit').append(v.description);
+
+                    });
+
+                });
+            });
+
+
+            bsModalDetailContractEdit.showCancelBtn();
+            bsModalDetailContractEdit.addClass('modal-wide');
+            bsModalDetailContractEdit.addClass('modal-high');
+            bsModalDetailContractEdit.setOkEvent(function () {
+                var data = '';
+                switch (billRegistryGroupProductId) {
+                    case 1:
+                        data = {
+                            idDetail: idDetail,
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            automaticInvoice: $('#automaticInvoiceEdit').val(),
+                            value: $('#valueDesEdit').val(),
+                            billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                            descriptionValue: $('#descriptionValueEdit').val(),
+                            billingDay: $('#billingDayEdit').val(),
+                            typePaymentId: $('#1typePaymentIdEdit').val(),
+                            periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                            sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                            descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                            descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                            descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                            descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                            descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                            descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                            dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                            dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                            dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                            dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                            feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                            feeCodCommission: $('#feeCodCommissionEdit').val(),
+                            feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                            feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                            chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                            feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                            periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                            deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                            productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                            productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                            productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                            productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                            productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                            productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                            chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                            feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                            periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                            paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                        };
+                        break;
+                    case 2:
+                        data = {
+                            idDetail: idDetail,
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            automaticInvoice: $('#automaticInvoiceEdit').val(),
+                            value: $('#valueDesEdit').val(),
+                            billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                            descriptionValue: $('#descriptionValueEdit').val(),
+                            billingDay: $('#billingDayEdit').val(),
+                            typePaymentId: $('#1typePaymentIdEdit').val(),
+                            periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                            sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                            descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                            descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                            descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                            descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                            descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                            descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                            dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                            dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                            dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                            dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                            feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                            feeCodCommission: $('#feeCodCommissionEdit').val(),
+                            feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                            feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                            chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                            feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                            periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                            deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                            productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                            productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                            productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                            productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                            productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                            productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                            chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                            feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                            periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                            paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                        };
+                        break;
+                    case 3:
+                        data = {
+                            idDetail: idDetail,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            automaticInvoice: $('#automaticInvoiceEdit').val(),
+                            descriptionInvoice: $('#descriptionInvoiceEdit').val(),
+                            billingDay: $('#billingDayEdit').val(),
+                            typePaymentId: $('#3typePaymentIdEdit').val(),
+                            startUpCostCampaign: $('#startUpCostCampaignEdit').val(),
+                            feeAgencyCommision: $('#feeAgencyCommisionEdit').val(),
+                            prepaidPaymentIsActive: $('#prepaidPaymentIsActiveEdit').val(),
+                            prepaidCost: $('#prepaidCostEdit').val(),
+                            productStartUpCostCampaign: $('#productStartUpCostCampaignEdit').val(),
+                            productFeeAgencyCommision: $('#productFeeAgencyCommisionEdit').val(),
+
+
+                        };
+                        break;
+                    case 4:
+                        data = {
+                            idDetail: idDetail,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            automaticInvoice: $('#automaticInvoiceEdit').val(),
+                            descriptionInvoice: $('#descriptionInvoiceEdit').val(),
+                            billingDay: $('#billingDayEdit').val(),
+                            typePaymentId: $('#4typePaymentIdEdit').val(),
+                            startUpCostCampaign: $('#startUpCostCampaignEdit').val(),
+                            feeAgencyCommision: $('#feeAgencyCommisionEdit').val(),
+                            prepaidPaymentIsActive: $('#prepaidPaymentIsActiveEdit').val(),
+                            prepaidCost: $('#prepaidCostEdit').val(),
+                            productStartUpCostCampaign: $('#productStartUpCostCampaignEdit').val(),
+                            productFeeAgencyCommision: $('#productFeeAgencyCommisionEdit').val(),
+                        };
+                        break;
+                    case 5:
+                        data = {
+                            idDetail: idDetail,
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            automaticInvoice: $('#automaticInvoiceEdit').val(),
+                            value: $('#valueDesEdit').val(),
+                            billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                            descriptionValue: $('#descriptionValueEdit').val(),
+                            billingDay: $('# ').val(),
+                            typePaymentId: $('#1typePaymentIdEdit').val(),
+                            periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                            sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                            descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                            descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                            descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                            descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                            descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                            descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                            dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                            dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                            dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                            dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                            feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                            feeCodCommission: $('#feeCodCommissionEdit').val(),
+                            feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                            feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                            chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                            feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                            periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                            deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                            productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                            productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                            productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                            productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                            productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                            productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                            chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                            feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                            periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                            paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                        };
+                        break;
+                    case 6:
+                        data = {
+                            idDetail: idDetail,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            typeContractId: $('#typeContractIdEdit').val(),
+                            valueMarkUpFullPrice: $('#valueMarkUpFullPriceEdit').val(),
+                            valueMarkUpSalePrice: $('#valueMarkUpSalePriceEdit').val(),
+                            billingDay: $('#billingDayEdit').val(),
+                            billRegistryProductValue: $('#billRegistryProductValueEdit').val()
+                        };
+                        break;
+                    case 7:
+                        data = {
+                            idDetail: idDetail,
+                            emailAccount: $('#emailAccountEdit').val(),
+                            emailAccountSendQty: $('#emailAccountSendQtyEdit').val(),
+                            emailAccountCampaignQty: $('#emailAccountCampaignQtyEdit').val(),
+
+                            billRegistryGroupProductId: billRegistryGroupProductId,
+                            billRegistryContractRowId: billRegistryContractRowId,
+                            nameRow: $('#nameRowEdit').val(),
+                            descriptionRow: $('#descriptionRowEdit').val(),
+                            automaticInvoice: $('#automaticInvoiceEdit').val(),
+                            value: $('#valueDesEdit').val(),
+                            billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
+                            descriptionValue: $('#descriptionValueEdit').val(),
+                            billingDay: $('#billingDayEdit').val(),
+                            typePaymentId: $('#1typePaymentIdEdit').val(),
+                            periodTypeCharge: $('#periodTypeChargeEdit').val(),
+                            sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
+                            descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
+                            descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
+                            descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
+                            descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
+                            descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
+                            descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
+                            dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
+                            dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
+                            dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
+                            dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
+                            feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
+                            feeCodCommission: $('#feeCodCommissionEdit').val(),
+                            feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
+                            feePaypalCommission: $('#feePaypalCommissionEdit').val(),
+                            chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
+                            feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
+                            periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
+                            deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
+                            productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
+                            productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
+                            productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
+                            productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
+                            productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
+                            productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
+                            chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
+                            feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
+                            periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
+                            paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
+                        };
+                        break;
+                }
+                $.ajax({
+                    method: 'put',
+                    url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
+                    data: data
+                }).done(function (res) {
+                    bsModalDetailContractEdit.writeBody(res);
+                }).fail(function (res) {
+                    bsModalDetailContractEdit.writeBody('Errore grave');
+                }).always(function (res) {
+                    bsModalDetailContractEdit.setOkEvent(function () {
+                        bsModalDetailContractEdit.hide();
+                        //window.location.reload();
+                    });
+                    bsModalDetailContractEdit.showOkBtn();
+                });
+            });
 
 
         }
-        let bsModalDetailContractEdit = new $.bsModal('Modifica Dettaglio  Contratto al Servizio  associato', {
-            body: bodyForm
-        });
-
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct',
-                condition: {billRegistryGroupProductId: 1}
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let selecttypeProductAssocId = $('#typeProductAssocIdEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            selecttypeProductAssocId.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductValue);
-                }
-            });
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeeCreditCardCommision = $('#productfeeCreditCardCommisionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeeCreditCardCommision.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeCreditCardCommission);
-                }
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let billRegistryProductValue = $('#billRegistryProductValueEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            billRegistryProductValue.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeCreditCardCommission);
-                }
-            });
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeeCodCommission = $('#productfeeCodCommissionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeeCodCommission.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeCodCommission);
-                }
-            });
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeeBankTransferCommission = $('#productfeeBankTransferCommissionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeeBankTransferCommission.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeBankTransferCommission);
-                }
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeePaypalCommission = $('#productfeePaypalCommissionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeePaypalCommission.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeePaypalCommission);
-                }
-            });
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select1paymentTypePaymentId = $('#1paymentTypePaymentIdEdit');
-            // if (typeof (select1paymentTypePaymentId[0].selectize) != 'undefined') select1paymentTypePaymentId[0].selectize.destroy();
-            select1paymentTypePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select1deliveryTypePaymentId = $('#1deliveryTypePaymentIdEdit');
-            //   if (typeof (select1deliveryTypePaymentId[0].selectize) != 'undefined') select1deliveryTypePaymentId[0].selectize.destroy();
-            select1deliveryTypePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select1typePaymentId = $('#1typePaymentIdEdit');
-            //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
-            select1typePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeeCostDeliveryCommission = $('#productfeeCostDeliveryCommissionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeeCostDeliveryCommission.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeCostDeliveryCommission);
-                }
-            });
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productfeeCostCommissionPayment = $('#productfeeCostCommissionPaymentEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productfeeCostCommissionPayment.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeCostCommissionPayment);
-                }
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productStartUpCostCampaign = $('#productStartUpCostCampaignEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productStartUpCostCampaign.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductStartUpCostCampaign);
-                }
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryProduct'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let productFeeAgencyCommision = $('#productFeeAgencyCommisionEdit');
-            //   if (typeof (selecttypeProductAssocId[0].selectize) != 'undefined') selecttypeProductAssocId[0].selectize.destroy();
-            productFeeAgencyCommision.selectize({
-                valueField: 'id',
-                labelField: 'codeProduct',
-                searchField: ['codeProduct'],
-                options: res2,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.codeProduct) + ' | ' + escape(item.nameProduct) + '</span> - ' +
-                            '<span class="caption">prezzo:' + escape(item.price) + '</span>' +
-                            '</div>'
-                    }
-                },
-                onInitialize:function(){
-                    var selectize=this;
-                    selectize.setValue(billRegistryProductFeeAgencyCommision);
-                }
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select1typePaymentId = $('#1typePaymentIdEdit');
-            //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
-            select1typePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select1 = $('#2paymentTypePaymentIdEdit');
-            //if (typeof (select1[0].selectize) != 'undefined') select1[0].selectize.destroy();
-            select1.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select2 = $('#2deliveryTypePaymentIdEdit');
-            //  if (typeof (select2[0].selectize) != 'undefined') select2[0].selectize.destroy();
-            select2.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select3 = $('#2typePaymentIdEdit');
-            //    if (typeof (select3[0].selectize) != 'undefined') select3[0].selectize.destroy();
-            select3.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select4 = $('#5paymentTypePaymentIdEdit');
-            //  if (typeof (select4[0].selectize) != 'undefined') select4[0].selectize.destroy();
-            select4.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select5deliveryTypePaymentId = $('#5deliveryTypePaymentIdEdit');
-            // if (typeof (select5deliveryTypePaymentId[0].selectize) != 'undefined') select5deliveryTypePaymentId[0].selectize.destroy();
-            select5deliveryTypePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select5typePaymentId = $('#5typePaymentIdEdit');
-            //   if (typeof (select5typePaymentId[0].selectize) != 'undefined') select5typePaymentId[0].selectize.destroy();
-            select5typePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select6paymentTypePaymentId = $('#6paymentTypePaymentIdEdit');
-            //  if (typeof (select6paymentTypePaymentId[0].selectize) != 'undefined') select6paymentTypePaymentId[0].selectize.destroy();
-            select6paymentTypePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select6deliveryTypePaymentId = $('#6deliveryTypePaymentIdEdit');
-            // if (typeof (select6deliveryTypePaymentId[0].selectize) != 'undefined') select6deliveryTypePaymentId[0].selectize.destroy();
-            select6deliveryTypePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select6typePaymentId = $('#6typePaymentIdEdit');
-            //   if (typeof (select6typePaymentId[0].selectize) != 'undefined') select6typePaymentId[0].selectize.destroy();
-            select6typePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select3typePaymentId = $('#3typePaymentIdEdit');
-            //   if (typeof (select3typePaymentId[0].selectize) != 'undefined') select3typePaymentId[0].selectize.destroy();
-            select3typePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'BillRegistryTypePayment'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            let select4typePaymentId = $('#4typePaymentIdEdit');
-            //   if (typeof (select4typePaymentId[0].selectize) != 'undefined') select4typePaymentId[0].selectize.destroy();
-            select4typePaymentId.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name'],
-                options: res2
-            });
-
-        });
-
-        $('#typeProductAssocIdEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#typeProductAssocIdEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                let canoneEdit = res;
-                $.each(canoneEdit, function (k, v) {
-                    $('#descriptionDetailEdit').empty();
-                    $('#descriptionDetailEdit').append(v.description);
-                    $('#valueDesEdit').val(parseInt(v.price).toFixed(2));
-
-                });
-
-            });
-        });
-        $('#productfeePaypalCommissionEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productfeePaypalCommissionEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divfeePaypalCommissionEdit').empty();
-                    $('#divfeePaypalCommissionEdit').append(v.description);
-
-                });
-
-            });
-        });
-
-        $('#productfeeBankTransferCommissionEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productfeeBankTransferCommissionEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divfeeBankTransferCommissionEdit').empty();
-                    $('#divfeeBankTransferCommissionEdit').append(v.description);
-
-                });
-
-            });
-        });
-        //billRegistryProductValue
-        $('#billRegistryProductValueEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#billRegistryProductValueEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divBillRegistryProductValueEdit').empty();
-                    $('#divBillRegistryProductValueEdit').append(v.description);
-
-                });
-            });
-        });
-        $('#productfeeCodCommissionEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productfeeCodCommissionEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divfeeCodCommissionEdit').empty();
-                    $('#divfeeCodCommissionEdit').append(v.description);
-
-                });
-
-            });
-        });
-        $('#productfeeCreditCardCommisionEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productfeeCreditCardCommisionEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divfeeCreditCardCommisionEdit').empty();
-                    $('#divfeeCreditCardCommisionEdit').append(v.description);
-
-                });
-
-            });
-        });
-        $('#productfeeCostDeliveryCommissionEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productfeeCostDeliveryCommissionEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divfeeCostDeliveryCommissionEdit').empty();
-                    $('#divfeeCostDeliveryCommissionEdit').append(v.description);
-
-                });
-
-            });
-        });
-        $('#productfeeCostCommissionPaymentEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productfeeCostCommissionPaymentEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divfeeCostCommissionPaymentEdit').empty();
-                    $('#divfeeCostCommissionPaymentEdit').append(v.description);
-
-                });
-
-            });
-        });
-        //productStartUpCostCampaign
-        $('#productStartUpCostCampaignEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productStartUpCostCampaignEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divStartUpCostCampaignEdit').empty();
-                    $('#divStartUpCostCampaignEdit').append(v.description);
-
-                });
-
-            });
-        });
-
-        //productFeeAgencyCommision
-        $('#productFeeAgencyCommisionEdit').change(function () {
-            $.ajax({
-                url: '/blueseal/xhr/SelectBillRegistryProductDetailAjaxController',
-                method: 'GET',
-                data: {
-                    typeProductAssocId: $('#productFeeAgencyCommisionEdit').val()
-
-                },
-                dataType: 'json'
-            }).done(function (res) {
-                $.each(res, function (k, v) {
-                    $('#divFeeAgencyCommisionEdit').empty();
-                    $('#divFeeAgencyCommisionEdit').append(v.description);
-
-                });
-
-            });
-        });
-
-
-        bsModalDetailContractEdit.showCancelBtn();
-        bsModalDetailContractEdit.addClass('modal-wide');
-        bsModalDetailContractEdit.addClass('modal-high');
-        bsModalDetailContractEdit.setOkEvent(function () {
-            var data = '';
-            switch (billRegistryGroupProductId) {
-                case 1:
-                    data = {
-                        idDetail:idDetail,
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        automaticInvoice: $('#automaticInvoiceEdit').val(),
-                        value: $('#valueDesEdit').val(),
-                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
-                        descriptionValue: $('#descriptionValueEdit').val(),
-                        billingDay: $('#billingDayEdit').val(),
-                        typePaymentId: $('#1typePaymentIdEdit').val(),
-                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
-                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
-                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
-                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
-                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
-                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
-                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
-                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
-                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
-                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
-                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
-                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
-                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
-                        feeCodCommission: $('#feeCodCommissionEdit').val(),
-                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
-                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
-                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
-                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
-                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
-                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
-                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
-                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
-                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
-                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
-                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
-                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
-                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
-                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
-                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
-                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
-                    };
-                    break;
-                case 2:
-                    data = {
-                        idDetail:idDetail,
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        automaticInvoice: $('#automaticInvoiceEdit').val(),
-                        value: $('#valueDesEdit').val(),
-                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
-                        descriptionValue: $('#descriptionValueEdit').val(),
-                        billingDay: $('#billingDayEdit').val(),
-                        typePaymentId: $('#1typePaymentIdEdit').val(),
-                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
-                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
-                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
-                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
-                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
-                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
-                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
-                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
-                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
-                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
-                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
-                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
-                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
-                        feeCodCommission: $('#feeCodCommissionEdit').val(),
-                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
-                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
-                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
-                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
-                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
-                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
-                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
-                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
-                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
-                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
-                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
-                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
-                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
-                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
-                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
-                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
-                    };
-                    break;
-                case 3:
-                    data = {
-                        idDetail:idDetail,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        automaticInvoice: $('#automaticInvoiceEdit').val(),
-                        descriptionInvoice: $('#descriptionInvoiceEdit').val(),
-                        billingDay: $('#billingDayEdit').val(),
-                        typePaymentId: $('#3typePaymentIdEdit').val(),
-                        startUpCostCampaign: $('#startUpCostCampaignEdit').val(),
-                        feeAgencyCommision: $('#feeAgencyCommisionEdit').val(),
-                        prepaidPaymentIsActive: $('#prepaidPaymentIsActiveEdit').val(),
-                        prepaidCost: $('#prepaidCostEdit').val(),
-                        productStartUpCostCampaign: $('#productStartUpCostCampaignEdit').val(),
-                        productFeeAgencyCommision: $('#productFeeAgencyCommisionEdit').val(),
-
-
-                    };
-                    break;
-                case 4:
-                    data = {
-                        idDetail:idDetail,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        automaticInvoice: $('#automaticInvoiceEdit').val(),
-                        descriptionInvoice: $('#descriptionInvoiceEdit').val(),
-                        billingDay: $('#billingDayEdit').val(),
-                        typePaymentId: $('#4typePaymentIdEdit').val(),
-                        startUpCostCampaign: $('#startUpCostCampaignEdit').val(),
-                        feeAgencyCommision: $('#feeAgencyCommisionEdit').val(),
-                        prepaidPaymentIsActive: $('#prepaidPaymentIsActiveEdit').val(),
-                        prepaidCost: $('#prepaidCostEdit').val(),
-                        productStartUpCostCampaign: $('#productStartUpCostCampaignEdit').val(),
-                        productFeeAgencyCommision: $('#productFeeAgencyCommisionEdit').val(),
-                    };
-                    break;
-                case 5:
-                    data = {
-                        idDetail:idDetail,
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        automaticInvoice: $('#automaticInvoiceEdit').val(),
-                        value: $('#valueDesEdit').val(),
-                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
-                        descriptionValue: $('#descriptionValueEdit').val(),
-                        billingDay: $('# ').val(),
-                        typePaymentId: $('#1typePaymentIdEdit').val(),
-                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
-                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
-                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
-                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
-                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
-                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
-                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
-                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
-                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
-                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
-                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
-                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
-                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
-                        feeCodCommission: $('#feeCodCommissionEdit').val(),
-                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
-                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
-                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
-                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
-                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
-                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
-                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
-                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
-                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
-                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
-                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
-                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
-                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
-                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
-                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
-                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
-                    };
-                    break;
-                case 6:
-                    data = {
-                        idDetail:idDetail,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        typeContractId: $('#typeContractIdEdit').val(),
-                        valueMarkUpFullPrice: $('#valueMarkUpFullPriceEdit').val(),
-                        valueMarkUpSalePrice: $('#valueMarkUpSalePriceEdit').val(),
-                        billingDay: $('#billingDayEdit').val(),
-                        billRegistryProductValue: $('#billRegistryProductValueEdit').val()
-                    };
-                    break;
-                case 7:
-                    data = {
-                        idDetail:idDetail,
-                        emailAccount: $('#emailAccountEdit').val(),
-                        emailAccountSendQty: $('#emailAccountSendQtyEdit').val(),
-                        emailAccountCampaignQty: $('#emailAccountCampaignQtyEdit').val(),
-
-                        billRegistryGroupProductId: billRegistryGroupProductId,
-                        billRegistryContractRowId: billRegistryContractRowId,
-                        nameRow: $('#nameRowEdit').val(),
-                        descriptionRow: $('#descriptionRowEdit').val(),
-                        automaticInvoice: $('#automaticInvoiceEdit').val(),
-                        value: $('#valueDesEdit').val(),
-                        billRegistryProductValue: $('#typeProductAssocIdEdit').val(),
-                        descriptionValue: $('#descriptionValueEdit').val(),
-                        billingDay: $('#billingDayEdit').val(),
-                        typePaymentId: $('#1typePaymentIdEdit').val(),
-                        periodTypeCharge: $('#periodTypeChargeEdit').val(),
-                        sellingFeeCommision: $('#sellingFeeCommisionEdit').val(),
-                        descfeeCreditCardCommission: $('#descfeeCreditCardCommissionEdit').val(),
-                        descfeeCodCommission: $('#descfeeCodCommissionEdit').val(),
-                        descfeePaypalCommission: $('#descfeePaypalCommissionEdit').val(),
-                        descfeeBankTransferCommission: $('#descfeeBankTransferCommissionEdit').val(),
-                        descfeeCostDeliveryCommission: $('#descfeeCostDeliveryCommissionEdit').val(),
-                        descfeeCostCommissionPayment: $('#descfeeCostCommissionPaymentEdit').val(),
-                        dayChargeFeeCreditCardCommission: $('#dayChargeFeeCreditCardCommissionEdit').val(),
-                        dayChargeFeeCodCommission: $('#dayChargeFeeCodCommissionEdit').val(),
-                        dayChargeFeeBankTransferCommission: $('#dayChargeFeeBankTransferCommissionEdit').val(),
-                        dayChargeFeePaypalCommission: $('#dayChargeFeePaypalCommissionEdit').val(),
-                        feeCreditCardCommission: $('#feeCreditCardCommissionEdit').val(),
-                        feeCodCommission: $('#feeCodCommissionEdit').val(),
-                        feeBankTransferCommission: $('#feeBankTransferCommissionEdit').val(),
-                        feePaypalCommission: $('#feePaypalCommissionEdit').val(),
-                        chargeDeliveryIsActive: $('#chargeDeliveryIsActiveEdit').val(),
-                        feeCostDeliveryCommission: $('#feeCostDeliveryCommissionEdit').val(),
-                        periodTypeChargeDelivery: $('#dayChargeFeeCostDeliveryCommissionEdit').val(),
-                        deliveryTypePaymentId: $('#1deliveryTypePaymentIdEdit').val(),
-                        productfeePaypalCommission: $('#productfeePaypalCommissionEdit').val(),
-                        productfeeBankTransferCommission: $('#productfeeBankTransferCommissionEdit').val(),
-                        productfeeCodCommission: $('#productfeeCodCommissionEdit').val(),
-                        productfeeCreditCardCommision: $('#productfeeCreditCardCommisionEdit').val(),
-                        productfeeCostDeliveryCommission: $('#productfeeCostDeliveryCommissionEdit').val(),
-                        productfeeCostCommissionPayment: $('#productfeeCostCommissionPaymentEdit').val(),
-                        chargePaymentIsActive: $('#chargePaymentIsActiveEdit').val(),
-                        feeCostCommissionPayment: $('#feeCostCommissionPaymentEdit').val(),
-                        periodTypeChargePayment: $('#dayChargeFeeCostCommissionPaymentEdit').val(),
-                        paymentTypePaymentId: $('#1paymentTypePaymentIdEdit').val()
-                    };
-                    break;
-            }
-            $.ajax({
-                method: 'put',
-                url: '/blueseal/xhr/BillRegistryContractRowManageAjaxController',
-                data: data
-            }).done(function (res) {
-                bsModalDetailContractEdit.writeBody(res);
-            }).fail(function (res) {
-                bsModalDetailContractEdit.writeBody('Errore grave');
-            }).always(function (res) {
-                bsModalDetailContractEdit.setOkEvent(function () {
-                    bsModalDetailContractEdit.hide();
-                    //window.location.reload();
-                });
-                bsModalDetailContractEdit.showOkBtn();
-            });
-        });
-
-
-    });
+    )
+    ;
 
 }
 
