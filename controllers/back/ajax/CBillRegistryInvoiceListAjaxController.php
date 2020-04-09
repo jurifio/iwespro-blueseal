@@ -33,12 +33,17 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                       `bri`.`grossTotal`             AS `grossTotal`,
                       `bri`.`invoiceDate`             AS `invoiceDate`,
                       `brtp`.`name` AS typePayment,
-                      `bris`.status as status
+                      `bris`.status as status,
+                      `braps`.`numberSlip` as `numberSlip`   
                     FROM `BillRegistryInvoice` `bri`
                       JOIN `BillRegistryClient` `brc` on `bri`.`billRegistryClientId`=`brc`.`id`
                         join `BillRegistryClientBillingInfo` `brcbi` on `bri`.`billRegistryClientId`
                       JOIN `BillRegistryTypePayment` `brtp` on `brcbi`.`billRegistryTypePaymentId`= `brtp`.`id`
                       JOIN `BillRegistryTimeTable` btt on bri.id=btt.billRegistryInvoiceId
+                        left join BillRegistryActivePaymentSlip braps on btt.BillRegistryActivePaymentSlipId=braps.id
+                        
+                        
+                        
                    left  JOIN `BillRegistryInvoiceStatus` bris on bri.statusId=bris.id GROUP BY id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -50,6 +55,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
         $billRegistryClientRepo=\Monkey::app()->repoFactory->create('BillRegistryClient');
         $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
         $billRegistryTimeTableRepo=\Monkey::app()->repoFactory->create('BillRegistryTimeTable');
+        $billRegistryActivePaymentSlipRepo=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
         foreach ($datatable->getResponseSetData() as $key => $row) {
             $billRegistryInvoice = $billRegistryInvoiceRepo->findOne([$row['id']]);
             $row = [];
@@ -65,12 +71,18 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
             $row['vat']=number_format($billRegistryInvoice->vat,2,',','.').' &euro;';
             $row['grossTotal']=number_format($billRegistryInvoice->grossTotal,2,',','.').' &euro;';
 
-            $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBY(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
+            $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
             $btt=$billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId'=>$billRegistryInvoice->id]);
            $bris=$billRegistryInvoiceStatusRepo->findOneBy(['id'=>$billRegistryInvoice->statusId]);
+
            $row['status']=$bris->status;
             $rowPayment="";
             foreach($btt as $bt){
+                $numberSlip='';
+                if($bt->billRegistryActivePaymentSlipId!=null){
+                    $braps=$billRegistryActivePaymentSlipRepo->findOneBy(['id'=>$bt->billRegistryActivePaymentSlipId]);
+                    $numberSlip='distinta n: '.$braps->numberSlip;
+                }
                 $dateNow=new \DateTime();
                 $dateEstimated=new \dateTime($bt->dateEstimated);
                 if($dateNow>$dateEstimated && $bt->amountPaid==0 ){
@@ -84,7 +96,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                     margin-top: 0.5em;
                     padding-right: 4px;
                     padding-left: 4px;">
-<b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b></i></br>';
+<b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y') . ' '.$numberSlip.'</b></i></br>';
                 }elseif($dateNow>=$dateEstimated && $bt->amountPaid!=0){
                     $rowPayment.='<i style="
                     color:green;
@@ -97,7 +109,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                     margin-top: 0.5em;
                     padding-right: 4px;
                     padding-left: 4px;">
-<b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b></i></br>';
+<b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y') . ' '.$numberSlip.'</b></i></br>';
                 }elseif($dateNow<$dateEstimated && $bt->amountPaid==0){
                     $rowPayment.='<i style="
                     color:orange;
@@ -109,7 +121,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                     padding: 0.1em;
                     margin-top: 0.5em;
                     padding-right: 4px;
-                    padding-left: 4px;"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y'). ' </b></i></br>';
+                    padding-left: 4px;"><b>€'.number_format($bt->amountPayment,2,',','.'). ' '.$dateEstimated->format('d-m-Y') . ' '.$numberSlip.'</b></i></br>';
                 }elseif($dateNow<=$dateEstimated && $bt->amountPaid!=0) {
                     $rowPayment .= '<i style="color:green;
                     font-size: 12px;
@@ -120,7 +132,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                     padding: 0.1em;
                     margin-top: 0.5em;
                     padding-right: 4px;
-                    padding-left: 4px;"><b>€' . number_format($bt->amountPayment,2,',','.') . ' ' . $dateEstimated->format('d-m-Y') . ' </b></i></br>';
+                    padding-left: 4px;"><b>€' . number_format($bt->amountPayment,2,',','.') . ' ' . $dateEstimated->format('d-m-Y') . ' '.$numberSlip.'</b></i></br>';
                 }
 
             }

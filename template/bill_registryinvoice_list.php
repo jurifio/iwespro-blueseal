@@ -151,7 +151,7 @@
                                 <th data-slug="rowPayment"
                                     data-is-visible="true"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Scadenze
+                                    data-orderable="true" class="center">Scadenze<br>Distinta
                                 </th>
 
                                 <th data-slug="status"

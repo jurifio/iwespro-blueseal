@@ -733,8 +733,8 @@ function modifyRowPaymnetInvoiceEdit(counterRow, idPayment) {
     let dateEstimated = '#' + counterRow + 'rowTime';
     let amountPayment = '#' + counterRow + 'rowAmountPayment';
     let bsModal = new $.bsModal('Modifica Scadenza', {
-        body: '<p>Confermi la Modifica della Scadenza Attenzione ?</p>' +
-            '<p>Attenzione se modifichi invece  il pagamento dalla sezione Dati Pagamenti  verranno rigenerate le scadenze</p>'
+        body: '<p>Confermi la Modifica della Scadenza ?</p>' +
+            '<p><span style="color: red;">Attenzione se modifichi invece  il pagamento dalla sezione Dati Pagamenti  e salvi verranno rigenerate le scadenze</span></p>'
     });
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
