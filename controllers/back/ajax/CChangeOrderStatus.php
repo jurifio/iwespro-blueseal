@@ -77,33 +77,38 @@ class CChangeOrderStatus extends AAjaxController
                     $res = $e -> getMessage();
                 }
                 try{
+
                     $stmtUpdateOrder=$db_con->prepare('UPDATE `Order` set `status`=\''.$codeStatus.'\' WHERE id='.$remoteOrderSellerId);
                     $stmtUpdateOrder->execute();
-                    if ($codeStatus=='ORD_CANCEL' || $codeStatus=='ORD_RETURNED' || $codeStatus=='ORD_FR_CANCEL'){
-                        if ($codeStatus=='ORD_CANCEL' || $codeStatus=='ORD_FR_CANCEL'){
-                            $codeToDelete=2;
-                        }else{
-                            $codeToDelete=3;
+                    if ($codeStatus=='ORD_CANCEL' || $codeStatus=='ORD_RETURNED' || $codeStatus=='ORD_FR_CANCEL') {
+                        if ($codeStatus == 'ORD_CANCEL' || $codeStatus == 'ORD_FR_CANCEL') {
+                            $codeToDelete = 2;
+                        } else {
+                            $codeToDelete = 3;
                         }
-                        $typePayment=\Monkey::app()->repoFactory->create('OrderPaymentMethod')->findOneBy(['id'=>$order->orderPaymentMethodId]);
-                        $amountToReturn=$order->netTotal-($order->netTotal/100*$typePayment->paymentCommissionRate)-($order->netTotal/100*11);
-                        $stmtUpdateRemoteShopMovements=$db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
+                        $typePayment = \Monkey::app()->repoFactory->create('OrderPaymentMethod')->findOneBy(['id' => $order->orderPaymentMethodId]);
+                        $amountToReturn = $order->netTotal - ($order->netTotal / 100 * $typePayment->paymentCommissionRate) - ($order->netTotal / 100 * 11);
+                        $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $remoteOrderSellerId . ' and isLocked=1');
+                        $stmtFindShopMovements->execute();
+                        if ($stmtFindShopMovements == null) {
+                            $stmtUpdateRemoteShopMovements = $db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
                     values(
-                         '".$remoteOrderSellerId."',
+                         '" . $remoteOrderSellerId . "',
                           null,
                           null,
-                          '".$amountToReturn."',
-                          '".$dateNow."',
-                          '".$dateNow."',
-                         '".$codeToDelete."',
+                          '" . $amountToReturn . "',
+                          '" . $dateNow . "',
+                          '" . $dateNow . "',
+                         '" . $codeToDelete . "',
                           1,
                           'ordine Cancellato',
                           1,
-                          '".$order->id."'
+                          '" . $order->id . "'
                                                                                                                                                                                 
                                                                                                                                                                
 ) ");
-                        $stmtUpdateRemoteShopMovements->execute();
+                            $stmtUpdateRemoteShopMovements->execute();
+                        }
                     }
                 }catch (\Throwable $e){
                     \Monkey::app()->applicationLog('CChangeStatusOrder','error', 'error change Status  remote Order',$e);

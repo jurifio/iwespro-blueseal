@@ -117,8 +117,12 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
 
         if ($shopId != null || $shopId != 44) {
             try {
-                $stmtShopMovements = $db_con->prepare('DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId);
-                $stmtShopMovements->execute();
+                $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $orderRepo->remoteOrderSellerId . ' and isLocked=1');
+                $stmtFindShopMovements->execute();
+                if ($stmtFindShopMovements == null) {
+                    $stmtShopMovements = $db_con->prepare('DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId);
+                    $stmtShopMovements->execute();
+                }
             } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione ShopMovementes','DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId,'');
             }
@@ -263,8 +267,12 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
 
                 if ($shopId != null || $shopId != 44) {
                     try {
-                        $stmtShopMovements = $db_con1->prepare('DELETE FROM ShopMovements WHERE orderId=' . $remoteOrderSupplierId);
-                        $stmtShopMovements->execute();
+                        $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' .$remoteOrderSupplierId . ' and isLocked=1');
+                        $stmtFindShopMovements->execute();
+                        if ($stmtFindShopMovements == null) {
+                            $stmtShopMovements = $db_con1->prepare('DELETE FROM ShopMovements WHERE orderId=' . $remoteOrderSupplierId);
+                            $stmtShopMovements->execute();
+                        }
                     } catch (\Throwable $e) {
                         \Monkey::app()->applicationLog('COrderDeleteCompleteAjaxController','Error','Cancellazione ShopMovementes Parallel ','DELETE FROM ShopMovements WHERE orderId=' . $remoteOrderSupplierId,'');
                     }
