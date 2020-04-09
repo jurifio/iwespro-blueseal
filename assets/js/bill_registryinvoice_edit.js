@@ -19,7 +19,43 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'UserDetails'
 
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    var selectUserId = $('#userId');
+    if (typeof (selectUserId[0].selectize) != 'undefined') selectUserId[0].selectize.destroy();
+    selectUserId.selectize({
+        valueField: 'userId',
+        labelField: 'name',
+        searchField: ['name', 'surname'],
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
+                    '<span class="caption">gender:' + escape(item.gender + 'birthDay:' + item.birthDate) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
+                    '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
+                    '</div>'
+            }
+        },
+        onInitialize: function () {
+            var selectize = this;
+            selectize.setValue($('#billRegistryUserId').val());
+        }
+    });
+
+});
 
 $.ajax({
     method: 'GET',
@@ -93,41 +129,7 @@ $.ajax({
 
 });
 
-$("#userId").change(function () {
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'UserDetails'
 
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var selectUserId = $('#userId');
-        if (typeof (selectUserId[0].selectize) != 'undefined') selectUserId[0].selectize.destroy();
-        selectUserId.selectize({
-            valueField: 'userId',
-            labelField: 'name',
-            searchField: ['name', 'surname'],
-            options: res2,
-            render: {
-                item: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
-                        '<span class="caption">gender:' + escape(item.gender + 'birthDay:' + item.birthDate) + '</span>' +
-                        '</div>'
-                },
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) + ' ' + escape(item.surname) + '</span> - ' +
-                        '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
-                        '</div>'
-                }
-            }
-        });
-
-    });
-});
 $.ajax({
     method: 'GET',
     url: '/blueseal/xhr/GetTableContent',
@@ -407,8 +409,7 @@ $('#billRegistryClientId').change(function () {
     document.getElementById('fax').value = '';
     document.getElementById('mobile').value = '';
 
-    var selectUserId = $("#userId")[0].selectize;
-    selectUserId.clear();
+
 
     var selectizetoCountryId = $("#countryId")[0].selectize;
     selectizetoCountryId.clear();
@@ -455,7 +456,6 @@ $('#billRegistryClientId').change(function () {
             document.getElementById('phone').value = v.phone;
             document.getElementById('fax').value = v.fax;
             document.getElementById('mobile').value = v.mobile;
-            $('#userId').data('selectize').setValue(v.userId);
             document.getElementById('contactName').value = v.contactName;
             document.getElementById('phoneAdmin').value = v.phoneAdmin;
             document.getElementById('mobileAdmin').value = v.mobileAdmin;

@@ -197,21 +197,17 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="hidden" id="billRegistryUserId" name="billRegistryUserId" value="<?php echo $brc->userId?>"/>
+                                    <?php if($brc->userId!=null){
+                                    echo '<input type="hidden" id="billRegistryUserId" name="billRegistryUserId" value="'.$brc->userId.'"/>';
+                                    }else{
+                                        echo'<input type="hidden" id="billRegistryUserId" name="billRegistryUserId" value=""/>';
+                                    }?>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="userId">Seleziona l'utente </label>
                                         <select id="userId" name="userId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                            <?php foreach (\Monkey::app()->repoFactory->create('User')->findOneBy(['id' => $brc->userId]) as $user) {
-                                                if ($user->id == $brc->userId) {
-                                                    echo '<option value="' . $user->id . '" selected="selected">' . $user->email . '<option>';
-                                                } else {
-                                                    echo '<option value="' . $user->id . '">' . $user->email . '<option>';
-                                                }
-                                            }
-                                            ?>
                                         </select>
                                     </div>
                                 </div>
