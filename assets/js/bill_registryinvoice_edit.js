@@ -124,6 +124,10 @@ $.ajax({
                     '<span class="caption">VAT: ' + escape(item.vatNumber + ' phone: ' + item.phone) + '</span>' +
                     '</div>'
             }
+        },
+        onInitialize: function () {
+            var selectize = this;
+            selectize.setValue($('#billRegistryClientInvoiceId').val());
         }
     });
 

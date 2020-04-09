@@ -39,13 +39,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
+                                    <input type="hidden" id="billRegistryClientInvoiceId" name="billRegistryClientInvoiceId" value="<?php echo $bri->billRegistryClientInvoiceId?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="billRegistryClientId">Seleziona il cliente</label>
                                         <select id="billRegistryClientId" name="BillRegistryClientId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                            <?php foreach (\Monkey::app()->repoFactory->create('BillRegistryClient')->findAll() as $client) {
+                                            <?php foreach (\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$bri->billRegistryClientId]) as $client) {
                                                 if ($client->id == $bri->billRegistryClientId) {
                                                     echo '<option value="' . $client->id . '" selected="selected">' . $client->companyName . '</option>';
                                                 } else {
