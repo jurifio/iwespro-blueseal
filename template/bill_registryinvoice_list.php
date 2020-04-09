@@ -200,6 +200,16 @@
                 data-placement="bottom">
         </bs-toolbar-button>
         <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-eraser"
+            data-permission="/admin/product/add"
+            data-event="bs.invoice.delete"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Cancellla Fattura"
+            data-placement="bottom">
+        </bs-toolbar-button>
+        <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-print"
                 data-permission="/admin/product/add"

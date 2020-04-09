@@ -67,3 +67,50 @@ $(document).on('bs.invoice.print', function () {
         });
     });
 });
+
+$(document).on('bs.invoice.delete', function () {
+    let invoice = (new URL(document.location)).searchParams.get("order");
+
+    if (invoice == null) {
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if (selectedRows.length != 1) {
+            new Alert({
+                type: "warning",
+                message: "Seleziona una riga"
+            }).open();
+            return false;
+        }
+
+        invoice = selectedRows[0].DT_RowId.replace('row__', '');
+    }
+
+    let bsModal = new $.bsModal('Cancella Fattura', {
+        body: `Confermi la Cancellazione della Fattura ?`
+    });
+
+    bsModal.setOkEvent(function () {
+        var data = {
+            billRegistryInvoiceId:invoice
+        };
+        var urldef = "/blueseal/xhr/BillRegistryInvoiceManageAjaxController";
+        $.ajax({
+            method: "delete",
+            url: urldef,
+            data: data
+        }).done(function (res) {
+                bsModal.writeBody(res);
+
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.showOkBtn();
+                bsModal.hide();
+                window.location.href='/blueseal/anagrafica/fatture-lista';
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});
+

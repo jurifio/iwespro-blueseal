@@ -29,17 +29,17 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
         $billRegistryClientAccountHasProductRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccountHasProduct');
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
-        $billRegistryTypeTaxesRepo=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes');
-        $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
-        $billRegistryTimeTableRepo=\Monkey::app()->repoFactory->create('BillRegistryTimeTable');
+        $billRegistryTypeTaxesRepo = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes');
+        $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
+        $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
 
         $data = $this->app->router->request()->getRequestData();
-        $rowInvoice=$data['rowInvoice'];
-        $netTotal=$data['netTotal'];
-        $vatTotal=$data['vatTotal'];
-        $grossTotal=$data['grossTotal'];
-        $discountTotal=$data['discountTotal'];
-        if($_GET['billRegistryClientId']=='' ) {
+        $rowInvoice = $data['rowInvoice'];
+        $netTotal = $data['netTotal'];
+        $vatTotal = $data['vatTotal'];
+        $grossTotal = $data['grossTotal'];
+        $discountTotal = $data['discountTotal'];
+        if ($_GET['billRegistryClientId'] == '') {
             if ($data['invoiceNumber'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
             } else {
@@ -48,9 +48,9 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             if ($data['dateInvoice'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
             } else {
-                $dateInvoice =strtotime($data['dateInvoice']);
-                $invoiceDate=date('Y-m-d H:i:s', $dateInvoice);
-                $invoiceYear=date('Y', $dateInvoice);
+                $dateInvoice = strtotime($data['dateInvoice']);
+                $invoiceDate = date('Y-m-d H:i:s',$dateInvoice);
+                $invoiceYear = date('Y',$dateInvoice);
             }
             if ($_GET['companyName'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Ragione Sociale Cliente non inserita</i>';
@@ -195,36 +195,35 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 $sdi = $_GET['sdi'];
             }
 
-                $shopId = 57;
+            $shopId = 57;
 
 
-                $accountStatusId =1;
+            $accountStatusId = 1;
 
 
-                $dateAct = new DateTime();
-                $dateActivation = $dateAct->format('Y-m-d H:i:s');
+            $dateAct = new DateTime();
+            $dateActivation = $dateAct->format('Y-m-d H:i:s');
 
 
-                $accountAsFriend = '1';
+            $accountAsFriend = '1';
 
 
-                $typeFriendId = 5;
+            $typeFriendId = 5;
 
 
-                $accountAsParallel = 0;
+            $accountAsParallel = 0;
 
 
-                $accountAsParallelSupplier = 0;
+            $accountAsParallelSupplier = 0;
 
 
-                $accountAsParallelSeller = 0;
+            $accountAsParallelSeller = 0;
 
 
-                $parallelFee = 0;
+            $parallelFee = 0;
 
 
-                $accountAsService = 0;
-
+            $accountAsService = 0;
 
 
             $ratingAsFriend = 5;
@@ -287,23 +286,21 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 $brcbiInsert->billRegistryClientId = $billRegistryClientId;
                 $brcbiInsert->insert();
 
-                $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
-                $billRegistryClientBillingInfoId=$billRegistryClientBillingInfo->id;
-
-
+                $billRegistryClientBillingInfo = $billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId' => $billRegistryClientId]);
+                $billRegistryClientBillingInfoId = $billRegistryClientBillingInfo->id;
 
 
             } catch (\Throwable $e) {
                 \Monkey::app()->applicationLog('CRegistryClientManageAjaxController','error','insert Client',$e,'');
                 return 'Errore Inserimento' . $e;
             }
-        }else{
-            $billRegistryClient=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$_GET['billRegistryClientId']]);
-            $billRegistryClientId=$billRegistryClient->id;
+        } else {
+            $billRegistryClient = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $_GET['billRegistryClientId']]);
+            $billRegistryClientId = $billRegistryClient->id;
             $billRegistryTypePaymentId = $_GET['billRegistryTypePaymentId'];
             $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
-            $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
-            $billRegistryClientBillingInfoId=$billRegistryClientBillingInfo->id;
+            $billRegistryClientBillingInfo = $billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId' => $billRegistryClientId]);
+            $billRegistryClientBillingInfoId = $billRegistryClientBillingInfo->id;
             if ($data['invoiceNumber'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
             } else {
@@ -312,46 +309,46 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             if ($data['dateInvoice'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
             } else {
-                $dateInvoice =strtotime($data['dateInvoice']);
-                $invoiceDate=date('Y-m-d H:i:s', $dateInvoice);
-                $invoiceYear=date('Y', $dateInvoice);
-                $todayInvoice=date('d-m-Y', $dateInvoice);
+                $dateInvoice = strtotime($data['dateInvoice']);
+                $invoiceDate = date('Y-m-d H:i:s',$dateInvoice);
+                $invoiceYear = date('Y',$dateInvoice);
+                $todayInvoice = date('d-m-Y',$dateInvoice);
             }
 
 
         }
-        $billRegistryInvoiceRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoice');
-        $billRegistryInvoiceInsert=$billRegistryInvoiceRepo->getEmptyEntity();
-        $billRegistryInvoiceInsert->invoiceNumber=$invoiceNumber;
-        $billRegistryInvoiceInsert->invoiceYear=$invoiceYear;
-        $billRegistryInvoiceInsert->invoiceType='W';
-        $billRegistryInvoiceInsert->invoiceSiteChar='W';
-        $billRegistryInvoiceInsert->billRegistryClientId=$billRegistryClientId;
-        $billRegistryInvoiceInsert->billRegistryTypePaymentId=$billRegistryTypePaymentId;
-        $billRegistryInvoiceInsert->billRegistryClientBillingInfoId=$billRegistryClientBillingInfoId;
-        $billRegistryInvoiceInsert->netTotal=$netTotal;
-        $billRegistryInvoiceInsert->vat=$vatTotal;
-        $billRegistryInvoiceInsert->bankRegistryId=$_GET['bankRegistryId'];
-        $billRegistryInvoiceInsert->discountTotal=$discountTotal;
-        $billRegistryInvoiceInsert->grossTotal=$grossTotal;
-        $billRegistryInvoiceInsert->invoiceDate=$invoiceDate;
-        $billRegistryInvoiceInsert->statusId=1;
+        $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+        $billRegistryInvoiceInsert = $billRegistryInvoiceRepo->getEmptyEntity();
+        $billRegistryInvoiceInsert->invoiceNumber = $invoiceNumber;
+        $billRegistryInvoiceInsert->invoiceYear = $invoiceYear;
+        $billRegistryInvoiceInsert->invoiceType = 'W';
+        $billRegistryInvoiceInsert->invoiceSiteChar = 'W';
+        $billRegistryInvoiceInsert->billRegistryClientId = $billRegistryClientId;
+        $billRegistryInvoiceInsert->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+        $billRegistryInvoiceInsert->billRegistryClientBillingInfoId = $billRegistryClientBillingInfoId;
+        $billRegistryInvoiceInsert->netTotal = $netTotal;
+        $billRegistryInvoiceInsert->vat = $vatTotal;
+        $billRegistryInvoiceInsert->bankRegistryId = $_GET['bankRegistryId'];
+        $billRegistryInvoiceInsert->discountTotal = $discountTotal;
+        $billRegistryInvoiceInsert->grossTotal = $grossTotal;
+        $billRegistryInvoiceInsert->invoiceDate = $invoiceDate;
+        $billRegistryInvoiceInsert->statusId = 1;
         $billRegistryInvoiceInsert->insert();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {
             $lastBillRegistryInvoiceId = $result['id'];
         }
-        $billRegistryInvoiceRowRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
-        $rowInvoiceDetail=[];
+        $billRegistryInvoiceRowRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
+        $rowInvoiceDetail = [];
         foreach (json_decode($rowInvoice,false) as $row) {
-            $billRegistryTypeTaxes=$billRegistryTypeTaxesRepo->findOneBy(['id'=>$row->billRegistryTypeTaxesProductId]);
+            $billRegistryTypeTaxes = $billRegistryTypeTaxesRepo->findOneBy(['id' => $row->billRegistryTypeTaxesProductId]);
             $billRegistryInvoiceRowInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
             $billRegistryInvoiceRowInsert->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
-            if($row->idProduct!=0 || $row->idProduct!=null){
-                $billRegistryProductId=$row->idProduct;
+            if ($row->idProduct != 0 || $row->idProduct != null) {
+                $billRegistryProductId = $row->idProduct;
 
-            }else{
-                $billRegistryProductId='0';
+            } else {
+                $billRegistryProductId = '0';
             }
 
             $billRegistryInvoiceRowInsert->billRegistryProductId = $billRegistryProductId;
@@ -371,19 +368,18 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 'billRegistryProductId' => $billRegistryProductId,
                 'description' => $row->description,
                 'qty' => $row->qty,
-                'priceRow' =>  $row->price,
+                'priceRow' => $row->price,
                 'netPrice' => $row->netTotalRow,
                 'vatRow' => $row->vatRow,
-                'discountRow'=>$row->discountRowAmount,
-                'percDiscount'=>$row->percDiscountRow,
+                'discountRow' => $row->discountRowAmount,
+                'percDiscount' => $row->percDiscountRow,
                 'grossTotalRow' => $row->grossTotalRow,
                 'billRegistryTypeTaxesId' => $row->billRegistryTypeTaxesProductId,
-                'billRegistryTypeTaxesDesc' => $billRegistryTypeTaxes->description.'<br>'.$billRegistryTypeTaxes->perc,
+                'billRegistryTypeTaxesDesc' => $billRegistryTypeTaxes->description . '<br>' . $billRegistryTypeTaxes->perc,
                 'billRegistryContractId' => '0',
                 'billRegistryContractRowId' => '0',
                 'billRegistryContractRowDetailId' => '0'];
         }
-
 
 
         $billRegistryTypePayment = $billRegistryTypePaymentRepo->findOneBy(['id' => $billRegistryTypePaymentId]);
@@ -466,8 +462,6 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         }
 
 
-
-
         $billRegistryClient = $billRegistryClientRepo->findOneBy(['id' => $billRegistryClientId]);
         $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $billRegistryClient->countryId]);
         $isExtraUe = $country->extraue;
@@ -481,7 +475,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $email = $shopHub->email;
         $logoSite = $shopHub->logoSite;
         $logoThankYou = $shopHub->logoThankYou;
-        $invoiceType='W';
+        $invoiceType = 'W';
 
         $invoiceText = '';
         $invoiceText .= addslashes('
@@ -852,13 +846,13 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
 
 
         if ($isExtraUe != '1') {
-            $invoiceHeaderText='Fattura';
+            $invoiceHeaderText = 'Fattura';
 
         } else {
-            $invoiceHeaderText='Invoice';
+            $invoiceHeaderText = 'Invoice';
 
         }
-        $invoiceText .='</div>
+        $invoiceText .= '</div>
                         </div>
                         <div><br>
                             <div class="pull-left font-montserrat small"><strong>';
@@ -993,17 +987,17 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
                             <strong>';
-       if($discountTotal!='0.00') {
-           if ($isExtraUe != 1) {
-               $invoiceText .= 'Sconto Total';
-           } else {
-               $invoiceText .= 'Total Discount ';
-           }
-           $invoiceText .= '</strong></td>
+        if ($discountTotal != '0.00') {
+            if ($isExtraUe != 1) {
+                $invoiceText .= 'Sconto Total';
+            } else {
+                $invoiceText .= 'Total Discount ';
+            }
+            $invoiceText .= '</strong></td>
                         <td style="border: 0px"
                             class="text-center">' . number_format($discountTotal,2,',','.') . ' &euro;' . '</td>
                     </tr>';
-       }
+        }
 
         $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
                         <td style="border: 0px"></td>
@@ -1083,18 +1077,13 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $updateBillRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id' => $lastBillRegistryInvoiceId]);
         $updateBillRegistryInvoice->invoiceText = stripslashes($invoiceText);
         $updateBillRegistryInvoice->update();
-        $shopHasCounter=\Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId'=>57,'invoiceYear'=>$invoiceYear]);
-        if($isExtraUe!="1"){
-            $shopHasCounter->invoiceCounter=$invoiceNumber;
-        }else{
-            $shopHasCounter->invoiceextraUeCounter=$invoiceNumber;
+        $shopHasCounter = \Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId' => 57,'invoiceYear' => $invoiceYear]);
+        if ($isExtraUe != "1") {
+            $shopHasCounter->invoiceCounter = $invoiceNumber;
+        } else {
+            $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
         }
         $shopHasCounter->update();
-
-
-
-
-
 
 
         return 'inserimento Fattura Eseguito';
@@ -1106,72 +1095,71 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
         $billRegistryClientAccountHasProductRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccountHasProduct');
         $billRegistryClientBillingInfoRepo = \Monkey::app()->repoFactory->create('BillRegistryClientBillingInfo');
-        $billRegistryTypeTaxesRepo=\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes');
-        $billRegistryTypePaymentRepo=\Monkey::app()->repoFactory->create('BillRegistryTypePayment');
-        $billRegistryTimeTableRepo=\Monkey::app()->repoFactory->create('BillRegistryTimeTable');
-        $billRegistryInvoiceId=$_GET['billRegistryInvoiceId'];
+        $billRegistryTypeTaxesRepo = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes');
+        $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
+        $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
+        $billRegistryInvoiceId = $_GET['billRegistryInvoiceId'];
         $data = $this->app->router->request()->getRequestData();
-        $rowInvoice=$data['rowInvoice'];
-        $netTotal=$data['netTotal'];
-        $vatTotal=$data['vatTotal'];
-        $grossTotal=$data['grossTotal'];
-        $discountTotal=$data['discountTotal'];
+        $rowInvoice = $data['rowInvoice'];
+        $netTotal = $data['netTotal'];
+        $vatTotal = $data['vatTotal'];
+        $grossTotal = $data['grossTotal'];
+        $discountTotal = $data['discountTotal'];
 
-            $billRegistryClient=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$_GET['billRegistryClientId']]);
-            $billRegistryClientId=$billRegistryClient->id;
-            $billRegistryTypePaymentId = $_GET['billRegistryTypePaymentId'];
-            $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
-            $bankRegistryId=$_GET['bankRegistryId'];
-            $billRegistryClientBillingInfo=$billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId'=>$billRegistryClientId]);
-            $billRegistryClientBillingInfoId=$billRegistryClientBillingInfo->id;
-            if ($data['invoiceNumber'] == '') {
-                return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
-            } else {
-                $invoiceNumber = $data['invoiceNumber'];
-            }
-            if ($data['dateInvoice'] == '') {
-                return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
-            } else {
-                $dateInvoice =strtotime($data['dateInvoice']);
-                $invoiceDate=date('Y-m-d H:i:s', $dateInvoice);
-                $invoiceYear=date('Y', $dateInvoice);
-                $todayInvoice=date('d-m-Y', $dateInvoice);
-            }
+        $billRegistryClient = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $_GET['billRegistryClientId']]);
+        $billRegistryClientId = $billRegistryClient->id;
+        $billRegistryTypePaymentId = $_GET['billRegistryTypePaymentId'];
+        $billRegistryTypeTaxesId = $_GET['billRegistryTypeTaxesId'];
+        $bankRegistryId = $_GET['bankRegistryId'];
+        $billRegistryClientBillingInfo = $billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId' => $billRegistryClientId]);
+        $billRegistryClientBillingInfoId = $billRegistryClientBillingInfo->id;
+        if ($data['invoiceNumber'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
+        } else {
+            $invoiceNumber = $data['invoiceNumber'];
+        }
+        if ($data['dateInvoice'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
+        } else {
+            $dateInvoice = strtotime($data['dateInvoice']);
+            $invoiceDate = date('Y-m-d H:i:s',$dateInvoice);
+            $invoiceYear = date('Y',$dateInvoice);
+            $todayInvoice = date('d-m-Y',$dateInvoice);
+        }
 
 
-
-        $billRegistryInvoiceRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoice');
-        $billRegistryInvoiceUpdate=$billRegistryInvoiceRepo->findOneBy(['id'=>$billRegistryInvoiceId]);
-        $billRegistryInvoiceUpdate->invoiceNumber=$invoiceNumber;
-        $billRegistryInvoiceUpdate->invoiceYear=$invoiceYear;
-        $billRegistryInvoiceUpdate->invoiceType='W';
-        $billRegistryInvoiceUpdate->invoiceSiteChar='W';
-        $billRegistryInvoiceUpdate->billRegistryClientId=$billRegistryClientId;
-        $billRegistryInvoiceUpdate->billRegistryTypePaymentId=$billRegistryTypePaymentId;
-        $billRegistryInvoiceUpdate->billRegistryClientBillingInfoId=$billRegistryClientBillingInfoId;
-        $billRegistryInvoiceUpdate->netTotal=str_replace(',','.',$netTotal);
-        $billRegistryInvoiceUpdate->vat=str_replace(',','.',$vatTotal);
-        $billRegistryInvoiceUpdate->discountTotal=str_replace(',','.',$discountTotal);
-        $billRegistryInvoiceUpdate->grossTotal=str_replace(',','.',$grossTotal);
-        $billRegistryInvoiceUpdate->invoiceDate=$invoiceDate;
-        $billRegistryInvoiceUpdate->bankRegistryId=$bankRegistryId;
-        $billRegistryInvoiceUpdate->statusId=1;
+        $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+        $billRegistryInvoiceUpdate = $billRegistryInvoiceRepo->findOneBy(['id' => $billRegistryInvoiceId]);
+        $billRegistryInvoiceUpdate->invoiceNumber = $invoiceNumber;
+        $billRegistryInvoiceUpdate->invoiceYear = $invoiceYear;
+        $billRegistryInvoiceUpdate->invoiceType = 'W';
+        $billRegistryInvoiceUpdate->invoiceSiteChar = 'W';
+        $billRegistryInvoiceUpdate->billRegistryClientId = $billRegistryClientId;
+        $billRegistryInvoiceUpdate->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+        $billRegistryInvoiceUpdate->billRegistryClientBillingInfoId = $billRegistryClientBillingInfoId;
+        $billRegistryInvoiceUpdate->netTotal = str_replace(',','.',$netTotal);
+        $billRegistryInvoiceUpdate->vat = str_replace(',','.',$vatTotal);
+        $billRegistryInvoiceUpdate->discountTotal = str_replace(',','.',$discountTotal);
+        $billRegistryInvoiceUpdate->grossTotal = str_replace(',','.',$grossTotal);
+        $billRegistryInvoiceUpdate->invoiceDate = $invoiceDate;
+        $billRegistryInvoiceUpdate->bankRegistryId = $bankRegistryId;
+        $billRegistryInvoiceUpdate->statusId = 1;
         $billRegistryInvoiceUpdate->update();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {
             $lastBillRegistryInvoiceId = $result['id'];
         }
-        $billRegistryInvoiceRowRepo=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
-        $rowInvoiceDetail=[];
+        $billRegistryInvoiceRowRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
+        $rowInvoiceDetail = [];
         foreach (json_decode($rowInvoice,false) as $row) {
-            $billRegistryTypeTaxes=$billRegistryTypeTaxesRepo->findOneBy(['id'=>$row->billRegistryTypeTaxesProductId]);
+            $billRegistryTypeTaxes = $billRegistryTypeTaxesRepo->findOneBy(['id' => $row->billRegistryTypeTaxesProductId]);
             $billRegistryInvoiceRowInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
             $billRegistryInvoiceRowInsert->billRegistryInvoiceId = $billRegistryInvoiceId;
-            if($row->idProduct!=0 || $row->idProduct!=null){
-                $billRegistryProductId=$row->idProduct;
+            if ($row->idProduct != 0 || $row->idProduct != null) {
+                $billRegistryProductId = $row->idProduct;
 
-            }else{
-                $billRegistryProductId='0';
+            } else {
+                $billRegistryProductId = '0';
             }
 
             $billRegistryInvoiceRowInsert->billRegistryProductId = $billRegistryProductId;
@@ -1191,37 +1179,35 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 'billRegistryProductId' => $billRegistryProductId,
                 'description' => $row->description,
                 'qty' => $row->qty,
-                'priceRow' =>  $row->price,
+                'priceRow' => $row->price,
                 'netPrice' => $row->netTotalRow,
                 'vatRow' => $row->vatRow,
-                'discountRow'=>$row->discountRowAmount,
-                'percDiscount'=>$row->percDiscountRow,
+                'discountRow' => $row->discountRowAmount,
+                'percDiscount' => $row->percDiscountRow,
                 'grossTotalRow' => $row->grossTotalRow,
                 'billRegistryTypeTaxesId' => $row->billRegistryTypeTaxesProductId,
-                'billRegistryTypeTaxesDesc' => $billRegistryTypeTaxes->description.'<br>'.$billRegistryTypeTaxes->perc,
+                'billRegistryTypeTaxesDesc' => $billRegistryTypeTaxes->description . '<br>' . $billRegistryTypeTaxes->perc,
                 'billRegistryContractId' => '0',
                 'billRegistryContractRowId' => '0',
                 'billRegistryContractRowDetailId' => '0'];
         }
-$resDistinta='';
-        $isCalculated=0;
-        $billRegistryTimeTable=$billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId'=>$billRegistryInvoiceId]);
-        foreach ($billRegistryTimeTable as  $payment){
-            if ($payment->billRegistryActivePaymentSlipId!=null){
-                $isCalculated=1;
-                $resDistinta=' ma le scadenze sono rimaste invariate in quanto già associata a distinta';
+        $resDistinta = '';
+        $isCalculated = 0;
+        $billRegistryTimeTable = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
+        foreach ($billRegistryTimeTable as $payment) {
+            if ($payment->billRegistryActivePaymentSlipId != null) {
+                $isCalculated = 1;
+                $resDistinta = ' ma le scadenze sono rimaste invariate in quanto già associata a distinta';
                 break;
             }
         }
         $billRegistryTypePayment = \Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findOneBy(['id' => $billRegistryTypePaymentId]);
         $namePayment = $billRegistryTypePayment->name;
-        if($isCalculated==0) {
+        if ($isCalculated == 0) {
             $billRegistryTimeTable = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
             foreach ($billRegistryTimeTable as $payment) {
                 $payment->delete();
             }
-
-
 
 
             $filterBillRegistryTypePayment = $billRegistryTypePaymentRepo->findBy(['name' => $namePayment]);
@@ -1315,7 +1301,7 @@ $resDistinta='';
         $email = $shopHub->email;
         $logoSite = $shopHub->logoSite;
         $logoThankYou = $shopHub->logoThankYou;
-        $invoiceType='W';
+        $invoiceType = 'W';
 
         $invoiceText = '';
         $invoiceText .= addslashes('
@@ -1686,13 +1672,13 @@ $resDistinta='';
 
 
         if ($isExtraUe != '1') {
-            $invoiceHeaderText='Fattura';
+            $invoiceHeaderText = 'Fattura';
 
         } else {
-            $invoiceHeaderText='Invoice';
+            $invoiceHeaderText = 'Invoice';
 
         }
-        $invoiceText .='</div>
+        $invoiceText .= '</div>
                         </div>
                         <div><br>
                             <div class="pull-left font-montserrat small"><strong>';
@@ -1794,12 +1780,12 @@ $resDistinta='';
         $invoiceText .= '</th>';
 
         $invoiceText .= '</tr></thead><tbody>';
-        $rowInvoiceDetail=\Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findBy(['billRegistryInvoiceId'=>$billRegistryInvoiceId]);
+        $rowInvoiceDetail = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow')->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
         if ($rowInvoiceDetail != null) {
             foreach ($rowInvoiceDetail as $rowInvoice) {
                 $invoiceText .= '<tr><td class="text-center">' . $rowInvoice->description . '</td>';
                 $invoiceText .= '<td class="text-center">' . number_format($rowInvoice->priceRow,2,',','.') . ' &euro;' . '</td>';
-                $invoiceText .= '<td class="text-center">sconto' . $rowInvoice->percentDiscount . ' %: ' .number_format($rowInvoice->discountRow,2,',','.') . ' &euro;' . '</td>';
+                $invoiceText .= '<td class="text-center">sconto' . $rowInvoice->percentDiscount . ' %: ' . number_format($rowInvoice->discountRow,2,',','.') . ' &euro;' . '</td>';
                 $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice->billRegistryTypeTaxesId]);
                 $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . number_format($rowInvoice->vatRow,2,',','.') . ' &euro;' . '</td>';
                 $invoiceText .= '<td class="text-center">' . number_format($rowInvoice->grossTotalRow,2,',','.') . ' &euro;' . '</td></tr>';
@@ -1819,7 +1805,7 @@ $resDistinta='';
         }
         $invoiceText .= '</strong></td>
                         <td style="border: 0px"
-                            class="text-center">' . $netTotal. ' &euro;' . '</td>
+                            class="text-center">' . $netTotal . ' &euro;' . '</td>
                     </tr>';
         $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
                         <td style="border: 0px"></td>
@@ -1827,7 +1813,7 @@ $resDistinta='';
                         <td style="border: 0px"></td>
                         <td style="border: 0px">
                             <strong>';
-        if($discountTotal!='0,00') {
+        if ($discountTotal != '0,00') {
             if ($isExtraUe != 1) {
                 $invoiceText .= 'Sconto Totale';
             } else {
@@ -1919,13 +1905,44 @@ $resDistinta='';
         $updateBillRegistryInvoice->update();
 
 
-
-
-
-
-
-
-        return 'Modifica Fattura Eseguita'.$resDistinta;
+        return 'Modifica Fattura Eseguita' . $resDistinta;
     }
 
+    public function delete()
+    {
+        $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
+        $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+        $billRegistryInvoiceRowRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
+
+        $data = $this->app->router->request()->getRequestData();
+
+        $billRegistryInvoiceId = $data['billRegistryInvoiceId'];
+        try {
+
+
+            $res = \Monkey::app()->dbAdapter->query('select billRegistryActivePaymentSlipId  from BillRegistryTimeTable where billRegistryInvoiceId=' . $billRegistryInvoiceId . ' 
+            and billRegistryActivePaymentSlipId IS NOT NULL',[])->fetchAll();
+            foreach ($res as $result) {
+                if ($result['billRegistryActivePaymentSlipId'] != null) {
+                    return 'Non è possibile cancellare la fattura in quanto è stata generata la distinta';
+                }
+            }
+            $brtt = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
+            foreach ($brtt as $timetable) {
+                $timetable->delete();
+            }
+                $brir = $billRegistryInvoiceRowRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
+            foreach ($brir as $rowInvoice) {
+                $rowInvoice->delete();
+            }
+            $bri = $billRegistryInvoiceRepo->findOneBy(['id' => $billRegistryInvoiceId]);
+            $bri->delete();
+            $return = 'Cancellazione Eseguita Con Successo';
+            \Monkey::app()->applicationLog('CBillRegistryInvoiceManagaAjacController','Report','Delete invoice','deleted invoice ' . $billRegistryInvoiceId,'');
+        } catch (\Throwable $e) {
+            $return = 'Problema con la Cancellazione consultare il Log';
+            \Monkey::app()->applicationLog('CBillRegistryInvoiceManagaAjacController','Error','Delete invoice','deleted invoice ' . $billRegistryInvoiceId,'');
+        }
+        return $return;
+    }
 }
