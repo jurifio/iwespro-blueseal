@@ -1203,12 +1203,13 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 'billRegistryContractRowId' => '0',
                 'billRegistryContractRowDetailId' => '0'];
         }
-
+$resDistinta='';
         $isCalculated=0;
         $billRegistryTimeTable=$billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId'=>$billRegistryInvoiceId]);
         foreach ($billRegistryTimeTable as  $payment){
             if ($payment->billRegistryActivePaymentSlipId!=null){
                 $isCalculated=1;
+                $resDistinta=' ma le scadenze sono rimaste invariate in quanto già associata a distinta';
                 break;
             }
         }
@@ -1229,7 +1230,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
                 $billRegistryTimeTable->typeDocument = '7';
                 $billRegistryTimeTable->billRegistryTypePaymentId = $billRegistryTypePaymentId;
-                $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
+                $billRegistryTimeTable->billRegistryInvoiceId = $billRegistryInvoiceId;
                 $amountRate = $grossTotal / 100 * $rowsPayment->prc;
                 $dateNow = new \DateTime($invoiceDate);
                 if ($rowsPayment->day == '0') {
@@ -1281,10 +1282,10 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                     $year30 = $modPayment->format('Y');
                     $isWeekEnd = $modPayment->format('D');
                     if ($isWeekEnd == 'Sat' || $isWeekEnd == 'Sun') {
-                        $estimatedPayment = '28' . '-' . $mont30 . '-' . $year30;
+                        $estimatedPayment = '28' . '-' . $month30 . '-' . $year30;
                         $dbEstimatedPaymentTemp = $year30 . '-' . $month30 . '-28';
                     } else {
-                        $estimatedPayment = '30' . '-' . $mont30 . '-' . $year30;
+                        $estimatedPayment = '30' . '-' . $month30 . '-' . $year30;
                         $dbEstimatedPaymentTemp = $year30 . '-' . $month30 . '-' . $day30;
                     }
 
@@ -1924,7 +1925,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
 
 
 
-        return 'Modifica Fattura Eseguita';
+        return 'Modifica Fattura Eseguita'.$resDistinta;
     }
 
 }

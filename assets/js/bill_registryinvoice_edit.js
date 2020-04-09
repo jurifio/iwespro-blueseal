@@ -845,6 +845,7 @@ $(document).on('bs.invoice.save', function () {
             bsModal.setOkEvent(function () {
                 bsModal.showOkBtn();
                 bsModal.hide();
+                window.location.href='/blueseal/anagrafica/fatture-lista';
             });
             bsModal.showOkBtn();
         });

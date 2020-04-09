@@ -666,6 +666,18 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 echo '</div>';
                                 echo '<div class="col-md-2">';
                                 echo '<div class="form-group form-group-default">';
+                                echo '<label for="'.$covidGianluca.'rowTypePayment">Distinta</label>';
+                                if($picacciu->billRegistryActivePaymentSlipId!=null) {
+                                    $braps = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id' => $picacciu->billRegistryActivePaymentSlipId]);
+                                    echo '<input type="text" id="' . $covidGianluca . 'rowPaymentSlip" disabled  name="' . $covidGianluca . 'rowPaymentSlip" value="' . $braps->numberSlip . '"/>';
+                                }else{
+                                    echo '<input type="text" id="' . $covidGianluca . 'rowPaymentSlip" disabled  name="' . $covidGianluca . 'rowPaymentSlip" value=""/>';
+                                }
+
+                                echo '</div>';
+                                echo '</div>';
+                                echo '<div class="col-md-2">';
+                                echo '<div class="form-group form-group-default">';
                                 echo '<label for="'.$covidGianluca.'rowAmountPayment">Importo Scadenza</label>';
 
                                 echo '<input type="text" id="'.$covidGianluca.'rowAmountPayment"  name="'.$covidGianluca.'rowAmountPayment" value="'.number_format($picacciu->amountPayment,2,'.','').'"/>';
