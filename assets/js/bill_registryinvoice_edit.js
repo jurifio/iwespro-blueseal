@@ -123,6 +123,10 @@ $("#userId").change(function () {
                         '<span class="caption">gender:' + escape(item.gender + ' birthDay:' + item.birthDate) + '</span>' +
                         '</div>'
                 }
+            },
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue($('#billRegistryUserId').val());
             }
         });
 

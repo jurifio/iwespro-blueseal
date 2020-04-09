@@ -197,6 +197,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
+                                    <input type="hidden" id="billRegistryUserId" name="billRegistryUserId" value="<?php echo $brc->userId?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="userId">Seleziona l'utente </label>
                                         <select id="userId" name="userId"
