@@ -118,7 +118,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
 
 
                 foreach ($res as $result) {
-                    $stmtNumberDocument = $db_con->prepare('SELECT max(id)  as id from PaymentBill');
+                    $stmtNumberDocument = $db_con->prepare('SELECT max(id)+1  as id from PaymentBill');
                     $stmtNumberDocument->execute();
                     $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
                     $numberDocument=$rowNumberDocument['id'];
@@ -142,7 +142,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                         $btt->update();
                     }
 
-                    $newNumber= $numberDocument+1;
+                    $newNumber= $numberDocument;
                     $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
                     $updateNumberDocument->execute();
                 }

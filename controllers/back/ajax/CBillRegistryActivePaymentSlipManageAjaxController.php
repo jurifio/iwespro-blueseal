@@ -165,10 +165,10 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
                     $dbnamesel='pickyshop_dev';
                 } else {
                     $db_host = '5.189.159.187';
-                    $db_name = 'information_schema';
-                    $db_user = 'root';
-                    $db_pass = 'fGLyZV4N3vapUo9';
-                    $dbnamesel='pickyshopfront';
+                    $db_name = 'pickyshopfront';
+                    $db_user = 'pickyshop4';
+                    $db_pass = 'rrtYvg6W!';
+                    $dbnamesel = 'pickyshopfront';
                 }
                 try {
 
@@ -179,10 +179,10 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
                     $rest = $e -> getMessage();
                 }
 
-                $rowNumberDocument = $db_con->prepare('SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES
-                                                                 WHERE TABLE_SCHEMA = \''.$dbnamesel.'\' AND TABLE_NAME = \'PaymentBill\';');
-                $rowNumberDocument->execute();
-                $numberDocument=$rowNumberDocument->fetch(PDO::FETCH_ASSOC);
+            $stmtNumberDocument = $db_con->prepare('SELECT max(id)+1  as id from PaymentBill');
+            $stmtNumberDocument->execute();
+            $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
+            $numberDocument=$rowNumberDocument['id'];
 
 
             foreach ($res as $result) {
@@ -191,7 +191,7 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
                 $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
                 $braps->amount = $result['amountPayment'];
-                $braps->numberSlip = $numberDocument['AUTO_INCREMENT'];
+                $braps->numberSlip = $numberDocument;
                 $braps->creationDate = $creationDate;
                 $braps->paymentDate = $result['paymentDate'];
                 $braps->statusId = 6;
@@ -209,7 +209,7 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
 
 
             }
-            $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+            $newNumber= $numberDocument;
             $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
             $updateNumberDocument->execute();
 
