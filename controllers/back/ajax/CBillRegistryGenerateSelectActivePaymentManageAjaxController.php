@@ -67,9 +67,9 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                     $dbnamesel = 'pickyshop_dev';
                 } else {
                     $db_host = '5.189.159.187';
-                    $db_name = 'information_schema';
-                    $db_user = 'root';
-                    $db_pass = 'fGLyZV4N3vapUo9';
+                    $db_name = 'pickyshopfront';
+                    $db_user = 'pickyshop4';
+                    $db_pass = 'rrtYvg6W!';
                     $dbnamesel = 'pickyshopfront';
                 }
                 try {
@@ -84,16 +84,15 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
 
 
                 foreach ($res as $result) {
-                    $rowNumberDocument = $db_con->prepare('SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES
-                                                                 WHERE TABLE_SCHEMA = \'' . $dbnamesel . '\' AND TABLE_NAME = \'PaymentBill\';');
-                    $rowNumberDocument->execute();
-                    $numberDocument = $rowNumberDocument->fetch(PDO::FETCH_ASSOC);
-
+                    $stmtNumberDocument = $db_con->prepare('SELECT max(id)  as id from PaymentBill');
+                    $stmtNumberDocument->execute();
+                    $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
+                    $numberDocument=$rowNumberDocument['id'];
 
                     $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
                     $braps->amount = $result['amountPayment'];
-                    $braps->numberSlip =  $numberDocument['AUTO_INCREMENT'];
+                    $braps->numberSlip =  $numberDocument;
                     $braps->creationDate = $creationDate;
                     $braps->paymentDate = $result['paymentDate'];
                     $braps->statusId = 6;
@@ -108,7 +107,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                         $btt->update();
                     }
 
-                    $newNumber= $numberDocument['AUTO_INCREMENT']+1;
+                    $newNumber= $numberDocument+1;
                     $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
                     $updateNumberDocument->execute();
                 }
