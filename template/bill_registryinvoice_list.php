@@ -219,6 +219,9 @@
                 data-title="stampa Fattura"
                 data-placement="bottom">
         </bs-toolbar-button>
+        <bs-toolbar-button
+            data-remote="btn.generate.selectactivepaymentbill"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

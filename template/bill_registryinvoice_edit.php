@@ -39,7 +39,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
-                                    <input type="hidden" id="billRegistryClientInvoiceId" name="billRegistryClientInvoiceId" value="<?php echo $bri->billRegistryClientInvoiceId?>"/>
+                                    <input type="hidden" id="billRegistryClientInvoiceId" name="billRegistryClientInvoiceId" value="<?php echo $bri->billRegistryClientId?>"/>
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="billRegistryClientId">Seleziona il cliente</label>
                                         <select id="billRegistryClientId" name="BillRegistryClientId"
