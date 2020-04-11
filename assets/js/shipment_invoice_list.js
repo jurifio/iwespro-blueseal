@@ -1,3 +1,50 @@
+$(document).on('bs.shipmentinvoice.pay', function () {
+    var dataTable = $('.table').DataTable();
+    var selectedRows = dataTable.rows('.selected').data();
+
+    if(selectedRows.length != 1) {
+        new Alert({
+            type: "warning",
+            message: "Seleziona una riga"
+        }).open();
+        return false;
+    }
+
+    let documentId=selectedRows[0].shipmentInvoiceNumber;
+    let bsModal = new $.bsModal('Rifatturazione Costi di Spedizione', {
+        body: '<p>Confermare?</p>'
+    });
+
+
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+        var data = {
+           invoice:documentId
+
+        };
+        var urldef = "/blueseal/xhr/ShipmentInvoiceCarrierManageAjaxController";
+        $.ajax({
+            method: "POST",
+            url: urldef,
+            data: data
+        }).done(function (res) {
+                bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.showOkBtn();
+
+                bsModal.hide();
+                window.location.href='/blueseal/spedizioni/fatture';
+            });
+            bsModal.showOkBtn();
+        });
+    });
+});
+
+
 function openShipmentDetail(invoice,carrier){
 var shipmentId='';
 var shop='';

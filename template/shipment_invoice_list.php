@@ -74,6 +74,19 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
-
+<bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Gestione Fatture">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-check-circle-o"
+                data-permission="/admin/product/add"
+                data-event="bs.shipmentinvoice.pay"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Rifatturazione Costi di Spedizione"
+                data-placement="bottom">
+        </bs-toolbar-button>
+    </bs-toolbar-group>
+</bs-toolbar>
 </body>
 </html>

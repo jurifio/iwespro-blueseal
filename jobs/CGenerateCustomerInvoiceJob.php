@@ -37,7 +37,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
         $billRegistryContractRowRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRow');
         $billRegistryContractRowDetailRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRowDetail');
         $billRegistryClientAccountRepo = \Monkey::app()->repoFactory->create('BillRegistryClientAccount');
-        $billRegistryContractRowPaymentBillRepo=\Monkey::app()->repoFactory->create('BillRegistryContractRowPaymentBill');
+        $billRegistryContractRowPaymentBillRepo = \Monkey::app()->repoFactory->create('BillRegistryContractRowPaymentBill');
         $billRegistryGroupProductRepo = \Monkey::app()->repoFactory->create('BillRegistryGroupProductRepo');
         $billRegistryPriceListRepo = \Monkey::app()->repoFactory->create('BillRegistryPriceList');
         $billRegistryProductRepo = \Monkey::app()->repoFactory->create('BillRegistryProduct');
@@ -92,21 +92,21 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $typePaymentId = $billRegistryRowMonkSource->typePaymentId;
                                     $periodTypeCharge = $billRegistryRowMonkSource->periodTypeCharge;
                                     $sellingFeeCommision = $billRegistryRowMonkSource->sellingFeeCommision;
-                                    $descriptionValue=$billRegistryRowMonkSource->descriptionValue;
+                                    $descriptionValue = $billRegistryRowMonkSource->descriptionValue;
                                     $descfeeCodCommission = $billRegistryRowMonkSource->descfeeCodCommission;
                                     $descfeeCreditCardCommission = $billRegistryRowMonkSource->descfeeCreditCardCommission;
                                     $descfeeBankTransferCommission = $billRegistryRowMonkSource->descfeeBankTransferCommission;
                                     $descfeePaypalCommission = $billRegistryRowMonkSource->descfeePaypalCommission;
                                     $feeCreditCardCommission = $billRegistryRowMonkSource->feeCreditCardCommission;
-                                    $descfeeCostDeliveryCommission=$billRegistryRowMonkSource->descfeeCostDeliveryCommission;
-                                    $descfeeCostCommissionPayment=$billRegistryRowMonkSource->descfeeCostCommissionPayment;
-                                    $billRegistryProductValue=$billRegistryRowMonkSource->billRegistryProductValue;
-                                    $billRegistryProductFeeCodCommission=$billRegistryRowMonkSource->billRegistryProductFeeCodCommission;
-                                    $billRegistryProductFeePaypalCommission=$billRegistryRowMonkSource->billRegistryProductFeePaypalCommission;
-                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowMonkSource->billRegistryProductFeeBankTransferCommission;
-                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowMonkSource->billRegistryProductFeeCreditCardCommission;
-                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMonkSource->billRegistryProductFeeCostDeliveryCommission;
-                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMonkSource->billRegistryProductFeeCostCommissionPayment;
+                                    $descfeeCostDeliveryCommission = $billRegistryRowMonkSource->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment = $billRegistryRowMonkSource->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue = $billRegistryRowMonkSource->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission = $billRegistryRowMonkSource->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission = $billRegistryRowMonkSource->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission = $billRegistryRowMonkSource->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission = $billRegistryRowMonkSource->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission = $billRegistryRowMonkSource->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment = $billRegistryRowMonkSource->billRegistryProductFeeCostCommissionPayment;
                                     $dayChargeFeeCreditCardCommission = $billRegistryRowMonkSource->dayChargeFeeCreditCardCommission;
                                     $feeCodCommission = $billRegistryRowMonkSource->feeCodCommission;
                                     $dayChargeFeeCodCommission = $billRegistryRowMonkSource->dayChargeFeeCodCommission;
@@ -125,53 +125,53 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $orderLine = \Monkey::app()->repoFactory->create('OrderLine')->findBy(['remoteShopSellerId' => $shopId]);
 
                                     foreach ($orderLine as $orl) {
-                                        $isBillService=null;
-                                        $isBillPayment=null;
-                                        $isBillDeliveryCost=null;
-                                        $isBill=null;
+                                        $isBillService = null;
+                                        $isBillPayment = null;
+                                        $isBillDeliveryCost = null;
+                                        $isBill = null;
 
 
                                         if ($orl->status == 'ORD_DELIVERED' || $orl->status == 'ORD_SENT' || $orl->status == 'ORD_FRND_PYD') {
                                             if ($orl->isBill == null) {
                                                 $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orl->orderId]);
-                                                if($billingDay==$day){
-                                                    $isBillService=1;
+                                                if ($billingDay == $day) {
+                                                    $isBillService = 1;
                                                 }
                                                 switch ($order->orderPaymentMethodId) {
                                                     case 1:
-                                                        if($day==$dayChargeFeePaypalCommission){
+                                                        if ($day == $dayChargeFeePaypalCommission) {
                                                             $paypalCommission += $orl->netPrice / 100 * $feePaypalCommission;
-                                                            $isBillPayment=1;
-                                                        }else{
-                                                            $paypalCommission+=0;
-                                                            $isBillPayment=null;
+                                                            $isBillPayment = 1;
+                                                        } else {
+                                                            $paypalCommission += 0;
+                                                            $isBillPayment = null;
                                                         }
                                                         break;
                                                     case 2:
-                                                        if($day==$dayChargeFeeCreditCardCommission) {
+                                                        if ($day == $dayChargeFeeCreditCardCommission) {
                                                             $creditCardCommission += $orl->netPrice / 100 * $feeCreditCardCommission;
-                                                            $isBillPayment=1;
-                                                        }else{
-                                                            $creditCardCommission=0;
-                                                            $isBillPayment=null;
+                                                            $isBillPayment = 1;
+                                                        } else {
+                                                            $creditCardCommission = 0;
+                                                            $isBillPayment = null;
                                                         }
                                                         break;
                                                     case 3:
-                                                        if($day==$dayChargeFeeBankTransferCommission) {
+                                                        if ($day == $dayChargeFeeBankTransferCommission) {
                                                             $bankTransferCommission += $orl->netPrice / 100 * $feeBankTransferCommission;
-                                                            $isBillPayment=1;
-                                                        }else{
-                                                            $bankTransferCommission+=0;
-                                                            $isBillPayment=null;
+                                                            $isBillPayment = 1;
+                                                        } else {
+                                                            $bankTransferCommission += 0;
+                                                            $isBillPayment = null;
                                                         }
                                                         break;
                                                     case 5:
-                                                        if($day==$dayChargeFeeCodCommission) {
+                                                        if ($day == $dayChargeFeeCodCommission) {
                                                             $codCommission += $orl->netPrice / 100 * $feeCodCommission;
                                                             $isBillPayment = 1;
-                                                        }else{
-                                                            $codCommission+=0;
-                                                            $isBillPayment=null;
+                                                        } else {
+                                                            $codCommission += 0;
+                                                            $isBillPayment = null;
                                                         }
                                                         break;
 
@@ -181,26 +181,31 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                                 $orderLineHasShipment = \Monkey::app()->repoFactory->create('OrderLineHasShipment')->findBy(['orderLineId' => $orl->id,'orderId' => $orl->orderId]);
                                                 foreach ($orderLineHasShipment as $olhs) {
                                                     $shipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id' => $olhs->shipmentId]);
-                                                    if($day==$periodTypeChargeDelivery) {
-                                                        $isBillDeliveryCost=1;
-                                                        if ($shipment->realShipmentPrice != null) {
-                                                            $costDeliveryCommission += $shipment->realShipmentPrice + ($shipment->realShipmentPrice / 100 * $feeCostDeliveryCommission);
+                                                    if ($day == $periodTypeChargeDelivery) {
+                                                        if ($orl->isBillDeliveryCost == null) {
+                                                            $isBillDeliveryCost = 1;
+                                                            if ($shipment->realShipmentPrice != null) {
+                                                                $costDeliveryCommission += $shipment->realShipmentPrice + ($shipment->realShipmentPrice / 100 * $feeCostDeliveryCommission);
+                                                            }
+                                                        }else {
+                                                            $isBillDeliveryCost = 1;
                                                         }
-                                                    }else{
-                                                        $costDeliveryCommission=0;
-                                                        $isBillDeliveryCost=1;
+
+                                                    } else {
+                                                        $costDeliveryCommission = 0;
                                                     }
 
                                                 }
-                                                if($isBillDeliveryCost==1 && $isBillPayment==1 && $isBillService==1){
-                                                    $isBill=1;
-                                                }else{
-                                                    $isBill=null;
+                                                if ($isBillDeliveryCost == 1 && $isBillPayment == 1 && $isBillService == 1) {
+                                                    $isBill = 1;
+                                                    $orl->isBill = $isBill;
                                                 }
-                                                $orl->isBillService=$isBillService;
-                                                $orl->isBillPayment=$isBillPayment;
-                                                $orl->isBillDeliveryCost=$isBillDeliveryCost;
-                                                $orl->isBill = $isBill;
+                                                $orl->isBillService = $isBillService;
+                                                $orl->isBillPayment = $isBillPayment;
+                                                if ($isBillDeliveryCost==1) {
+                                                    $orl->isBillDeliveryCost = $isBillDeliveryCost;
+                                                }
+
                                                 $orl->update();
                                             }
                                         } else {
@@ -215,7 +220,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $vatRowTotalExtra = ($paypalCommission + $codCommission + $bankTransferCommission + $creditCardCommission + $costDeliveryCommission) / 100 * $customerTaxes->perc;
                                     $vat += $vatRowTotalExtra;
                                     $grossTotal += $netTotalRow + $vatRowTotalExtra;
-                                    if($day==$dayChargeFeePaypalCommission) {
+                                    if ($day == $dayChargeFeePaypalCommission) {
                                         if ($paypalCommission != 0) {
                                             $rowInvoiceExtraFee[] = [
                                                 'billRegistryProductId' => 0,
@@ -233,7 +238,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             ];
                                         }
                                     }
-                                    if($day==$dayChargeFeeCodCommission) {
+                                    if ($day == $dayChargeFeeCodCommission) {
                                         if ($codCommission != 0) {
                                             $rowInvoiceExtraFee[] = [
                                                 'billRegistryProductId' => 0,
@@ -251,7 +256,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             ];
                                         }
                                     }
-                                    if($day==$dayChargeFeeBankTransferCommission) {
+                                    if ($day == $dayChargeFeeBankTransferCommission) {
                                         if ($bankTransferCommission != 0) {
                                             $rowInvoiceExtraFee[] = [
                                                 'billRegistryProductId' => 0,
@@ -269,7 +274,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             ];
                                         }
                                     }
-                                    if($day==$dayChargeFeeCreditCardCommission) {
+                                    if ($day == $dayChargeFeeCreditCardCommission) {
                                         if ($creditCardCommission != 0) {
                                             $rowInvoiceExtraFee[] = [
                                                 'billRegistryProductId' => 0,
@@ -287,7 +292,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             ];
                                         }
                                     }
-                                    if($day==$periodTypeChargeDelivery) {
+                                    if ($day == $periodTypeChargeDelivery) {
                                         if ($feeCostDeliveryCommission != 0) {
                                             $rowInvoiceExtraFee[] = [
                                                 'billRegistryProductId' => 0,
@@ -306,7 +311,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                         }
                                     }
 
-                                    if($day==$billingDay) {
+                                    if ($day == $billingDay) {
                                         $netTotalRowContract = $valueContractRow;
                                         $netTotal += $netTotalRowContract;
                                         $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
@@ -364,20 +369,20 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $descfeeBankTransferCommission = $billRegistryRowMonkAir->descfeeBankTransferCommission;
                                     $descfeePaypalCommission = $billRegistryRowMonkAir->descfeePaypalCommission;
                                     $feeCreditCardCommission = $billRegistryRowMonkAir->feeCreditCardCommission;
-                                    $descfeeCostDeliveryCommission=$billRegistryRowMonkAir->descfeeCostDeliveryCommission;
-                                    $descfeeCostCommissionPayment=$billRegistryRowMonkAir->descfeeCostCommissionPayment;
-                                    $billRegistryProductValue=$billRegistryRowMonkAir->billRegistryProductValue;
-                                    $billRegistryProductFeeCodCommission=$billRegistryRowMonkAir->billRegistryProductFeeCodCommission;
-                                    $billRegistryProductFeePaypalCommission=$billRegistryRowMonkAir->billRegistryProductFeePaypalCommission;
-                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowMonkAir->billRegistryProductFeeBankTransferCommission;
-                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowMonkAir->billRegistryProductFeeCreditCardCommission;
-                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMonkAir->billRegistryProductFeeCostDeliveryCommission;
-                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMonkAir->billRegistryProductFeeCostCommissionPayment;
+                                    $descfeeCostDeliveryCommission = $billRegistryRowMonkAir->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment = $billRegistryRowMonkAir->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue = $billRegistryRowMonkAir->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission = $billRegistryRowMonkAir->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission = $billRegistryRowMonkAir->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission = $billRegistryRowMonkAir->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission = $billRegistryRowMonkAir->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission = $billRegistryRowMonkAir->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment = $billRegistryRowMonkAir->billRegistryProductFeeCostCommissionPayment;
 
 
                                     $customerTaxes = $billRegistryTypeTaxesRepo->findOneBy(['id' => $billRegistryClientBillingInfo->billRegistryTypeTaxesId]);
 
-                                    if($day==$billingDay) {
+                                    if ($day == $billingDay) {
                                         $netTotalRow = $valueContractRow;
                                         $netTotal += $netTotalRow;
                                         $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
@@ -416,11 +421,11 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 $prepaidPaymentIsActive = $billRegistryRowMonkEntrySocial->prepaidPaymentIsActive;
                                 $prepaidCost = $billRegistryRowMonkEntrySocial->prepaidCost;
                                 $startUpCostIsPaid = $billRegistryRowMonkEntrySocial->startUpCostIsPaid;
-                                $descriptionContractRow=$billRegistryRowMonkEntrySocial->descriptionRow;
-                                $nameContractRow=$billRegistryRowMonkEntrySocial->nameRow;
-                                $billRegistryProductStartUpCostCampaign=$billRegistryRowMonkEntrySocial->billRegistryProductStartUpCostCampaign;
-                                $billRegistryProductFeeAgencyCommision=$billRegistryRowMonkEntrySocial->billRegistryProductFeeAgencyCommision;
-                                if($billingDay==$today) {
+                                $descriptionContractRow = $billRegistryRowMonkEntrySocial->descriptionRow;
+                                $nameContractRow = $billRegistryRowMonkEntrySocial->nameRow;
+                                $billRegistryProductStartUpCostCampaign = $billRegistryRowMonkEntrySocial->billRegistryProductStartUpCostCampaign;
+                                $billRegistryProductFeeAgencyCommision = $billRegistryRowMonkEntrySocial->billRegistryProductFeeAgencyCommision;
+                                if ($billingDay == $today) {
                                     if ($startUpCostIsPaid == null || $startUpCostIsPaid == 0) {
                                         $netTotalRowStartUpCost = $startUpCostIsPaid;
                                         $vatTotalRowStartUPCost = $netTotalRowStartUpCost / 100 * $customerTaxes->perc;
@@ -569,7 +574,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                             ];
                                         }
                                     }
-                                }else {
+                                } else {
                                     continue 2;
                                 }
                                 break;
@@ -581,7 +586,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $billingDay = $billRegistryRowSocialMonk->billingDay;
                                     $typePaymentId = $billRegistryRowSocialMonk->typePaymentId;
                                     $periodTypeCharge = $billRegistryRowSocialMonk->periodTypeCharge;
-                                    $descriptionValue=$billRegistryRowSocialMonk->descriptionValue;
+                                    $descriptionValue = $billRegistryRowSocialMonk->descriptionValue;
                                     $sellingFeeCommision = $billRegistryRowSocialMonk->sellingFeeCommision;
                                     $feeCreditCardCommission = $billRegistryRowSocialMonk->feeCreditCardCommission;
                                     $dayChargeFeeCreditCardCommission = $billRegistryRowSocialMonk->dayChargeFeeCreditCardCommission;
@@ -604,16 +609,16 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $descfeeBankTransferCommission = $billRegistryRowSocialMonk->descfeeBankTransferCommission;
                                     $descfeePaypalCommission = $billRegistryRowSocialMonk->descfeePaypalCommission;
                                     $feeCreditCardCommission = $billRegistryRowSocialMonk->feeCreditCardCommission;
-                                    $descfeeCostDeliveryCommission=$billRegistryRowSocialMonk->descfeeCostDeliveryCommission;
-                                    $descfeeCostCommissionPayment=$billRegistryRowSocialMonk->descfeeCostCommissionPayment;
-                                    $billRegistryProductValue=$billRegistryRowSocialMonk->billRegistryProductValue;
-                                    $billRegistryProductFeeCodCommission=$billRegistryRowSocialMonk->billRegistryProductFeeCodCommission;
-                                    $billRegistryProductFeePaypalCommission=$billRegistryRowSocialMonk->billRegistryProductFeePaypalCommission;
-                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowSocialMonk->billRegistryProductFeeBankTransferCommission;
-                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowSocialMonk->billRegistryProductFeeCreditCardCommission;
-                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowSocialMonk->billRegistryProductFeeCostDeliveryCommission;
-                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowSocialMonk->billRegistryProductFeeCostCommissionPayment;
-                                    if($day==$billingDay) {
+                                    $descfeeCostDeliveryCommission = $billRegistryRowSocialMonk->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment = $billRegistryRowSocialMonk->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue = $billRegistryRowSocialMonk->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission = $billRegistryRowSocialMonk->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission = $billRegistryRowSocialMonk->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission = $billRegistryRowSocialMonk->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission = $billRegistryRowSocialMonk->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission = $billRegistryRowSocialMonk->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment = $billRegistryRowSocialMonk->billRegistryProductFeeCostCommissionPayment;
+                                    if ($day == $billingDay) {
                                         $netTotalRow = $valueContractRow;
                                         $netTotal += $netTotalRow;
                                         $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
@@ -648,7 +653,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $emailAccountSendQty = $billRegistryRowMailMonk->emailAccountSendQty;
                                     $emailAccountCampaignQty = $billRegistryRowMailMonk->emailAccountCampaignQty;
                                     $valueContractRow = $billRegistryRowMailMonk->value;
-                                    $descriptionValue=$billRegistryRowMailMonk->descriptionValue;
+                                    $descriptionValue = $billRegistryRowMailMonk->descriptionValue;
                                     $billingDay = $billRegistryRowMailMonk->billingDay;
                                     $typePaymentId = $billRegistryRowMailMonk->typePaymentId;
                                     $periodTypeCharge = $billRegistryRowMailMonk->periodTypeCharge;
@@ -674,16 +679,16 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $descfeeBankTransferCommission = $billRegistryRowMailMonk->descfeeBankTransferCommission;
                                     $descfeePaypalCommission = $billRegistryRowMailMonk->descfeePaypalCommission;
                                     $feeCreditCardCommission = $billRegistryRowMailMonk->feeCreditCardCommission;
-                                    $descfeeCostDeliveryCommission=$billRegistryRowMailMonk->descfeeCostDeliveryCommission;
-                                    $descfeeCostCommissionPayment=$billRegistryRowMailMonk->descfeeCostCommissionPayment;
-                                    $billRegistryProductValue=$billRegistryRowMailMonk->billRegistryProductValue;
-                                    $billRegistryProductFeeCodCommission=$billRegistryRowMailMonk->billRegistryProductFeeCodCommission;
-                                    $billRegistryProductFeePaypalCommission=$billRegistryRowMailMonk->billRegistryProductFeePaypalCommission;
-                                    $billRegistryProductFeeBankTransferCommission=$billRegistryRowMailMonk->billRegistryProductFeeBankTransferCommission;
-                                    $billRegistryProductFeeCreditCardCommission=$billRegistryRowMailMonk->billRegistryProductFeeCreditCardCommission;
-                                    $billRegistryProductFeeCostDeliveryCommission=$billRegistryRowMailMonk->billRegistryProductFeeCostDeliveryCommission;
-                                    $billRegistryProductFeeCostCommissionPayment=$billRegistryRowMailMonk->billRegistryProductFeeCostCommissionPayment;
-                                    if($day==$billingDay) {
+                                    $descfeeCostDeliveryCommission = $billRegistryRowMailMonk->descfeeCostDeliveryCommission;
+                                    $descfeeCostCommissionPayment = $billRegistryRowMailMonk->descfeeCostCommissionPayment;
+                                    $billRegistryProductValue = $billRegistryRowMailMonk->billRegistryProductValue;
+                                    $billRegistryProductFeeCodCommission = $billRegistryRowMailMonk->billRegistryProductFeeCodCommission;
+                                    $billRegistryProductFeePaypalCommission = $billRegistryRowMailMonk->billRegistryProductFeePaypalCommission;
+                                    $billRegistryProductFeeBankTransferCommission = $billRegistryRowMailMonk->billRegistryProductFeeBankTransferCommission;
+                                    $billRegistryProductFeeCreditCardCommission = $billRegistryRowMailMonk->billRegistryProductFeeCreditCardCommission;
+                                    $billRegistryProductFeeCostDeliveryCommission = $billRegistryRowMailMonk->billRegistryProductFeeCostDeliveryCommission;
+                                    $billRegistryProductFeeCostCommissionPayment = $billRegistryRowMailMonk->billRegistryProductFeeCostCommissionPayment;
+                                    if ($day == $billingDay) {
                                         $netTotalRow = $valueContractRow;
                                         $netTotal += $netTotalRow;
                                         $vatRowTotalExtra = $valueContractRow / 100 * $customerTaxes->perc;
@@ -805,7 +810,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                 }
                                 $billRegistryInvoice->invoiceDate = $invoiceDate;
                                 $billRegistryInvoice->automaticInvoice = $automaticInvoice;
-                                $billRegistryInvoiceInsert->bankRegistryId=$billRegistryClientBillingInfo->bankRegistryId;
+                                $billRegistryInvoiceInsert->bankRegistryId = $billRegistryClientBillingInfo->bankRegistryId;
                                 $billRegistryInvoice->statusId = 1;
                                 $billRegistryInvoice->insert();
                                 $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
@@ -1377,24 +1382,24 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                         $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
                                         $rowInvoiceInsert->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
                                         $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
-                                        $descriptionRow=$rowInvoice['description'];
-                                        if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129){
+                                        $descriptionRow = $rowInvoice['description'];
+                                        if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129) {
 
                                             if (strpos($descriptionRow,'{mandato}') !== false) {
-                                                $sqlRowP='select id, mandatoryMonth,dateMandatoryMonth from BillRegistryContractRowPaymentBill where month(dateMandatoryMonth)=\''.$date->format('d').'\'
-                                                and mandatoryMonth=\''.$date->format('d').'\' and Year(dateMandatoryMonth)=\''.$date->format('Y').'\' and billRegistryContractRowId='.$rowInvoice['billRegistryContractRowId'].' 
-                                                and billRegistryClientId='.$billRegistryClientId;
-                                                $mandate=\Monkey::app()->dbAdapter->query($sqlRowP,[])->fetchAll();
-                                                foreach($mandate as $man){
-                                                    $dateMandate=new \DateTime($man['dateMandatoryMonth']);
-                                                    $desMan= ' mandato n. '.$man['id'].'/'.$dateMandate->format('d-m-Y'). '<br>';
+                                                $sqlRowP = 'select id, mandatoryMonth,dateMandatoryMonth from BillRegistryContractRowPaymentBill where month(dateMandatoryMonth)=\'' . $date->format('d') . '\'
+                                                and mandatoryMonth=\'' . $date->format('d') . '\' and Year(dateMandatoryMonth)=\'' . $date->format('Y') . '\' and billRegistryContractRowId=' . $rowInvoice['billRegistryContractRowId'] . ' 
+                                                and billRegistryClientId=' . $billRegistryClientId;
+                                                $mandate = \Monkey::app()->dbAdapter->query($sqlRowP,[])->fetchAll();
+                                                foreach ($mandate as $man) {
+                                                    $dateMandate = new \DateTime($man['dateMandatoryMonth']);
+                                                    $desMan = ' mandato n. ' . $man['id'] . '/' . $dateMandate->format('d-m-Y') . '<br>';
                                                 }
                                                 str_replace('{mandato}',$desMan,$descriptionRow);
 
                                             } else {
                                                 $descriptionRow;
                                             }
-                                        }else{
+                                        } else {
                                             if (strpos($descriptionRow,'{mandato}') !== false) {
                                                 str_replace('{mandato}','',$descriptionRow);
                                             }
@@ -1402,7 +1407,7 @@ class CGenerateCustomerInvoiceJob extends ACronJob
 
                                         if (strpos($descriptionRow,'{periodo}') !== false) {
 
-                                            $desMan= ' periodo  '.$date->format('d').'/'.$date->format('Y'). '<br>';
+                                            $desMan = ' periodo  ' . $date->format('d') . '/' . $date->format('Y') . '<br>';
 
                                             str_replace('{periodo}',$desMan,$descriptionRow);
 
@@ -1433,31 +1438,31 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                         $rowInvoiceInsert = $billRegistryInvoiceRowRepo->getEmptyEntity();
                                         $rowInvoiceInsert->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
                                         $rowInvoiceInsert->billRegistryProductId = $rowInvoice['billRegistryProductId'];
-                                        $descriptionRow=$rowInvoice['description'];
-                                        if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129){
+                                        $descriptionRow = $rowInvoice['description'];
+                                        if ($typePaymentId == 118 || $typePaymentId == 119 || $typePaymentId == 120 || $typePaymentId == 127 || $typePaymentId == 128 || $typePaymentId == 129) {
 
                                             if (strpos($descriptionRow,'{mandato}') !== false) {
-                                                $sqlRowP='select id, mandatoryMonth,dateMandatoryMonth from BillRegistryContractRowPaymentBill where month(dateMandatoryMonth)=\''.$date->format('d').'\'
-                                                and mandatoryMonth=\''.$date->format('d').'\' and Year(dateMandatoryMonth)=\''.$date->format('Y').'\' and billRegistryContractRowId='.$rowInvoice['billRegistryContractRowId'].' 
-                                                and billRegistryClientId='.$billRegistryClientId;
-                                                $mandate=\Monkey::app()->dbAdapter->query($sqlRowP,[])->fetchAll();
-                                                foreach($mandate as $man){
-                                                    $dateMandate=new \DateTime($man['dateMandatoryMonth']);
-                                                    $desMan= ' mandato n. '.$man['id'].'/'.$dateMandate->format('d-m-Y'). '<br>';
+                                                $sqlRowP = 'select id, mandatoryMonth,dateMandatoryMonth from BillRegistryContractRowPaymentBill where month(dateMandatoryMonth)=\'' . $date->format('d') . '\'
+                                                and mandatoryMonth=\'' . $date->format('d') . '\' and Year(dateMandatoryMonth)=\'' . $date->format('Y') . '\' and billRegistryContractRowId=' . $rowInvoice['billRegistryContractRowId'] . ' 
+                                                and billRegistryClientId=' . $billRegistryClientId;
+                                                $mandate = \Monkey::app()->dbAdapter->query($sqlRowP,[])->fetchAll();
+                                                foreach ($mandate as $man) {
+                                                    $dateMandate = new \DateTime($man['dateMandatoryMonth']);
+                                                    $desMan = ' mandato n. ' . $man['id'] . '/' . $dateMandate->format('d-m-Y') . '<br>';
                                                 }
                                                 str_replace('{mandato}',$desMan,$descriptionRow);
 
                                             } else {
                                                 $descriptionRow;
                                             }
-                                        }else{
+                                        } else {
                                             if (strpos($descriptionRow,'{mandato}') !== false) {
                                                 str_replace('{mandato}','',$descriptionRow);
                                             }
                                         }
                                         if (strpos($descriptionRow,'{periodo}') !== false) {
 
-                                            $desMan= ' periodo  '.$date->format('M').'/'.$date->format('Y'). '<br>';
+                                            $desMan = ' periodo  ' . $date->format('M') . '/' . $date->format('Y') . '<br>';
 
                                             str_replace('{periodo}',$desMan,$descriptionRow);
 
@@ -1598,48 +1603,47 @@ class CGenerateCustomerInvoiceJob extends ACronJob
                                     $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
                                 }
                                 $shopHasCounter->update();
-                                $attachmentRoot = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempMail') ;
-                                $attachment=[];
-                                $attachment[] = ['filePath'=>$attachmentRoot . '/' . $invoiceNumber .   $invoiceType . $year . '.html','fileName'=>$invoiceNumber .   $invoiceType . $year . '.html'];
-                                if (file_exists($attachmentRoot.'/'.$invoiceNumber .   $invoiceType . $year.'.html')) {
-                                    unlink($attachmentRoot.'/'.$invoiceNumber .   $invoiceType . $year.'.html');
+                                $attachmentRoot = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempMail');
+                                $attachment = [];
+                                $attachment[] = ['filePath' => $attachmentRoot . '/' . $invoiceNumber . $invoiceType . $year . '.html','fileName' => $invoiceNumber . $invoiceType . $year . '.html'];
+                                if (file_exists($attachmentRoot . '/' . $invoiceNumber . $invoiceType . $year . '.html')) {
+                                    unlink($attachmentRoot . '/' . $invoiceNumber . $invoiceType . $year . '.html');
                                 }
-                                $attachmentFile=fopen($attachmentRoot.'/'.$invoiceNumber .   $invoiceType . $year.'.html','w');
+                                $attachmentFile = fopen($attachmentRoot . '/' . $invoiceNumber . $invoiceType . $year . '.html','w');
                                 fwrite($attachmentFile,stripslashes($invoiceText));
                                 fclose($attachmentFile);
-                                $billRegistryClientEmail=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryClientId]);
-                                $invoiceDate=$todayInvoice;
-                                $numberInvoice=$invoiceNumber;
-                                $to=[$billRegistryClientEmail->emailAdmin];
+                                $billRegistryClientEmail = $billRegistryClientRepo->findOneBy(['id' => $billRegistryClientId]);
+                                $invoiceDate = $todayInvoice;
+                                $numberInvoice = $invoiceNumber;
+                                $to = [$billRegistryClientEmail->emailAdmin];
                                 if ($isExtraUe != "1") {
-                                    $amountTotal= $grossTotal;
+                                    $amountTotal = $grossTotal;
                                 } else {
                                     $amountTotal = $netTotal;
                                 }
-                                $btt=\Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findBy(['billRegistryInvoiceId'=>$lastBillRegistryInvoiceId]);
-                                $tobcc=['gianluca@iwes.it'];
+                                $btt = \Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findBy(['billRegistryInvoiceId' => $lastBillRegistryInvoiceId]);
+                                $tobcc = ['gianluca@iwes.it'];
                                 /** @var CEmailRepo $mailRepo */
                                 $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                                $mailRepo->newPackagedMail('sendinvoicetocustomer', 'no-reply@pickyshop.com', $to, $tobcc, ['amministrazione@iwes.it'], [
+                                $mailRepo->newPackagedMail('sendinvoicetocustomer','no-reply@pickyshop.com',$to,$tobcc,['amministrazione@iwes.it'],[
                                     'numberInvoice' => $numberInvoice,
                                     'invoiceDate' => $invoiceDate,
                                     'amountTotal' => $amountTotal,
-                                    'btt'=>$btt
+                                    'btt' => $btt
                                 ],'MailGun',$attachment);
 
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     continue;
                 }
             }
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
 
-$this->report('CGenerateCustomerInvoiceJob','error ',$e);
-}
+            $this->report('CGenerateCustomerInvoiceJob','error ',$e);
+        }
 
 
-}
+    }
 }

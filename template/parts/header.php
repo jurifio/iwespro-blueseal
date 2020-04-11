@@ -77,8 +77,8 @@
             <div class="thumbnail-wrapper d32 circular inline m-t-5">
                 <img src="<?php echo $imgUser; ?>" alt="<?php echo $imgUser; ?>" data-src="<?php echo $imgUser; ?>" data-src-retina="<?php echo $imgUser; ?>" width="55" height="55">
             </div>
-            <div class="pull-left p-r-10 p-t-10 fs-14 font-heading">
-                &nbsp;<a href="<?php echo $app->urlFor('blueseal/logout') ?>"><span class="semi-bold">Esci</span></a>
+            <div class="pull-left p-r-10 p-t-5 fs-14 font-heading">
+                &nbsp;<a href="<?php echo $app->urlFor('blueseal/logout') ?>"  class="btn btn-light" role="button"><i class="fa fa-sign-out" aria-hidden="true"></i>esci</a>
             </div>
         </div>
     </div>
