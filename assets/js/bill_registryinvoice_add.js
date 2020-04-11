@@ -236,7 +236,24 @@ $.ajax({
         valueField: 'id',
         labelField: 'status',
         searchField: ['status'],
-        options: res2
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.status) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.status) + '</span>' +
+                    '</div>'
+
+            }
+        },
+        onInitialize: function () {
+            var selectize = this;
+            selectize.setValue(1);
+        }
     });
 
 });
