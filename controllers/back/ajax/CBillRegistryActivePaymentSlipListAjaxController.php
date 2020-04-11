@@ -96,7 +96,7 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
                 }else{
                     $shopId='';
                 }
-                $invoiceList.=$invoice->invoiceNumber.'-'.$invoice->invoiceType.'-'.$invoice->invoiceYear.'<br>' ;
+                $invoiceList.=$invoice->invoiceNumber.'-'.$invoice->invoiceType.'-'.$invoice->invoiceYear.'('.number_format($invoice->grossTotal,2,',','.').')<br>' ;
                 $impAmount+=$invoice->grossTotal;
             }
             $pb=$pbRepo->findOneBy(['id'=>$paymentBill->paymentBillId]);

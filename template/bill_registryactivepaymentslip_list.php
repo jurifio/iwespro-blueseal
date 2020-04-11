@@ -191,7 +191,7 @@
                                     data-default-order="desc" class="center dataFilterType">Scadenza<br>Distinta</th>
                                 <th data-slug="invoices"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Fatture<br>Associate</th>
+                                    data-orderable="true" class="center">Fatture<br>Associate<br>(Importo)</th>
                                 <th data-slug="impAmount"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Importo<br>Fatture</th>
