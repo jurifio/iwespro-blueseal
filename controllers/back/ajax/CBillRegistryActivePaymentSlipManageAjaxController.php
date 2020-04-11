@@ -182,7 +182,16 @@ and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.
             $stmtNumberDocument = $db_con->prepare('SELECT max(id)+1  as id from PaymentBill');
             $stmtNumberDocument->execute();
             $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
-            $numberDocument=$rowNumberDocument['id'];
+            $numberDocumentPassive=$rowNumberDocument['id'];
+            $stmtNumberDocument = $db_con->prepare('SELECT max(numberSlip)+1  as id from BillRegistryActivePaymentSlip');
+            $stmtNumberDocument->execute();
+            $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
+            $numberDocumentActive=$rowNumberDocument['id'];
+            if($numberDocumentActive>$numberDocumentPassive){
+                $numberDocument=$numberDocumentActive;
+            }else{
+                $numberDocument=$numberDocumentPassive;
+            }
 
 
             foreach ($res as $result) {

@@ -108,8 +108,8 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
                 $negativeAmount=0;
             }
 
-
-            $row['numberSlip']=$paymentBill->id;
+            $row['id']=$paymentBill->id;
+            $row['numberSlip']=$paymentBill->numberSlip;
             $row['companyName']=$client->companyName;
             $row['invoices'] = $invoiceList;
             $row['statusId']=$bps->name;

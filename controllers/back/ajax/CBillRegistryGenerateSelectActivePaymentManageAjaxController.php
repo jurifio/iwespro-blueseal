@@ -87,7 +87,16 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                     $stmtNumberDocument = $db_con->prepare('SELECT max(id)+1  as id from PaymentBill');
                     $stmtNumberDocument->execute();
                     $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
-                    $numberDocument=$rowNumberDocument['id'];
+                    $numberDocumentPassive=$rowNumberDocument['id'];
+                    $stmtNumberDocument = $db_con->prepare('SELECT max(numberSlip)+1  as id from BillRegistryActivePaymentSlip');
+                    $stmtNumberDocument->execute();
+                    $rowNumberDocument = $stmtNumberDocument->fetch(PDO::FETCH_ASSOC);
+                    $numberDocumentActive=$rowNumberDocument['id'];
+                    if($numberDocumentActive>$numberDocumentPassive){
+                        $numberDocument=$numberDocumentActive;
+                    }else{
+                        $numberDocument=$numberDocumentPassive;
+                    }
 
                     $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
@@ -108,7 +117,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
                     }
 
                     $newNumber= $numberDocument;
-                    $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill auto_increment='.$newNumber);
+                    $updateNumberDocument=$db_con->prepare('ALTER TABLE PaymentBill AUTO_INCREMENT='.$newNumber);
                     $updateNumberDocument->execute();
                 }
 
