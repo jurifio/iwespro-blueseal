@@ -30,7 +30,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                         `brtt`.`amountPayment` as `amountPayment`,
                         `brtt`.`description` as description,
                         `brtt`.`datePayment` as `datePayment`,
-                       concat(`bri`.`invoiceNumber`,'/',`bri`.`invoiceType`,'-',`bri`.`invoiceYear`)                                       as `invoice`,
+                       concat(`bri`.`invoiceNumber`,'/',`bri`.`invoiceType`,'-',`bri`.`invoiceYear`)                                       as `invoiceNumber`,
                       `brc`.`companyName`                                      AS `companyName`,
                       `bri`.`netTotal`                                         AS `netTotal`,
                       `bri`.`vat`             AS `vat`,
@@ -41,6 +41,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                          if(`brtt`.`billRegistryActivePaymentSlipId` is null,'non Presente',brpb.paymentBillId) as paymentSlipId,
                         if(`brpb`.`PaymentBillId` is null,'non Presente',pb.id) as paymentBillId,          
                         if(`brpb`.`PaymentBillId` is null,'non Presente',pb.amount) as amountNegative,
+                        if(`brtt`.`billRegistryActivePaymentSlipId` is null,'non Presente',brpb.numberSlip) as numberSlip,
                        (`brtt`.amountPayment-`brtt`.`amountPaid`) as restPaid 
     
                     FROM `BillRegistryTimeTable` `brtt`
@@ -88,6 +89,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
             if($billRegistryTimeTable->billRegistryActivePaymentSlipId!=null) {
                 $paymentSlip = $billRegistryActivePaymentSlipRepo->findOneBy(['id'=>$billRegistryTimeTable->billRegistryActivePaymentSlipId]);
                 $paymentSlipId=$paymentSlip->id;
+                $numberSlip=$paymentSlip->numberSlip;
                 if($paymentSlip->paymentBillId!=null) {
                     $paymentBill = $paymentBillRepo->findOneBy(['id' => $paymentSlip->paymentBillId]);
                     $amountNegative = $paymentBill->amount;
@@ -101,6 +103,7 @@ class CBillRegistryTimeTableListAjaxController extends AAjaxController
                 $amountNegative=0;
                 $paymentBillId='Non Presente';
             }
+            $row['numberSlip']=$numberSlip;
             $row['paymentSlipId']=$paymentSlipId;
             $row['paymentBillId']=$paymentBillId;
             $row['amountNegative']=number_format($amountNegative,2,',','.').' &euro;';

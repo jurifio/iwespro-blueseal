@@ -41,10 +41,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                       JOIN `BillRegistryTypePayment` `brtp` on `brcbi`.`billRegistryTypePaymentId`= `brtp`.`id`
                       JOIN `BillRegistryTimeTable` btt on bri.id=btt.billRegistryInvoiceId
                         left join BillRegistryActivePaymentSlip braps on btt.BillRegistryActivePaymentSlipId=braps.id
-                        
-                        
-                        
-                   left  JOIN `BillRegistryInvoiceStatus` bris on bri.statusId=bris.id GROUP BY id";
+                     JOIN `BillRegistryInvoiceStatus` bris on bri.statusId=bris.id GROUP BY id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings();
@@ -73,7 +70,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
 
             $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
             $btt=$billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId'=>$billRegistryInvoice->id]);
-           $bris=$billRegistryInvoiceStatusRepo->findOneBy(['id'=>$billRegistryInvoice->statusId]);
+            $bris=$billRegistryInvoiceStatusRepo->findOneBy(['id'=>$billRegistryInvoice->statusId]);
 
            $row['status']=$bris->status;
             $rowPayment="";

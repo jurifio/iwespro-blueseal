@@ -46,6 +46,9 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             } else {
                 $invoiceNumber = $data['invoiceNumber'];
             }
+            if ($status== '') {
+                return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Stato Fattura   Non Selezionata</i>';
+            }
             if ($data['dateInvoice'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';
             } else {
@@ -1124,6 +1127,9 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
         } else {
             $invoiceNumber = $data['invoiceNumber'];
+        }
+        if ($status== '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Stato Fattura   Non Selezionata</i>';
         }
         if ($data['dateInvoice'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data Attivazione non Selezionata</i>';

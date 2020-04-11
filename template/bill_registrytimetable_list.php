@@ -198,9 +198,9 @@
                                     data-orderable="true" class="center">Data<br>Scadenza
                                 </th>
 
-                                <th data-slug="paymentSlipId"
+                                <th data-slug="numberSlip"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Distinta<br>Attiva
+                                    data-orderable="true" class="center">Prog.<br>Distinta<br>Attiva
                                 </th>
                                 <th data-slug="amountPayment"
                                     data-searchable="true"
