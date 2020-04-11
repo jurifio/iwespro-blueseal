@@ -88,6 +88,17 @@
                                         />/W
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <input type="hidden" id="statusId" name="statusId" value="<?php echo $bri->statusId;?>"/>
+                                     <div class="form-group form-group-default selectize-enabled">
+                                        <label for="invoiceStatusId">Seleziona Lo Stato Della Fattura</label>
+                                        <select id="invoiceStatusId" name="invoiceStatusId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">

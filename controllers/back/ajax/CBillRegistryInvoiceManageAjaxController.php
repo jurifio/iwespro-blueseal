@@ -39,6 +39,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $vatTotal = $data['vatTotal'];
         $grossTotal = $data['grossTotal'];
         $discountTotal = $data['discountTotal'];
+        $status=$data['statusInvoice'];
         if ($_GET['billRegistryClientId'] == '') {
             if ($data['invoiceNumber'] == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Numerazione Non Selezionata</i>';
@@ -332,7 +333,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceInsert->discountTotal = $discountTotal;
         $billRegistryInvoiceInsert->grossTotal = $grossTotal;
         $billRegistryInvoiceInsert->invoiceDate = $invoiceDate;
-        $billRegistryInvoiceInsert->statusId = 1;
+        $billRegistryInvoiceInsert->statusId = $status;
         $billRegistryInvoiceInsert->insert();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {
@@ -391,6 +392,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
             $billRegistryTimeTable->typeDocument = '7';
             $billRegistryTimeTable->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+
             $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
             $amountRate = $grossTotal / 100 * $rowsPayment->prc;
             $dateNow = new \DateTime($invoiceDate);
@@ -457,6 +459,10 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
             $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
             $billRegistryTimeTable->amountPayment = $amountRate;
+            if($status=="3"){
+                $billRegistryTimeTable->amountPaid=$amountRate;
+                $billRegistryTimeTable->datePayment=$invoiceDate;
+            }
             $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;
             $billRegistryTimeTable->insert();
         }
@@ -1105,6 +1111,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $vatTotal = $data['vatTotal'];
         $grossTotal = $data['grossTotal'];
         $discountTotal = $data['discountTotal'];
+        $status=$data['statusInvoice'];
 
         $billRegistryClient = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $_GET['billRegistryClientId']]);
         $billRegistryClientId = $billRegistryClient->id;
@@ -1143,7 +1150,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceUpdate->grossTotal = str_replace(',','.',$grossTotal);
         $billRegistryInvoiceUpdate->invoiceDate = $invoiceDate;
         $billRegistryInvoiceUpdate->bankRegistryId = $bankRegistryId;
-        $billRegistryInvoiceUpdate->statusId = 1;
+        $billRegistryInvoiceUpdate->statusId = $status;
         $billRegistryInvoiceUpdate->update();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {
@@ -1282,6 +1289,10 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
                 $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
                 $billRegistryTimeTable->amountPayment = $amountRate;
+                if($status=="3"){
+                    $billRegistryTimeTable->amountPaid=$amountRate;
+                    $billRegistryTimeTable->datePayment=$invoiceDate;
+                }
                 $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;
                 $billRegistryTimeTable->insert();
 

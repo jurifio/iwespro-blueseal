@@ -132,6 +132,41 @@ $.ajax({
     });
 
 });
+$.ajax({
+    method: 'GET',
+    url: '/blueseal/xhr/GetTableContent',
+    data: {
+        table: 'BillRegistryInvoiceStatus'
+    },
+    dataType: 'json'
+}).done(function (res2) {
+    let selectBillRegistryInvoiceStatus = $('#invoiceStatusId');
+    if (typeof (selectBillRegistryInvoiceStatus[0].selectize) != 'undefined') selectBillRegistryInvoiceStatus[0].selectize.destroy();
+    selectBillRegistryInvoiceStatus.selectize({
+        valueField: 'id',
+        labelField: 'status',
+        searchField: ['status'],
+        options: res2,
+        render: {
+            item: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.status) + '</span>' +
+                    '</div>'
+            },
+            option: function (item, escape) {
+                return '<div>' +
+                    '<span class="label">' + escape(item.status) + '</span>' +
+                    '</div>'
+
+            }
+        },
+        onInitialize: function () {
+            var selectize = this;
+            selectize.setValue($('#statusId').val());
+        }
+    });
+
+});
 
 
 $.ajax({
@@ -824,6 +859,7 @@ $(document).on('bs.invoice.save', function () {
             discountTotal: $('#discountTotal').val(),
             vatTotal: $('#vatTotal').val(),
             grossTotal: $('#grossTotal').val(),
+            statusInvoice:$('#invoiceStatusId').val()
 
 
         };
