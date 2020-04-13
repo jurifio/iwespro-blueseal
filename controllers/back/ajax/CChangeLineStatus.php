@@ -105,7 +105,7 @@ class CChangeLineStatus extends AAjaxController
                     $typePayment=\Monkey::app()->repoFactory->create('OrderPaymentMethod')->findOneBy(['id'=>$orderRepo->orderPaymentMethodId]);
                     $amountToReturn=$orderLine->netPrice-($orderLine->netPrice/100*$typePayment->paymentCommissionRate)-($orderLine->netPrice/100*11);
                     if($orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status=='ORD_MISSNG' || $orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status== 'ORD_ERR_SEND' || $orderLine->Status== 'ORD_QLTY_KO') {
-                        $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $orderLine->remoteOrderSellerId . ' and isLocked=1');
+                        $stmtFindShopMovements = $db_con->prepare('select count(id) as countId   from ShopMovements where  orderId =' . $orderLine->remoteOrderSellerId . ' and isLocked=1');
                         $stmtFindShopMovements->execute();
                         while ($rowFindShopMovements = $stmtFindShopMovements->fetch(PDO::FETCH_ASSOC)) {
                             $countRow=$rowFindShopMovements['countId'];
