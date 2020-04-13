@@ -41,7 +41,6 @@ class CShipmentListAjaxController extends AAjaxController
                     `sh2`.`name` as  remoteShopName,
                      s.dateInvoice as dateInvoice,
                     s.shipmentInvoiceNumber as shipmentInvoiceNumber,
-                    if(s.isBilling=0,'No','Si') as isBilling,
                     s.creationDate as creationDate,
                     O.id as orderId,
                     O.isParallel AS isParallel,
@@ -112,7 +111,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row['cancellationDate'] = $cancellationDate;
             $row['creationDate'] = ($val->creationDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->creationDate,'Y-m-d'):'';
             $row['productContent'] = "";
-            $row["shipmentInvoiceNumber"] = ($val->shipmentInvoiceNumber!=null)? $val->shipmentInvoiceNumber : '';
+            $row["shipmentInvoiceNumber"] = ($val->shipmentInvoiceNumber!=null) ? $val->shipmentInvoiceNumber : '';
 
 
             $orderlineIds = [];

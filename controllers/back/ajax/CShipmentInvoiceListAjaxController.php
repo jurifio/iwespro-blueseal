@@ -40,9 +40,8 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                     s.remoteShipmentId as remoteShipmentId,
                      s.dateInvoice as dateInvoice,
                     if(s.remoteShopShipmentId=1,'Si','No') as shopId,
-                    s.isBilling as isBilling
+                    if(s.isBilling=1,'Si,'No') as isBilling
                 
-                  
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
                 where s.shipmentInvoiceNumber is not null and s.realShipmentPrice is not null
@@ -77,7 +76,7 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                 $impFat = $result['total'];
                 $totalShipment=$result['totalShipment'];
             }
-            $row['isBill']=($val->isBill==1)?'Si':'No';
+            $row['isBilling']=($val->isBilling==1)?'Si':'No';
             $row['impFat']=money_format('%.2n',$impFat) . ' &euro;';
             $row['iva']=money_format('%.2n', $impFat/100*22) . ' &euro;';
             $row['totFat']=money_format('%.2n',$impFat+($impFat/100*22)) . ' &euro;';
