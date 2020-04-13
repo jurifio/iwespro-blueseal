@@ -112,7 +112,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row['cancellationDate'] = $cancellationDate;
             $row['creationDate'] = ($val->creationDate!=null) ? STimeToolbox::FormatDateFromDBValue($val->creationDate,'Y-m-d'):'';
             $row['productContent'] = "";
-            $row["shipmentInvoiceNumber"] = ($val->shipmentInvoiceNumber!=null)? $val->shipmentInvoiceNumber:'';
+            $row["shipmentInvoiceNumber"] = ($val->shipmentInvoiceNumber!=null)? $val->shipmentInvoiceNumber : '';
 
 
             $orderlineIds = [];

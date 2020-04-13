@@ -59,6 +59,9 @@
                                 <th data-slug="totFat"
                                     data-searchable="true"
                                     data-orderable="true" class="center">totale Fattura</th>
+                                <th data-slug="isBill"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Rifatturata?</th>
                             </tr>
 
                             </thead>
