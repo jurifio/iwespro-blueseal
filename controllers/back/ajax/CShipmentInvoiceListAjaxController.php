@@ -39,9 +39,10 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                     s.note,
                     s.remoteShipmentId as remoteShipmentId,
                      s.dateInvoice as dateInvoice,
-                    if(s.remoteShopShipmentId=1,'Si','No') as shopId,
-                    if(s.isBilling=1,'Si','No') as isBilling
+                    s.remoteShopShipmentId as shopId,
+                   if(s.isBilling=1,'Si','No') as isBilling
                 
+                  
                 FROM Shipment s 
                   join Carrier c on s.carrierId = c.id
                 where s.shipmentInvoiceNumber is not null and s.realShipmentPrice is not null
@@ -68,7 +69,7 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
             $row['shipmentInvoiceNumber']=$val->shipmentInvoiceNumber;
             $row['shipmentInvoiceNumberPrint']='<button style="width: 200px ; height:32px;"  onclick="openShipmentDetail(\'' . $val->shipmentInvoiceNumber .'\',\''. $val->carrier->name.'\')" class="btn btn-light"><i class="fa fa-list-alt" aria-hidden="true"></i> ' . $val->shipmentInvoiceNumber . '</button>';
             $row['shop'] = \Monkey::app()->repoFactory->create('Shop')->findOne([$row['shopId']])->name;
-           $dateInvoice=strtotime($val->dateInvoice);
+            $dateInvoice=strtotime($val->dateInvoice);
             $invoiceDate=date('d-m-Y', $dateInvoice);
             $row['dateInvoice']=$invoiceDate;
             $res = \Monkey::app()->dbAdapter->query('select sum(realShipmentPrice) as total ,count(id) as totalShipment  from Shipment WHERE realShipmentPrice is not null and  shipmentInvoiceNumber="'.$val->shipmentInvoiceNumber.'"',[])->fetchAll();
@@ -76,7 +77,6 @@ class CShipmentInvoiceListAjaxController extends AAjaxController
                 $impFat = $result['total'];
                 $totalShipment=$result['totalShipment'];
             }
-            $row['isBilling']=($val->isBilling==1)? 'Si':'No';
             $row['impFat']=money_format('%.2n',$impFat) . ' &euro;';
             $row['iva']=money_format('%.2n', $impFat/100*22) . ' &euro;';
             $row['totFat']=money_format('%.2n',$impFat+($impFat/100*22)) . ' &euro;';
