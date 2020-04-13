@@ -26,7 +26,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="shipment_list"
+                               data-datatable-name="shipment_invoice_list"
                                data-controller="ShipmentInvoiceListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
