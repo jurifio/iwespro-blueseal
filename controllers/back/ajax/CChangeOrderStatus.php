@@ -88,9 +88,13 @@ class CChangeOrderStatus extends AAjaxController
                         }
                         $typePayment = \Monkey::app()->repoFactory->create('OrderPaymentMethod')->findOneBy(['id' => $order->orderPaymentMethodId]);
                         $amountToReturn = $order->netTotal - ($order->netTotal / 100 * $typePayment->paymentCommissionRate) - ($order->netTotal / 100 * 11);
-                        $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $remoteOrderSellerId . ' and isLocked=1');
+                        //$stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $remoteOrderSellerId . ' and isLocked=1');
+                        $stmtFindShopMovements = $db_con->prepare('select count(id)  as countId  from ShopMovements where  orderId =2000 and isLocked=1');
                         $stmtFindShopMovements->execute();
-                        if ($stmtFindShopMovements == null) {
+                        while ($rowFindShopMovements = $stmtFindShopMovements->fetch(PDO::FETCH_ASSOC)) {
+                            $countRow=$rowFindShopMovements['countId'];
+                        }
+                        if ($countRow == 0) {
                             $stmtUpdateRemoteShopMovements = $db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
                     values(
                          '" . $remoteOrderSellerId . "',

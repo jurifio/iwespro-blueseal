@@ -107,7 +107,10 @@ class CChangeLineStatus extends AAjaxController
                     if($orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status=='ORD_MISSNG' || $orderLine->Status=='ORD_FRND_CANC' || $orderLine->Status== 'ORD_ERR_SEND' || $orderLine->Status== 'ORD_QLTY_KO') {
                         $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $orderLine->remoteOrderSellerId . ' and isLocked=1');
                         $stmtFindShopMovements->execute();
-                        if ($stmtFindShopMovements == null) {
+                        while ($rowFindShopMovements = $stmtFindShopMovements->fetch(PDO::FETCH_ASSOC)) {
+                            $countRow=$rowFindShopMovements['countId'];
+                        }
+                        if ($countRow == 0) {
                             $stmtUpdateRemoteShopMovements = $db_con->prepare("INSERT INTO ShopMovements (orderId,returnId,shopRefundRequestId,amount,`date`,valueDate,typeId,shopWalletId,note,isVisible,remoteIwesOrderId)
                     values(
                          '" . $orderLine->remoteOrderSellerId . "',
