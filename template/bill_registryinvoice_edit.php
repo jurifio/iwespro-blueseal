@@ -313,6 +313,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-default">
+                                        <label for="subject">Oggetto Fattura</label>
+                                        <textarea class="form-control" name="subject" id="subject"
+                                                  value=""><?php echo $bri->subject; ?></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

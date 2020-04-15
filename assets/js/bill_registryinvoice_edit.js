@@ -840,6 +840,7 @@ $(document).on('bs.invoice.save', function () {
         'emailCcn=' + $("#emailCcn").val() + '&' +
         'emailPec=' + $("#emailPec").val() + '&' +
         'note=' + $("#note").val() + '&' +
+        'subject=' + $("#subject").val() + '&' +
         'bankRegistryId=' + selectedBankDef + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +

@@ -706,6 +706,7 @@ $(document).on('bs.invoice.save', function () {
         'emailCcn=' + $("#emailCcn").val() + '&' +
         'emailPec=' + $("#emailPec").val() + '&' +
         'note=' + $("#note").val() + '&' +
+        'subject=' + $("#subject").val() + '&' +
         'bankRegistryId=' + $("#bankRegistryId").val() + '&' +
         'iban=' + $("#iban").val() + '&' +
         'currencyId=' + $("#currencyId").val() + '&' +

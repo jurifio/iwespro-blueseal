@@ -34,7 +34,8 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                       `bri`.`invoiceDate`             AS `invoiceDate`,
                       `brtp`.`name` AS typePayment,
                       `bris`.status as status,
-                      `braps`.`numberSlip` as `numberSlip`   
+                      `braps`.`numberSlip` as `numberSlip`,
+                      `bri`.`subject` as `subject`  
                     FROM `BillRegistryInvoice` `bri`
                       JOIN `BillRegistryClient` `brc` on `bri`.`billRegistryClientId`=`brc`.`id`
                         join `BillRegistryClientBillingInfo` `brcbi` on `bri`.`billRegistryClientId`
@@ -67,6 +68,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
             $row['netPrice']= number_format(trim($billRegistryInvoice->netTotal),2,',','.').' &euro;';
             $row['vat']=number_format($billRegistryInvoice->vat,2,',','.').' &euro;';
             $row['grossTotal']=number_format($billRegistryInvoice->grossTotal,2,',','.').' &euro;';
+            $row['subject']=$billRegistryInvoice->subject;
 
             $billRegistryTypePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryTypePaymentId]);
             $btt=$billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId'=>$billRegistryInvoice->id]);

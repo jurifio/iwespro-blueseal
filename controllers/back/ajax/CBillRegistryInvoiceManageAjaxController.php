@@ -107,6 +107,11 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             } else {
                 $fax = $_GET['fax'];
             }
+            if($_GET['subject']==''){
+                $subject='';
+            }else{
+                $subject=$_GET['subject'];
+            }
 
             if ($_GET['mobile'] == "") {
                 $mobile = '';
@@ -364,6 +369,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $billRegistryInvoiceRowInsert->discountRow = $row->discountRowAmount;
             $billRegistryInvoiceRowInsert->percentDiscount = $row->percDiscountRow;
             $billRegistryInvoiceRowInsert->grossTotalRow = $row->grossTotalRow;
+            $billRegistryInvoiceRowInsert->subject=$subject;
             $billRegistryInvoiceRowInsert->billRegistryTypeTaxesId = $row->billRegistryTypeTaxesProductId;
             $billRegistryInvoiceRowInsert->insert();
 
@@ -1157,6 +1163,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceUpdate->invoiceDate = $invoiceDate;
         $billRegistryInvoiceUpdate->bankRegistryId = $bankRegistryId;
         $billRegistryInvoiceUpdate->statusId = $status;
+        $billRegistryInvoiceUpdate->subject=$_GET['subject'];
         $billRegistryInvoiceUpdate->update();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {

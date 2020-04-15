@@ -130,7 +130,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Data<br>Fattura
                                 </th>
-
+                                <th data-slug="subject"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Oggetto<br>Fattura
+                                </th>
                                 <th data-slug="netPrice"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Imponibile
