@@ -121,7 +121,7 @@ class CDeactivateCampaignAggregatorJob extends ACronJob
                         $this->report('CDeactivateCampaignAggregatorJob','deactivate Aggregator'.$marketplaceAccount->name,'');
                         $mailRepo = \Monkey::app()->repoFactory->create('Email');
                         $bodyMail='Aggregatore '.$marketplaceAccount->name. 'ha raggiunto il budget di euro  per il corrente mese<br>la pubblicazione è stata disattivata';
-                        $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"Dissattivazione  " . $marketplaceAccount->name,$bodyMail);
+                        $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"Dissattivazione  " . $marketplaceAccount->name,$bodyMail, null, null, null, 'mailGun', false,null);
                         $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
                         $aggregatorPublishLog->marketplaceAccountId=$markeplaceAccountId;
                         $aggregatorPublishLog->marketplaceId=$marketplaceId;

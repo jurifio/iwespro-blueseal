@@ -159,7 +159,7 @@ class CCreateAutoProductBatch extends ACronJob
 
             /** @var CEmailRepo $mailRp */
             $mailRp = \Monkey::app()->repoFactory->create('Email');
-            $mailRp->newMail('it@iwes.it', ['it@iwes.it'], [], [], 'Error while creating product batch', $e->getMessage());
+            $mailRp->newMail('it@iwes.it', ['it@iwes.it'], [], [], 'Error while creating product batch', $e->getMessage(), null, null, null, 'mailGun', false,null);
 
             return false;
         }

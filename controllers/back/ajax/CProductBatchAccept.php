@@ -58,7 +58,7 @@ class CProductBatchAccept extends AAjaxController
 
         $body = "Il fason $name ha accettato i lotti con id: $idH";
 
-        $mailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], 'Conferma accettazione lotto lotto', $body);
+        $mailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], 'Conferma accettazione lotto lotto', $body, null, null, null, 'mailGun', false,null);
 
       $res = "Lotto accettato con successo";
       return $res;

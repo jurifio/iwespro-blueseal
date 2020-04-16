@@ -117,7 +117,7 @@ class CShootingBookingAjaxController extends AAjaxController
 
             /** @var CEmailRepo $mailRepo */
             $mailRepo = \Monkey::app()->repoFactory->create('Email');
-            $mailRepo->newMail('it@iwes.it', ["friend@iwes.it"],[],[],"Nuova prenotazione shooting", $body);
+            $mailRepo->newMail('it@iwes.it', ["friend@iwes.it"],[],[],"Nuova prenotazione shooting", $body, null, null, null, 'mailGun', false,null);
 
             $res = "Shooting prenotato con successo. Codice prenotazione: ".$sbId;
         }

@@ -76,7 +76,7 @@ class CCloseExpiredProductBatch extends ACronJob
                 Cordiali saluti,
                 Iwes                
                 ";
-                    $mailR->newMail('operator@iwes.it', [$productBatch->contractDetails->contracts->foison->email], [], ['gianluca@iwes.it'], $sub, $text);
+                    $mailR->newMail('operator@iwes.it', [$productBatch->contractDetails->contracts->foison->email], [], ['gianluca@iwes.it'], $sub, $text, null, null, null, 'mailGun', false,null);
                 }
             }
 

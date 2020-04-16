@@ -103,13 +103,13 @@ class CProductShootingPrintDdtAjaxController extends AAjaxController
             if($s->printed == 1){
                 $subject = "RISTAMPA DDT da parte di ".$s->shootingBooking->shop->name;
                 $body = "Il friend ".$s->shootingBooking->shop->name." ha STAMPATO NUOVAMENTE il DDT ".$d->number;
-                $mailRepo->newMail('it@iwes.it', ['it@iwes.it'], [], [], $subject, $body);
+                $mailRepo->newMail('it@iwes.it', ['it@iwes.it'], [], [], $subject, $body, null, null, null, 'mailGun', false,null);
 
 
             } else if($s->printed == 0){
                 $subject = "Prima stampa ddt da parte di ".$s->shootingBooking->shop->name;
                 $body = "Il friend ".$s->shootingBooking->shop->name." ha STAMPATO PER LA PRIMA VOLTA il DDT ".$d->number;
-                $mailRepo->newMail('it@iwes.it', ['it@iwes.it'], [], [], $subject, $body);
+                $mailRepo->newMail('it@iwes.it', ['it@iwes.it'], [], [], $subject, $body, null, null, null, 'mailGun', false,null);
 
                 $s->printed = 1;
                 $s->update();

@@ -83,7 +83,7 @@ class CProductBatchManage extends AAjaxController
                 Gianluca Cartechini<br />
                 Iwes";
 
-            $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body);
+            $mailRepo->newMail('gianluca@iwes.it', [$to], [], [], 'Conferma creazione lotto', $body, null, null, null, 'mailGun', false,null);
 
 
             $res = "Lotto creato con sucecsso";
@@ -162,7 +162,7 @@ class CProductBatchManage extends AAjaxController
                 Iwes
                 ";
 
-                $mailRepo->newMail('gianluca@iwes.it', [$email], [], [], "Lotto confermato e chiuso con successo", $body);
+                $mailRepo->newMail('gianluca@iwes.it', [$email], [], [], "Lotto confermato e chiuso con successo", $body, null, null, null, 'mailGun', false,null);
 
             }
         }

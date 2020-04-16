@@ -96,7 +96,7 @@ class CContractDetailsRepo extends ARepo
         Iwes
         ";
 
-        if(ENV == 'prod') $mRepo->newMail($from, [$to], [], [], $subject, $body);
+        if(ENV == 'prod') $mRepo->newMail($from, [$to], [], [], $subject, $body, null, null, null, 'mailGun', false,null);
 
         return true;
     }
@@ -128,7 +128,7 @@ class CContractDetailsRepo extends ARepo
                 Gianluca Cartechini<br />
                 Iwes";
 
-            if(ENV == 'prod') $mailRepo->newMail('gianluca@iwes.it', [$to], [], ['gianluca@iwes.it'], 'Conferma di accettazione contratto', $body);
+            if(ENV == 'prod') $mailRepo->newMail('gianluca@iwes.it', [$to], [], ['gianluca@iwes.it'], 'Conferma di accettazione contratto', $body, null, null, null, 'mailGun', false,null);
 
             return true;
         } else {

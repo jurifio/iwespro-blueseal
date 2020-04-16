@@ -133,7 +133,7 @@ class CProductBatchDetailsManage extends AAjaxController
                 $body = "Il Foison " . $name . "(" . $email . ")" . " chiede la revisione del lotto n. " . $productBatchId . " per presunto fine lavoro";
 
 
-                $emailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], $subject, $body);
+                $emailRepo->newMail('gianluca@iwes.it', ['gianluca@iwes.it'], [], [], $subject, $body, null, null, null, 'mailGun', false,null);
             }
 
             $date = new \DateTime();

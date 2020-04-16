@@ -99,7 +99,7 @@ class CProductShootingFriendForceAddAjaxController extends AAjaxController
         $body = "Il friend: ".$shpname." ha forzato l'inserimento dei seguenti prodotti nello shooting ".$sb->shooting->id."<br />".$prodForced;
         /** @var CEmailRepo $emailRepo */
         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-        $emailRepo->newMail('it@iwes.it', ['it@iwes.it'],[],[],'Forzatura su prenotazione shooting chiusa', $body);
+        $emailRepo->newMail('it@iwes.it', ['it@iwes.it'],[],[],'Forzatura su prenotazione shooting chiusa', $body, null, null, null, 'mailGun', false,null);
 
         return $res;
     }

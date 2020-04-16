@@ -137,7 +137,7 @@ class CMessageManage extends AAjaxController
         $title = "Il messaggio n. $mesId è stato modificato";
         /** @var CFoison $foison */
         foreach ($foisons as $foison){
-            $mail->newMail('gianluca@iwes.it', [$foison->email], [],[], $title, $body);
+            $mail->newMail('gianluca@iwes.it', [$foison->email], [],[], $title, $body, null, null, null, 'mailGun', false,null);
         }
 
 

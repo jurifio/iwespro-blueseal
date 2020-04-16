@@ -190,7 +190,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
                 $bodyMail .= 'numero Prodotti Totali in Coda di Pubblicazione ' . $countProduct;
                 /** @var CEmailRepo $mailRepo */
                 $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail);
+                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail, null, null, null, 'mailGun', false,null);
                 $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
                 $aggregatorPublishLog->marketplaceAccountId=$marketplaceAccountId;
                 $aggregatorPublishLog->marketplaceId=$marketplaceId;
@@ -203,7 +203,7 @@ class CPublishProductIntoMarketplaceJob extends ACronJob
             }catch(\Throwable $e){
                 $bodyMail='<html><body>errore nella mail<br>'.$e.'</body></html>';
                 $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail);
+                $mailRepo->newMail('it@iwes.it',["gianluca@iwes.it","juri@iwes.it","it@iwes.it"],[],[],"coda Pubblicazione su " . $marketplaceAccount->name,$bodyMail, null, null, null, 'mailGun', false,null);
                 $aggregatorPublishLog=\Monkey::app()->repoFactory->create('AggregatorPublishLog')->getEmptyEntity();
                 $aggregatorPublishLog->marketplaceAccountId=$markeplaceAccountId;
                 $aggregatorPublishLog->marketplaceId=$marketplaceId;
