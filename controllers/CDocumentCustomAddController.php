@@ -94,7 +94,7 @@ class CDocumentCustomAddController extends ARestrictedAccessRootController
 
                 /** @var CEmailRepo $emailRepo */
                 $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                $emailRepo->newMail('no-reply@pickyshop.com', [$shopEmail], [], [], 'Richiesta di accredito', $body);
+                $emailRepo->newMail('no-reply@pickyshop.com', [$shopEmail], [], [], 'Richiesta di accredito', $body, null, null, null, 'mailGun', false,null);
 
             }
         } catch (\Throwable $e) {

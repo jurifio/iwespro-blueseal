@@ -164,7 +164,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                 if (!is_array($to)) {
                     $to = [$to];
                 }
-                $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message);
+                $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message, null, null, null, 'mailGun', false,null);
             }
 
         } else {

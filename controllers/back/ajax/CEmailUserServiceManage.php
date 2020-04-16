@@ -64,7 +64,7 @@ class CEmailUserServiceManage extends AAjaxController
             /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
             $emailRepo = \Monkey::app()->repoFactory->create('Email');
 
-            $emailRepo->newMail($from, $to, [], [], $subject, $message);
+            $emailRepo->newMail($from, $to, [], [], $subject, $message, null, null, null, 'mailGun', false,null);
             $res = "Email Inviata con successo";
 
 
@@ -86,7 +86,7 @@ class CEmailUserServiceManage extends AAjaxController
                 $to = [$to];
 
             }
-            $emailRepo->newMail($from, $to, [], [], $subject, $message);
+            $emailRepo->newMail($from, $to, [], [], $subject, $message, null, null, null, 'mailGun', false,null);
             $res = "Test Inviato con successo";
         }
 

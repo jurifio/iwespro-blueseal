@@ -138,7 +138,7 @@ class CNewsletterUserManage extends AAjaxController
                 $to = [$to];
 
             }
-            $emailRepo->newMail($fromEmailAddressId, $to, [], [], $subject, $message);
+            $emailRepo->newMail($fromEmailAddressId, $to, [], [], $subject, $message, null, null, null, 'mailGun', false,null);
             $res = "Test Inviato con successo";
         }
 

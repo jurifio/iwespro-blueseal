@@ -87,7 +87,7 @@ class CMessageManage extends AAjaxController
                 Iwes Operator Team";
         /** @var CFoison $foison */
         foreach ($foisons as $foison){
-            $mail->newMail('gianluca@iwes.it', [$foison->email], [],[], 'Nuovo messaggio da Pickyshop', $body);
+            $mail->newMail('gianluca@iwes.it', [$foison->email], [],[], 'Nuovo messaggio da Pickyshop', $body, null, null, null, 'mailGun', false,null);
         }
 
 

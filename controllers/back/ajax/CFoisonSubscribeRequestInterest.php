@@ -141,7 +141,7 @@ class CFoisonSubscribeRequestInterest extends AAjaxController
                         <br>Gianluca Cartechini
                         <br><br>Iwes s.n.c.";
 
-            $emailRepo->newMail('gianluca@iwes.it', [$foison->email], [], [], $subject, $body);
+            $emailRepo->newMail('gianluca@iwes.it', [$foison->email], [], [], $subject, $body, null, null, null, 'mailGun', false,null);
 
             return "Il Fason <strong>$userName</strong> è stato creato correttamente.
                 <br>Numero di contratto: $contract->id";
