@@ -271,7 +271,7 @@ $.ajax({
 });
 
 
-$("#billRegistryTypeTaxesId").change(function () {
+
     $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
@@ -286,11 +286,26 @@ $("#billRegistryTypeTaxesId").change(function () {
             valueField: 'id',
             labelField: 'description',
             searchField: ['description'],
-            options: res2
+            options: res2,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.description) + '</span> ' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.description) + '</span> ' +
+                        '</div>'
+                }
+            },
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue($('#billRegistryTypeTaxesIdSelect').val());
+            }
         });
 
     });
-});
 
 $.ajax({
     method: 'GET',
@@ -471,8 +486,7 @@ $('#billRegistryClientId').change(function () {
     selectCurrencyId.clear();
     var selectBillRegistryTypePaymentId = $("#billRegistryTypePaymentId")[0].selectize;
     selectBillRegistryTypePaymentId.clear();
-    var selectBillRegistryTypeTaxesId = $("#billRegistryTypeTaxesId")[0].selectize;
-    selectBillRegistryTypeTaxesId.clear();
+
 
 
     $.ajax({
@@ -507,7 +521,7 @@ $('#billRegistryClientId').change(function () {
             document.getElementById('note').value = v.note;
             $('#bankRegistryId').data('selectize').setValue(v.bankRegistryId);
             $('#billRegistryTypePaymentId').data('selectize').setValue(v.billRegistryTypePaymentId);
-            $('#billRegistryTypeTaxesId').data('selectize').setValue(v.billRegistryTypeTaxesId);
+          //  $('#billRegistryTypeTaxesId').data('selectize').setValue(v.billRegistryTypeTaxesId);
             $('#currencyId').data('selectize').setValue(v.currencyId);
             document.getElementById('iban').value = v.iban;
             document.getElementById('sdi').value = v.sdi;

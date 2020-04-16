@@ -408,19 +408,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
+                                        <input type="hidden" id="billRegistryTypeTaxesIdSelect" name="billRegistryTypeTaxesIdSelect" value="<?php echo $brcbi->billRegistryTypeTaxesId;?>"/>
                                         <label for="billRegistryTypeTaxesId">Seleziona l'aliquota Iva</label>
                                         <select id="billRegistryTypeTaxesId" name="billRegistryTypeTaxesId"
                                                 class="full-width selectpicker"
                                                 placeholder="Seleziona la Lista"
                                                 data-init-plugin="selectize">
-                                            <?php foreach (\Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findAll() as $taxes) {
-                                                if ($taxes->id == $brcbi->billRegistryTypeTaxesId) {
-                                                    echo '<option value="' . $taxes->id . '" selected="selected">' . $taxes->description . '<option>';
-                                                } else {
-                                                    echo '<option value="' . $taxes->id . '">' . $taxes->description . '<option>';
-                                                }
-                                            }
-                                            ?>
                                         </select>
                                     </div>
                                 </div>
