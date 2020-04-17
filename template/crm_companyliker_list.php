@@ -34,25 +34,20 @@
                                     data-orderable="true"
                                     class="center">Company Liker
                                 </th>
+                                <th data-slug="interest"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Interessi
+                                </th>
+                                <th data-slug="message"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Rubrica
+                                </th>
                                 <th data-slug="address"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Indirizzo
-                                </th>
-                                <th data-slug="postCode"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">CAP
-                                </th>
-                                <th data-slug="city"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Città
-                                </th>
-                                <th data-slug="countryName"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Stato
                                 </th>
                                 <th data-slug="phone"
                                     data-searchable="false"
@@ -69,7 +64,6 @@
                                     data-orderable="false"
                                     class="center">Email
                                 </th>
-
                                 <th data-slug="contactName"
                                     data-searchable="true"
                                     data-orderable="true"
