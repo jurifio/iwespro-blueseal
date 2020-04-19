@@ -116,6 +116,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getMessage());
                 return false;
             }
+            sleep(2);
         }
 
         //delete all product photo in tmp folder

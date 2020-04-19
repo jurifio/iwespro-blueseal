@@ -49,11 +49,11 @@ class CMarketplaceProductPrestashopManageController extends AAjaxController
         $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
         if ($rows == 'all') {
-            $query = "SELECT DISTINCT concat(product,'-', variant) AS code
+           $query = "SELECT DISTINCT concat(product,'-', variant) AS code
                       FROM vProductSortingView v 
                       WHERE (product, variant) NOT IN (
                         SELECT DISTINCT m.productId, m.productVariantId 
-                        FROM MarketPlaceHasProductAssociate m 
+                        FROM MarketplaceHasProductAssociate m 
                         WHERE m.marketplaceId = ? AND m.shopId = ? )";
             $rows = $this->app->dbAdapter->query($query, [$marketplaceHasShop->marketplaceId, $marketplaceHasShop->id])->fetchAll(\PDO::FETCH_COLUMN, 0);
         }

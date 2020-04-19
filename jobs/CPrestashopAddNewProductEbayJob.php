@@ -67,8 +67,6 @@ class CPrestashopAddNewProductEbayJob extends ACronJob
 
 
 
-
-
         $res="Aggiunta  Prodotti ebay  finito alle ore ".date('Y-m-d H:i:s');
         $this->report('Clean Prestashop Product Quantity o ',$res,$res);
 
