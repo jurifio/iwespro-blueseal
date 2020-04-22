@@ -1223,9 +1223,10 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 break;
             }
         }
-        if($data['modifyDatePayment']=="1") {
+
             $billRegistryTypePayment = \Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findOneBy(['id' => $billRegistryTypePaymentId]);
             $namePayment = $billRegistryTypePayment->name;
+        if($data['modifyDatePayment']=="1") {
             if ($isCalculated == 0) {
                 $billRegistryTimeTable = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
                 foreach ($billRegistryTimeTable as $payment) {
@@ -1315,6 +1316,8 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
 
                 }
             }
+        }else{
+            $resDistinta.='<br> ha scelto di non modificare le scadenze';
         }
         $billRegistryClient = $billRegistryClientRepo->findOneBy(['id' => $billRegistryClientId]);
         $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $billRegistryClient->countryId]);
