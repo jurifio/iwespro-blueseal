@@ -116,6 +116,9 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.marketplace.enable"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.product.marketplace.response"
         ></bs-toolbar-button>
         <bs-toolbar-button

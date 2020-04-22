@@ -135,7 +135,7 @@ class PrestaShopWebserviceTest
 
 		curl_setopt_array($session, $curl_options);
         $response = curl_exec($session);
-        $a = curl_error($session);
+        $a = curl_error($session) ;
 
 		$index = strpos($response, "\r\n\r\n");
 		if ($index === false && $curl_params[CURLOPT_CUSTOMREQUEST] != 'HEAD')
@@ -378,7 +378,7 @@ class PrestaShopWebserviceTest
 			throw new PrestaShopWebserviceException('Bad parameters given');
 
         $urlDomain = explode('/api/', $url)[0];
-        $urlArgs = explode('.com', $url)[1];
+        $urlArgs = explode('.shop', $url)[1];
 		$request = self::executeRequest($urlDomain,  array(CURLOPT_CUSTOMREQUEST => 'PUT', CURLOPT_POSTFIELDS => $xml), $urlArgs);
 		self::checkStatusCode($request['status_code']);// check the response validity
 

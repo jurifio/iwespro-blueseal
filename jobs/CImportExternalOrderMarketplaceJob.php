@@ -46,9 +46,9 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
     {
 
         set_time_limit(0);
-        ini_set('memory_limit', '2048M');
+        ini_set('memory_limit','2048M');
 
-        $res="";
+        $res = "";
         /********marketplace********/
         $db_host = "5.189.159.187";
         $db_name = "iwesPrestaDB";
@@ -56,11 +56,11 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
         $db_pass = "rrtYvg6W!";
         try {
 
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $res.= " connessione ok <br>";
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $res .= " connessione ok <br>";
         } catch (PDOException $e) {
-            $res.= $e->getMessage();
+            $res .= $e->getMessage();
         }
         $userRepo = \Monkey::app()->repoFactory->create('User');
         $userDetailsRepo = \Monkey::app()->repoFactory->create('UserDetails');
@@ -78,7 +78,8 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
 
 
         $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
-        $stmtUser = $db_con->prepare("SELECT 
+        try {
+            $stmtUser = $db_con->prepare("SELECT 
                                      pc.id_customer AS remoteId,
                                      pc.id_lang AS  langId,
                                      pc.email as username,                              
@@ -86,7 +87,7 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                      pc.email as email,     
                                      concat('marketplace-','%s') as registrationEntryPoint,
                                       '1' as isActive,
-                                    '1'as isDeleted,
+                                    '0' as isDeleted,
                                      0 as isEmailChanged,
                                      pc.id_shop AS shopId,
                                      pc.id_shop AS siteId,
@@ -96,6 +97,7 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                      pc.lastname AS surname,
                                      pc.birthday AS birthday,
                                      pc.company AS company,
+                                     pac.id_address as addressId,    
                                      pac.address1 AS address,
                                      pac.address2 AS extra,
                                      pac.postcode AS postcode,
@@ -107,85 +109,92 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                      pc.date_add AS creationDate
                                      FROM ps_customer pc
                                      JOIN ps_address pac ON pc.id_customer =pac.id_customer
-                                     JOIN ps_state pst ON pac.id_state WHERE email <> 'NOSEND-EBAY'
+                                     JOIN ps_state pst ON pac.id_state WHERE email <> 'NOSEND-EBAY' and pc.isImport is null 
                                    GROUP BY  remoteId");
-        $stmtUser->execute();
-        while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
-            $checkUserIfExist = \Monkey::app()->repoFactory->create('User')->findOneBy( ['email' => $rowUser['email']]);
-            if (null == $checkUserIfExist) {
-                $insertUser = \Monkey::app()->repoFactory->create('User')->getEmptyEntity();
-                $insertUser->langId = $rowUser['langId'];
-                $insertUser->email = $rowUser['email'];
-                $insertUser->registrationEntryPoint = $rowUser['registrationEntryPoint'];
-                $insertUser->isActive = '1';
-                $insertUser->isDeleted = '0';
-                $insertUser->creationDate = $rowUser['creationDate'];
-                $insertUser->isEmailChanged = '0';
-                $insertUser->insert();
-                $insertUserAddress = \Monkey::app()->repoFactory->create('UserAddress')->getEmptyEntity();
-                $getuserId = \Monkey::app()->repoFactory->create('User')->findOneBy(['email' => $rowUser['email']]);
-                $userId = $getuserId->id;
-                $insertUserAddress->userId = $userId;
-                $insertUserAddress->isBilling = '1';
-                $insertUserAddress->isDefault = '0';
-                $insertUserAddress->name = $rowUser['firstname'];
-                $insertUserAddress->surname = $rowUser['surname'];
-                $insertUserAddress->company = $rowUser['company'];
-                $insertUserAddress->address = $rowUser['address'];
-                $insertUserAddress->extra = $rowUser['extra'];
-                $insertUserAddress->province = $rowUser['province'];
-                $insertUserAddress->city = $rowUser['city'];
-                $insertUserAddress->postcode = $rowUser['postcode'];
-                $findCountry = \Monkey::app()->repoFactory->create('ZipCode')->findOneBy(['code' => $rowUser['postcode'], 'orderSubdivision2Code' => $rowUser['province']]);
-                if ($findCountry == null) {
-                    $insertUserAddress->countryId = '101';
-                } else {
-                    $country = $findCountry->countryId;
-                    $insertUserAddress->countryId = $country;
-                }
-                if ($rowUser['phone'] == null) {
-                    $phone = $rowUser['phone_mobile'];
-                } else {
-                    $phone = $rowUser['phone'];
-                }
-                $insertUserAddress->phone = $phone;
-                $insertUserAddress->lastUsed = 1;
-                $insertUserAddress->insert();
-                $insertUserDetails = \Monkey::app()->repoFactory->create('UserDetails')->getEmptyEntity();
-                $insertUserDetails->userId = $userId;
-                $insertUserDetails->name = $rowUser['firstname'];
-                $insertUserDetails->surname = $rowUser['surname'];
-                $insertUserDetails->birthDate = $rowUser['birthday'];
-                $insertUserDetails->phone = $phone;
-                if ($rowUser['gender'] == 1) {
-                    $gender = 'M';
-                } else {
-                    $gender = 'F';
-                }
-                $insertUserDetails->gender = $gender;
-                $insertUserDetails->regDate = $rowUser['creationDate'];
-                $insertUserDetails->fiscalcode = $rowUser['fiscalcode'];
-                $insertUserDetails->insert();
-                //userEmail Creation
-                $insertUserEmail = \Monkey::app()->repoFactory->create('UserEmail')->getEmptyEntity();
-                $insertUserEmail->userid = $userId;
-                $insertUserEmail->address = $rowUser['email'];
-                $insertUserEmail->isPrimary = '1';
-                $insertUserEmail->insert();
-                $res.= " inserimento utente" . $rowUser['email'] . " eseguito<br>";
+            $stmtUser->execute();
+            while ($rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC)) {
+                $checkUserIfExist = $userRepo->findOneBy(['email' => $rowUser['email']]);
+                if (null == $checkUserIfExist) {
+                    $insertUser = \Monkey::app()->repoFactory->create('User')->getEmptyEntity();
+                    $insertUser->langId = $rowUser['langId'];
+                    $insertUser->email = $rowUser['email'];
+                    $insertUser->registrationEntryPoint = $rowUser['registrationEntryPoint'];
+                    $insertUser->isActive = '1';
+                    $insertUser->isDeleted = '0';
+                    $insertUser->creationDate = $rowUser['creationDate'];
+                    $insertUser->isEmailChanged = '0';
+                    $insertUser->remoteId = $rowUser['remoteId'];
+                    $insertUser->remoteShopId = 58;
+                    $insertUser->insert();
+                    $insertUserAddress = \Monkey::app()->repoFactory->create('UserAddress')->getEmptyEntity();
+                    $getuserId = \Monkey::app()->repoFactory->create('User')->findOneBy(['email' => $rowUser['email']]);
+                    $userId = $getuserId->id;
+                    $insertUserAddress->userId = $userId;
+                    $insertUserAddress->isBilling = '1';
+                    $insertUserAddress->isDefault = '0';
+                    $insertUserAddress->name = $rowUser['firstname'];
+                    $insertUserAddress->surname = $rowUser['surname'];
+                    $insertUserAddress->company = $rowUser['company'];
+                    $insertUserAddress->address = $rowUser['address'];
+                    $insertUserAddress->extra = $rowUser['extra'];
+                    $insertUserAddress->province = $rowUser['province'];
+                    $insertUserAddress->city = $rowUser['city'];
+                    $insertUserAddress->postcode = $rowUser['postcode'];
+                    $findCountry = \Monkey::app()->repoFactory->create('ZipCode')->findOneBy(['code' => $rowUser['postcode'],'orderSubdivision2Code' => $rowUser['province']]);
+                    if ($findCountry == null) {
+                        $insertUserAddress->countryId = '101';
+                    } else {
+                        $country = $findCountry->countryId;
+                        $insertUserAddress->countryId = $country;
+                    }
+                    if ($rowUser['phone'] == null) {
+                        $phone = $rowUser['phone_mobile'];
+                    } else {
+                        $phone = $rowUser['phone'];
+                    }
+                    $insertUserAddress->phone = $phone;
+                    $insertUserAddress->lastUsed = 1;
+                    $insertUserAddress->remoteUserId = $rowUser['remoteId'];
+                    $insertUserAddress->remoteId = $rowUser['userAddressId'];
+                    $insertUserAddress->remoteShopId = 58;
+                    $insertUserAddress->insert();
+                    $insertUserDetails = \Monkey::app()->repoFactory->create('UserDetails')->getEmptyEntity();
+                    $insertUserDetails->userId = $userId;
+                    $insertUserDetails->name = $rowUser['firstname'];
+                    $insertUserDetails->surname = $rowUser['surname'];
+                    $insertUserDetails->birthDate = $rowUser['birthday'];
+                    $insertUserDetails->phone = $phone;
+                    if ($rowUser['gender'] == 1) {
+                        $gender = 'M';
+                    } else {
+                        $gender = 'F';
+                    }
+                    $insertUserDetails->gender = $gender;
+                    $insertUserDetails->regDate = $rowUser['creationDate'];
+                    $insertUserDetails->fiscalcode = $rowUser['fiscalcode'];
+                    $insertUserDetails->insert();
+                    //userEmail Creation
+                    $insertUserEmail = \Monkey::app()->repoFactory->create('UserEmail')->getEmptyEntity();
+                    $insertUserEmail->userid = $userId;
+                    $insertUserEmail->address = $rowUser['email'];
+                    $insertUserEmail->isPrimary = '1';
+                    $insertUserEmail->insert();
 
 
-            } else {
-                $res.= "utente" . $rowUser['email'] . " già in elenco";
+                } else {
+                    continue;
+
+                }
+
 
             }
-
-
+        } catch (\throwable $e) {
+            $this->report('CImportExternalOrderMarketPlaceJob','error','Errore User ' . $e);
         }
 
         /* Inserimento Carrelli **/
-
-        $stmtCart = $db_con->prepare("SELECT 
+        try {
+        $stmtCart = $db_con->prepare('SELECT 
                                      pcart.id_cart AS remoteId,
                                      ppa.reference AS product,
                                      p.id_shop_default  AS siteId,
@@ -198,12 +207,12 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                      FROM ps_cart pcart 
                                       JOIN ps_cart_product pcp ON pcart.id_cart = pcp.id_cart
                                       JOIN ps_product_attribute ppa ON pcp.id_product=ppa.id_product AND pcp.id_product_attribute =ppa.id_product_attribute
-                                      JOIN ps_product p ON ppa.id_product=p.id_product 
+                                      JOIN ps_product p ON ppa.id_product=p.id_product where pcart.isImport is null
                                
-                                  ");
+                                  ');
         $stmtCart->execute();
         while ($rowCart = $stmtCart->fetch(PDO::FETCH_ASSOC)) {
-            $checkCartExist = \Monkey::app()->repoFactory->create('Cart')->findOneBy(['remoteId' => $rowCart['remoteId']]);
+            $checkCartExist = $cartRepo->findOneBy(['remoteId' => $rowCart['remoteId']]);
             if ($checkCartExist == null) {
                 $insertCart = \Monkey::app()->repoFactory->create('Cart')->getEmptyEntity();
                 $findUserId = \Monkey::app()->repoFactory->create('User')->findOneBy(['remoteId' => $rowCart['id_customer']]);
@@ -218,14 +227,16 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                 $insertCart->creationDate = $rowCart['creationDate'];
                 $insertCart->remoteId = $rowCart['remoteId'];
                 $insertCart->insert();
-                $res="Inserito Nuovo Carrello";
+                $res = "Inserito Nuovo Carrello";
 
             } else {
-                $res.= "carrello gia esistente";
+                $res .= "carrello gia esistente";
 
             }
         }
-
+        } catch (\throwable $e) {
+            $this->report('CImportExternalOrderMarketplaceJob', 'error', 'Errore Cart ' . $e);
+        }
 
         /***inserimento ordini */
 
@@ -278,19 +289,19 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
         while ($rowOrder = $stmtOrder->fetch(PDO::FETCH_ASSOC)) {
             $checkOrderExist = \Monkey::app()->repoFactory->create('Order')->findOneBy(['remoteOrderId' => $rowOrder['remoteOrderId']]);
             if ($checkOrderExist == null) {
-                if (strpos($rowOrder['remoteOrderId'], 'PayPal') != false) {
+                if (strpos($rowOrder['remoteOrderId'],'PayPal') != false) {
                     $orderPaymentMethodId = 1;
                 }
-                if (strpos($rowOrder['remoteOrderId'], 'carta di Credito') != false) {
+                if (strpos($rowOrder['remoteOrderId'],'carta di Credito') != false) {
                     $orderPaymentMethodId = 2;
                 }
-                if (strpos($rowOrder['remoteOrderId'], 'Bonifico') != false) {
+                if (strpos($rowOrder['remoteOrderId'],'Bonifico') != false) {
                     $orderPaymentMethodId = 3;
                 }
-                if (strpos($rowOrder['remoteOrderId'], 'Contrassegno') != false) {
+                if (strpos($rowOrder['remoteOrderId'],'Contrassegno') != false) {
                     $orderPaymentMethodId = 5;
                 }
-                if (strpos($rowOrder['remoteOrderId'], 'PickandPay') != false) {
+                if (strpos($rowOrder['remoteOrderId'],'PickandPay') != false) {
                     $orderPaymentMethodId = 4;
                 }
                 $findcartId = \Monkey::app()->repoFactory->create('Cart')->findOneBy(['remoteId' => $rowOrder['cartId']]);
@@ -304,9 +315,9 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                 $insertOrder->status = "ORD_WAIT";
                 $findshippingDetails = \Monkey::app()->repoFactory->create('UserAddress')->findOneBy(['userId' => $orderUserId]);
                 $shipmentAddressId = $findshippingDetails->id;
-                $findaddressBillingDetails = \Monkey::app()->repoFactory->create('UserAddress')->findOneBy(['userId' => $orderUserId, 'isBilling' => 1]);
+                $findaddressBillingDetails = \Monkey::app()->repoFactory->create('UserAddress')->findOneBy(['userId' => $orderUserId,'isBilling' => 1]);
 
-                $findaddressShippingDetails = \Monkey::app()->repoFactory->create('UserAddress')->findOneBy(['userId' => $orderUserId, 'isBilling' => 0]);
+                $findaddressShippingDetails = \Monkey::app()->repoFactory->create('UserAddress')->findOneBy(['userId' => $orderUserId,'isBilling' => 0]);
                 if (null == $findaddressBillingDetails) {
                     $insertOrder->frozenShippingAddress = $findaddressShippingDetails->froze();
                     $insertOrder->frozenBillingAddress = $findaddressShippingDetails->froze();
@@ -332,10 +343,10 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                 $insertOrder->paymentDate = $rowOrder['paymentDate'];
                 $insertOrder->remoteOrderId = $rowOrder['remoteOrderId'];
                 $insertOrder->insert();
-                $res.= '<br>inserimento ordine ' . $rowOrder['remoteOrderId'];
+                $res .= '<br>inserimento ordine ' . $rowOrder['remoteOrderId'];
 
             } else {
-                $res.= '<br>Ordine già esistente';
+                $res .= '<br>Ordine già esistente';
 
 
             }
@@ -361,7 +372,7 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                   ");
         $stmtCartLine->execute();
         while ($rowCartLine = $stmtCartLine->fetch(PDO::FETCH_ASSOC)) {
-            $productSkuCartLine[] = explode('-', $rowCartLine['remoteId']);
+            $productSkuCartLine[] = explode('-',$rowCartLine['remoteId']);
 
             $checkCartLineExist = \Monkey::app()->repoFactory->create('CartLine')->findOneBy(['remoteId' => $rowCartLine['remoteId']]);
             if ($checkCartLineExist == null) {
@@ -375,10 +386,10 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                 $insertCartLine->siteId = $rowCartLine['siteId'];
                 $insertCartLine->remoteId = $rowCartLine['remoteId'];
                 $insertCartLine->insert();
-                $res.= "Riga Carrello  inserita";
+                $res .= "Riga Carrello  inserita";
 
             } else {
-                $res.= "Riga Carrello  gia esistente";
+                $res .= "Riga Carrello  gia esistente";
 
             }
         }
@@ -411,7 +422,7 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                                   ");
         $stmtOrderLine->execute();
         while ($rowOrderLine = $stmtOrderLine->fetch(PDO::FETCH_ASSOC)) {
-            $productSkuOrderLine[] = explode('-', $rowOrderLine['remoteId']);
+            $productSkuOrderLine[] = explode('-',$rowOrderLine['remoteId']);
 
             $checkOrderLineExist = \Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['remoteId' => $rowOrderLine['remoteId']]);
             if ($checkOrderLineExist == null) {
@@ -428,11 +439,11 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
                         'productVariantId' => $productSkuOrderLine[0][3],
                         'productSizeId' => $productSkuOrderLine[0][4],
                         'shopId' => $productSkuOrderLine[0][5]]);
-                if($skufind!=null) {
+                if ($skufind != null) {
                     $insertOrderLine->frozenProduct = $skufind->froze();
                 }
-                $findshopId=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['prestashopId'=>$rowOrderLine['siteId']]);
-                $shopId=$findshopId->shopId;
+                $findshopId = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['prestashopId' => $rowOrderLine['siteId']]);
+                $shopId = $findshopId->shopId;
                 $insertOrderLine->shopId = $shopId;
                 $insertOrderLine->status = 'ORD_WAIT';
                 $insertOrderLine->fullPrice = $rowOrderLine['fullPrice'];
@@ -446,10 +457,10 @@ class CImportExternalOrderMarketplaceJob extends ACronJob
 
                 $insertOrderLine->insert();
 
-                $res.= "Riga Ordine  gia esistente";
+                $res .= "Riga Ordine  gia esistente";
 
             } else {
-                $res.= "Riga Ordine  gia esistente";
+                $res .= "Riga Ordine  gia esistente";
 
             }
         }

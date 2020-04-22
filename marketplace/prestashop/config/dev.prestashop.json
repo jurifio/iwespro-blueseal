@@ -1,43 +1,43 @@
 {
     "category": {
-        "url": "dev.prestapicky.com",
-        "key": "SK16MRINAAJUVX6HNLBVM7ZJ1H5FXP48",
+        "url": "dev.iwes.shop",
+        "key": "XVWQJWZR6D8TS9F3IMFQLHURI4MD91WX",
         "resource": "categories",
         "debug": false
     },
     "manufacturer": {
-        "url": "dev.prestapicky.com",
-        "key": "Q5TQG7ZHFJCVANGR1NHA7P5DMBIQ4AP4",
+        "url": "dev.iwes.shop",
+        "key": "AJBU8WEZX164VE5VI99JPJVDESS373KS",
         "resource": "manufacturers",
         "debug": false
     },
     "shop": {
-        "url": "dev.prestapicky.com",
-        "key": "CD7SD5RN261Q2578NPTSTGQED2NF6I3H",
+        "url": "dev.iwes.shop",
+        "key": "1QVJHPL7W9N2ABKLGL968L6LNLVUT1CX",
         "resource": "shops",
         "debug": false
     },
     "product": {
-        "url": "dev.prestapicky.com",
-        "key": "LEQA82EUA1J5RYHBMMNZA6E6FBUABWKA",
-        "resource": "",
+        "url": "dev.iwes.shop",
+        "key": "6SS993LXNX84RQN9XZ4XSTZRNZCBJLQV",
+        "resource": "products",
         "debug": false
     },
     "productOption": {
-        "url": "dev.prestapicky.com",
-        "key": "9LUEDZHTTJLK19A92Q2QRC2A2UTPGZC5",
+        "url": "dev.iwes.shop",
+        "key": "EXH4731KYEJG6DSF3CJ9ND5P3EVR5DKI",
         "resource": "product_option_values",
         "debug": false
     },
     "features": {
-        "url": "dev.prestapicky.com",
-        "key": "DPWAV7RWQED4SL3ZLFDXN2YV9QBJU5LR",
+        "url": "dev.iwes.shop",
+        "key": "8Y943RJ5WLFG56TTLIBHXWMI3VFKV64I",
         "resource": "",
         "debug": false
     },
     "orders": {
-        "url": "dev.prestapicky.com",
-        "key": "45F8KT2DDAN64K1EXAFUUSXZ3TI1RQ2V",
+        "url": "dev.iwes.shop",
+        "key": "5DIB4MSUY3UYEUWXKN2SLVVV9LLL79IP",
         "resource": "",
         "debug": false
     }

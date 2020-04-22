@@ -1154,7 +1154,9 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceUpdate->invoiceType = 'W';
         $billRegistryInvoiceUpdate->invoiceSiteChar = 'W';
         $billRegistryInvoiceUpdate->billRegistryClientId = $billRegistryClientId;
-        $billRegistryInvoiceUpdate->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+        if($data['modifyDatePayment']=="1") {
+            $billRegistryInvoiceUpdate->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+        }
         $billRegistryInvoiceUpdate->billRegistryClientBillingInfoId = $billRegistryClientBillingInfoId;
         $billRegistryInvoiceUpdate->netTotal = str_replace(',','.',$netTotal);
         $billRegistryInvoiceUpdate->vat = str_replace(',','.',$vatTotal);
@@ -1221,95 +1223,97 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 break;
             }
         }
-        $billRegistryTypePayment = \Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findOneBy(['id' => $billRegistryTypePaymentId]);
-        $namePayment = $billRegistryTypePayment->name;
-        if ($isCalculated == 0) {
-            $billRegistryTimeTable = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
-            foreach ($billRegistryTimeTable as $payment) {
-                $payment->delete();
-            }
+        if($data['modifyDatePayment']=="1") {
+            $billRegistryTypePayment = \Monkey::app()->repoFactory->create('BillRegistryTypePayment')->findOneBy(['id' => $billRegistryTypePaymentId]);
+            $namePayment = $billRegistryTypePayment->name;
+            if ($isCalculated == 0) {
+                $billRegistryTimeTable = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $billRegistryInvoiceId]);
+                foreach ($billRegistryTimeTable as $payment) {
+                    $payment->delete();
+                }
 
 
-            $filterBillRegistryTypePayment = $billRegistryTypePaymentRepo->findBy(['name' => $namePayment]);
-            $numberRate = 1;
-            foreach ($filterBillRegistryTypePayment as $rowsPayment) {
-                $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
-                $billRegistryTimeTable->typeDocument = '7';
-                $billRegistryTimeTable->billRegistryTypePaymentId = $billRegistryTypePaymentId;
-                $billRegistryTimeTable->billRegistryInvoiceId = $billRegistryInvoiceId;
-                $amountRate = $grossTotal / 100 * $rowsPayment->prc;
-                $dateNow = new \DateTime($invoiceDate);
-                if ($rowsPayment->day == '0') {
+                $filterBillRegistryTypePayment = $billRegistryTypePaymentRepo->findBy(['name' => $namePayment]);
+                $numberRate = 1;
+                foreach ($filterBillRegistryTypePayment as $rowsPayment) {
+                    $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
+                    $billRegistryTimeTable->typeDocument = '7';
+                    $billRegistryTimeTable->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+                    $billRegistryTimeTable->billRegistryInvoiceId = $billRegistryInvoiceId;
+                    $amountRate = $grossTotal / 100 * $rowsPayment->prc;
+                    $dateNow = new \DateTime($invoiceDate);
+                    if ($rowsPayment->day == '0') {
 
-                    $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . ' day');
-                    $isWeekEnd = $dateNow->format('D');
+                        $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . ' day');
+                        $isWeekEnd = $dateNow->format('D');
 
-                    if ($isWeekEnd == 'Sat' || $isWeekEnd == 'Sun') {
-                        $modPayment = $dateNow->modify('+ 2 day');
-                    }
-                    $estimatedPayment = $modPayment->format('d-m-Y');
-                    $dbEstimatedPayment = $modPayment->format('Y-m-d H:i:s');
-
-
-                } elseif ($rowsPayment->day == '15') {
-                    if ($day15 <= 16) {
-                        $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . 'day');
-                        $day15 = $modPayment->format('d');
-                        $month15 = $modPayment->format('m');
-                        $year15 = $modPayment->format('Y');
-                        $estimatedPayment = '15' . '-' . $mont15 . '-' . $year15;
-                        $dbEstimatedPaymentTemp = $year15 . '-' . $month15 . '-' . $day15;
-                        $dbEstimatedPaymentTemp2 = new \DateTime($dbEstimatedPaymentTemp);
-                        $dbEstimatedPayment = $dbEstimatedPaymentTemp2->format('Y-m-d H:i:s');
-                    } else {
-                        $modPayment = $dateNow->modify('+ 60 day');
-
-                        $day15 = $modPayment->format('d');
-                        $month15 = $modPayment->format('m');
-                        $year15 = $modPayment->format('Y');
-                        $isWeekEnd = $modPayment->format('D');
                         if ($isWeekEnd == 'Sat' || $isWeekEnd == 'Sun') {
-                            $estimatedPayment = '18' . '-' . $mont15 . '-' . $year15;
-                            $dbEstimatedPaymentTemp = $year15 . '-' . $month15 . '-18';
-                        } else {
+                            $modPayment = $dateNow->modify('+ 2 day');
+                        }
+                        $estimatedPayment = $modPayment->format('d-m-Y');
+                        $dbEstimatedPayment = $modPayment->format('Y-m-d H:i:s');
+
+
+                    } elseif ($rowsPayment->day == '15') {
+                        if ($day15 <= 16) {
+                            $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . 'day');
+                            $day15 = $modPayment->format('d');
+                            $month15 = $modPayment->format('m');
+                            $year15 = $modPayment->format('Y');
                             $estimatedPayment = '15' . '-' . $mont15 . '-' . $year15;
                             $dbEstimatedPaymentTemp = $year15 . '-' . $month15 . '-' . $day15;
+                            $dbEstimatedPaymentTemp2 = new \DateTime($dbEstimatedPaymentTemp);
+                            $dbEstimatedPayment = $dbEstimatedPaymentTemp2->format('Y-m-d H:i:s');
+                        } else {
+                            $modPayment = $dateNow->modify('+ 60 day');
+
+                            $day15 = $modPayment->format('d');
+                            $month15 = $modPayment->format('m');
+                            $year15 = $modPayment->format('Y');
+                            $isWeekEnd = $modPayment->format('D');
+                            if ($isWeekEnd == 'Sat' || $isWeekEnd == 'Sun') {
+                                $estimatedPayment = '18' . '-' . $mont15 . '-' . $year15;
+                                $dbEstimatedPaymentTemp = $year15 . '-' . $month15 . '-18';
+                            } else {
+                                $estimatedPayment = '15' . '-' . $mont15 . '-' . $year15;
+                                $dbEstimatedPaymentTemp = $year15 . '-' . $month15 . '-' . $day15;
+                            }
+
+                            $dbEstimatedPaymentTemp2 = new \DateTime($dbEstimatedPaymentTemp);
+                            $dbEstimatedPayment = $dbEstimatedPaymentTemp2->format('Y-m-d H:i:s');
+                        }
+
+
+                    } elseif ($rowsPayment->day == '-1') {
+                        $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . 'day');
+                        $day30 = $modPayment->format('d');
+                        $month30 = $modPayment->format('m');
+                        $year30 = $modPayment->format('Y');
+                        $isWeekEnd = $modPayment->format('D');
+                        if ($isWeekEnd == 'Sat' || $isWeekEnd == 'Sun') {
+                            $estimatedPayment = '28' . '-' . $month30 . '-' . $year30;
+                            $dbEstimatedPaymentTemp = $year30 . '-' . $month30 . '-28';
+                        } else {
+                            $estimatedPayment = '30' . '-' . $month30 . '-' . $year30;
+                            $dbEstimatedPaymentTemp = $year30 . '-' . $month30 . '-' . $day30;
                         }
 
                         $dbEstimatedPaymentTemp2 = new \DateTime($dbEstimatedPaymentTemp);
                         $dbEstimatedPayment = $dbEstimatedPaymentTemp2->format('Y-m-d H:i:s');
+
                     }
-
-
-                } elseif ($rowsPayment->day == '-1') {
-                    $modPayment = $dateNow->modify('+ ' . $rowsPayment->numDay . 'day');
-                    $day30 = $modPayment->format('d');
-                    $month30 = $modPayment->format('m');
-                    $year30 = $modPayment->format('Y');
-                    $isWeekEnd = $modPayment->format('D');
-                    if ($isWeekEnd == 'Sat' || $isWeekEnd == 'Sun') {
-                        $estimatedPayment = '28' . '-' . $month30 . '-' . $year30;
-                        $dbEstimatedPaymentTemp = $year30 . '-' . $month30 . '-28';
-                    } else {
-                        $estimatedPayment = '30' . '-' . $month30 . '-' . $year30;
-                        $dbEstimatedPaymentTemp = $year30 . '-' . $month30 . '-' . $day30;
+                    $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
+                    $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
+                    $billRegistryTimeTable->amountPayment = $amountRate;
+                    if ($status == "3") {
+                        $billRegistryTimeTable->amountPaid = $amountRate;
+                        $billRegistryTimeTable->datePayment = $invoiceDate;
                     }
+                    $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;
+                    $billRegistryTimeTable->insert();
 
-                    $dbEstimatedPaymentTemp2 = new \DateTime($dbEstimatedPaymentTemp);
-                    $dbEstimatedPayment = $dbEstimatedPaymentTemp2->format('Y-m-d H:i:s');
 
                 }
-                $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
-                $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
-                $billRegistryTimeTable->amountPayment = $amountRate;
-                if($status=="3"){
-                    $billRegistryTimeTable->amountPaid=$amountRate;
-                    $billRegistryTimeTable->datePayment=$invoiceDate;
-                }
-                $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;
-                $billRegistryTimeTable->insert();
-
-
             }
         }
         $billRegistryClient = $billRegistryClientRepo->findOneBy(['id' => $billRegistryClientId]);

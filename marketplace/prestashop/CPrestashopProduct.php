@@ -787,6 +787,42 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         return true;
     }
+    public function activateProduct($productData, CMarketplaceHasShop $mhs, $action)
+    {
+        /** @var CProduct $product */
+      //  $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productData['productId'], 'productVariantId' => $productData['productVariantId']]);
+        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productData->prestaId, [], null, null, $mhs->prestashopId);
+        $productChildXml = $productXml->children()->children();
+
+        switch ($action) {
+            case '0':
+               $active=0;
+                break;
+            case '1':
+                $active=1;
+                break;
+            default:
+                return false;
+        }
+
+        $productChildXml->active=$active;
+
+
+        try {
+            $opt['resource'] = self::PRODUCT_RESOURCE;
+            $opt['putXml'] = $productXml->asXML();
+            $opt['id_shop'] = $mhs->prestashopId;
+            $opt['id'] = $productData->prestaId;
+            $this->ws->edit($opt);
+
+        } catch (\PrestaShopWebserviceException $e) {
+            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
+            return false;
+        }
+
+
+        return true;
+    }
 
     /**
      * @param $products

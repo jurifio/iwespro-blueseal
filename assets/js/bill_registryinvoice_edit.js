@@ -817,7 +817,10 @@ function modifyRowPaymnetInvoiceEdit(counterRow, idPayment) {
 
 $(document).on('bs.invoice.save', function () {
     let bsModal = new $.bsModal('Modifica Fatture', {
-        body: '<p>Confermare?</p>'
+        body: '<p>Confermare?</p>'+
+            '<div class="form-group form-group-default selectize-enabled full-width">'+
+            '<label for="modifyDatePayment">Vuoi Modificare le Scadenze?</label><select class="full-width" placeholder="Abilita" data-init-plugin="selectize" title="" name="modifyDatePayment" id="modifyDatePayment" required>'+
+            '<option value=""/><option value="0">No</option><option value="1">Si</option></select></div>'
     });
     var val = '';
     $(':checkbox:checked').each(function (i) {
@@ -874,7 +877,8 @@ $(document).on('bs.invoice.save', function () {
             discountTotal: $('#discountTotal').val(),
             vatTotal: $('#vatTotal').val(),
             grossTotal: $('#grossTotal').val(),
-            statusInvoice:$('#invoiceStatusId').val()
+            statusInvoice:$('#invoiceStatusId').val(),
+            modifyDatePayment:$('#modifyDatePayment').val(),
 
 
         };
