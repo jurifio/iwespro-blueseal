@@ -40,7 +40,7 @@ class CPrestashopActivateProductManage extends AAjaxController
     {
         $data = \Monkey::app()->router->request()->getRequestData();
         $shop_id = $data['marketplaceHasShopId'];
-        $action=$data['action'];
+        $action = $data['action'];
 
         $prestashopHasProductRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $prestashopHasProductHasMarketplaceHasShopRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
@@ -54,14 +54,17 @@ class CPrestashopActivateProductManage extends AAjaxController
         /** @var CRepo $phphmhsR */
         $php = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         foreach ($data['rows'] as $collectionProduct) {
-            $dataProduct=explode('-',$collectionProduct);
-           // $product=$phphmhsR->findOneBy(['productId'=>$dataProduct[0],'productVariantId'=>$dataProduct[1]]);
-            $product=$php->findOneBy(['productId'=>182705,'productVariantId'=>5642129]); //182705-5642129
-           $prestashopProduct->activateProduct($product, $mhs,$action);
-
+            $dataProduct = explode('-',$collectionProduct);
+             $product=$php->findOneBy(['productId'=>$dataProduct[0],'productVariantId'=>$dataProduct[1]]);
+            //$product = $php->findOneBy(['productId' => 182705,'productVariantId' => 5642129]); //182705-5642129
+            if ($product == null) {
+                continue;
+            }
+            $prestashopProduct->activateProduct($product,$mhs,$action);
+        sleep(2);
         }
 
-        return 'Prodotto Riattivato';
+        return 'Operazione eseguita';
     }
 
 }
