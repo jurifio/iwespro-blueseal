@@ -56,7 +56,7 @@ class CPrestashopActivateProductManage extends AAjaxController
         foreach ($data['rows'] as $collectionProduct) {
             $dataProduct=explode('-',$collectionProduct);
            // $product=$phphmhsR->findOneBy(['productId'=>$dataProduct[0],'productVariantId'=>$dataProduct[1]]);
-            $product=$php->findOneBy(['productId'=>182705,'productVariantId'=>5642129]);
+            $product=$php->findOneBy(['productId'=>109229,'productVariantId'=>4626373]);
            $prestashopProduct->activateProduct($product, $mhs,$action);
 
         }

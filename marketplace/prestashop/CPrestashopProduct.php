@@ -806,6 +806,9 @@ class CPrestashopProduct extends APrestashopMarketplace
                 return false;
         }
         unset($productChildXml->active);
+        unset($productChildXml->manufacturer_name);
+        unset($productChildXml->quantity);
+        unset($productChildXml->associations->combinations);
         $productChildXml->active=$active;
 
 
