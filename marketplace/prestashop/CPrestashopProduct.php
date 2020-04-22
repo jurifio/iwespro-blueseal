@@ -790,8 +790,9 @@ class CPrestashopProduct extends APrestashopMarketplace
     public function activateProduct($productData, CMarketplaceHasShop $mhs, $action)
     {
         /** @var CProduct $product */
+        $shopId=$mhs->prestashopId;
       //  $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productData['productId'], 'productVariantId' => $productData['productVariantId']]);
-        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productData->prestaId, [], null, null, $mhs->prestashopId);
+        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productData->prestaId, [], null, null, $shopId);
         $productChildXml = $productXml->children()->children();
 
         switch ($action) {
@@ -804,14 +805,16 @@ class CPrestashopProduct extends APrestashopMarketplace
             default:
                 return false;
         }
-
+        unset($productChildXml->active);
         $productChildXml->active=$active;
+
+
 
 
         try {
             $opt['resource'] = self::PRODUCT_RESOURCE;
             $opt['putXml'] = $productXml->asXML();
-            $opt['id_shop'] = $mhs->prestashopId;
+            $opt['id_shop'] = $shopId;
             $opt['id'] = $productData->prestaId;
             $this->ws->edit($opt);
 
