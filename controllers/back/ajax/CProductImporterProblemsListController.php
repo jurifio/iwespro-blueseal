@@ -30,27 +30,30 @@ class CProductImporterProblemsListController extends AAjaxController
               concat_ws('-',`psg`.`locale`, `psmg`.`name`)                     AS `sizeGroup`,
               `p`.`creationDate`                                               AS `creationDate`,
               group_concat(`ds`.`size` ORDER BY `ds`.`size` ASC SEPARATOR '-') AS `problems`,
+              p.dummyPicture AS dummyPicture,
               productCategoryId AS categoryId
             FROM `Product` `p`
               JOIN `ProductVariant` `pv` ON `pv`.`id` = `p`.`productVariantId`
               JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
               JOIN `ProductStatus` `ps` ON `p`.`productStatusId` = `ps`.`id`
-              JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId`) AND (`p`.`productVariantId` = `dp`.`productVariantId`)
+              JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId` AND `p`.`productVariantId` = `dp`.`productVariantId`)
               JOIN `DirtySku` `ds` ON `dp`.`id` = `ds`.`dirtyProductId`
-              JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`)
-                                              AND (`dp`.`productVariantId` = `sp`.`productVariantId`)
-                                              AND (`dp`.`shopId` = `sp`.`shopId`)
+              JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`
+                                              AND `dp`.`productVariantId` = `sp`.`productVariantId`
+                                              AND `dp`.`shopId` = `sp`.`shopId`)
               JOIN `ProductSizeGroup` `psg` ON `sp`.`productSizeGroupId` = `psg`.`id`
               JOIN `Shop` `s` ON `sp`.`shopId` = `s`.`id`
               LEFT JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE p.dummyPicture <> 'bs-dummy-16-9.png'  AND 
-              `ps`.`id` NOT IN (6, 7, 8, 12, 13)
+              `ps`.`id` NOT IN ( 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
+               AND (`s`.`isActive`=1)
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
+                  or (concat_ws('-',`psg`.`locale`, `psmg`.`name`) LIKE '%RIMP-zz-Cappelli%' AND p.dummyPicture <> 'bs-dummy-16-9.png' AND `s`.`isActive`=1)
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
-            HAVING (sum(`ds`.`qty`) > 0)";
+            HAVING (sum(`ds`.`qty`) > 0) Order BY p.id asc";
 
         $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
         if (!empty($this->authorizedShops)) {

@@ -245,7 +245,7 @@ class PrestaShopWebserviceTest
 			throw new PrestaShopWebserviceException('Bad parameters given');
 
         $urlDomain = explode('/api/', $url)[0];
-        $urlArgs = explode('.com', $url)[1];
+        $urlArgs = explode('.shop', $url)[1];
 		$request = self::executeRequest($urlDomain, array(CURLOPT_CUSTOMREQUEST => 'POST', CURLOPT_POSTFIELDS => $xml), $urlArgs);
 
 		self::checkStatusCode($request['status_code']);

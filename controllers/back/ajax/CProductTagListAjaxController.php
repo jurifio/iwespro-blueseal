@@ -81,7 +81,7 @@ class CProductTagListAjaxController extends AAjaxController
                     ON (((`pht`.`productId` = `p`.`id`) AND (`pht`.`productVariantId` = `p`.`productVariantId`)))) LEFT JOIN `Tag` `t`
                     ON ((`pht`.`tagId` = `t`.`id`))) LEFT JOIN
                   `ProductColorGroup` `pcg` ON ((`p`.`productColorGroupId` = `pcg`.`id`)))
-                WHERE ((`pcg`.`langId` = 1) AND (`ps`.`code` IN ('A', 'P', 'I')))
+                WHERE  (`ps`.`code` IN ('A', 'P', 'I'))
                 GROUP BY `p`.`productVariantId`";
         $datatable = new CDataTables($sql,['id','productVariantId'],$_GET,true);
         if(!empty($this->authorizedShops)){

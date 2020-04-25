@@ -299,9 +299,10 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                 //download image from aws
                 $imgBody = file_get_contents(htmlspecialchars_decode($url));
+                sleep(1);
 
                 file_put_contents($destDir . $productPhoto->name, $imgBody);
-
+                sleep(1);
                 $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
 
                 //Uncomment the following line in order to update an existing image
