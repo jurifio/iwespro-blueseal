@@ -64,7 +64,9 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         //craete new tmp folder
         $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
-        if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
+        if (!is_dir(rtrim($destDir, "/"))) if (!mkdir($destDir,0777,true) && !is_dir($destDir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created',$destDir));
+        }
 
         /** @var CProduct $product */
         foreach ($products as $product) {
