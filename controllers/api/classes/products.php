@@ -1156,8 +1156,13 @@ class products extends AApi
                 $p = \Monkey::app()->repoFactory->create("Product")->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
 
                 $path = pathinfo($v['url']);
+                $c = curl_init();
+                curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode($v['url']));
+                $imgBody = curl_exec($c);
+                curl_close($c);
+                //$imgBody = file_get_contents(htmlspecialchars_decode($v['url']));
 
-                $imgBody = file_get_contents(htmlspecialchars_decode($v['url']));
 
                 $imgN = str_pad($v['position'], 3, "0", STR_PAD_LEFT);
                 $destFileName = $p->getAztecCode() . " - " . $imgN . "." . $path['extension'];

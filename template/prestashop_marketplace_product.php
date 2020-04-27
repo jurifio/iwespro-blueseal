@@ -63,6 +63,12 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Stato
                                 </th>
+                                <th data-slug="productStatus"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Stato<br>Prodotto<br>su Iwes
+                                </th>
                                 <th data-slug="sale"
                                     data-required="true"
                                     data-searchable="true"

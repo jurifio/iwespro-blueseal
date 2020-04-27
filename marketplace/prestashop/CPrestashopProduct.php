@@ -300,7 +300,12 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $url = $cdnUrl . $product->productBrand->slug . '/' . $productPhoto->name;
 
                 //download image from aws
-                $imgBody = file_get_contents(htmlspecialchars_decode($url));
+                $c = curl_init();
+                curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode($url));
+                $imgBody = curl_exec($c);
+                curl_close($c);
+                //$imgBody = file_get_contents(htmlspecialchars_decode($url));
                 sleep(1);
 
                 file_put_contents($destDir . $productPhoto->name, $imgBody);
@@ -336,7 +341,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $result = curl_exec($ch);
                 curl_close($ch);
             } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
+                \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo '.$url, $e->getMessage());
                 continue;
             }
         }
@@ -998,7 +1003,12 @@ class CPrestashopProduct extends APrestashopMarketplace
                     $url = $cdnUrl . $product->productBrand->slug . '/' . $productPhoto->name;
 
                     //download image from aws
-                    $imgBody = file_get_contents(htmlspecialchars_decode($url));
+                    $c = curl_init();
+                    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode($url));
+                    $imgBody = curl_exec($c);
+                    curl_close($c);
+                    //$imgBody = file_get_contents(htmlspecialchars_decode($url));
 
                     file_put_contents($destDir . $productPhoto->name, $imgBody);
 

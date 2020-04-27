@@ -36,6 +36,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
+              PS.name as productStatus,     
               group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified)) AS sale,
               group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
@@ -48,7 +49,8 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                psiz.name                                                                                             AS stock
             FROM PrestashopHasProduct php
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
-            JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId
+            JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
+            LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
             LEFT JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
@@ -114,6 +116,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     break;
             }
             $row['brand']=$php->product->productBrand->name;
+            $row['productStatus']=$php->product->productStatus->name;
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
