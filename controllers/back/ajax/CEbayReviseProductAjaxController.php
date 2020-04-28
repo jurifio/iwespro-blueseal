@@ -118,25 +118,47 @@ class CEbayReviseProductAjaxController extends AAjaxController
 <ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">
   <ErrorLanguage>it_IT</ErrorLanguage>
   <WarningLevel>High</WarningLevel>';
-                    $reservedIds = \Monkey::app()->dbAdapter->query('SELECT  p.prestaId as prestaId, p.productId as ProductId, p.productVariantId as productVariantId  FROM PrestashopHasProduct p
+                    $reservedIds = \Monkey::app()->dbAdapter->query('SELECT  p.prestaId as prestaId, p.productId as productId, p.productVariantId as productVariantId  FROM PrestashopHasProduct p
         join PrestashopHasProductHasMarketplaceHasShop pp on  p.productId=pp.productId and
                                                              p.productVariantId=pp.productVariantId 
                                                     WHERE pp.marketplaceHasShopId=' . $marketplace['prestashopId'] . ' and p.prestaId is not null',[])->fetchAll();
 
                     foreach ($reservedIds as $reservedId) {
-                        $getReference = $db_con->prepare('select pfp.id_product_ref as id_product_ref,
+                        try {
+                            $getReference = $db_con->prepare('select count(*) as countProductRow,  php.id_product_ref as id_product_ref,
                                                     p.id_product as id_product, 
                                                     p.id_category_default as id_category_default
                                                     from ps_fastbay1_product php
-                                                        join ps_product_shop p on pfp.id_product=p.id_product 
-                                                        and shopId=' . $marketplace['prestashopId'] . ' and p.id_product=' . $reservedId['prestaId']);
-                        $getReference->execute();
-                        $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
-                        $getCategoryId = $db_con->prepare('select  dest_shop as StoreCategoryID  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
-                     and shopId=' . $marketplace['prestashopId'] . ' and p.id_product=' . $reservedId['prestaId']);
+                                                        join ps_product_shop p on php.id_product=p.id_product and php.id_shop=p.id_shop
+                                                        where php.id_shop=' . $marketplace['prestashopId'] . ' and php.id_marketplace=' . $market['marketplaceId'] . ' and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1');
+                            $getReference->execute();
+                            $sqlDebug='select count(*) as countProductRow,  php.id_product_ref as id_product_ref,
+                                                    p.id_product as id_product, 
+                                                    p.id_category_default as id_category_default
+                                                    from ps_fastbay1_product php
+                                                        join ps_product_shop p on php.id_product=p.id_product and php.id_shop=p.id_shop
+                                                        where php.id_shop=' . $marketplace['prestashopId'] . ' and php.id_marketplace=' . $market['marketplaceId'] . ' and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1';
+                            $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
+
+                            \Monkey::app()->applicationLog('EbayRevise','log','query',$sqlDebug,'');
+                        }catch(\Throwable $e){
+                            return $e;
+
+                        }
+                        if($rowsGetReference[0]['countProductRow']==0){
+                            continue 2;
+                        } else {
+                        try {
+                        $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
+                     and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId']. ' limit 1');
+                        $getCategoryId->execute();
                         $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
-                        //intestazione prodotto
-                        $xml . '<Item>
+                        }catch(\Throwable $e){
+                            return $e;
+                        }
+
+                            //intestazione prodotto
+                            $xml . '<Item>
     <ItemID>' . $rowsGetReference[0]['id_product_ref'] . '</ItemID>
     <Country>' . $rowCountryShop[0]['fastbay1_seller_country'] . '</Country>
     <Currency>EUR</Currency>
@@ -154,112 +176,113 @@ class CEbayReviseProductAjaxController extends AAjaxController
      <NameValueList>
           <Name>Taglia</Name>
     ';
-                        /** @var CProduct $product */
-                        $product = $productRepo->finOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                        $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
-                        $slugBrand = $productBrand->slug;
-                        $brandName = $productBrand->name;
-                        $productEanParent = $productEanRepo->findOneBy(['productId' => $reservedId['productId'],'productVariant' => $reservedId['productVariantId'],'productSizeId' => 0]);
-                        if ($productEanParent != null) {
-                            $productEan = $productEanParent->ean;
-                        } else {
-                            $productEan = '';
-                        }
-
-                        $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $product->productSizeGroupId]);
-                        $productSizeGroupHasProductSize = $productSizeGroupHasProductSizeRepo->findBy(['ProductSizeGroupId' => $productSizeGroup->id]);
-                        $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
-                        //etichetta taglie
-                        foreach ($productSizeGroupHasProductSize as $sizeId) {
-                            $productSize = $productSizeRepo->findOneBy(['id' => $sizeId->productSizeId]);
-                            $xml .= '<Value>' . $productSize->name . '</Value>';
-                        }
-                        $xml .= '</NameValueList>';
-                        //variante colore
-                        $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['productVariantId' => $reservedId['productVariantId']]);
-                        $xml .= '<NameValueList>' . $productVariant->name . '</NameValueList>';
-                        $xml .= '</VariationSpecificsSet>';
-                        //varianti taglie
-                        /** @var CProductSku $productSku */
-                        $productSku = $productSkuRepo->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                        foreach ($productSku as $sku) {
-                            $getReferenceIdProductAttribute = $db_con->prepare('select ppas.id_product_attribute as id_product_attribute, ppa.ean13 from ps_product_atribute ppa
-                        join ps_product_attribute_shop ppas on ppas.id_product_attribute=ppa.id_product_attribute and ppas.id_product=ppa.id_product_attribute
-                        where  ppas.id_product=' . $reservedId['prestaId'] . ' and ppas.shopId=' . $marketplace['prestashopId'] . ' and ppa.reference="' . $sku->productId . '-' . $sku->producVariantId . '-' . $sku->producSizeId . '"');
-                            $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
-                            $xml .= '<Variation>';
-                            $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
-                            $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                            if ($phphmhs->isOnSale == 0) {
-                                $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
+                            /** @var CProduct $product */
+                            $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                            $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
+                            $slugBrand = $productBrand->slug;
+                            $brandName = $productBrand->name;
+                            $productEanParent = $productEanRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'productSizeId' => 0]);
+                            if ($productEanParent != null) {
+                                $productEan = $productEanParent->ean;
                             } else {
-                                $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
-
+                                $productEan = '';
                             }
-                            $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
-                            $xml .= '<VariationProductListingDetails>';
-                            $xml .= '<EAN>' . $sku->ean . '</EAN>';
-                            $xml .= '<UPC>Non applicabile</UPC>';
-                            $xml .= '</VariationProductListingDetails>';
-                            $xml .= '<VariationSpecifics>';
+
+                            $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $product->productSizeGroupId]);
+                            $productSizeGroupHasProductSize = $productSizeGroupHasProductSizeRepo->findBy(['ProductSizeGroupId' => $productSizeGroup->id]);
+                            $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
+                            //etichetta taglie
+                            foreach ($productSizeGroupHasProductSize as $sizeId) {
+                                $productSize = $productSizeRepo->findOneBy(['id' => $sizeId->productSizeId]);
+                                $xml .= '<Value>' . $productSize->name . '</Value>';
+                            }
+                            $xml .= '</NameValueList>';
+                            //variante colore
+                            $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['id' => $reservedId['productVariantId']]);
+                            $xml .= '<NameValueList>' . $productVariant->name . '</NameValueList>';
+                            $xml .= '</VariationSpecificsSet>';
+                            //varianti taglie
+                            /** @var CProductSku $productSku */
+                            $productSku = $productSkuRepo->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                            foreach ($productSku as $sku) {
+                                $getReferenceIdProductAttribute = $db_con->prepare('select ppas.id_product_attribute as id_product_attribute, ppa.ean13 from ps_product_attribute ppa
+                        join ps_product_attribute_shop ppas on ppas.id_product_attribute=ppa.id_product_attribute and ppas.id_product=ppa.id_product
+                        where  ppas.id_product=' . $reservedId['prestaId'] . ' and ppas.id_shop=' . $marketplace['prestashopId'] . ' and ppa.reference="' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . '" limit 1');
+                                $getReferenceIdProductAttribute->execute();
+                                $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
+                                $xml .= '<Variation>';
+                                $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
+                                $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
+                                if ($phphmhs->isOnSale == 0) {
+                                    $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
+                                } else {
+                                    $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
+
+                                }
+                                $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
+                                $xml .= '<VariationProductListingDetails>';
+                                $xml .= '<EAN>' . $sku->ean . '</EAN>';
+                                $xml .= '<UPC>Non applicabile</UPC>';
+                                $xml .= '</VariationProductListingDetails>';
+                                $xml .= '<VariationSpecifics>';
+                                $xml .= '<NameValueList>';
+                                $xml .= '<Name>Taglia</Name>';
+                                $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
+                                $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                                $xml .= '</NameValueList>';
+                                $xml .= '<NameValueList>';
+                                $xml .= '<Name>Color</Name>';
+                                $xml .= '<Value>' . $productVariant->name . '</Value>';
+                                $xml .= '</NameValueList>';
+                                $xml .= '</VariationSpecifics>';
+                                $xml .= '</Variation>';
+                            }
+                            $xml .= '</Variations>';
+                            $xml .= '<PictureDetails>';
+                            $productHasProduct = \Monkey::app()->repoFactory->create('ProductHasProduct')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                            foreach ($productHasProduct as $phs) {
+                                $productPhoto = \Monkey::app()->repoFactory->create('ProductPhoto')->findOneBy(['id' => $phs->productPhotoId]);
+                                if ($productPhoto->size = '1124') {
+                                    $xml .= '<PictureURL>https://cdn.iwes.it/' . $slugBrand . '/' . $productPhoto->name . '</PictureURL>';
+                                } else {
+                                }
+                                continue;
+                            }
+                            $xml .= '</PictureDetails>';
+                            $xml .= '<ItemSpecifics>';
                             $xml .= '<NameValueList>';
-                            $xml .= '<Name>Taglia</Name>';
-                            $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
-                            $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                            $xml .= '<Name><![CDATA[MPN]]></Name>';
+                            $xml .= '<Value><![CDATA[' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . ']]></Value>';
                             $xml .= '</NameValueList>';
                             $xml .= '<NameValueList>';
-                            $xml .= '<Name>Color</Name>';
-                            $xml .= '<Value>' . $productVariant->name . '</Value>';
+                            $xml .= '<Name><![CDATA[Marca]]></Name>';
+                            $xml .= '<Value><![CDATA[' . $brandName . ']]></Value>';
                             $xml .= '</NameValueList>';
-                            $xml .= '</VariationSpecifics>';
-                            $xml .= '</Variation>';
-                        }
-                        $xml .= '</Variations>';
-                        $xml .= '<PictureDetails>';
-                        $productHasProduct = \Monkey::app()->repoFactory->create('ProductHasProduct')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                        foreach ($productHasProduct as $phs) {
-                            $productPhoto = \Monkey::app()->repoFactory->create('ProductPhoto')->findOneBy(['id' => $phs->productPhotoId]);
-                            if ($productPhoto->size = '1124') {
-                                $xml .= '<PictureURL>https://cdn.iwes.it/' . $slugBrand . '/' . $productPhoto->name . '</PictureURL>';
+                            $xml .= '</ItemSpecifics>';
+                            $xml .= '<ConditionID>1000</ConditionID>';
+                            if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
+                                $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
+                                $name = $product->productBrand->name
+                                    . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
+                                    . '€ ' .
+                                    $product->itemno
+                                    . ' ' .
+                                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+                                $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
                             } else {
+                                $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
+                                    . ' ' .
+                                    $product->productBrand->name
+                                    . ' ' .
+                                    $product->itemno
+                                    . ' ' .
+                                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+
+
+                                $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
                             }
-                            continue;
-                        }
-                        $xml .= '</PictureDetails>';
-                        $xml .= '<ItemSpecifics>';
-                        $xml .= '<NameValueList>';
-                        $xml .= '<Name><![CDATA[MPN]]></Name>';
-                        $xml .= '<Value><![CDATA[' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . ']]></Value>';
-                        $xml .= '</NameValueList>';
-                        $xml .= '<NameValueList>';
-                        $xml .= '<Name><![CDATA[Marca]]></Name>';
-                        $xml .= '<Value><![CDATA[' . $brandName . ']]></Value>';
-                        $xml .= '</NameValueList>';
-                        $xml .= '</ItemSpecifics>';
-                        $xml .= '<ConditionID>1000</ConditionID>';
-                        if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                            $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
-                            $name = $product->productBrand->name
-                                . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
-                                . '€ ' .
-                                $product->itemno
-                                . ' ' .
-                                $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
-                            $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
-                        } else {
-                            $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
-                                . ' ' .
-                                $product->productBrand->name
-                                . ' ' .
-                                $product->itemno
-                                . ' ' .
-                                $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
-
-
-                            $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
-                        }
-                        $xml .= '<Description>';
-                        $xml .= '<![CDATA[<!DOCTYPE html>
+                            $xml .= '<Description>';
+                            $xml .= '<![CDATA[<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
@@ -660,22 +683,22 @@ footer {
 </ul>
 <img src="https://wearephoenixteam.com/ebay/free-templates/images/temp6/gif-img.gif" class="gif_img" alt="" /></section>
 <section class="title">';
-                        $xml .= '<h2>' . $name . '</h2>';
-                        $xml .= '</section>
+                            $xml .= '<h2>' . $name . '</h2>';
+                            $xml .= '</section>
 <section class="reference">';
-                        $xml .= '<h2>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '</h2>';
-                        $xml .= '</section>
+                            $xml .= '<h2>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '</h2>';
+                            $xml .= '</section>
 <section class="ean13">';
-                        $xml .= '<h2>' . $productEan . '</h2>';
-                        $xml .= '</section>
+                            $xml .= '<h2>' . $productEan . '</h2>';
+                            $xml .= '</section>
 <section class="temp_content">
 <h2>Descrizione Prodotto</h2>
 <div class="description">
 <div vocab="https://schema.org/" typeof="Product">
 <p>descrizione</p>
 </div>';
-                        $xml .= '<p>' . $name . '<br/></p>';
-                        $xml .= '</div>
+                            $xml .= '<p>' . $name . '<br/></p>';
+                            $xml .= '</div>
 </section>
 <section class="vertabs">
 <ul class="css_tab">
@@ -685,14 +708,14 @@ footer {
 <p><br /> SPEDIZIONE IMMEDIATA ANCHE IN CONTRASSEGNO</p>
 <p>ACQUISTA ORA E RICEVI IN 24/48 ORE !!! (sabato e domenica esclusi)</p>
 <h2><a name="disponibilita-dei-prodotti"></a>Disponibilit&agrave; dei prodotti</h2>';
-                        $xml .= '<p>Ricevuto l\'ordine, ' . $addressBook->subject . ' procede, prima della spedizione, al controllo qualit&agrave; e alla conferma mediante e-mail dell\'ordine in lavorazione. Qualora gli articoli ordinati non siano pi&ugrave; disponibili o non abbiano superato il controllo qualit&agrave; ne daremo immediata comunicazione al cliente proponendo possibili alternative.</p>';
-                        $xml .= '<h2><a name="evasione-degli-ordini"></a>Evasione degli ordini</h2>';
-                        $xml .= '<p>Gli ordini saranno evasi entro 48 ore dall&rsquo;esito positivo del pagamento. E\' facolt&agrave; ' . $addressBook->subject . ' rifiutare ordini a chiunque per qualsiasi motivo.</p>';
-                        $xml .= '<h2><a name="modalita-di-spedizione"></a>Modalit&agrave; di spedizione</h2>';
-                        $xml .= '<p>Tutte le consegne effettuate da ' . $addressBook->subject . '  sono coperte da assicurazione contro il furto e danni accidentali. Ritirata la consegna la copertura assicurativa si estingue.</p>';
-                        $xml .= '<h2><a name="consegna"></a>Consegna</h2>';
-                        $xml .= '<p>Gli ordini verranno spediti da ' . $addressBook->subject . ', da Luned&igrave; al Venerd&igrave; dalle 9:00 CET alle 17:30 CET.</p>';
-                        $xml .= '<p>Gli ordini effettuati durante il fine settimana saranno processati il luned&igrave; successivo.</p>
+                            $xml .= '<p>Ricevuto l\'ordine, ' . $addressBook->subject . ' procede, prima della spedizione, al controllo qualit&agrave; e alla conferma mediante e-mail dell\'ordine in lavorazione. Qualora gli articoli ordinati non siano pi&ugrave; disponibili o non abbiano superato il controllo qualit&agrave; ne daremo immediata comunicazione al cliente proponendo possibili alternative.</p>';
+                            $xml .= '<h2><a name="evasione-degli-ordini"></a>Evasione degli ordini</h2>';
+                            $xml .= '<p>Gli ordini saranno evasi entro 48 ore dall&rsquo;esito positivo del pagamento. E\' facolt&agrave; ' . $addressBook->subject . ' rifiutare ordini a chiunque per qualsiasi motivo.</p>';
+                            $xml .= '<h2><a name="modalita-di-spedizione"></a>Modalit&agrave; di spedizione</h2>';
+                            $xml .= '<p>Tutte le consegne effettuate da ' . $addressBook->subject . '  sono coperte da assicurazione contro il furto e danni accidentali. Ritirata la consegna la copertura assicurativa si estingue.</p>';
+                            $xml .= '<h2><a name="consegna"></a>Consegna</h2>';
+                            $xml .= '<p>Gli ordini verranno spediti da ' . $addressBook->subject . ', da Luned&igrave; al Venerd&igrave; dalle 9:00 CET alle 17:30 CET.</p>';
+                            $xml .= '<p>Gli ordini effettuati durante il fine settimana saranno processati il luned&igrave; successivo.</p>
 <p>Gli ordini saranno processati entro le 48 ore dalla ricezione del pagamento per ordini ricevuti entro le ore 11:30 CET.</p>
 <p>Informiamo che non effettuiamo spedizioni verso caselle postali.</p>
 <h3>Spedizioni</h3>
@@ -780,8 +803,8 @@ footer {
 <p>In caso di pagamento tramite PayPal verrai automaticamente trasferito alla pagina di pagamento PayPal. Se si &egrave; gi&agrave; clienti PayPal, sar&agrave; sufficiente accedere con i propri dati e confermare il pagamento. Se non si possiede un conto PayPal, &egrave; possibile aprirne uno e confermare il pagamento.</p>
 <h2><a name="bonifico-bancario"></a>Bonifico bancario</h2>
 <p>Durante il processo di acquisto &egrave; possibile scegliere &ldquo;Bonifico Bancario&rdquo; come modalit&agrave; di pagamento. Il Cliente riceve automaticamente una email contenente i dati bancari di Cartechinishop.com. I prodotti ordinati verranno riservati in attesa dell&rsquo;arrivo del bonifico bancario sul conto. Il cliente dovr&agrave; inviare via email copia del pagamento entro 48 ore oltrepassate le quali l&rsquo;ordine verr&agrave; automaticamente cancellato. Scegliendo la &ldquo;modalit&agrave; di pagamento&rdquo; Bonifico Bancario dovr&agrave; trasferire il totale dell&rsquo;ordine al seguente conto bancario, indicando il numero dell&rsquo;ordine:</p>';
-                        $xml .= '<p>' . $addressBook->subject . '<br /> IBAN:' . $addressBook->iban . '</p>';
-                        $xml .= '<p>L\'ordine sar&agrave; spedito subito dopo la ricezione dell&rsquo;accredito sul nostro conto bancario.</p>
+                            $xml .= '<p>' . $addressBook->subject . '<br /> IBAN:' . $addressBook->iban . '</p>';
+                            $xml .= '<p>L\'ordine sar&agrave; spedito subito dopo la ricezione dell&rsquo;accredito sul nostro conto bancario.</p>
 <h2><a name="contrassegno"></a>Contrassegno</h2>
 <p>Il pagamento con contrassegno &egrave; valido solo per i seguenti paesi: <strong>Italia</strong> e per importi inferiori a 1.000 EUR</p>
 <p>Tramite questo metodo di pagamento pagherai il totale dell\'ordine direttamente al corriere al momento della consegna. Ricordati di preparare l\'importo esatto dell\'ordine in quanto il corriere non &egrave; autorizzato a dare resto. Non &egrave; possibile pagare il contrassegno con assegno bancario di nessun genere</p>
@@ -809,7 +832,7 @@ footer {
 <li><input id="tab7" class="css-tab" name="tab" type="radio" /> <label for="tab7" class="tab-label">CONTATTI</label>
 <div id="tab-content7" class="tab-content">
 <h2>CONTATTACI</h2>';
-                        $xml .= '<p>tel. +39 02 379 20 266<br /> &nbsp;mob. +39 327 55 90 989<br /> &nbsp;email.&nbsp; support@iwes.it&nbsp;</p>
+                            $xml .= '<p>tel. +39 02 379 20 266<br /> &nbsp;mob. +39 327 55 90 989<br /> &nbsp;email.&nbsp; support@iwes.it&nbsp;</p>
 </div>
 </li>
 </ul>
@@ -839,9 +862,9 @@ footer {
 <tbody>
 <tr>
 <td align="left" style="background: #323b47; font-color: #ffffff;">';
-                        $xml .= '<p>Copyright &copy; ' . $addressBook->subject . ' | All Rights Reserved</p>';
-                        $xml .= '</td><td align="right" style="background: #323b47;"><img width="150" height="35" src="' . $shop->urlSite . '/assets/img/' . $shop->logoSite . '" /></td>';
-                        $xml .= '</tr>
+                            $xml .= '<p>Copyright &copy; ' . $addressBook->subject . ' | All Rights Reserved</p>';
+                            $xml .= '</td><td align="right" style="background: #323b47;"><img width="150" height="35" src="' . $shop->urlSite . '/assets/img/' . $shop->logoSite . '" /></td>';
+                            $xml .= '</tr>
 </tbody>
 </table>
 </footer>
@@ -907,40 +930,40 @@ footer {
 </div>]]>
     </Description>';
 
-                        $xml .= '<Storefront><StoreCategoryID>' . $rowGetCategoryId['StoreCategoryID'] . '</StoreCategoryID></Storefront><PostalCode>' . $rowZipCodeShop[0]['shop_zip_code'] . '</PostalCode>';
-                        $xml .= '<Location>' . $rowCompanyCity[0]['company_city'] . '</Location>';
-                        $xml .= '<DispatchTimeMax>2</DispatchTimeMax>';
-                        $xml .= '<PaymentMethods>PayPal</PaymentMethods>';
-                        $xml .= '<PayPalEmailAddress>' . $rowPaypalEmail['paypal_email'] . '</PayPalEmailAddress>';
-                        $xml .= '<SellerProfiles>';
-                        $getDescPaymentRules = $db_con->prepare('select profile_name from ps_fastbay_business_policies where profile_id=' . $rowRuleBusiness['id_payment'] . ' and
+                            $xml .= '<Storefront><StoreCategoryID>' . $rowGetCategoryId[0]['StoreCategoryID'] . '</StoreCategoryID></Storefront><PostalCode>' . $rowZipCodeShop[0]['shop_zip_code'] . '</PostalCode>';
+                            $xml .= '<Location>' . $rowCompanyCity[0]['company_city'] . '</Location>';
+                            $xml .= '<DispatchTimeMax>2</DispatchTimeMax>';
+                            $xml .= '<PaymentMethods>PayPal</PaymentMethods>';
+                            $xml .= '<PayPalEmailAddress>' . $rowPaypalEmail[0]['paypal_email'] . '</PayPalEmailAddress>';
+                            $xml .= '<SellerProfiles>';
+                            $getDescPaymentRules = $db_con->prepare('select profile_name from ps_fastbay1_business_policies where profile_id=' . $rowRuleBusiness[0]['id_payment'] . ' and
     id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace="' . $market['marketplaceId'] . '" limit 1');
-                        $getDescPaymentRules->execute();
-                        $rowDescPaymentRules = $getDescPaymentRules->fetchAll(PDO::FETCH_ASSOC);
-                        $getDescShippingRules = $db_con->prepare('select profile_name from ps_fastbay_business_policies where profile_id=' . $rowRuleBusiness['id_shipping'] . ' and
+                            $getDescPaymentRules->execute();
+                            $rowDescPaymentRules = $getDescPaymentRules->fetchAll(PDO::FETCH_ASSOC);
+                            $getDescShippingRules = $db_con->prepare('select profile_name from ps_fastbay1_business_policies where profile_id=' . $rowRuleBusiness[0]['id_shipping'] . ' and
     id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace="' . $market['marketplaceId'] . '" limit 1');
-                        $getDescShippingRules->execute();
-                        $rowDescShippingRules = $getDescShippingRules->fetchAll(PDO::FETCH_ASSOC);
-                        $getDescReturnRules = $db_con->prepare('select profile_name from ps_fastbay_business_policies where profile_id=' . $rowRuleBusiness['id_return'] . ' and
+                            $getDescShippingRules->execute();
+                            $rowDescShippingRules = $getDescShippingRules->fetchAll(PDO::FETCH_ASSOC);
+                            $getDescReturnRules = $db_con->prepare('select profile_name from ps_fastbay1_business_policies where profile_id=' . $rowRuleBusiness[0]['id_return'] . ' and
     id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace="' . $market['marketplaceId'] . '" limit 1');
-                        $getDescReturnRules->execute();
-                        $rowDescReturnRules = $getDescReturnRules->fetchAll(PDO::FETCH_ASSOC);
-                        $xml .= '<SellerPaymentProfile>';
-                        $xml .= '<PaymentProfileID>' . $rowRuleBusiness[0]['id_payment'] . '</PaymentProfileID>';
-                        $xml .= ' <PaymentProfileName>' . $rowDescPaymentRules['profile_name'] . '</PaymentProfileName>';
-                        $xml .= '</SellerPaymentProfile>';
-                        $xml .= ' <SellerReturnProfile> 
+                            $getDescReturnRules->execute();
+                            $rowDescReturnRules = $getDescReturnRules->fetchAll(PDO::FETCH_ASSOC);
+                            $xml .= '<SellerPaymentProfile>';
+                            $xml .= '<PaymentProfileID>' . $rowRuleBusiness[0]['id_payment'] . '</PaymentProfileID>';
+                            $xml .= ' <PaymentProfileName>' . $rowDescPaymentRules[0]['profile_name'] . '</PaymentProfileName>';
+                            $xml .= '</SellerPaymentProfile>';
+                            $xml .= ' <SellerReturnProfile> 
          <ReturnProfileID>' . $rowRuleBusiness[0]['id_return'] . '</ReturnProfileID>
          <ReturnProfileName>' . $rowDescReturnRules[0]['profile_name'] . '</ReturnProfileName>
         </SellerReturnProfile> 
         <SellerShippingProfile> 
          <ShippingProfileID>' . $rowRuleBusiness[0]['id_shipping'] . '</ShippingProfileID>
-         <ShippingProfileName>' . $rowDescShippingRules['id_profile'] . '</ShippingProfileName>
+         <ShippingProfileName>' . $rowDescShippingRules[0]['profile_name'] . '</ShippingProfileName>
         </SellerShippingProfile> 
         </SellerProfiles> ';
-                        $xml .= '<Site>Italy</Site>';
-                        $xml .= '</item>';
-
+                            $xml .= '<Site>Italy</Site>';
+                            $xml .= '</item>';
+                        }
 
                     }
                     $getToken = $db_con->prepare('select token from ps_fastbay1_token where id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace="' . $market['marketplaceId'] . '" limit 1');
@@ -1002,7 +1025,7 @@ footer {
                     $response = curl_exec($connection);*/
                     $res = 'invio eseguito xml:<br>' . $xml;
                 } catch (\Throwable $e) {
-                    \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','error','EbayReviseProdut',$e,$xml);
+                    \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','error','EbayReviseProduct',$e,$xml);
                     $res = 'errore<br>' . $e;
                     return $res;
                 }
@@ -1011,7 +1034,7 @@ footer {
         }
 
 
-        \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','success','EbayReviseProdut',$xml,'');
+        \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','success','EbayReviseProduct',$xml,'');
 
 
         return $res;
