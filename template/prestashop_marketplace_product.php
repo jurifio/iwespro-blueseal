@@ -204,6 +204,17 @@
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-edge"
+                data-permission="/admin/product/edit"
+                data-event="bs.ebay.align.product"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiorna i Prodotti su Ebay"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

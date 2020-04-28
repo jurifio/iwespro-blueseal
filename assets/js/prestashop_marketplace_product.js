@@ -409,4 +409,43 @@
             });
         });
     });
+
+    //bs.ebay.align.product;
+
+    $(document).on('bs.ebay.align.product', function () {
+
+
+        products='';
+
+
+        let bsModal = new $.bsModal('Aggiornamento Massivo ', {
+            body: `Aggiornamento Prodotti su Ebay`
+        });
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                products: products,
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/EbayReviseProductAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+
 })(jQuery);
