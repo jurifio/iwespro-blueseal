@@ -36,7 +36,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
      */
     public function post()
     {
-        $xml = '';
+        $xml='';
         if (ENV === 'prod') {
             $db_host = '5.189.159.187';
             $db_name = 'iwesPrestaDB';
@@ -119,10 +119,12 @@ class CEbayReviseProductAjaxController extends AAjaxController
                         $xml .= '<ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';
                         $xml .= '<ErrorLanguage>it_IT</ErrorLanguage>';
                         $xml .= '<WarningLevel>High</WarningLevel>';
+
                         $reservedIds = \Monkey::app()->dbAdapter->query('SELECT  p.prestaId as prestaId, p.productId as productId, p.productVariantId as productVariantId  FROM PrestashopHasProduct p
         join PrestashopHasProductHasMarketplaceHasShop pp on  p.productId=pp.productId and
                                                              p.productVariantId=pp.productVariantId 
                                                     WHERE pp.marketplaceHasShopId=' . $marketplace['prestashopId'] . ' and p.prestaId is not null',[])->fetchAll();
+
 
                         foreach ($reservedIds as $reservedId) {
                             try {
@@ -150,7 +152,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 continue ;
                             } else {
                                 try {
-                                    $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
+                                    $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
                                     $getCategoryId->execute();
                                     $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
@@ -161,7 +163,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 //intestazione prodotto
                                 $xml .= '<Item>';
                                 $xml .= '<ItemID>' . $rowsGetReference[0]['id_product_ref'] . '</ItemID>';
-                                $xml .= ' <Country>' . $rowCountryShop[0]['fastbay1_seller_country'] . '</Country>';
+                                $xml .= '<Country>' . $rowCountryShop[0]['fastbay1_seller_country'] . '</Country>';
                                 $xml .= '<Currency>EUR</Currency>';
                                 $xml .= '<PostalCode>' . $rowZipCodeShop[0]['shop_zip_code'] . '</PostalCode>';
                                 $xml .= '<Location>' . $rowCompanyCity[0]['company_city'] . '</Location>';
@@ -169,7 +171,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 $xml .= '<BestOfferEnabled>False</BestOfferEnabled>';
                                 $xml .= '</BestOfferDetails>';
                                 $xml .= '<PrimaryCategory>';
-                                $xml .= '<CategoryID>62107</CategoryID>';
+                                $xml .= '<CategoryID>'.$rowGetCategoryId[0]['dest_ebay'].'</CategoryID>';
                                 $xml .= '</PrimaryCategory>';
                                 $xml .= '<HitCounter>RetroStyle</HitCounter>';
                                 $xml .= '<Variations>';
@@ -194,12 +196,23 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 //etichetta taglie
                                 foreach ($productSizeGroupHasProductSize as $sizeId) {
                                     $productSize = $productSizeRepo->findOneBy(['id' => $sizeId->productSizeId]);
-                                    $xml .= '<Value>' . $productSize->name . '</Value>';
+                                    $skusValue=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(
+                                        ['productId'=>$reservedId['productId'],
+                                        'productVariantId'=>$reservedId['productVariantId'],
+                                        'productSizeId'=>$sizeId->productSizeId]);
+                                    if($skusValue!=null) {
+                                        if ($skusValue->stockQty != '0') {
+                                            $xml .= '<Value>' . $productSize->name . '</Value>';
+                                        }
+                                    }
                                 }
                                 $xml .= '</NameValueList>';
                                 //variante colore
                                 $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['id' => $reservedId['productVariantId']]);
-                                $xml .= '<NameValueList>' . $productVariant->name . '</NameValueList>';
+                                $xml.='<NameValueList>';
+                                $xml .= '<Name>Color</Name>';
+                                $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
+                                $xml.='</NameValueList>';
                                 $xml .= '</VariationSpecificsSet>';
                                 //varianti taglie
                                 /** @var CProductSku $productSku */
@@ -232,21 +245,20 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                     $xml .= '</NameValueList>';
                                     $xml .= '<NameValueList>';
                                     $xml .= '<Name>Color</Name>';
-                                    $xml .= '<Value>' . $productVariant->name . '</Value>';
+                                    $xml .= '<Value>'.$product->productColorGroup->name.'</Value>';
                                     $xml .= '</NameValueList>';
                                     $xml .= '</VariationSpecifics>';
                                     $xml .= '</Variation>';
                                 }
                                 $xml .= '</Variations>';
                                 $xml .= '<PictureDetails>';
-                                $productHasProduct = \Monkey::app()->repoFactory->create('ProductHasProduct')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                                foreach ($productHasProduct as $phs) {
+                                $productHasProductPhoto = \Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                                foreach ($productHasProductPhoto as $phs) {
                                     $productPhoto = \Monkey::app()->repoFactory->create('ProductPhoto')->findOneBy(['id' => $phs->productPhotoId]);
-                                    if ($productPhoto->size = '1124') {
+                                    if ($productPhoto->size == '1124') {
                                         $xml .= '<PictureURL>https://cdn.iwes.it/' . $slugBrand . '/' . $productPhoto->name . '</PictureURL>';
-                                    } else {
                                     }
-                                    continue;
+
                                 }
                                 $xml .= '</PictureDetails>';
                                 $xml .= '<ItemSpecifics>';
@@ -258,6 +270,47 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 $xml .= '<Name><![CDATA[Marca]]></Name>';
                                 $xml .= '<Value><![CDATA[' . $brandName . ']]></Value>';
                                 $xml .= '</NameValueList>';
+                                /*$xml.='<NameValueList>
+        <Name><![CDATA[Materiale Tomaia]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList><NameValueList>
+        <Name><![CDATA[Larghezza della scarpa]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList>
+      <NameValueList>
+        <Name><![CDATA[Tipo]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList>
+       <NameValueList>
+        <Name><![CDATA[Modello]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList>
+        <NameValueList>
+        <Name><![CDATA[Reparto]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList>';
+                                $xml .= '<NameValueList>';
+                                $xml .= '<Name><![CDATA[Vintage]]></Name>';
+                                $xml .= '<Value><![CDATA[non applicabile]]></Value>';
+                                $xml .= '</NameValueList>';
+                                try {
+                                    $getListingDetail = $db_con->prepare('SELECT  `name` FROM ps_fastbay1_category_specific 
+                                    WHERE `name` NOT LIKE \'%MPN%\' AND `name` NOT LIKE \'%Marca%\'
+                                    
+                                     and id_fastbay1_category='.$rowGetCategoryId[0]['dest_ebay'].' and id_marketplace=' . $market['marketplaceId']);
+                                    $getListingDetail->execute();
+                                   $rowGetListingDetail = $getListingDetail->fetchAll(PDO::FETCH_ASSOC);
+                                       foreach($rowGetListingDetail as $listingDetail){
+                                       $xml .= '<NameValueList>';
+                                       $xml .= '<Name><![CDATA['.$listingDetail['name'].']]></Name>';
+                                       $xml .= '<Value><![CDATA[Non applicabile]]></Value>';
+                                       $xml .= '</NameValueList>';
+                                   }
+                                } catch (\Throwable $e) {
+                                    return $e;
+                                }*/
+
+
                                 $xml .= '</ItemSpecifics>';
                                 $xml .= '<ConditionID>1000</ConditionID>';
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
@@ -962,7 +1015,8 @@ footer {
         </SellerShippingProfile> 
         </SellerProfiles> ';
                                 $xml .= '<Site>Italy</Site>';
-                                $xml .= '</item>';
+                                $xml .= '</Item>';
+                                $res .= 'Prodotti inviati  :'.$reservedId['productId'].'-'.$reservedId['productVariantId'].'<br>';
                             }
 
                         }
@@ -975,6 +1029,17 @@ footer {
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>
 </ReviseFixedPriceItem>';
+                        $xml = preg_replace(
+                            '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'
+                            . '|[\x00-\x7F][\x80-\xBF]+'
+                            . '|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*'
+                            . '|[\xC2-\xDF]((?![\x80-\xBF])|[\x80-\xBF]{2,})'
+                            . '|[\xE0-\xEF](([\x80-\xBF](?![\x80-\xBF]))|(?![\x80-\xBF]{2})|[\x80-\xBF]{3,})/S',
+                            '?',
+                            $xml
+                        );
+
+                        $xml = preg_replace('/\xE0[\x80-\x9F][\x80-\xBF]' . '|\xED[\xA0-\xBF][\x80-\xBF]/S', '?', $xml);
                         $devID = '9c29584f-1f9e-4c60-94dc-84f786d8670e';
                         $appID = 'VendiloS-c310-4f4c-88a9-27362c05ea78';
                         $certID = '3050bb00-db24-4842-999c-b943deb09d1a';
@@ -1023,7 +1088,12 @@ footer {
 
 // Send the Request
                         $response = curl_exec($connection);
-                        $res .= 'invio xml eseguito :<br>';
+                        //$xmlresponse = new \SimpleXMLElement($response);
+
+
+                        $res .= 'risultato'.var_dump($response);
+
+
                     } catch (\Throwable $e) {
                         \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','error','EbayReviseProduct',$e,$xml);
                         $res .= 'errore<br>' . $e;
@@ -1033,8 +1103,8 @@ footer {
             }
         }
 
+        \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','Report','EbayReviseProduct',$xml,'');
 
-        \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','success','EbayReviseProduct',$xml,'');
 
 
         return $res;

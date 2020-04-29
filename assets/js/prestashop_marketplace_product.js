@@ -425,6 +425,7 @@
 
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
+            bsModal.writeBody('<img src="/assets/img/ajax-loader.gif" />');
 
             const data = {
                 products: products,
