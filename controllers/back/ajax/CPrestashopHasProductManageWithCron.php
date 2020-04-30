@@ -34,23 +34,46 @@ class CPrestashopHasProductManageWithCron extends AAjaxController
         if(empty($this->data['marketplaceHasShopId']) || (empty($this->data['variantValue']) && $this->data['modifyType'] !== 'nf')){
             return 'Inserisci i dati correttamente';
         }
-
+        $res='';
         /** @var CPrestashopHasProductRepo $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+        $shopHasProductRepo=\Monkey::app()->repoFactory->create('ShopHasProduct');
+        $phsdRepo=\Monkey::app()->repoFactory->create('ProductHasShopDestination');
+        $marketplaceHasShopRepo=\Monkey::app()->repoFactory->create('MarketplaceHasShop');
 
         foreach ($this->data['products'] as $productCode){
 
             $productIds = explode('-',$productCode);
+            $shopId=$marketplaceHasShopRepo->findOneBy(['prestashopId'=>$this->data['marketplaceHasShopId']])->shopId;
+            $isProductShop=$shopHasProductRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopId'=>$shopId]);
+            $isProductHasShopDestination=$phsdRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopIdDestination'=>$shopId]);
+            if($isProductShop!=null) {
+                /** @var CPrestashopHasProduct $php */
+                $php = $phpRepo->findOneBy(['productId' => $productIds[0],'productVariantId' => $productIds[1]]);
 
-            /** @var CPrestashopHasProduct $php */
-            $php = $phpRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1]]);
-            $php->marketplaceHasShopId = $this->data['marketplaceHasShopId'];
-            $php->modifyType = $this->data['modifyType'];
-            $php->variantValue = $this->data['modifyType'] === 'nf' ? 0 : $this->data['variantValue'];
-            $php->update();
+                /** @var @ marketplaceHasShopId */
+                $php->marketplaceHasShopId = $this->data['marketplaceHasShopId'];
+                $php->modifyType = $this->data['modifyType'];
+                $php->variantValue = $this->data['modifyType'] === 'nf' ? 0 : $this->data['variantValue'];
+                $php->update();
+                $res.='Prodotto '.$productIds[0].'-'.$productIds[1].' inserito con successo</br>';
+            }elseif($isProductHasShopDestination!=null) {
+                /** @var CPrestashopHasProduct $php */
+                $php = $phpRepo->findOneBy(['productId' => $productIds[0],'productVariantId' => $productIds[1]]);
+
+                /** @var @ marketplaceHasShopId */
+                $php->marketplaceHasShopId = $this->data['marketplaceHasShopId'];
+                $php->modifyType = $this->data['modifyType'];
+                $php->variantValue = $this->data['modifyType'] === 'nf' ? 0 : $this->data['variantValue'];
+                $php->update();
+                $res.='Prodotto' .$productIds[0].'-'.$productIds[1].' inserito con successo</br>';
+            }else{
+                $res.='Prodotto' .$productIds[0].'-'.$productIds[1].' inserito Non inserito pechè non presente neanche nello shop di Destinazione</br>';
+
+            }
         }
 
-        return 'Prodotti prenotati con successo';
+        return $res;
     }
 
 

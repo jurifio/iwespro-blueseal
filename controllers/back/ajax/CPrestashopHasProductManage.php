@@ -50,22 +50,39 @@ class CPrestashopHasProductManage extends AAjaxController
         if(empty($this->data['marketplaceHasShopId']) || (empty($this->data['variantValue']) && $this->data['modifyType'] !== 'nf')){
             return 'Inserisci i dati correttamente';
         }
-
+        $res='';
         $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $this->data['marketplaceHasShopId']]);
+        $shopHasProductRepo=\Monkey::app()->repoFactory->create('ShopHasProduct');
+        $phsdRepo=\Monkey::app()->repoFactory->create('ProductHasShopDestination');
+        $marketplaceHasShopRepo=\Monkey::app()->repoFactory->create('MarketplaceHasShop');
 
         /** @var CProductRepo $productRepo */
         $productRepo = \Monkey::app()->repoFactory->create('Product');
 
         $products = new CObjectCollection();
         foreach ($this->data['products'] as $productCode) {
-            /** @var CProduct $product */
-            $product = $productRepo->findOneByStringId($productCode);
-            $products->add($product);
+            $productIds = explode('-',$productCode);
+            $shopId=$marketplaceHasShopRepo->findOneBy(['prestashopId'=>$this->data['marketplaceHasShopId']])->shopId;
+            $isProductShop=$shopHasProductRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopId'=>$shopId]);
+            $isProductHasShopDestination=$phsdRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopIdDestination'=>$shopId]);
+            if($isProductShop!=null) {
+                /** @var CProduct $product */
+                $product = $productRepo->findOneByStringId($productCode);
+                $products->add($product);
+                $res.='Prodotto '.$productIds[0].'-'.$productIds[1].' inserito con successo</br>';
+            } elseif($isProductHasShopDestination!=null) {
+                /** @var CProduct $product */
+                $product = $productRepo->findOneByStringId($productCode);
+                $products->add($product);
+                $res.='Prodotto '.$productIds[0].'-'.$productIds[1].' inserito con successo</br>';
+            }else{
+                $res.='Prodotto' .$productIds[0].'-'.$productIds[1].' inserito Non inserito pechè non presente neanche nello shop di Destinazione</br>';
+            }
         }
 
         $prestashopProduct = new CPrestashopProduct();
         if ($prestashopProduct->addNewProducts($products, $mhs, $this->data['modifyType'], $this->data['variantValue'])) {
-            return 'Prodotti inseriti con successo';
+            return $res;
         };
 
         return 'Errore durante l\'inserimento dei prodotti';
