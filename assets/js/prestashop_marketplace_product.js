@@ -438,7 +438,7 @@
             }).done(function (res) {
                 bsModal.writeBody(res);
             }).fail(function (res) {
-                bsModal.writeBody('Errore grave');
+                bsModal.writeBody(res);
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     bsModal.hide();
