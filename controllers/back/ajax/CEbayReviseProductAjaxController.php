@@ -210,8 +210,8 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 $getReferenceIdProductAttribute->execute();
                                 $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
                                 $xml .= '<Variation>';
-                                $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
-                               //$xml.='<SKU>'.$reservedId['productId'].'-'.$reservedId['productVariantId'].'-'.$sku->productSizeId.'</SKU>';
+                               // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
+                               $xml.='<SKU>'.$reservedId['productId'].'-'.$reservedId['productVariantId'].'-'.$sku->productSizeId.'</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                                 if ($phphmhs->isOnSale == 0) {
                                     $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
