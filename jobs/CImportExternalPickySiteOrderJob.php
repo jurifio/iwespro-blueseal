@@ -561,6 +561,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.isOrderMarketplace as isOrderMarketplace,
                                                o.marketplaceId as marketplaceId,
                                                o.marketplaceOrderId as marketplaceOrderId,
+                                               o.orderIDMarketplace as orderIDMarketplace,
                                                o.isImport as isImport
                                                from `Order` o join User U on o.userId = U.id WHERE isParallel is null  AND o.isImport=0 ');
                 $stmtOrder->execute();
@@ -618,6 +619,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder->isParallel = $rowOrder['isParallel'];
                                 $insertOrder->isOrderMarketplace=$rowOrder['isOrderMarketplace'];
                                 $insertOrder->marketplaceOrderId=$rowOrder['marketplaceOrderId'];
+                                $insertOrder->orderIDMarketplace=$rowOrder['orderIDMarketplace'];
                                 $insertOrder->insert();
                                 continue;
 
