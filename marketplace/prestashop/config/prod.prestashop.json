@@ -32,7 +32,7 @@
     "features": {
         "url": "iwes.shop",
         "key": "8Y943RJ5WLFG56TTLIBHXWMI3VFKV64I",
-        "resource": "",
+        "resource": "products",
         "debug": false
     },
     "orders": {

@@ -24,7 +24,7 @@ class CPrestashopAddNewShop extends ACronJob
      */
     public function run($args = null)
     {
-        $this->insertNewShopInPrestashop($args);
+            $this->insertNewShopInPrestashop($args);
     }
 
     /**

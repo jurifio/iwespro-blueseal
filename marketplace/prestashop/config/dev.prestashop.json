@@ -20,7 +20,7 @@
     "product": {
         "url": "dev.iwes.shop",
         "key": "6SS993LXNX84RQN9XZ4XSTZRNZCBJLQV",
-        "resource": "",
+        "resource": "products",
         "debug": false
     },
     "productOption": {
