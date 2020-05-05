@@ -50,7 +50,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $variantValue
      * @return bool
      */
-    public function addNewProducts($products, CMarketplaceHasShop $marketplaceHasShop, $modifyType, $variantValue)
+    public function addNewProducts($products,CMarketplaceHasShop $marketplaceHasShop,$modifyType,$variantValue)
     {
 
         //if argument is object create objectCollection and then iterate it
@@ -65,7 +65,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         //craete new tmp folder
         $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
-        if (!is_dir(rtrim($destDir, "/"))) if (!mkdir($destDir,0777,true) && !is_dir($destDir)) {
+        if (!is_dir(rtrim($destDir,"/"))) if (!mkdir($destDir,0777,true) && !is_dir($destDir)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created',$destDir));
         }
 
@@ -102,21 +102,21 @@ class CPrestashopProduct extends APrestashopMarketplace
                 if ($productPrice <= 0) continue;
 
                 /** @var CPrestashopHasProduct $pHp */
-                $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $product->id, 'productVariantId' => $product->productVariantId]);
-                $operation = $this->checkIfProductExist($product, $marketplaceHasShop->prestashopId, $pHp);
+                $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId]);
+                $operation = $this->checkIfProductExist($product,$marketplaceHasShop->prestashopId,$pHp);
 
                 if ($operation == 'insert') {
-                    if (!$this->insertNewProduct($product, $productPrice, $marketplaceHasShop, $destDir)) continue;
+                    if (!$this->insertNewProduct($product,$productPrice,$marketplaceHasShop,$destDir)) continue;
                 } else if ($operation == 'exist') {
-                    $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $marketplaceHasShop->prestashopId);
-                    $this->updateProductPrice($xml, $productPrice, $marketplaceHasShop, $product);
+                    $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE,$pHp->prestaId,[],null,null,$marketplaceHasShop->prestashopId);
+                    $this->updateProductPrice($xml,$productPrice,$marketplaceHasShop,$product);
                 } else if ($operation instanceof \SimpleXMLElement) {
-                    if (!$this->insertProductInNewShop($operation, $marketplaceHasShop, $product, $destDir, $productPrice)) continue;
+                    if (!$this->insertProductInNewShop($operation,$marketplaceHasShop,$product,$destDir,$productPrice)) continue;
                 }
 
 
             } catch (\Exception $e) {
-                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getLine());
+                \Monkey::app()->applicationLog('PrestashopProduct','Error','Errore while insert',$e->getLine(),$e->getMessage());
                 return false;
             }
 
@@ -131,7 +131,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             }
             rmdir($destDir);
         } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while deleting photo', $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct','error','Error while deleting photo',$e->getMessage());
         }
 
         return true;
@@ -149,25 +149,25 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      * @throws \bamboo\core\exceptions\RedPandaException
      */
-    private function insertNewProduct($product, $productPrice, $marketplaceHasShop, $destDir)
+    private function insertNewProduct($product,$productPrice,$marketplaceHasShop,$destDir)
     {
         //INSERT PRODUCT
-        $xmlResponseProduct = $this->insertProduct($product, $productPrice, $marketplaceHasShop->prestashopId);
+        $xmlResponseProduct = $this->insertProduct($product,$productPrice,$marketplaceHasShop->prestashopId);
 
         //if error while insert product go to next product
         if (!$xmlResponseProduct) return false;
 
         $resourcesProduct = $xmlResponseProduct->children()->children();
         //add combination sizes
-        if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId, $productPrice)) {
+        if (!$this->addCombination($product,$resourcesProduct,$marketplaceHasShop->prestashopId,$productPrice)) {
             return false;
         }
-            try {
-                //upload product photo
-                $this->uploadImage($resourcesProduct->id,$product,$destDir,$marketplaceHasShop->prestashopId);
-            }catch(\Throwable $e){
+        try {
+            //upload product photo
+            $this->uploadImage($resourcesProduct->id,$product,$destDir,$marketplaceHasShop->prestashopId);
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct','error','uploadImage',$e);
-            }
+        }
         //if all is ok then insert product in pickyshop db
         try {
             /** @var CPrestashopHasProduct $pHp */
@@ -179,7 +179,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $pHp->prestaId = (int)$xmlResponseProduct->children()->children()->id;
             $pHp->status = 1;
             $pHp->update();
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct','error','Update PrestashopHasProduct',$e);
         }
         try {
@@ -192,12 +192,12 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->smartInsert();
 
             return true;
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct','error','Insert PrestashopHasProductHasMarketplaceHasShop',$e);
         }
     }
 
-    private function insertProductInNewShop($productXml, $marketplaceHasShop, $product, $destDir, $productPrice)
+    private function insertProductInNewShop($productXml,$marketplaceHasShop,$product,$destDir,$productPrice)
     {
 
         try {
@@ -213,7 +213,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id_shop'] = $marketplaceHasShop->prestashopId;
             $this->ws->edit($opt);
 
-            if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId, $productPrice)) {
+            if (!$this->addCombination($product,$resourcesProduct,$marketplaceHasShop->prestashopId,$productPrice)) {
                 return false;
             }
 
@@ -230,7 +230,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $this->ws->delete($optD);
             };
 
-            $this->uploadImage((int)$resourcesProduct->id, $product, $destDir, $marketplaceHasShop->prestashopId);
+            $this->uploadImage((int)$resourcesProduct->id,$product,$destDir,$marketplaceHasShop->prestashopId);
 
             /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
             $phphmhs = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->getEmptyEntity();
@@ -240,7 +240,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->price = $productPrice;
             $phphmhs->smartInsert();
         } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert product: ' . $product->id . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId, $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct','error','Error while insert product: ' . $product->id . '-' . $product->productVariantId . ' nello shop ' . $marketplaceHasShop->prestashopId,$e->getMessage());
             return false;
         }
 
@@ -257,14 +257,14 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function updateProductPrice($productXml, $productPrice, $marketplaceHasShop, $product)
+    public function updateProductPrice($productXml,$productPrice,$marketplaceHasShop,$product)
     {
         $resourcesProduct = $productXml->children()->children();
 
         foreach ($resourcesProduct->associations->combinations->combination as $combination) {
             $combinationId = (int)$combination->id;
 
-            $combinationXmlF = $this->getDataFromResource(self::COMBINATION_RESOURCE, $combinationId, [], null, null, $marketplaceHasShop->prestashopId);
+            $combinationXmlF = $this->getDataFromResource(self::COMBINATION_RESOURCE,$combinationId,[],null,null,$marketplaceHasShop->prestashopId);
             $combinationXmlC = $combinationXmlF->children()->children();
 
             $combinationXmlC->price = $productPrice;
@@ -294,9 +294,9 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $shop
      * @return bool
      */
-    public function uploadImage($prestashopProductId, CProduct $product, $destDir, $shop): bool
+    public function uploadImage($prestashopProductId,CProduct $product,$destDir,$shop): bool
     {
-        $cdnUrl = \Monkey::app()->cfg()->fetch("general", "product-photo-host");
+        $cdnUrl = \Monkey::app()->cfg()->fetch("general","product-photo-host");
 
         $productPhotos = $product->productPhoto;
         $productPhotos->reorder('order');
@@ -311,21 +311,21 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                 //download image from aws
                 $c = curl_init();
-                curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode($url));
+                curl_setopt($c,CURLOPT_RETURNTRANSFER,1);
+                curl_setopt($c,CURLOPT_URL,htmlspecialchars_decode($url));
                 $imgBody = curl_exec($c);
                 curl_close($c);
                 //$imgBody = file_get_contents(htmlspecialchars_decode($url));
                 sleep(1);
 
-                file_put_contents($destDir . $productPhoto->name, $imgBody);
+                file_put_contents($destDir . $productPhoto->name,$imgBody);
                 sleep(1);
                 $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
 
                 //Uncomment the following line in order to update an existing image
                 //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
 
-                $image_path = curl_file_create($destDir . $productPhoto->name, 'image/jpg');
+                $image_path = curl_file_create($destDir . $productPhoto->name,'image/jpg');
 
                 $request_host = $this->url;
                 //$headers = array("Host: " . $request_host);
@@ -338,20 +338,20 @@ class CPrestashopProduct extends APrestashopMarketplace
                 //curl_setopt($ch, CURLOPT_HEADER, true);
                 //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-                curl_setopt($ch, CURLOPT_URL, $urlRest);
-                curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch,CURLOPT_URL,$urlRest);
+                curl_setopt($ch,CURLOPT_BINARYTRANSFER,1);
+                curl_setopt($ch,CURLOPT_POST,true);
+                curl_setopt($ch,CURLOPT_USERPWD,$this->key . ':');
+                curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+                curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 
                 //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                 //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
                 $result = curl_exec($ch);
                 curl_close($ch);
             } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo '.$url, $e->getMessage());
+                \Monkey::app()->applicationLog('CPrestashopProduct','error','Error while insert photo ' . $url,$e->getMessage());
                 continue;
             }
         }
@@ -367,7 +367,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return \SimpleXMLElement
      * @throws \PrestaShopWebserviceException
      */
-    public function getStockAvaibles($stockAvailableId = null, $filter = [], $shopId): \SimpleXMLElement
+    public function getStockAvaibles($stockAvailableId = null,$filter = [],$shopId): \SimpleXMLElement
     {
         $opt = array('resource' => $this::STOCK_AVAILABLES_RESOURCE);
 
@@ -389,7 +389,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param CPrestashopHasProduct $pHp
      * @return null|\SimpleXMLElement|string
      */
-    public function checkIfProductExist(CProduct $product, $shop, CPrestashopHasProduct $pHp)
+    public function checkIfProductExist(CProduct $product,$shop,CPrestashopHasProduct $pHp)
     {
         $allShops = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
 
@@ -398,13 +398,13 @@ class CPrestashopProduct extends APrestashopMarketplace
         //if exist product for some shops
         if ($mhs->count() != 0) {
             //if exist product for specific shop
-            if ($mhs->findOneByKey('prestashopId', $shop)) {
+            if ($mhs->findOneByKey('prestashopId',$shop)) {
                 return 'exist';
             } else {
                 foreach ($allShops as $s) {
                     $xml = null;
                     try {
-                        $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE, $pHp->prestaId, [], null, null, $s->prestashopId);
+                        $xml = $this->getDataFromResource($this::PRODUCT_RESOURCE,$pHp->prestaId,[],null,null,$s->prestashopId);
                     } catch (\Throwable $e) {
                     }
 
@@ -426,7 +426,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @throws \PrestaShopWebserviceException
      * @throws BambooException
      */
-    public function insertProduct(CProduct $product, $productPrice, $shop)
+    public function insertProduct(CProduct $product,$productPrice,$shop)
     {
         /** @var CProductEanRepo $productEanRepo */
         $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
@@ -442,22 +442,90 @@ class CPrestashopProduct extends APrestashopMarketplace
         }
         */
 
-        $productName = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
+        $productName = $product->productCategoryTranslation->findOneByKey('langId',1)->name
             . ' ' .
             $product->productBrand->name
             . ' ' .
             $product->itemno
             . ' ' .
-            $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
+            $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
 
         /** @var \SimpleXMLElement $blankProductXml */
         $blankProductXml = $this->getBlankSchema($this::PRODUCT_RESOURCE);
         $resourcesBlankProduct = $blankProductXml->children()->children();
-        $findProductBrand=\Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->findOneBy(['productBrandId'=>$product->productBrandId]);
-        if($findProductBrand!=null) {
+        /** @var  $findProductBrand CPrestashopHasProductHasMarketplaceHasShop */
+        $findProductBrand = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->findOneBy(['productBrandId' => $product->productBrand->id]);
+        if ($findProductBrand != null) {
             $resourcesBlankProduct->id_manufacturer = $findProductBrand->prestashopManufacturerId;
-        }else{
-            (new CPrestashopManufacturer)->addNewManufacturers($findProductBrand);
+        } else {
+            //$productBrand = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $product->productBrand->id]);
+            $db_host = "5.189.159.187";
+            $db_name = "iwesPrestaDB";
+            $db_user = "iwesprestashop";
+            $db_pass = "X+]l&LEa]zSI";
+            /*define("HOST", "5.189.159.187");
+            define("USERNAME", "iwesprestashop");
+            define("PASSWORD", "X+]l&LEa]zSI");
+            define("DATABASE", "iwesPrestaDB");*/
+            $res = "";
+
+            try {
+
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res .= " connessione ok <br>";
+            } catch (PDOException $e) {
+                $res .= $e->getMessage();
+            }
+            $today = new \DateTime();
+            $creationDate = $today->format('Y-m-d H:i:s');
+            $insertManufacturer = $db_con->prepare('insert into ps_manufacturer (`name`,`date_add`,`date_upd`,`active`)
+             VALUES(
+                    \'' . $product->productBrand->name . '\',
+                    \'' . $creationDate . '\',
+                    \'' . $creationDate . '\',
+                    1
+             )');
+            $insertManufacturer->execute();
+            $stmtLastManufacturer = $db_con->prepare("SELECT max(id_manufacturer) AS id_manufacturer FROM ps_manufacturer");
+            $stmtLastManufacturer->execute();
+            $id_manufacturer = $stmtLastManufacturer->fetch();
+            $insertManufacturerLang = $db_con->prepare('insert into ps_manufacturer_lang (`id_manufacturer`,`id_lang`,`description`,`short_description`,`meta_title`,`meta_keywords`,`meta_description`)
+             VALUES(
+                    \'' . $id_manufacturer[0] . '\',
+                    1,
+                    \'' . $product->productBrand->name . '\',
+                     \'' . $product->productBrand->name . '\',
+                      \'' . $product->productBrand->name . '\',
+                       \'' . $product->productBrand->name . '\',
+                        \'' . $product->productBrand->name . '\',
+             )');
+            $insertManufacturerLang->execute();
+            $insertManufacturerLang = $db_con->prepare('insert into ps_manufacturer_lang (`id_manufacturer`,`id_lang`,`description`,`short_description`,`meta_title`,`meta_keywords`,`meta_description`)
+             VALUES(
+                    \'' . $id_manufacturer[0] . '\',
+                   2,
+                    \'' . $product->productBrand->name . '\',
+                     \'' . $product->productBrand->name . '\',
+                      \'' . $product->productBrand->name . '\',
+                       \'' . $product->productBrand->name . '\',
+                        \'' . $product->productBrand->name . '\',
+             )');
+            $insertManufacturerLang->execute();
+            $pbhpsmf=\Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->getEmptyEntity();
+            $pbhpsmf->productBrandId=$product->productBrand->id;
+            $pbhpsmf->prestashopManufacturerId=$id_manufacturer[0];
+            $pbhpsmf->insert();
+            $marketplaceHasShop = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
+            foreach ($marketplaceHasShop as $prestashopId) {
+                $insertManufacturerShop = $db_con->prepare('insert into ps_manufacturer_shop (`id_manufacturer`,`id_shop`)
+             VALUES(
+                    \'' . $id_manufacturer[0] . '\',
+                    \'' . $prestashopId->prestashopId . '\'
+             )');
+                $insertManufacturerShop->execute();
+            }
+
             $resourcesBlankProduct->id_manufacturer = $product->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
         }
         $resourcesBlankProduct->reference = $product->id . '-' . $product->productVariantId;
@@ -465,7 +533,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         $resourcesBlankProduct->active = 1;
         $resourcesBlankProduct->available_for_order = 1;
         $resourcesBlankProduct->show_price = 1;
-        if (!is_null($eanFather)) $resourcesBlankProduct->ean13 = $eanFather->ean;
+        // if (!is_null($eanFather)) $resourcesBlankProduct->ean13 = $eanFather->ean;
 
         //$node = dom_import_simplexml($resourcesBlankProduct->name->language[0][0]);
         //$no = $node->ownerDocument;
@@ -498,7 +566,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             }
 
             $fatherCategory = $resourcesBlankProduct->associations->categories->addChild('category');
-            $fatherCategory->addChild('id', $prestashopCategoryObj->prestashopCategoryId);
+            $fatherCategory->addChild('id',$prestashopCategoryObj->prestashopCategoryId);
         }
 
         $resourcesBlankProduct->id_category_default = $prestashopCategoryObj->prestashopCategoryId;
@@ -518,8 +586,8 @@ class CPrestashopProduct extends APrestashopMarketplace
             }
 
             $fatherFeature = $resourcesBlankProduct->associations->product_features->addChild('product_feature');
-            $fatherFeature->addChild('id', $prestashopFeatureObj->prestashopFeatureId);
-            $fatherFeature->addChild('id_feature_value', $prestashopFeatureObj->prestashopFeatureValueId);
+            $fatherFeature->addChild('id',$prestashopFeatureObj->prestashopFeatureId);
+            $fatherFeature->addChild('id_feature_value',$prestashopFeatureObj->prestashopFeatureValueId);
         }
 
         //Here we call to add a new product
@@ -529,7 +597,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $opt['id_shop'] = $shop;
             $xmlResponseProduct = $this->ws->add($opt);
         } catch (\PrestaShopWebserviceException $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert product' . $product->id . '-' . $product->productVariantId, $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while insert product' . $product->id . '-' . $product->productVariantId,$e->getMessage());
             return false;
         }
 
@@ -545,7 +613,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function addCombination(CProduct $product, $resourcesProduct, $shop, $productPrice)
+    public function addCombination(CProduct $product,$resourcesProduct,$shop,$productPrice)
     {
 
         /** @var CProductPublicSku $productPublicSku */
@@ -574,7 +642,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $resourcesCombinationBlank->price = $productPrice;
             $resourcesCombinationBlank->minimal_quantity = 1;
             $resourcesCombinationBlank->associations->product_option_values->product_option_value->id = $prestashopColorId;
-            $resourcesCombinationBlank->associations->product_option_values->addChild('product_option_value')->addChild('id', $prestashopSizeId);
+            $resourcesCombinationBlank->associations->product_option_values->addChild('product_option_value')->addChild('id',$prestashopSizeId);
 
             try {
                 $opt = null;
@@ -583,17 +651,17 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['id_shop'] = $shop;
                 $xml_response_combination = $this->ws->add($opt);
             } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert combination', $e->getMessage());
+                \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while insert combination',$e->getMessage());
                 return false;
             }
 
             $resourcesCombination = $xml_response_combination->children()->children();
 
-            $xml_ext_stock_available_id = $this->getStockAvaibles(null, ['id_product_attribute' => (int)$resourcesCombination->id], $shop);
+            $xml_ext_stock_available_id = $this->getStockAvaibles(null,['id_product_attribute' => (int)$resourcesCombination->id],$shop);
             $xml_ext_stock_available_resource = $xml_ext_stock_available_id->children()->children();
             $ext_stock_available = (int)$xml_ext_stock_available_resource->stock_available[0]['id'];
 
-            $resourcesStockAvailableXml = $this->getStockAvaibles($ext_stock_available, [], $shop);
+            $resourcesStockAvailableXml = $this->getStockAvaibles($ext_stock_available,[],$shop);
             $resourcesStockAvailable = $resourcesStockAvailableXml->children()->children();
 
             $resourcesStockAvailable->quantity = $productPublicSku->stockQty;
@@ -608,7 +676,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             } catch (\PrestaShopWebserviceException $e) {
                 //if fail to insert quantity delete combination
                 $this->deleteCombination((int)$resourcesCombination->id);
-                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert stock available', $e->getMessage());
+                \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while insert stock available',$e->getMessage());
                 return false;
             }
 
@@ -626,17 +694,17 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function deleteProduct(int $prestashopProductId, int $productId, int $productVariantId)
+    public function deleteProduct(int $prestashopProductId,int $productId,int $productVariantId)
     {
         /** @var CPrestashopHasProduct $php */
-        $php = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $productId, 'productVariantId' => $productVariantId]);
+        $php = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId]);
 
         $prestashopShopsIds = $php->getShopsForProduct();
 
         $optD['resource'] = self::IMAGES_RESOURCE;
         $optD['id'] = $prestashopProductId;
 
-        $images = $this->getDataFromResource(self::IMAGES_RESOURCE, $prestashopProductId);
+        $images = $this->getDataFromResource(self::IMAGES_RESOURCE,$prestashopProductId);
 
         $opt['resource'] = $this::PRODUCT_RESOURCE;
         $opt['id'] = $prestashopProductId;
@@ -657,7 +725,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             try {
                 $this->ws->delete($opt);
             } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while deleting product', $e->getMessage());
+                \Monkey::app()->applicationLog('PrestashopProduct','Error','Error while deleting product',$e->getMessage());
             }
         }
 
@@ -676,7 +744,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         try {
             $this->ws->delete($opt);
         } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Error while deleting combination', $e->getMessage());
+            \Monkey::app()->applicationLog('PrestashopProduct','Error','Error while deleting combination',$e->getMessage());
         }
 
         return true;
@@ -691,36 +759,36 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function updateProductQuantity($productId, $sizeId, $newQty = null, $differential = null, $shops)
+    public function updateProductQuantity($productId,$sizeId,$newQty = null,$differential = null,$shops)
     {
 
         if (is_null($newQty) && is_null($differential)) return false;
 //ciclo per ogni shop
         foreach ($shops as $shopId) {
             //ottengo il prodotto padre
-            $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE, $productId, [], [], null, $shopId);
+            $productXmlFather = $this->getDataFromResource($this::PRODUCT_RESOURCE,$productId,[],[],null,$shopId);
             //setto la relazione con le tabelle
             $productXmlChildren = $productXmlFather->children()->children();
             //per ogni prodotto combinazion
             foreach ($productXmlChildren->associations->combinations->combination as $association) {
                 //assegno al prodotto la relazione con la combinazione
-                $combinationXmlFather = $this->getDataFromResource($this::COMBINATION_RESOURCE, (int)$association->id, [], [], null, $shopId);
+                $combinationXmlFather = $this->getDataFromResource($this::COMBINATION_RESOURCE,(int)$association->id,[],[],null,$shopId);
                 //setto  la combinazione attiva
                 $combinationXmlChildren = $combinationXmlFather->children()->children();
                 //setto la referenza Taglia  con il productSizeId
-                $productSizeOnPrestashop = explode('-', $combinationXmlChildren->reference)[2];
+                $productSizeOnPrestashop = explode('-',$combinationXmlChildren->reference)[2];
                 //se la sizeId è uguale alla variante in prestashop
                 if ($sizeId == $productSizeOnPrestashop) {
                     //size is the same
                     $idProductAttribute = (int)$combinationXmlChildren->id;
 
                     //get stock available id
-                    $stockAvailableXmlIndexFather = $this->getDataFromResource($this::STOCK_AVAILABLES_RESOURCE, null, ['id_product_attribute' => $idProductAttribute], [], null, $shopId);
+                    $stockAvailableXmlIndexFather = $this->getDataFromResource($this::STOCK_AVAILABLES_RESOURCE,null,['id_product_attribute' => $idProductAttribute],[],null,$shopId);
                     $stockAvailableXmlIndexChildren = $stockAvailableXmlIndexFather->children()->children();
                     $stockAvailableId = (int)$stockAvailableXmlIndexChildren->stock_available[0]['id'];
 
                     //get stock available
-                    $stockAvailableXmlFather = $this->getDataFromResource($this::STOCK_AVAILABLES_RESOURCE, $stockAvailableId, [], [], null, $shopId);
+                    $stockAvailableXmlFather = $this->getDataFromResource($this::STOCK_AVAILABLES_RESOURCE,$stockAvailableId,[],[],null,$shopId);
                     $stockAvailableXmlChildren = $stockAvailableXmlFather->children()->children();
 
                     //modify stock_available quantity
@@ -736,7 +804,7 @@ class CPrestashopProduct extends APrestashopMarketplace
                         $opt['id'] = $stockAvailableId;
                         $this->ws->edit($opt);
                     } catch (\PrestaShopWebserviceException $e) {
-                        \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product qty', $e->getMessage());
+                        \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while update product qty',$e->getMessage());
                         return false;
                     }
                 }
@@ -746,7 +814,6 @@ class CPrestashopProduct extends APrestashopMarketplace
 
         return true;
     }
-
 
 
     /**
@@ -759,11 +826,11 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function updateProductSaleDescription($productData, CMarketplaceHasShop $mhs, $action, $price = null, $salePrice = null)
+    public function updateProductSaleDescription($productData,CMarketplaceHasShop $mhs,$action,$price = null,$salePrice = null)
     {
         /** @var CProduct $product */
-        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productData['productId'], 'productVariantId' => $productData['productVariantId']]);
-        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productData['prestaId'], [], null, null, $mhs->prestashopId);
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productData['productId'],'productVariantId' => $productData['productVariantId']]);
+        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE,$productData['prestaId'],[],null,null,$mhs->prestashopId);
         $productChildXml = $productXml->children()->children();
 
         switch ($action) {
@@ -774,17 +841,17 @@ class CPrestashopProduct extends APrestashopMarketplace
                     . '€ ' .
                     $product->itemno
                     . ' ' .
-                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
+                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
                 $shopprice = $salePrice;
                 break;
             case 'remove':
-                $name = $product->productCategoryTranslation->findOneByKey('langId', 1)->name
+                $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
                     . ' ' .
                     $product->productBrand->name
                     . ' ' .
                     $product->itemno
                     . ' ' .
-                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId', 1)->name;
+                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
                 $shopprice = $price;
                 break;
             default:
@@ -805,27 +872,28 @@ class CPrestashopProduct extends APrestashopMarketplace
             $this->ws->edit($opt);
 
         } catch (\PrestaShopWebserviceException $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while update product name (on sale)',$e->getMessage());
             return false;
         }
 
 
         return true;
     }
-    public function activateProduct($productData, CMarketplaceHasShop $mhs, $action)
+
+    public function activateProduct($productData,CMarketplaceHasShop $mhs,$action)
     {
         /** @var CProduct $product */
-        $shopId=$mhs->prestashopId;
-      //  $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productData['productId'], 'productVariantId' => $productData['productVariantId']]);
-        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE, $productData->prestaId, [], null, null, $shopId);
+        $shopId = $mhs->prestashopId;
+        //  $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productData['productId'], 'productVariantId' => $productData['productVariantId']]);
+        $productXml = $this->getDataFromResource(self::PRODUCT_RESOURCE,$productData->prestaId,[],null,null,$shopId);
         $productChildXml = $productXml->children()->children();
 
         switch ($action) {
             case '0':
-               $active=0;
+                $active = 0;
                 break;
             case '1':
-                $active=1;
+                $active = 1;
                 break;
             default:
                 return false;
@@ -834,9 +902,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         unset($productChildXml->manufacturer_name);
         unset($productChildXml->quantity);
         unset($productChildXml->associations->combinations);
-        $productChildXml->active=$active;
-
-
+        $productChildXml->active = $active;
 
 
         try {
@@ -847,7 +913,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $this->ws->edit($opt);
 
         } catch (\PrestaShopWebserviceException $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while update product name (on sale)', $e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while update product name (on sale)',$e->getMessage());
             return false;
         }
 
@@ -869,7 +935,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function insertSpecificPriceForSale($products, CMarketplaceHasShop $mhs, bool $updateDescription, $reduction, $reductionType, $from = null, $to = null)
+    public function insertSpecificPriceForSale($products,CMarketplaceHasShop $mhs,bool $updateDescription,$reduction,$reductionType,$from = null,$to = null)
     {
 
         /** @var CRepo $phphmhsR */
@@ -878,7 +944,7 @@ class CPrestashopProduct extends APrestashopMarketplace
         foreach ($products as $product) {
 
             /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
-            $phphmhs = $phphmhsR->findOneBy(['productId' => $product['productId'], 'productVariantId' => $product['productVariantId'], 'marketplaceHasShopId' => $mhs->id]);
+            $phphmhs = $phphmhsR->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $mhs->id]);
 
             if (is_null($phphmhs) || $phphmhs->isOnSale == 1) continue;
 
@@ -910,14 +976,14 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $opt['id_shop'] = $mhs->prestashopId;
                 $this->ws->add($opt);
             } catch (\PrestaShopWebserviceException $e) {
-                \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while insert specific price', $e->getMessage());
+                \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while insert specific price',$e->getMessage());
                 return false;
             }
 
             $salePrice = ($reductionType === 'amount' || $reductionType === 'nf') ? $phphmhs->price - $reduction : $phphmhs->price - ($phphmhs->price * ($reduction / 100));
 
             if ($updateDescription) {
-                $this->updateProductSaleDescription($product, $mhs, 'add', $phphmhs->price, $salePrice);
+                $this->updateProductSaleDescription($product,$mhs,'add',$phphmhs->price,$salePrice);
                 $phphmhs->titleModified = 1;
             }
 
@@ -935,24 +1001,24 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @return bool
      * @throws \PrestaShopWebserviceException
      */
-    public function removeSpecificPriceForSale($product, CMarketplaceHasShop $mhs)
+    public function removeSpecificPriceForSale($product,CMarketplaceHasShop $mhs)
     {
-        $specificPrices = $this->getDataFromResource(self::SPECIFIC_PRICE_RESOURCE, null, ['id_product' => $product['prestaId'], 'id_shop' => $mhs->prestashopId]);
+        $specificPrices = $this->getDataFromResource(self::SPECIFIC_PRICE_RESOURCE,null,['id_product' => $product['prestaId'],'id_shop' => $mhs->prestashopId]);
 
         try {
             $optD['resource'] = self::SPECIFIC_PRICE_RESOURCE;
             $optD['id'] = (int)$specificPrices->specific_prices->specific_price->attributes()->id;
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $optD['id'],'');
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while deleting specific price',$optD['id'],'');
             $this->ws->delete($optD);
         } catch (\Throwable $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while deleting specific price', $e->getMessage(),'');
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while deleting specific price',$e->getMessage(),'');
             return false;
         }
         try {
-            $this->updateProductSaleDescription($product, $mhs, 'remove');
+            $this->updateProductSaleDescription($product,$mhs,'remove');
 
-        } catch(\Throwable $e){
-            \Monkey::app()->applicationLog('CPrestashopProduct', 'Error', 'Error while Remove sale Description', $e->getMessage(),'');
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while Remove sale Description',$e->getMessage(),'');
         }
         return true;
     }
@@ -966,7 +1032,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $shop
      * @return bool
      */
-    public function updateProductImage($prestashopProductId, $productId, $productVariantId, $shop): bool
+    public function updateProductImage($prestashopProductId,$productId,$productVariantId,$shop): bool
     {
         $db_host = "5.189.159.187";
         $db_name = "iwesPrestaDB";
@@ -978,11 +1044,11 @@ class CPrestashopProduct extends APrestashopMarketplace
         define("DATABASE", "iwesPrestaDB");*/
         $res = "";
         $destDir = \Monkey::app()->rootPath() . "/temp/tempPrestashopImgs/";
-        if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
+        if (!is_dir(rtrim($destDir,"/"))) mkdir($destDir,0777,true);
         try {
 
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             $res .= " connessione ok <br>";
         } catch (PDOException $e) {
             $res .= $e->getMessage();
@@ -995,8 +1061,8 @@ class CPrestashopProduct extends APrestashopMarketplace
         } else {
             $save_to = '/home/iwespro/public_html/temp-prestashop/';
         }
-        $cdnUrl = \Monkey::app()->cfg()->fetch("general", "product-photo-host");
-        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productId, 'productVariantId' => $productVariantId]);
+        $cdnUrl = \Monkey::app()->cfg()->fetch("general","product-photo-host");
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $productId,'productVariantId' => $productVariantId]);
 
         $stmtGetCountImageProduct = $db_con->prepare("SELECT   count(*) as numberImage from ps_image where id_product ='" . $prestashopProductId . "'");
 
@@ -1021,20 +1087,20 @@ class CPrestashopProduct extends APrestashopMarketplace
 
                     //download image from aws
                     $c = curl_init();
-                    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode($url));
+                    curl_setopt($c,CURLOPT_RETURNTRANSFER,1);
+                    curl_setopt($c,CURLOPT_URL,htmlspecialchars_decode($url));
                     $imgBody = curl_exec($c);
                     curl_close($c);
                     //$imgBody = file_get_contents(htmlspecialchars_decode($url));
 
-                    file_put_contents($destDir . $productPhoto->name, $imgBody);
+                    file_put_contents($destDir . $productPhoto->name,$imgBody);
 
                     $urlRest = 'https://iwes.shop/api/images/products/' . $prestashopProductId . '?id_group_shop=1';
 
                     //Uncomment the following line in order to update an existing image
                     //$url = 'http://myprestashop.com/api/images/products/1/2?ps_method=PUT';
 
-                    $image_path = curl_file_create($destDir . $productPhoto->name, 'image/jpg');
+                    $image_path = curl_file_create($destDir . $productPhoto->name,'image/jpg');
 
                     $request_host = $this->url;
                     //$headers = array("Host: " . $request_host);
@@ -1047,20 +1113,20 @@ class CPrestashopProduct extends APrestashopMarketplace
                     //curl_setopt($ch, CURLOPT_HEADER, true);
                     //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-                    curl_setopt($ch, CURLOPT_URL, $urlRest);
-                    curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-                    curl_setopt($ch, CURLOPT_POST, true);
-                    curl_setopt($ch, CURLOPT_USERPWD, $this->key . ':');
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch,CURLOPT_URL,$urlRest);
+                    curl_setopt($ch,CURLOPT_BINARYTRANSFER,1);
+                    curl_setopt($ch,CURLOPT_POST,true);
+                    curl_setopt($ch,CURLOPT_USERPWD,$this->key . ':');
+                    curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+                    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 
                     //curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                     //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
                     $result = curl_exec($ch);
                     curl_close($ch);
                 } catch (\Throwable $e) {
-                    \Monkey::app()->applicationLog('CPrestashopProduct', 'error', 'Error while insert photo', $e->getMessage());
+                    \Monkey::app()->applicationLog('CPrestashopProduct','error','Error while insert photo',$e->getMessage());
                     continue;
                 }
             }
