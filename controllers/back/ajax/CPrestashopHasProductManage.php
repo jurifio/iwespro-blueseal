@@ -67,12 +67,12 @@ class CPrestashopHasProductManage extends AAjaxController
             $isProductHasShopDestination=$phsdRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopIdDestination'=>$shopId]);
             if($isProductShop!=null) {
                 /** @var CProduct $product */
-                $product = $productRepo->findOneByStringId($productCode);
+                $product = $productRepo->findOneBy(['id'=>$productIds[0], 'productVariantId'=>$productIds[1]]);
                 $products->add($product);
                 $res.='Prodotto '.$productIds[0].'-'.$productIds[1].' inserito con successo</br>';
             } elseif($isProductHasShopDestination!=null) {
                 /** @var CProduct $product */
-                $product = $productRepo->findOneByStringId($productCode);
+                $product = $productRepo->findOneBy(['id'=>$productIds[0], 'productVariantId'=>$productIds[1]]);
                 $products->add($product);
                 $res.='Prodotto '.$productIds[0].'-'.$productIds[1].' inserito con successo</br>';
             }else{
@@ -81,9 +81,10 @@ class CPrestashopHasProductManage extends AAjaxController
         }
 
         $prestashopProduct = new CPrestashopProduct();
+
         if ($prestashopProduct->addNewProducts($products, $mhs, $this->data['modifyType'], $this->data['variantValue'])) {
             return $res;
-        };
+        }
 
         return 'Errore durante l\'inserimento dei prodotti';
     }

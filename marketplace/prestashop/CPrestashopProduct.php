@@ -16,6 +16,7 @@ use bamboo\domain\entities\CProductPhoto;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\repositories\CProductEanRepo;
+use bamboo\blueseal\marketplace\prestashop\CPrestashopManufacturer;
 use PDO;
 
 /**
@@ -114,11 +115,11 @@ class CPrestashopProduct extends APrestashopMarketplace
                 }
 
 
-            } catch (\Throwable $e) {
-                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getMessage());
+            } catch (\Exception $e) {
+                \Monkey::app()->applicationLog('PrestashopProduct', 'Error', 'Errore while insert', $e->getLine());
                 return false;
             }
-            sleep(2);
+
         }
 
         //delete all product photo in tmp folder
@@ -161,30 +162,39 @@ class CPrestashopProduct extends APrestashopMarketplace
         if (!$this->addCombination($product, $resourcesProduct, $marketplaceHasShop->prestashopId, $productPrice)) {
             return false;
         }
-
-        //upload product photo
-        $this->uploadImage($resourcesProduct->id, $product, $destDir, $marketplaceHasShop->prestashopId);
-
+            try {
+                //upload product photo
+                $this->uploadImage($resourcesProduct->id,$product,$destDir,$marketplaceHasShop->prestashopId);
+            }catch(\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopProduct','error','uploadImage',$e);
+            }
         //if all is ok then insert product in pickyshop db
-        /** @var CPrestashopHasProduct $pHp */
-        $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy([
-            'productId' => $product->id,
-            'productVariantId' => $product->productVariantId
-        ]);
+        try {
+            /** @var CPrestashopHasProduct $pHp */
+            $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy([
+                'productId' => $product->id,
+                'productVariantId' => $product->productVariantId
+            ]);
 
-        $pHp->prestaId = (int)$xmlResponseProduct->children()->children()->id;
-        $pHp->status = 1;
-        $pHp->update();
+            $pHp->prestaId = (int)$xmlResponseProduct->children()->children()->id;
+            $pHp->status = 1;
+            $pHp->update();
+        }catch(\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopProduct','error','Update PrestashopHasProduct',$e);
+        }
+        try {
+            /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
+            $phphmhs = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->getEmptyEntity();
+            $phphmhs->productId = $pHp->productId;
+            $phphmhs->productVariantId = $pHp->productVariantId;
+            $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
+            $phphmhs->price = $productPrice;
+            $phphmhs->smartInsert();
 
-        /** @var CPrestashopHasProductHasMarketplaceHasShop $phphmhs */
-        $phphmhs = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->getEmptyEntity();
-        $phphmhs->productId = $pHp->productId;
-        $phphmhs->productVariantId = $pHp->productVariantId;
-        $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
-        $phphmhs->price = $productPrice;
-        $phphmhs->smartInsert();
-
-        return true;
+            return true;
+        }catch(\Throwable $e){
+            \Monkey::app()->applicationLog('CPrestashopProduct','error','Insert PrestashopHasProductHasMarketplaceHasShop',$e);
+        }
     }
 
     private function insertProductInNewShop($productXml, $marketplaceHasShop, $product, $destDir, $productPrice)
@@ -414,6 +424,7 @@ class CPrestashopProduct extends APrestashopMarketplace
      * @param $shop
      * @return bool|\SimpleXMLElement
      * @throws \PrestaShopWebserviceException
+     * @throws BambooException
      */
     public function insertProduct(CProduct $product, $productPrice, $shop)
     {
@@ -442,7 +453,13 @@ class CPrestashopProduct extends APrestashopMarketplace
         /** @var \SimpleXMLElement $blankProductXml */
         $blankProductXml = $this->getBlankSchema($this::PRODUCT_RESOURCE);
         $resourcesBlankProduct = $blankProductXml->children()->children();
-        $resourcesBlankProduct->id_manufacturer = $product->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
+        $findProductBrand=\Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->findOneBy(['productBrandId'=>$product->productBrandId]);
+        if($findProductBrand!=null) {
+            $resourcesBlankProduct->id_manufacturer = $findProductBrand->prestashopManufacturerId;
+        }else{
+            (new CPrestashopManufacturer)->addNewManufacturers($findProductBrand);
+            $resourcesBlankProduct->id_manufacturer = $product->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
+        }
         $resourcesBlankProduct->reference = $product->id . '-' . $product->productVariantId;
         $resourcesBlankProduct->price = 0;
         $resourcesBlankProduct->active = 1;
