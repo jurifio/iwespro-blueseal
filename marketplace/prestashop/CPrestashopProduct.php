@@ -16,7 +16,6 @@ use bamboo\domain\entities\CProductPhoto;
 use bamboo\domain\entities\CProductPublicSku;
 use bamboo\domain\entities\CProductSheetActual;
 use bamboo\domain\repositories\CProductEanRepo;
-use bamboo\blueseal\marketplace\prestashop\CPrestashopManufacturer;
 use PDO;
 
 /**
@@ -453,12 +452,14 @@ class CPrestashopProduct extends APrestashopMarketplace
         /** @var \SimpleXMLElement $blankProductXml */
         $blankProductXml = $this->getBlankSchema($this::PRODUCT_RESOURCE);
         $resourcesBlankProduct = $blankProductXml->children()->children();
-        /** @var  $findProductBrand CPrestashopHasProductHasMarketplaceHasShop */
-        $findProductBrand = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->findOneBy(['productBrandId' => $product->productBrand->id]);
-        if ($findProductBrand != null) {
-            $resourcesBlankProduct->id_manufacturer = $findProductBrand->prestashopManufacturerId;
+        $productBrand = \Monkey::app()->repoFactory->create('ProductBrand') -> findOneBy(['id' => $product->productBrandId]);
+
+        /** @var  $findProductBrandPreastoshop CPrestashopHasProductHasMarketplaceHasShop */
+        $findProductBrandPrestashop = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->findOneBy(['productBrandId' => $productBrand->id]);
+        if ($findProductBrandPrestashop != null) {
+            $resourcesBlankProduct->id_manufacturer = $findProductBrandPrestashop->prestashopManufacturerId;
         } else {
-            //$productBrand = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $product->productBrand->id]);
+            $productBrand = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $productBrand->id]);
             $db_host = "5.189.159.187";
             $db_name = "iwesPrestaDB";
             $db_user = "iwesprestashop";
@@ -479,42 +480,43 @@ class CPrestashopProduct extends APrestashopMarketplace
             }
             $today = new \DateTime();
             $creationDate = $today->format('Y-m-d H:i:s');
-            $insertManufacturer = $db_con->prepare('insert into ps_manufacturer (`name`,`date_add`,`date_upd`,`active`)
+            $dateUpdate=$today->format('Y-m-d H:i:s');
+            $insertManufacturer = $db_con->prepare(sprintf("insert into ps_manufacturer (`name`,`date_add`,`date_upd`,`active`)
              VALUES(
-                    \'' . $product->productBrand->name . '\',
-                    \'' . $creationDate . '\',
-                    \'' . $creationDate . '\',
+                    '%s',
+                    '%s',
+                    '%s',
                     1
-             )');
+             )",$productBrand->slug,$creationDate,$dateUpdate));
             $insertManufacturer->execute();
             $stmtLastManufacturer = $db_con->prepare("SELECT max(id_manufacturer) AS id_manufacturer FROM ps_manufacturer");
             $stmtLastManufacturer->execute();
             $id_manufacturer = $stmtLastManufacturer->fetch();
-            $insertManufacturerLang = $db_con->prepare('insert into ps_manufacturer_lang (`id_manufacturer`,`id_lang`,`description`,`short_description`,`meta_title`,`meta_keywords`,`meta_description`)
+            $insertManufacturerLang = $db_con->prepare(sprintf("insert into ps_manufacturer_lang (`id_manufacturer`,`id_lang`,`description`,`short_description`,`meta_title`,`meta_keywords`,`meta_description`)
              VALUES(
-                    \'' . $id_manufacturer[0] . '\',
+                    '%s',
                     1,
-                    \'' . $product->productBrand->name . '\',
-                     \'' . $product->productBrand->name . '\',
-                      \'' . $product->productBrand->name . '\',
-                       \'' . $product->productBrand->name . '\',
-                        \'' . $product->productBrand->name . '\',
-             )');
+                    '%s',
+                     '%s',
+                      '%s',
+                       '%s',
+                        '%s'
+             )",$id_manufacturer[0],addslashes($productBrand->name),addslashes($productBrand->name),addslashes($productBrand->name),addslashes($productBrand->name),addslashes($productBrand->name)));
             $insertManufacturerLang->execute();
-            $insertManufacturerLang = $db_con->prepare('insert into ps_manufacturer_lang (`id_manufacturer`,`id_lang`,`description`,`short_description`,`meta_title`,`meta_keywords`,`meta_description`)
+            $insertManufacturerLang = $db_con->prepare(sprintf("insert into ps_manufacturer_lang (`id_manufacturer`,`id_lang`,`description`,`short_description`,`meta_title`,`meta_keywords`,`meta_description`)
              VALUES(
-                    \'' . $id_manufacturer[0] . '\',
+                    '%s',
                    2,
-                    \'' . $product->productBrand->name . '\',
-                     \'' . $product->productBrand->name . '\',
-                      \'' . $product->productBrand->name . '\',
-                       \'' . $product->productBrand->name . '\',
-                        \'' . $product->productBrand->name . '\',
-             )');
+                    '%s',
+                     '%s',
+                      '%s',
+                       '%s',
+                        '%s'
+             )",$id_manufacturer[0],addslashes($productBrand->name),addslashes($productBrand->name),addslashes($productBrand->name),addslashes($productBrand->name),addslashes($productBrand->name)));
             $insertManufacturerLang->execute();
-            $pbhpsmf=\Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->getEmptyEntity();
-            $pbhpsmf->productBrandId=$product->productBrand->id;
-            $pbhpsmf->prestashopManufacturerId=$id_manufacturer[0];
+            $pbhpsmf = \Monkey::app()->repoFactory->create('ProductBrandHasPrestashopManufacturer')->getEmptyEntity();
+            $pbhpsmf->productBrandId = $productBrand->id;
+            $pbhpsmf->prestashopManufacturerId = $id_manufacturer[0];
             $pbhpsmf->insert();
             $marketplaceHasShop = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findAll();
             foreach ($marketplaceHasShop as $prestashopId) {
@@ -526,7 +528,8 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $insertManufacturerShop->execute();
             }
 
-            $resourcesBlankProduct->id_manufacturer = $product->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
+            //$resourcesBlankProduct->id_manufacturer = $product->productBrandHasPrestashopManufacturer->prestashopManufacturerId;
+            $resourcesBlankProduct->id_manufacturer = $id_manufacturer[0];
         }
         $resourcesBlankProduct->reference = $product->id . '-' . $product->productVariantId;
         $resourcesBlankProduct->price = 0;
