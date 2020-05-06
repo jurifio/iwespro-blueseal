@@ -32,6 +32,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                       `bri`.`vat`             AS `vat`,
                       `bri`.`grossTotal`             AS `grossTotal`,
                       `bri`.`invoiceDate`             AS `invoiceDate`,
+                       if(`bri`.`isBilled`=1,'Si','No')           AS sendToLegal, 
                       `brtp`.`name` AS typePayment,
                       `bris`.status as status,
                       `braps`.`numberSlip` as `numberSlip`,
@@ -59,6 +60,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
             $row = [];
             $row["DT_RowId"] = 'row__' . $billRegistryInvoice->printId();
             $row['id'] = $billRegistryInvoice->id;
+            $row['sendToLegal']=($billRegistryInvoice->isBilled==1)?'Si':'No';
            $billRegistryClient=$billRegistryClientRepo->findOneBy(['id'=>$billRegistryInvoice->billRegistryClientId]);
             $date=new \DateTime($billRegistryInvoice->invoiceDate);
             $row['invoiceDate']=$date->format('d-m-Y');

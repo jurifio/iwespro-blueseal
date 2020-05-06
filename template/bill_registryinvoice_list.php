@@ -165,6 +165,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice
                                 </th>
+                                <th data-slug="sendToLegal"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Fatturata<br>Elettronicamente
+                                </th>
                             </tr>
 
                             </thead>
@@ -219,7 +223,17 @@
                 data-event="bs.invoice.print"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="stampa Fattura"
+                data-title="Stampa Fattura"
+                data-placement="bottom">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-gavel"
+                data-permission="/admin/product/add"
+                data-event="bs.invoice.sendLegal"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Invia a Fatture in Cloud"
                 data-placement="bottom">
         </bs-toolbar-button>
         <bs-toolbar-button
