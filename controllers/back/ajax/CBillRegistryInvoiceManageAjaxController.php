@@ -467,9 +467,9 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             }
             $billRegistryTimeTable->description = money_format('%.2n',$amountRate) . '  &euro; da corrisponedere entro il ' . $estimatedPayment;
             $billRegistryTimeTable->dateEstimated = $dbEstimatedPayment;
-            $billRegistryTimeTable->amountPayment = $amountRate;
+            $billRegistryTimeTable->amountPayment = number_format($amountRate,2,'.','');
             if($status=="3"){
-                $billRegistryTimeTable->amountPaid=$amountRate;
+                $billRegistryTimeTable->amountPaid=number_format($amountRate,2,'.','');
                 $billRegistryTimeTable->datePayment=$invoiceDate;
             }
             $billRegistryTimeTable->billRegistryClientId = $billRegistryClientId;

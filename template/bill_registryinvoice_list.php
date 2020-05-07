@@ -228,6 +228,16 @@
         </bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-envelope"
+                data-permission="/admin/product/add"
+                data-event="bs.invoice.sendEmail"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Invia Fattura di Cortesia al Cliente"
+                data-placement="bottom">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-gavel"
                 data-permission="/admin/product/add"
                 data-event="bs.invoice.sendLegal"

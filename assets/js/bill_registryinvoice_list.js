@@ -159,3 +159,69 @@ $(document).on('bs.invoice.sendLegal', function () {
     });
 });
 
+$(document).on('bs.invoice.sendEmail', function () {
+    let invoice = (new URL(document.location)).searchParams.get("order");
+
+    if (invoice == null) {
+        let selectedRows = $('.table').DataTable().rows('.selected').data();
+
+        if (selectedRows.length != 1) {
+            new Alert({
+                type: "warning",
+                message: "Seleziona una riga"
+            }).open();
+            return false;
+        }
+
+        invoice = selectedRows[0].DT_RowId.replace('row__', '');
+    }
+    let modal = new $.bsModal('Invia Email Al Cliente', {});
+    modal.showLoader();
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: "/blueseal/xhr/GenerateMailInvoiceToCustomerAjaxController",
+            type: "GET",
+            data: {
+                billRegistryInvoiceId: invoice
+            }
+        }).done(function (res) {
+            modal.writeBody(
+                '<div class="form-group form-group-default">' +
+                '<label>Email Contatto Amministrativo </label>' +
+                '<input class="form-control" type="text"  id="emailAdmin" name="emailAdmin" value="' + res + '" />' +
+                '</div>');
+
+            modal.setOkEvent(function () {
+
+                Pace.ignore(function () {
+                    $.ajax({
+                        url: "/blueseal/xhr/GenerateMailInvoiceToCustomerAjaxController",
+                        type: "POST",
+                        data: {
+                            billRegistryInvoiceId: invoice,
+                            email: $('#emailAdmin').val()
+                        },
+                    }).done(function (res) {
+                        modal.writeBody(res);
+                    }).fail(function (res) {
+                        modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
+                        console.error(res);
+                    }).always(function (res) {
+                        modal.setOkEvent(function () {
+                            modal.showOkBtn();
+                            modal.hide();
+                        });
+                        modal.showOkBtn();
+                    });
+
+                });
+            });
+
+        }).fail(function () {
+            modal.writeBody('OOPS! C\'è stato un problema. Contatta un amministratore');
+        });
+
+    });
+});
+

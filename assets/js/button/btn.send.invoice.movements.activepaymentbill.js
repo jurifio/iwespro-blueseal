@@ -32,7 +32,7 @@ $(document).on('btn-send-invoice-movements-activepaymentbill', function () {
             if($('#invoiceOption').val() === "invia") {
                 $.ajax({
                     method: 'post',
-                    url: '/blueseal/xhr/GenerateCustomerActivePaymentSlipMailAjaxController',
+                    url: '/blueseal/',
                     data: {
                         id: id
                     }

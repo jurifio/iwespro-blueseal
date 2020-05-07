@@ -114,11 +114,12 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                 $i = 0;
                 $scontotot = 0;
                 $articoli = [];
-                $ordinearticolo = 0;
+                $ordineArticolo = 0;
+                $idlineaordine=0;
                 $productRepo=\Monkey::app()->repoFactory->create('BillRegistryProduct');
                 foreach ($rowInvoice as $row) {
-                    $idlineaordine = $i + 1;
-                    $ordinearticolo + 1;
+                    $idlineaordine = $idlineaordine + 1;
+                    $ordineArticolo=$ordineArticolo + 1;
                     $product=$productRepo->findOneBy(['id'=>$row->billRegistryProductId]);
                     $codice = $product->codeProduct;
 
@@ -127,13 +128,13 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                     $quantity = $row->qty;
                     $descrizione = $row->description;
                     $categoria = "";
-                    $prezzo_netto = number_format($row->netPriceRow,2);
-                    $prezzo_lordo = number_format($row->grossTotal,2);
+                    $prezzo_netto = number_format($row->netPriceRow,2,'.','');
+                    $prezzo_lordo = number_format($row->grossTotalRow,2,'.','');
                     $scontoCharge = $row->percentDiscount;
                     $sconto = $row->discountRow;
                     $cod_iva = "0";
                     $applica_ra_contributi = "true";
-                    $ordine = $ordinearticolo;
+                    $ordine = $ordineArticolo;
                     $sconto_rosso = "0";
                     $in_ddt = false;
                     $magazzino = true;
@@ -153,13 +154,13 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                         'tassabile' => true,
                         'sconto' => $sconto,
                         'applica_ra_contributi' => $applica_ra_contributi,
-                        'ordine' => $ordine,
+                        'ordine' => $ordineArticolo,
                         'sconto_rosso' => $sconto_rosso,
                         'in_ddt' => $in_ddt,
                         'magazzino' => $magazzino
                     ];
                 }
-                $tot = number_format($invoice->grossTotal,2);
+                $tot = number_format($invoice->grossTotal,2,'.','');
 
                 $insertJson .= json_encode($articoli) . ',';
  $insertJson .= '"lista_pagamenti": ';
@@ -171,7 +172,7 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                             $dateEstimated = date('d/m/Y',$dateInvoicePayment);
                             $lista_pagamenti[] = [
                                 'data_scadenza' => $dateEstimated,
-                                'importo' => number_format($payment->amountPayment,2),
+                                'importo' => number_format($payment->amountPayment,2,'.',''),
                                 'metodo' => 'not',
                                 'data_saldo' => ''
                             ];

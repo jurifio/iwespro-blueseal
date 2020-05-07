@@ -42,7 +42,7 @@ class CBillRegistryTimeTableManageController extends AAjaxController
         $dateP=new \DateTime($date);
         $datePayment = $dateP->format('Y-m-d H:i:s');
         $billRegistryTimeTable = \Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findOneBy(['id'=>$billRegistryTimeTableId]);
-        $billRegistryTimeTable->amountPaid=$amountPayment;
+        $billRegistryTimeTable->amountPaid=number_format($amountPayment,2,'.','');
         $billRegistryTimeTable->datePayment=$datePayment;
         $billRegistryTimeTable->update();
         $billRegistryInvoiceId=$billRegistryTimeTable->billRegistryInvoiceId;
