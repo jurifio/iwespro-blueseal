@@ -29,13 +29,15 @@ class CProductBrandHasEanListAjaxController extends AAjaxController
     public function get()
     {
         //inserita modifica per conteggio ean disponibili
-        $sql = "SELECT pb.id as id, 
+        $sql = 'SELECT pb.id as id, 
                        pb.name as name,
                         pb.hasAggregator as hasAggregatorEan,
                        pb.hasMarketplaceRights as hasMarketplaceRights,
-                       pb.hasExternalEan as hasExternalEan
-                        from ProductBrand pb 
-                    ";
+                       pb.hasExternalEan as hasExternalEan,
+                        group_concat(mp.name) as nameMarketplace                 
+                        from ProductBrand pb   left join  MarketplaceHasShopBrandRights mpr on  pb.id=mpr.productBrandId
+                    left join MarketplaceHasShop mp on mpr.marketplaceHasShopId=mp.id group by pb.id
+                    ';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
 
@@ -53,6 +55,8 @@ class CProductBrandHasEanListAjaxController extends AAjaxController
             ($row['hasMarketplaceRights']==0)? $row['hasMarketplaceRights']='No' : $row['hasMarketplaceRights']='Si';
             ($row['hasExternalEan']==0)? $row['hasExternalEan']='No' : $row['hasExternalEan']='Si';
             ($row['hasAggregatorEan']==0)? $row['hasAggregatorEan']='No' : $row['hasAggregatorEan']='Si';
+            ($row['nameMarketplace']==null)? $row['nameMarketplace']='non Associato': str_replace(',','<br />',$row['nameMarketplace']);
+
 
             $datatable->setResponseDataSetRow($key,$row);
 

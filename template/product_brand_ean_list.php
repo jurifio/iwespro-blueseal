@@ -47,6 +47,9 @@
                                 <th data-slug="hasExternalEan"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Utilizza Ean Iwes</th>
+                                <th data-slug="nameMarketplace"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Marketplace Associati</th>
 
                             </tr>
                             </thead>
