@@ -30,6 +30,8 @@ class CPrestashopBookingProductJob extends ACronJob
      */
     public function run($args = null)
     {
+        $this->report('CPrestashopBookingProductJob', 'Start Booking','');
+
         $this->insertBookingProducts();
     }
 
@@ -38,6 +40,7 @@ class CPrestashopBookingProductJob extends ACronJob
      */
     private function insertBookingProducts()
     {
+        try{
         /** @var  CRepo $productRepo  */
         $productRepo=\Monkey::app()->repoFactory->create('Product');
         /** @var  CRepo $productBrandRepo  */
@@ -63,15 +66,36 @@ class CPrestashopBookingProductJob extends ACronJob
                     if($mhsbr!=null){
                         /**@var CPrestashopHasProduct $phpFind */
                         $phpFind=$phpRepo->finOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'marketplaceHasShopId'=>$mp->id]);
-                        if($phpFind!=null){
+                        if($phpFind==null){
+                            if($phpFind->prestaId=='') {
+                                /** @var CPrestashopHasProduct $phpInsert */
+                                $phpInsert->getEmptyEntity();
+                                $phpInsert->productId = $product->id;
+                                $phpInsert->productVariantId = $product->productVariantId;
+                                $phpInsert->marketplaceHasShopId = $mp->id;
+                                $phpInsert->modifyType='nf';
+                                $phpInsert->variantValue=0;
+
+                                }else{
+                                continue;
+                            }
+                        }else{
+                            continue;
 
                         }
+                    }else{
+                        continue ;
                     }
+                }else{
+                    continue;
                 }
             }
 
         }
 
-        $this->report('Export product', 'End Export');
+        $this->report('CPrestashopBookingProductJob', 'End Booking','');
+    }catch(\Throwable $e){
+            $this->report('CPrestashopBookingProductJob','error',$e->getMessage());
+        }
     }
 }
