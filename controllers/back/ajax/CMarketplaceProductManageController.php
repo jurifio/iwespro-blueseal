@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use bamboo\domain\entities\CProduct;
 use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
 
 /**
@@ -58,8 +59,11 @@ class CMarketplaceProductManageController extends AAjaxController
                 $ids = [];
 
                 set_time_limit(6);
+                /** @var  $product CProduct */
                 $product = $productRepo->findOneByStringId($row);
-                $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product, $marketplaceAccount, $cpc, $modifier, $activeAutomatic);
+                if($product->productBrand->hasAggregator==1) {
+                    $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product,$marketplaceAccount,$cpc,$modifier,$activeAutomatic);
+                }
                 $i++;
                 \Monkey::app()->repoFactory->commit();
             } catch

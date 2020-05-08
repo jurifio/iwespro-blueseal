@@ -46,6 +46,7 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
+                  p.dummyPicture <> 'bs-dummy-16-9.png'  AND 
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
@@ -104,6 +105,7 @@ class CProductImporterProblemsListController extends AAjaxController
             'SELECT size 
                     FROM DirtyProduct dp 
                       JOIN DirtySku ds ON dp.id = ds.dirtyProductId 
+                        
                     WHERE  
                     dp.productId = :productId AND 
                     dp.productVariantId = :productVariantId AND 

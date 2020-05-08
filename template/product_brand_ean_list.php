@@ -64,13 +64,16 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
 
-    <bs-toolbar-group data-group-label="Gestione Codici per brand ">
+    <bs-toolbar-group data-group-label="Gestione brand ">
 
         <bs-toolbar-button
                 data-remote="bs.lists.manage.brandean"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.assign.brandean"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.manage.marketplace.brand.rights"
         ></bs-toolbar-button>
         </bs-toolbar-group>
 </bs-toolbar>

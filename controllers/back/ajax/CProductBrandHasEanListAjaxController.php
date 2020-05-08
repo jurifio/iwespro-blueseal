@@ -48,7 +48,7 @@ class CProductBrandHasEanListAjaxController extends AAjaxController
 
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
-
+            $row['DT_RowId']=$row['id'];
             $row['name']="<b>".$row['name']."</b>";
             ($row['hasMarketplaceRights']==0)? $row['hasMarketplaceRights']='No' : $row['hasMarketplaceRights']='Si';
             ($row['hasExternalEan']==0)? $row['hasExternalEan']='No' : $row['hasExternalEan']='Si';
