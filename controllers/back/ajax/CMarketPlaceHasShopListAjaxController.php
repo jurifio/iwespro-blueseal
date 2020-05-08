@@ -53,6 +53,7 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
         $opera = $blueseal . "prodotti/marketplace/associate/sale?id=";
         foreach ($datatable->getResponseSetData() as $key => $row) {
+            $row['DT_RowId']=$row['id'];
             $row['id'] = '<a href="' . $opera .  $row['id'] . '">' .  $row['id'] . '</a>';
         if($row['typeSync']==1){
             $row['typeSync']='automatico';

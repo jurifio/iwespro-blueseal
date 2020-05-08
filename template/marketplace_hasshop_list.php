@@ -86,12 +86,22 @@
         <bs-toolbar-button
                 data-remote="bs.lists.create.associatemarketplace"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eur"
+                data-permission="/admin/marketing"
+                data-event="bs.marketplace.price.rules"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Politica Prezzi Prodotti su Marketplace"
+                data-placement="bottom"
+        ></bs-toolbar-button>
 
         <bs-toolbar-button
                 data-remote="bs.lists.delete.asociatemarketplacehasshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <!--<bs-toolbar-group data-group-label="Nuovo shop">
+    <bs-toolbar-group data-group-label="Nuovo shop">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-floppy-o"
@@ -102,7 +112,8 @@
                 data-title="Salva"
                 data-placement="bottom"
         ></bs-toolbar-button>
-    </bs-toolbar-group>-->
+
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

@@ -19,7 +19,7 @@ $(document).on('bs-manage-marketplace-brand-rights', function (e, element, butto
     if (selectedRowsCount < 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare uno o più Prodotti per poterli taggare"
+            message: "Devi selezionare uno o più Brand  per poterli Associare"
         }).open();
         return false;
     }
