@@ -67,7 +67,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
         $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize');
         $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
         $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
-        $marketplaceHasShop = \Monkey::app()->dbAdapter->query('SELECT shopId as shopId, prestashopId as prestashopId from MarketplaceHasShop where  `name` like "%Ebay%"',[])->fetchAll();
+        $marketplaceHasShop = \Monkey::app()->dbAdapter->query('SELECT shopId as shopId, prestashopId as prestashopId, isPriceHub as isPriceHub from MarketplaceHasShop where  `name` like "%Ebay%"',[])->fetchAll();
         foreach ($marketplaceHasShop as $marketplace) {
 
             $getMarketplaceShop = $db_con->prepare('select count(*) as countRow, conf_value as marketplaceId from ps_fastbay1_shop_marketplace where conf_key="mp_selected" and id_shop=' . $marketplace['prestashopId']);
@@ -125,22 +125,22 @@ class CEbayReviseProductAjaxController extends AAjaxController
                     foreach ($reservedIds as $reservedId) {
 
 
-                            $getReference = $db_con->prepare('select count(*) as countProductRow,  php.id_product_ref as id_product_ref,
+                        $getReference = $db_con->prepare('select count(*) as countProductRow,  php.id_product_ref as id_product_ref,
                                                     p.id_product as id_product, 
                                                     p.id_category_default as id_category_default
                                                     from ps_fastbay1_product php
                                                         join ps_product_shop p on php.id_product=p.id_product and php.id_shop=p.id_shop
                                                         where php.id_shop=' . $marketplace['prestashopId'] . ' and php.id_marketplace=' . $market['marketplaceId'] . ' and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1');
-                            $getReference->execute();
-                            $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
+                        $getReference->execute();
+                        $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($rowsGetReference == null) {
                             continue;
                         } else {
-                                $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
+                            $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
-                                $getCategoryId->execute();
-                                $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
+                            $getCategoryId->execute();
+                            $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
                             $xml .= '<ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';
@@ -210,14 +210,25 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 $getReferenceIdProductAttribute->execute();
                                 $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
                                 $xml .= '<Variation>';
-                               // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
-                               $xml.='<SKU>'.$reservedId['productId'].'-'.$reservedId['productVariantId'].'-'.$sku->productSizeId.'</SKU>';
+                                // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
+                                $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($phphmhs->isOnSale == 0) {
-                                    $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
-                                } else {
-                                    $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
+                                if ($market['isPriceHub'] == '0') {
+                                    if ($phphmhs->isOnSale == 0) {
+                                        $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
+                                    } else {
+                                        $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
 
+                                    }
+                                } else {
+                                    /**  @var CProduct $findProductsIsOnSale */
+                                    $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
+                                    if ($findProductsIsOnSale == 0) {
+                                        $xml .= '<StartPrice>' . number_format($sku->price,2,'.','') . '</StartPrice>';
+                                    } else {
+                                        $xml .= '<StartPrice>' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
+
+                                    }
                                 }
                                 $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
                                 $xml .= '<VariationProductListingDetails>';
@@ -300,26 +311,52 @@ class CEbayReviseProductAjaxController extends AAjaxController
 
                             $xml .= '</ItemSpecifics>';
                             $xml .= '<ConditionID>1000</ConditionID>';
-                            if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
-                                $name = $product->productBrand->name
-                                    . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
-                                    . '€ ' .
-                                    $product->itemno
-                                    . ' ' .
-                                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
-                                $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
-                            } else {
-                                $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
-                                    . ' ' .
-                                    $product->productBrand->name
-                                    . ' ' .
-                                    $product->itemno
-                                    . ' ' .
-                                    $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+                            if ($market['isPriceHub'] == '0') {
+                                if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
+                                    $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
+                                    $name = $product->productBrand->name
+                                        . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
+                                        . '€ ' .
+                                        $product->itemno
+                                        . ' ' .
+                                        $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+                                    $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
+                                } else {
+                                    $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
+                                        . ' ' .
+                                        $product->productBrand->name
+                                        . ' ' .
+                                        $product->itemno
+                                        . ' ' .
+                                        $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
 
 
-                                $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
+                                    $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
+                                }
+                            }else{
+                                /**  @var CProduct $findProductsIsOnSale */
+                                $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
+                                if ($findProductsIsOnSale == "1") {
+                                    $percSc = (int)(($sku->price - $phphmhs->salePrice) * 100 / $sku->price);
+                                    $name = $product->productBrand->name
+                                        . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
+                                        . '€ ' .
+                                        $product->itemno
+                                        . ' ' .
+                                        $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+                                    $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
+                                } else {
+                                    $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
+                                        . ' ' .
+                                        $product->productBrand->name
+                                        . ' ' .
+                                        $product->itemno
+                                        . ' ' .
+                                        $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+
+
+                                    $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
+                                }
                             }
                             $xml .= '<Description>';
                             $xml .= '<![CDATA[<!DOCTYPE html>
@@ -1090,8 +1127,6 @@ footer {
                 }
             }
         }
-
-
 
 
         return $res;

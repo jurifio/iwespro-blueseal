@@ -38,6 +38,7 @@ class CManageRulesPriceMarketplaceHasShopAjaxController extends AAjaxController
         $data = $this->app->router->request()->getRequestData();
         $marketplaceShopIds = $data['marketplaceShopIds'];
         $isPriceHub = $data['isPriceHub'];
+        if($isPriceHub=='')return 'Devi Selezionare un opzione chiudi e riesegui l\'operazione';
 
         foreach ($marketplaceShopIds as $marketplaceShopId) {
             $mhs = $marketplaceHasShopRepo->findOneBy(['id' => $marketplaceShopId]);

@@ -40,7 +40,8 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
                       ma.name as markeplaceName,  
                       mhs.typeSync as typeSync,
                       mhs.imgMarketPlace as imgMarketPlace,
-                      mhs.prestashopId as prestashopId
+                      mhs.prestashopId as prestashopId,
+                      if(mhs.isPriceHub='1','Si','No') as priceRule 
                       
                 FROM MarketplaceHasShop mhs 
                 inner join Marketplace ma on mhs.marketPlaceId=ma.id
@@ -61,6 +62,7 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
         }else{
             $row['typeSync']='manuale';
         }
+
         $image=$row['imgMarketPlace'];
         $row['imgMarketPlace']="<img width='80' src='".$imgMarketPlacePath.$image."'</img>";
 

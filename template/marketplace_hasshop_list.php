@@ -61,6 +61,11 @@
                                     data-orderable="true"
                                     class="center">Prestashop Id
                                 </th>
+                                <th data-slug="priceRule"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Listino Da Shop
+                                </th>
 
                             </tr>
                             </thead>
