@@ -342,6 +342,7 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
         $billRegistryInvoiceInsert->grossTotal = $grossTotal;
         $billRegistryInvoiceInsert->invoiceDate = $invoiceDate;
         $billRegistryInvoiceInsert->statusId = $status;
+        $billRegistryInvoiceInsert->subject=$subject;
         $billRegistryInvoiceInsert->insert();
         $res = \Monkey::app()->dbAdapter->query('select max(id) as id from BillRegistryInvoice ',[])->fetchAll();
         foreach ($res as $result) {
@@ -369,7 +370,6 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
             $billRegistryInvoiceRowInsert->discountRow = $row->discountRowAmount;
             $billRegistryInvoiceRowInsert->percentDiscount = $row->percDiscountRow;
             $billRegistryInvoiceRowInsert->grossTotalRow = $row->grossTotalRow;
-            $billRegistryInvoiceRowInsert->subject=$subject;
             $billRegistryInvoiceRowInsert->billRegistryTypeTaxesId = $row->billRegistryTypeTaxesProductId;
             $billRegistryInvoiceRowInsert->insert();
 

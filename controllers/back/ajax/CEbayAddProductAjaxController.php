@@ -217,7 +217,7 @@ class CEbayAddProductAjaxController extends AAjaxController
                                 // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                                 $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($market['isPriceHub'] == '0') {
+                                if ($marketplace['isPriceHub'] == '0') {
                                     if ($phphmhs->isOnSale == 0) {
                                         $xml .= '<StartPrice currencyID="EUR">' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
