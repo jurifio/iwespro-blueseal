@@ -313,7 +313,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                             $xml .= '<ConditionID>1000</ConditionID>';
                             if ($marketplace['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                    $percSc = (int)$phphmhs->price - (($phphmhs->price-$phphmhs->salePrice) /100);
+                                    $percSc = (int)($phphmhs->price - ($phphmhs->price*$phphmhs->salePrice /100));
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
                                         . '€ ' .
@@ -337,7 +337,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 /**  @var CProduct $findProductsIsOnSale */
                                 $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                 if ($findProductsIsOnSale == "1") {
-                                    $percSc = (int)$sku->price - (($sku->price-$sku->salePrice) /100);
+                                    $percSc = (int)($sku->price - ($sku->price*$sku->salePrice /100));
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .
