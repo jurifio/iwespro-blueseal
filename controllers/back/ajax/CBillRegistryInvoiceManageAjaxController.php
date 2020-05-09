@@ -304,6 +304,11 @@ class CBillRegistryInvoiceManageAjaxController extends AAjaxController
                 return 'Errore Inserimento' . $e;
             }
         } else {
+            if($_GET['subject']==''){
+                $subject='';
+            }else{
+                $subject=$_GET['subject'];
+            }
             $billRegistryClient = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $_GET['billRegistryClientId']]);
             $billRegistryClientId = $billRegistryClient->id;
             $billRegistryTypePaymentId = $_GET['billRegistryTypePaymentId'];

@@ -1,23 +1,19 @@
 <?php
 
-namespace bamboo\controllers\back\ajax;
+namespace bamboo\blueseal\jobs;
 
-use bamboo\blueseal\business\CDataTables;
+use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
-use bamboo\core\db\pandaorm\repositories\CRepo;
-use bamboo\domain\entities\CFoison;
-use bamboo\domain\entities\CMessage;
-use bamboo\domain\entities\CMessageHasUser;
+use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CMarketplaceHasShop;
+use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductSku;
-use bamboo\domain\entities\CUser;
-use bamboo\domain\repositories\CFoisonRepo;
 use PDO;
-use PDOException;
 
 /**
- * Class CEbayReviseProductAjaxController
- * @package bamboo\controllers\back\ajax
+ * Class CEbayAddProductJob
+ * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -25,16 +21,24 @@ use PDOException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 28/04/2020
+ * @date 09/05/2020
  * @since 1.0
  */
-class CEbayReviseProductAjaxController extends AAjaxController
+class CEbayAddProductJob extends ACronJob
 {
+
     /**
-     * @return string
-     * @throws \Throwable
+     * @param null $args
      */
-    public function post()
+    public function run($args = null)
+    {
+        $this->addProductsInEbay();
+    }
+
+    /**
+     * @throws \bamboo\core\exceptions\BambooDBALException
+     */
+    private function addProductsInEbay()
     {
         $xml = '';
         if (ENV === 'prod') {
@@ -123,14 +127,18 @@ class CEbayReviseProductAjaxController extends AAjaxController
 
 
                     foreach ($reservedIds as $reservedId) {
+                        $getIfProductEbay=$db_con->prepare('select count(*) as existInEbay from  ps_fastbay1_product where id_product='.$reservedId['prestaId']. ' and 
+                            id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId']);
+                        $getIfProductEbay->execute();
+                        $rowGetIfProductEbay=$getIfProductEbay->fetchAll(PDO::FETCH_ASSOC);
+                        if($rowGetIfProductEbay[0]['existInEbay']!=0) continue;
 
 
-                        $getReference = $db_con->prepare('select count(*) as countProductRow,  php.id_product_ref as id_product_ref,
+                        $getReference = $db_con->prepare('select count(*) as countProductRow,  
                                                     p.id_product as id_product, 
                                                     p.id_category_default as id_category_default
-                                                    from ps_fastbay1_product php
-                                                        join ps_product_shop p on php.id_product=p.id_product and php.id_shop=p.id_shop
-                                                        where php.id_shop=' . $marketplace['prestashopId'] . ' and php.id_marketplace=' . $market['marketplaceId'] . ' and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1');
+                                                   from ps_product_shop p
+                                                        where p.id_shop=' . $marketplace['prestashopId'] . '  and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1');
                         $getReference->execute();
                         $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
@@ -148,7 +156,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                             $xml .= '<WarningLevel>High</WarningLevel>';
                             //intestazione prodotto
                             $xml .= '<Item>';
-                            $xml .= '<ItemID>' . $rowsGetReference[0]['id_product_ref'] . '</ItemID>';
+                            $xml .= '<AutoPay>false</AutoPay>';
                             $xml .= '<Country>' . $rowCountryShop[0]['fastbay1_seller_country'] . '</Country>';
                             $xml .= '<Currency>EUR</Currency>';
                             $xml .= '<PostalCode>' . $rowZipCodeShop[0]['shop_zip_code'] . '</PostalCode>';
@@ -215,18 +223,18 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                                 if ($marketplace['isPriceHub'] == '0') {
                                     if ($phphmhs->isOnSale == 0) {
-                                        $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
-                                        $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
 
                                     }
                                 } else {
                                     /**  @var CProduct $findProductsIsOnSale */
                                     $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                     if ($findProductsIsOnSale == 0) {
-                                        $xml .= '<StartPrice>' . number_format($sku->price,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($sku->price,2,'.','') . '</StartPrice>';
                                     } else {
-                                        $xml .= '<StartPrice>' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
 
                                     }
                                 }
@@ -249,6 +257,8 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 $xml .= '</Variation>';
                             }
                             $xml .= '</Variations>';
+                            $xml.='<ListingDuration>GTC</ListingDuration>';
+                            $xml.='<ListingType>FixedPriceItem</ListingType>';
                             $xml .= '<PictureDetails>';
                             $productHasProductPhoto = \Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             foreach ($productHasProductPhoto as $phs) {
@@ -1038,6 +1048,7 @@ footer {
          <ShippingProfileName>' . $rowDescShippingRules[0]['profile_name'] . '</ShippingProfileName>
         </SellerShippingProfile> 
         </SellerProfiles> ';
+                            $xml .= '<SiteId>' . $market['marketplaceId'] . '</SiteId>';
                             $xml .= '<Site>Italy</Site>';
                             $xml .= '</Item>';
                             $res .= 'Prodotti inviati  :' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '<br>';
@@ -1049,7 +1060,7 @@ footer {
     <eBayAuthToken>' . $rowGetToken[0]['token'] . '</eBayAuthToken>
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>
-</ReviseFixedPriceItem>';
+</AddItemRequest>';
                             $xml = preg_replace(
                                 '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'
                                 . '|[\x00-\x7F][\x80-\xBF]+'
@@ -1064,10 +1075,10 @@ footer {
                             $devID = '9c29584f-1f9e-4c60-94dc-84f786d8670e';
                             $appID = 'VendiloS-c310-4f4c-88a9-27362c05ea78';
                             $certID = '3050bb00-db24-4842-999c-b943deb09d1a';
-                            $siteID = 0;
+                            $siteID = $market['marketplaceId'];
 
                             $apiUrl = 'https://api.ebay.com/ws/api.dll';
-                            $apiCall = 'ReviseFixedPriceItem';
+                            $apiCall = 'AddItem';
                             $compatibilityLevel = 741;
 
                             $runame = 'Vendilo_SpA-VendiloS-c310-4-prlqnbrjv';
@@ -1116,21 +1127,40 @@ footer {
                                 $res .= 'risultato' . var_dump($response);
 
                                 sleep(1);
-                                \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','Report','EbayReviseProduct',$xml,'');
+
+                                $reponseNewProduct = new \SimpleXMLElement($response);
+
+                                $id_product_ref = $reponseNewProduct->ItemID;
+                                echo $id_product_ref;
+                                $today = new \DateTime();
+                                $now = $today->format('Y-m-d H:i:s');
+                                $updateProductReference=$db_con->prepare('INSERT INTO ps_fastbay1_product (id_country,id_product,id_attribute,id_product_ref,date_add,date_upd,revise_zero,id_shop,id_marketplace)
+VALUES (8,
+        \''.$reservedId['prestaId'].'\',
+        0
+        \''.$id_product_ref.'\',
+         \''.$now.'\',
+          \''.$now.'\',
+          0,
+          \''.$marketplace['prestashopId'].'\',
+          \''.$market['marketplaceId'].'\'
+        )
+        ');
+                                $updateProductReference->execute();
+
+
+
+
+                                sleep(1);
+                                $this->report('CEbayReviseProductJob', 'Report',$xml);
                             } catch (\Throwable $e) {
-                                \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','error','EbayReviseProduct',$e,$xml);
-                                $res .= 'errore<br>' . $e;
-                                return $res;
+                                $this->report('CEbayReviseProductJob', 'Error',$e);
+
                             }
                         }
                     }
                 }
             }
         }
-
-
-        return $res;
-
     }
-
 }

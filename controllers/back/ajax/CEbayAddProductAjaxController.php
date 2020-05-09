@@ -253,6 +253,8 @@ class CEbayAddProductAjaxController extends AAjaxController
                                 $xml .= '</Variation>';
                             }
                             $xml .= '</Variations>';
+                            $xml.='<ListingDuration>GTC</ListingDuration>';
+                            $xml.='<ListingType>FixedPriceItem</ListingType>';
                             $xml .= '<PictureDetails>';
                             $productHasProductPhoto = \Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             foreach ($productHasProductPhoto as $phs) {
@@ -315,9 +317,9 @@ class CEbayAddProductAjaxController extends AAjaxController
 
                             $xml .= '</ItemSpecifics>';
                             $xml .= '<ConditionID>1000</ConditionID>';
-                            if ($market['isPriceHub'] == '0') {
+                            if ($marketplace['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                    $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
+                                    $percSc = (int)$phphmhs->price - (($phphmhs->price-$phphmhs->salePrice) /100);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
                                         . '€ ' .
@@ -341,7 +343,7 @@ class CEbayAddProductAjaxController extends AAjaxController
                                 /**  @var CProduct $findProductsIsOnSale */
                                 $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                 if ($findProductsIsOnSale == "1") {
-                                    $percSc = (int)(($sku->price - $phphmhs->salePrice) * 100 / $sku->price);
+                                    $percSc = (int)$sku->price - (($sku->price-$sku->salePrice) /100);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .
@@ -1042,6 +1044,7 @@ footer {
          <ShippingProfileName>' . $rowDescShippingRules[0]['profile_name'] . '</ShippingProfileName>
         </SellerShippingProfile> 
         </SellerProfiles> ';
+                            $xml .= '<SiteId>' . $market['marketplaceId'] . '</SiteId>';
                             $xml .= '<Site>Italy</Site>';
                             $xml .= '</Item>';
                             $res .= 'Prodotti inviati  :' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '<br>';
@@ -1053,7 +1056,7 @@ footer {
     <eBayAuthToken>' . $rowGetToken[0]['token'] . '</eBayAuthToken>
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>
-</ReviseFixedPriceItem>';
+</AddItemRequest>';
                             $xml = preg_replace(
                                 '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'
                                 . '|[\x00-\x7F][\x80-\xBF]+'
@@ -1068,10 +1071,10 @@ footer {
                             $devID = '9c29584f-1f9e-4c60-94dc-84f786d8670e';
                             $appID = 'VendiloS-c310-4f4c-88a9-27362c05ea78';
                             $certID = '3050bb00-db24-4842-999c-b943deb09d1a';
-                            $siteID = 0;
+                            $siteID = $market['marketplaceId'];
 
                             $apiUrl = 'https://api.ebay.com/ws/api.dll';
-                            $apiCall = 'ReviseFixedPriceItem';
+                            $apiCall = 'AddItem';
                             $compatibilityLevel = 741;
 
                             $runame = 'Vendilo_SpA-VendiloS-c310-4-prlqnbrjv';
@@ -1120,7 +1123,29 @@ footer {
                                 $res .= 'risultato' . var_dump($response);
 
                                 sleep(1);
-                                \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','Report','EbayReviseProduct',$xml,'');
+
+                                $reponseNewProduct = new \SimpleXMLElement($response);
+
+                                $id_product_ref = $reponseNewProduct->ItemID;
+                                echo $id_product_ref;
+                                $today = new \DateTime();
+                                $now = $today->format('Y-m-d H:i:s');
+                                $updateProductReference=$db_con->prepare('INSERT INTO ps_fastbay1_product (id_country,id_product,id_attribute,id_product_ref,date_add,date_upd,revise_zero,id_shop,id_marketplace)
+VALUES (8,
+        \''.$reservedId['prestaId'].'\',
+        0
+        \''.$id_product_ref.'\',
+         \''.$now.'\',
+          \''.$now.'\',
+          0,
+          \''.$marketplace['prestashopId'].'\',
+          \''.$market['marketplaceId'].'\'
+        )
+        ');
+                                $updateProductReference->execute();
+
+
+                                \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','Report','EbayAddProduct Reference'.$id_product_ref,$xml,'');
                             } catch (\Throwable $e) {
                                 \Monkey::app()->applicationLog('CEbayReviseProductAjaxController','error','EbayReviseProduct',$e,$xml);
                                 $res .= 'errore<br>' . $e;
