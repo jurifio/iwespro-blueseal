@@ -59,35 +59,26 @@ class CPrestashopBookingProductJob extends ACronJob
             $products = $productRepo->findBy(['productStatusId' => 6]);
             foreach ($products as $product) {
                 /** @var CProductBrand $productBrand */
-                $productBrand = $productBrandRepo->findOneBy(['id' => $product->productStatusId]);
+                $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
                 if ($productBrand->hasMarketplaceRights == 1) {
-                    /** @var CMarketplaceHasShopBrandRights $mhsbr*/
-                    $mhsbr=$marketplaceHasShopBrandRightsRepo->findOneBy(['marketplaceHasShopId'=>$mp->id,'productBrandId'=>$product->productBrandId]);
-                    if($mhsbr!=null){
+                    /** @var CMarketplaceHasShopBrandRights $mhsbr */
+                    $mhsbr = $marketplaceHasShopBrandRightsRepo->findOneBy(['marketplaceHasShopId' => $mp->id,'productBrandId' => $product->productBrandId]);
+                    if ($mhsbr != null) {
                         /**@var CPrestashopHasProduct $phpFind */
-                        $phpFind=$phpRepo->finOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId,'marketplaceHasShopId'=>$mp->id]);
-                        if($phpFind==null){
-                            if($phpFind->prestaId=='') {
-                                /** @var CPrestashopHasProduct $phpInsert */
-                                $phpInsert->getEmptyEntity();
-                                $phpInsert->productId = $product->id;
-                                $phpInsert->productVariantId = $product->productVariantId;
-                                $phpInsert->marketplaceHasShopId = $mp->id;
-                                $phpInsert->modifyType='nf';
-                                $phpInsert->variantValue=0;
+                        $phpFind = $phpRepo->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $mp->id]);
+                        if ($phpFind == null) {
 
-                                }else{
-                                continue;
-                            }
-                        }else{
-                            continue;
+                            /** @var CPrestashopHasProduct $phpInsert */
+                            $phpInsert=$phpRepo->getEmptyEntity();
+                            $phpInsert->productId = $product->id;
+                            $phpInsert->productVariantId = $product->productVariantId;
+                            $phpInsert->marketplaceHasShopId = $mp->id;
+                            $phpInsert->modifyType = 'nf';
+                            $phpInsert->variantValue = 0;
+                            $phpInsert->insert();
 
                         }
-                    }else{
-                        continue ;
                     }
-                }else{
-                    continue;
                 }
             }
 

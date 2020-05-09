@@ -448,5 +448,45 @@
             });
         });
     });
+    $(document).on('bs.add.presta.product.all', function () {
+
+
+
+        let bsModal = new $.bsModal('Pubblica tutti i Prodotti con stato pubblicato sui Marketplace', {
+            body: `
+                <div>
+                    <p>Confermi?</p>
+                
+                </div>
+            `
+        });
+
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+            const data = {
+                products: 1
+
+            };
+
+            $.ajax({
+                method: 'POST',
+                url: '/blueseal/xhr/PrestashopBookingProductListAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody('Errore grave');
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
 
 })(jQuery);

@@ -144,6 +144,17 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-space-shuttle"
+                data-permission="/admin/product/edit"
+                data-event="bs.add.presta.product.all"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Pubblica Tutti Prodotti su marketPlace con stato pubblicato"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-recycle"
                 data-permission="/admin/product/edit"
                 data-event="bs.update.presta.product.feature"
