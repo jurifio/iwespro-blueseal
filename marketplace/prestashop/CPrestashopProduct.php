@@ -103,7 +103,6 @@ class CPrestashopProduct extends APrestashopMarketplace
                 /** @var CPrestashopHasProduct $pHp */
                 $pHp = \Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId]);
                 $operation = $this->checkIfProductExist($product,$marketplaceHasShop->prestashopId,$pHp);
-
                 if ($operation == 'insert') {
                     if (!$this->insertNewProduct($product,$productPrice,$marketplaceHasShop,$destDir)) continue;
                 } else if ($operation == 'exist') {
@@ -115,7 +114,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
 
             } catch (\Exception $e) {
-                \Monkey::app()->applicationLog('PrestashopProduct','Error','Errore while insert',$e->getLine(),$e->getMessage());
+                \Monkey::app()->applicationLog('PrestashopProduct','Error','Errore while insert'. $product->id.'-'.$product->productVariantId,$e->getLine(),$e->getMessage());
                 return false;
             }
 

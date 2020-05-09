@@ -217,7 +217,7 @@ class CEbayReviseProductJob extends ACronJob
                                 // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                                 $xml.='<SKU>'.$reservedId['productId'].'-'.$reservedId['productVariantId'].'-'.$sku->productSizeId.'</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($market['isPriceHub'] == '0') {
+                                if ($marketplace['isPriceHub'] == '0') {
                                     if ($phphmhs->isOnSale == 0) {
                                         $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
@@ -315,7 +315,7 @@ class CEbayReviseProductJob extends ACronJob
 
                             $xml .= '</ItemSpecifics>';
                             $xml .= '<ConditionID>1000</ConditionID>';
-                            if ($market['isPriceHub'] == '0') {
+                            if ($marketplace['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
                                     $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
                                     $name = $product->productBrand->name
@@ -1122,7 +1122,7 @@ footer {
                                 sleep(1);
                                 $this->report('CEbayReviseProductJob', 'Report',$xml);
                             } catch (\Throwable $e) {
-                                $this->report('CEbayReviseProductJob', 'Report',$e);
+                                $this->report('CEbayReviseProductJob', 'Error',$e);
 
                             }
                         }

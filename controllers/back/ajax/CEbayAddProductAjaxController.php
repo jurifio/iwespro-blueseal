@@ -16,7 +16,7 @@ use PDO;
 use PDOException;
 
 /**
- * Class CEbayReviseProductAjaxController
+ * Class CEbayAddProductAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -25,10 +25,10 @@ use PDOException;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 28/04/2020
+ * @date 09/05/2020
  * @since 1.0
  */
-class CEbayReviseProductAjaxController extends AAjaxController
+class CEbayAddProductAjaxController extends AAjaxController
 {
     /**
      * @return string
@@ -123,14 +123,18 @@ class CEbayReviseProductAjaxController extends AAjaxController
 
 
                     foreach ($reservedIds as $reservedId) {
+                            $getIfProductEbay=$db_con->prepare('select count(*) as existInEbay from  ps_fastbay1_product where id_product='.$reservedId['prestaId']. ' and 
+                            id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId']);
+                            $getIfProductEbay->execute();
+                            $rowGetIfProductEbay=$getIfProductEbay->fetchAll(PDO::FETCH_ASSOC);
+                            if($rowGetIfProductEbay[0]['existInEbay']!=0) continue;
 
 
-                        $getReference = $db_con->prepare('select count(*) as countProductRow,  php.id_product_ref as id_product_ref,
+                        $getReference = $db_con->prepare('select count(*) as countProductRow,  
                                                     p.id_product as id_product, 
                                                     p.id_category_default as id_category_default
-                                                    from ps_fastbay1_product php
-                                                        join ps_product_shop p on php.id_product=p.id_product and php.id_shop=p.id_shop
-                                                        where php.id_shop=' . $marketplace['prestashopId'] . ' and php.id_marketplace=' . $market['marketplaceId'] . ' and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1');
+                                                   from ps_product_shop p
+                                                        where p.id_shop=' . $marketplace['prestashopId'] . '  and php.id_product=' . $reservedId['prestaId'] . ' group by id_category_default,id_product limit 1');
                         $getReference->execute();
                         $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
@@ -148,7 +152,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                             $xml .= '<WarningLevel>High</WarningLevel>';
                             //intestazione prodotto
                             $xml .= '<Item>';
-                            $xml .= '<ItemID>' . $rowsGetReference[0]['id_product_ref'] . '</ItemID>';
+                            $xml .= '<AutoPay>false</AutoPay>';
                             $xml .= '<Country>' . $rowCountryShop[0]['fastbay1_seller_country'] . '</Country>';
                             $xml .= '<Currency>EUR</Currency>';
                             $xml .= '<PostalCode>' . $rowZipCodeShop[0]['shop_zip_code'] . '</PostalCode>';
@@ -213,20 +217,20 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                                 $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($marketplace['isPriceHub'] == '0') {
+                                if ($market['isPriceHub'] == '0') {
                                     if ($phphmhs->isOnSale == 0) {
-                                        $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
-                                        $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
 
                                     }
                                 } else {
                                     /**  @var CProduct $findProductsIsOnSale */
                                     $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                     if ($findProductsIsOnSale == 0) {
-                                        $xml .= '<StartPrice>' . number_format($sku->price,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($sku->price,2,'.','') . '</StartPrice>';
                                     } else {
-                                        $xml .= '<StartPrice>' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
+                                        $xml .= '<StartPrice currencyID="EUR">' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
 
                                     }
                                 }
@@ -311,7 +315,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
 
                             $xml .= '</ItemSpecifics>';
                             $xml .= '<ConditionID>1000</ConditionID>';
-                            if ($marketplace['isPriceHub'] == '0') {
+                            if ($market['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
                                     $percSc = (int)(($phphmhs->price - $phphmhs->salePrice) * 100 / $price);
                                     $name = $product->productBrand->name
