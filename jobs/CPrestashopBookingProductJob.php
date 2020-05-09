@@ -74,7 +74,7 @@ class CPrestashopBookingProductJob extends ACronJob
                             $phpInsert->productVariantId = $product->productVariantId;
                             $phpInsert->marketplaceHasShopId = $mp->id;
                             $phpInsert->modifyType = 'nf';
-                            $phpInsert->variantValue = 0;
+                            $phpInsert->variantValue = 0.0;
                             $phpInsert->insert();
 
                         }

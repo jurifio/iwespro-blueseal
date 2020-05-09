@@ -71,7 +71,7 @@ class CPrestashopBookingProductListAjaxController extends AAjaxController
                                 $phpInsert->productVariantId = $product->productVariantId;
                                 $phpInsert->marketplaceHasShopId = $mp->id;
                                 $phpInsert->modifyType = 'nf';
-                                $phpInsert->variantValue = 0;
+                                $phpInsert->variantValue = 0.0;
                                 $phpInsert->insert();
                                 $res.='inserimento Prodotto '.$product->id.'-'.$product->productVariantId. 'su marketplace '.$mp->name.'<br>';
 
