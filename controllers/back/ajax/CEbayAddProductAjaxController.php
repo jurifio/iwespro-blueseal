@@ -343,7 +343,7 @@ class CEbayAddProductAjaxController extends AAjaxController
                                 /**  @var CProduct $findProductsIsOnSale */
                                 $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                 if ($findProductsIsOnSale == "1") {
-                                    $percSc =100 * ($sku->price - $sku->salePrice)/$sku->price;
+                                    $percSc =number_format(100 * ($sku->price - $sku->salePrice)/$sku->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .

@@ -323,7 +323,7 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<ConditionID>1000</ConditionID>';
                             if ($marketplace['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                    $percSc =100 * ($phphmhs->price - $phphmhs->salePrice)/$phphmhs->price;
+                                    $percSc =number_format(100 * ($phphmhs->price - $phphmhs->salePrice)/$phphmhs->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
                                         . '€ ' .
@@ -347,7 +347,7 @@ class CEbayAddProductJob extends ACronJob
                                 /**  @var CProduct $findProductsIsOnSale */
                                 $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                 if ($findProductsIsOnSale == "1") {
-                                    $percSc =100 * ($sku->price - $sku->salePrice)/$sku->price;
+                                    $percSc =number_format(100 * ($sku->price - $sku->salePrice)/$sku->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .
