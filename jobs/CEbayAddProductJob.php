@@ -151,7 +151,7 @@ class CEbayAddProductJob extends ACronJob
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
-                            $xml .= '<ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';
+                            $xml .= '<AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
                             $xml .= '<ErrorLanguage>it_IT</ErrorLanguage>';
                             $xml .= '<WarningLevel>High</WarningLevel>';
                             //intestazione prodotto
@@ -323,7 +323,7 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<ConditionID>1000</ConditionID>';
                             if ($marketplace['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                    $percSc =number_format(100 * ($phphmhs->price - $phphmhs->price) /$phphmhs->price,0,'','');
+                                    $percSc =100 * ($phphmhs->price - $phphmhs->price)/$phphmhs->price;
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
                                         . '€ ' .
@@ -347,7 +347,7 @@ class CEbayAddProductJob extends ACronJob
                                 /**  @var CProduct $findProductsIsOnSale */
                                 $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
                                 if ($findProductsIsOnSale == "1") {
-                                    $percSc =number_format(100 * ($sku->price - $sku->price)  /$sku->price,0,'','');
+                                    $percSc =100 * ($sku->price - $sku->price)/$sku->price;
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .
@@ -1125,16 +1125,17 @@ footer {
 
 
                                 $res .= 'risultato' . var_dump($response);
-
+                                $this->report('CEbayAddProductJob', 'Report ',$response);
                                 sleep(1);
 
                                 $reponseNewProduct = new \SimpleXMLElement($response);
-
+                                $this->report('CEbayAddProductJob', 'Report ',$xml);
                                 $id_product_ref = $reponseNewProduct->ItemID;
                                 echo $id_product_ref;
                                 $today = new \DateTime();
                                 $now = $today->format('Y-m-d H:i:s');
-                                $updateProductReference=$db_con->prepare(sprintf("INSERT INTO ps_fastbay1_product (id_country,id_product,id_attribute,id_product_ref,date_add,date_upd,revise_zero,id_shop,id_marketplace)
+                                if(strlen($id_product_ref)>8) {
+                                    $updateProductReference = $db_con->prepare(sprintf("INSERT INTO ps_fastbay1_product (id_country,id_product,id_attribute,id_product_ref,date_add,date_upd,revise_zero,id_shop,id_marketplace)
 VALUES (8,
         '%s',
         0,
@@ -1146,9 +1147,9 @@ VALUES (8,
           '%s'
         )
         ",$reservedId['prestaId'],$id_product_ref,$now,$now,$marketplace['prestashopId'],$market['marketplaceId']));
-                                $updateProductReference->execute();
+                                    $updateProductReference->execute();
 
-
+                                }
 
 
                                 sleep(1);
