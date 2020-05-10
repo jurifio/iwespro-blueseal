@@ -272,20 +272,13 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<ItemSpecifics>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[MPN]]></Name>';
-                            $xml .= '<Value><![CDATA[' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . ']]></Value>';
+                            $xml .= '<Value><![CDATA[' . $sku->productId . '-' . $sku->productVariantId .'-' . $sku->productSizeId . ']]></Value>';
                             $xml .= '</NameValueList>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[Marca]]></Name>';
                             $xml .= '<Value><![CDATA[' . $brandName . ']]></Value>';
                             $xml .= '</NameValueList>';
                             $xml .= '<NameValueList>
-        <Name><![CDATA[Materiale Tomaia]]></Name>
-        <Value><![CDATA[non applicabile]]></Value>
-      </NameValueList><NameValueList>
-        <Name><![CDATA[Larghezza della scarpa]]></Name>
-        <Value><![CDATA[non applicabile]]></Value>
-      </NameValueList>
-      <NameValueList>
         <Name><![CDATA[Tipo]]></Name>
         <Value><![CDATA[non applicabile]]></Value>
       </NameValueList>
@@ -1131,9 +1124,9 @@ footer {
                                 $reponseNewProduct = new \SimpleXMLElement($response);
                                 $this->report('CEbayAddProductJob', 'Report ',$xml);
                                 $id_product_ref = $reponseNewProduct->ItemID;
-                                echo $id_product_ref;
                                 $today = new \DateTime();
                                 $now = $today->format('Y-m-d H:i:s');
+                                sleep(1);
                                 if(strlen($id_product_ref)>8) {
                                     $updateProductReference = $db_con->prepare(sprintf("INSERT INTO ps_fastbay1_product (id_country,id_product,id_attribute,id_product_ref,date_add,date_upd,revise_zero,id_shop,id_marketplace)
 VALUES (8,
@@ -1152,7 +1145,7 @@ VALUES (8,
                                 }
 
 
-                                sleep(1);
+
                                 $this->report('CEbayAddProductJob', 'Report ',$xml);
                             } catch (\Throwable $e) {
                                 $this->report('CEbayAddProductJob', 'Error '.$reservedId['prestaId'].'-' .$id_product_ref.' linea :'.$e->getLine(),$e->getMessage(). var_dump($response));

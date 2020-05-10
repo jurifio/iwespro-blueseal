@@ -268,7 +268,7 @@ class CEbayAddProductAjaxController extends AAjaxController
                             $xml .= '<ItemSpecifics>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[MPN]]></Name>';
-                            $xml .= '<Value><![CDATA[' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . ']]></Value>';
+                            $xml .= '<Value><![CDATA[' . $sku->productId . '-' . $sku->productVariantId .'-' . $sku->productSizeId . ']]></Value>';
                             $xml .= '</NameValueList>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[Marca]]></Name>';
