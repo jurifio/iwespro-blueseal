@@ -41,6 +41,8 @@ class CAmazonAddProductJob extends ACronJob
     public function run($args = null)
     {
         $this->addProductsInAmazon();
+        $this->app = $app;
+        $this->app->vendorLibraries->load('amazonMWS');
     }
 
     /**
