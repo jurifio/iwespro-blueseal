@@ -109,7 +109,7 @@
     <bs-toolbar-group data-group-label="Nuovo shop">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-plus-o"
+                data-icon="fa-plus-circle"
                 data-permission="/admin/marketing"
                 data-event="bs.marketplace.shop.add"
                 data-class="btn btn-default"
