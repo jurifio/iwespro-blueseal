@@ -133,6 +133,9 @@
             data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.publish.amazon"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.product.marketplace.publish.all"
         ></bs-toolbar-button>
     </bs-toolbar-group>

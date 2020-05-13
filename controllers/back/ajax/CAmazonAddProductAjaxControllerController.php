@@ -1,27 +1,18 @@
 <?php
-
-namespace bamboo\blueseal\jobs;
-
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
-use bamboo\core\base\CObjectCollection;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CMarketplaceHasShop;
-use bamboo\domain\entities\CPrestashopHasProduct;
-use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductSku;
-use PDO;
+namespace bamboo\controllers\back\ajax;
 use bamboo\amazon\business\builders\AAmazonFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonImageFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonInventoryFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonPricingFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonProductFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonRelationshipFeedBuilder;
-use bamboo\core\application\AApplication;
 use bamboo\domain\entities\CMarketplaceAccountHasProduct;
+use bamboo\domain\entities\CProduct;
+use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
 
 /**
- * Class CAmazonAddProductJob
- * @package bamboo\blueseal\jobs
+ * Class CAmazonAddProductAjaxControllerController
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -32,23 +23,14 @@ use bamboo\domain\entities\CMarketplaceAccountHasProduct;
  * @date 11/05/2020
  * @since 1.0
  */
-class CAmazonAddProductJob extends ACronJob
+class CAmazonAddProductAjaxControllerController extends AAjaxController
 {
 
-    /**
-     * @param null $args
-     */
-    public function run($args = null)
-    {
-        $this->addProductsInAmazon();
-        \Monkey::app()->vendorLibraries->load('amazonMWS');
-    }
 
-    /**
-     * @throws \bamboo\core\exceptions\BambooDBALException
-     */
-    private function addProductsInAmazon()
+    public function post()
     {
+
+        \Monkey::app()->vendorLibraries->load('amazonMWS');
         $sql = "SELECT 	marketplaceAccountId as id,
 						marketplaceId
 				FROM 	MarketplaceAccountHasProduct mahp, 
@@ -93,8 +75,9 @@ class CAmazonAddProductJob extends ACronJob
 
             } catch
             (\Throwable $e) {
-                $this->report('CAmazonAddProductJob',$e->getMessage(),$e->getLine());
+                \Monkey::app()->applicationLog('CAmazonAddProductJob','ERROR',$e->getLine(),$e->getMessage(),$e->getFile());
             }
+            return $count;
         }
     }
     protected function prepareAndSend($marketplaceAccount, AAmazonFeedBuilder $builder,$products) {

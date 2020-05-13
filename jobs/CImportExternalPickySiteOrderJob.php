@@ -252,30 +252,32 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                                       FROM NewsletterUser where isImport is null
                                                                     ');
                 $stmtNewsletterUser->execute();
-                while ($rowNewsletterUser = $stmtNewsletterUser->fetch(PDO::FETCH_ASSOC)) {
-                    $checkIfNewsletterUserExist = $newsletterUserRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
-                    if ($checkIfNewsletterUserExist == null) {
-                        $newsletterUserInsert = $newsletterUserRepo->getEmptyEntity();
-                        $newsletterUserInsert->email = $rowNewsletterUser['email'];
-                        $newsletterUserInsert->isActive = $rowNewsletterUser['isActive'];
-                        $newsletterUserInsert->langId = $rowNewsletterUser['langId'];
-                        $newsletterUserInsert->subscriptionDate = $rowNewsletterUser['subscriptionDate'];
-                        if ($rowNewsletterUser['remoteUserId'] != null) {
-                            $user = $userRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
-                            $userId = $user->id;
-                            $newsletterUserInsert->userId = $userId;
+                if ($stmtNewsletterUser!=null) {
+                    while ($rowNewsletterUser = $stmtNewsletterUser->fetch(PDO::FETCH_ASSOC)) {
+                        $checkIfNewsletterUserExist = $newsletterUserRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
+                        if ($checkIfNewsletterUserExist == null) {
+                            $newsletterUserInsert = $newsletterUserRepo->getEmptyEntity();
+                            $newsletterUserInsert->email = $rowNewsletterUser['email'];
+                            $newsletterUserInsert->isActive = $rowNewsletterUser['isActive'];
+                            $newsletterUserInsert->langId = $rowNewsletterUser['langId'];
+                            $newsletterUserInsert->subscriptionDate = $rowNewsletterUser['subscriptionDate'];
+                            if ($rowNewsletterUser['remoteUserId'] != null) {
+                                $user = $userRepo->findOneBy(['email' => $rowNewsletterUser['email']]);
+                                $userId = $user->id;
+                                $newsletterUserInsert->userId = $userId;
+                            }
+                            $newsletterUserInsert->unsubscriptionDate = $rowNewsletterUser['unsubscriptionDate'];
+                            $newsletterUserInsert->genderNewsletterUser = $rowNewsletterUser['genderNewsletterUser'];
+                            $newsletterUserInsert->nameNewsletter = $rowNewsletterUser['nameNewsletter'];
+                            $newsletterUserInsert->surnameNewsletter = $rowNewsletterUser['surnameNewsletter'];
+                            $newsletterUserInsert->remoteId = $rowNewsletterUser['remoteId'];
+                            $newsletterUserInsert->remoteShopId = $shop;
+                            $newsletterUserInsert->insert();
+                        } else {
+                            continue;
                         }
-                        $newsletterUserInsert->unsubscriptionDate = $rowNewsletterUser['unsubscriptionDate'];
-                        $newsletterUserInsert->genderNewsletterUser = $rowNewsletterUser['genderNewsletterUser'];
-                        $newsletterUserInsert->nameNewsletter = $rowNewsletterUser['nameNewsletter'];
-                        $newsletterUserInsert->surnameNewsletter = $rowNewsletterUser['surnameNewsletter'];
-                        $newsletterUserInsert->remoteId = $rowNewsletterUser['remoteId'];
-                        $newsletterUserInsert->remoteShopId = $shop;
-                        $newsletterUserInsert->insert();
-                    } else {
-                        continue;
-                    }
 
+                    }
                 }
                 $stmtUpdateNewsletterUser=$db_con->prepare("UPDATE NewsletterUser set isImport=1 WhERE isImport is null");
                 $stmtUpdateNewsletterUser->execute();
@@ -475,7 +477,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     }
 
                 }
-                $stmtCartUpdate=$db_con->prepare('UPDATE Cart SET isImport=1  WHERE isImport=0');
+                $stmtCartUpdate=$db_con->prepare('UPDATE Cart SET isImport=1  WHERE isImport=0 and isImport is null');
                 $stmtCartUpdate->execute();
             } catch (\throwable $e) {
                 $this->report('CImportExternalPickysiteOrder', 'error', 'Errore Cart ' . $e);
@@ -493,29 +495,31 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                             cl.isImport as isImport 
                                             from CartLine cl WHERE isParallel is null AND cl.isImport=0');
                 $stmtCartLine -> execute();
-                while ($rowCartLineOrder = $stmtCartLine -> fetch(PDO::FETCH_ASSOC)) {
-                    $findCartLineIdIfExist = $cartLineRepo -> findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'], 'remoteShopSellerId' => $shop]);
+                if ($stmtCartLine!=null) {
+                    while ($rowCartLineOrder = $stmtCartLine->fetch(PDO::FETCH_ASSOC)) {
+                        $findCartLineIdIfExist = $cartLineRepo->findOneBy(['remoteCartLineSellerId' => $rowCartLineOrder['remoteCartLineSellerId'],'remoteShopSellerId' => $shop]);
 
-                    if ($findCartLineIdIfExist == null) {
-                        $cartIdFind = $cartRepo -> findOneBy(['remoteCartSellerId' => $rowCartLineOrder['remoteCartId'], 'remoteShopSellerId' => $shop]);
-                        if ($cartIdFind !== null) {
-                            $cartId = $cartIdFind -> id;
-                            $cartLineInsert = $cartLineRepo -> getEmptyEntity();
-                            $cartLineInsert -> cartId = $cartId;
-                            $cartLineInsert -> productId = $rowCartLineOrder['productId'];
-                            $cartLineInsert -> productVariantId = $rowCartLineOrder['productVariantId'];
-                            $cartLineInsert -> productSizeId = $rowCartLineOrder['productSizeId'];
-                            $cartLineInsert -> remoteCartLineSellerId = $rowCartLineOrder['remoteCartLineSellerId'];
-                            $cartLineInsert -> remoteShopSellerId = $shop;
-                            $cartLineInsert ->remoteCartSellerId=$rowCartLineOrder['remoteCartId'];
-                            $cartLineInsert -> insert();
+                        if ($findCartLineIdIfExist == null) {
+                            $cartIdFind = $cartRepo->findOneBy(['remoteCartSellerId' => $rowCartLineOrder['remoteCartId'],'remoteShopSellerId' => $shop]);
+                            if ($cartIdFind !== null) {
+                                $cartId = $cartIdFind->id;
+                                $cartLineInsert = $cartLineRepo->getEmptyEntity();
+                                $cartLineInsert->cartId = $cartId;
+                                $cartLineInsert->productId = $rowCartLineOrder['productId'];
+                                $cartLineInsert->productVariantId = $rowCartLineOrder['productVariantId'];
+                                $cartLineInsert->productSizeId = $rowCartLineOrder['productSizeId'];
+                                $cartLineInsert->remoteCartLineSellerId = $rowCartLineOrder['remoteCartLineSellerId'];
+                                $cartLineInsert->remoteShopSellerId = $shop;
+                                $cartLineInsert->remoteCartSellerId = $rowCartLineOrder['remoteCartId'];
+                                $cartLineInsert->insert();
 
+                            }
+                        } else {
+
+                            continue;
                         }
-                    } else {
 
-                        continue;
                     }
-
                 }
                 $stmtCartLineUpdate=$db_con->prepare('UPDATE CartLine SET isImport=1  WHERE isImport=0');
                 $stmtCartLineUpdate->execute();

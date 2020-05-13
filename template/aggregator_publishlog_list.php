@@ -82,6 +82,9 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione Log">
+        <bs-toolbar-button
+        data-remote="bs.product.marketplace.google.publish"
+        </bs-toolbar-button
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
