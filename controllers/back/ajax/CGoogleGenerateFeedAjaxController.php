@@ -91,8 +91,8 @@ class CGoogleGenerateFeedAjaxController extends AAjaxController
         $writer->endDocument();
         $writer->flush();
 
-        \Monkey::app()->applicationLog('CGoogleGenerateFeedAhaxController','Log','End build','','');
-        \Monkey::app()->applicationLog('CGoogleGenerateFeedAhaxController','Log','End build','End build, errors: ' . $contoErrori);
+        \Monkey::app()->applicationLog('CGoogleGenerateFeedAjaxController','Log','End build','','');
+        \Monkey::app()->applicationLog('CGoogleGenerateFeedAjaxController','Log','End build','End build, errors: ' . $contoErrori);
         return 'PorcoDio';
     }
     /**
