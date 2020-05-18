@@ -145,10 +145,14 @@ class CEbayAddProductJob extends ACronJob
                         if ($rowsGetReference == null) {
                             continue;
                         } else {
-                            $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
+                            $getCategoryId = $db_con->prepare('select count(*) as countRecord,  dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
                             $getCategoryId->execute();
+
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
+                            if($rowGetCategoryId[0]['countRecord']==0){
+                                continue;
+                            }
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
                             $xml .= '<AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
@@ -221,7 +225,7 @@ class CEbayAddProductJob extends ACronJob
                                 // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                                 $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($marketplace['isPriceHub'] == '0') {
+                                if ($marketplace['isPriceHub'] == 0) {
                                     if ($phphmhs->isOnSale == 0) {
                                         $xml .= '<StartPrice currencyID="EUR">' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
@@ -1146,7 +1150,7 @@ VALUES (8,
 
 
 
-                                $this->report('CEbayAddProductJob', 'Report ',$xml);
+                                $this->report('CEbayAddProductJob', 'Report ' .$reservedId['prestaId'].'-' .$id_product_ref,$xml);
                             } catch (\Throwable $e) {
                                 $this->report('CEbayAddProductJob', 'Error '.$reservedId['prestaId'].'-' .$id_product_ref.' linea :'.$e->getLine(),$e->getMessage(). var_dump($response));
 

@@ -141,10 +141,14 @@ class CEbayAddProductAjaxController extends AAjaxController
                         if ($rowsGetReference == null) {
                             continue;
                         } else {
-                            $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
+                            $getCategoryId = $db_con->prepare('select count(*) as countRecord,  dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
                             $getCategoryId->execute();
+
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
+                            if($rowGetCategoryId[0]['countRecord']==0){
+                                continue;
+                            }
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
                             $xml .= '<ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';

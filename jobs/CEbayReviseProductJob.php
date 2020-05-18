@@ -139,12 +139,14 @@ class CEbayReviseProductJob extends ACronJob
                         $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($rowsGetReference == null) {
-                            continue;
+                            continue ;
                         } else {
                             $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
                             $getCategoryId->execute();
+
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
+
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
                             $xml .= '<ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';
@@ -215,9 +217,9 @@ class CEbayReviseProductJob extends ACronJob
                                 $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
                                 $xml .= '<Variation>';
                                 // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
-                                $xml.='<SKU>'.$reservedId['productId'].'-'.$reservedId['productVariantId'].'-'.$sku->productSizeId.'</SKU>';
+                                $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($marketplace['isPriceHub'] == '0') {
+                                if ($marketplace['isPriceHub'] == 0) {
                                     if ($phphmhs->isOnSale == 0) {
                                         $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
@@ -226,7 +228,7 @@ class CEbayReviseProductJob extends ACronJob
                                     }
                                 } else {
                                     /**  @var CProduct $findProductsIsOnSale */
-                                    $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
+                                    $findProductsIsOnSale = $productRepo->findOneBy(['id' => $sku->productId,'productVariantId' => $sku->productVariantId])->isOnSale;
                                     if ($findProductsIsOnSale == 0) {
                                         $xml .= '<StartPrice>' . number_format($sku->price,2,'.','') . '</StartPrice>';
                                     } else {
@@ -266,7 +268,7 @@ class CEbayReviseProductJob extends ACronJob
                             $xml .= '<ItemSpecifics>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[MPN]]></Name>';
-                            $xml .= '<Value><![CDATA[' . $sku->productId . '-' . $sku->productVariantId .'-' . $sku->productSizeId . ']]></Value>';
+                            $xml .= '<Value><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></Value>';
                             $xml .= '</NameValueList>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[Marca]]></Name>';
@@ -315,9 +317,9 @@ class CEbayReviseProductJob extends ACronJob
 
                             $xml .= '</ItemSpecifics>';
                             $xml .= '<ConditionID>1000</ConditionID>';
-                            if ($marketplace['isPriceHub'] == '0') {
+                            if ($marketplace['isPriceHub'] == 0) {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                    $percSc =number_format(100 * ($phphmhs->price - $phphmhs->salePrice)/$phphmhs->price,0);
+                                    $percSc = number_format(100 * ($phphmhs->price - $phphmhs->salePrice) / $phphmhs->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
                                         . '€ ' .
@@ -337,11 +339,11 @@ class CEbayReviseProductJob extends ACronJob
 
                                     $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
                                 }
-                            }else{
+                            } else {
                                 /**  @var CProduct $findProductsIsOnSale */
-                                $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
-                                if ($findProductsIsOnSale == "1") {
-                                    $percSc = number_format(100 * ($sku->price - $sku->salePrice)/$sku->price,0);
+                                $findProductsIsOnSale = $productRepo->findOneBy(['id' => $sku->productId,'productVariantId' => $sku->productVariantId])->isOnSale;
+                                if ($findProductsIsOnSale == 1) {
+                                    $percSc = number_format(100 * ($sku->price - $sku->salePrice) / $sku->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .
@@ -1117,15 +1119,14 @@ footer {
                                 //$xmlresponse = new \SimpleXMLElement($response);
 
 
-
-
                                 sleep(1);
-                                $this->report('CEbayReviseProductJob', 'Report',$xml);
+                                $this->report('CEbayReviseProductJob','Report ' . $rowsGetReference[0]['id_product_ref'],$xml);
                             } catch (\Throwable $e) {
-                                $this->report('CEbayReviseProductJob', 'Error',$e);
+                                $this->report('CEbayReviseProductJob','Error' ,$e);
 
                             }
                         }
+
                     }
                 }
             }

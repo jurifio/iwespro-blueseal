@@ -134,9 +134,9 @@ class CEbayReviseProductAjaxController extends AAjaxController
                         $getReference->execute();
                         $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
-                        if ($rowsGetReference == null) {
-                            continue;
-                        } else {
+                            if ($rowsGetReference == null) {
+                                continue;
+                            } else {
                             $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
                             $getCategoryId->execute();
@@ -213,7 +213,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
                                 // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                                 $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
                                 $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($marketplace['isPriceHub'] == '0') {
+                                if ($marketplace['isPriceHub'] == 0) {
                                     if ($phphmhs->isOnSale == 0) {
                                         $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
                                     } else {
@@ -311,7 +311,7 @@ class CEbayReviseProductAjaxController extends AAjaxController
 
                             $xml .= '</ItemSpecifics>';
                             $xml .= '<ConditionID>1000</ConditionID>';
-                            if ($marketplace['isPriceHub'] == '0') {
+                            if ($marketplace['isPriceHub'] == 0) {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
                                     $percSc =number_format(100 * ($phphmhs->price - $phphmhs->salePrice)/$phphmhs->price,2);
                                     $name = $product->productBrand->name
