@@ -30,10 +30,12 @@ class CBillRegistryInvoiceListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/bill_registryinvoice_list.php');
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'allShops' => $allShops,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -118,10 +118,12 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
+                                <?php if ($allShops) : ?>
                                 <th data-slug="companyName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Cliente
                                 </th>
+                                <?php endif; ?>
                                 <th data-slug="invoiceNumber"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Numero<br>Fattura
@@ -161,6 +163,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stato
                                 </th>
+                                <?php if ($allShops) : ?>
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Codice
@@ -169,6 +172,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Fatturata<br>Elettronicamente
                                 </th>
+                                <?php endif; ?>
                             </tr>
 
                             </thead>
@@ -189,7 +193,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-cog"
-                data-permission="/admin/product/add"
+                data-permission="AllShops"
                 data-event="bs.invoice.generate"
                 data-class="btn btn-default"
                 data-rel="tooltip"
@@ -199,7 +203,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus-circle"
-                data-permission="/admin/product/add"
+                data-permission="AllShops"
                 data-event="bs.invoice.add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
@@ -209,7 +213,7 @@
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-eraser"
-            data-permission="/admin/product/add"
+            data-permission="AllShops"
             data-event="bs.invoice.delete"
             data-class="btn btn-default"
             data-rel="tooltip"
@@ -229,7 +233,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-envelope"
-                data-permission="/admin/product/add"
+                data-permission="AllShops"
                 data-event="bs.invoice.sendEmail"
                 data-class="btn btn-default"
                 data-rel="tooltip"
@@ -239,7 +243,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-gavel"
-                data-permission="/admin/product/add"
+                data-permission="AllShops"
                 data-event="bs.invoice.sendLegal"
                 data-class="btn btn-default"
                 data-rel="tooltip"
