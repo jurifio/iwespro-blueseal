@@ -255,6 +255,9 @@
             data-remote="bs.paymentBill.submit"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.paymentActiveBill.pay"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
             data-remote="bs.paymentActiveBill.edit"
         ></bs-toolbar-button>
         <bs-toolbar-button
