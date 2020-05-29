@@ -237,7 +237,7 @@
         {
             "pattern": "/blueseal/lista-prodotti-veloce(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductLFastListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductFastListController"
             },
             "filters": {},
             "translations": {},
