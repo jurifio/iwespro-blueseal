@@ -29,7 +29,21 @@ class CProductFastListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_fast_list.php');
-
+        if(isset($_GET['season'])) {
+            $season=$_GET['season'];
+        }else{
+            $season=0;
+        }
+        if(isset($_GET['productZeroQuantity'])) {
+            $productZeroQuantity=$_GET['productZeroQuantity'];
+        }else{
+            $productZeroQuantity=0;
+        }
+        if(isset($_GET['productStatus'])) {
+            $productStatus=$_GET['productStatus'];
+        }else{
+            $productStatus=0;
+        }
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $bluesealBase . "prodotti";
@@ -82,6 +96,9 @@ class CProductFastListController extends ARestrictedAccessRootController
             'cm' => $this->app->categoryManager,
             'pageURL' => $pageURL,
             'prodotti' => $prodotti,
+            'season'=>$season,
+            'productZeroQuantity'=>$productZeroQuantity,
+            'productStatus'=>$productStatus,
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);

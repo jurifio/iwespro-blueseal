@@ -27,25 +27,37 @@
                             <div class="col-md-3">
                                 <div class="form-group form-group-default">
                                     <label for="season">Visualizza tutte le Stagioni</label>
-                                    <input type="checkbox" id="season" name="season" value="0"/>
+                                    <?php if($season==1) {
+                                        echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
+                                    }else{
+                                        echo '<input type="checkbox"  id="season" name="season" value="0"/>';
+                                    }
+                                    ?>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group form-group-default">
-                                    <label for="ProductZeroQuantity">Includi Quantità 0</label>
-                                    <input type="checkbox" id="ProductZeroQuantity"
-                                           name="ProductZeroQuantity" value="0"/>
+                                    <label for="productZeroQuantity">Includi Quantità 0</label>
+                                    <?php     if($productZeroQuantity==1) {
+                                       echo ' <input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
+                                    }else{
+                                        echo ' <input type="checkbox" id="productZeroQuantity"  name="productZeroQuantity" value="0"/>';
+                                    }
+                                   ?>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group form-group-default">
                                     <label for="productStatus">includi tutti gli stati prodotto</label>
-                                    <input type="checkbox" id="productStatus"
-                                           name="productStatus" value="0"/>
+                                    <?php if($productStatus){
+                                    echo '<input type="checkbox" checked="checked" id="productStatus"  name="productStatus" value="0"/>';
+                                     }else{
+                                        echo '<input type="checkbox" id="productStatus"  name="productStatus" value="0"/>';
+                                     }?>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"></span></button>
+                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
                             </div>
                         </div>
                     </div>
@@ -59,6 +71,9 @@
                                data-controller="ProductFastListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
+                               data-product-zero-quantity="<?php echo $productZeroQuantity?>"
+                               data-season="<?php echo $season?>"
+                               data-product-status="<?php echo $productStatus?>"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
                                data-display-length="200">
                             <thead>

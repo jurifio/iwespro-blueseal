@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -23,32 +24,46 @@ class CProductFastListAjaxController extends AAjaxController
 {
     public function get()
     {
-        $productSeason= \Monkey::app()->dbAdapter->query('select max(id) as productSeasonId from ProductSeason ',[])->fetchAll();
+
+        $productSeason = \Monkey::app()->dbAdapter->query('select max(id) as productSeasonId from ProductSeason ',[])->fetchAll();
         foreach ($productSeason as $val) {
             $productSeasonId = $val['productSeasonId'];
         }
-        $season = \Monkey::app()->router->request()->getRequestData('season');
+        //$season=\Monkey::app()->router->request()->getRequestData('season');
+        if (isset($_REQUEST['season'])) {
+            $season = $_REQUEST['season'];
+        } else {
+            $season = '';
+        }
+        if (isset($_REQUEST['productZeroQuantity'])) {
+            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = '';
+        }
+        if (isset($_REQUEST['productStatus'])) {
+            $productStatus = $_REQUEST['productStatus'];
+        } else {
+            $productStatus = '';
+        }
 
-        if($season) {
-                $sqlFilterSeason = '';
-            } else {
-                $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
-            }
-  $productZeroQuantity=\Monkey::app()->router->request()->getRequestData('productZeroQuantity');
-            if ($productZeroQuantity) {
-                $sqlFilterQuantity = '';
-            } else {
-                $sqlFilterQuantity = 'and p.qty>0';
-            }
-$productStatus=\Monkey::app()->router->request()->getRequestData('productStatus');
-            if ($productStatus) {
-                $sqlFilterStatus = '';
-            } else {
-                $sqlFilterStatus = 'and p.productStatusId=6';
-            }
+        if ($season == 1) {
+            $sqlFilterSeason = '';
+        } else {
+            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+        }
+        if ($productZeroQuantity == 1) {
+            $sqlFilterQuantity = '';
+        } else {
+            $sqlFilterQuantity = 'and p.qty>0';
+        }
+        if ($productStatus == 1) {
+            $sqlFilterStatus = '';
+        } else {
+            $sqlFilterStatus = 'and p.productStatusId=6';
+        }
 
 
-            $sql = "SELECT
+        $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   p.id                                                                                              AS id,
                   p.productVariantId                                                                                AS productVariantId,
@@ -131,21 +146,21 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 ". $sqlFilterSeason. ' ' . $sqlFilterQuantity. ' '. $sqlFilterStatus ;
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
-        if ($shootingCritical)  $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
+        if ($shootingCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
         $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
         if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
 
 
-        $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
+        $datatable = new CDataTables($sql,['id','productVariantId'],$_GET,true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        $datatable->addCondition('shopId', $shopIds);
+        $datatable->addCondition('shopId',$shopIds);
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
-        $productStatuses = $em->findAll('limit 99', '');
+        $productStatuses = $em->findAll('limit 99','');
 
         $statuses = [];
         foreach ($productStatuses as $status) {
@@ -160,7 +175,7 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
         $docRepo = \Monkey::app()->repoFactory->create('Document');
         $datatable->doAllTheThings();
 
-        foreach ($datatable->getResponseSetData() as $key=>$row) {
+        foreach ($datatable->getResponseSetData() as $key => $row) {
             /** @var $val CProduct */
             $val = $productRepo->findOneBy($row);
 
@@ -171,7 +186,7 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-", $val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
+            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
 
             $row['details'] = "";
             foreach ($val->productSheetActual as $k => $v) {
@@ -184,18 +199,18 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
-            $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $val->printId() . '"></table>';
+            $row['externalId'] = '<span class="small">' . $val->getShopExtenalIds('<br />') . '</span>';
 
             $row['cpf'] = $val->printCpf();
 
             $row['colorGroup'] = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
             $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories('<br>', '/') . '</span>';
+            $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories('<br>','/') . '</span>';
             $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>', false) . '</span>';
+            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
             $row['status'] = $val->productStatus->name;
             $row['productPriority'] = $val->sortingPriorityId;
 
@@ -206,7 +221,7 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
             foreach ($val->productSku as $sku) {
                 $qty += $sku->stockQty;
                 $iShop = $sku->shop->name;
-                if (!in_array($iShop, $shopz)) {
+                if (!in_array($iShop,$shopz)) {
                     $shopz[] = $iShop;
 
                     $price = $isOnSale ? $sku->salePrice : $sku->price;
@@ -216,7 +231,7 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
                         $value = $sku->value;
                         $friendRevenue = $value + $value * $multiplier / 100;
                         $priceNoVat = $price / 1.22;
-                        $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100, 2, ",", ".");
+                        $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100,2,",",".");
                     } else {
                         $mup[] = '-';
                     }
@@ -227,8 +242,8 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
 
             //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
             $row['marketplaces'] = "";
-            $row["row_shop"] = $val->getShops('|', true);
-            $row['shop'] = '<span class="small">'.$val->getShops('<br />', true).'</span>';
+            $row["row_shop"] = $val->getShops('|',true);
+            $row['shop'] = '<span class="small">' . $val->getShops('<br />',true) . '</span>';
             $row['shops'] = $val->shopHasProduct->count();
 
 
@@ -258,9 +273,9 @@ $productStatus=\Monkey::app()->router->request()->getRequestData('productStatus'
             $sids = "";
             $ddtNumbers = "";
             /** @var CShooting $singleShooting */
-            foreach ($val->shooting as $singleShooting){
-                $sids .= '<br />'.$singleShooting->id;
-                $ddtNumbers .= '<br />'.$docRepo->findShootingFriendDdt($singleShooting);
+            foreach ($val->shooting as $singleShooting) {
+                $sids .= '<br />' . $singleShooting->id;
+                $ddtNumbers .= '<br />' . $docRepo->findShootingFriendDdt($singleShooting);
             }
             $row["shooting"] = $sids;
             $row["doc_number"] = $ddtNumbers;
