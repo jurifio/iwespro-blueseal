@@ -38,7 +38,7 @@ class CProductFastListAjaxController extends AAjaxController
         }
         if(isset($_GET['ProductZeroQuantity'])) {
             if ($_GET['ProductZeroQuantity'] == 1) {
-                $sqlFilterQuantity = 'and p.qty>=0';
+                $sqlFilterQuantity = '';
             } else {
                 $sqlFilterQuantity = 'and p.qty>0';
             }

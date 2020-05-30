@@ -39,9 +39,9 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group form-group-default">
-                                    <label for="ProductStatus">includi tutti gli stati prodotto</label>
-                                    <input type="checkbox" id="ProductStatus"
-                                           name="ProductStatus" value="0"/>
+                                    <label for="productStatus">includi tutti gli stati prodotto</label>
+                                    <input type="checkbox" id="productStatus"
+                                           name="productStatus" value="0"/>
                                 </div>
                             </div>
                             <div class="col-md-3">
