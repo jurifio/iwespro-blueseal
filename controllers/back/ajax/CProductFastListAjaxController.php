@@ -36,8 +36,8 @@ class CProductFastListAjaxController extends AAjaxController
         }else{
             $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
         }
-        if(isset($_GET['ProductZeroQuantity'])) {
-            if ($_GET['ProductZeroQuantity'] == 1) {
+        if(isset($_GET['productZeroQuantity'])) {
+            if ($_GET['productZeroQuantity'] == 1) {
                 $sqlFilterQuantity = '';
             } else {
                 $sqlFilterQuantity = 'and p.qty>0';
@@ -46,8 +46,8 @@ class CProductFastListAjaxController extends AAjaxController
             $sqlFilterQuantity = 'and p.qty>0';
         }
 
-        if(isset($_GET['ProductStatus'])){
-            if ($_GET['ProductStatus'] == 1) {
+        if(isset($_GET['productStatus'])){
+            if ($_GET['productStatus'] == 1) {
                 $sqlFilterStatus = '';
             } else {
                 $sqlFilterStatus = 'and p.productStatusId=6';
