@@ -3,6 +3,7 @@ $('#btnsearchplus').click(function(){
     if ($('#season').prop("checked")) {
         season = 'season=1';
     }
+
     var productZeroQuantity='&productZeroQuantity=0';
     if($('#productZeroQuantity').prop('checked')) {
         productZeroQuantity = '&productZeroQuantity=1';
