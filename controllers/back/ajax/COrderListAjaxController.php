@@ -92,7 +92,7 @@ class COrderListAjaxController extends AAjaxController
         }
         $toSend = \Monkey::app()->router->request()->getRequestData('toSend');
         if ($toSend)
-            $sql .= "AND (
+            $sql .= " AND (
                 `ols`.`id` > 4 AND `os`.`id` NOT IN (8,13,18) 
                 AND (
                         (`o`.`paymentDate` IS NOT NULL AND `o`.`orderPaymentMethodId` <> 5)

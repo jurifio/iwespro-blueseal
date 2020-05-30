@@ -27,34 +27,25 @@ class CProductFastListAjaxController extends AAjaxController
         foreach ($productSeason as $val) {
             $productSeasonId = $val['productSeasonId'];
         }
-        if(isset($_GET['season'])) {
-            if ($_GET['season'] == 1) {
+        $season = \Monkey::app()->router->request()->getRequestData('season');
+
+        if($season) {
                 $sqlFilterSeason = '';
             } else {
                 $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
             }
-        }else{
-            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
-        }
-        if(isset($_GET['productZeroQuantity'])) {
-            if ($_GET['productZeroQuantity'] == 1) {
+  $productZeroQuantity=\Monkey::app()->router->request()->getRequestData('productZeroQuantity');
+            if ($productZeroQuantity) {
                 $sqlFilterQuantity = '';
             } else {
                 $sqlFilterQuantity = 'and p.qty>0';
             }
-        }else {
-            $sqlFilterQuantity = 'and p.qty>0';
-        }
-
-        if(isset($_GET['productStatus'])){
-            if ($_GET['productStatus'] == 1) {
+$productStatus=\Monkey::app()->router->request()->getRequestData('productStatus');
+            if ($productStatus) {
                 $sqlFilterStatus = '';
             } else {
                 $sqlFilterStatus = 'and p.productStatusId=6';
             }
-        }else {
-            $sqlFilterStatus = 'and p.productStatusId=6';
-        }
 
 
             $sql = "SELECT
