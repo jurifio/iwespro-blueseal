@@ -66,29 +66,39 @@ class CProductSuperFastListAjaxController extends AAjaxController
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   p.id                                                                                              AS id,
-                  p.productVariantId                                                                                AS productVariantId,
-                  concat(pse.name, ' ', pse.year)                                                               AS season,
-                  pse.isActive                                                                                      AS isActive,
-                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
-                  pv.description                                                                                    AS colorNameManufacturer,
-                  pb.name                                                                                           AS brand,
-                  ps.name                                                                                           AS status,  
-                  p.creationDate                                                                                    AS creationDate,
-                  p.lastUpdate as lastUpdate,  
-                  if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
-                  p.isOnSale                                                                                        AS isOnSale,
-                  p.qty                                                                                             AS hasQty
+                  p.shop as shop,
+                  p.colorGroup as colorGroup
+                  p.colorNameManufacturer as colorNameManufacturer,
+                  p.seasion as season,
+                  p.externalId as externalId,
+                  p.cpf as cpf,
+                  p.details as details,
+                  p.dummy as dummy,
+                  p.hasPhotos as hasPhotos,
+                  p.productName as productName,  
+                  p.hasDetails as hasDetails,
+                  p.brand as brand,
+                  p.productSizeGroupId as productSizeGroupId
+                  p.categoryId as categoryId
+                  p.tags as tags,
+                  p.status as status,
+                  p.hasQty as hasQty,
+                  p.isOnSale as isOnSale,
+                  p.productPriority as ProductPriority,
+                  p.description as description,         
+                  p.marketplaces as marketplaces,
+                  p.stock as stock,
+                  p.activePrice as activePrice,
+                  p.shops as shops,
+                  p.friendPrices as friendPrices,  
+                  p.friendValues as friendValues,
+                  p.processing as processing,
+                  p.shooting as shooting,
+                  p.doc_number as doc_number
+                  p.inPrestashop as inPrestashop
+       
                 
-                FROM Product p
-                  JOIN ProductSeason pse ON p.productSeasonId = pse.id
-                  JOIN ProductVariant pv ON p.productVariantId = pv.id
-                  JOIN ProductBrand pb ON p.productBrandId = pb.id
-                  JOIN ProductStatus ps ON ps.id = p.productStatusId    
-                 join ShopHasProduct sap on p.id=sap.productId and p.productVariantId=sap.productVariantId
-                  join Shop s on sap.shopId=s.id 
-                  
-
-
+                FROM ProductView p
                  WHERE 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus;
 
 
@@ -128,101 +138,7 @@ class CProductSuperFastListAjaxController extends AAjaxController
             );
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
-            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
 
-            $row['details'] = "";
-            foreach ($val->productSheetActual as $k => $v) {
-                if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
-                    $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
-                }
-            }
-
-            $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
-            $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
-            $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
-
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $val->printId() . '"></table>';
-            $row['externalId'] = '<span class="small">' . $val->getShopExtenalIds('<br />') . '</span>';
-
-            $row['cpf'] = $val->printCpf();
-
-            $row['colorGroup'] = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
-            $row['brand'] = isset($val->productBrand) ? $val->productBrand->name : "";
-            $row['categoryId'] = '<span class="small">' . $val->getLocalizedProductCategories('<br>','/') . '</span>';
-            $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
-
-            $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
-            $row['status'] = $val->productStatus->name;
-            $row['productPriority'] = $val->sortingPriorityId;
-
-            $qty = 0;
-            $shopz = [];
-            $mup = [];
-            $isOnSale = $val->isOnSale();
-            foreach ($val->productSku as $sku) {
-                $qty += $sku->stockQty;
-                $iShop = $sku->shop->name;
-                if (!in_array($iShop,$shopz)) {
-                    $shopz[] = $iShop;
-
-                    $price = $isOnSale ? $sku->salePrice : $sku->price;
-
-                    if ((float)$price) {
-                        $multiplier = ($val->productSeason->isActive) ? (($isOnSale) ? $sku->shop->saleMultiplier : $sku->shop->currentSeasonMultiplier) : $sku->shop->pastSeasonMultiplier;
-                        $value = $sku->value;
-                        $friendRevenue = $value + $value * $multiplier / 100;
-                        $priceNoVat = $price / 1.22;
-                        $mup[] = number_format(($priceNoVat - $friendRevenue) / $priceNoVat * 100,2,",",".");
-                    } else {
-                        $mup[] = '-';
-                    }
-                }
-            }
-            $row['hasQty'] = $qty;
-            $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
-
-            //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
-            $row['marketplaces'] = "";
-            $row["row_shop"] = $val->getShops('|',true);
-            $row['shop'] = '<span class="small">' . $val->getShops('<br />',true) . '</span>';
-            $row['shops'] = $val->shopHasProduct->count();
-
-
-            //$row['mup'] = '<span class="small">';
-            //$row['mup'] .= implode('<br />', $mup);
-            //$row['mup'] .= '</span>';
-
-            $row['friendPrices'] = [];
-            $row['friendValues'] = [];
-            $row['friendSalePrices'] = [];
-            foreach ($val->shopHasProduct as $shp) {
-                $row['friendPrices'][] = $shp->price;
-                $row['friendValues'][] = $shp->value;
-                $row['friendSalePrices'][] = $shp->salePrice;
-            }
-
-            $row['friendPrices'] = implode('<br />',$row['friendPrices']);
-            $row['friendValues'] = implode('<br />',$row['friendValues']);
-            $row['friendSalePrices'] = implode('<br />',$row['friendSalePrices']);
-
-            $row['colorNameManufacturer'] = $val->productVariant->description;
-
-            $row['isOnSale'] = $val->isOnSale();
-            $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
-            $row['processing'] = ($val->processing) ? $val->processing : '-';
-
-            $sids = "";
-            $ddtNumbers = "";
-            /** @var CShooting $singleShooting */
-            foreach ($val->shooting as $singleShooting) {
-                $sids .= '<br />' . $singleShooting->id;
-                $ddtNumbers .= '<br />' . $docRepo->findShootingFriendDdt($singleShooting);
-            }
-            $row["shooting"] = $sids;
-            $row["doc_number"] = $ddtNumbers;
-            $row["inPrestashop"] = is_null($val->prestashopHasProduct) ? 'no' : 'si';
 
             $datatable->setResponseDataSetRow($key,$row);
         }
