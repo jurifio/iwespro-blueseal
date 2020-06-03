@@ -75,7 +75,7 @@
                                data-season="<?php echo $season?>"
                                data-product-status="<?php echo $productStatus?>"
                                data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
-                               data-display-length="20">
+                               data-display-length="10">
                             <thead>
                             <tr>
                                 <th data-slug="code"
