@@ -76,6 +76,8 @@ class CUpdateProductViewJob extends ACronJob
         }
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $row = [];
+        /** @var CDocumentRepo $docRepo */
+        $docRepo = \Monkey::app()->repoFactory->create('Document');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         $productViewRepo = \Monkey::app()->repoFactory->create('ProductView');
         $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');

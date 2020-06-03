@@ -9,6 +9,7 @@ use bamboo\core\exceptions\BambooShipmentException;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\repositories\CDocumentRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
@@ -62,6 +63,8 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
         foreach ($productStatuses as $status) {
             $statuses[$status->code] = $status->name;
         }
+        /** @var CDocumentRepo $docRepo */
+        $docRepo = \Monkey::app()->repoFactory->create('Document');
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $row = [];
         $productRepo = \Monkey::app()->repoFactory->create('Product');
