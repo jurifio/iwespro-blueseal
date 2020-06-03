@@ -1,23 +1,24 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
 use bamboo\core\base\CObjectCollection;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CMarketplaceHasShop;
-use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\core\exceptions\BambooException;
+use bamboo\core\exceptions\BambooOrderLineException;
+use bamboo\core\exceptions\BambooShipmentException;
+use bamboo\domain\entities\COrderLine;
 use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductSku;
-use bamboo\domain\entities\CProductView;
-use PDO;
 use bamboo\domain\entities\CShooting;
-use bamboo\domain\repositories\CDocumentRepo;
-
+use bamboo\domain\repositories\COrderLineRepo;
+use bamboo\domain\repositories\CShipmentRepo;
+use bamboo\utils\time\STimeToolbox;
+use DateTime;
+use PDO;
+use PDOException;
 
 /**
- * Class CAmazonAddProductJob
- * @package bamboo\blueseal\jobs
+ * Class CGenerateProductSuperFastListAjaxController
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -25,25 +26,12 @@ use bamboo\domain\repositories\CDocumentRepo;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 11/05/2020
+ * @date 03/06/2020
  * @since 1.0
  */
-class CUpdateProductViewJob extends ACronJob
+class CGenerateProductSuperFastListAjaxController extends AAjaxController
 {
-
-    /**
-     * @param null $args
-     */
-    public function run($args = null)
-    {
-        $this->updateProductView();
-        \Monkey::app()->vendorLibraries->load('amazonMWS');
-    }
-
-    /**
-     * @throws \bamboo\core\exceptions\BambooDBALException
-     */
-    private function updateProductView()
+    public function post()
     {
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
@@ -83,9 +71,9 @@ class CUpdateProductViewJob extends ACronJob
         $productNameTranslationRepo = \Monkey::app()->repoFactory->create('ProductNameTranslation');
         $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
         foreach ($res as $result) {
-            $findProductView = $productViewRepo->findOneBy(['productId' => $result['id'],'productVariantId' => $result['productVariantId']]);
+            $findProductView = $productViewRepo->findOneBy(['productId'=> $result['id'],'productVariantId' => $result['productVariantId']]);
             if ($findProductView == null) {
-                $productViewInsert->productViewRepo - getEmptyEntity();
+                $productViewInsert=$productViewRepo->getEmptyEntity();
                 /** @var $val CProduct */
                 $val = $productRepo->findOneBy(['id' => $result['id'],'productVariantId' => $result['productVariantId']]);
 
@@ -303,7 +291,6 @@ class CUpdateProductViewJob extends ACronJob
 
 
         }
+    return 'ok';
     }
 }
-
-
