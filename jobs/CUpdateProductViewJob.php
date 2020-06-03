@@ -87,7 +87,7 @@ class CUpdateProductViewJob extends ACronJob
         foreach ($res as $result) {
             $findProductView = $productViewRepo->findOneBy(['productId' => $result['id'],'productVariantId' => $result['productVariantId']]);
             if ($findProductView == null) {
-                $productViewInsert->productViewRepo - getEmptyEntity();
+                $productViewInsert=$productViewRepo->getEmptyEntity();
                 /** @var $val CProduct */
                 $val = $productRepo->findOneBy(['id' => $result['id'],'productVariantId' => $result['productVariantId']]);
 

@@ -20,7 +20,7 @@ use bamboo\core\db\pandaorm\adapter\CMySQLAdapter;
  * @date 30/05/2020
  * @since 1.0
  */
-class CProductShopListController extends ARestrictedAccessRootController
+class CProductSuperFastListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
     protected $pageSlug = "product_shop_list";
@@ -28,7 +28,7 @@ class CProductShopListController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_shop_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_superfast_list.php');
         if(isset($_GET['season'])) {
             $season=$_GET['season'];
         }else{
