@@ -38,6 +38,28 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
         $today = new \DateTime();
         $now = $today->format('Y-m-d H:i:s');
 
+       /* $sql = "SELECT
+                  concat(p.id, '-', pv.id)                                                                      AS code,
+                  p.id                                                                                              AS id,
+                  p.productVariantId                                                                                AS productVariantId,
+                  concat(pse.name, ' ', pse.year)                                                               AS season,
+                  pse.isActive                                                                                      AS isActive,
+                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
+                  pv.description                                                                                    AS colorNameManufacturer,
+                  pb.name                                                                                           AS brand,
+                  ps.name                                                                                           AS status,  
+                  p.creationDate                                                                                    AS creationDate,
+                  p.lastUpdate as lastUpdate,  
+                  if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
+                  p.isOnSale                                                                                        AS isOnSale,
+                  p.qty                                                                                             AS hasQty
+                
+                FROM Product p
+                  JOIN ProductSeason pse ON p.productSeasonId = pse.id
+                  JOIN ProductVariant pv ON p.productVariantId = pv.id
+                  JOIN ProductBrand pb ON p.productBrandId = pb.id
+                  JOIN ProductStatus ps ON ps.id = p.productStatusId
+                 WHERE 1=1 and  p.lastUpdate>='".$lastExecution."' and p.lastUpdate<='".$now."' GROUP BY p.id,p.productVariantId  ";*/
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   p.id                                                                                              AS id,
@@ -59,7 +81,7 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
-                 WHERE 1=1 and  p.lastUpdate>='".$lastExecution."' and p.lastUpdate<='".$now."' GROUP BY p.id,p.productVariantId  ";
+                  GROUP BY p.id,p.productVariantId  ";
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
 
@@ -88,32 +110,32 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
                 $productViewInsert->productVariantId = $val->productVariantId;
 
                 $productViewInsert->dummy = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-                $productViewInsert->productSizeGroup = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
+                $productViewInsert->productSizeGroup = ($val->productSizeGroup) ?  $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0]  : '';
 
                 $details = "";
                 foreach ($val->productSheetActual as $k => $v) {
                     if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
-                        $details .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
+                        $details .=  $v->productDetail->productDetailTranslation->getFirst()->name . "<br />";
                     }
                 }
                 $productViewInsert->details = $details;
 
                 $productViewInsert->hasPhotos = ($val->productPhoto->count()) ? 'sì' : 'no';
                 $productViewInsert->hasDetails = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
-                $productViewInsert->season = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
+                $productViewInsert->season = $val->productSeason->name . " " . $val->productSeason->year ;
 
                 $productViewInsert->stock = '<table class="nested-table inner-size-table" data-product-id="' . $val->printId() . '"></table>';
-                $productViewInsert->externalId = '<span class="small">' . $val->getShopExtenalIds('<br />') . '</span>';
+                $productViewInsert->externalId =  $val->getShopExtenalIds('<br />') ;
 
                 $productViewInsert->cpf = $val->printCpf();
 
-                $productViewInsert->colorGroup = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
+                $productViewInsert->colorGroup =  (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") ;
                 $productViewInsert->brand = isset($val->productBrand) ? $val->productBrand->name : "";
-                $productViewInsert->categoryId = '<span class="small">' . $val->getLocalizedProductCategories('<br>','/') . '</span>';
-                $productViewInsert->description = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
+                $productViewInsert->categoryId =  $val->getLocalizedProductCategories('<br>','/');
+                $productViewInsert->description = ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "");
 
                 $productViewInsert->productName = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-                $productViewInsert->tags = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
+                $productViewInsert->tags =  $val->getLocalizedTags('<br>',false) ;
                 $productViewInsert->status = $val->productStatus->name;
                 $productViewInsert->productPriority = $val->sortingPriorityId;
                 $productViewInsert->lastUpdate = $val->lastUpdate;
@@ -146,7 +168,7 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
 
                 //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
                 $productViewInsert->marketplaces = "";
-                $productViewInsert->shop = '<span class="small">' . $val->getShops('<br />',true) . '</span>';
+                $productViewInsert->shop =  $val->getShops('<br />',true) ;
                 $productViewInsert->shops = $val->shopHasProduct->count();
 
 
@@ -195,32 +217,32 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
                     $val = $productRepo->findOneBy(['id' => $result['id'],'productVariantId' => $result['productVariantId']]);
 
                     $productView->dummy = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-                    $productView->productSizeGroup = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
+                    $productView->productSizeGroup = ($val->productSizeGroup) ?  $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0]  : '';
 
                     $details = "";
                     foreach ($val->productSheetActual as $k => $v) {
                         if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {
-                            $details .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
+                            $details .=  $v->productDetail->productDetailTranslation->getFirst()->name . "<br />";
                         }
                     }
                     $productView->details = $details;
 
                     $productView->hasPhotos = ($val->productPhoto->count()) ? 'sì' : 'no';
                     $productView->hasDetails = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
-                    $productView->season = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
+                    $productView->season =  $val->productSeason->name . " " . $val->productSeason->year ;
 
                     $productView->stock = '<table class="nested-table inner-size-table" data-product-id="' . $val->printId() . '"></table>';
-                    $productView->externalId = '<span class="small">' . $val->getShopExtenalIds('<br />') . '</span>';
+                    $productView->externalId =  $val->getShopExtenalIds('<br />') ;
 
                     $productView->cpf = $val->printCpf();
 
-                    $productView->colorGroup = '<span class="small">' . (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
+                    $productView->colorGroup =  (!is_null($val->productColorGroup) ? $val->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") ;
                     $productView->brand = isset($val->productBrand) ? $val->productBrand->name : "";
-                    $productView->categoryId = '<span class="small">' . $val->getLocalizedProductCategories('<br>','/') . '</span>';
-                    $productView->description = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
+                    $productView->categoryId =  $val->getLocalizedProductCategories('<br>','/') ;
+                    $productView->description =  ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") ;
 
                     $productView->productName = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-                    $productView->tags = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
+                    $productView->tags =  $val->getLocalizedTags('<br>',false) ;
                     $productView->status = $val->productStatus->name;
                     $productView->productPriority = $val->sortingPriorityId;
                     $productView->lastUpdate = $val->lastUpdate;
@@ -253,7 +275,7 @@ class CGenerateProductSuperFastListAjaxController extends AAjaxController
 
                     //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
                     $productView->marketplaces = "";
-                    $productView->shop = '<span class="small">' . $val->getShops('<br />',true) . '</span>';
+                    $productView->shop =  $val->getShops('<br />',true) ;
                     $productView->shops = $val->shopHasProduct->count();
 
 

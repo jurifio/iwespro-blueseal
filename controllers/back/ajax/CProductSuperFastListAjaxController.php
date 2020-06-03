@@ -64,12 +64,12 @@ class CProductSuperFastListAjaxController extends AAjaxController
 
 
         $sql = "SELECT
-                  concat(p.id, '-', pv.id)                                                                      AS code,
+                  concat(p.id, '-', p.productVariantId)                                                                      AS code,
                   p.id                                                                                              AS id,
                   p.shop as shop,
-                  p.colorGroup as colorGroup
+                  p.colorGroup as colorGroup,
                   p.colorNameManufacturer as colorNameManufacturer,
-                  p.seasion as season,
+                  p.season as season,
                   p.externalId as externalId,
                   p.cpf as cpf,
                   p.details as details,
@@ -78,8 +78,8 @@ class CProductSuperFastListAjaxController extends AAjaxController
                   p.productName as productName,  
                   p.hasDetails as hasDetails,
                   p.brand as brand,
-                  p.productSizeGroupId as productSizeGroupId
-                  p.categoryId as categoryId
+                  p.productSizeGroup as productSizeGroup,
+                  p.categoryId as categoryId,
                   p.tags as tags,
                   p.status as status,
                   p.hasQty as hasQty,
@@ -94,7 +94,7 @@ class CProductSuperFastListAjaxController extends AAjaxController
                   p.friendValues as friendValues,
                   p.processing as processing,
                   p.shooting as shooting,
-                  p.doc_number as doc_number
+                  p.doc_number as doc_number,
                   p.inPrestashop as inPrestashop
        
                 
