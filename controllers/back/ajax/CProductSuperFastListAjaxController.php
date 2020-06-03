@@ -83,11 +83,13 @@ class CProductSuperFastListAjaxController extends AAjaxController
                   JOIN ProductSeason pse ON p.productSeasonId = pse.id
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
-                  JOIN ProductStatus ps ON ps.id = p.productStatusId        
+                  JOIN ProductStatus ps ON ps.id = p.productStatusId    
+                 join ShopHasProduct sap on p.id=sap.productId and p.productVariantId=sap.productVariantId
+                  join Shop s on sap.shopId=s.id 
                   
 
 
-                 WHERE 1=1  " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus;
+                 WHERE 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');

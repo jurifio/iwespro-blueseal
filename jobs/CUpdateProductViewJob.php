@@ -45,6 +45,10 @@ class CUpdateProductViewJob extends ACronJob
      */
     private function updateProductView()
     {
+        $lastExecution=\Monkey::app()->repoFactory->create('Job')->findOneBy(['id'=>146])->lastExecution;
+        $today = new \DateTime();
+        $now = $today->format('Y-m-d H:i:s');
+
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   p.id                                                                                              AS id,
@@ -66,7 +70,7 @@ class CUpdateProductViewJob extends ACronJob
                   JOIN ProductVariant pv ON p.productVariantId = pv.id
                   JOIN ProductBrand pb ON p.productBrandId = pb.id
                   JOIN ProductStatus ps ON ps.id = p.productStatusId
-                 WHERE 1=1 GROUP BY p.id,p.productVariantId  ";
+                 WHERE 1=1 and  p.lastUpdate>='".$lastExecution."' and p.lastUpdate<='".$now."' GROUP BY p.id,p.productVariantId";
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
 

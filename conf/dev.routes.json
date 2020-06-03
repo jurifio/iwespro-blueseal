@@ -218,6 +218,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/lista-prodotti-superveloce(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSuperFastListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/lista-prodotti-utente(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductUserListController"
