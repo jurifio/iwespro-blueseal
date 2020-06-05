@@ -14,7 +14,7 @@ var photoOrderList = Sortable.create(el, {
 $(document).ready(function() {
     $(this).trigger('bs.load.video');
 });
-
+/*
 $(document).on('bs.load.video',function(){
     $.ajax({
         type: 'GET',
@@ -26,7 +26,7 @@ $(document).on('bs.load.video',function(){
     }).done(function (content) {
         $('#selectable').html(content);
     })
-});
+});*/
 
 $(document).on('bs.add.video', function (e){
     var bsModal = $('#bsModal');
