@@ -7,18 +7,18 @@ var photoOrderList = Sortable.create(el, {
     draggable: ".draggable", // Specifies which items inside the element should be sortable
     filter: '.js-remove',
     onFilter: function (evt) {
-        $(document).trigger('bs.photo.delete', evt);
+        $(document).trigger('bs.video.delete', evt);
     }
 });
 
 $(document).ready(function() {
-    $(this).trigger('bs.load.photo');
+    $(this).trigger('bs.load.video');
 });
 
-$(document).on('bs.load.photo',function(){
+$(document).on('bs.load.video',function(){
     $.ajax({
         type: 'GET',
-        url: '/blueseal/xhr/ProductPhotoAjaxManage',
+        url: '/blueseal/xhr/ProductVideoAjaxManage',
         data: {
             "id" : $.QueryString["id"],
             "productVariantId" : $.QueryString["productVariantId"]
@@ -28,7 +28,7 @@ $(document).on('bs.load.photo',function(){
     })
 });
 
-$(document).on('bs.add.photo', function (e){
+$(document).on('bs.add.video', function (e){
     var bsModal = $('#bsModal');
 
     var header = bsModal.find('.modal-header h4');
@@ -38,14 +38,14 @@ $(document).on('bs.add.photo', function (e){
 
     bsModal.modal();
 
-    header.html('Carica Foto');
+    header.html('Carica Video');
     okButton.html('Fatto').off().on('click', function () {
         bsModal.modal('hide');
         okButton.off();
     });
     cancelButton.remove();
     var bodyContent =
-        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
+        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzoneVideo" action="POST">'+
         '<div class="fallback">'+
         '<input name="file" type="file" multiple />' +
         '</div>' +
@@ -53,11 +53,11 @@ $(document).on('bs.add.photo', function (e){
 
     body.html(bodyContent);
     var dropzone = new Dropzone("#dropzoneModal",{
-        url: "/blueseal/xhr/ProductPhotoAjaxManage",
-        maxFilesize: 4,
-        maxFiles: 10,
-        parallelUploads: 10,
-        acceptedFiles: "image/jpeg,video/*",
+        url: "/blueseal/xhr/ProductVideoAjaxManage",
+        maxFilesize: 500, // MB
+        maxFiles: 4,
+        timeout:5000,
+        acceptedFiles: "video/*",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: false,
         sending: function(file, xhr, formData) {
@@ -66,12 +66,14 @@ $(document).on('bs.add.photo', function (e){
         }
     });
 
-    dropzone.on('addedfile',function(){
-        okButton.attr("disabled", "disabled");
+
+    dropzone.on('addedfile',function(file){
+        okButton.attr("enabled", "enabled");
+
     });
     dropzone.on('queuecomplete',function(){
         okButton.removeAttr("disabled");
-        $(document).trigger('bs.load.photo');
+        $(document).trigger('bs.load.video');
     });
 });
 $('#photoOrderForm').on('submit',function(e){
@@ -86,16 +88,16 @@ $('#photoOrderForm').on('submit',function(e){
 
     $.ajax({
         type: 'PUT',
-        url: '/blueseal/xhr/ProductPhotoAjaxManage',
+        url: '/blueseal/xhr/ProductVideoAjaxManage',
         data: serialized+'&'+ids
     }).done(function (content) {
-        modal = new $.bsModal('Salvataggio Foto',
+        modal = new $.bsModal('Salvataggio Video',
             {
                 body: 'Salvataggio riuscito',
                 isCancelButton: false
             });
     }).fail(function (content) {
-        modal = new $.bsModal('Salvataggio Foto',
+        modal = new $.bsModal('Salvataggio Video',
             {
                 body: 'OOPS! Si è verificato un problema.<br /> Se il problema persiste contattare un amministratore',
                 isCancelButton: false
@@ -103,25 +105,25 @@ $('#photoOrderForm').on('submit',function(e){
     });
 });
 
-$(document).on('bs.photo.delete', function (e, element) {
+$(document).on('bs.video.delete', function (e, element) {
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
     var body = $('.modal-body');
     var cancelButton = $('.modal-footer .btn-default');
     var okButton = $('.modal-footer .btn-success');
 
-    header.html('Cancellazione Foto');
-    body.html('Sei sicuro di voler eliminare questa foto?');
+    header.html('Cancellazione Video');
+    body.html('Sei sicuro di voler eliminare questo Video?');
 
     cancelButton.html('Annulla').off().on('click', function (e,evt) {
         bsModal.modal('hide');
         okButton.off();
     });
 
-    okButton.html('Elimina Foto').off().on('click', function () {
+    okButton.html('Elimina Video').off().on('click', function () {
         $.ajax({
             type: 'DELETE',
-            url: '/blueseal/xhr/ProductPhotoAjaxManage',
+            url: '/blueseal/xhr/ProductVideoAjaxManage',
             data: {
                 "id" : $.QueryString["id"],
                 "productVariantId" : $.QueryString["productVariantId"],
