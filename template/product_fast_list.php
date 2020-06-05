@@ -273,6 +273,9 @@
                 data-remote="bs.product.shooting.manage"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.video.manage"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-remote="bs.product.force.shooting"
         ></bs-toolbar-button>
         <bs-toolbar-button
