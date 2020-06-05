@@ -70,11 +70,6 @@
                                 <input type="hidden" name="id" value="<?php echo $productEdit->id ?>">
                                 <input type="hidden" name="productVariantId"
                                        value="<?php echo $productEdit->productVariantId ?>">
-
-                                <div class="row">
-                                    <button class="btn btn-success" type="submit">Salva</button>
-                                    <button class="btn btn-default"><i class="pg-close"></i> Cancella</button>
-                                </div>
                             </form>
                         </div>
                     </div>
