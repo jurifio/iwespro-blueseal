@@ -45,6 +45,16 @@ class CProductFastListAjaxController extends AAjaxController
         } else {
             $productStatus = '';
         }
+        if (isset($_REQUEST['productBrandid'])) {
+            $productBrandId = $_REQUEST['productBrandid'];
+        } else {
+            $productBrandId = '';
+        }
+        if (isset($_REQUEST['productShopid'])) {
+            $shopid = $_REQUEST['productShopid'];
+        } else {
+            $shopid = '';
+        }
 
         if ($season == 1) {
             $sqlFilterSeason = '';
@@ -61,6 +71,17 @@ class CProductFastListAjaxController extends AAjaxController
         } else {
             $sqlFilterStatus = 'and p.productStatusId=6';
         }
+        if ($productBrandId == 0) {
+            $sqlFilterBrand = '';
+        } else {
+            $sqlFilterBrand = 'and p.productBrandId='.$productBrandId;
+        }
+        if ($shopid == 0) {
+            $sqlFilterShop = '';
+        } else {
+            $sqlFilterShop = 'and s.id='.$shopid;
+        }
+
 
 
         $sql = "SELECT
@@ -146,7 +167,7 @@ class CProductFastListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus;
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');

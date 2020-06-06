@@ -44,6 +44,16 @@ class CProductFastListController extends ARestrictedAccessRootController
         }else{
             $productStatus=0;
         }
+        if(isset($_GET['productBrandId'])){
+            $productBrandId=$_GET['productBrandId'];
+        } else{
+            $productBrandId=0;
+        }
+        if(isset($_GET['shopid'])){
+            $shopid=$_GET['shopid'];
+        } else{
+            $shopid=0;
+        }
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $bluesealBase . "prodotti";
@@ -51,6 +61,8 @@ class CProductFastListController extends ARestrictedAccessRootController
         $carica = $bluesealBase . "skus";
         $foto = $bluesealBase . "carica_foto.php";
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
+        $productBrand=\Monkey::app()->repoFactory->create('ProductBrand')->findAll();
+        $Shop=\Monkey::app()->repoFactory->create('Shop')->findAll();
 
         $shops = [];
         if ($this->app->getUser()->hasPermission('allShops')) {
@@ -100,6 +112,10 @@ class CProductFastListController extends ARestrictedAccessRootController
             'productZeroQuantity'=>$productZeroQuantity,
             'productStatus'=>$productStatus,
             'page' => $this->page,
+            'productBrand'=>$productBrand,
+            'productBrandId'=>$productBrandId,
+            'Shop'=>$Shop,
+            'shopid'=>$shopid,
             'sidebar' => $this->sidebar->build()
         ]);
     }
