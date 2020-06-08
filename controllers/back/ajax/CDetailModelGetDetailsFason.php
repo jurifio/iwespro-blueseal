@@ -79,8 +79,9 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
             /** @var CRepo $catRepo */
             $cats = implode(',', $catsU);
+            $catsone=substr($cats,1);
             $query = "SELECT p.id, p.name, p.imageUrl AS img, p.description AS `desc` 
-                      FROM ProductSheetModelPrototypeCategoryGroup p WHERE p.id in ($cats) AND p.macroCategoryGroupId = $macroCategId";
+                      FROM ProductSheetModelPrototypeCategoryGroup p WHERE p.id in ($catsone) AND p.macroCategoryGroupId =".$macroCategId;
             $catInfo1 = \Monkey::app()->dbAdapter->query($query, [])->fetchAll();
 
             return json_encode($catInfo1);
@@ -110,7 +111,8 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
                 /** @var CRepo $catRepo */
                 $matsS = implode(',', $matsU);
-                $query = "SELECT p.id, p.name FROM ProductSheetModelPrototypeMaterial p WHERE p.id in ($matsS)";
+                $matsOne=substr($mastsS,1);
+                $query = "SELECT p.id, p.name FROM ProductSheetModelPrototypeMaterial p WHERE p.id in ($catsone)";
                 $matInfo = \Monkey::app()->dbAdapter->query($query, [])->fetchAll();
 
                 return json_encode($matInfo);
