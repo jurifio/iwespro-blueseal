@@ -33,7 +33,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $materialFilter=\Monkey::app()->router->request()->getRequestData('material');
 
-            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE `code` like \'%'.$genderId.'\%'.$materialFileter.'%\' and code \'%'.$genderId.'-%'.$materialFileter.'%\' like  AND categoryGroupId IS NOT NULL', [$genderId])->fetchAll();
+            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE `code` like \'%'.$genderId.'\%'.$materialFilter.'%\' and `code` like \'%'.$genderId.'-%'.$materialFilter.'%\'   AND categoryGroupId IS NOT NULL', [])->fetchAll();
             if (empty($psmpS1)) return false;
 
 

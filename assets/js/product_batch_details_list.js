@@ -726,7 +726,7 @@
             var select = $('#material');
             // if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
-                valueField: 'id',
+                valueField: 'name',
                 labelField: ['name'],
                 options: res
             });
