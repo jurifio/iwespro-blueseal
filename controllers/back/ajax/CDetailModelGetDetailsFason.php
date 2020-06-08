@@ -31,8 +31,9 @@ class CDetailModelGetDetailsFason extends AAjaxController
         $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
         if ($step == 1) {
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
+            $materialFilter=\Monkey::app()->router->request()->getRequestData('material');
 
-            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? AND isVisible = 1 AND categoryGroupId IS NOT NULL', [$genderId])->fetchAll();
+            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE `code` like \'%'.$genderId.'\%'.$materialFileter.'%\' and code \'%'.$genderId.'-%'.$materialFileter.'%\' like  AND categoryGroupId IS NOT NULL', [$genderId])->fetchAll();
             if (empty($psmpS1)) return false;
 
 
@@ -111,7 +112,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
                 /** @var CRepo $catRepo */
                 $matsS = implode(',', $matsU);
-                $matsOne=substr($matsS,1);
+                $matsOne=substr($matsS,0);
                 $query = "SELECT p.id, p.name FROM ProductSheetModelPrototypeMaterial p WHERE p.id in ($matsOne)";
                 $matInfo = \Monkey::app()->dbAdapter->query($query, [])->fetchAll();
 
