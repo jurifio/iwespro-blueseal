@@ -111,8 +111,8 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
                 /** @var CRepo $catRepo */
                 $matsS = implode(',', $matsU);
-                $matsOne=substr($mastsS,1);
-                $query = "SELECT p.id, p.name FROM ProductSheetModelPrototypeMaterial p WHERE p.id in ($catsone)";
+                $matsOne=substr($matsS,1);
+                $query = "SELECT p.id, p.name FROM ProductSheetModelPrototypeMaterial p WHERE p.id in ($matsOne)";
                 $matInfo = \Monkey::app()->dbAdapter->query($query, [])->fetchAll();
 
                 return json_encode($matInfo);
