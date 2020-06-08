@@ -32,8 +32,11 @@ class CDetailModelGetDetailsFason extends AAjaxController
         if ($step == 1) {
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $materialFilter=\Monkey::app()->router->request()->getRequestData('material');
+            if($genderId=='\/D'){
+                $genderId=$genderId.'|'.$materialFilter;
+            }
 
-            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE `code` like \'%'.$genderId.'\%'.$materialFilter.'%\' and `code` like \'%'.$genderId.'-%'.$materialFilter.'%\'   AND categoryGroupId IS NOT NULL', [])->fetchAll();
+            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE `code` REGEXP  \''.$genderId.'\'   AND categoryGroupId IS NOT NULL', [])->fetchAll();
             if (empty($psmpS1)) return false;
 
 
