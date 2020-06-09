@@ -24,7 +24,18 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row" align="center" style="padding-top: 130px;">
-                            <div class="col-md-2">
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default">
+                                    <label for="stored">Visualizza  lo storico</label>
+                                    <?php if($stored==1) {
+                                        echo '<input type="checkbox" checked="checked" id="stored" name="stored" value="0"/>';
+                                    }else{
+                                        echo '<input type="checkbox"  id="stored" name="stored" value="0"/>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
                                 <div class="form-group form-group-default">
                                     <label for="season">Visualizza tutte le Stagioni</label>
                                     <?php if($season==1) {
@@ -96,6 +107,7 @@
                                 <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -111,6 +123,7 @@
                                data-season="<?php echo $season?>"
                                data-product-status="<?php echo $productStatus?>"
                                data-product-shopid="<?php echo $shopid?>"
+                               data-product-stored="<?php echo $stored?>"
                                data-product-BrandId="<?php echo $productBrandId?>"
                                data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
                                data-display-length="10">

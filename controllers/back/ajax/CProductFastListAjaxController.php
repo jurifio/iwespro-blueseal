@@ -35,6 +35,11 @@ class CProductFastListAjaxController extends AAjaxController
         } else {
             $season = '';
         }
+        if (isset($_REQUEST['stored'])) {
+            $stored = $_REQUEST['stored'];
+        } else {
+            $stored = '';
+        }
         if (isset($_REQUEST['productZeroQuantity'])) {
             $productZeroQuantity = $_REQUEST['productZeroQuantity'];
         } else {
@@ -80,6 +85,11 @@ class CProductFastListAjaxController extends AAjaxController
             $sqlFilterShop = '';
         } else {
             $sqlFilterShop = 'and s.id='.$shopid;
+        }
+        if ($stored == 0) {
+            $sqlFilterStored = '';
+        } else {
+            $sqlFilterStored = 'and p.stored='.$stored;
         }
 
 
@@ -167,7 +177,7 @@ class CProductFastListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop;
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');

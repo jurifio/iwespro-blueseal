@@ -3,6 +3,7 @@ $('#btnsearchplus').click(function(){
     if ($('#season').prop("checked")) {
         season = 'season=1';
     }
+
     var productZeroQuantity='&productZeroQuantity=0';
     if($('#productZeroQuantity').prop('checked')) {
         productZeroQuantity = '&productZeroQuantity=1';
@@ -19,7 +20,11 @@ $('#btnsearchplus').click(function(){
     if($('#shopid').val()!=0) {
         shop = '&shopid='+$('#shopid').val();
     }
-    var url='/blueseal/lista-prodotti-veloce?'+season+productZeroQuantity+productStatus+productBrand+shop;
+    var stored='stored=0';
+    if ($('#stored').prop("checked")) {
+        stored = '&stored=1';
+    }
+    var url='/blueseal/lista-prodotti-veloce?'+season+productZeroQuantity+productStatus+productBrand+shop+stored;
 
     window.location.href=url;
 });
