@@ -12,7 +12,14 @@ $('#btnsearchplus').click(function(){
     if($('#productStatus').prop('checked')) {
         productStatus = '&productStatus=1';
     }
-    var url='/blueseal/lista-prodotti-superveloce?'+season+productZeroQuantity+productStatus;
 
-    window.location.href=url;
+    var  productBrand='&productBrandId=0';
+    if($('#productBrandId').val()!=0) {
+        productBrand = '&productBrandId='+$('#productBrandId').val();
+    }
+    var  shop='&shopid=0';
+    if($('#shopid').val()!=0) {
+        shop = '&shopid='+$('#shopid').val();
+    }
+    var url='/blueseal/lista-prodotti-veloce?'+season+productZeroQuantity+productStatus+productBrand+shop;
 });

@@ -3,6 +3,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\exceptions\RedPandaOrderLogicException;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CShooting;
 use bamboo\domain\repositories\CDocumentRepo;
@@ -28,6 +29,7 @@ class CProductSuperFastListAjaxController extends AAjaxController
         $productSeason = \Monkey::app()->dbAdapter->query('select max(id) as productSeasonId from ProductSeason ',[])->fetchAll();
         foreach ($productSeason as $val) {
             $productSeasonId = $val['productSeasonId'];
+
         }
         //$season=\Monkey::app()->router->request()->getRequestData('season');
         if (isset($_REQUEST['season'])) {
@@ -45,11 +47,22 @@ class CProductSuperFastListAjaxController extends AAjaxController
         } else {
             $productStatus = '';
         }
+        if (isset($_REQUEST['productBrandid'])) {
+            $productBrandId = $_REQUEST['productBrandid'];
+        } else {
+            $productBrandId = '';
+        }
+        if (isset($_REQUEST['productShopid'])) {
+            $shopid = $_REQUEST['productShopid'];
+        } else {
+            $shopid = '';
+        }
 
         if ($season == 1) {
             $sqlFilterSeason = '';
         } else {
-            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+            $seasonName=\Monkey::app()->repoFactory->create('ProductSeason')->findOneBy(['id'=>$productSeasonId])->name;
+            $sqlFilterSeason = ' and p.season like\'%' . $seasonName.'%\'';
         }
         if ($productZeroQuantity == 1) {
             $sqlFilterQuantity = '';
@@ -59,13 +72,24 @@ class CProductSuperFastListAjaxController extends AAjaxController
         if ($productStatus == 1) {
             $sqlFilterStatus = '';
         } else {
-            $sqlFilterStatus = 'and p.productStatusId=6';
+            $sqlFilterStatus = 'and p.status like \'%Pubblicato%\'';
+        }
+        if ($productBrandId == 0) {
+            $sqlFilterBrand = '';
+        } else {
+            $sqlFilterBrand = 'and p.brand like\'%' .$productBrandId.'%\'';
+        }
+        if ($shopid == 0) {
+            $sqlFilterShop = '';
+        } else {
+            $sqlFilterShop = 'and p.shop like \'%'.$shopid.'%\'';
         }
 
 
         $sql = "SELECT
                   concat(p.id, '-', p.productVariantId)                                                                      AS code,
                   p.id                                                                                              AS id,
+                  p.productVariantId as productVariantId,  
                   p.shop as shop,
                   p.colorGroup as colorGroup,
                   p.colorNameManufacturer as colorNameManufacturer,
@@ -99,7 +123,7 @@ class CProductSuperFastListAjaxController extends AAjaxController
        
                 
                 FROM ProductView p
-                 WHERE 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus;
+                 WHERE 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus. ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
@@ -107,10 +131,16 @@ class CProductSuperFastListAjaxController extends AAjaxController
         $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
         if ($productDetailCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11) HAVING `hasDetails` = 'no'";
 
-
+        $productStatusRepo=\Monkey::app()->repoFactory->create('ProductStatus');
         $datatable = new CDataTables($sql,['id','productVariantId'],$_GET,true);
         $shopIds = \Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        $datatable->addCondition('shopId',$shopIds);
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+        $shs=[];
+        foreach ($shopIds as $sh){
+            $sid=$shopRepo->findOneBy(['id'=>$sh])->name;
+            $shs[] = $sh . '-' . $sid;
+        }
+        $datatable->addCondition('shop',$shopIds);
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
@@ -122,19 +152,18 @@ class CProductSuperFastListAjaxController extends AAjaxController
 
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
-        $productRepo = \Monkey::app()->repoFactory->create('Product');
+        $productRepo = \Monkey::app()->repoFactory->create('ProductView');
 
-        /** @var CDocumentRepo $docRepo */
-        $docRepo = \Monkey::app()->repoFactory->create('Document');
+
         $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
-            /** @var $val CProduct */
             $val = $productRepo->findOneBy($row);
 
-            $row["DT_RowId"] = $val->printId();
-            $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
-            $val->productStatus->isReady == 1 ? 'arancione' : ""
+            $row["DT_RowId"] = $val->id.'-'.$val->productVariantId;
+            $stat=$productStatusRepo->findOneBy(['name'=>$val->status]);
+            $row["DT_RowClass"] = $stat->isVisible == 1 ? 'verde' : (
+            $stat->isReady == 1 ? 'arancione' : ""
             );
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
