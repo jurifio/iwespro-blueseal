@@ -44,6 +44,16 @@ class CProductUserListController extends ARestrictedAccessRootController
         }else{
             $productStatus=0;
         }
+        if(isset($_GET['productBrandId'])){
+            $productBrandId=$_GET['productBrandId'];
+        } else{
+            $productBrandId=0;
+        }
+        if(isset($_GET['shopid'])){
+            $shopid=$_GET['shopid'];
+        } else{
+            $shopid=0;
+        }
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $bluesealBase . "prodotti";
@@ -100,6 +110,10 @@ class CProductUserListController extends ARestrictedAccessRootController
             'productZeroQuantity'=>$productZeroQuantity,
             'productStatus'=>$productStatus,
             'page' => $this->page,
+            'productBrand'=>$productBrand,
+            'productBrandId'=>$productBrandId,
+            'Shop'=>$Shop,
+            'shopid'=>$shopid,
             'sidebar' => $this->sidebar->build()
         ]);
     }

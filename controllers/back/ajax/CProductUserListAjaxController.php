@@ -29,33 +29,56 @@ class CProductUserListAjaxController extends AAjaxController
         foreach ($productSeason as $val) {
             $productSeasonId = $val['productSeasonId'];
         }
-        if(isset($_GET['season'])) {
-            if ($_GET['season'] == 1) {
-                $sqlFilterSeason = '';
-            } else {
-                $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
-            }
-        }else{
-            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+        if (isset($_REQUEST['season'])) {
+            $season = $_REQUEST['season'];
+        } else {
+            $season = '';
         }
-        if(isset($_GET['ProductZeroQuantity'])) {
-            if ($_GET['ProductZeroQuantity'] == 1) {
-                $sqlFilterQuantity = 'and p.qty>=0';
-            } else {
-                $sqlFilterQuantity = 'and p.qty>0';
-            }
-        }else {
-            $sqlFilterQuantity = 'and p.qty>0';
+        if (isset($_REQUEST['productZeroQuantity'])) {
+            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = '';
+        }
+        if (isset($_REQUEST['productStatus'])) {
+            $productStatus = $_REQUEST['productStatus'];
+        } else {
+            $productStatus = '';
+        }
+        if (isset($_REQUEST['productBrandid'])) {
+            $productBrandId = $_REQUEST['productBrandid'];
+        } else {
+            $productBrandId = '';
+        }
+        if (isset($_REQUEST['productShopid'])) {
+            $shopid = $_REQUEST['productShopid'];
+        } else {
+            $shopid = '';
         }
 
-        if(isset($_GET['ProductStatus'])){
-            if ($_GET['ProductStatus'] == 1) {
-                $sqlFilterStatus = '';
-            } else {
-                $sqlFilterStatus = 'and p.productStatusId=6';
-            }
-        }else {
+        if ($season == 1) {
+            $sqlFilterSeason = '';
+        } else {
+            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+        }
+        if ($productZeroQuantity == 1) {
+            $sqlFilterQuantity = '';
+        } else {
+            $sqlFilterQuantity = 'and p.qty>0';
+        }
+        if ($productStatus == 1) {
+            $sqlFilterStatus = '';
+        } else {
             $sqlFilterStatus = 'and p.productStatusId=6';
+        }
+        if ($productBrandId == 0) {
+            $sqlFilterBrand = '';
+        } else {
+            $sqlFilterBrand = 'and p.productBrandId='.$productBrandId;
+        }
+        if ($shopid == 0) {
+            $sqlFilterShop = '';
+        } else {
+            $sqlFilterShop = 'and s.id='.$shopid;
         }
 
 
@@ -106,7 +129,7 @@ class CProductUserListAjaxController extends AAjaxController
                               JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
                     ) ON (p.id, p.productVariantId) = (ppc.productId,ppc.productVariantId)
                   LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
-                where 1=1 ". $sqlFilterSeason. ' ' . $sqlFilterQuantity. ' '. $sqlFilterStatus ;
+                where 1=1 ". $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
