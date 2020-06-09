@@ -140,7 +140,7 @@ where p.productStatusId=6";
 
 
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
-            $row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
+            $row['marketplaces'] = '';
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$val->printId().'"></table>';
             $row['externalId'] = '<span class="small">'.$val->getShopExtenalIds('<br />').'</span>';
 
