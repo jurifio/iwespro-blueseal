@@ -31,6 +31,72 @@ class CProductSlimListAjaxController extends AAjaxController
         $allShops = $user->hasPermission('allShops');
         $productHasShopDestination = \Monkey::app()->repoFactory->create('ProductHasShopDestination');
         $shopRepo= \Monkey::app()->repoFactory->create('Shop');
+        $productSeason = \Monkey::app()->dbAdapter->query('select max(id) as productSeasonId from ProductSeason ',[])->fetchAll();
+        foreach ($productSeason as $val) {
+            $productSeasonId = $val['productSeasonId'];
+        }
+        //$season=\Monkey::app()->router->request()->getRequestData('season');
+        if (isset($_REQUEST['season'])) {
+            $season = $_REQUEST['season'];
+        } else {
+            $season = '';
+        }
+        if (isset($_REQUEST['stored'])) {
+            $stored = $_REQUEST['stored'];
+        } else {
+            $stored = '';
+        }
+        if (isset($_REQUEST['productZeroQuantity'])) {
+            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = '';
+        }
+        if (isset($_REQUEST['productStatus'])) {
+            $productStatus = $_REQUEST['productStatus'];
+        } else {
+            $productStatus = '';
+        }
+        if (isset($_REQUEST['productBrandid'])) {
+            $productBrandId = $_REQUEST['productBrandid'];
+        } else {
+            $productBrandId = '';
+        }
+        if (isset($_REQUEST['productShopid'])) {
+            $shopid = $_REQUEST['productShopid'];
+        } else {
+            $shopid = '';
+        }
+
+        if ($season == 1) {
+            $sqlFilterSeason = '';
+        } else {
+            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+        }
+        if ($productZeroQuantity == 1) {
+            $sqlFilterQuantity = '';
+        } else {
+            $sqlFilterQuantity = 'and p.qty>0';
+        }
+        if ($productStatus == 1) {
+            $sqlFilterStatus = '';
+        } else {
+            $sqlFilterStatus = 'and p.productStatusId=6';
+        }
+        if ($productBrandId == 0) {
+            $sqlFilterBrand = '';
+        } else {
+            $sqlFilterBrand = 'and p.productBrandId='.$productBrandId;
+        }
+        if ($shopid == 0) {
+            $sqlFilterShop = '';
+        } else {
+            $sqlFilterShop = 'and s.id='.$shopid;
+        }
+        if ($stored == 0) {
+            $sqlFilterStored = '';
+        } else {
+            $sqlFilterStored = 'and p.stored='.$stored;
+        }
 
         $sql = "SELECT
   `p`.`id`                                             AS `id`,
@@ -76,7 +142,7 @@ FROM `Product` `p`
   LEFT JOIN (DirtyProduct dp
     JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
     ON (shp.productId,shp.productVariantId,shp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
-WHERE `pss`.`id` NOT IN (7, 8)
+WHERE `pss`.`id` NOT IN (7, 8) ". $sqlFilterSeason . " " . $sqlFilterQuantity . " " . $sqlFilterStatus . " " . $sqlFilterBrand. " " . $sqlFilterShop. " " . $sqlFilterStored."
 GROUP BY p.id, p.productVariantId, s.id
 ORDER BY `p`.`creationDate` DESC";
 

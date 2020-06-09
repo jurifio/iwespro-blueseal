@@ -20,6 +20,97 @@
                     </div>
                 </div>
             </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center" style="padding-top: 130px;">
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default">
+                                    <label for="stored">Visualizza  lo storico</label>
+                                    <?php if($stored==1) {
+                                        echo '<input type="checkbox" checked="checked" id="stored" name="stored" value="0"/>';
+                                    }else{
+                                        echo '<input type="checkbox"  id="stored" name="stored" value="0"/>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default">
+                                    <label for="season">Visualizza tutte le Stagioni</label>
+                                    <?php if($season==1) {
+                                        echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
+                                    }else{
+                                        echo '<input type="checkbox"  id="season" name="season" value="0"/>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                    <label for="productZeroQuantity">Includi Quantità 0</label>
+                                    <?php     if($productZeroQuantity==1) {
+                                        echo ' <input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
+                                    }else{
+                                        echo ' <input type="checkbox" id="productZeroQuantity"  name="productZeroQuantity" value="0"/>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                    <label for="productStatus">includi tutti gli stati prodotto</label>
+                                    <?php if($productStatus){
+                                        echo '<input type="checkbox" checked="checked" id="productStatus"  name="productStatus" value="0"/>';
+                                    }else{
+                                        echo '<input type="checkbox" id="productStatus"  name="productStatus" value="0"/>';
+                                    }?>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="productBrandId">Seleziona il Brand </label>
+                                    <select id="productBrandId" name="countryId"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+                                        <?php echo '<option   value="">Seleziona</option>';
+                                        foreach ($productBrand as $brand) {
+                                            if ($brand->id == $productBrandId) {
+                                                echo '<option  selected="selected" value="' . $brand->id . '">' . $brand->name . '</option>';
+                                            } else {
+                                                echo '<option value="' . $brand->id . '">' . $brand->name . '</option>';
+                                            }
+                                        }; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="shopid">Seleziona lo Shop</label>
+                                    <select id="shopid" name="shopid"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+                                        <?php  echo '<option   value="">Seleziona</option>';
+                                        foreach ($Shop as $shop) {
+                                            if ($shop->id == $shopid) {
+                                                echo '<option  selected="selected" value="' . $shop->id . '">' . $shop->name . '</option>';
+                                            } else {
+                                                echo '<option value="' . $shop->id . '">' . $shop->name . '</option>';
+                                            }
+                                        }; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -29,7 +120,14 @@
                                data-controller="ProductSlimListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="100, 200, 500">
+                               data-product-zero-quantity="<?php echo $productZeroQuantity?>"
+                               data-season="<?php echo $season?>"
+                               data-product-status="<?php echo $productStatus?>"
+                               data-product-shopid="<?php echo $shopid?>"
+                               data-product-stored="<?php echo $stored?>"
+                               data-product-BrandId="<?php echo $productBrandId?>"
+                               data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
+                               data-display-length="10">
                             <thead>
                             <tr>
                                 <th data-slug="code"
