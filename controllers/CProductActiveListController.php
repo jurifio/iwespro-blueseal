@@ -28,6 +28,31 @@ class CProductActiveListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_active_list.php');
+        if(isset($_GET['season'])) {
+            $season=$_GET['season'];
+        }else{
+            $season=0;
+        }
+        if(isset($_GET['productZeroQuantity'])) {
+            $productZeroQuantity=$_GET['productZeroQuantity'];
+        }else{
+            $productZeroQuantity=0;
+        }
+        if(isset($_GET['productStatus'])) {
+            $productStatus=$_GET['productStatus'];
+        }else{
+            $productStatus=0;
+        }
+        if(isset($_GET['productBrandId'])){
+            $productBrandId=$_GET['productBrandId'];
+        } else{
+            $productBrandId=0;
+        }
+        if(isset($_GET['shopid'])){
+            $shopid=$_GET['shopid'];
+        } else{
+            $shopid=0;
+        }
 
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
@@ -36,6 +61,8 @@ class CProductActiveListController extends ARestrictedAccessRootController
         $carica = $bluesealBase . "skus";
         $foto = $bluesealBase . "carica_foto.php";
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
+        $productBrand=\Monkey::app()->repoFactory->create('ProductBrand')->findAll();
+        $Shop=\Monkey::app()->repoFactory->create('Shop')->findAll();
 
         $shops = [];
         if ($this->app->getUser()->hasPermission('allShops')) {
@@ -81,7 +108,14 @@ class CProductActiveListController extends ARestrictedAccessRootController
             'cm' => $this->app->categoryManager,
             'pageURL' => $pageURL,
             'prodotti' => $prodotti,
+            'season'=>$season,
+            'productZeroQuantity'=>$productZeroQuantity,
+            'productStatus'=>$productStatus,
             'page' => $this->page,
+            'productBrand'=>$productBrand,
+            'productBrandId'=>$productBrandId,
+            'Shop'=>$Shop,
+            'shopid'=>$shopid,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -60,7 +60,9 @@ class CProductUserListController extends ARestrictedAccessRootController
         $aggiungi = $bluesealBase . "prodotti/aggiungi";
         $carica = $bluesealBase . "skus";
         $foto = $bluesealBase . "carica_foto.php";
+        $productBrand=\Monkey::app()->repoFactory->create('ProductBrand')->findAll();
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
+        $Shop=\Monkey::app()->repoFactory->create('Shop')->findAll();
 
         $shops = [];
         if ($this->app->getUser()->hasPermission('allShops')) {

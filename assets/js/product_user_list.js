@@ -19,7 +19,7 @@ $('#btnsearchplus').click(function(){
     if($('#shopid').val()!=0) {
         shop = '&shopid='+$('#shopid').val();
     }
-    var url='/blueseal/lista-prodotti-veloce?'+season+productZeroQuantity+productStatus+productBrand+shop;
+    var url='/blueseal/lista-prodotti-utente?'+season+productZeroQuantity+productStatus+productBrand+shop;
 
     window.location.href=url;
 });
