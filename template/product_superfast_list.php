@@ -65,7 +65,7 @@
                                             data-init-plugin="selectize">
                                         <?php echo '<option   value="">Seleziona</option>';
                                         foreach ($productBrand as $brand) {
-                                            if ($brand->id == $productBrandId) {
+                                            if ($brand->name == $productBrandId) {
                                                 echo '<option  selected="selected" value="' . $brand->name . '">' . $brand->name . '</option>';
                                             } else {
                                                 echo '<option value="' . $brand->name . '">' . $brand->name . '</option>';
@@ -88,12 +88,12 @@
                                             } else {
                                                 echo '<option value="' . $shop->id .'-'.$shop->name. '">' . $shop->name . '</option>';
                                             }
-                                        }; ?>
+                                        } ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                                <button class="success" id="btnsearchplus1"  name ='btnsearchplus1' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
                             </div>
                         </div>
                     </div>

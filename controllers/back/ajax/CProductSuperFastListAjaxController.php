@@ -108,13 +108,14 @@ class CProductSuperFastListAjaxController extends AAjaxController
                   p.status as status,
                   p.hasQty as hasQty,
                   p.isOnSale as isOnSale,
-                  p.productPriority as ProductPriority,
+                  p.productPriority as productPriority,
                   p.description as description,         
                   p.marketplaces as marketplaces,
                   p.stock as stock,
                   p.activePrice as activePrice,
                   p.shops as shops,
                   p.friendPrices as friendPrices,  
+                  p.friendSalePrices as friendSalePrices,
                   p.friendValues as friendValues,
                   p.processing as processing,
                   p.shooting as shooting,
@@ -140,7 +141,7 @@ class CProductSuperFastListAjaxController extends AAjaxController
             $sid=$shopRepo->findOneBy(['id'=>$sh])->name;
             $shs[] = $sh . '-' . $sid;
         }
-        $datatable->addCondition('shop',$shopIds);
+       $datatable->addCondition('shop',$shs);
 
         $em = $this->app->entityManagerFactory->create('ProductStatus');
         $productStatuses = $em->findAll('limit 99','');
@@ -167,6 +168,38 @@ class CProductSuperFastListAjaxController extends AAjaxController
             );
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
+
+            $row['shop']=$val->shop;
+            $row['colorGroup']=$val->colorGroup;
+            $row['colorNameManufacturer']=$val->colorNameManufacturer;
+            $row['season']=$val->season;
+            $row['externalId']=$val->externalId;
+            $row['cpf']=$val->cpf;
+            $row['brand']=$val->brand;
+            $row['details']=$val->details;
+            $row['dummy']=$val->dummy;
+            $row['hasPhotos']=$val->hasPhotos;
+            $row['productName']=$val->productName;
+            $row['hasDetails']=$val->brand;
+            $row['productSizeGroup']=$val->productSizeGroup;
+            $row['categoryId']=$val->categoryId;
+            $row['tags']=$val->tags;
+            $row['status']=$val->status;
+            $row['hasQty']=$val->hasQty;
+            $row['isOnSale']=$val->isOnSale;
+            $row['productPriority']=$val->productPriority;
+            $row['description']=$val->description;
+            $row['marketplaces']=$val->marketplaces;
+            $row['stock']=$val->stock;
+            $row['activePrice']=number_format($val->activePrice,2,',','.');
+            $row['shops']=$val->shop;
+            $row['friendPrices']=number_format($val->friendPrices,2,',','.');
+            $row['friendValues']=number_format($val->friendValues,2,',','.');
+            $row['friendSalePrices']=number_format($val->friendSalePrices,2,',','.');
+            $row['processing']=$val->processing;
+            $row['shooting']=$val->shooting;
+            $row['doc_number']=$val->doc_number;
+            $row['inPrestashop']=$val->inPrestashop;
 
 
             $datatable->setResponseDataSetRow($key,$row);
