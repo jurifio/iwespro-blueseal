@@ -597,12 +597,6 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal"' +
-                '<div class="material-modal" style="margin-bottom: 90px">' +
-                '<label style="display: block" for="material">Materiale:</label>' +
-                '<select class="material"  id="material" name="material">' +
-                '<option disabled selected value>Seleziona un\'opzione</option>' +
-                '</select>' +
-                '</div>' +
                 '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
                 '<select class="gender" name="gender">' +
@@ -651,11 +645,6 @@
                 '<div class="alert alertModal"></div>' +
                 '<div class="detail-form form-group">' +
                 '<div class="detail-modal">' +
-                '<div class="material-modal" style="margin-bottom: 90px">' +
-                '<label style="display: block" for="material">Materiale:</label>' +
-                '<select class="material" id="material" name="material">' +
-                '<option  value>Seleziona un\'opzione</option>' +
-                '</select>' +
                 '</div>' +
                 '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
@@ -715,22 +704,7 @@
             pId = selectedRows[0].DT_RowId.split('-')[0];
             pVariantId = selectedRows[0].DT_RowId.split('-')[1];
         }
-        $.ajax({
-            method:'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'ProductSheetModelPrototypeMaterial'
-            },
-            dataType: 'json'
-        }).done(function (res) {
-            var select = $('#material');
-            // if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'name',
-                labelField: ['name'],
-                options: res
-            });
-        });
+
 
         $.ajax({
             method:'GET',
@@ -767,7 +741,7 @@
             var select = $('.gender');
             if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
-                valueField: 'slug',
+                valueField: 'id',
                 labelField: ['name'],
                 options: res
             });
@@ -786,7 +760,6 @@
             const dataG = {
                 genderId: $('.gender').val(),
                 step: 1,
-                material:$('#material').val()
             };
             $.ajax({
                 method: 'get',
