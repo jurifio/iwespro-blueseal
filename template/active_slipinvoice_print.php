@@ -389,30 +389,30 @@
                             </thead>
                             <tbody>
                             <?php foreach ($payment as $invoice):
-                                if ($invoice->note == "ANNULLATA") {continue;}
+
                                 ?>
                                 <tr>
                                     <td valign="top" align="left" class="lh-3"
                                         style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: 'Poppins', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                        <?php echo $invoice->number; ?>
+                                        <?php
+                                        $bri=\Monkey::app()->repoFactory->create('BillRegistryInvoice')->findOneBy(['id'=>$invoice->billRegistryInvoiceId]);
+                                        echo $bri->invoiceNumber; ?>
                                     </span>
                                     </td>
                                     <td valign="top" align="left" class="lh-3"
                                         style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: 'Poppins', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                        <?php echo \bamboo\utils\time\STimeToolbox::EurFormattedDate($invoice->date); ?>
+                                        <?php echo \bamboo\utils\time\STimeToolbox::EurFormattedDate($bri->invoiceDate); ?>
                                     </span>
                                     </td>
                                     <td valign="top" align="left" class="lh-3"
                                         style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: 'Poppins', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
                                         <?php
-                                        if($invoice->getSignedValueWithVat() < 0) {
-                                            echo abs($invoice->getSignedValueWithVat());
-                                        } else {
-                                            echo $invoice->getSignedValueWithVat() *-1;
-                                        }
+
+                                            echo number_format($invoice->amountPayment,2,',','.');
+
                                         ?>
                                     </span>
                                     </td>

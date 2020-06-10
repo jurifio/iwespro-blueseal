@@ -35,29 +35,22 @@ class CBillRegistryActivePaymentSlipPrintAjaxController extends AAjaxController
         $paymentBillId = \Monkey::app()->router->request()->getRequestData('id');
 
         /** @var CPaymentBillRepo $paymentBillRepo */
-        $paymentBillRepo = \Monkey::app()->repoFactory->create('PaymentBill');
+        $paymentBillRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
 
         /** @var CPaymentBill $paymentBill */
         $paymentBill = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
+        $total=number_format($paymentBill->amount,2,',','.');
+        $payment=\Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findBy(['billRegistryActivePaymentSlipId'=>$paymentBillId]);
 
-        foreach ($paymentBill->getDistinctPayments() as $key => $payment) {
-            $to = explode(';',$payment[0]->shopAddressBook->shop->referrerEmails);
 
-            $name = $payment[0]->shopAddressBook->subject;
 
-            $total = 0;
-            foreach ($payment as $invoice) {
-                $total += $invoice->getSignedValueWithVat();
-            }
 
             return $view->render([
                 'app' => new CRestrictedAccessWidgetHelper($this->app),
                 'page' => $this->page,
-                'currentYear'=>$currentYear,
                 'paymentBill' => $paymentBill,
                 'billId' => $paymentBillId,
-                'name' => $name,
-                'total' => abs($total),
+                'total' => $total,
                 'payment' => $payment
             ]);
 
@@ -65,6 +58,5 @@ class CBillRegistryActivePaymentSlipPrintAjaxController extends AAjaxController
         }
 
 
-    }
 }
 

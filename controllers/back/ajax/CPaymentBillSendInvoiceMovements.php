@@ -39,7 +39,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
     $paymentBillId = \Monkey::app()->router->request()->getRequestData('id');
 
     /** @var CPaymentBillRepo $paymentBillRepo */
-    $paymentBillRepo = \Monkey::app()->repoFactory->create('PaymentBill');
+    $paymentBillRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
 
     /** @var CPaymentBill $paymentBill */
     $paymentBill = $paymentBillRepo->findOneBy(['id'=>$paymentBillId]);
