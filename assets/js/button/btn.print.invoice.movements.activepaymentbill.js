@@ -1,15 +1,15 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-exchange",
+    icon: "fa-print",
     permission: "/admin/order/list&&allShops",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Manda la lista delle fatture",
+    title: "Stampal la lista delle fatture",
     placement: "bottom",
     event: "btn-send-invoice-movements-activepaymentbill"
 };
 
-$(document).on('btn-send-invoice-movements-activepaymentbill', function () {
+$(document).on('btn-print-invoice-movements-activepaymentbill', function () {
     "use strict";
 
     let dataTable = $('.dataTable').DataTable();
@@ -20,7 +20,7 @@ $(document).on('btn-send-invoice-movements-activepaymentbill', function () {
 
         let bsModal = new $.bsModal('Controlla congruenza distinte', {
                 body: 'Scegli l\'opzione: <select id="invoiceOption">\n' +
-                '<option value="invia">Invia Distinte</option>\n' +
+                '<option value="invia">Stampa Distinte</option>\n' +
                 '<option value="scarica">Scarica Distinte</option>\n' +
                 '</select>'
             }
@@ -32,7 +32,7 @@ $(document).on('btn-send-invoice-movements-activepaymentbill', function () {
             if($('#invoiceOption').val() === "invia") {
                 $.ajax({
                     method: 'post',
-                    url: '/blueseal/xhr/PaymentBillSendInvoiceMovements',
+                    url: '/blueseal/xhr/active',
                     data: {
                         id: id
                     }
@@ -49,7 +49,7 @@ $(document).on('btn-send-invoice-movements-activepaymentbill', function () {
             } else if($('#invoiceOption').val() === "scarica"){
                 $.ajax({
                     method: 'get',
-                    url: '/blueseal/xhr/PaymentBillSendInvoiceMovements',
+                    url: '/blueseal/xhr/BillRegistryActivePaymentSlipPrintAjaxController',
                     data: {
                         id: id
                     }
