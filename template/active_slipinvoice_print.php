@@ -305,7 +305,7 @@
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 30px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: 'Poppins', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                        Inviamo di seguito Estratto conto della distinta n. <?php echo $paymentBill->id ?> per € <?php echo $total ?>.
+                                        Inviamo di seguito Estratto conto della distinta n. <?php echo $paymentBill->numebrSlip ?> per € <?php echo $total ?>.
                                     </span>
                                 </td>
                             </tr>
