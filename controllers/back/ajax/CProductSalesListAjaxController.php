@@ -50,8 +50,102 @@ class CProductSalesListAjaxController extends AAjaxController
 
         $bluesealBase = $this->app->baseUrl(false) . "/blueseal/";
         $dummyUrl = $this->app->cfg()->fetch('paths', 'dummyUrl');
+        $productSeason = \Monkey::app()->dbAdapter->query('select max(id) as productSeasonId from ProductSeason ',[])->fetchAll();
+        foreach ($productSeason as $val) {
+            $productSeasonId = $val['productSeasonId'];
+        }
+        //$season=\Monkey::app()->router->request()->getRequestData('season');
+        if (isset($_REQUEST['season'])) {
+            $season = $_REQUEST['season'];
+        } else {
+            $season = '';
+        }
+        if (isset($_REQUEST['stored'])) {
+            $stored = $_REQUEST['stored'];
+        } else {
+            $stored = '';
+        }
+        if (isset($_REQUEST['productZeroQuantity'])) {
+            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = '';
+        }
+        if (isset($_REQUEST['productStatus'])) {
+            $productStatus = $_REQUEST['productStatus'];
+        } else {
+            $productStatus = '';
+        }
+        if (isset($_REQUEST['productBrandid'])) {
+            $productBrandId = $_REQUEST['productBrandid'];
+        } else {
+            $productBrandId = '';
+        }
+        if (isset($_REQUEST['productShopid'])) {
+            $shopid = $_REQUEST['productShopid'];
+        } else {
+            $shopid = '';
+        }
 
-        $sql = "select `p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,`pc`.`slug` AS `slug`,concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,group_concat(distinct `Shop`.`title` separator ',') AS `shops`,concat(`p`.`itemno`,' # ',`pv`.`name`) AS `CPF`,concat(`ps`.`name`,' ',`ps`.`year`) AS `season`,`pv`.`name` AS `variant`,`ProductStatus`.`name` AS `status`,`p`.`sortingPriorityId` AS `productPriority`,min(`Tag`.`sortingPriorityId`) AS `tagPriority`,`ProductBrand`.`name` AS `brand`,sum(`ProductSku`.`stockQty`) AS `totalQty`,max(`ProductSku`.`price`) AS `price`,max(`ProductSku`.`salePrice`) AS `salePrice`,cast(max(`pickyshop`.`ProductSku`.`isOnSale`) as char charset utf8) AS `isOnsale` from ((((((((((`Product` `p` join `ProductVariant` `pv`) left join (`ProductHasProductCategory` `phpc` left join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`))) on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`)))) left join `ProductHasTag` on((`pickyshop`.`ProductHasTag`.`productVariantId` = `p`.`productVariantId`))) left join `Tag` on((`pickyshop`.`ProductHasTag`.`tagId` = `pickyshop`.`Tag`.`id`))) join `ProductSku`) join `ProductBrand`) join `ProductStatus`) join `Shop`) left join `ProductHasProductPhoto` on(((`p`.`id` = `pickyshop`.`ProductHasProductPhoto`.`productId`) and (`p`.`productVariantId` = `pickyshop`.`ProductHasProductPhoto`.`productVariantId`)))) join `ProductSeason` `ps` on((`p`.`productSeasonId` = `ps`.`id`))) where ((`pickyshop`.`ProductHasTag`.`productId` = `p`.`id`) and (`p`.`productVariantId` = `pv`.`id`) and (`pickyshop`.`ProductSku`.`shopId` = `pickyshop`.`Shop`.`id`) and (`pickyshop`.`ProductStatus`.`id` = `p`.`productStatusId`) and (`pickyshop`.`ProductStatus`.`code` in ('A','P','I')) and (`p`.`id` = `pickyshop`.`ProductSku`.`productId`) and (`pickyshop`.`ProductSku`.`price` > 0) and (`p`.`productVariantId` = `pickyshop`.`ProductSku`.`productVariantId`) and (`pickyshop`.`ProductBrand`.`id` = `p`.`productBrandId`)) group by `p`.`id`,`p`.`productVariantId` having (`totalQty` >= 0)";
+        if ($season == 1) {
+            $sqlFilterSeason = '';
+        } else {
+            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+        }
+        if ($productZeroQuantity == 1) {
+            $sqlFilterQuantity = '';
+        } else {
+            $sqlFilterQuantity = 'and p.qty>0';
+        }
+        if ($productStatus == 1) {
+            $sqlFilterStatus = '';
+        } else {
+            $sqlFilterStatus = 'and p.productStatusId=6';
+        }
+        if ($productBrandId == 0) {
+            $sqlFilterBrand = '';
+        } else {
+            $sqlFilterBrand = 'and p.productBrandId='.$productBrandId;
+        }
+        if ($shopid == 0) {
+            $sqlFilterShop = '';
+        } else {
+            $sqlFilterShop = 'and Shop.id='.$shopid;
+        }
+        if ($stored == 0) {
+            $sqlFilterStored = '';
+        } else {
+            $sqlFilterStored = 'and p.stored='.$stored;
+        }
+
+        $sql = "select `p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,`pc`.`slug` AS `slug`,
+       concat(`p`.`id`,'-',`p`.`productVariantId`) AS `code`,
+       group_concat(distinct `Shop`.`title` separator ',') AS `shops`,
+       concat(`p`.`itemno`,' # ',`pv`.`name`) AS `CPF`,
+       concat(`ps`.`name`,' ',`ps`.`year`) AS `season`,`pv`.`name` AS `variant`,`ProductStatus`.`name` AS `status`,`p`.`sortingPriorityId` AS `productPriority`,
+       min(`Tag`.`sortingPriorityId`) AS `tagPriority`,`ProductBrand`.`name` AS `brand`,
+       sum(`ProductSku`.`stockQty`) AS `totalQty`,
+       max(`ProductSku`.`price`) AS `price`,
+       max(`ProductSku`.`salePrice`) AS `salePrice`,
+       cast(max(`p`.`isOnSale`) as char charset utf8) AS `isOnsale`
+    from ((((((((((`Product` `p` join `ProductVariant` `pv`) 
+        left join (`ProductHasProductCategory` `phpc`
+            left join `ProductCategory` `pc` on((`phpc`.`productCategoryId` = `pc`.`id`))) on(((`p`.`id` = `phpc`.`productId`) and (`p`.`productVariantId` = `phpc`.`productVariantId`))))
+        left join `ProductHasTag` on((`ProductHasTag`.`productVariantId` = `p`.`productVariantId`))) 
+           left join `Tag` on((`ProductHasTag`.`tagId` = `Tag`.`id`))) join `ProductSku`) 
+        join `ProductBrand`) 
+        join `ProductStatus`) 
+        join `Shop`) 
+        left join `ProductHasProductPhoto` on(((`p`.`id` = `ProductHasProductPhoto`.`productId`) and (`p`.`productVariantId` = `ProductHasProductPhoto`.`productVariantId`))))
+         join `ProductSeason` `ps` on((`p`.`productSeasonId` = `ps`.`id`))) 
+where ((`ProductHasTag`.`productId` = `p`.`id`) and (`p`.`productVariantId` = `pv`.`id`)
+           and (`ProductSku`.`shopId` = `Shop`.`id`) 
+           and (`ProductStatus`.`id` = `p`.`productStatusId`)
+           and (`ProductStatus`.`code` in ('A','P','I'))
+           and (`p`.`id` = `ProductSku`.`productId`)
+           and (`ProductSku`.`price` > 0) 
+           and (`p`.`productVariantId` = `ProductSku`.`productVariantId`)
+           and (`ProductBrand`.`id` = `p`.`productBrandId`)) " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored."  
+group by `p`.`id`,`p`.`productVariantId` having (`totalQty` >= 0)";
         $datatable = new CDataTables($sql, ['id', 'productVariantId'], $_GET,true);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
