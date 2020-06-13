@@ -46,7 +46,18 @@
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default">
+                                    <label for="productShooting">escludi shooting</label>
+                                    <?php     if($productShooting==1) {
+                                        echo ' <input type="checkbox" checked="checked" id="productShooting" name="productShooting" value="0"/>';
+                                    }else{
+                                        echo ' <input type="checkbox" id="productShooting"  name="productShooting" value="0"/>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
                                 <div class="form-group form-group-default">
                                     <label for="productZeroQuantity">Includi Quantità 0</label>
                                     <?php     if($productZeroQuantity==1) {
@@ -120,6 +131,7 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-product-zero-quantity="<?php echo $productZeroQuantity?>"
+                               data-product-shooting="<?php echo $productShooting?>"
                                data-season="<?php echo $season?>"
                                data-product-status="<?php echo $productStatus?>"
                                data-product-shopid="<?php echo $shopid?>"
@@ -165,6 +177,11 @@
                                 <th data-slug="dummy"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Dummy
+                                </th>
+                                <th data-slug="dummyVideo"
+                                    data-searchable="false"
+                                    data-orderable="true"
+                                    data-visible="false" class="center">Ha Video
                                 </th>
                                 <th data-slug="hasPhotos"
                                     data-searchable="true"
@@ -266,10 +283,6 @@
                                 <th data-slug="shooting"
                                     data-searchable="true"
                                     data-orderable="true">Shooting
-                                </th>
-                                <th data-slug="doc_number"
-                                    data-searchable="true"
-                                    data-orderable="true">N. DDT
                                 </th>
                                 <th data-slug="inPrestashop"
                                     data-searchable="true"
@@ -436,6 +449,10 @@
         <bs-toolbar-button
                 data-remote="bs.product.sku.insert.ean"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.preview.video"
+        ></bs-toolbar-button>
+
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

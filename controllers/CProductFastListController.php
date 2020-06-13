@@ -59,6 +59,11 @@ class CProductFastListController extends ARestrictedAccessRootController
         } else{
             $stored=0;
         }
+        if(isset($_GET['productShooting'])) {
+            $productShooting=$_GET['productShooting'];
+        }else{
+            $productShooting=0;
+        }
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $bluesealBase . "prodotti";
@@ -119,6 +124,7 @@ class CProductFastListController extends ARestrictedAccessRootController
             'page' => $this->page,
             'productBrand'=>$productBrand,
             'productBrandId'=>$productBrandId,
+            'productShooting'=>$productShooting,
             'Shop'=>$Shop,
             'shopid'=>$shopid,
             'stored'=>$stored,

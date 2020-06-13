@@ -40,6 +40,11 @@ class CProductFastListAjaxController extends AAjaxController
         } else {
             $stored = '';
         }
+        if (isset($_REQUEST['productShooting'])) {
+            $productShooting = $_REQUEST['productShooting'];
+        } else {
+            $productShooting = '';
+        }
         if (isset($_REQUEST['productZeroQuantity'])) {
             $productZeroQuantity = $_REQUEST['productZeroQuantity'];
         } else {
@@ -70,6 +75,11 @@ class CProductFastListAjaxController extends AAjaxController
             $sqlFilterQuantity = '';
         } else {
             $sqlFilterQuantity = 'and p.qty>0';
+        }
+        if ($productShooting == 1) {
+            $sqlFilterShooting = 'and concat(phs.shootingId) is null     ';
+        } else {
+            $sqlFilterShooting = '';
         }
         if ($productStatus == 1) {
             $sqlFilterStatus = '';
@@ -122,6 +132,7 @@ class CProductFastListAjaxController extends AAjaxController
                        WHERE ((ProductSheetActual.productId = p.id) AND
                               (ProductSheetActual.productVariantId = p.productVariantId))) > 2), 'sì', 'no')    AS hasDetails,
                   if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
+                  if(isnull(p.dummyVideo), 'no', 'sì')            AS dummyVideo,
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
@@ -177,7 +188,7 @@ class CProductFastListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored;
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored. ' ' . $sqlFilterShooting;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
@@ -211,6 +222,7 @@ class CProductFastListAjaxController extends AAjaxController
             $val = $productRepo->findOneBy($row);
 
             $row["DT_RowId"] = $val->printId();
+            $row['video'] = $val->dummyVideo;
             $row["DT_RowClass"] = $val->productStatus->isVisible == 1 ? 'verde' : (
             $val->productStatus->isReady == 1 ? 'arancione' : ""
             );
@@ -227,6 +239,7 @@ class CProductFastListAjaxController extends AAjaxController
             }
 
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
+            $row['dummyVideo'] = ($val->dummyVideo!=null) ? 'sì' : 'no';
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
