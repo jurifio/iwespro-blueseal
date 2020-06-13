@@ -237,7 +237,7 @@ class CProductFastListAjaxController extends AAjaxController
                     $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
                 }
             }
-
+            $row['dummyPicture']=$val->getDummyPictureUrl();
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
             $row['dummyVideo'] = ($val->dummyVideo!=null) ? 'sì' : 'no';
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';

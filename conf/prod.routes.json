@@ -3717,6 +3717,19 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/lista-correlazioni(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductCorrelationListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

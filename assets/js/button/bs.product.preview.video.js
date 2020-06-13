@@ -22,9 +22,10 @@ $(document).on('bs-product-preview-video', function () {
         return false;
     }
    var video =selectedRows[0].video;
+    var poster=selectedRows[0].dummyPicture;
     var body='';
     if (video!=null){
-        body='<video  width="450" height="600"  controls autoplay>'+
+        body='<video  width="450" height="600" poster="'+poster+'" controls autoplay>'+
                         '<source src="'+video+'" type="video/mp4">';
     }else{
         body `non Ci sono Video`;
