@@ -72,7 +72,7 @@ class CProductVideoAjaxManage extends AAjaxController
             return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
         }
         $return=
-        $product->dummyVideo='https:/cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
+        $product->dummyVideo='https://cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
         $product->update();
 
 

@@ -24,9 +24,8 @@ $(document).on('bs-product-preview-video', function () {
    var video =selectedRows[0].video;
     var body='';
     if (video!=null){
-        body=`<video  width="450" height="600"  controls autoplay>
-                        <source src="`+video+`" type="video/mp4">
-                    </video>`
+        body='<video  width="450" height="600"  controls autoplay>'+
+                        '<source src="'+video+'" type="video/mp4">';
     }else{
         body `non Ci sono Video`;
     }
