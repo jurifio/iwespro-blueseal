@@ -27,6 +27,9 @@ class CProductCorrelationAjaxController extends AAjaxController
         $data = \Monkey::app()->router->request()->getRequestData();
         $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
         $name=$data['name'];
+        if ($name==null){
+            return 'Nome non Valorizzato';
+        }
         $description=$data['description'];
         $note=$data['note'];
         $findpc=$productCorrelationRepo->findOneBy(['name'=>$name]);
@@ -47,6 +50,9 @@ class CProductCorrelationAjaxController extends AAjaxController
         $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
         $id=$data['id'];
         $name=$data['name'];
+        if ($name==null){
+            return 'Nome non Valorizzato';
+        }
         $description=$data['description'];
         $note=$data['note'];
         $pc=$productCorrelationRepo->findOneBy(['id'=>$id]);
