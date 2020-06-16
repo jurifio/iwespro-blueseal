@@ -27,8 +27,10 @@ class CProductCorrelationListAjaxController extends AAjaxController
                   `p`.`id`                                          AS `id`,
                   `p`.`name`                            AS `name`,
                   `p`.`description`                                AS `description`,
-                  `p`.`note`                                      AS `note`
-                  
+                  `p`.`note`                                      AS `note`,
+                  `p`.`code`                                      AS `code`,
+                  `p`.`image`                                      AS `image`,
+                   `p`.`seo`                                      AS `seo` 
                 FROM `ProductCorrelation` `p`";
 
         $datatable = new CDataTables($sql, ['id'], $_GET);
@@ -53,6 +55,9 @@ class CProductCorrelationListAjaxController extends AAjaxController
                 $response['data'][$i]['name'] = $v->name;
                 $response['data'][$i]['description'] = $v->description;
                 $response['data'][$i]['note'] = $v->note;
+                $response['data'][$i]['image'] = ($v->image!=null)? '<img width="50px" src="'.$v->image.'"/>': '';
+                $response['data'][$i]['code'] = $v->code;
+                $response['data'][$i]['seo'] = $v->seo;
                 $i++;
             } catch (\Throwable $e) {
                 throw $e;

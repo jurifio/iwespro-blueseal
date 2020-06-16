@@ -11,7 +11,7 @@ window.buttonSetup = {
 };
 
 $(document).on('bs-product-correlation.insert', function () {
-
+    var urldef='';
 
     let bsModal = new $.bsModal('Inserisci un Tema di Correlazione fra Prodotti', {
         body: `<div class="row">
@@ -21,19 +21,76 @@ $(document).on('bs-product-correlation.insert', function () {
                 </div>
                 </div>
                 <div class="row">
+               <div class="form-group form-group-default selectize-enabled">
+                                        <label for="code">seleziona il Tipo di Correlazione</label>
+                                        <select id="code" name="code"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option  value="APP">Potrebbe Piacerti Anche</option>
+                                            <option  value="LOOK">look</option>
+                                            <option  value="COLOUR">Colore</option>
+                                        </select>
+                                    </div>
+                </div>
+                <div class="row">
                 <div class="form-group form-group-default">
                                         <label for="description">Descrizione</label>
                                         <textarea class="form-control" name="description" id="description"
                                                   value=""></textarea>
                                     </div>
                 </div>
+                <div class="row">
                 <div class="form-group form-group-default">
                                         <label for="note">Note</label>
                                         <textarea class="form-control" name="note" id="note"
                                                   value=""></textarea>
                                     </div>
                 </div>
+                <div class="row">
+                <div class="form-group form-group-default">
+                                        <label for="seo">Seo</label>
+                                        <textarea class="form-control" name="seo" id="seo"
+                                                  value=""></textarea>
+                                    </div>
+                </div>
+                 <div class="form-group form-group-default">
+                        <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">
+                        <div class="form-group form-group-default selectize-enabled\\">
+                        <label for="file">Immagine</label> 
+                        <div class="fallback">
+                        <label for="file">immagine</label>
+                        <input name="file" type="file" multiple />
+                        </div>
+                        </div>
+                        </div>
+
+                        '</form>';
                 `
+    });
+    let dropzone = new Dropzone("#dropzoneModal",{
+        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
+
+        maxFilesize: 5,
+        maxFiles: 100,
+        parallelUploads: 10,
+        acceptedFiles: "image/jpeg",
+        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+        uploadMultiple: true,
+        sending: function(file, xhr, formData) {
+
+        }
+    });
+
+    dropzone.on('addedfile',function(file){
+        let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+        let filename=file.name;
+        let image =urlimage+filename;
+         urldef=image;
+    });
+    dropzone.on('queuecomplete',function(){
+        okButton.removeAttr("disabled");
+        $(document).trigger('bs.load.photo');
     });
 
 
@@ -48,6 +105,9 @@ $(document).on('bs-product-correlation.insert', function () {
             name: $('#nameCorrelation').val(),
             description: $('#description').val(),
             note:$('#note').val(),
+            seo:$('#seo').val(),
+            code:$('#code').val(),
+            image:urldef
         };
         $.ajax({
             method: 'post',

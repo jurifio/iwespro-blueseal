@@ -36,11 +36,20 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">id</th>
+                                <th data-slug="code"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">Tipo</th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center">Nome</th>
+                                <th data-slug="image"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Immagine</th>
                                 <th data-slug="description"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -49,6 +58,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">note</th>
+                                <th data-slug="seo"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Seo</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -64,7 +77,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Correlazioni">
+    <bs-toolbar-group data-group-label="Gestione  Tabella Correlazioni">
         <bs-toolbar-button
                 data-remote="bs.product.correlation.insert"
         ></bs-toolbar-button>

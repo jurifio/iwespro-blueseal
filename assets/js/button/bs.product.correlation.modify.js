@@ -13,36 +13,71 @@ window.buttonSetup = {
 $(document).on('bs-product-correlation.modify', function () {
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
-    if(selectedRows.length != 1){
+    if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
             message: "Devi selezionare una riga alla volta"
         }).open();
         return false;
     }
-    var id =selectedRows[0].DT_RowId;
-    var name=selectedRows[0].name;
-    var description=selectedRows[0].description;
-    var note=selectedRows[0].note;
+    var id = selectedRows[0].DT_RowId;
+    var name = selectedRows[0].name;
+    var description = selectedRows[0].description;
+    var note = selectedRows[0].note;
+    var code = selectedRows[0].code;
+    var seo = selectedRows[0].seo;
+    var selAPP = '';
+    var selLOOK = '';
+    var selCOLOUR = '';
+    switch (code) {
+        case 'APP':
+            selAPP = 'checked="checked"';
+            selLOOK = '';
+            selCOLOUR = '';
+            break;
+        case 'LOOK':
+            selAPP = '';
+            selLOOK = 'checked="checked"';
+            selCOLOUR = '';
+            break;
+        case 'COLOUR':
+            selAPP = '';
+            selLOOK = '';
+            selCOLOUR = 'checked="checked"';
+            break;
+    }
 
     let bsModal = new $.bsModal('Modifica un Tema di Correlazione fra Prodotti', {
         body: `<div class="row">
                 <div class="form-group form-group-default required">
         <label>Nome Correlazione</label>
-        <input type="text" id="nameCorrelation" name="nameCorrelation" value="`+name+`"/>
+        <input type="text" id="nameCorrelation" name="nameCorrelation" value="` + name + `"/>
                 </div>
+                </div>
+                <div class="row">
+               <div class="form-group form-group-default selectize-enabled">
+                                        <label for="code">seleziona il Tipo di Correlazione</label>
+                                        <select id="code" name="code"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                            <option ` + selAPP + `  value="APP">Potrebbe Piacerti Anche</option>
+                                            <option ` + selLOOK + `  value="LOOK">look</option>
+                                            <option  ` + selCOLOUR + ` value="COLOUR">Colore</option>
+                                        </select>
+                                    </div>
                 </div>
                 <div class="row">
                 <div class="form-group form-group-default">
                                         <label for="description">Descrizione</label>
                                         <textarea class="form-control" name="description" id="description">
-                                                  `+description+`</textarea>
+                                                  ` + description + `</textarea>
                                     </div>
                 </div>
                 <div class="form-group form-group-default">
                                         <label for="note">Note</label>
                                         <textarea class="form-control" name="note" id="note"
-                                                  >`+note+`</textarea>
+                                                  >` + note + `</textarea>
                                     </div>
                 </div>
                 `
@@ -55,12 +90,11 @@ $(document).on('bs-product-correlation.modify', function () {
     bsModal.setOkEvent(function () {
 
 
-
         const data = {
-            id:id,
+            id: id,
             name: $('#nameCorrelation').val(),
             description: $('#description').val(),
-            note:$('#note').val(),
+            note: $('#note').val(),
         };
         $.ajax({
             method: 'put',

@@ -8,7 +8,7 @@ use bamboo\domain\entities\CProductHasProductCorrelation;
 
 
 /**
- * Class CProductCorrelationAjaxController
+ * Class CProductHasProductCorrelationManageAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -17,19 +17,20 @@ use bamboo\domain\entities\CProductHasProductCorrelation;
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @date 13/06/2020
+ * @date 15/06/2020
  * @since 1.0
  */
-class CProductCorrelationAjaxController extends AAjaxController
+class CProductHasProductCorrelationManageAjaxController extends AAjaxController
 {
+    public function get(){
+
+
+    }
     public function post()
     {
         $data = \Monkey::app()->router->request()->getRequestData();
         $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
         $name=$data['name'];
-        $code=$data['code'];
-        $image=$data['image'];
-        $seo=$data['seo'];
         if ($name==null){
             return 'Nome non Valorizzato';
         }
@@ -43,9 +44,6 @@ class CProductCorrelationAjaxController extends AAjaxController
         $pc->name=$name;
         $pc->description=$description;
         $pc->note=$note;
-        $pc->code=$code;
-        $pc->seo=$seo;
-        $pc->image=$image;
         $pc->insert();
         return 'Correlazione inserita con successo';
 
@@ -56,9 +54,6 @@ class CProductCorrelationAjaxController extends AAjaxController
         $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
         $id=$data['id'];
         $name=$data['name'];
-        $code=$data['code'];
-        $image=$data['image'];
-        $seo=$data['seo'];
         if ($name==null){
             return 'Nome non Valorizzato';
         }
@@ -68,9 +63,6 @@ class CProductCorrelationAjaxController extends AAjaxController
         $pc->name=$name;
         $pc->description=$description;
         $pc->note=$note;
-        $pc->code=$code;
-        $pc->seo=$seo;
-        $pc->image=$image;
         $pc->update();
         return 'Correlazione Aggiornata con successo';
     }
