@@ -194,7 +194,7 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
                                 ON p.productVariantId = phs.productVariantId AND p.id = phs.productId 
                       LEFT JOIN (ProductHasProductCorrelation phpcn 
-                          join ProductCorrelation pcm on phpcn.id=pcm.correlationId) on p.id=phpcn.productId and p.productVariantId=phpcn.productVariantId   
+                          join ProductCorrelation pcm on phpcn.correlationId=pcm.id) on p.id=phpcn.productId and p.productVariantId=phpcn.productVariantId   
 
 where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored. ' ' . $sqlFilterShooting;
 
