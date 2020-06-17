@@ -249,9 +249,10 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
             }
             $findProductCorrelation=$productHasProductCorrelationRepo->findOneBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
             if($findProductCorrelation!=null){
-                $row['correlation']=$productCorrelationRepo->findOneBy(['id'=>$findProductCorrelation->id])->name;
-                $row['typecorrelation']=$productCorrelationRepo->findOneBy(['id'=>$findProductCorrelation->id])->code;
-                $row['imagecorrelation']='<img width="50px" src="'.$productCorrelationRepo->findOneBy(['id'=>$findProductCorrelation->id])->code.'"</img>';
+                $productCorrelation=$productCorrelationRepo->findOneBy(['id'=>$findProductCorrelation->correlationId]);
+                $row['correlation']=$productCorrelation->name;
+                $row['typecorrelation']=$productCorrelation->code;
+                $row['imagecorrelation']='<img width="50px" src="'.$productCorrelation->image.'"</img>';
             }else{
                 $row['correlation']='';
                 $row['typecorrelation']='';

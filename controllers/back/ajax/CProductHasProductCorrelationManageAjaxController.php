@@ -53,7 +53,7 @@ class CProductHasProductCorrelationManageAjaxController extends AAjaxController
             $prod = explode('-',$product);
             $productId = $prod[0];
             $productVariantId = $prod[1];
-            $shopId = $shopHasProductRepo->finOneBy(['productId' => $productId,'productVariantId' => $productVariantId])->shopId;
+            $shopId = $shopHasProductRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId])->shopId;
             $findProduct = $productHasProductCorrelation->findOneBy(['correlationId' => $code,'productId' => $productId,'productVariantId' => $productVariantId,'shopId' => $shopId]);
             if ($findProduct == null) {
                 $productCorrel = $productHasProductCorrelation->getEmptyEntity();
