@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -22,66 +23,64 @@ use bamboo\domain\entities\CProductHasProductCorrelation;
  */
 class CProductHasProductCorrelationManageAjaxController extends AAjaxController
 {
-    public function get(){
+    public function get()
+    {
+        $correlation = [];
+        $productCorrelation = \Monkey::app()->repoFactory->create('ProductCorrelation')->findAll();
+        foreach ($productCorrelation as $collect) {
+            if ($collect->image != null) {
+                $image = $collect->image;
+            } else {
+                $image = '';
+            }
+            array_push($correlation,['id' => $collect->id,'name' => $collect->name,'code' => $collect->code,'img' => $image]);
+        }
 
+        return json_encode($correlation);
 
     }
+
     public function post()
     {
+        $res = '';
         $data = \Monkey::app()->router->request()->getRequestData();
-        $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
-        $name=$data['name'];
-        if ($name==null){
-            return 'Nome non Valorizzato';
+        $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
+        $productHasProductCorrelation = \Monkey::app()->repoFactory->create('ProductHasProductCorrelation');
+        $productCorrelationRepo = \Monkey::app()->repoFactory->create('ProductCorrelation');
+        $code = $data['code'];
+        $products = $data['row'];
+        foreach ($products as $product) {
+            $prod = explode('-',$product);
+            $productId = $prod[0];
+            $productVariantId = $prod[1];
+            $shopId = $shopHasProductRepo->finOneBy(['productId' => $productId,'productVariantId' => $productVariantId])->shopId;
+            $findProduct = $productHasProductCorrelation->findOneBy(['correlationId' => $code,'productId' => $productId,'productVariantId' => $productVariantId,'shopId' => $shopId]);
+            if ($findProduct == null) {
+                $productCorrel = $productHasProductCorrelation->getEmptyEntity();
+                $productCorrel->correlationId = $code;
+                $productCorrel->productId = $productId;
+                $productCorrel->productVariantId = $productVariantId;
+                $productCorrel->shopId = $shopId;
+                $productCorrel->insert();
+                $res .= 'inserito prodotto ' . $productId . '-' . $productVariantId . '  su correlazione ' . $code . '</br>';
+            } else {
+                $res .= 'prodotto  ' . $productId . '-' . $productVariantId . ' esistente non inserito su ' . $code.' </br>';
+                continue;
+            }
         }
-        $description=$data['description'];
-        $note=$data['note'];
-        $findpc=$productCorrelationRepo->findOneBy(['name'=>$name]);
-        if($findpc!=null){
-            return 'Esiste Già una correlazione con questo nome';
-        }
-        $pc=$productCorrelationRepo->getEmptyEntity();
-        $pc->name=$name;
-        $pc->description=$description;
-        $pc->note=$note;
-        $pc->insert();
-        return 'Correlazione inserita con successo';
+
+
+        return $res;
 
     }
+
     public function put()
     {
-        $data = \Monkey::app()->router->request()->getRequestData();
-        $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
-        $id=$data['id'];
-        $name=$data['name'];
-        if ($name==null){
-            return 'Nome non Valorizzato';
-        }
-        $description=$data['description'];
-        $note=$data['note'];
-        $pc=$productCorrelationRepo->findOneBy(['id'=>$id]);
-        $pc->name=$name;
-        $pc->description=$description;
-        $pc->note=$note;
-        $pc->update();
-        return 'Correlazione Aggiornata con successo';
+
     }
+
     public function delete()
     {
-        $data = \Monkey::app()->router->request()->getRequestData();
-        /** @var CRepo $productCorrelationRepo */
-        $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
-        /** @var CRepo $productHasProductCorrelationRepo  */
-        $productHasProductCorrelationRepo=\Monkey::app()->repoFactory->create('ProductHasProductCorrelation');
-        $id=$data['id'];
-        /** @var CProductHasProductCorrelation $phpc */
-        $phpc=$productHasProductCorrelationRepo->findBy(['correlationId'=>$id]);
-        foreach ($phpc as $values){
-            $values->delete();
-        }
-        /** @var CProductCorrelation $pc */
-        $pc=$productCorrelationRepo->findOneBy(['id'=>$id]);
-        $pc->delete();
-        return 'Correlazioni  Cancellate con successo';
+
     }
 }

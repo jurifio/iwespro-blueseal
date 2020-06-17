@@ -23,7 +23,6 @@ $(document).on('bs-productmanage-correlation-insert', function () {
     }
 
     var row = [];
-    var shopIdCorr=
     $.each(selectedRows, function (k, v) {
         row.push(v.DT_RowId);
     });
@@ -33,25 +32,64 @@ $(document).on('bs-productmanage-correlation-insert', function () {
 
     let bsModal = new $.bsModal('Inserisci un Tema di Correlazione fra Prodotti', {
         body: `<div class="row">
-                <div class="form-group form-group-default required">
-        <label>Nome Correlazione</label>
-        <input type="text" id="nameCorrelation" name="nameCorrelation" value=""/>
-                </div>
-                </div>
-                <div class="row">
-                <div class="form-group form-group-default">
-                                        <label for="description">Descrizione</label>
-                                        <textarea class="form-control" name="description" id="description"
-                                                  value=""></textarea>
-                                    </div>
-                </div>
-                <div class="form-group form-group-default">
-                                        <label for="note">Note</label>
-                                        <textarea class="form-control" name="note" id="note"
-                                                  value=""></textarea>
+                 <div class="form-group form-group-default selectize-enabled">
+                                        <label for="code">seleziona la Correlazione</label>
+                                        <select id="code" name="code"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
                                     </div>
                 </div>
                 `
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/ProductHasProductCorrelationManageAjaxController',
+        dataType: 'json'
+    }).done(function (res2) {
+        let select = $('#code');
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name', 'code'],
+            options: res2,
+            render: {
+                option: function (item, escape) {
+                    let rendResCats = '';
+
+                    if(item.img == null && item.code == null){
+                        rendResCats = '<div>' +
+                            escape(item.name) +
+                            '</div>';
+                    } else if(item.img != null && item.code == null){
+                        rendResCats = '<div>' +
+                            escape(item.name) + ' | ' +
+                            "<img style='width: 50px' src='" + escape(item.img) + "'>" +
+                            '</div>';
+                    } else if (item.img == null && item.code != null){
+                        rendResCats = '<div>' +
+                            escape(item.name) + ' | ' +
+                            escape(item.code) +
+                            '</div>';
+                    } else {
+                        rendResCats = '<div>' +
+                            escape(item.name) + ' | ' +
+                            escape(item.code) + ' | ' +
+                            "<img style='width: 50px' src='" + escape(item.img) + "'>" +
+                            '</div>';
+                    }
+
+                    return rendResCats;
+                },
+                item: function (item, escape) {
+                    return '<div>' +
+                        escape(item.name) +
+                        '</div>';
+                }
+            }
+        });
+
     });
 
 
@@ -64,13 +102,12 @@ $(document).on('bs-productmanage-correlation-insert', function () {
 
 
         const data = {
-            name: $('#nameCorrelation').val(),
-            description: $('#description').val(),
-            note:$('#note').val(),
+           row: row,
+            code: $('#code').val(),
         };
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/ProductCorrelationAjaxController',
+            url: '/blueseal/xhr/ProductHasProductCorrelationManageAjaxController',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);
