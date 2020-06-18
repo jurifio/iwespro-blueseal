@@ -54,38 +54,40 @@ class CCreateProductCorrelationJob extends ACronJob
             $productHasProductCorrelationRepo = \Monkey::app()->repoFactory->create('ProductHasProductCorrelation');
             $productRepo = \Monkey::app()->repoFactory->create('Product');
             $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
-            $products = $productRepo->findBy(['stored'=>0]);
+            $sql='select sp.productId as productId, group_concat(sp.productVariantId) as variant, sp.shopId as shopId from ShopHasProduct sp
+JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and p.qty>1     group by sp.productId,sp.shopId';
+            $shopHasProducts = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductCorrelation ',[])->fetchAll();
 
 
-            foreach ($products as $product) {
-                $shopHasProduct = $shopHasProductRepo->findBy(['productId' => $product->id]);
-                $findProductCorrelation = $productCorrelationRepo->findOneBy(['code' => 'C0LOUR','name' => $product->id]);
+            foreach ($shopHasProducts as $shopHasProduct) {
+                $nameCorrelation=$shopHasProduct['productId'].'-'.$shopHasProduct['shopId'];
+                $findProductCorrelation = $productCorrelationRepo->findOneBy(['code' => 'C0LOUR','name' => $nameCorrelation]);
                 if ($findProductCorrelation == null) {
                     $findProductCorrelationInsert = $productCorrelationRepo->getEmptyEntity();
-                    $findProductCorrelationInsert->name = $product->id;
-                    $findProductCorrelationInsert->description = 'varianti taglie ' . $product->id;
-                    $findProductCorrelationInsert->note = 'varianti taglie ' . $product->id;
+                    $findProductCorrelationInsert->name = $nameCorrelation;
+                    $findProductCorrelationInsert->description = 'varianti taglie ' . $nameCorrelation;
+                    $findProductCorrelationInsert->note = 'varianti taglie ' . $nameCorrelation;
                     $findProductCorrelationInsert->code = 'COLOUR';
-                    $photo = \Monkey::app()->repoFactory->create('ProductPhoto')->getPhotoForProductSizeOrder($product, 281, 1);
-                    $photoImage=($photo)? 'https://cdn.iwes.it/'.$product->productBrand->slug . '/' . $photo->name: 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
-                    $findProductCorrelationInsert->image = $photoImage;
+                    $findProductCorrelationInsert->seo = 'varianti taglie ' . $nameCorrelation;
+                    $combinations=explode(',',$shopHasProduct['variant']);
+                    $findProductCorrelationInsert->image = 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';;
                     $findProductCorrelationInsert->seo = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->insert();
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductCorrelation ',[])->fetchAll();
                     foreach ($res as $result) {
                         $lastId = $result['id'];
                     }
-                    foreach ($shopHasProduct as $pr) {
-                        $findProductHasProductCorrelation = $productHasProductCorrelationRepo->findOneBy(['productId' => $pr->productId,
-                            'productVariantId' => $pr->productVariantId,
-                            'shopId' => $pr->shopId,
+                    foreach($combinations as $combination){
+                        $findProductHasProductCorrelation = $productHasProductCorrelationRepo->findOneBy(['productId' => $shopHasProduct['productId'],
+                            'productVariantId' => $combination,
+                            'shopId' => $shopHasProduct['shopId'],
                             'correlationId' => $lastId]);
                         if ($findProductHasProductCorrelation == null) {
                             $findProductHasProductCorrelationInsert = $productHasProductCorrelationRepo->getEmptyEntity();
                             $findProductHasProductCorrelationInsert->correlationId = $lastId;
-                            $findProductHasProductCorrelationInsert->productId = $pr->productId;
-                            $findProductHasProductCorrelationInsert->productVariantId = $pr->productVariantId;
-                            $findProductHasProductCorrelationInsert->shopId = $pr->shopId;
+                            $findProductHasProductCorrelationInsert->productId = $shopHasProduct['productId'];
+                            $findProductHasProductCorrelationInsert->productVariantId = $combination;
+                            $findProductHasProductCorrelationInsert->shopId = $shopHasProduct['shopId'];
                             $findProductHasProductCorrelationInsert->insert();
 
                         } else {
@@ -97,7 +99,6 @@ class CCreateProductCorrelationJob extends ACronJob
                 } else {
                     continue;
                 }
-
 
             }
         }catch(\Throwable $e){
