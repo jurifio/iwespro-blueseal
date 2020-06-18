@@ -42,8 +42,9 @@ class CCreateProductCorrelation extends AAjaxController
                     $findProductCorrelationInsert->description = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->note = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->code = 'COLOUR';
-                    $photo = \Monkey::app()->repoFactory->create('ProductPhoto')->getPhotoForProductSizeOrder($product, $size, $number);
-                    $photoImage=($photo)? 'https://cdn.iwes.it/'.$product->productBrand->slug . '/' . $photo->name: 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
+                    $photo = \Monkey::app()->repoFactory->create('ProductPhoto');
+                    $photoUrl=$this->getPhotoForProductSizeOrder($product, $size, $number);
+                    $photoImage=($photoUrl)? 'https://cdn.iwes.it/'.$product->productBrand->slug . '/' . $photo->name: 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
                     $findProductCorrelationInsert->image = $photoImage;
                     $findProductCorrelationInsert->seo = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->insert();
@@ -82,5 +83,22 @@ class CCreateProductCorrelation extends AAjaxController
 
 
 
+    }
+    /**
+     * @param CProduct $product
+     * @param $size
+     * @param $order
+     * @return \bamboo\core\db\pandaorm\entities\AEntity|null
+     */
+    public function getPhotoForProductSizeOrder(CProduct $product, $size, $order)
+    {
+        $sql = "SELECT id 
+                FROM ProductHasProductPhoto phpp JOIN 
+                  ProductPhoto pp ON phpp.productPhotoId = pp.id
+                WHERE phpp.productId = ? AND 
+                      phpp.productVariantId = ? AND 
+                      pp.size = ? AND 
+                      pp.`order` = ?";
+        return $this->em()->findBySql($sql, [$product->id, $product->productVariantId, $size, $order])->getFirst();
     }
 }
