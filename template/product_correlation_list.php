@@ -87,6 +87,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.correlation.delete"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.productpopulatecolour.correlation"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

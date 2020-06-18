@@ -1,28 +1,15 @@
 <?php
 
-namespace bamboo\blueseal\jobs;
+namespace bamboo\controllers\back\ajax;
 
-use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
-use bamboo\core\base\CObjectCollection;
-use bamboo\core\jobs\ACronJob;
-use bamboo\domain\entities\CMarketplaceHasShop;
-use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\blueseal\business\CDataTables;
+use bamboo\domain\entities\CAddressBook;
+use bamboo\core\theming\CWidgetHelper;
+use bamboo\domain\repositories\CProductRepo;
 use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductSku;
-use PDO;
-use bamboo\amazon\business\builders\AAmazonFeedBuilder;
-use bamboo\amazon\business\builders\CAmazonImageFeedBuilder;
-use bamboo\amazon\business\builders\CAmazonInventoryFeedBuilder;
-use bamboo\amazon\business\builders\CAmazonPricingFeedBuilder;
-use bamboo\amazon\business\builders\CAmazonProductFeedBuilder;
-use bamboo\amazon\business\builders\CAmazonRelationshipFeedBuilder;
-use bamboo\core\application\AApplication;
-use bamboo\domain\entities\CMarketplaceAccountHasProduct;
-use bamboo\domain\entities\CProductPhoto;
-
 /**
- * Class CCreateProductCorrelationJob
- * @package bamboo\blueseal\jobs
+ * Class CCreateProductCorrelation
+ * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -33,20 +20,9 @@ use bamboo\domain\entities\CProductPhoto;
  * @date 18/06/2020
  * @since 1.0
  */
-class CCreateProductCorrelationJob extends ACronJob
+class CCreateProductCorrelation extends AAjaxController
 {
-
-    /**
-     * @param null $args
-     */
-    public function run($args = null)
-    {
-        $this->createProductCorrelation();
-        \Monkey::app()->vendorLibraries->load('amazonMWS');
-    }
-
-
-    private function createProductCorrelation()
+    public function post()
     {
         try {
             ini_set('memory_limit', '1024M');
@@ -101,10 +77,10 @@ class CCreateProductCorrelationJob extends ACronJob
 
             }
         }catch(\Throwable $e){
-            $this->report('CCreateProductCorrelationJob',$e->getMessage(),$e->getLine());
+            \Monkey::app()->applicationLog('CCreateProductCorrelationJob','Error','populate',$e->getMessage(),$e->getLine());
         }
 
 
-    }
 
+    }
 }
