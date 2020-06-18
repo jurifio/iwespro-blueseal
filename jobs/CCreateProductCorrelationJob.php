@@ -56,7 +56,7 @@ class CCreateProductCorrelationJob extends ACronJob
             $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
             $sql='select sp.productId as productId, group_concat(sp.productVariantId) as variant, sp.shopId as shopId from ShopHasProduct sp
 JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and p.qty>1     group by sp.productId,sp.shopId';
-            $shopHasProducts = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductCorrelation ',[])->fetchAll();
+            $shopHasProducts = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
 
 
             foreach ($shopHasProducts as $shopHasProduct) {
@@ -70,8 +70,7 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
                     $findProductCorrelationInsert->code = 'COLOUR';
                     $findProductCorrelationInsert->seo = 'varianti taglie ' . $nameCorrelation;
                     $combinations=explode(',',$shopHasProduct['variant']);
-                    $findProductCorrelationInsert->image = 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';;
-                    $findProductCorrelationInsert->seo = 'varianti taglie ' . $product->id;
+                    $findProductCorrelationInsert->image = 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
                     $findProductCorrelationInsert->insert();
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductCorrelation ',[])->fetchAll();
                     foreach ($res as $result) {
