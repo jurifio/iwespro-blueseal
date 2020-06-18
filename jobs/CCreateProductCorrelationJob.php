@@ -54,7 +54,8 @@ class CCreateProductCorrelationJob extends ACronJob
             $productHasProductCorrelationRepo = \Monkey::app()->repoFactory->create('ProductHasProductCorrelation');
             $productRepo = \Monkey::app()->repoFactory->create('Product');
             $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
-            $products = $productRepo->findAll();
+            $products = $productRepo->findBy(['stored'=>0]);
+
 
             foreach ($products as $product) {
                 $shopHasProduct = $shopHasProductRepo->findBy(['productId' => $product->id]);
