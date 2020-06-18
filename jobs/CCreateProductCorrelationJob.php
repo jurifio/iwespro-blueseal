@@ -66,9 +66,8 @@ class CCreateProductCorrelationJob extends ACronJob
                     $findProductCorrelationInsert->description = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->note = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->code = 'COLOUR';
-                    $photo = \Monkey::app()->repoFactory->create('ProductPhoto');
-                    $photoUrl=$this->getPhotoForProductSizeOrder($product, $size, $number);
-                    $photoImage=($photoUrl)? 'https://cdn.iwes.it/'.$product->productBrand->slug . '/' . $photo->name: 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
+                    $photo = \Monkey::app()->repoFactory->create('ProductPhoto')->getPhotoForProductSizeOrder($product, 281, 1);
+                    $photoImage=($photo)? 'https://cdn.iwes.it/'.$product->productBrand->slug . '/' . $photo->name: 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
                     $findProductCorrelationInsert->image = $photoImage;
                     $findProductCorrelationInsert->seo = 'varianti taglie ' . $product->id;
                     $findProductCorrelationInsert->insert();
@@ -85,7 +84,7 @@ class CCreateProductCorrelationJob extends ACronJob
                             $findProductHasProductCorrelationInsert = $productHasProductCorrelationRepo->getEmptyEntity();
                             $findProductHasProductCorrelationInsert->correlationId = $lastId;
                             $findProductHasProductCorrelationInsert->productId = $pr->productId;
-                            $findProductHasProductCorrelationInsert->productVariantId = $pr->poductVariantId;
+                            $findProductHasProductCorrelationInsert->productVariantId = $pr->productVariantId;
                             $findProductHasProductCorrelationInsert->shopId = $pr->shopId;
                             $findProductHasProductCorrelationInsert->insert();
 
