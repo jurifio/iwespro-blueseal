@@ -78,7 +78,7 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
                     }
                     foreach($combinations as $combination) {
                         $findProductQuantity = $productRepo->findOneBy(['id' => $shopHasProduct['productId'],'productVariantId' => $combination]);
-                        if ($findProductQuantity > 0) {
+                        if ($findProductQuantity->qty > 0) {
                             $findProductHasProductCorrelation = $productHasProductCorrelationRepo->findOneBy(['productId' => $shopHasProduct['productId'],
                                 'productVariantId' => $combination,
                                 'shopId' => $shopHasProduct['shopId'],
