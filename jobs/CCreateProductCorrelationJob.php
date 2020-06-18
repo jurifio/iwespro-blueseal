@@ -86,7 +86,7 @@ class CCreateProductCorrelationJob extends ACronJob
                             $findProductHasProductCorrelationInsert->insert();
 
                         } else {
-                            continue 2;
+                            continue ;
                         }
                     }
 
