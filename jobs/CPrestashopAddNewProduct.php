@@ -43,7 +43,7 @@ class CPrestashopAddNewProduct extends ACronJob
 
         foreach ($reservedIds as $reservedId){
 
-            $prodChar = explode('|', $reservedId['prodChar']);
+           // $prodChar = explode('|', $reservedId['prodChar']);
 
             /** @var CMarketplaceHasShop $mhs */
             $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $reservedId['marketplaceHasShopId']]);
