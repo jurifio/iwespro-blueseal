@@ -5,7 +5,7 @@ window.buttonSetup = {
     event: "bs-manage-marketplace-brand-rights",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Applica le regola di Pubblicazione per Marketplace  ",
+    title: "Applica la regola di Pubblicazione per Marketplace  ",
     placement: "bottom",
     toggle: "modal"
 };

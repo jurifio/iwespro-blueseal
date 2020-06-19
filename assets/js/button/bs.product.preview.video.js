@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-product-preview-video",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Gestisci etichette",
+    title:"Visualizza Video ",
     placement:"bottom",
     toggle:"modal"
 };

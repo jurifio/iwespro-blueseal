@@ -257,6 +257,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $row['correlation']='';
                 $row['typecorrelation']='';
                 $row['imagecorrelation']='';
+
             }
             $row['dummyPicture']=$val->getDummyPictureUrl();
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';

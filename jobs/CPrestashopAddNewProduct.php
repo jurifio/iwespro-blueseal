@@ -39,17 +39,17 @@ class CPrestashopAddNewProduct extends ACronJob
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
 
         $prestashopProduct = new CPrestashopProduct();
-        $reservedIds = \Monkey::app()->dbAdapter->query("SELECT DISTINCT concat(marketplaceHasShopId, '|', modifyType, '|', variantValue) AS prodChar FROM PrestashopHasProduct WHERE marketplaceHasShopId IS NOT NULL", [])->fetchAll();
+        $reservedIds = \Monkey::app()->dbAdapter->query("SELECT DISTINCT marketplaceHasShopId , modifyType,variantValue AS prodChar FROM PrestashopHasProduct WHERE marketplaceHasShopId IS NOT NULL", [])->fetchAll();
 
         foreach ($reservedIds as $reservedId){
 
             $prodChar = explode('|', $reservedId['prodChar']);
 
             /** @var CMarketplaceHasShop $mhs */
-            $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $prodChar[0]]);
+            $mhs = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $reservedId['marketplaceHasShopId']]);
 
             /** @var CObjectCollection $phpCollection */
-            $phpCollection = $phpRepo->findBy(['marketplaceHasShopId'=>$prodChar[0], 'modifyType'=>$prodChar[1], 'variantValue'=>$prodChar[2]]);
+            $phpCollection = $phpRepo->findBy(['marketplaceHasShopId'=>$reservedId['marketplaceHasShopId'], 'modifyType'=>$reservedId['modifyType'], 'variantValue'=>$reservedId['variantValue']]);
 
             $products = new CObjectCollection();
 
@@ -58,7 +58,7 @@ class CPrestashopAddNewProduct extends ACronJob
                 $products->add($php->product);
             }
 
-            if($prestashopProduct->addNewProducts($products,$mhs, $prodChar[1], $prodChar[2])){
+            if($prestashopProduct->addNewProducts($products,$mhs, $reservedId['modifyType'], $reservedId['variantValue'])){
                 \Monkey::app()->dbAdapter->query('UPDATE PrestashopHasProduct 
                                                         SET 
                                                           marketplaceHasShopId = NULL, 
@@ -68,7 +68,7 @@ class CPrestashopAddNewProduct extends ACronJob
                                                           marketplaceHasShopId = ?
                                                           AND modifyType = ?
                                                           AND variantValue = ?',
-                                                          [$prodChar[0], $prodChar[1], $prodChar[2]]);
+                                                          [$reservedId['marketplaceHasShopId'], $reservedId['modifyType'], $reservedId['variantValue']]);
             };
         }
 
