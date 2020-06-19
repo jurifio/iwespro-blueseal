@@ -57,9 +57,9 @@ class CPrestashopAddNewProduct extends ACronJob
             foreach ($phpCollection as $php){
                 $products->add($php->product);
             }
-
-            if($prestashopProduct->addNewProducts($products,$mhs, $reservedId['modifyType'], $reservedId['variantValue'])){
-                \Monkey::app()->dbAdapter->query('UPDATE PrestashopHasProduct 
+            try {
+                if ($prestashopProduct->addNewProducts($products,$mhs,$reservedId['modifyType'],$reservedId['variantValue'])) {
+                    \Monkey::app()->dbAdapter->query('UPDATE PrestashopHasProduct 
                                                         SET 
                                                           marketplaceHasShopId = NULL, 
                                                           modifyType = NULL,
@@ -68,8 +68,11 @@ class CPrestashopAddNewProduct extends ACronJob
                                                           marketplaceHasShopId = ?
                                                           AND modifyType = ?
                                                           AND variantValue = ?',
-                                                          [$reservedId['marketplaceHasShopId'], $reservedId['modifyType'], $reservedId['variantValue']]);
-            };
+                        [$reservedId['marketplaceHasShopId'],$reservedId['modifyType'],$reservedId['variantValue']]);
+                }
+            }catch(\Throwable $e){
+                $this->report('Export product','CPrestashopAddNewProduct', $e->getMessage.' '.$e->getLine());
+            }
         }
 
         $this->report('Export product', 'End Export');
