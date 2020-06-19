@@ -39,7 +39,7 @@ class CPrestashopAddNewProduct extends ACronJob
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
 
         $prestashopProduct = new CPrestashopProduct();
-        $reservedIds = \Monkey::app()->dbAdapter->query("SELECT DISTINCT marketplaceHasShopId , modifyType, variantValue  FROM PrestashopHasProduct WHERE marketplaceHasShopId IS NOT NULL", [])->fetchAll();
+        $reservedIds = \Monkey::app()->dbAdapter->query("SELECT DISTINCT marketplaceHasShopId , modifyType, variantValue  FROM PrestashopHasProduct WHERE marketplaceHasShopId IS NOT NULL and `status`=2", [])->fetchAll();
 
         foreach ($reservedIds as $reservedId){
 
