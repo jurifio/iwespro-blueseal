@@ -195,11 +195,12 @@
             data-permission="/admin/product/list"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Segna righe d'ordine come spedite <?php echo ($allShops) ? ' dal Friend' : ''; ?>"
+            data-title="Segna righe d'ordine come spedite <?php// echo ($allShops) ? ' dal Friend' : ''; ?>"
             data-placement="bottom"
             data-event="bs.friend.orderline.shippedByFriend"
         ></bs-toolbar-button>-->
     </bs-toolbar-group>
+    <?php if ($allShops) : ?>
     <bs-toolbar-group data-group-label="Gestione Pagamenti">
         <bs-toolbar-button
             data-remote="bs.friend.order.registerInvoiceFromFile"
@@ -213,12 +214,13 @@
 <!--        <bs-toolbar-button
                 data-remote="bs.friend.order.registerCreditNoteOnReturn"
         ></bs-toolbar-button>-->
-        <?php if ($allShops) : ?>
+
         <bs-toolbar-button
                 data-remote="bs.friend.order.registerTransportDocFromFile"
         ></bs-toolbar-button>
-        <?php endif; ?>
+
     </bs-toolbar-group>
+    <?php endif; ?>
     <?php if ($allShops): ?>
     <bs-toolbar-group data-group-label="Filtra righe">
         <bs-toolbar-button
