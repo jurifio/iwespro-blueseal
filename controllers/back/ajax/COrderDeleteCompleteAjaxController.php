@@ -117,7 +117,7 @@ class COrderDeleteCompleteAjaxController extends AAjaxController
 
         if ($shopId != null || $shopId != 44) {
             try {
-                $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $orderRepo->remoteOrderSellerId . ' and isLocked=1');
+                $stmtFindShopMovements = $db_con->prepare('select *  from ShopMovements where  orderId =' . $orderRepo->remoteOrderSellerId . ' and isLocked=0');
                 $stmtFindShopMovements->execute();
                 if ($stmtFindShopMovements == null) {
                     $stmtShopMovements = $db_con->prepare('DELETE FROM ShopMovements WHERE orderId=' . $orderRepo->remoteOrderSellerId);
