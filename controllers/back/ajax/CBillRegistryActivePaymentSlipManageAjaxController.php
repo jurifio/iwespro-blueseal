@@ -45,16 +45,33 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $brpas = $billRegistryPaymentActiveSlipRepo->findOneBy(['id' => $billRegistryActivePaymentSlipId]);
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
-            $amountPassive = $p->amount;
+            $tempNote=$p->note;
+            $amountPassive = $p->amount-$p->amountPaid;
             $amountInvoice = 0;
             if ($amountPassive > $amountActive) {
-                return 'Distinta Passiva  maggiore di quella Attiva';
+                $amountPayment=$amountActive;
+                $p->amountPaid=$amountActive;
+                $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberslip;
+                $p->update();
+            }else if($amountPassive == $amountActive){
+
+                $amountPayment=$amountActive;
+                $p->amountPaid=$amountActive;
+                $p->isPaid=1;
+                $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberslip;
+                $p->update();
+            }else if($amountPassive < $amountActive){
+                $amountPayment=$amountPassive;
+                $p->amountPaid=$amountPassive;
+                $p->isPaid=1;
+                $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberslip;
+                $p->update();
             }
             $i = 1;
             $brtt = $billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentSlipId' => $billRegistryActivePaymentSlipId]);
             if ($brtt != null) {
                 foreach ($brtt as $payment) {
-                    $amountActive -= $amountPassive;
+                    $amountActive -= $amountPayment;
                     if ($i == 1) {
                         $bri = $billRegistryInvoiceRepo->findOneBy(['id' => $payment->billRegistryInvoiceId]);
                         $amountInvoice = $bri->grossTotal;
@@ -62,21 +79,21 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                     $date = new \DateTime();
                     $datePayment = $date->format('Y-m-d H:i:s');
                     $ratePayment = $payment->amountPayment;
-                    if ($ratePayment <= $amountPassive) {
+                    if ($ratePayment <= $amountPayment) {
                         $payment->amountPaid = $ratePayment;
                         $payment->datePayment = $datePayment;
-                        $amountPassive -= $ratePayment;
+                        $amountPayment -= $ratePayment;
                         $amountInvoice -= $ratePayment;
                         $payment->update();
-                        if ($amountPassive <= 0) {
+                        if ($amountPayment <= 0) {
                             $p->isPaid = 1;
                             $p->note = 'compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                             $p->update();
                         }
-                    } elseif ($ratePayment > $amountPassive) {
-                        $payment->amountPaid = $amountPassive;
-                        $amountPassive -= $amountPassive;
-                        $amountInvoice -= $amountPassive;
+                    } elseif ($ratePayment > $amountPayment) {
+                        $payment->amountPaid = $amountPayment;
+                        $amountPayment -= $amountPayment;
+                        $amountInvoice -= $amountPayment;
                         $payment->update();
                         if ($amountPassive <= 0) {
                             $p->isPaid = 1;
