@@ -51,8 +51,10 @@ class CBillRegistryActivePaymentBillPayManage extends AAjaxController
         $amountPaid=$paymentBillData['amount'];
         $amount=$paymentBill->amount;
         $paymentBill->paymentDate = $paymentBillData['paymentDate'] ;
-        if($amountPaid<$amount){
-            $paymentBill->statusId=6;
+        if($amountPaid<$amount) {
+            $paymentBill->statusId = 6;
+        }else if($amountPaid==$amount){
+            $paymentBill->statusId = 2;
         }else{
             $paymentBill->statusId=5;
         }
