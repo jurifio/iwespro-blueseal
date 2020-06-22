@@ -43,19 +43,21 @@ var  data1= { shopRecipientId:shopId };
                     item: function (item, escape) {
                         return '<div>' +
                             '<span class="label">Dist N. ' + escape(item.id) + '</span>  - ' +
-                            '<span class="caption"> Imp Tot. ' + escape(item.amount + '-Imp Pag.to '+ item.amountPaid+' -Importo Saldo '+ item.restPaid +' -data: ' + item.creationDate) + '</span>' +
+                            '<span class="caption"> Imp Tot. ' + escape(item.amount + '-Imp Pag.to '+ item.amountPaid+' -Imp. Saldo '+ item.restPaid +' -data: ' + item.creationDate) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
                             '<span class="label">Dist N. ' + escape(item.id) + '</span>  - ' +
-                            '<span class="caption"> Imp Tot. ' + escape(item.amount + '-Imp Pag.to '+ item.amountPaid+' -Importo Saldo '+ item.restPaid +' -data: ' + item.creationDate) + '</span>' +
+                            '<span class="caption"> Imp Tot. ' + escape(item.amount + '-Imp Pag.to '+ item.amountPaid+' -Imp. Saldo '+ item.restPaid +' -data: ' + item.creationDate) + '</span>' +
                             '</div>'
                     }
                 }
             });
         });
     });
+    bsModal.addClass('modal-wide');
+    bsModal.addClass('modal-high');
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         const data = { paymentBillId:$('#selectPaymentBillId').val(),recipientId:shopId,documentId:documentId};
