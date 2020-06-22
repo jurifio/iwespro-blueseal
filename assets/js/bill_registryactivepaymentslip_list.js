@@ -43,13 +43,13 @@ var  data1= { shopRecipientId:shopId };
                     item: function (item, escape) {
                         return '<div>' +
                             '<span class="label">Dist N. ' + escape(item.id) + '</span>  - ' +
-                            '<span class="caption"> Imp Tot. ' + escape(item.amount + 'Imp Pag.to '+item.amountPayment+' data: ' + item.creationDate) + '</span>' +
+                            '<span class="caption"> Imp Tot. ' + escape(item.amount + 'Imp Pag.to '+ item.amountPaid+' data: ' + item.creationDate) + '</span>' +
                             '</div>'
                     },
                     option: function (item, escape) {
                         return '<div>' +
                             '<span class="label">Dist N. ' + escape(item.id) + '</span>  - ' +
-                            '<span class="caption"> Imp.' + escape(item.amount + ' data: ' + item.creationDate) + '</span>' +
+                            '<span class="caption"> Imp Tot. ' + escape(item.amount + 'Imp Pag.to '+ item.amountPaid+' data: ' + item.creationDate) + '</span>' +
                             '</div>'
                     }
                 }

@@ -45,7 +45,7 @@ where d.shopRecipientId='.$shopRecipientId.' and pb.submissionDate is null group
             $paymentBill[] = ['id' => $result['paymentBillId'],
                 'amount' =>  $result['amount'],
                 'creationDate' =>$creationDate,
-                'amountPayment'=>$result['amountPayment']
+                'amountPaid'=>$result['amountPaid']
                 ];
         }
 
