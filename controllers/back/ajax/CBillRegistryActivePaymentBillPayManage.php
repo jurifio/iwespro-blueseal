@@ -55,6 +55,9 @@ class CBillRegistryActivePaymentBillPayManage extends AAjaxController
             $paymentBill->statusId = 6;
         }else if($amountPaid==$amount){
             $paymentBill->statusId = 2;
+            $now=new \DateTime();
+            $dateNow=$now->format('Y-m-d H:i:s');
+            $paymetbill->submissionDate=$dateNow;
         }else{
             $paymentBill->statusId=5;
         }
