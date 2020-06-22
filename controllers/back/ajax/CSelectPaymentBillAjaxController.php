@@ -33,7 +33,7 @@ class CSelectPaymentBillAjaxController extends AAjaxController
     {
         $paymentBill=[];
        $shopRecipientId = $this -> app -> router -> request() -> getRequestData('shopRecipientId');
-        $res = $this -> app -> dbAdapter -> query('SELECT pb.id as paymentBillId,pb.creationDate as creationDate,  d.shopRecipientId as shopId, pb.amount as amount
+        $res = $this -> app -> dbAdapter -> query('SELECT pb.id as paymentBillId,pb.creationDate as creationDate,pb.amountPaid as amountPaid,  d.shopRecipientId as shopId, pb.amount as amount
 from PaymentBill  pb join PaymentBillHasInvoiceNew pbhi on pb.id=pbhi.paymentBillId 
     join Document d on pbhi.invoiceNewId=d.id 
 where d.shopRecipientId='.$shopRecipientId.' and pb.submissionDate is null group by pb.id'
