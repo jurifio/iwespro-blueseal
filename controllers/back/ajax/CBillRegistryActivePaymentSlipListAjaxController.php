@@ -103,7 +103,7 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $pb=$pbRepo->findOneBy(['id'=>$paymentBill->paymentBillId]);
             if($pb!=null){
                 $numSlipPass=$pb->id;
-                $negativeAmount=$pb->amount;
+                $negativeAmount=$pb->amount-$pb->amountPaid;
             }else{
                 $numSlipPass='';
                 $negativeAmount=0;
@@ -118,7 +118,6 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $row['creationDate']=STimeToolbox::FormatDateFromDBValue($paymentBill->creationDate,STimeToolbox::ANGLO_DATE_FORMAT);
             $row['paymentDate'] = STimeToolbox::FormatDateFromDBValue($paymentBill->paymentDate,STimeToolbox::ANGLO_DATE_FORMAT);
             $row['submissionDate'] = $paymentBill->submissionDate ?? 'Non Sottomessa';
-            $row['amountPaid']=number_format($paymentBill->amount-$paymentBill->amountPaid,'2',',','.').' &euro;';
             $row['impAmount']=number_format($impAmount,'2',',','.').' &euro;';
             $row['impSlip']=number_format($amountSlip,'2',',','.').' &euro;';
             $row['typePayment']=$typePayment->name;
