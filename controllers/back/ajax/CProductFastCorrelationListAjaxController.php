@@ -239,7 +239,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                         }
                     }
                 }
-                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->id,'productVariantId'=>$shp->productVariantId,'shopId'=>$shop->shopId]);
+                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->id,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
                 if($findProductCorrelation!=null) {
                     foreach ($findProductCorrelation as $colourCollection) {
                         $productCorrelation = $productCorrelationRepo->findOneBy(['id' => $colourCollection->correlationId,'code' => 'APP']);
@@ -248,7 +248,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                         }
                     }
                 }
-                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->id,'productVariantId'=>$shp->productVariantId,'shopId'=>$shop->shopId]);
+                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->id,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
                 if($findProductCorrelation!=null) {
                     foreach ($findProductCorrelation as $colourCollection) {
                         $productCorrelation = $productCorrelationRepo->findOneBy(['id' => $colourCollection->correlationId,'code' => 'LOOK']);
