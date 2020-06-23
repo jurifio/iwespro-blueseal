@@ -94,7 +94,7 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
         if ($shopid == 0) {
             $sqlFilterShop = '';
         } else {
-            $sqlFilterShop = 'and s.id='.$shopid;
+            $sqlFilterShop = 'and sp.id='.$shopid;
         }
         $sqlFilterStored = 'and `p`.`stored`=0';
         if ($stored == 1) {
@@ -112,8 +112,10 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
                   pse.isActive                                                                                      AS isActive,
                   concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
                   pv.description                                                                                    AS colorNameManufacturer,
-                  concat(s.id, '-', s.name)                                                                     AS shop,
-               
+                  concat(s.id, '-', s.name)                                                                     AS shop,        
+                   s.id                                                                                              AS shopId,
+                  s.name                                                                                            AS row_shop,
+                p.sortingPriorityId                                                                               AS productPriority,
                   pb.name                                                                                           AS brand,
                   ps.name                                                                                           AS status,
                   concat(psg.locale, ' - ',
