@@ -236,7 +236,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                             $COLOUR.=$productCorrelation->name.'</br>';
                         }elseif($productCorrelation->code=='LOOK'){
                             $LOOK.=$productCorrelation->name.'</br>';
-                        }else{
+                        }elseif($productCorrelation->code=='APP'){
                             $APP.=$productCorrelation->name.'</br>';
                         }
 
