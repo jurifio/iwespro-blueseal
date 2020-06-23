@@ -230,7 +230,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $row['friendPrices'][] = $shp->price;
                 $row['friendValues'][] = $shp->value;
                 $row['friendSalePrices'][] = $shp->salePrice;
-                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->id,'productVariantId'=>$shp->productVariantId,'shopId'=>$shop->shopId]);
+                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->id,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
                 if($findProductCorrelation!=null) {
                     foreach ($findProductCorrelation as $colourCollection) {
                         $productCorrelation = $productCorrelationRepo->findOneBy(['id' => $colourCollection->correlationId,'code' => 'COLOUR']);
