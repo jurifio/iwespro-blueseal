@@ -61,7 +61,7 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
 
             foreach ($shopHasProducts as $shopHasProduct) {
                 $nameCorrelation=$shopHasProduct['productId'].'-'.$shopHasProduct['shopId'];
-                $findProductCorrelation = $productCorrelationRepo->findOneBy(['code' => 'C0LOUR','name' => $nameCorrelation]);
+                $findProductCorrelation = $productCorrelationRepo->findOneBy(['name' => $nameCorrelation]);
                 if ($findProductCorrelation == null) {
                     $findProductCorrelationInsert = $productCorrelationRepo->getEmptyEntity();
                     $findProductCorrelationInsert->name = $nameCorrelation;
@@ -92,7 +92,7 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
                                 $findProductHasProductCorrelationInsert->insert();
 
                             } else {
-                                continue;
+                                continue 2;
                             }
                         }
                     }
