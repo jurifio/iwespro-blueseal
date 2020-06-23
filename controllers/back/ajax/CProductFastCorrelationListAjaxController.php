@@ -229,30 +229,30 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $row['friendPrices'][] = $shp->price;
                 $row['friendValues'][] = $shp->value;
                 $row['friendSalePrices'][] = $shp->salePrice;
-                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
-                if($findProductCorrelation!=null) {
-                    foreach ($findProductCorrelation as $colourCollection) {
-                        $productCorrelation = $productCorrelationRepo->findOneBy(['id' => $colourCollection->correlationId,'code' => 'COLOUR']);
-                        if ($productCorrelation != null) {
-                            $COLOUR .= $productCorrelation->name . '</br>';
+                $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
+                if($findProductCorrelationc!=null) {
+                    foreach ($findProductCorrelationc as $colourCollectionc) {
+                        $productCorrelationc = $productCorrelationRepo->findOneBy(['id' => $colourCollectionc->correlationId,'code' => 'COLOUR']);
+                        if ($productCorrelationc != null) {
+                            $COLOUR .= $productCorrelationc->name . '</br>';
                         }
                     }
                 }
-                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
-                if($findProductCorrelation!=null) {
-                    foreach ($findProductCorrelation as $colourCollection) {
-                        $productCorrelation = $productCorrelationRepo->findOneBy(['id' => $colourCollection->correlationId,'code' => 'APP']);
-                        if ($productCorrelation != null) {
-                            $APP .= $productCorrelation->name . '</br>';
+                $findProductCorrelationb=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
+                if($findProductCorrelationb!=null) {
+                    foreach ($findProductCorrelationb as $colourCollectionb) {
+                        $productCorrelationb = $productCorrelationRepo->findOneBy(['id' => $colourCollectionb->correlationId,'code' => 'APP']);
+                        if ($productCorrelationb != null) {
+                            $APP .= $productCorrelationb->name . '</br>';
                         }
                     }
                 }
-                $findProductCorrelation=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
-                if($findProductCorrelation!=null) {
-                    foreach ($findProductCorrelation as $colourCollection) {
-                        $productCorrelation = $productCorrelationRepo->findOneBy(['id' => $colourCollection->correlationId,'code' => 'LOOK']);
-                        if ($productCorrelation != null) {
-                            $LOOK .= $productCorrelation->name . '</br>';
+                $findProductCorrelationm=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
+                if($findProductCorrelationm!=null) {
+                    foreach ($findProductCorrelationm as $colourCollectionm) {
+                        $productCorrelationm = $productCorrelationRepo->findOneBy(['id' => $colourCollectionm->correlationId,'code' => 'LOOK']);
+                        if ($productCorrelationm != null) {
+                            $LOOK .= $productCorrelationm->name . '</br>';
                         }
                     }
                 }
