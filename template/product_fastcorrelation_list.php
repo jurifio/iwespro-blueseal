@@ -149,18 +149,22 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">CPF
                                 </th>
-                                <th data-slug="typecorrelation"
+                                <th data-slug="COLOUR"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Tipo Correlazione
+                                    data-orderable="true"
+                                    data-visible="false" class="center">colori
                                 </th>
-                                <th data-slug="correlation"
+                                <th data-slug="APP"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Correlazione
+                                    data-orderable="true"
+                                    data-visible="false" class="center">PPA
                                 </th>
-                                <th data-slug="imagecorrelation"
+                                <th data-slug="LOOK"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Immagine<br>Correlazione
+                                    data-orderable="true"
+                                    data-visible="false" class="center">LOOK
                                 </th>
+
                                 <th data-slug="colorGroup"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Gruppo Colore
@@ -206,21 +210,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center categoryFilterType">Categorie
                                 </th>
-                                <th data-slug="COLOUR"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-visible="false" class="center">colori
-                                </th>
-                                <th data-slug="APP"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-visible="false" class="center">PPA
-                                </th>
-                                <th data-slug="LOOK"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-visible="false" class="center">LOOK
-                                </th>
+
 
                                 <th data-slug="tags"
                                     data-searchable="true"
