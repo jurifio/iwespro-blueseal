@@ -229,16 +229,20 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $row['friendPrices'][] = $shp->price;
                 $row['friendValues'][] = $shp->value;
                 $row['friendSalePrices'][] = $shp->salePrice;
-                $productCorrelationc = $productCorrelationRepo->findBy(['code' => 'COLOUR']);
+                $productCorrelationc = $productCorrelationRepo->findAll();
                 foreach($productCorrelationc as $productCorrelation){
-                    $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId,'correlationId'=>$productCorrelation->id]);
-                    if($findProductCorrelationc->$productCorrelation->code=='COLOUR'){
-                        $COLOUR.=$findProductCorrelationc->$productCorrelation->name.'</br>';
-                    }elseif($findProductCorrelationc->$productCorrelation->code=='LOOK'){
-                        $LOOK.=$findProductCorrelationc->$productCorrelation->name.'</br>';
-                    }else{
-                        $APP.=$findProductCorrelationc->$productCorrelation->name.'</br>';
+                    $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['correlationId'=>$productCorrelation->id]);
+                    foreach($findProductCorrelationc as $pr){
+                        if($productCorrelation->code=='COLOUR'){
+                            $COLOUR.=$productCorrelation->name.'</br>';
+                        }elseif($productCorrelation->code=='LOOK'){
+                            $LOOK.=$productCorrelation->name.'</br>';
+                        }else{
+                            $APP.=$productCorrelation->name.'</br>';
+                        }
+
                     }
+
                 }
 
 
