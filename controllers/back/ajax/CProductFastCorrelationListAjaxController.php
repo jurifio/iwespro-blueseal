@@ -246,15 +246,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 }
 
 
-                $findProductCorrelationm=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId]);
-                if($findProductCorrelationm!=null) {
-                    foreach ($findProductCorrelationm as $colourCollectionm) {
-                        $productCorrelationm = $productCorrelationRepo->findOneBy(['id' => $colourCollectionm->correlationId,'code' => 'LOOK']);
-                        if ($productCorrelationm != null) {
-                            $LOOK .= $productCorrelationm->name . '</br>';
-                        }
-                    }
-                }
+
 
             }
             $row['COLOUR']=$COLOUR;
