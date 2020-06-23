@@ -96,11 +96,10 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
         } else {
             $sqlFilterShop = 'and s.id='.$shopid;
         }
-        $sqlFilterStored = 'and `p`.`stored`=0';
-        if ($stored == 1) {
+        if ($stored == 0) {
             $sqlFilterStored = '';
         } else {
-            $sqlFilterStored = 'and `p`.`stored`=0';
+            $sqlFilterStored = 'and p.stored='.$stored;
         }
 
 
