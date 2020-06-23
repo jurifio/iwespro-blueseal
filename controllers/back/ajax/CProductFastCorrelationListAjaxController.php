@@ -120,7 +120,7 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
                   ps.name                                                                                           AS status,
                   concat(psg.locale, ' - ',
                          psmg.name)                                                                                 AS productSizeGroup,
-								  group_concat(pc.id) AS correlation
+								  
 
  from Product p 
    JOIN ProductSeason pse ON p.productSeasonId = pse.id
@@ -161,7 +161,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
         $productCorrelationRepo=\Monkey::app()->repoFactory->create('ProductCorrelation');
         $productHasProductCorrelationRepo=\Monkey::app()->repoFactory->create('ProductHasProductCorrelation');
 
-        /** @var CDocumentRepo $docRepo */
+
         $datatable->doAllTheThings();
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
