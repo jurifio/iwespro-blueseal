@@ -231,7 +231,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $row['friendSalePrices'][] = $shp->salePrice;
                 $productCorrelationc = $productCorrelationRepo->findAll();
                 foreach($productCorrelationc as $productCorrelation){
-                    $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->proudctId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId,'correlationId'=>$productCorrelation->id]);
+                    $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId,'correlationId'=>$productCorrelation->id]);
                     foreach($findProductCorrelationc as $pr){
                         if($productCorrelation->code=='COLOUR'){
                             $COLOUR.=$productCorrelation->name.'</br>';
