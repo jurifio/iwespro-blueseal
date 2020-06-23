@@ -177,10 +177,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop
                                 </th>
-                                <th data-slug="externalId"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">ID Orig.
-                                </th>
+
 
                                 <!--<th class="center">Gruppo Taglie</th>-->
 
@@ -196,10 +193,6 @@
                                     data-searchable="false"
                                     data-orderable="false" class="center">Nome
                                 </th>
-                                <th data-slug="hasDetails"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Ha Dett.
-                                </th>
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand
@@ -213,6 +206,22 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center categoryFilterType">Categorie
                                 </th>
+                                <th data-slug="COLOUR"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-visible="false" class="center">colori
+                                </th>
+                                <th data-slug="APP"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-visible="false" class="center">PPA
+                                </th>
+                                <th data-slug="LOOK"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-visible="false" class="center">LOOK
+                                </th>
+
                                 <th data-slug="tags"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -241,20 +250,10 @@
                                     data-orderable="false"
                                     class="center">Descr.
                                 </th>
-                                <th data-slug="stock"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Taglie
-                                </th>
                                 <th data-slug="activePrice"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Prezzo Attivo
-                                </th>
-                                <th data-slug="shops"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Numero di Shops
                                 </th>
                                 <th data-slug="friendPrices"
                                     data-searchable="false"
@@ -271,18 +270,8 @@
                                     data-orderable="false"
                                     class="center">Prezzo in saldo
                                 </th>
-                                <th data-slug="processing"
-                                    data-searchable="true"
-                                    data-orderable="false">Prodotto
-                                </th>
-                                <th data-slug="shooting"
-                                    data-searchable="true"
-                                    data-orderable="true">Shooting
-                                </th>
-                                <th data-slug="inPrestashop"
-                                    data-searchable="true"
-                                    data-orderable="true">Prestashop
-                                </th>
+
+
                             </tr>
                             </thead>
                             <tbody>
