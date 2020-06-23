@@ -231,13 +231,14 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $productCorrelationc = $productCorrelationRepo->findAll();
                 foreach($productCorrelationc as $productCorrelation){
                     $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId,'correlationId'=>$productCorrelation->id]);
+                    $correl=$productCorrelation->name;
                     foreach($findProductCorrelationc as $pr){
                         if($productCorrelation->code=='COLOUR'){
-                            $COLOUR.=$productCorrelation->name.'</br>';
+                            $COLOUR.=$correl.':'.$pr->productId.'-'.$pr->productVariantId.'</br>';
                         }elseif($productCorrelation->code=='LOOK'){
-                            $LOOK.=$productCorrelation->name.'</br>';
+                            $LOOK.=$correl.':'.$pr->productId.'-'.$pr->productVariantId.'</br>';
                         }elseif($productCorrelation->code=='APP'){
-                            $APP.=$productCorrelation->name.'</br>';
+                            $APP.=$correl.':'.$pr->productId.'-'.$pr->productVariantId.'</br>';
                         }
 
                     }
