@@ -90,6 +90,9 @@
         <bs-toolbar-button
                 data-remote="bs.productpopulatecolour.correlation"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.goto.correlation"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 
