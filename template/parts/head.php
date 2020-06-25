@@ -11,7 +11,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta content="" name="description"/>
 <meta content="" name="author"/>
-<meta http-equiv="refresh" content="0;URL=https://www.iwes.pro/blueseal">
 <script>
     paceOptions = {
         ajax: {ignoreURLs: ['/blueseal/xhr/TemplateFetchController', '/blueseal/xhr/CheckPermission']}
