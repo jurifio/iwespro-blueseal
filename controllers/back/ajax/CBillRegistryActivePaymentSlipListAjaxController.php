@@ -134,6 +134,7 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
                 $row['impPassive'] = '';
                 $row['negativeAmount'] = '';
                 $row['impSaldoPassive']='';
+                $row['impInizialePassive']='';
             }
             $row['note'] = $paymentBill->note;
             $row["DT_RowShopId"]=$shopId;
