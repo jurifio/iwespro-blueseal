@@ -127,8 +127,10 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 } else {
                     $brpas->statusId = 5;
                 }
+
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
+                $brpas->amountRest=$paymentBillRepo->findOneBy(['id' => $paymentBillId])->amountPaid;
                 $brpas->update();
             }
 

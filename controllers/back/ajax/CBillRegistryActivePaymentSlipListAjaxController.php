@@ -125,14 +125,8 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
                 $row['impInizialePassive']= ($pb->amount!=null) ?
                     number_format($pb->amount,'2',',','.') . ' &euro;'
                     :'';
-                $sqlDiff='SELECT ((SELECT SUM(p.amount) FROM PaymentBill p WHERE p.id='.$paymentBill->paymentBillId.')-
-(SELECT SUM(p.amount) FROM BillRegistryActivePaymentSlip p WHERE p.paymentBillId='.$paymentBill->paymentBillId.' and  p.id='.$pb->id.')) AS difference from PaymentBill  GROUP BY difference';
-                $difference=\Monkey::app()->dbAdapter->query($sqlDiff, [])->fetchAll();
-                foreach ($difference as $result){
-                    $dif=$result['difference'];
-                }
                 $row['impPassive']= ($pb->amount!=null) ?
-                    number_format($dif,'2',',','.') . ' &euro;'
+                    number_format($paymentBIll->amountRest,'2',',','.') . ' &euro;'
                :'';
                 $row['impSaldoPassive'] = ($pb->amount != null) ? number_format($pb->amount-$paymentBill->amount,'2',',','.') . ' &euro;' : '';
                 $row['negativeAmount'] = ($pb->amount != null) ? number_format($paymentBill->amount - $pb->amount,'2',',','.') . ' &euro;' : '';
