@@ -122,11 +122,14 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $row['impSlip']=number_format($amountSlip,'2',',','.').' &euro;';
             $row['typePayment']=$typePayment->name;
             if($pb!=null) {
+                $row['impInizialePassive']= ($pb->amount!=null) ?
+                    number_format($pb->amount - $paymentBill->amount,'2',',','.') . ' &euro;'
+                    :'';
                 $row['impSaldoPassive']= ($pb->amount!=null) ?
                     number_format($pb->amount - $paymentBill->amount,'2',',','.') . ' &euro;'
                :'';
                 $row['impPassive'] = ($pb->amount != null) ? number_format($pb->amount,'2',',','.') . ' &euro;' : '';
-                $row['negativeAmount'] = ($pb->amount != null) ? number_format($pb->amount - $negativeAmount,'2',',','.') . ' &euro;' : '';
+                $row['negativeAmount'] = ($pb->amount != null) ? number_format($paymentBill->amount - $negativeAmount,'2',',','.') . ' &euro;' : '';
             }else{
                 $row['impPassive'] = '';
                 $row['negativeAmount'] = '';

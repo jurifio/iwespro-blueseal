@@ -201,6 +201,9 @@
                                 <th data-slug="paymentBillId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Pagamento<br> con <br>Distinta<br>Passiva N.</th>
+                                <th data-slug="impInizialePassive"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Importo<br>Iniziale Distinta<br>Passiva</th>
                                 <th data-slug="impPassive"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Importo<br>Distinta<br>Passiva</th>
