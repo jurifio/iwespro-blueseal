@@ -206,7 +206,7 @@
                                     data-orderable="true" class="center">Importo<br>Iniziale Distinta<br>Passiva</th>
                                 <th data-slug="impPassive"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Importo<br>Distinta<br>Passiva</th>
+                                    data-orderable="true" class="center">Saldo<br>Iniziale Distinta<br>Passiva</th>
                                 <th data-slug="impSaldoPassive"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Saldo<br>Distinta<br>Passiva</th>
