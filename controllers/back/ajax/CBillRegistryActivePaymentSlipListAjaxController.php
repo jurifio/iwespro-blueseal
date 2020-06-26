@@ -127,7 +127,7 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
                     :'';
                 $sqlDiff='SELECT ((SELECT SUM(p.amount) FROM PaymentBill p WHERE p.id='.$paymentBill->paymentBillId.')-
 (SELECT SUM(p.amount) FROM BillRegistryActivePaymentSlip p WHERE p.paymentBillId='.$paymentBill->paymentBillId.' and  p.id='.$pb->id.')) AS difference';
-                $difference=\Monkey::app()->dbAdapter->query($sqlDiff, [])->fetchAll()[0]['difference'] + 1;
+                $difference=\Monkey::app()->dbAdapter->query($sqlDiff, [])->fetchAll()[0]['difference'];
                 $row['impPassive']= ($pb->amount!=null) ?
                     number_format($difference,'2',',','.') . ' &euro;'
                :'';
