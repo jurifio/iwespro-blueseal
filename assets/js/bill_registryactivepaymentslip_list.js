@@ -49,7 +49,7 @@ var  data1= { shopRecipientId:shopId };
                     option: function (item, escape) {
                         return '<div>' +
                             '<span class="label">Dist N. ' + escape(item.id) + '</span>  - ' +
-                            '<span class="caption"> Imp Tot. ' + escape(item.amount + '-Imp Pag.to '+ item.restPaid+' -Imp. Saldo '+ item.amountPaid +' -data: ' + item.creationDate) + '</span>' +
+                            '<span class="caption"> Imp Tot. ' + escape(item.amount + '-Imp Pag.to '+ item.amountPaid+' -Imp. Saldo '+ item.restPaid +' -data: ' + item.creationDate) + '</span>' +
                             '</div>'
                     }
                 }

@@ -46,12 +46,16 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             $tempNote=$p->note;
-            $amountPassive = $p->amount-$p->amountPaid;
+            if($p->amountPaid>0){
+                $amountPassive=$p->amountPaid;
+            }else{
+                $amountPassive =$p->amount;
+            }
+            $amountPaid=$p->amountPaid;
             $amountInvoice = 0;
-
             if ($amountPassive > $amountActive) {
                 $amountPayment=$amountActive;
-                $p->amountPaid=$amountPassive-$amountPayment;
+                $p->amountPaid=$amountPaid+$amountActive;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
             }else if($amountPassive == $amountActive){
@@ -63,8 +67,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 $p->update();
             }else if($amountPassive < $amountActive){
                 $amountPayment=$amountPassive;
-                $p->amountPaid=$p->amount;
-                $p->isPaid=1;
+                $p->amountPaid=$amountPaid+$amountActive;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
             }
@@ -86,9 +89,9 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                         $amountPayment -= $ratePayment;
                         $amountInvoice -= $ratePayment;
                         $payment->update();
-                        if ($amountPayment <= 0) {
+                        if ($amountPayment >= $p->amount) {
                             $p->isPaid = 1;
-                            $p->note = 'compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
+                            $p->note = $tempNote.'<br>compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                             $p->update();
                         }
                     } elseif ($ratePayment > $amountPayment) {
@@ -96,9 +99,9 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                         $amountPayment -= $amountPayment;
                         $amountInvoice -= $amountPayment;
                         $payment->update();
-                        if ($amountPassive <= 0) {
+                        if ($amountPayment >= $p->amount) {
                             $p->isPaid = 1;
-                            $p->note = 'compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
+                            $p->note = $tempNote.'<br>compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                             $p->update();
                         }
                     } elseif ($amountPassive <= 0) {
@@ -106,7 +109,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                         $payment->update();
                         $amountInvoice -= 0;
                         $p->isPaid = 1;
-                        $p->note = 'compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
+                        $p->note = $tempNote.'<br>compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                         $p->update();
 
                     }
@@ -128,13 +131,9 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                     $brpas->statusId = 5;
                 }
 
+                $brpas->amountRest=$amountPaid;
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
-                if($brpas->amountRest==null || $brpas->amountRest==0){
-                    $brpas->amountRest=$paymentBillRepo->findOneBy(['id' => $paymentBillId])->amount;
-                }else {
-                    $brpas->amountRest = $paymentBillRepo->findOneBy(['id' => $paymentBillId])->amountPaid;
-                }
                 $brpas->update();
             }
 
@@ -150,58 +149,58 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
     public function post()
     {
         try {
-        $data = $this->app->router->request()->getRequestData();
-        $paymentStartDate = new \DateTime($data['paymentStartDate']);
-        $paymentEndDate=new \DateTime($data['paymentEndDate']);
-        $startDate=$paymentStartDate->format('Y-m-d 00:00:00');
-        $endDate=$paymentEndDate->format('Y-m-d 23:59:00');
-        $clientId= isset($data['clientId']) ?$data['clientId'] : "0" ;
-        if($clientId!='' ){
-            $sqlFilter='and bri.billRegistryClientId='.$clientId;
-        }else{
-            $sqlFilter='';
-        }
-        $typePaymentId=$data['typePaymentId'];
+            $data = $this->app->router->request()->getRequestData();
+            $paymentStartDate = new \DateTime($data['paymentStartDate']);
+            $paymentEndDate=new \DateTime($data['paymentEndDate']);
+            $startDate=$paymentStartDate->format('Y-m-d 00:00:00');
+            $endDate=$paymentEndDate->format('Y-m-d 23:59:00');
+            $clientId= isset($data['clientId']) ?$data['clientId'] : "0" ;
+            if($clientId!='' ){
+                $sqlFilter='and bri.billRegistryClientId='.$clientId;
+            }else{
+                $sqlFilter='';
+            }
+            $typePaymentId=$data['typePaymentId'];
 
 
-        $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
-        $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
-        $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
-        $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
-        $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
-        $res = $this->app->dbAdapter->query('SELECT   group_concat(btt.id) as id,SUM(btt.amountPayment) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
+            $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+            $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
+            $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
+            $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
+            $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
+            $res = $this->app->dbAdapter->query('SELECT   group_concat(btt.id) as id,SUM(btt.amountPayment) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
 JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillRegistryTypePayment brtp ON bri.billRegistryTypePaymentId=brtp.id 
  where btt.amountPaid =0 and btt.dateEstimated >=\''.$startDate.'\' and btt.dateEstimated <=\''.$endDate.'\'
 and brtp.codice_modalita_pagamento_fe like\'%'.$typePaymentId.'%\' '.$sqlFilter.'  group BY bri.billRegistryClientId,date_format(btt.dateEstimated,"%d-%c-%Y"),bri.billRegistryTypePaymentId',[])->fetchAll();
-        if($res==null){
-            return "non ci sono scadenze utili per la generazione delle distinte";
-        }
+            if($res==null){
+                return "non ci sono scadenze utili per la generazione delle distinte";
+            }
             $today = new \DateTime();
             $creationDate = $today->format('Y-m-d H:i:s');
             $numberPaymentBankSlip=$this->app->dbAdapter->query("SELECT ifnull(MAX(bankSlipNumberId),0)+1 as bankSlipNumberId
             FROM BillRegistryActivePaymentSlip",[])->fetchAll()[0]['bankSlipNumberId'];
 
-                if (ENV === 'dev') {
-                    $db_host = 'localhost';
-                    $db_name = 'information_schema';
-                    $db_user = 'root';
-                    $db_pass = 'geh44fed';
-                    $dbnamesel='pickyshop_dev';
-                } else {
-                    $db_host = '5.189.159.187';
-                    $db_name = 'pickyshopfront';
-                    $db_user = 'pickyshop4';
-                    $db_pass = 'rrtYvg6W!';
-                    $dbnamesel = 'pickyshopfront';
-                }
-                try {
+            if (ENV === 'dev') {
+                $db_host = 'localhost';
+                $db_name = 'information_schema';
+                $db_user = 'root';
+                $db_pass = 'geh44fed';
+                $dbnamesel='pickyshop_dev';
+            } else {
+                $db_host = '5.189.159.187';
+                $db_name = 'pickyshopfront';
+                $db_user = 'pickyshop4';
+                $db_pass = 'rrtYvg6W!';
+                $dbnamesel = 'pickyshopfront';
+            }
+            try {
 
-                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                    $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $rest = ' connessione ok <br>';
-                } catch (PDOException $e) {
-                    $rest = $e -> getMessage();
-                }
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
+                $db_con -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $rest = ' connessione ok <br>';
+            } catch (PDOException $e) {
+                $rest = $e -> getMessage();
+            }
 
             $stmtNumberDocument = $db_con->prepare('SELECT max(id)+1  as id from PaymentBill');
             $stmtNumberDocument->execute();
