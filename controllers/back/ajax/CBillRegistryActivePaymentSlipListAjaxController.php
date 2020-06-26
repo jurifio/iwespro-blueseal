@@ -122,8 +122,8 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $row['impSlip']=number_format($amountSlip,'2',',','.').' &euro;';
             $row['typePayment']=$typePayment->name;
             $row['impSaldoPassive']=number_format($negativeAmount,'2',',','.').' &euro;';
-            $row['impPassive']=number_format($pb->amount,'2',',','.').' &euro;';
-            $row['negativeAmount']=number_format($pb->amount-$negativeAmount,'2',',','.').' &euro;';
+            $row['impPassive']=($pb->amount!=null)?number_format($pb->amount,'2',',','.').' &euro;':'';
+            $row['negativeAmount']=($pb->amount!=null)?number_format($pb->amount-$negativeAmount,'2',',','.').' &euro;':'';
             $row['note'] = $paymentBill->note;
             $row["DT_RowShopId"]=$shopId;
             $datatable->setResponseDataSetRow($key,$row);
