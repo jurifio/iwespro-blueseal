@@ -37,7 +37,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $data = $this->app->router->request()->getRequestData();
             $imp=explode('-',$data['paymentBillId']);
             $paymentBillId = $imp[0];
-            $paRest=$imp[1];
+            $paymentRest=$imp[1];
             $recipientId = $data['recipientId'];
             $billRegistryActivePaymentSlipId = $data['documentId'];
             $paymentBillRepo = \Monkey::app()->repoFactory->create('PaymentBill');
@@ -50,7 +50,6 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             $tempNote=$p->note;
-            $paymentRest=$p->amount-$paRest;
             if($p->amountPaid>0){
                 $amountPassive=$p->amountPaid;
             }else{
