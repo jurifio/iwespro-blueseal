@@ -55,7 +55,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             if($paAmountPaid==0){
                 $paymentRest=$p->amount;
             }else{
-                $paymentRest=$paRestPaid;
+                $paymentRest=$paAmountPaid-$amountActive;
             }
             $tempNote=$p->note;
             if($p->amountPaid>0){
@@ -69,7 +69,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountInvoice = 0;
             if ($amountPassive > $amountActive) {
                 $amountPayment=$amountActive;
-                $p->amountPaid=$amountPassive-$amountActive;
+                $p->amountPaid=$paymentRest;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
             }else if($amountPassive == $amountActive){
