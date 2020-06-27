@@ -50,7 +50,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             $tempNote=$p->note;
-            $paymentRest=$p->amount-$paymentRest;
+            $paymentRest=$p->amount-$paRest;
             if($p->amountPaid>0){
                 $amountPassive=$p->amountPaid;
             }else{
