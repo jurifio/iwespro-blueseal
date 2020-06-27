@@ -14,6 +14,10 @@ $(document).on('btn.assoc.paymentBillNegative', function () {
    let  shopId = selectedRows[0].DT_RowShopId;
     let documentId=selectedRows[0].DT_RowId;
     let amountActive=selectedRows[0].impSlip;
+    amountActive=amountActive.replace('€','');
+    amountActive=amountActive.replace('.','');
+    amountActive=amountActive.replace(',','.')
+    amountActive=amountActive.toFixed(2);
 
 
 
