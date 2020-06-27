@@ -68,11 +68,10 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 $amountPassive =$p->amount;
 
             }
-            $amountPaid=$p->amountPaid;
             $amountInvoice = 0;
                 $amountPayment=$amountActive;
                 if($paAmountPaid==0) {
-                    $p->amountPaid = $p->amount - $amountActive;
+                    $p->amountPaid = $paAmount - $amountActive;
                 }else{
                     $p->amountPaid=$paymentRest;
                 }
