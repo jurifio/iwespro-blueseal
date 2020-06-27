@@ -130,8 +130,11 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 } else {
                     $brpas->statusId = 5;
                 }
-
-                $brpas->amountRest=$p->amount-$amountPaid;
+                if($brpas->amountRest==null){
+                $brpas->amountRest=$p->amount;
+                }else {
+                    $brpas->amountRest = $p->amount - $amountPaid;
+                }
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
                 $brpas->update();
