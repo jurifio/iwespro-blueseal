@@ -130,7 +130,10 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 } else {
                     $brpas->statusId = 5;
                 }
-                if($brpas->amountRest==null){
+                if($amountPaid==null){
+                    $amountPaid=$p->amount;
+                }
+                if($brpas->amountRest==0){
                 $brpas->amountRest=$p->amount;
                 }else {
                     $brpas->amountRest = $p->amount - $amountPaid;
@@ -138,6 +141,13 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
                 $brpas->update();
+            }
+            $pbUpdate=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id' => $billRegistryActivePaymentSlipId,'paymentBillId'=>$paymentBillId]);
+            $amountRest=$pbUpdate->amountRest;
+            if($amountRest==0){
+                $pbUpdate->amountRest=$p->amount;
+            }else{
+                $pbUpdate->amountRest=$amountRest-$amountActive;
             }
 
 
