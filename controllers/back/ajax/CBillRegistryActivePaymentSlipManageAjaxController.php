@@ -36,21 +36,24 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
 
             $data = $this->app->router->request()->getRequestData();
             $imp=explode('-',$data['paymentBillId']);
+            // id distinta passiva
             $paymentBillId = $imp[0];
+            // importo distinta passiva
             $paAmount=$imp[1];
+            //importo pagato distinta passiva
             $paAmountPaid=$imp[2];
+            //importo
             $paRestPaid=$imp[3];
             $recipientId = $data['recipientId'];
+            $amountActive=$data['amountActive'];
             $billRegistryActivePaymentSlipId = $data['documentId'];
             $paymentBillRepo = \Monkey::app()->repoFactory->create('PaymentBill');
             $billRegistryPaymentActiveSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
             $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
             $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
             $brpas = $billRegistryPaymentActiveSlipRepo->findOneBy(['id' => $billRegistryActivePaymentSlipId]);
-            $partialSlip=$brpas->amountRest;
 
 
-            $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             if($paAmountPaid==0){
                 $paymentRest=$p->amount;
@@ -58,33 +61,20 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 $paymentRest=$paAmountPaid-$amountActive;
             }
             $tempNote=$p->note;
+            // se l'importo  passivo è maggior di zeo allora
             if($p->amountPaid>0){
                 $amountPassive=$p->amountPaid;
             }else{
                 $amountPassive =$p->amount;
 
-
             }
             $amountPaid=$p->amountPaid;
             $amountInvoice = 0;
-            if ($amountPassive > $amountActive) {
                 $amountPayment=$amountActive;
                 $p->amountPaid=$paymentRest;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
-            }else if($amountPassive == $amountActive){
 
-                $amountPayment=$amountActive;
-                $p->amountPaid=$amountPassive-$amountActive;
-                $p->isPaid=1;
-                $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
-                $p->update();
-            }else if($amountPassive < $amountActive){
-                $amountPayment=$amountPassive;
-                $p->amountPaid=$amountPassive-$amountActive;
-                $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
-                $p->update();
-            }
             $i = 1;
             $brtt = $billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentSlipId' => $billRegistryActivePaymentSlipId]);
             if ($brtt != null) {

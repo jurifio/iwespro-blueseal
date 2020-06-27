@@ -13,6 +13,7 @@ $(document).on('btn.assoc.paymentBillNegative', function () {
 
    let  shopId = selectedRows[0].DT_RowShopId;
     let documentId=selectedRows[0].DT_RowId;
+    let amountActive=selectedRows[0].impSlip;
 
 
 
@@ -60,7 +61,7 @@ var  data1= { shopRecipientId:shopId };
     bsModal.addClass('modal-high');
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
-        const data = { paymentBillId:$('#selectPaymentBillId').val(),recipientId:shopId,documentId:documentId};
+        const data = { paymentBillId:$('#selectPaymentBillId').val(),recipientId:shopId,documentId:documentId,amountActive:amountActive};
         var urldef = "/blueseal/xhr/BillRegistryActivePaymentSlipManageAjaxController";
         $.ajax({
             method: "PUT",
