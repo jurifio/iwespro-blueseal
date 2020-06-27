@@ -47,10 +47,13 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             $tempNote=$p->note;
+            $totalRow=0;
             if($p->amountPaid>0){
                 $amountPassive=$p->amountPaid;
             }else{
                 $amountPassive =$p->amount;
+
+
             }
             $amountPaid=$p->amountPaid;
             $amountInvoice = 0;
@@ -131,24 +134,19 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 } else {
                     $brpas->statusId = 5;
                 }
-                if($amountPaid==null){
-                    $amountPaid=$p->amount;
-                }
-                $totalRow=$p->amount - $amountPaid;
-                if($partialSlip==0){
-                $brpas->amountRest=$p->amount;
-                }else {
-                    $brpas->amountRest =$totalRow;
-                }
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
                 $brpas->update();
             }
+            $pbselect=\Monkey::app()->repoFactory->create('PaymentBill')->findOneBy(['id'=>$paymentBillId]);
+
             $bpudpate=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id'=>$billRegistryActivePaymentSlipId,'paymentBillId'=>$paymentBillId]);
             $totalRow=$p->amount - $amountPaid;
-            if($partialSlip!=0){
+            if($bpudpate->amountRest==0){
 
-                $bpudpate->amountRest =$totalRow;
+                $bpudpate->amountRest =$pbselect->amount;
+            }else{
+                $bpudpate->amountRest =$pbselect->amountPaid;
             }
             $bpudpate->update();
 
