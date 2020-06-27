@@ -17,7 +17,7 @@ $(document).on('btn.assoc.paymentBillNegative', function () {
     amountActive=amountActive.replace('€','');
     amountActive=amountActive.replace('.','');
     amountActive=amountActive.replace(',','.')
-    amountActive=amountActive.toFixed(2);
+    amountActive=parseFloat(amountActive).toFixed(2);
 
 
 
