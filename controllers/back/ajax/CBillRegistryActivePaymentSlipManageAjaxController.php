@@ -35,7 +35,9 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
 
 
             $data = $this->app->router->request()->getRequestData();
-            $paymentBillId = $data['paymentBillId'];
+            $imp=explode(',',$data['paymentBillId']);
+            $paymentBillId = $imp[0];
+            $paymentRest=$imp[1];
             $recipientId = $data['recipientId'];
             $billRegistryActivePaymentSlipId = $data['documentId'];
             $paymentBillRepo = \Monkey::app()->repoFactory->create('PaymentBill');
@@ -134,21 +136,12 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 } else {
                     $brpas->statusId = 5;
                 }
+                $brpas->amountRest=$paymentRest;
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
                 $brpas->update();
             }
-            $pbselect=\Monkey::app()->repoFactory->create('PaymentBill')->findOneBy(['id'=>$paymentBillId]);
 
-            $bpudpate=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id'=>$billRegistryActivePaymentSlipId,'paymentBillId'=>$paymentBillId]);
-            $totalRow=$p->amount - $amountPaid;
-            if($bpudpate->amountRest==0){
-
-                $bpudpate->amountRest =$pbselect->amount;
-            }else{
-                $bpudpate->amountRest =$pbselect->amountPaid;
-            }
-            $bpudpate->update();
 
 
             return 'Associazione e Aggiornamento Eseguiti con successo';
