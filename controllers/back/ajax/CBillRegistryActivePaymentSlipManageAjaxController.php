@@ -35,7 +35,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
 
 
             $data = $this->app->router->request()->getRequestData();
-            $imp=explode(',',$data['paymentBillId']);
+            $imp=explode('-',$data['paymentBillId']);
             $paymentBillId = $imp[0];
             $paymentRest=$imp[1];
             $recipientId = $data['recipientId'];
