@@ -50,10 +50,10 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
 
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
-            if($paRest==$p->amount){
-                $paymentRest=$paRest;
+            if($paRest==0){
+                $paymentRest=$p->amount;
             }else{
-                $paymentRest=($p->amount-$paRest+$amountActive);
+                $paymentRest=$paRest;
             }
             $tempNote=$p->note;
             if($p->amountPaid>0){
@@ -67,19 +67,20 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $amountInvoice = 0;
             if ($amountPassive > $amountActive) {
                 $amountPayment=$amountActive;
-                $p->amountPaid=$amountPaid+$amountActive;
+                $p->amountPaid=$amountPassive-$amountActive;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
             }else if($amountPassive == $amountActive){
 
                 $amountPayment=$amountActive;
-                $p->amountPaid=$amountActive;
+                $p->amountPaid=$amountPassive-$amountActive;
                 $p->isPaid=1;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
             }else if($amountPassive < $amountActive){
                 $amountPayment=$amountPassive;
-                $p->amountPaid=$amountPaid+$amountActive;
+                $p->amountPaid=$amountPassive-$amountActive;
+                $p->isPaid=1;
                 $p->note=$tempNote.'<br>compensazione con distinta attiva '.$brpas->numberSlip;
                 $p->update();
             }

@@ -42,13 +42,13 @@ where d.shopRecipientId='.$shopRecipientId.' and pb.submissionDate is null and p
         foreach ($res as $result) {
           $date=  new \DateTime($result['creationDate']);
           $creationDate=$date->format('d-m-Y');
-            $imp=$result['amount']-$result['amountPaid'];
+            $imp=$result['amountPaid'];
 
             $paymentBill[] = ['id' => $result['paymentBillId'].'-'.$imp,
                 'amount' =>  $result['amount'],
                 'creationDate' =>$creationDate,
-                'amountPaid'=>$result['amountPaid'],
-                'restPaid'=>$result['amount']-$result['amountPaid']
+                'amountPaid'=>$result['amount']-$result['amountPaid'],
+                'restPaid'=>$result['amountPaid']
                 ];
         }
 
