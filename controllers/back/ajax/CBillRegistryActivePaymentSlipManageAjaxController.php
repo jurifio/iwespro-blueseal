@@ -46,7 +46,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
             $brpas = $billRegistryPaymentActiveSlipRepo->findOneBy(['id' => $billRegistryActivePaymentSlipId]);
             $partialSlip=$brpas->amountRest;
-            if($partilaSlip)
+
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             $tempNote=$p->note;
