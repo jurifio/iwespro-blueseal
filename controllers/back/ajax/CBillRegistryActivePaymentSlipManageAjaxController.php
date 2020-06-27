@@ -43,6 +43,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
             $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
             $brpas = $billRegistryPaymentActiveSlipRepo->findOneBy(['id' => $billRegistryActivePaymentSlipId]);
+            $partialSlip=$brpas->amountRest;
             $amountActive = $brpas->amount;
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
             $tempNote=$p->note;
@@ -133,22 +134,23 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 if($amountPaid==null){
                     $amountPaid=$p->amount;
                 }
-                if($brpas->amountRest==0){
+                $totalRow=$p->amount - $amountPaid;
+                if($partialSlip==0){
                 $brpas->amountRest=$p->amount;
                 }else {
-                    $brpas->amountRest = $p->amount - $amountPaid;
+                    $brpas->amountRest =$totalRow;
                 }
                 $brpas->paymentBillId = $paymentBillId;
                 $brpas->recipientId = $recipientId;
                 $brpas->update();
             }
-            $pbUpdate=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id' => $billRegistryActivePaymentSlipId,'paymentBillId'=>$paymentBillId]);
-            $amountRest=$pbUpdate->amountRest;
-            if($amountRest==0){
-                $pbUpdate->amountRest=$p->amount;
-            }else{
-                $pbUpdate->amountRest=$amountRest-$amountActive;
+            $bpudpate=\Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id'=>$billRegistryActivePaymentSlipId,'paymentBillId'=>$paymentBillId]);
+            $totalRow=$p->amount - $amountPaid;
+            if($partialSlip!=0){
+
+                $bpudpate->amountRest =$totalRow;
             }
+            $bpudpate->update();
 
 
             return 'Associazione e Aggiornamento Eseguiti con successo';
