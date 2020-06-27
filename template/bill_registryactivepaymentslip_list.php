@@ -207,9 +207,6 @@
                                 <th data-slug="impPassive"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Saldo<br>Iniziale Distinta<br>Passiva</th>
-                                <th data-slug="impSaldoPassive"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Saldo<br>Distinta<br>Passiva</th>
                                 <th data-slug="negativeAmount"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Importo<br>a Saldo<br>Distinte<br>Attivo-Passivo</th>
