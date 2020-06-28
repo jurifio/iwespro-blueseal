@@ -82,6 +82,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $brtt = $billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentSlipId' => $billRegistryActivePaymentSlipId]);
             if ($brtt != null) {
                 foreach ($brtt as $payment) {
+
                     $amountActive -= $amountPayment;
                     if ($i == 1) {
                         $bri = $billRegistryInvoiceRepo->findOneBy(['id' => $payment->billRegistryInvoiceId]);
@@ -111,7 +112,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                             $p->note = $tempNote.'<br>compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                             $p->update();
                         }
-                    } elseif ($amountPassive <= 0) {
+                    } elseif ($p->amountPaid <= 0) {
                         $payment->amountPaid = 0;
                         $payment->update();
                         $amountInvoice -= 0;
@@ -131,7 +132,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                     $briUpdate->statusId = 4;
                     $briUpdate->update();
                 }
-                if ($amountActive <= 0) {
+                if ($paAmountPaid > $amountActive) {
                     $brpas->statusId = 2;
                     $brpas->datePayment = $datePayment;
                 } else {
