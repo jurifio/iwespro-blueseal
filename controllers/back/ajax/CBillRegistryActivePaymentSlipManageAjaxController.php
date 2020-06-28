@@ -112,7 +112,7 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                             $p->note = $tempNote.'<br>compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                             $p->update();
                         }
-                    } elseif ($amountPassive <= 0) {
+                    } elseif ($p->amountPaid <= 0) {
                         $payment->amountPaid = 0;
                         $payment->update();
                         $amountInvoice -= 0;
