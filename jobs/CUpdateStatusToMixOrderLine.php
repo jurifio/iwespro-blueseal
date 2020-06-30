@@ -48,7 +48,7 @@ class CUpdateStatusToMixOrderLine extends ACronJob
         $query = "SELECT * from `Order`";
         $order = $orderRepo->findBySql($query,[]);
         foreach ($order as $orders) {
-            if ($orders->remotOrderSellerId != null && $orders->remoteShopSellerId) {
+            if ($orders->remoteOrderSellerId != null && $orders->remoteShopSellerId) {
                 $countStatusWorking = 0;
                 $countStatusShipped = 0;
                 $countStatusCancel = 0;
