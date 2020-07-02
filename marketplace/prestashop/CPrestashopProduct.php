@@ -678,7 +678,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             } catch (\PrestaShopWebserviceException $e) {
                 //if fail to insert quantity delete combination
                 $this->deleteCombination((int)$resourcesCombination->id);
-                \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while insert stock available',$e->getMessage());
+                \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while insert stock available',$e->getMessage().'-'.$e->getLine());
                 return false;
             }
 

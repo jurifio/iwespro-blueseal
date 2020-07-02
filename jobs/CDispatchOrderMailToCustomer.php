@@ -46,6 +46,14 @@ class CDispatchOrderMailToCustomer extends ACronJob
                         $row = [];
                         $row['orderId'] = $line->orderId;
                         $row['orderLineId'] = $line->id;
+                       /*orderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['orderLineId'=>$line->id,'orderId'=>$orderId]);
+                        if($orderLineHasShipment
+                        $shipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['shipmentId'=>$orderLineHasShipment->shipmentId]);
+                        if($shipment!=null){
+                            $row['shipment']=$ship
+                        }*/
+
+
                         $row['productId'] = $line->productId;
                         $row['productVariantId'] = $line->productVariantId;
                         $row['productSizeId'] = $line->productSizeId;
