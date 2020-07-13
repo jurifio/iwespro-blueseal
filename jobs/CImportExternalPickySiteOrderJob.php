@@ -438,6 +438,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                c.userId as userId,
                                                U.`email` AS `email`,
                                                c.cartTypeId as cartTypeId,
+                                               c.pickyCoinsAmountOnCart as pickyCoinsAmountOnCart,
                                                c.billingAddressId as billingAddressId,
                                                c.shipmentAddressId as shipmentAddressId,
                                                c.lastUpdate as lastUpdate,
@@ -465,6 +466,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $insertCart -> userId = $userId;
                             $insertCart -> cartTypeId = $rowCart['cartTypeId'];
                             $insertCart -> lastUpdate = $rowCart['lastUpdate'];
+                            $insertCart -> pickyCoinsAmountOnCart=['pickyCoinsAmountOnCart'];
                             $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
                             $insertCart -> remoteShopSellerId = $shop;
                             $insertCart -> insert();
@@ -560,6 +562,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.paymentDate as paymentDate,
                                                o.lastUpdate as lastUpdate,
                                                o.creationDate as creationDate,
+                                               o.pickyCoinsMovementAmount as pickyCoinsMovementAmount,
                                                o.hasInvoice as hasInvoice,
                                                o.isParallel as isParallel,
                                                o.isOrderMarketplace as isOrderMarketplace,
@@ -584,6 +587,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder = $orderRepo->getEmptyEntity();
                                 $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
                                 $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
+                                if($rowOrder['pickyCoinsMovementAmount']!=null){
+                                   $insertOrder->pickyCoinsMovementAmount = $rowOrder['pickyCoinsMovementAmount'];
+                                }
                                 if ($rowOrder['couponId'] != '') {
                                     $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
                                     if ($FindCoupon != null) {
@@ -671,6 +677,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note,
+                                     ol.pickyCoinsMovementAmount as pickyCoinsMovementAmount,
                                      ol.isParallel as isParallel,
 									 ol.isImport as isImport
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null and ol.isImport=0');
@@ -702,6 +709,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.creationDate as creationDate,
                                      ol.lastUpdate as lastUpdate,
                                      ol.note as note,
+                                     ol.pickyCoinsMovementAmount as pickyCoinsMovementAmount,
                                      ol.isParallel as isParallel,
                                      ol.isImport as isImport   
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null  AND isImport=0');
@@ -749,6 +757,9 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrderLine->creationDate = $rowOrderLine['creationDate'];
                                 $insertOrderLine->lastUpdate = $rowOrderLine['lastUpdate'];
                                 $insertOrderLine->note = $rowOrderLine['note'];
+                                if($rowOrderLine['pickyCoinsMovementAmount']!=null){
+                                    $insertOrderLine->pickyCoinsMovementAmount = $rowOrderLine['pickyCoinsMovementAmount'];
+                                }
                                 $insertOrderLine->remoteOrderLineSellerId = $rowOrderLine['remoteOrderLineSellerId'];
                                 $insertOrderLine->remoteShopSellerId = $shop;
                                 $insertOrderLine->remoteOrderSellerId = $rowOrderLine['remoteOrderSellerId'];
