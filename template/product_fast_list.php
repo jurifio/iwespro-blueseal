@@ -381,7 +381,14 @@
                 data-remote="bs.product.details.merge"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.model.insertIntoProducts"
+                data-tag="a"
+                data-icon="fa-object-group"
+                data-permission="worker"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs-product-model-insertIntoProducts-worker"
+                data-title="Aggiorna I prodotti da un modello"
+                data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.merge"
