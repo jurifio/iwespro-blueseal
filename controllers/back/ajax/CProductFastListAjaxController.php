@@ -230,7 +230,7 @@ class CProductFastListAjaxController extends AAjaxController
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
             $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
-
+            $row['row_pCardUrl'] = (!$val->getProductCardUrl() ? '-' : $val->getProductCardUrl());
             $row['details'] = "";
             foreach ($val->productSheetActual as $k => $v) {
                 if (!is_null($v->productDetail) && !$v->productDetail->productDetailTranslation->isEmpty()) {

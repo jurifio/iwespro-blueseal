@@ -57,7 +57,7 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
     var i = 0;
     var row = [];
     let url = selectedRows[0].row_pCardUrl;
-    let dummyUrl = selectedRows[0].dummyUrl;
+    let dummyUrl = selectedRows[0].dummy;
     let body = '';
     let visibleImg = '';
 
