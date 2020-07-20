@@ -76,7 +76,6 @@ class CProductModelListSupportAjaxController extends AAjaxController
             }
             $row['details'].= '</span>';
             $row['catGroupName'] = (is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->name);
-            $row['macroCatGroupName'] = (is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->name);
             $row['gendName'] = (is_null($val->genderId) ? '-' : $val->productSheetModelPrototypeGender->name);
             $row['matName'] = (is_null($val->materialId) ? '-' : $val->productSheetModelPrototypeMaterial->name);
 
