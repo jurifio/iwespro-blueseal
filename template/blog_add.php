@@ -35,7 +35,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="choosePage">Procedura di Riferimento</label>
-                                                <select id="choosePage">
+                                                <select id="choosePage" data-init-plugin="selectize">
                                                     <option value="">seleziona una Procedura</option>
                                                     <?php foreach ($pag as $key => $val) : ?>
                                                         <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
