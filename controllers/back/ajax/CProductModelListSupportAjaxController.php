@@ -26,20 +26,17 @@ class CProductModelListSupportAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT 
-                    pmpts.id as id,
-                    pmpts.modelCode as code,
-                    pmpts.modelName as name,
-                    pmpts.productName,
-                    pmpts.prototypeName,
-                    pmpts.categoryName as categories,
-                    pmpts.details,
-                    pmpts.catGroupName,
-                    pmpts.gendName,
-                    pmpts.matName
-                    FROM ProductSheetModelPrototypeSupport pmpts
-                     join  ProductSheetModelPrototype psmp on pmpts.id=psmp.id
-                     join  ProductSheetModelPrototypeCategoryGroup psmpcg on psmp.categoryGroupId=psmpcg.id
-                     join  ProductSheetModelPrototypeMacroCategoryGroup psmpmcg on psmpcg.macroCategoryGroupId=psmpmcg.id ";
+                    id,
+                    modelCode as code,
+                    modelName as name,
+                    productName,
+                    prototypeName,
+                    categoryName as categories,
+                    details,
+                    catGroupName,
+                    gendName,
+                    matName
+                    FROM ProductSheetModelPrototypeSupport";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -79,7 +76,7 @@ class CProductModelListSupportAjaxController extends AAjaxController
             }
             $row['details'].= '</span>';
             $row['catGroupName'] = (is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->name);
-            $row['macrocatGroupName'](is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->name);
+            $row['macroCatGroupName'] = (is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->name);
             $row['gendName'] = (is_null($val->genderId) ? '-' : $val->productSheetModelPrototypeGender->name);
             $row['matName'] = (is_null($val->materialId) ? '-' : $val->productSheetModelPrototypeMaterial->name);
 

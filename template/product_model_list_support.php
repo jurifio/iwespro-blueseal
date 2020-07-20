@@ -49,9 +49,9 @@
                                 <th data-slug="details"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Dettagli</th>
-                                <th data-slug="macrocatGroupName"
+                                <th data-slug="macroCatGroupName"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Macro Categorie preImpostate</th>
+                                    data-orderable="true" class="center">Macrocategorie preImpostate</th>
                                 <th data-slug="catGroupName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Categorie preImpostate</th>
