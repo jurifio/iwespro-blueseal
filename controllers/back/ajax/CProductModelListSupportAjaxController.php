@@ -37,9 +37,9 @@ class CProductModelListSupportAjaxController extends AAjaxController
                     pmpts.gendName,
                     pmpts.matName
                     FROM ProductSheetModelPrototypeSupport pmpts
-                    left join  ProductSheetModelPrototype psmp on pmpts.id=psmp.id
-                    left join  ProductSheetModelPrototypeCategoryGroup psmpcg on psmp.categoryGroupId=psmpcg.id
-                    left join  ProductSheetModelPrototypeMacroCategoryGroup psmpmcg on psmpcg.macroCategoryGroupId=psmpmcg.id ";
+                     join  ProductSheetModelPrototype psmp on pmpts.id=psmp.id
+                     join  ProductSheetModelPrototypeCategoryGroup psmpcg on psmp.categoryGroupId=psmpcg.id
+                     join  ProductSheetModelPrototypeMacroCategoryGroup psmpmcg on psmpcg.macroCategoryGroupId=psmpmcg.id ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
