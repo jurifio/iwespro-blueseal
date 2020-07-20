@@ -55,7 +55,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $query = "SELECT pmc.id, pmc.name, pmc.imageUrl AS img, pmc.description AS `desc` FROM  ProductSheetModelPrototypeMacroCategoryGroup pmc ";
             $macroCat = \Monkey::app()->dbAdapter->query($query,[])->fetchAll();
 
-            return json_encode(array_unique($macroCat,SORT_REGULAR));
+            return json_encode($macroCat);
         }
 
 
