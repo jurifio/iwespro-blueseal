@@ -64,7 +64,7 @@
     </div>
 
     <!--<div class=" pull-right">
-        <div class="header-inner">
+        <div class="header-inner">1
             <a href="#" class="btn-link icon-set menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview"></a>
         </div>
     </div>-->
@@ -78,7 +78,7 @@
                 <img src="<?php echo $imgUser; ?>" alt="<?php echo $imgUser; ?>" data-src="<?php echo $imgUser; ?>" data-src-retina="<?php echo $imgUser; ?>" width="55" height="55">
             </div>
             <div class="pull-left p-r-10 p-t-5 fs-14 font-heading">
-                &nbsp;<a href="<?php echo $app->urlFor('blueseal/logout') ?>"  class="btn btn-light" role="button"><i class="fa fa-sign-out" aria-hidden="true"></i>esci</a>
+                &nbsp;<a href="<?php echo $app->urlFor('blueseal/logout') ?>"  class="btn btn-light" style="margin-top:-10px;" role="button"><i class="fa fa-sign-out" aria-hidden="true"></i> esci</a>
             </div>
         </div>
     </div>

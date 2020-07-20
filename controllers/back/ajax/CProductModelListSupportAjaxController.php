@@ -27,16 +27,19 @@ class CProductModelListSupportAjaxController extends AAjaxController
     {
         $sql = "SELECT 
                     id,
-                    modelCode as code,
-                    modelName as name,
-                    productName,
-                    prototypeName,
-                    categoryName as categories,
-                    details,
-                    catGroupName,
-                    gendName,
-                    matName
-                    FROM ProductSheetModelPrototypeSupport";
+                    pmpts.modelCode as code,
+                    pmpts.modelName as name,
+                    pmpts.productName,
+                    pmpts.prototypeName,
+                    pmpts.categoryName as categories,
+                    pmpts.details,
+                    pmpts.catGroupName,
+                    pmpts.gendName,
+                    pmpts.matName
+                    FROM ProductSheetModelPrototypeSupport pmpts
+                    left join  ProductSheetModelPrototype psmp on pmpts.id=psmp.id
+                    left join  ProductSheetModelPrototypeCategoryGroup psmpcg on psmp.categoryGroupId=psmpcg.id
+                    left join  ProductSheetModelPrototypeMacroCategoryGroup psmpmcg on psmpcg.categoryGroupId=psmpmcg.id ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
@@ -76,6 +79,7 @@ class CProductModelListSupportAjaxController extends AAjaxController
             }
             $row['details'].= '</span>';
             $row['catGroupName'] = (is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->name);
+            $row['macrocatGroupName'](is_null($val->categoryGroupId) ?  '-' : $val->productSheetModelPrototypeCategoryGroup->productSheetModelPrototypeMacroCategoryGroup->name);
             $row['gendName'] = (is_null($val->genderId) ? '-' : $val->productSheetModelPrototypeGender->name);
             $row['matName'] = (is_null($val->materialId) ? '-' : $val->productSheetModelPrototypeMaterial->name);
 
