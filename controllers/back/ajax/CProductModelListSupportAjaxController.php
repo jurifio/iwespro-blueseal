@@ -26,7 +26,7 @@ class CProductModelListSupportAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT 
-                    id,
+                    pmpts.id as id,
                     pmpts.modelCode as code,
                     pmpts.modelName as name,
                     pmpts.productName,
