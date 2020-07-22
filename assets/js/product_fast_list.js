@@ -75,6 +75,10 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
             '<div class="alert alertModal"></div>' +
             '<div class="detail-form form-group">' +
             '<div class="detail-modal"' +
+            '<div class="text-modal" style="margin-bottom: 90px">' +
+            '<label style="display: block" for="textSearch">Cosa Vuoi Cercare:</label>' +
+            '<input type="text" value="" id="textSearch" name="textSearch"/>'+
+            '</div>' +
             '<div class="gender-modal" style="margin-bottom: 90px">' +
             '<label style="display: block" for="gender">Genere:</label>' +
             '<select class="gender" name="gender">' +
@@ -123,6 +127,10 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
             '<div class="alert alertModal"></div>' +
             '<div class="detail-form form-group">' +
             '<div class="detail-modal">' +
+            '</div>' +
+            '<div class="text-modal" style="margin-bottom: 90px">' +
+            '<label style="display: block" for="textSearch">Cosa Vuoi Cercare:</label>' +
+            '<input type="text" value="" id="textSearch" name="textSearch"/>'+
             '</div>' +
             '<div class="gender-modal" style="margin-bottom: 90px">' +
             '<label style="display: block" for="gender">Genere:</label>' +
@@ -238,6 +246,7 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
         const dataG = {
             genderId: $('.gender').val(),
             step: 1,
+            textSearch:$('#textSearch').val(),
         };
         $.ajax({
             method: 'get',
