@@ -733,6 +733,7 @@
         $.ajax({
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
+            cache: true,
             data: {
                 table: 'ProductSheetModelPrototypeGender'
             },
@@ -765,6 +766,7 @@
                 method: 'get',
                 url: '/blueseal/xhr/DetailModelGetDetailsFason',
                 data: dataG,
+                cache: true,
                 dataType: 'json'
             }).done(function (res1) {
 
