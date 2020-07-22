@@ -316,6 +316,7 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
         const dataC = {
             genderId: $('.gender').val(),
             macroCategId: $('.categ').val(),
+            textSearch:$('#textSearch').val(),
             step: 2
         };
         $.ajax({

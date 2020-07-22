@@ -840,6 +840,7 @@
             const dataC = {
                 genderId: $('.gender').val(),
                 macroCategId: $('.categ').val(),
+                textSearch:$('#textSearch').val(),
                 step: 2
             };
             $.ajax({
