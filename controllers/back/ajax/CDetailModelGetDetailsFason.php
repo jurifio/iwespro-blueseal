@@ -64,7 +64,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $macroCategId = \Monkey::app()->router->request()->getRequestData('macroCategId');
-                $psmpS2 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ?',[$genderId])->fetchAll();
+                $psmpS2 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? AND name like \'%'.$textSearch.'%\'',[$genderId])->fetchAll();
 
             if (empty($psmpS2)) {
                 return false;
