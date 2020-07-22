@@ -33,7 +33,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
         if ($step == 1) {
             $genderId = \Monkey::app()->router->request()->getRequestData('genderId');
             $materialFilter = \Monkey::app()->router->request()->getRequestData('material');
-            $psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? AND isVisible = 1 AND categoryGroupId IS NOT NULL',[$genderId])->fetchAll();
+            /*$psmpS1 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? AND isVisible = 1 AND categoryGroupId IS NOT NULL',[$genderId])->fetchAll();
 
 
             if (empty($psmpS1)) return false;
@@ -42,16 +42,16 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $cats = [];
 
             /** @var CProductSheetModelPrototype $val */
-            foreach ($psmpS1 as $val) {
+         /*   foreach ($psmpS1 as $val) {
                 $cats[] = $val["categoryGroupId"];
-            }
+            }*/
 
 
-            $catsU = array_unique($cats);
+          //  $catsU = array_unique($cats);
 
             /** @var CRepo $catRepo */
 
-            $cats = implode(',',$catsU);
+           // $cats = implode(',',$catsU);
 
             $query = "SELECT pmc.id, pmc.name, pmc.imageUrl AS img, pmc.description AS `desc` FROM  ProductSheetModelPrototypeMacroCategoryGroup pmc  where pmc.name like '%".$textSearch."%'";
             $macroCat = \Monkey::app()->dbAdapter->query($query,[])->fetchAll();
