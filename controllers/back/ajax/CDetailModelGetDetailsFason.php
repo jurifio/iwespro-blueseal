@@ -27,6 +27,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
     public function get()
     {
         $step = \Monkey::app()->router->request()->getRequestData('step');
+        $textSearch=\Monkey::app()->router->request()->getRequestData('textSearch');
         /** @var CRepo $psmp */
         $psmp = \Monkey::app()->repoFactory->create('ProductSheetModelPrototype');
         if ($step == 1) {
@@ -52,7 +53,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
             $cats = implode(',',$catsU);
 
-            $query = "SELECT pmc.id, pmc.name, pmc.imageUrl AS img, pmc.description AS `desc` FROM  ProductSheetModelPrototypeMacroCategoryGroup pmc ";
+            $query = "SELECT pmc.id, pmc.name, pmc.imageUrl AS img, pmc.description AS `desc` FROM  ProductSheetModelPrototypeMacroCategoryGroup pmc  where pmc.description like '%".$textSearch."%'";
             $macroCat = \Monkey::app()->dbAdapter->query($query,[])->fetchAll();
 
             return json_encode($macroCat);
