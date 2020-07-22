@@ -53,7 +53,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
 
             $cats = implode(',',$catsU);
 
-            $query = "SELECT pmc.id, pmc.name, pmc.imageUrl AS img, pmc.description AS `desc` FROM  ProductSheetModelPrototypeMacroCategoryGroup pmc  where pmc.description like '%".$textSearch."%'";
+            $query = "SELECT pmc.id, pmc.name, pmc.imageUrl AS img, pmc.description AS `desc` FROM  ProductSheetModelPrototypeMacroCategoryGroup pmc  where pmc.name like '%".$textSearch."%'";
             $macroCat = \Monkey::app()->dbAdapter->query($query,[])->fetchAll();
 
             return json_encode($macroCat);
