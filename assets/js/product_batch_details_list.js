@@ -599,7 +599,7 @@
                 '<div class="detail-modal"' +
                 '<div class="text-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="textSearch">Cosa Vuoi Cercare:</label>' +
-                '<input type="text" value="" id="textSearch" name="textSearch" style="width: 70%">'
+                '<input type="text" value="" id="textSearch" name="textSearch" style="width: 70%">'+
                 '</div>' +
                 '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
@@ -652,7 +652,7 @@
                 '</div>' +
                 '<div class="text-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="textSearch">Cosa Vuoi Cercare:</label>' +
-                '<input type="text" value="" id="textSearch" name="textSearch" style="width: 70%">'
+                '<input type="text" value="" id="textSearch" name="textSearch" style="width: 70%">'+
                 '</div>' +
                 '<div class="gender-modal" style="margin-bottom: 90px">' +
                 '<label style="display: block" for="gender">Genere:</label>' +
