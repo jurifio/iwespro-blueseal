@@ -66,7 +66,7 @@ class CDetailModelGetDetailsFason extends AAjaxController
             $macroCategId = \Monkey::app()->router->request()->getRequestData('macroCategId');
             $textSearch=\Monkey::app()->router->request()->getRequestData('textSearch');
 
-                $psmpS2 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? ',[$genderId])->fetchAll();
+               /* $psmpS2 = \Monkey::app()->dbAdapter->query('SELECT categoryGroupId FROM ProductSheetModelPrototype WHERE genderId = ? ',[$genderId])->fetchAll();
 
             if (empty($psmpS2)) {
                 return false;
@@ -74,17 +74,17 @@ class CDetailModelGetDetailsFason extends AAjaxController
                 $cats1 = [];
 
                 /** @var CProductSheetModelPrototype $val */
-                foreach ($psmpS2 as $val) {
+            /*    foreach ($psmpS2 as $val) {
                     $cats1[] = $val['categoryGroupId'];
                 }
-            }
+            }*/
 
-            $catsU = array_unique($cats1);
+          /*  $catsU = array_unique($cats1);
 
             /** @var CRepo $catRepo */
-            $cats = implode(',', $catsU);
+        /*    $cats = implode(',', $catsU);
 
-                $catsone = substr($cats,1);
+                $catsone = substr($cats,1);*/
 
             $query = "SELECT p.id, p.name, p.imageUrl AS img, p.description AS `desc` 
                       FROM ProductSheetModelPrototypeCategoryGroup p WHERE  p.macroCategoryGroupId =".$macroCategId. "  AND p.name like '%".$textSearch."%'";
