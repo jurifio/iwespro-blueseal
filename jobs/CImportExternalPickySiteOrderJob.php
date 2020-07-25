@@ -390,10 +390,10 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                     $checkCouponIfExist = $couponRepo -> findOneBy(['remoteId' => $rowCoupon['remoteId'], 'remoteShopId' => $shop]);
                     if ($checkCouponIfExist == null) {
                         $couponInsert = $couponRepo -> getEmptyEntity();
-                        if($rowCoupon['userId']!=null) {
+                       /* if($rowCoupon['userId']!=null) {
                             $checkUserIfExist = $userRepo->findOneBy(['email' => $rowCoupon['email']]);
                             $couponInsert -> userId = $checkUserIfExist->id;
-                        }
+                        }*/
                             $checkCouponTypeIfExist = $couponTypeRepo -> findOneBy(['remoteId' => $rowCoupon['couponTypeId'], 'remoteShopId' => $shop]);
                            if($rowCoupon['couponEventId']!=null) {
                                $checkCouponEventIfExist = $couponEventRepo->findOneBy(['remoteId' => $rowCoupon['couponEventId'],'remoteShopId' => $shop]);
