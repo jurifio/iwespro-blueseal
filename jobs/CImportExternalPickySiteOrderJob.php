@@ -466,7 +466,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $insertCart -> userId = $userId;
                             $insertCart -> cartTypeId = $rowCart['cartTypeId'];
                             $insertCart -> lastUpdate = $rowCart['lastUpdate'];
-                            $insertCart -> pickyCoinsAmountOnCart=['pickyCoinsAmountOnCart'];
+                            $insertCart -> pickyCoinsAmountOnCart=$rowCart['pickyCoinsAmountOnCart'];
                             $insertCart -> remoteCartSellerId = $rowCart['remoteCartSellerId'];
                             $insertCart -> remoteShopSellerId = $shop;
                             $insertCart -> insert();
