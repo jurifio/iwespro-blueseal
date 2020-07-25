@@ -486,7 +486,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
             }
 
             /***** inserimento righe carrello *********/
-       /*     try {
+            try {
                 $stmtCartLine = $db_con -> prepare('SELECT
                                             cl.id as remoteCartLineSellerId,
                                             cl.cartId as remoteCartId,
@@ -527,7 +527,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                 $stmtCartLineUpdate->execute();
             } catch (\throwable $e) {
                 $this -> report('CImportExternalPickySiteOrderJob', 'error', 'Errore CartLine ' . $e);
-            }*/
+            }
 
             try {
                 /***inserimento ordini */
@@ -587,9 +587,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder = $orderRepo->getEmptyEntity();
                                 $insertOrder->orderPaymentMethodId = $rowOrder['orderPaymentMethodId'];
                                 $insertOrder->orderShippingmethodId = $rowOrder['orderShippingMethodId'];
-                                if($rowOrder['pickyCoinsMovementAmount']!=null){
-                                   $insertOrder->pickyCoinsMovementAmount = $rowOrder['pickyCoinsMovementAmount'];
-                                }
+                                $insertOrder->pickyCoinsMovementAmount = $rowOrder['pickyCoinsMovementAmount'];
+
                                 if ($rowOrder['couponId'] != '') {
                                     $FindCoupon = $couponRepo->findOneBy(['remoteId' => $rowOrder['couponId'], 'remoteShopId' => $shop]);
                                     if ($FindCoupon != null) {
@@ -757,9 +756,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrderLine->creationDate = $rowOrderLine['creationDate'];
                                 $insertOrderLine->lastUpdate = $rowOrderLine['lastUpdate'];
                                 $insertOrderLine->note = $rowOrderLine['note'];
-                                if($rowOrderLine['pickyCoinsMovementAmount']!=null){
-                                    $insertOrderLine->pickyCoinsMovementAmount = $rowOrderLine['pickyCoinsMovementAmount'];
-                                }
+                                $insertOrderLine->pickyCoinsMovementAmount = $rowOrderLine['pickyCoinsMovementAmount'];
                                 $insertOrderLine->remoteOrderLineSellerId = $rowOrderLine['remoteOrderLineSellerId'];
                                 $insertOrderLine->remoteShopSellerId = $shop;
                                 $insertOrderLine->remoteOrderSellerId = $rowOrderLine['remoteOrderSellerId'];
