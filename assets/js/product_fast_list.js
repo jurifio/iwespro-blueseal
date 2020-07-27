@@ -76,7 +76,7 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
             '<div class="detail-form form-group">' +
             '<div class="detail-modal"' +
             '<div class="text-modal" style="margin-bottom: 90px">' +
-            '<label style="display: block" for="textSearch">Cosa Vuoi Cercare:</label>' +
+            '<label style="display: block" for="textSearch">Cosa Vuoi Cercare(utilizza solo una parola):</label>' +
             '<input type="text" value="" id="textSearch" name="textSearch"/>'+
             '</div>' +
             '<div class="gender-modal" style="margin-bottom: 90px">' +
@@ -129,7 +129,7 @@ $(document).on('bs-product-model-insertIntoProducts-worker', function (e, elemen
             '<div class="detail-modal">' +
             '</div>' +
             '<div class="text-modal" style="margin-bottom: 90px">' +
-            '<label style="display: block" for="textSearch">Cosa Vuoi Cercare:</label>' +
+            '<label style="display: block" for="textSearch">Cosa Vuoi Cercare(utilizza solo una parola):</label>' +
             '<input type="text" value="" id="textSearch" name="textSearch"/>'+
             '</div>' +
             '<div class="gender-modal" style="margin-bottom: 90px">' +
