@@ -14,6 +14,65 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center" style="padding-top: 130px;">
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="detailLabelId">Seleziona l'etichetta Dettagli</label>
+                                    <select id="detailLabelId" name="detailLabelId"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+                                        <?php echo '<option   value="">Seleziona</option>';
+                                        foreach ($detailLabel as $label) {
+                                            if ($label->name == $detailLabelId) {
+                                                echo '<option  selected="selected" value="' . $label->name . '">' . $label->name . '</option>';
+                                            } else {
+                                                echo '<option  value="' . $label->name . '">' . $label->name . '</option>';
+                                            }
+                                        }; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                    <label for="selectDefine">Condizione Se(Valore Dettaglio)</label>
+                                    <select id="selectDefine" name="selectDefine"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+
+                                        <option value="">seleziona se</option>
+                                        <?if ($selectDefine==1){
+                                        echo '<option selected="selected" value="1">Contiene</option>';
+                                        }else{
+                                        echo '<option  value="1">Contiene</option>';
+                                        }
+                                        if ($selectDefine==0){
+                                        echo '<option selected="selected" value="0">Non Contiene</option>';
+                                        }else{
+                                        echo '<option  value="0"> Non Contiene</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default">
+                                    <label for="textDefine">Testo Valore Dettaglio</label>
+                                    <input type="text" id="textDefine" name="textDefine" value="<?php echo $textDefine?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -23,13 +82,34 @@
                                data-controller="ProductModelRevertListSupportAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 250, 1000, 1500, 2000">
+                               data-detailLabelId="<?php echo $detailLabelId?>"
+                               data-selectDefine="<?php echo $selectDefine?>"
+                               data-textDefine="<?php echo $textDefine?>"
+                               data-length-menu-setup="10,20,50, 100, 250, 1000, 1500, 2000">
                             <thead>
                             <tr>
                                 <th data-slug="id"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">id</th>
+                                <th data-slug="gendName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Genere</th>
+                                <th data-slug="macroCategory"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">MacroCategoria</th>
+                                <th data-slug="imageUrlMacroCategory"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Immagine MacroCategoria</th>
+                                <th data-slug="catGroupName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categoria</th>
+                                <th data-slug="imageUrlCategory"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Immagine Categoria</th>
+                                <th data-slug="matName"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Materiale</th>
                                 <th data-slug="code"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -43,21 +123,14 @@
                                 <th data-slug="prototypeName"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Scheda Prodotto</th>
-                                <th data-slug="categories"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center categoryFilterType">Categorie</th>
                                 <th data-slug="details"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Dettagli</th>
-                                <th data-slug="catGroupName"
+                                <th data-slug="categories"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Categorie preImpostate</th>
-                                <th data-slug="gendName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Genere</th>
-                                <th data-slug="matName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Materiale</th>
+                                    data-orderable="true" class="center categoryFilterType">Categorie<br>di<br>navigazione</th>
+
+
                             </tr>
                             </thead>
                             <tbody>

@@ -30,12 +30,13 @@
                                 <input type="hidden" data-json="PostTranslation.langId" value="1"/>
                             </div>
                             <div class="panel-body clearfix">
-                                <div id="divPage" class="hide">
-                                    <div class="row">
-                                        <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div id="divPage" class="hide">
+
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="choosePage">Procedura di Riferimento</label>
-                                                <select id="choosePage" data-init-plugin="selectize">
+                                                <select style="width:60%" id="choosePage" data-init-plugin="selectize">
                                                     <option value="">seleziona una Procedura</option>
                                                     <?php foreach ($pag as $key => $val) : ?>
                                                         <option value="<?php echo $key; ?>"><?php echo $val; ?></option>

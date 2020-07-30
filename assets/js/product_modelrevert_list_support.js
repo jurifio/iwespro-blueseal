@@ -1,4 +1,26 @@
+$('#btnsearchplus').click(function() {
+    var string='';
+     var detailLabelId = $('#detailLabelId').val();
+     if(detailLabelId!=''){
+         string=string +'detaillabelid='+detailLabelId;
+     }else{
+         string=string+'detaillabelid=notSet';
+     }
+     var selectDefine=$('#selectDefine').val();
+     if(selectDefine!=''){
+         string=string+'&selectdefine='+selectDefine;
+     }
 
+    var textDefine = $('#textDefine').val();
+    if (textDefine!='') {
+        string=string+ '&textdefine='+textDefine;
+    }
+
+
+    var url = '/blueseal/prodotti/modelli/revert/support?' + string;
+
+    window.location.href = url;
+});
 
 $(document).on('bs.pub.product', function (e, element, button) {
 

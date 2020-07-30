@@ -34,6 +34,10 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Cover</th>
+                                <th data-slug="typeBlog"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Tipp Blog</th>
                                 <th data-slug="title"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -47,6 +51,10 @@
                                     data-orderable="true"
                                     data-default-order="desc"
                                     class="center dataFilterType">Creazione</th>
+                                <th data-slug="url"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Url Post</th>
                                 <th data-slug="publishDate"
                                     data-searchable="true"
                                     data-orderable="true"

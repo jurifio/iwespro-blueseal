@@ -28,10 +28,29 @@ class CProductModelRevertListSupportController extends ARestrictedAccessRootCont
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_modelrevert_list_support.php');
-
+        $detailLabel=\Monkey::app()->repoFactory->create('ProductDetailLabelTranslation')->findBy(['langId'=>1]);
+        if(isset($_GET['detaillabelid'])) {
+            $detailLabelId=$_GET['detaillabelid'];
+        }else{
+            $detailLabelId='notSet';
+        }
+        if(isset($_GET['selectdefine'])) {
+            $selectDefine=$_GET['selectdefine'];
+        }else{
+            $selectDefine='';
+        }
+        if(isset($_GET['textdefine'])) {
+            $textDefine=$_GET['textdefine'];
+        }else{
+            $textDefine='';
+        }
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
+            'detailLabelId'=>$detailLabelId,
+            'detailLabel'=>$detailLabel,
+            'selectDefine'=>$selectDefine,
+            'textDefine'=>$textDefine,
             'sidebar' => $this->sidebar->build()
         ]);
     }
