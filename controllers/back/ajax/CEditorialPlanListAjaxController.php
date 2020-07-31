@@ -32,7 +32,7 @@ class CEditorialPlanListAjaxController extends AAjaxController
 
             /** @var CEditorialPlan $editorialPlan */
             $editorialPlan = $editorialPlanRepo->findOneBy(['id' => $row["id"] ]);
-
+            $row['row_id']=$row['id'];
             $row['id'] = '<a href="' . $opera . $editorialPlan->id . '">' . $editorialPlan->id . '</a>';
 
 

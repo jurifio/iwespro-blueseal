@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jurif
- * Date: 06/04/2018
- * Time: 16:55
- */
+
 
 namespace bamboo\controllers\back\ajax;
 
@@ -13,6 +8,20 @@ use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CShooting;
+
+/**
+ * Class CEditorialPlanDetailViewAllListAjaxController
+ * @package bamboo\controllers\back\ajax
+ *
+ * @author Iwes Team <it@iwes.it>
+ *
+ * @copyright (c) Iwes  snc - All rights reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * @date 31/07/2020
+ * @since 1.0
+ */
 
 class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
 {
@@ -46,12 +55,13 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
 
 
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $opera = $blueseal . "editorial/editoriale-pianodettagli-lista/";
+        $opera = $blueseal . "editorial/editorial-pianodettagli-lista/";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
             /** @var CEditorialPlan $editorialPlan */
             $editorialPlan = $editorialPlanRepo->findOneBy(['id' => $row["editorialPlanId"] ]);
+            $row['row_id']=$row['id'];
 
             $row['id'] = '<a href="' . $opera . $editorialPlan->id . '" >' . $row['id']. '</a>';
 

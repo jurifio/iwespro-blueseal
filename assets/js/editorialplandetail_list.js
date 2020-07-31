@@ -847,6 +847,11 @@
                         '<div><p>Cancella il Dettaglio</p></div>' +
                         '<input type="button" class="btn-success" id="deleteDetail" name="deleteDetail" value="Cancella il Dettaglio del Piano"' +
                         '</div>' +
+                            '<div class="form-group form-group-default required">' +
+                            '<label for="cloneDetail">Cancellazione</label>' +
+                            '<div><p>Cancella il Dettaglio</p></div>' +
+                            '<input type="button" class="btn-success" id="cloneDetail" name="cloneDetail" value="Clona il Dettaglio del Piano"' +
+                            '</div>' +
                         '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
                         '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
                     });
@@ -945,6 +950,44 @@
                                         title: title,
                                         note: note,
 
+
+                                    },
+
+
+                                    //  data: {editorialPlanDetailId:editorialPlanDetailId},
+                                    success: function (res) {
+                                        alert(res);
+                                        calendar.fullCalendar('refetchEvents');
+
+                                    }
+
+                                }
+                            );
+                            bsModal2.hide();
+                            window.location.reload();
+                        }
+                    });
+                    $("#cloneDetail").click(function () {
+                        if (confirm("Sei Sicuro di Clonare il Dettaglio del Piano Editoriale?")) {
+                            /*   var title = event.title;
+                               var editorialPlanDetailId = event.id;
+                               var startEventDate = event.start;
+                               var endEventDate = event.end;
+                               var argument = event.argument;
+                               var description = event.description;
+                               var photoUrl = event.photoUrl;
+                               var status = event.status;
+                               var note = event.note;
+                               var notify socialId = event.socialId;
+           */
+                            var url1 = window.location.href;
+                            var editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
+                            $.ajax({
+                                    url: "/blueseal/xhr/EditorialPlanDetailCloneAjaxController",
+                                    type: "put",
+                                    data: {
+                                        editorialPlanId: editorialPlanId,
+                                        editorialPlanDetailId: editorialPlanDetailId,
 
                                     },
 
@@ -1353,6 +1396,7 @@
 
         }
     }
+
 
 })
 (jQuery);

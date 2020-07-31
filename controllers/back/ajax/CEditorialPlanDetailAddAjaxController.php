@@ -29,10 +29,16 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
     {
         $data = \Monkey::app()->router->request()->getRequestData();
         $title = $data['title'];
+        if($title==''){
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> titolo non compilato</i>';
+        }
         $isEventVisible = $data['isEventVisible'];
         $startEventDate = $data['start'];
         $endEventDate = $data['end'];
         $argument = $data['argument'];
+        if($argument==''){
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
+        }
         $isVisibleEditorialPlanArgument = $data['isVisibleEditorialPlanArgument'];
         $isVisiblePhotoUrl = $data['isVisiblePhotoUrl'];
         $bodyEvent = $data['bodyEvent'];
@@ -45,6 +51,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $photoUrl = (array_key_exists('photoUrl',$data))? $data['photoUrl' ]: '';
         $unlinkphoto =[];
         $status = $data['status'];
+        if($status==''){
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Non hai selezionato lo stato</i>';
+        }
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
         $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d H:i:s');
