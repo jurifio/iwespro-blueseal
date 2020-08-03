@@ -1,7 +1,7 @@
 (function ($) {
     var eventColor;
     var obj = null;
-    var typeView=1;
+    var typeView = 1;
     $(document).ready(function () {
         $(this).trigger('bs.load.photo');
         createcalendar(obj, 1);
@@ -13,7 +13,7 @@
 
 
             $.each(ret.social, function (k, v,) {
-                $('#filterMedia').append('<div style ="background-color:'+ret.socialcolor[k]+';"><i class="'+ret.socialicon[k]+'"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</i></div>');
+                $('#filterMedia').append('<div style ="background-color:' + ret.socialcolor[k] + ';"><i class="' + ret.socialicon[k] + '"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</i></div>');
             });
 
 
@@ -77,7 +77,7 @@
         $('#appendDetailedChekbox').empty();
         $('#appendSinteticChekbox').empty();
         $('#appendDetailedChekbox').append('<i class="fa fa-check"></i>');
-        typeView=1;
+        typeView = 1;
 
         let checkedSocial = [];
         let checkedSocialName = [];
@@ -119,7 +119,7 @@
         $('#appendDetailedChekbox').empty();
         $('#appendSinteticChekbox').empty();
         $('#appendSinteticChekbox').append('<i class="fa fa-check"></i>');
-        typeView=2;
+        typeView = 2;
 
         let checkedSocial = [];
         let checkedSocialName = [];
@@ -224,8 +224,8 @@
                     var bgRender = "#ffffff";
                     var bgTitle = "#ffffff";
 
-                    eventColor="";
-                    bgTitle='<div style="background-color:'+event.color+';color:black;">';
+                    eventColor = "";
+                    bgTitle = '<div style="background-color:' + event.color + ';color:black;">';
                     switch (event.status) {
                         case "Bozza":
                             bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
@@ -247,13 +247,13 @@
                     }
 
 
-                    var linkimg="";
-                    var link  =event.photoUrl.split(",");
-                    link.forEach(function(element) {
-                        linkimg=linkimg + ' <img width="80px" src="' + element + '">';
+                    var linkimg = "";
+                    var link = event.photoUrl.split(",");
+                    link.forEach(function (element) {
+                        linkimg = linkimg + ' <img width="80px" src="' + element + '">';
 
                     });
-                    if(typeView==1) {
+                    if (typeView == 1) {
                         element.find('.fc-title').append(bgTitle +
                             '<b>' + event.argumentName +
                             ' | ' + event.titleEditorialPlan +
@@ -261,20 +261,19 @@
                             ' | ' + event.status + '</b></div>' + bgRender +
                             '<br><b>' + event.note + '</b><br>' + linkimg +
                             '</div>');
-                    }else{
+                    } else {
                         element.find('.fc-title').append(bgTitle +
                             '<b>' + event.argumentName +
                             ' | ' + event.titleEditorialPlan +
                             ' | ' + event.socialName +
-                            ' | ' + event.status +'</b><br>'+ bgRender +
+                            ' | ' + event.status + '</b><br>' + bgRender +
                             '<br></div>');
                     }
 
 
-
                     //'"<br/><b>Immagine:</b><img width="20px" src="' + event.photoUrl + '"></div>');
                 },
-                textColor:'black',
+                textColor: 'black',
                 editable: true,
                 selectable: true,
                 selectable: true,
@@ -296,10 +295,10 @@
                         okButton.off();
                     });
                     cancelButton.remove();
-                    var photogroup="";
+                    var photogroup = "";
                     let bodyContent =
                         '<div class="col-md-3">' +
-                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
+                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
                         '<label for=\"file\">Immagine Evento</label>' +
                         '<div class=\"fallback\">' +
@@ -310,8 +309,8 @@
                         '</div>' +
 
                         '</form>';
-                    $('#photoUrl').change(function() {
-                        photogroup =$('#photoUrl').val();
+                    $('#photoUrl').change(function () {
+                        photogroup = $('#photoUrl').val();
                     });
                     body.html(bodyContent);
 
@@ -319,165 +318,172 @@
                     var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY HH:mm:ss");
                     let bsModal1 = new $.bsModal('Invio', {
                         body: '<p>Inserisci un Evento per il Piano Editoriale</p>' +
-                        '<div class=\"row\">' +
-                        '<div class="col-md-3">' +
-                        '<div class="form-group form-group-default selectize-enabled">' +
-                        '<label for="editorialPlanArgumentId">Argomento Evento</label>' +
-                        '<select id="editorialPlanArgumentId"' +
-                        ' name="editorialPlanArgumentId" class="full-width selectpicker"' +
-                        ' required="required"' +
-                        ' placeholder="Selezione l\'argomento da utilizzare"' +
-                        ' data-init-plugin="selectize"></select>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleEditorialPlanArgument\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleEditorialPlanArgument\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" checked="true" name=\"isVisibleEditorialPlanArgument\" ">' +
-                        '</div>' +
-                        '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class="col-md-3">' +
+                            '<div class="form-group form-group-default selectize-enabled">' +
+                            '<label for="editorialPlanArgumentId">Argomento Evento</label>' +
+                            '<select id="editorialPlanArgumentId"' +
+                            ' name="editorialPlanArgumentId" class="full-width selectpicker"' +
+                            ' required="required"' +
+                            ' placeholder="Selezione l\'argomento da utilizzare"' +
+                            ' data-init-plugin="selectize"></select>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleEditorialPlanArgument\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleEditorialPlanArgument\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" checked="true" name=\"isVisibleEditorialPlanArgument\" ">' +
+                            '</div>' +
+                            '</div>' +
 
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"titleEvent\">Titolo Azione Evento</label>' +
-                        '<input id=\"titleEvent\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci il titolo\" name=\"titleEvent\" required=\"required\">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isEventVisible\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isEventVisible\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" checked="true" name=\"isEventVisible\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"description\">Descrizione Evento</label>' +
-                        '<input id=\"description\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci la descrizione \" name=\"description\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleDescription\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" checked="true" name=\"isVisibleDescription\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        bodyContent+
-                        /*'<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
-                        '<div class="fallback">'+
-                        '<input name="photoUrl" id="photoUrl" type="file" multiple />' +
-                        '</div>' +
-                        '</form>'+*/
-                        /* '<div class=\"col-md-3\">' +
-                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                         '<label for=\"photoUrl\">Immagine Evento</label>' +
-                         '<input type=\"text\" id=\"photoUrl\" class=\"form-control\"' +
-                         'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
-                         '</div>' +
-                         '</div>' +*/
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisiblePhotoUrl\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" checked="true" name=\"isVisiblePhotoUrl\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-9\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"bodyEvent\">Testo Evento</label>' +
-                        '<textarea id="bodyEvent" cols="150" rows="10" name="bodyEvent" placeholder="Inserisci il testo"></textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleBodyEvent\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleBodyEvent\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" checked="true" name=\"isVisibleBodyEvent\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-6\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"note\">Note Evento </label>' +
-                        '<textarea id="note" cols="100" rows="10" name="note" placeholder="Inserisci le note"></textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleNote\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleNote\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" checked="true" name=\"isVisibleNote\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        ' <div class="col-md-3">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\" name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Selezione il media da associare\"' +
-                        'data-init-plugin=\"selectize\"></select>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-6\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"startEventDate\">Data  Inizio Evento </label>' +
-                        '<input  type =\'datetime\'   id=\"startEventDate\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-6\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"endEventDate\">Data Fine Evento </label>' +
-                        '<input  type =\'datetime\'  id=\"endEventDate\" class=\"form-control\"' +
-                        'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                        '<div class="col-md-6">' +
-                        '<div class="form-group form-group-default selectize-enabled">' +
-                        '<label for="status">Seleziona lo Stato</label>' +
-                        '<select id="status" name="status" required="required"' +
-                        'class="full-width selectpicker"' +
-                        'placeholder="Seleziona lo stato"' +
-                        'data-init-plugin="selectize">' +
-                        '<option value="new">Stato</option>' +
-                        '<option value="Draft">Bozza</option>' +
-                        '<option value="Approved">Approvata</option>' +
-                        '<option value="Rejected">Rifiutata</option>' +
-                        '<option value="Published">Pubblicata</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="col-md-6">' +
-                        '<div class="form-group form-group-default selectize-enabled">' +
-                        '<label for="notifyEmail">Notificare al Cliente</label>' +
-                        '<select id="notifyEmail" name="notifyEmail" required="required"' +
-                        'class="full-width selectpicker"' +
-                        'placeholder="Seleziona"' +
-                        'data-init-plugin="selectize">' +
-                        '<option value="notNotify">Non Inviare la Notifica</option>' +
-                        '<option value="yesNotify">Invia la Notifica</option>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"titleEvent\">Titolo Azione Evento</label>' +
+                            '<input id=\"titleEvent\" class=\"form-control\"' +
+                            'placeholder=\"Inserisci il titolo\" name=\"titleEvent\" required=\"required\">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isEventVisible\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isEventVisible\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" checked="true" name=\"isEventVisible\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"description\">Descrizione Evento</label>' +
+                            '<input id=\"description\" class=\"form-control\"' +
+                            'placeholder=\"Inserisci la descrizione \" name=\"description\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleDescription\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" checked="true" name=\"isVisibleDescription\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            bodyContent +
+                            /*'<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
+                            '<div class="fallback">'+
+                            '<input name="photoUrl" id="photoUrl" type="file" multiple />' +
+                            '</div>' +
+                            '</form>'+*/
+                            /* '<div class=\"col-md-3\">' +
+                             '<div class=\"form-group form-group-default selectize-enabled\">' +
+                             '<label for=\"photoUrl\">Immagine Evento</label>' +
+                             '<input type=\"text\" id=\"photoUrl\" class=\"form-control\"' +
+                             'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" ">' +
+                             '</div>' +
+                             '</div>' +*/
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisiblePhotoUrl\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" checked="true" name=\"isVisiblePhotoUrl\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"linkDestination\">Link Destinazione</label>' +
+                            '<input id=\"linkDestination\" class=\"form-control\"' +
+                            'placeholder=\"Inserisci la destinazione \" name=\"linkDestination\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"bodyEvent\">Testo Evento</label>' +
+                            '<textarea id="bodyEvent" cols="100" rows="10" name="bodyEvent" placeholder="Inserisci il testo"></textarea>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleBodyEvent\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleBodyEvent\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" checked="true" name=\"isVisibleBodyEvent\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"note\">Note Evento </label>' +
+                            '<textarea id="note" cols="100" rows="10" name="note" placeholder="Inserisci le note"></textarea>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleNote\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleNote\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" checked="true" name=\"isVisibleNote\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            ' <div class="col-md-3">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\" name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Selezione il media da associare\"' +
+                            'data-init-plugin=\"selectize\"></select>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"startEventDate\">Data  Inizio Evento </label>' +
+                            '<input  type =\'datetime\'   id=\"startEventDate\" class=\"form-control\"' +
+                            'placeholder=\"Inserisci la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"endEventDate\">Data Fine Evento </label>' +
+                            '<input  type =\'datetime\'  id=\"endEventDate\" class=\"form-control\"' +
+                            'placeholder=\"Inserisci la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="row">' +
+                            '<div class="col-md-6">' +
+                            '<div class="form-group form-group-default selectize-enabled">' +
+                            '<label for="status">Seleziona lo Stato</label>' +
+                            '<select id="status" name="status" required="required"' +
+                            'class="full-width selectpicker"' +
+                            'placeholder="Seleziona lo stato"' +
+                            'data-init-plugin="selectize">' +
+                            '<option value="new">Stato</option>' +
+                            '<option value="Draft">Bozza</option>' +
+                            '<option value="Approved">Approvata</option>' +
+                            '<option value="Rejected">Rifiutata</option>' +
+                            '<option value="Published">Pubblicata</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="col-md-6">' +
+                            '<div class="form-group form-group-default selectize-enabled">' +
+                            '<label for="notifyEmail">Notificare al Cliente</label>' +
+                            '<select id="notifyEmail" name="notifyEmail" required="required"' +
+                            'class="full-width selectpicker"' +
+                            'placeholder="Seleziona"' +
+                            'data-init-plugin="selectize">' +
+                            '<option value="notNotify">Non Inviare la Notifica</option>' +
+                            '<option value="yesNotify">Invia la Notifica</option>' +
 
-                        '</select>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="form-group form-group-default required">' +
-                        '<label for="okSend">Invio</label>' +
-                        '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
-                        '</div>' +
-                        '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
+                            '</select>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group form-group-default required">' +
+                            '<label for="okSend">Invio</label>' +
+                            '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
+                            '</div>' +
+                            '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
                     });
-                    var photoUrl =[];
+                    var photoUrl = [];
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
@@ -488,7 +494,7 @@
                     $('#isVisibleNote').prop('checked', true);
                     $('#isVisibleBodyEvent').prop('checked', true);
                     $('#isVisiblePhotoUrl').prop('checked', true);
-                    let dropzone = new Dropzone("#dropzoneModal",{
+                    let dropzone = new Dropzone("#dropzoneModal", {
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
                         maxFilesize: 5,
@@ -497,19 +503,19 @@
                         acceptedFiles: "image/jpeg",
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
-                        sending: function(file, xhr, formData) {
+                        sending: function (file, xhr, formData) {
 
                         }
                     });
 
-                    dropzone.on('addedfile',function(file){
+                    dropzone.on('addedfile', function (file) {
                         okButton.attr("disabled", "disabled");
-                        let urlimage="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
-                        let filename=file.name;
-                        let image =urlimage+filename;
+                        let urlimage = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+                        let filename = file.name;
+                        let image = urlimage + filename;
                         photoUrl.push(image);
                     });
-                    dropzone.on('queuecomplete',function(){
+                    dropzone.on('queuecomplete', function () {
                         okButton.removeAttr("disabled");
                         $(document).trigger('bs.load.photo');
                     });
@@ -566,7 +572,7 @@
 
                         const data = {
                             title: $('#titleEvent').val(),
-                            start: start ,
+                            start: start,
                             end: end,
                             argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
@@ -577,6 +583,7 @@
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
                             notifyEmail: $('#notifyEmail').val(),
+                            linkDestination:$('#linkDestination').val(),
                             isEventVisible: isEvVisible,
                             isVisibleEditorialPlanArgument: isVisEdPlanArg,
                             isVisiblePhotoUrl: isVisPhoto,
@@ -606,7 +613,6 @@
                     });
 
 
-
                 },
                 editable: true,
                 eventClick: function (event) {
@@ -622,6 +628,7 @@
                     var bodyEvent = event.bodyEvent;
                     var isVisibleBodyEvent = event.isVisibleBodyEvent;
                     var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
+                    var linkDestination=event.linkDestination;
                     var photoUrl = event.photoUrl;
                     var status = event.status;
                     var selectedDraft = "";
@@ -662,19 +669,19 @@
                         okButton.off();
                     });
                     cancelButton.remove();
-                    var linkimg="";
-                    var link  =event.photoUrl.split(",");
-                    link.forEach(function(element) {
-                        linkimg=linkimg + '<br/><img width="150px" src="' + element + '">';
+                    var linkimg = "";
+                    var link = event.photoUrl.split(",");
+                    link.forEach(function (element) {
+                        linkimg = linkimg + '<br/><img width="150px" src="' + element + '">';
                     });
 
 
-                    var photogroup="";
+                    var photogroup = "";
                     let bodyContent =
                         '<div class="col-md-3">' +
-                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">'+
+                        '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" id="photoUrl" name="photoUrl" action="POST">' +
                         '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
+                        '<label for=\"file\">Immagine Evento' + linkimg + '</label>' +
                         '<div class=\"fallback\">' +
                         //'<label for=\"file\">Immagine Evento'+linkimg+'</label>' +
                         '<input name="file1" type="file" multiple />' +
@@ -683,8 +690,8 @@
                         '</div>' +
 
                         '</form>';
-                    $('#photoUrl').change(function() {
-                        photogroup =$('#photoUrl').val();
+                    $('#photoUrl').change(function () {
+                        photogroup = $('#photoUrl').val();
                     });
                     body.html(bodyContent);
 
@@ -693,172 +700,179 @@
                     var end = $.fullCalendar.formatDate(event.end, "DD-MM-YYYY HH:mm:ss");
                     let bsModal2 = new $.bsModal('Invio', {
                         body: '<p>Modifica l\'evento per il Piano Editoriale</p>' +
-                        '<div class=\"row\">' +
-                        '<div class="col-xs-3">' +
-                        '<div class="form-group form-group-default selectize-enabled">' +
-                        '<label for="editorialPlanArgumentId">Argomento Evento</label>' +
-                        '<select id="editorialPlanArgumentId" name="editorialPlanArgumentId" class="full-width selectpicker"' +
-                        'placeholder="Selezione l\' argomento da utilizzare"' +
-                        'data-init-plugin="selectize">' +
-                        '<option  value="' + argument + '">' + argumentName + '</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleEditorialPlanArgument\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleEditorialPlanArgument\" class=\"form-control\"' +
-                        'placeholder=\"Visible\"  name=\"isVisibleEditorialPlanArgument\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"\">titolo Evento</label>' +
-                        '<input id=\"titleEvent\" class=\"form-control\"' +
-                        'placeholder=\"Modifica il titolo\" name=\"titleEvent\" value=\"' + title + '\" required=\"required\">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isEventVisible\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isEventVisible\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" name=\"isEventVisible\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"description\">Descrizione Evento</label>' +
-                        '<input id=\"description\" class=\"form-control\"' +
-                        'placeholder=\"Modifica la descrizione \" name=\"description\" value=\"' + description + '\">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleDescription\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" name=\"isVisibleDescription\" ">' +
-                        '</div>' +
-                        '</div>' +  bodyContent +
-                        /*  '<div class=\"col-md-3\">' +
-                          '<div class=\"form-group form-group-default selectize-enabled\">' +
-                          '<label for=\"photoUrl\">Immagine Evento'+linkimg+'</label>' +
-                          '<input id=\"photoUrl\" class=\"form-control\"' +
-                          'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"' + photoUrl + '\">' +
-                          '</div>' +
-                          '</div>' +*/
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisiblePhotoUrl\" class=\"form-control\"' +
-                        'placeholder=\"Visible\" name=\"isVisiblePhotoUrl\">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-9\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"bodyEvent\">Testo Evento</label>' +
-                        '<textarea id="bodyEvent" cols="150" rows="10" name="bodyEvent">' + bodyEvent + '</textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleBodyEvent\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleBodyEvent\" class=\"form-control\"' +
-                        'placeholder=\"Visible\"  name=\"isVisibleBodyEvent\">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-6\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"note\">Note Evento</label>' +
-                        '<textarea id="note" cols="100" rows="10" name="note" placeholder="Inserisci le note">' + note + '</textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-3\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"isVisibleNote\">Visibile</label>' +
-                        '<input  type="checkbox" id=\"isVisibleNote\" class=\"form-control\"' +
-                        'placeholder=\"Visible\"  name=\"isVisibleNote\" ">' +
-                        '</div>' +
-                        '</div>' +
-                        ' <div class="col-md-3">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\"   name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Seleziona il media da Associare\"' +
-                        'data-init-plugin=\"selectize\">' +
-                        '<option value="' + socialId + '">' + socialName + '</option>' +
-                        '</select>' +
-                        ' </div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"row\">' +
-                        '<div class=\"col-md-6\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"startEventDate\">Data Inizio Evento </label>' +
-                        '<input  type =\'datetime\' id=\"startEventDate\" class=\"form-control\"' +
-                        'placeholder=\"Modifica la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class=\"col-md-6\">' +
-                        '<div class=\"form-group form-group-default selectize-enabled\">' +
-                        '<label for=\"endEventDate\">Data Fine Evento </label>' +
-                        '<input  type =\'datetime\' id=\"endEventDate\" class=\"form-control\"' +
-                        'placeholder=\"Modifica la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="row">' +
-                        '<div class="col-md-6">' +
-                        '<div class="form-group form-group-default selectize-enabled">' +
-                        '<label for="status">Seleziona lo Stato</label>' +
-                        '<select id="status" name="status" required="required"' +
-                        'class="full-width selectpicker"' +
-                        'placeholder="Seleziona lo stato"' +
-                        'data-init-plugin="selectize">' +
-                        '<option ' + selectedDraft + ' value="Draft">Bozza</option>' +
-                        '<option ' + selectedApproved + ' value="Approved">Approvata</option>' +
-                        '<option ' + selectedRejected + ' value="Rejected">Rifiutata</option>' +
-                        '<option ' + selectedPublished + ' value="Published">Pubblicata</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="col-md-6">' +
-                        '<div  class="form-group form-group-default selectize-enabled">' +
-                        '<label for="notifyEmail">Notificare al Cliente</label>' +
-                        '<select id="notifyEmail" name="notifyEmail" required="required"' +
-                        'class="full-width selectpicker"' +
-                        'placeholder="Seleziona"' +
-                        'data-init-plugin="selectize">' +
-                        '<option value="notNotify">Non Inviare la Notifica</option>' +
-                        '<option value="yesNotify">Invia la Notifica</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="form-group form-group-default required">' +
-                        '<label for="okSend">Modifica</label>' +
-                        '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
-                        '</div>' +
-                        '<div class="form-group form-group-default required">' +
-                        '<label for="deleteDetail">Cancellazione</label>' +
-                        '<div><p>Cancella il Dettaglio</p></div>' +
-                        '<input type="button" class="btn-success" id="deleteDetail" name="deleteDetail" value="Cancella il Dettaglio del Piano"' +
-                        '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class="col-xs-3">' +
+                            '<div class="form-group form-group-default selectize-enabled">' +
+                            '<label for="editorialPlanArgumentId">Argomento Evento</label>' +
+                            '<select id="editorialPlanArgumentId" name="editorialPlanArgumentId" class="full-width selectpicker"' +
+                            'placeholder="Selezione l\' argomento da utilizzare"' +
+                            'data-init-plugin="selectize">' +
+                            '<option  value="' + argument + '">' + argumentName + '</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleEditorialPlanArgument\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleEditorialPlanArgument\" class=\"form-control\"' +
+                            'placeholder=\"Visible\"  name=\"isVisibleEditorialPlanArgument\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"\">titolo Evento</label>' +
+                            '<input id=\"titleEvent\" class=\"form-control\"' +
+                            'placeholder=\"Modifica il titolo\" name=\"titleEvent\" value=\"' + title + '\" required=\"required\">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isEventVisible\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isEventVisible\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" name=\"isEventVisible\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"description\">Descrizione Evento</label>' +
+                            '<input id=\"description\" class=\"form-control\"' +
+                            'placeholder=\"Modifica la descrizione \" name=\"description\" value=\"' + description + '\">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleDescription\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleDescription\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" name=\"isVisibleDescription\" ">' +
+                            '</div>' +
+                            '</div>' + bodyContent +
+                            /*  '<div class=\"col-md-3\">' +
+                              '<div class=\"form-group form-group-default selectize-enabled\">' +
+                              '<label for=\"photoUrl\">Immagine Evento'+linkimg+'</label>' +
+                              '<input id=\"photoUrl\" class=\"form-control\"' +
+                              'placeholder=\"Inserisci il link immagine \" name=\"photoUrl\" value=\"' + photoUrl + '\">' +
+                              '</div>' +
+                              '</div>' +*/
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisiblePhotoUrl\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisiblePhotoUrl\" class=\"form-control\"' +
+                            'placeholder=\"Visible\" name=\"isVisiblePhotoUrl\">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"linkDestination\">Descrizione Evento</label>' +
+                            '<input id=\"linkDestination\" class=\"form-control\"' +
+                            'placeholder=\"Modifica il link \" name=\"linkDestination\" value=\"' + linkDestination + '\">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"bodyEvent\">Testo Evento</label>' +
+                            '<textarea id="bodyEvent" cols="150" rows="10" name="bodyEvent">' + bodyEvent + '</textarea>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleBodyEvent\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleBodyEvent\" class=\"form-control\"' +
+                            'placeholder=\"Visible\"  name=\"isVisibleBodyEvent\">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"note\">Note Evento</label>' +
+                            '<textarea id="note" cols="100" rows="10" name="note" placeholder="Inserisci le note">' + note + '</textarea>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-3\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"isVisibleNote\">Visibile</label>' +
+                            '<input  type="checkbox" id=\"isVisibleNote\" class=\"form-control\"' +
+                            'placeholder=\"Visible\"  name=\"isVisibleNote\" ">' +
+                            '</div>' +
+                            '</div>' +
+                            ' <div class="col-md-3">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"socialPlanId\">Seleziona il media da Associare </label><select id=\"socialPlanId\"  required=\"required\"   name=\"socialPlanId\" class=\"full-width selectpicker\" placeholder=\"Seleziona il media da Associare\"' +
+                            'data-init-plugin=\"selectize\">' +
+                            '<option value="' + socialId + '">' + socialName + '</option>' +
+                            '</select>' +
+                            ' </div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"row\">' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"startEventDate\">Data Inizio Evento </label>' +
+                            '<input  type =\'datetime\' id=\"startEventDate\" class=\"form-control\"' +
+                            'placeholder=\"Modifica la Data di Inizio del Dettaglio\" name=\"startEventDate\" value=\"' + start + '\" required=\"required\">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class=\"col-md-6\">' +
+                            '<div class=\"form-group form-group-default selectize-enabled\">' +
+                            '<label for=\"endEventDate\">Data Fine Evento </label>' +
+                            '<input  type =\'datetime\' id=\"endEventDate\" class=\"form-control\"' +
+                            'placeholder=\"Modifica la Data della Fine del Dettaglio  \" name=\"endEventDate\" value=\"' + end + '\" required=\"required\">' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="row">' +
+                            '<div class="col-md-6">' +
+                            '<div class="form-group form-group-default selectize-enabled">' +
+                            '<label for="status">Seleziona lo Stato</label>' +
+                            '<select id="status" name="status" required="required"' +
+                            'class="full-width selectpicker"' +
+                            'placeholder="Seleziona lo stato"' +
+                            'data-init-plugin="selectize">' +
+                            '<option ' + selectedDraft + ' value="Draft">Bozza</option>' +
+                            '<option ' + selectedApproved + ' value="Approved">Approvata</option>' +
+                            '<option ' + selectedRejected + ' value="Rejected">Rifiutata</option>' +
+                            '<option ' + selectedPublished + ' value="Published">Pubblicata</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="col-md-6">' +
+                            '<div  class="form-group form-group-default selectize-enabled">' +
+                            '<label for="notifyEmail">Notificare al Cliente</label>' +
+                            '<select id="notifyEmail" name="notifyEmail" required="required"' +
+                            'class="full-width selectpicker"' +
+                            'placeholder="Seleziona"' +
+                            'data-init-plugin="selectize">' +
+                            '<option value="notNotify">Non Inviare la Notifica</option>' +
+                            '<option value="yesNotify">Invia la Notifica</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="form-group form-group-default required">' +
+                            '<label for="okSend">Modifica</label>' +
+                            '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
+                            '</div>' +
+                            '<div class="form-group form-group-default required">' +
+                            '<label for="deleteDetail">Cancellazione</label>' +
+                            '<div><p>Cancella il Dettaglio</p></div>' +
+                            '<input type="button" class="btn-success" id="deleteDetail" name="deleteDetail" value="Cancella il Dettaglio del Piano"' +
+                            '</div>' +
                             '<div class="form-group form-group-default required">' +
                             '<label for="cloneDetail">Cancellazione</label>' +
                             '<div><p>Cancella il Dettaglio</p></div>' +
                             '<input type="button" class="btn-success" id="cloneDetail" name="cloneDetail" value="Clona il Dettaglio del Piano"' +
                             '</div>' +
-                        '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
-                        '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
+                            '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
+                            '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
                     });
-                    var photoUrl1 =[];
+                    var photoUrl1 = [];
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
-                    let dropzone = new Dropzone("#dropzoneModal",{
+                    let dropzone = new Dropzone("#dropzoneModal", {
                         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
                         maxFilesize: 5,
@@ -867,19 +881,19 @@
                         acceptedFiles: "image/jpeg",
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
-                        sending: function(file1, xhr, formData) {
+                        sending: function (file1, xhr, formData) {
 
                         }
                     });
-                    dropzone.on('addedfile',function(file1){
+                    dropzone.on('addedfile', function (file1) {
                         okButton.attr("disabled", "disabled");
-                        let urlimage1="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
-                        let filename1=file1.name;
-                        let image1 =urlimage1+filename1;
+                        let urlimage1 = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
+                        let filename1 = file1.name;
+                        let image1 = urlimage1 + filename1;
                         photoUrl1.push(image1);
 
                     });
-                    dropzone.on('queuecomplete',function(){
+                    dropzone.on('queuecomplete', function () {
                         okButton.removeAttr("disabled");
                         $(document).trigger('bs.load.photo');
                     });
@@ -1048,10 +1062,10 @@
                     bsModal2.showCancelBtn();
                     bsModal2.setOkEvent(function () {
                         var photo;
-                        if(photoUrl1.length==0){
-                            photo=photoUrl;
-                        }else{
-                        photo=photoUrl1;
+                        if (photoUrl1.length == 0) {
+                            photo = photoUrl;
+                        } else {
+                            photo = photoUrl1;
                         }
 
                         var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
@@ -1060,14 +1074,15 @@
                         var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
                         var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
                         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
-                        start =$('#startEventDate').val();
+                        start = $('#startEventDate').val();
                         end = $('#endEventDate').val();
                         const data = {
                             title: $('#titleEvent').val(),
-                            start:start,
+                            start: start,
                             end: end,
                             argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
+                            linkDestination:$('#linkDestination').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
                             photoUrl: photo,
@@ -1105,7 +1120,6 @@
                         });
 
                     });
-
 
 
                 },
@@ -1265,26 +1279,26 @@
                             }
                         })
                     }
-                } ,
+                },
 
                 eventMouseover: function (event) {
-                    var linkimg1="";
-                    var link  =event.photoUrl.split(",");
-                    link.forEach(function(element) {
+                    var linkimg1 = "";
+                    var link = event.photoUrl.split(",");
+                    link.forEach(function (element) {
 
                         var view = $('#calendar').fullCalendar('getView');
                         if (view.name == 'month') {
-                            linkimg1=linkimg1 + ' <img width="100px" src="' + element + '">';
-                        }else if(view.name == 'day') {
-                            linkimg1=linkimg1 + ' <img width="450px" src="' + element + '">';
+                            linkimg1 = linkimg1 + ' <img width="100px" src="' + element + '">';
+                        } else if (view.name == 'day') {
+                            linkimg1 = linkimg1 + ' <img width="450px" src="' + element + '">';
                         } else {
-                            linkimg1=linkimg1 + ' <img width="450px" src="' + element + '">';
+                            linkimg1 = linkimg1 + ' <img width="450px" src="' + element + '">';
                         }
 
 
                     });
 
-                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'testo: ' + ': ' + event.bodyEvent + '</br>'    + linkimg1 +'</div>';
+                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'testo: ' + ': ' + event.bodyEvent + '</br>' + linkimg1 + '</div>';
 
 
                     $("body").append(tooltip);

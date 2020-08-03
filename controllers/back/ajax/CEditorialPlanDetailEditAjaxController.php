@@ -30,6 +30,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $note = $data['note'];
         $description = $data['description'];
+        $linkDestination = $data['linkDestination'];
         $isVisibleDescription = $data['isVisibleDescription'];
         $photoUrl = $data['photoUrl'];
         $isVisiblePhotoUrl = $data['isVisiblePhotoUrl'];
@@ -85,6 +86,9 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         }
         if (!empty($argument)) {
             $editorialPlanDetail->editorialPlanArgumentId = $argument;
+        }
+        if (!empty($linkDestination)) {
+            $editorialPlanDetail->linkDestination = $linkDestination;
         }
 
         $editorialPlanDetail->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
@@ -191,6 +195,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
         $notifyEmail = "yesNotify";
+
 
 
         $editorialPlanDetailId = $data['editorialPlanDetailId'];

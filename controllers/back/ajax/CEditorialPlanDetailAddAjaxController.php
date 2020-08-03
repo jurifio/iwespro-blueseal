@@ -36,6 +36,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $startEventDate = $data['start'];
         $endEventDate = $data['end'];
         $argument = $data['argument'];
+        $linkDestination=$data['linkDestination'];
         if($argument==''){
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
         }
@@ -114,6 +115,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $editorialPlanDetailInsert->isVisiblePhotoUrl = $isVisiblePhotoUrl;
             $editorialPlanDetailInsert->status = $status;
             $editorialPlanDetailInsert->note = $note;
+            $editorialPlanDetailInsert->linkDestination=$linkDestination;
             $editorialPlanDetailInsert->isVisibleNote = $isVisibleNote;
             $editorialPlanDetailInsert->socialId = $socialId;
             $editorialPlanDetailInsert->bodyEvent = $bodyEvent;
