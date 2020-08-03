@@ -288,6 +288,7 @@
                                     data-searchable="true"
                                     data-orderable="true">Prestashop
                                 </th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -312,6 +313,9 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.set.onlycatalogue"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.publish.products"

@@ -36,7 +36,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '<div class="row">' +
         '<div class="col-xs-12">' +
 
-        '<label for="shopId">Seleziona lo Shop </label>'+
+        '<label for="shopId">Seleziona lo Shop</label>'+
         '<select id="shopId" name="shopId"'+
         'class="full-width selectpicker"'+
         'placeholder="Seleziona la Lista"'+
@@ -82,7 +82,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
 
     bsModal.setOkEvent(function () {
 
-        let id = selectedRows[0].id;
+        let id = selectedRows[0].row_id;
         let dateStartDate = $('#startDate').val();
         let dateEndDate = $('#endDate').val();
         let name = $('#editorialPlanName').val();

@@ -115,11 +115,12 @@ class CProductFastListAjaxController extends AAjaxController
                   concat(s.id, '-', s.name)                                                                     AS shop,
                   concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
                   pb.name                                                                                           AS brand,
-                  ps.name                                                                                           AS status,
+                  concat(ps.name,if(p.onlyCatalogue=1,' solo catalogo',' in vendita'))                                                                                          AS status,
                   concat(psg.locale, ' - ',
                          psmg.name)                                                                                 AS productSizeGroup,
                   p.creationDate                                                                                    AS creationDate,
-                  p.sortingPriorityId                                                                               AS productPriority,
+                  p.sortingPriorityId                                                                               AS productPriority,          
+                if(p.onlyCatalogue=1,'solo catalogo','in vendita')                                                                                        As onlyCatalogue,                               
                   s.id                                                                                              AS shopId,
                   s.name                                                                                            AS row_shop,
                   concat(phs.shootingId)                                                             AS shooting,
@@ -257,7 +258,13 @@ class CProductFastListAjaxController extends AAjaxController
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
             $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
-            $row['status'] = $val->productStatus->name;
+            $onlyCatalogue='';
+            if($val->onlyCatalogue==1){
+                $onlyCatalogue='solo catalogo';
+            }else{
+                $onlyCatalogue='in vendita';
+            }
+            $row['status'] = $val->productStatus->name. ' '.$onlyCatalogue;
             $row['productPriority'] = $val->sortingPriorityId;
 
             $qty = 0;

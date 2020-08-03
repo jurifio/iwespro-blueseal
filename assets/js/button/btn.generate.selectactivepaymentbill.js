@@ -35,7 +35,7 @@ var isProgrammable='0';
 
     let today = new Date().toISOString().slice(0, 10);
     let modal = new $.bsModal('Crea clientSlip | Distinta Attiva per le Fatture Selezionate', {
-            body: 'Confermi l\'oprazione'
+            body: 'Confermi l\'operazione'
 
 
         }
