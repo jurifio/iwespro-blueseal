@@ -184,4 +184,5 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
         return $res;
     }
+
 }

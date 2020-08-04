@@ -25,7 +25,7 @@ $(document).on('bs-publish-post-tosocial', function (e, element, button) {
 
     let postId = selectedRows[0].row_id;
     let bsModal = new $.bsModal('Pubblica il Post', {
-        body: '<p>Hai Deciso di Pubblicare il Post ' + selectedRow[0].title +'</p>'
+        body: '<p>Hai Deciso di Pubblicare il Post ' + selectedRows[0].title +'</p>'
 
     });
 
@@ -41,7 +41,7 @@ $(document).on('bs-publish-post-tosocial', function (e, element, button) {
             method: "post",
             url: "/blueseal/xhr/EditorialPlanDetailPublishAjaxController",
             data: {
-                id: id,
+                editorialPlanDetailId: id,
                 dateCampaignStart: dateCampaignStart,
                 dateCampaignFinish: dateCampaignFinish,
                 name: name,

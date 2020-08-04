@@ -2675,6 +2675,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/editorial/aggiungi-post(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanDetailAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/editorial/media-aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEditorialPlanSocialAddController"
