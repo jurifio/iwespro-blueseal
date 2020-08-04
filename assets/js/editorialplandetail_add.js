@@ -5,11 +5,45 @@
             method:'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'Shop'
+                table: 'EditorialPlan'
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#shopId');
+            var select = $('#editorialPlanId');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+        });
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'EditorialPlanArgument'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#editorialPlanArgumentId');
+            if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'titleArgument',
+                searchField: 'titleArgument',
+                options: res2,
+            });
+        });
+        $.ajax({
+            method:'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'EditorialPlanSocial'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#socialPlanId');
             if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -22,8 +56,8 @@
     })
 })(jQuery);
 
-$(document).on('bs.newEditorialPlan.save', function () {
-    let bsModal = new $.bsModal('Salva Piano Editoriale', {
+$(document).on('bs.post.save', function () {
+    let bsModal = new $.bsModal('Salva Post', {
         body: '<div><p>Premere ok per Salvare il Piano Editoriale' +
         '</div>'
     });
@@ -31,16 +65,41 @@ $(document).on('bs.newEditorialPlan.save', function () {
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
 
+        var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
+        var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? "1" : "0");
+        var isVisDesc = ($('#isVisibleDescription').is(":checked") ? "1" : "0");
+        var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
+        var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
+        var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
+        start = $('#startEventDate').val();
+        end = $('#endEventDate').val();
         const data = {
-            name: $('#name').val(),
-            startDate: $('#startDate').val(),
-            endDate: $('#endDate').val(),
-            shopId:  $('#shopId').val(),
+            title: $('#titleEvent').val(),
+            start: start,
+            end: end,
+            argument: $('#editorialPlanArgumentId').val(),
+            description: $('#description').val(),
+            linkDestination:$('#linkDestination').val(),
+            note: $('#note').val(),
+            isVisibleNote: isVisNote,
+            photoUrl: photo,
+            status: $('#status').val(),
+            socialId: $('#socialPlanId').val(),
+            editorialPlanId: $('#editorialPlanId').val(),
+            notifyEmail: $('#notifyEmail').val(),
+            isEventVisible: isEvVisible,
+            isVisibleEditorialPlanArgument: isVisEdPlanArg,
+            isVisibleDescription: isVisDesc,
+            isVisiblePhotoUrl: isVisPhoto,
+            bodyEvent: $('#bodyEvent').val(),
+            isVisibleBodyEvent: isVisBody
+
 
         };
+
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/EditorialPlanManage',
+            url: '/blueseal/xhr/EditorialPlanDetailAddAjaxController',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);
