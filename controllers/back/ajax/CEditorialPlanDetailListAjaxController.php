@@ -52,6 +52,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["description"] = $singleDetail->description;
             $data[$i]["isVisibleDescription"] = $singleDetail->isVisibleDescription;
             $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
+            $data[$i]["linkDestination"] = $singleDetail->linkDestination;
             $data[$i]["argumentName"] = $singleDetail->editorialPlanArgument->titleArgument;
             $data[$i]["isVisibleEditorialPlanArgument"] = $singleDetail->isVisibleEditorialPlanArgument;
             $data[$i]["photoUrl"] = $singleDetail->photoUrl;
