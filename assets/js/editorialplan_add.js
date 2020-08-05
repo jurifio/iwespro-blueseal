@@ -22,6 +22,7 @@
     })
 })(jQuery);
 
+
 $(document).on('bs.newEditorialPlan.save', function () {
     let bsModal = new $.bsModal('Salva Piano Editoriale', {
         body: '<div><p>Premere ok per Salvare il Piano Editoriale' +

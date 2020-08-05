@@ -16,108 +16,128 @@
 
 
             <div class="container-fluid container-fixed-lg bg-white">
-                <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
-                      autocomplete="off">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel panel-default clearfix">
-                                <div class="panel-heading clearfix">
-                                    <h5 class="m-t-10">Aggiungi un post</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default clearfix">
+                            <div class="panel-heading clearfix">
+                                <h5 class="m-t-10">Aggiungi un post</h5>
+                            </div>
+                            <div class="panel-body clearfix">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="editorialPlanId">Seleziona Piano Editoriale</label>
+                                            <select id="editorialPlanId"
+                                                    name="editorialPlanId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Selezione il piano editoriale da utilizzare"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="editorialPlanArgumentId">Argomento Evento</label>
+                                            <select id="editorialPlanArgumentId"
+                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Selezione argomento da utilizzare"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>
+                                            <input type="checkbox" id="isVisibleEditorialPlanArgument"
+                                                   class="form-control"
+                                                   placeholder="Visible" checked="true"
+                                                   name="isVisibleEditorialPlanArgument" ">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div id="divSelecterCampaign" class="hide">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="selecterCampaign">Seleziona Operazione su </label>
+                                                <select id="selecterCampaign"
+                                                        name="selecterCampaign" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione operazioni su campagna da utilizzare"
+                                                        data-init-plugin="selectize">
+                                                    <option value="">seleziona</option>
+                                                    <option value="0">Crea Nuova</option>
+                                                    <option value="1">Seleziona Esistente</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divCampaign" class="hide">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="titleEvent">Titolo Azione Evento</label>
+                                            <input id="titleEvent" class="form-control"
+                                                   placeholder="Inserisci il titolo" name="titleEvent"
+                                                   required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="isEventVisible">Visibile</label>
+                                            <input type="checkbox" id="isEventVisible" class="form-control"
+                                                   placeholder="Visible" checked="true" name="isEventVisible"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="description">Descrizione Evento</label>
+                                            <input id="description" class="form-control"
+                                                   placeholder="Inserisci la descrizione " name="description"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="isVisibleDescription">Visibile</label>
+                                            <input type="checkbox" id="isVisibleDescription" class="form-control"
+                                                   placeholder="Visible" checked="true" name="isVisibleDescription">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
+                                              id="photoUrl" name="photoUrl" action="POST">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="file">Immagine Evento</label>
+                                                <div class="fallback">
+                                                    <input name="file" type="file" multiple/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="isVisiblePhotoUrl">Visibile</label>
+                                            <input type="checkbox" id="isVisiblePhotoUrl" class="form-control"
+                                                   placeholder="Visible" checked="true" name="isVisiblePhotoUrl"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="editorialPlanId">Seleziona Piano Editoriale</label>
-                                                <select id="editorialPlanId"
-                                                        name="editorialPlanId" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione il piano editoriale da utilizzare"
-                                                        data-init-plugin="selectize"></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-9">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="editorialPlanArgumentId">Argomento Evento</label>
-                                                <select id="editorialPlanArgumentId"
-                                                        name="editorialPlanArgumentId" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione argomento da utilizzare"
-                                                        data-init-plugin="selectize"></select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isVisibleEditorialPlanArgument">Visibile</label>
-                                                <input type="checkbox" id="isVisibleEditorialPlanArgument"
-                                                       class="form-control"
-                                                       placeholder="Visible" checked="true"
-                                                       name="isVisibleEditorialPlanArgument" ">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="titleEvent">Titolo Azione Evento</label>
-                                                <input id="titleEvent" class="form-control"
-                                                       placeholder="Inserisci il titolo" name="titleEvent"
-                                                       required="required">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isEventVisible">Visibile</label>
-                                                <input type="checkbox" id="isEventVisible" class="form-control"
-                                                       placeholder="Visible" checked="true" name="isEventVisible" ">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="description">Descrizione Evento</label>
-                                                <input id="description" class="form-control"
-                                                       placeholder="Inserisci la descrizione " name="description" ">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isVisibleDescription">Visibile</label>
-                                                <input type="checkbox" id="isVisibleDescription" class="form-control"
-                                                       placeholder="Visible" checked="true" name="isVisibleDescription"
-                                                ">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
-                                                  id="photoUrl" name="photoUrl" action="POST">
-                                                <div class="form-group form-group-default selectize-enabled\
-                                                ">
-                                                    <label for="file">Immagine Evento</label>
-                                                    <div class="fallback">
-                                                        <label for="file">Immagine Evento</label>
-                                                        <input name="file" type="file" multiple/>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isVisiblePhotoUrl">Visibile</label>
-                                                <input type="checkbox" id="isVisiblePhotoUrl" class="form-control"
-                                                       placeholder="Visible" checked="true" name="isVisiblePhotoUrl" ">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-9">
+                                        <div class="col-md-6">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="bodyEvent">Testo Evento</label>
-                                                <textarea id="bodyEvent" cols="150" rows="10" name="bodyEvent"
+                                                <textarea id="bodyEvent" cols="80" rows="10" name="bodyEvent"
                                                           placeholder="Inserisci il testo"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="linkDestination">Link Destinazione</label>
+                                                <input id="linkDestination" class="form-control"
+                                                       placeholder="Inserisci la Destinazione " name="linkDestination"/>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -129,12 +149,14 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-9">
+                                        <div class="col-md-6">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="note">Note Evento</label>
-                                                <textarea id="note" cols="150" rows="10" name="note"
+                                                <textarea id="note" cols="80" rows="10" name="note"
                                                           placeholder="Inserisci le note"></textarea>
                                             </div>
+                                        </div>
+                                        <div class="col-md-3">
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -207,29 +229,29 @@
                             </div>
                         </div>
                     </div>
-                </form>
+
+                </div>
             </div>
         </div>
-    </div>
 
-    <?php include "parts/footer.php"; ?>
-</div>
-<?php include "parts/bsmodal.php"; ?>
-<?php include "parts/alert.php"; ?>
-<bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Operazioni su Post">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-file-o fa-plus"
-                data-permission="allShops||worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs.post.save"
-                data-title="Salva Post"
-                data-placement="bottom"
-                data-href="#"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-</bs-toolbar>
+        <?php include "parts/footer.php"; ?>
+    </div>
+    <?php include "parts/bsmodal.php"; ?>
+    <?php include "parts/alert.php"; ?>
+    <bs-toolbar class="toolbar-definition">
+        <bs-toolbar-group data-group-label="Operazioni su Post">
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-file-o fa-plus"
+                    data-permission="allShops||worker"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-event="bs.post.save"
+                    data-title="Salva Post"
+                    data-placement="bottom"
+                    data-href="#"
+            ></bs-toolbar-button>
+        </bs-toolbar-group>
+    </bs-toolbar>
 </body>
 </html>

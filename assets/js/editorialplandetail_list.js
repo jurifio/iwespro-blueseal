@@ -766,7 +766,7 @@
                             '<div class=\"row\">' +
                             '<div class=\"col-md-3\">' +
                             '<div class=\"form-group form-group-default selectize-enabled\">' +
-                            '<label for=\"linkDestination\">Descrizione Evento</label>' +
+                            '<label for=\"linkDestination\">Link Destinazione</label>' +
                             '<input id=\"linkDestination\" class=\"form-control\"' +
                             'placeholder=\"Modifica il link \" name=\"linkDestination\" value=\"' + linkDestination + '\">' +
                             '</div>' +
