@@ -115,25 +115,12 @@ $('#selecterCampaign').change(function () {
                                                 </select>
                                             </div>
                                         </div>
+                                       
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="typeBudget">Tipo Budget</label>
-                                                <select id="typeBudget"
-                                                        name="typeBudget" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione il tipo di Budget"
-                                                        data-init-plugin="selectize">
-                                                       <option value="">Seleziona il tipo di Budget</option>
-                                                       <option value="daily_budget">Budget Giornaliero</option>
-                                                       <option value="lifetime_budget">budget Totale</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="impBudget">Importo Budget</label>
-                                                <input id="impBudget" class="form-control"
-                                                       placeholder="Inserisci il Budget" name="impBudget"
+                                                <label for="lifetime_budget">Importo Budget Totale</label>
+                                                <input id="lifetime_budget" class="form-control"
+                                                       placeholder="Inserisci il Budget" name="lifetime_budget"
                                                        required="required">
                                             </div>
                                         </div>
@@ -261,7 +248,8 @@ function addCampaign(){
             buying_type: $('#buying_type').val(),
             objective: $('#objective').val(),
             typeBudget: $('#typeBudget').val(),
-            impBudget: $('#impBudget').val(),
+            daily_budget: $('#daily_budget').val(),
+            lifetime_budget: $('#lifetime_budget').val(),
             editorialPlanId:$('#editorialPlanId').val()
         }
         $.ajax({

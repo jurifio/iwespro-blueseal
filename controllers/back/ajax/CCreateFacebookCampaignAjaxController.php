@@ -42,13 +42,13 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
         $fb = new Facebook([
             'app_id' => $fbConfig['app_id'], // Replace {app-id} with your app id
             'app_secret' => $fbConfig['app_secret'],
-            'default_graph_version' => $fbConfig['default_graph_version'],
+            'default_graph_version' => 'v7.0',
             'persistent_data_handler' => &$c
         ]);
-
         $special_ad_categories=[];
-        $none=['NONE'];
-        $special_ad_categories[0]=$none;
+
+
+
         $res = '';
         $data = $this->app->router->request()->getRequestData();
         $editorialPlan=\Monkey::app()->repoFactory->create('EditorialPlan')->findOneBy(['id'=>$data['editorialPlanId']]);
@@ -56,28 +56,21 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
         $editorialPlanShopAsSocial = \Monkey::app()->repoFactory->create('EditorialPlanShopAsSocial')->findOneBy(['shopId' => $editorialPlan->shopId]);
         $pageAccessToken = $editorialPlanShopAsSocial->access_token;
         $adAccountId='act_'.$facebookMarketAccountId;
-if($data['typeBudget']=='daily_budget'){
-    $linkData = [
+
+
+    $linkData = array(
         'name' => $data['campaignName'],
         'buying_type' => $data['buying_type'],
         'objective' => $data['objective'],
-        'daily_budget' => $data['impBudget'],
-        'special_ad_categories' => $special_ad_categories,
+        'lifetime_budget' => $data['lifetime_budget'],
         'status' => 'PAUSED',
-    ];
-}else{
-    $linkData = [
-        'name' => $data['campaignName'],
-        'buying_type' => $data['buying_type'],
-        'objective' => $data['objective'],
-        'lifetime_budget' => $data['impBudget'],
-        'special_ad_categories' =>  $special_ad_categories,
-        'status' => 'PAUSED',
-    ];
-}
+        'special_ad_categories' =>'NONE',
+    );
+
 
             try {
-                $response = $fb->post('/'.$adAccountId.'/campaigns',$linkData,$pageAccessToken);
+                $response = $fb->post('/'.$adAccountId.'/campaigns',
+                    $linkData,$pageAccessToken);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
                 return $res = 'Graph returned an error: ' . $e->getMessage();
 
@@ -90,7 +83,7 @@ if($data['typeBudget']=='daily_budget'){
 
 
 
-        $res = $graphNode->id;
+        $res = $graphNode['id'];
         return $res;
     }
 }
