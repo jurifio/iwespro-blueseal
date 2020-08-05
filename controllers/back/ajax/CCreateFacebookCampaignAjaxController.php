@@ -46,6 +46,9 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
             'persistent_data_handler' => &$c
         ]);
 
+        $special_ad_categories=[];
+        $none=['NONE'];
+        $special_ad_categories[0]=$none;
         $res = '';
         $data = $this->app->router->request()->getRequestData();
         $editorialPlan=\Monkey::app()->repoFactory->create('EditorialPlan')->findOneBy(['id'=>$data['editorialPlanId']]);
@@ -59,6 +62,7 @@ if($data['typeBudget']=='daily_budget'){
         'buying_type' => $data['buying_type'],
         'objective' => $data['objective'],
         'daily_budget' => $data['impBudget'],
+        'special_ad_categories' => $special_ad_categories,
         'status' => 'PAUSED',
     ];
 }else{
@@ -67,12 +71,13 @@ if($data['typeBudget']=='daily_budget'){
         'buying_type' => $data['buying_type'],
         'objective' => $data['objective'],
         'lifetime_budget' => $data['impBudget'],
+        'special_ad_categories' =>  $special_ad_categories,
         'status' => 'PAUSED',
     ];
 }
 
             try {
-                $response = $fb->post('/'.$adAccountId.'/campaign',$linkData,$pageAccessToken);
+                $response = $fb->post('/'.$adAccountId.'/campaigns',$linkData,$pageAccessToken);
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
                 return $res = 'Graph returned an error: ' . $e->getMessage();
 
