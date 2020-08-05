@@ -62,7 +62,7 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
         'name' => $data['campaignName'],
         'buying_type' => $data['buying_type'],
         'objective' => $data['objective'],
-        'lifetime_budget' => $data['lifetime_budget'],
+        'lifetime_budget' => str_replace('.','',$data['lifetime_budget']),
         'status' => 'PAUSED',
         'special_ad_categories' =>'NONE',
     );
