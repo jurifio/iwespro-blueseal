@@ -78,6 +78,14 @@ $('#selecterCampaign').change(function () {
                                                        required="required">
                                             </div>
                                         </div>
+                                         <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="groupAdsName">Nome del Gruppo inserzioni</label>
+                                                <input id="groupAdsName" class="form-control"
+                                                       placeholder="Inserisci il Nome del gruppo Inserzioni" name="groupAdsName"
+                                                       required="required">
+                                            </div>
+                                        </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="buying_type">Tipo di Acquisto</label>
@@ -137,6 +145,161 @@ $('#selecterCampaign').change(function () {
        $('#divCampaign').append(bodyForm);
 
    }else{
+
+       var bodyForm=`<div class="row">
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                <label for="campaignName">Seleziona Campagna</label>
+                    <select id="campaignName"
+                           name="campaignName" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                   </select>
+               </div>
+           </div>
+            <div class="col-md-2">
+            <div id="divgroupAdsName">
+            
+            </div>
+            </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="buying_type">Tipo di Acquisto</label>
+                   <select id="buying_type"
+                           name="buying_type" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                       <option value="AUCTION">Asta</option>
+                       <option value="RESERVED">Copertura e Frequenza</option>
+                   </select>
+               </div>
+           </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="objective">Obiettivo della Campagna</label>
+                   <select id="objective"
+                           name="objective" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                       <option value="REACH">Copertura</option>
+                       <option value="LOCAL_AWARENESS">Traffico</option>
+                       <option value="APP_INSTALLS">installazioni dell\'App</option>
+                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                       <option value="POST_ENGAGEMENT">interazione con i post</option>
+                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                       <option value="MESSAGES">Messaggi</option>
+                       <option value="CONVERSIONS">Conversioni</option>
+                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
+                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
+                   </select>
+               </div>
+           </div>
+
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="lifetime_budget">Importo Budget Totale</label>
+                   <input id="lifetime_budget" class="form-control"
+                          placeholder="Inserisci il Budget" name="lifetime_budget"
+                          required="required">
+               </div>
+           </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <button class="btn btn-primary" id="addCampaign" onclick="updateCampaign()" type="button"><span
+                       class="fa fa-save">Aggiorna Campagna</span></button>
+                   <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/>
+               </div>
+           </div>
+       </div>`;
+   $('#divCampaign').removeClass('hide');
+   $('#divCampaign').empty();
+   $('#divCampaign').append(bodyForm);
+       $.ajax({
+           url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
+           method: 'get',
+           data: {
+               editorialPlanId:$('#editorialPlanId').val()
+           },
+           dataType: 'json'
+       }).done(function (res) {
+           console.log(res);
+           let campaignName = $('#campaignName');
+           //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+           campaignName.selectize({
+               valueField: 'idCampaign',
+               labelField: 'nameCampaign',
+               searchField: ['nameCampaign'],
+               options: res,
+               render: {
+                   item: function (item, escape) {
+                       return '<div>' +
+                           '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                           '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                           '</div>'
+                   },
+                   option: function (item, escape) {
+                       return '<div>' +
+                           '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                           '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                           '</div>'
+                   }
+               }
+           });
+       });
+       $('#campaignName').change(function () {
+           var bodyGroupAdsName=`<div class="form-group form-group-default selectize-enabled">
+                <label for="groupAdsName">Seleziona il Gruppo Inserzioni</label>
+                    <select id="groupAdsName"
+                           name="groupAdsName" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione il Gruppo inserzioni"
+                           data-init-plugin="selectize">
+                   </select>
+               </div>`;
+           $('#divgroupAdsName').empty();
+           $('#divgroupAdsName').append( bodyGroupAdsName);
+           $.ajax({
+               url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
+               method: 'get',
+               data: {
+                   campaignId:$('#campaignName').val(),
+                   editorialPlanId: $('#editorialPlanId').val()
+               },
+               dataType: 'json'
+           }).done(function (res) {
+               console.log(res);
+               let groupAdsName = $('#groupAdsName');
+               //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+               groupAdsName.selectize({
+                   valueField: 'idAdSet',
+                   labelField: 'nameAdSet',
+                   searchField: ['nameAdSet'],
+                   options: res,
+                   render: {
+                       item: function (item, escape) {
+                           return '<div>' +
+                               '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                               '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                               '</div>'
+                       },
+                       option: function (item, escape) {
+                           return '<div>' +
+                               '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                               '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                               '</div>'
+                       }
+                   }
+               });
+           });
+
+
+       });
 
    }
 
@@ -211,7 +374,8 @@ $(document).on('bs.post.save', function () {
             isVisibleDescription: isVisDesc,
             isVisiblePhotoUrl: isVisPhoto,
             bodyEvent: $('#bodyEvent').val(),
-            isVisibleBodyEvent: isVisBody
+            isVisibleBodyEvent: isVisBody,
+            facebookCampaignId:$('#facebookCampaignId').val()
 
 
         };
@@ -235,8 +399,8 @@ $(document).on('bs.post.save', function () {
     });
 });
 function addCampaign(){
-    let bsModal = new $.bsModal('Salva Post', {
-        body: '<div><p>Premere ok per Salvare il Piano Editoriale' +
+    let bsModal = new $.bsModal('Salva Campagna', {
+        body: '<div><p>Premere ok per Salvare la Campagna' +
             '</div>'
     });
 
@@ -248,7 +412,6 @@ function addCampaign(){
             buying_type: $('#buying_type').val(),
             objective: $('#objective').val(),
             typeBudget: $('#typeBudget').val(),
-            daily_budget: $('#daily_budget').val(),
             lifetime_budget: $('#lifetime_budget').val(),
             editorialPlanId:$('#editorialPlanId').val()
         }
@@ -258,10 +421,47 @@ function addCampaign(){
             data: data,
             dataType:'json'
         }).done(function (res) {
-            bsModal.writeBody(res);
+            bsModal.writeBody('Campagna Creata con successo');
             $('#facebookCampaignId').val(res);
         }).fail(function (res) {
-            bsModal.writeBody(res);
+            bsModal.writeBody('Errore Nella Creazione della Campagna');
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                bsModal.hide();
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
+}
+function updateCampaign(){
+    let bsModal = new $.bsModal('Salva Campagna', {
+        body: '<div><p>Premere ok per Salvare la Campagna' +
+            '</div>'
+    });
+
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+
+        const data = {
+            campaignId: $('#campaignName').val(),
+            buying_type: $('#buying_type').val(),
+            objective: $('#objective').val(),
+            typeBudget: $('#typeBudget').val(),
+            lifetime_budget: $('#lifetime_budget').val(),
+            editorialPlanId:$('#editorialPlanId').val()
+        }
+        $.ajax({
+            method: 'put',
+            url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
+            data: data,
+            dataType:'json'
+        }).done(function (res) {
+            bsModal.writeBody('Campagna Aggiornata con successo');
+            $('#facebookCampaignId').val(res);
+        }).fail(function (res) {
+            bsModal.writeBody('Errore Nella Creazione della Campagna');
         }).always(function (res) {
             bsModal.setOkEvent(function () {
                 bsModal.hide();

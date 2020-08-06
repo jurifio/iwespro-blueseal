@@ -37,6 +37,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $endEventDate = $data['end'];
         $argument = $data['argument'];
         $linkDestination=$data['linkDestination'];
+        $facebookCampaignId=$data['facebookCampaignId'];
         if($argument==''){
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
         }
