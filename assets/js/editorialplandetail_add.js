@@ -284,14 +284,14 @@ $('#selecterCampaign').change(function () {
                    render: {
                        item: function (item, escape) {
                            return '<div>' +
-                               '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
-                               '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                               '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                               '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
                                '</div>'
                        },
                        option: function (item, escape) {
                            return '<div>' +
-                               '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
-                               '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                               '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                               '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
                                '</div>'
                        }
                    }

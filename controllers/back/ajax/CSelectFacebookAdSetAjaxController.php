@@ -79,11 +79,12 @@ class CSelectFacebookAdSetAjaxController extends AAjaxController
           foreach ($adsets as $adset) {
               $nameAdSet = $adset->{CampaignFields::NAME} . PHP_EOL;
               $idAdSet = $adset->{CampaignFields::ID} . PHP_EOL;
+              $status=$adset->{CampaignFields::EFFECTIVE_STATUS} . PHP_EOL;
 
-              $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'error' => '0'];
+              $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status'=>$status,'error' => '0'];
           }
       }else{
-          $adSetList[] = ['idAdSet' => '0','nameAdSet' => '0','error' => '1'];
+          $adSetList[] = ['idAdSet' => '0','nameAdSet' => '0','status'=>'0','error' => '1'];
       }
         return json_encode($adSetList);
     }
