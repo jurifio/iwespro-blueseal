@@ -353,6 +353,24 @@ $(document).on('bs.post.save', function () {
         var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
         var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
+        var facebookCampaignId='';
+        if($('#facebookCampaignId').length){
+            facebookCampaignId=$('#facebookCampaignId').val();
+        }else{
+            facebookCampaignId='notExist';
+        }
+        var campaignName='';
+        if($('#campaignName').length){
+            campaignName=$('#campaignName').val();
+        }else{
+            campaignName='notExist';
+        }
+        var groupAdsName='';
+        if($('#groupAdsName').length){
+            groupAdsName=$('#groupAdsName').val();
+        }else{
+            groupAdsName='notExist';
+        }
         start = $('#startEventDate').val();
         end = $('#endEventDate').val();
         const data = {
@@ -375,7 +393,11 @@ $(document).on('bs.post.save', function () {
             isVisiblePhotoUrl: isVisPhoto,
             bodyEvent: $('#bodyEvent').val(),
             isVisibleBodyEvent: isVisBody,
-            facebookCampaignId:$('#facebookCampaignId').val()
+            facebookCampaignId:facebookCampaignId,
+            campaignId:campaignName,
+            groupAdsName:groupAdsName
+
+
 
 
         };

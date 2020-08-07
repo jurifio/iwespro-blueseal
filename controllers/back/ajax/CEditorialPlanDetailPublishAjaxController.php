@@ -60,21 +60,21 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
         $linkData = [
             'message' => $editorialPlan->name,
             'name' => $editorialPlanDetail->title,
-            'link' => 'https://www.pickyshop.com',
+            'link' => $editorialPlanDetail->linkDestination,
             'description' => $editorialPlanDetail->description,
-            'picture' => 'https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/21GIUGNO.jpg'
-            ];
-            try {
-                $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
-            } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                return $res = 'Graph returned an error: ' . $e->getMessage();
+            'picture' => $editorialPlanDetail->photoUrl
+        ];
+        try {
+            $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+            return $res = 'Graph returned an error: ' . $e->getMessage();
 
-            } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                return $res = 'Facebook SDK returned an error: ' . $e->getMessage();
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            return $res = 'Facebook SDK returned an error: ' . $e->getMessage();
 
-            }
-            $graphNode = $response->getGraphNode();
-
+        }
+        $graphNode = $response->getGraphNode();
+        $id=$graphNode['id'];
 
 
 
