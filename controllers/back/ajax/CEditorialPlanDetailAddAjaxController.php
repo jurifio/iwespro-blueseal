@@ -217,25 +217,45 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $pageAccessToken =$editorialPlanShopAsSocial->access_token;
                     if($isNewAdSet=='1') {
                         try {
-                            try {
-                                // Returns a `Facebook\FacebookResponse` object
-                                $response = $fb->get(
-                                    '...?fields=id,objective,status',
-                                    $pageAccessToken
+
+                                $adAccountId='act_'.$facebookMarketAccountId;
+                                $_SESSION['facebook_access_token']=$pageAccessToken;
+                                Api::init(
+                                    $fbConfig['app_id'], // App ID
+                                    $fbConfig['app_secret'],
+                                    $_SESSION['facebook_access_token'] // Your user access token
                                 );
-                            } catch(Facebook\Exceptions\FacebookResponseException $e) {
-                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'get Response GetCampaignDetail');
-                           return 'Graph returned an error: ' . $e->getMessage().''.$e->getLine();
-                            } catch(Facebook\Exceptions\FacebookSDKException $e) {
-                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'get sdk GetCampaignDetail');
-                                return 'Graph returned an error: ' . $e->getMessage().''.$e->getLine();
-                            }
-                            $getCampaign = $response->getGraphNode();
-                            foreach ($getCampaign as $campaign){
+                                $account = new AdAccount($adAccountId);
+                                $params = array(
+                                    'limit' => 500,
+                                );
+                                $fields = array(
+                                    CampaignFields::NAME, /* <--- this is the error */
+                                    CampaignFields::OBJECTIVE,
+                                    CampaignFields::STATUS,
 
-                            }
+                                );
+                                $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
+                                $campaignList=[];
+// Loop over objects
 
-                            $status=
+                                    foreach ($cursor as $campaign) {
+                                        $nameCampaign = $campaign->{CampaignFields::NAME} . PHP_EOL;
+                                        $idCampaign = $campaign->{CampaignFields::ID} . PHP_EOL;
+
+                                        $objective = $campaign->{CampaignFields::OBJECTIVE} . PHP_EOL;
+                                        $buying_type = $campaign->{CampaignFields::BUYING_TYPE} . PHP_EOL;
+                                        $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS} . PHP_EOL;
+                                        if($idCampaign==$campaignId)
+                                        $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                                        break;
+                                    }
+
+
+
+
+
+
                             // Returns a `Facebook\FacebookResponse` object
                             $response = $fb->post(
                                 '/' . $adAccountId . '/adsets',
@@ -246,9 +266,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                                     'campaign_id' => $campaignId,
                                     'billing_event' => 'IMPRESSIONS',
                                     'bid_amount' => '500',
-                                    'optimization_goal' => 'REACH',
+                                    'optimization_goal' => $campaignList[0]['objective'],
                                     'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
-                                    'status' => 'PAUSED',
+                                    'status' => $campaignList[0]['effective_status'],
                                 ),
                                 $pageAccessToken
                             );
@@ -263,15 +283,18 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         $graphNode = $response->getGraphNode();
                         $groupAdsName = $graphNode['id'];
                     }
-                    $linkData = [
-                        'message' => $editorialPlan->name,
-                        'name' => $editorialPlanDetail->title,
-                        'link' => $editorialPlanDetail->linkDestination,
-                        'description' => $editorialPlanDetail->description,
-                        'picture' => $editorialPlanDetail->photoUrl
-                    ];
-                    try {
-                        $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
+                    try{
+                    $response = $fb->post(
+                        '/' . $adAccountId . '/ads',
+                        array(
+                            'name' => $editorialPlanDetail->title,
+                            'adset_id' =>$groupAdsName,
+                            'creative'=>array('title'=>$editorialPlanDetail->title,'body'=>$editorialPlanDetail->description,'object_url'=>$editorialPlanDetail->linkDestination,'image_hash'=>$editorialPlanDetail->photoUrl),
+                            'status' => $campaignList[0]['effective_status'],
+                        ),
+                        $pageAccessToken
+                    );
+
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
                         \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
                         return  'Graph returned an error: ' . $e->getMessage();
