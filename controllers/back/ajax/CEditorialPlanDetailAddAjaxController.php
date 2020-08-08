@@ -217,6 +217,25 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $pageAccessToken =$editorialPlanShopAsSocial->access_token;
                     if($isNewAdSet=='1') {
                         try {
+                            try {
+                                // Returns a `Facebook\FacebookResponse` object
+                                $response = $fb->get(
+                                    '...?fields=id,objective,status',
+                                    $pageAccessToken
+                                );
+                            } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'get Response GetCampaignDetail');
+                           return 'Graph returned an error: ' . $e->getMessage().''.$e->getLine();
+                            } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'get sdk GetCampaignDetail');
+                                return 'Graph returned an error: ' . $e->getMessage().''.$e->getLine();
+                            }
+                            $getCampaign = $response->getGraphNode();
+                            foreach ($getCampaign as $campaign){
+
+                            }
+
+                            $status=
                             // Returns a `Facebook\FacebookResponse` object
                             $response = $fb->post(
                                 '/' . $adAccountId . '/adsets',
@@ -228,17 +247,18 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                                     'billing_event' => 'IMPRESSIONS',
                                     'bid_amount' => '500',
                                     'optimization_goal' => 'REACH',
-                                    'targeting' => '{"age_min":20,"age_max":24,"behaviors":[{"id":6002714895372,"name":"All travelers"}],"genders":[1],"geo_locations":{"countries":["US"],"regions":[{"key":"4081"}],"cities":[{"key":"777934","radius":10,"distance_unit":"mile"}]},"life_events":[{"id":6002714398172,"name":"Newlywed (1 year)"}],"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                                    'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
                                     'status' => 'PAUSED',
                                 ),
                                 $pageAccessToken
                             );
                         } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                            echo 'Graph returned an error: ' . $e->getMessage();
-                            exit;
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
+                           return  'Graph returned an error: ' . $e->getMessage();
                         } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                            exit;
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
+                            return 'Facebook SDK returned an error: ' . $e->getMessage();
+
                         }
                         $graphNode = $response->getGraphNode();
                         $groupAdsName = $graphNode['id'];
@@ -254,10 +274,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
                         \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
-
+                        return  'Graph returned an error: ' . $e->getMessage();
                     } catch (Facebook\Exceptions\FacebookSDKException $e) {
                         \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
-
+                        return  'Graph returned an error: ' . $e->getMessage();
                     }
                     $graphNode = $response->getGraphNode();
                     $editorialPlanDetailInsert->insertionId=$graphNode['id'];

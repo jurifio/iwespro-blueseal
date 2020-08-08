@@ -30,6 +30,9 @@ use FacebookAds\Object\AdCreativeLinkData;
 use FacebookAds\Object\Fields\AdCreativeLinkDataFields;
 use FacebookAds\Object\AdCreativeObjectStorySpec;
 use FacebookAds\Object\Fields\AdCreativeObjectStorySpecFields;
+use FacebookAds\Object\Fields\CampaignFields;
+use FacebookAds\Object\Fields\AdsInsightsFields;
+
 
 /**
  * Class CEditorialPlanDetailPublishAjaxController
@@ -78,7 +81,35 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
 
         $editorialPlanShopAsSocial = \Monkey::app()->repoFactory->create('EditorialPlanShopAsSocial')->findOneBy(['shopId' => $editorialPlan->shopId]);
         $pageAccessToken = 'EAALxfLD2ZAZCoBAGWoLZAfszPwLN4WnPehwiHyym7tZAOZAsZAVVHMQkT3ZCIsZAmkXK3hQZCKlvS66tjPyEVtCaDwQzUoZCyh5rusYHYt0oeunHzZAbwaBUwMRGhKet2BORvAiypkvu21XJWh7pkAZCGiKRXpN2EHgZBwmxHyKcsd7w1KQZDZD';
-/*
+        $this->app->vendorLibraries->load("facebookBusiness");
+        $_SESSION['facebook_access_token']=$pageAccessToken;
+        Api::init(
+            $fbConfig['app_id'], // App ID
+            $fbConfig['app_secret'],
+            $_SESSION['facebook_access_token'] // Your user access token
+        );
+        $account = new AdAccount($adAccountId);
+
+
+        $adSetList=[];
+        $adsets = $account->getAdSets(array(
+            AdSetFields::NAME,
+            AdSetFields::CONFIGURED_STATUS,
+            AdSetFields::EFFECTIVE_STATUS,
+            AdSetFields::ID,
+        ));
+// Loop over objects
+        if($adsets!=null) {
+            foreach ($adsets as $adset) {
+                $nameAdSet = $adset->{CampaignFields::NAME} . PHP_EOL;
+                $idAdSet = $adset->{CampaignFields::ID} . PHP_EOL;
+                $status = $adset->{CampaignFields::EFFECTIVE_STATUS} . PHP_EOL;
+
+                $adSetList[] = ['idAdSet' => $idAdSet, 'nameAdSet' => $nameAdSet, 'status' => $status, 'error' => '0'];
+            }
+        }
+        /*
+
         $linkData = [
             'message' => $editorialPlan->name,
             'name' => $editorialPlanDetail->title,
@@ -116,7 +147,7 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
                     'billing_event' => 'IMPRESSIONS',
                     'bid_amount'=>'500',
                     'optimization_goal' => 'REACH',
-                    'targeting' => '{"age_min":20,"age_max":24,"behaviors":[{"id":6002714895372,"name":"All travelers"}],"genders":[1],"geo_locations":{"countries":["US"],"regions":[{"key":"4081"}],"cities":[{"key":"777934","radius":10,"distance_unit":"mile"}]},"life_events":[{"id":6002714398172,"name":"Newlywed (1 year)"}],"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                    'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
                     'status' => 'PAUSED',
                 ),
                 $pageAccessToken
