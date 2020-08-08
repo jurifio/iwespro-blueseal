@@ -137,6 +137,7 @@ $('#selecterCampaign').change(function () {
                                         <button class="btn btn-primary" id="addCampaign" onclick="addCampaign()" type="button"><span
                                                 class="fa fa-save">Salva Campagna</span></button>
                                             <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/> 
+                                            <input type="hidden" id="isNewAdset" name="isNewAdset" value="1"/>
                                             </div>
                                         </div>
                                     </div>`;
@@ -214,6 +215,7 @@ $('#selecterCampaign').change(function () {
                    <button class="btn btn-primary" id="addCampaign" onclick="updateCampaign()" type="button"><span
                        class="fa fa-save">Aggiorna Campagna</span></button>
                    <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/>
+                    <input type="hidden" id="isNewAdset" name="isNewAdset" value="2"/>
                </div>
            </div>
        </div>`;
@@ -366,10 +368,12 @@ $(document).on('bs.post.save', function () {
             campaignName='notExist';
         }
         var groupAdsName='';
-        if($('#groupAdsName').length){
-            groupAdsName=$('#groupAdsName').val();
-        }else{
-            groupAdsName='notExist';
+        if($('#groupAdsName').length) {
+            groupAdsName = $('#groupAdsName').val();
+        }
+        var isNewAdSet=0;
+        if($('#isNewAdset').length){
+            isNewAdSet=$('#isNewAdset').val();
         }
         start = $('#startEventDate').val();
         end = $('#endEventDate').val();
@@ -395,7 +399,8 @@ $(document).on('bs.post.save', function () {
             isVisibleBodyEvent: isVisBody,
             facebookCampaignId:facebookCampaignId,
             campaignId:campaignName,
-            groupAdsName:groupAdsName
+            groupAdsName:groupAdsName,
+            isNewAdSet:isNewAdSet
 
 
 

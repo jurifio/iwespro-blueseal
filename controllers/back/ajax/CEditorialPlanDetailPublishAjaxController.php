@@ -6,6 +6,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\facebook\CFacebookCookieSession;
+use FacebookAds\Http\Exception\RequestException;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CEditorialPlanArgument;
 use bamboo\domain\entities\CEditorialPlanDetail;
@@ -96,59 +97,39 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
         }
         $graphNode = $response->getGraphNode();
         $id=$graphNode['id'];*/
-        $this->app->vendorLibraries->load("facebookBusiness");
-      /*  $_SESSION['facebook_access_token']=$pageAccessToken;
-        Api::init(
-            $fbConfig['app_id'], // App ID
-            $fbConfig['app_secret'],
-            $_SESSION['facebook_access_token']);*/
 
 
-        $adset = new AdSet(null, $adAccountId);
-        $adset->setData(array(
-            AdSetFields::NAME => 'Peter//MyAdSet//PromotedObject//13112017-2',
-            AdSetFields::PROMOTED_OBJECT => array(
-                'page_id' => 126120924732396
-            ),
-            AdSetFields::OPTIMIZATION_GOAL => AdSetOptimizationGoalValues::REACH,
-            AdSetFields::BILLING_EVENT => AdSetBillingEventValues::IMPRESSIONS,
-            AdSetFields::BID_AMOUNT => 2,
-            AdSetFields::DAILY_BUDGET => 1000,
-            AdSetFields::CAMPAIGN_ID => '6186226299176',
-            AdSetFields::TARGETING => (new Targeting())->setData(array(
-                TargetingFields::GEO_LOCATIONS => array(
-                    'countries' => array(
-                        'IT',
-                    ),
-                )
-            )),
-            AdSetFields::START_TIME =>
-                (new \DateTime("+1 week"))->format(\DateTime::ISO8601),
-            AdSetFields::END_TIME =>
-                (new \DateTime("+2 week"))->format(\DateTime::ISO8601),
-        ));
-        $adset->validate()->create(array(
-            AdSet::STATUS_PARAM_NAME => AdSet::STATUS_ACTIVE,
-        ));
 
-$creative = new AdCreative(null, $adAccountId);
-$creative->setData(array(
-    AdCreativeFields::NAME => 'Prova nuova',
-    AdCreativeFields::TITLE => 'Welcome to our app',
-    AdCreativeFields::BODY => "We've got fun 'n' games",
-    AdCreativeFields::IMAGE_HASH => $editorialPlanDetail->photoUrl,
-    AdCreativeFields::OBJECT_URL => 'https://www.pickyshop.com',
-));
-$ad = new Ad(null, $adAccountId);
-$ad->setData(array(
-    AdFields::CREATIVE => $creative,
-    AdFields::NAME => 'prova juri',
-    AdFields::ADSET_ID => $adset->id,
-));
-$ad->create(array(
-    Ad::STATUS_PARAM_NAME => Ad::STATUS_PAUSED,
 
-));
+
+
+
+        try {
+            // Returns a `Facebook\FacebookResponse` object
+            $response = $fb->post(
+                '/'.$adAccountId.'/adsets',
+                array (
+                    'name' => 'My First AdSet',
+                    'start_time' => '2020-08-14T12:46:42-0700',
+                    'end_time' => '2020-08-21T12:46:42-0700',
+                    'campaign_id' => '6186226299176',
+                    'billing_event' => 'IMPRESSIONS',
+                    'bid_amount'=>'500',
+                    'optimization_goal' => 'REACH',
+                    'targeting' => '{"age_min":20,"age_max":24,"behaviors":[{"id":6002714895372,"name":"All travelers"}],"genders":[1],"geo_locations":{"countries":["US"],"regions":[{"key":"4081"}],"cities":[{"key":"777934","radius":10,"distance_unit":"mile"}]},"life_events":[{"id":6002714398172,"name":"Newlywed (1 year)"}],"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                    'status' => 'PAUSED',
+                ),
+                $pageAccessToken
+            );
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+        $graphNode = $response->getGraphNode();
+        /* handle the result */
 
 
 

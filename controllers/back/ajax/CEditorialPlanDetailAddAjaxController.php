@@ -56,6 +56,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $facebookCampaignId = $data['facebookCampaignId'];
         $campaignId = $data['campaignId'];
         $groupAdsName = $data['groupAdsName'];
+        $isNewAdSet=$data['isNewAdSet'];
         if ($argument == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
         }
@@ -155,11 +156,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             if ($facebookCampaignId != 'notExist') {
                 $editorialPlanDetailInsert->facebookCampaignId = $facebookCampaignId;
             }
-            if ($groupAdsName != 'notExist') {
-                $editorialPlanDetailInsert->groupInsertionId = $groupAdsName;
-            }
+
             $editorialPlanDetailInsert->isVisibleBodyEvent = $isVisibleBodyEvent;
             $editorialPlanDetailInsert->editorialPlanId = $editorialPlanId;
+            $insertionId='';
 
             // eseguo la commit sulla tabella;
             switch ($argument) {
@@ -179,6 +179,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     ]);
                     $pageAccessToken =$editorialPlanShopAsSocial->access_token;
 
+
                     $linkData = [
                         'message' => $editorialPlan->name,
                         'name' => $editorialPlanDetail->title,
@@ -196,7 +197,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
                     }
                     $graphNode = $response->getGraphNode();
-                    $editorialPlanDetailInsert->insertionId=$graphNode['id'];
+                    $insertionId=$graphNode['id'];
 
                     break;
                 case '6':
@@ -214,7 +215,34 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         'persistent_data_handler' => &$c
                     ]);
                     $pageAccessToken =$editorialPlanShopAsSocial->access_token;
-
+                    if($isNewAdSet=='1') {
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adsets',
+                                array(
+                                    'name' => $groupAdsName,
+                                    'start_time' =>$startEventForFacebook,
+                                    'end_time' => $endEventForFacebook,
+                                    'campaign_id' => $campaignId,
+                                    'billing_event' => 'IMPRESSIONS',
+                                    'bid_amount' => '500',
+                                    'optimization_goal' => 'REACH',
+                                    'targeting' => '{"age_min":20,"age_max":24,"behaviors":[{"id":6002714895372,"name":"All travelers"}],"genders":[1],"geo_locations":{"countries":["US"],"regions":[{"key":"4081"}],"cities":[{"key":"777934","radius":10,"distance_unit":"mile"}]},"life_events":[{"id":6002714398172,"name":"Newlywed (1 year)"}],"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                                    'status' => 'PAUSED',
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                            echo 'Graph returned an error: ' . $e->getMessage();
+                            exit;
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                            exit;
+                        }
+                        $graphNode = $response->getGraphNode();
+                        $groupAdsName = $graphNode['id'];
+                    }
                     $linkData = [
                         'message' => $editorialPlan->name,
                         'name' => $editorialPlanDetail->title,
@@ -236,7 +264,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     break;
 
             }
-
+            if($isNewAdSet!='0') {
+                $editorialPlanDetailInsert->groupInsertionId = $groupAdsName;
+            }
             $editorialPlanDetailInsert->smartInsert();
 
 
