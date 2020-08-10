@@ -36,6 +36,7 @@ use FacebookAds\Object\AdImage;
 use FacebookAds\Object\Fields\AdImageFields;
 
 
+
 /**
  * Class CEditorialPlanDetailPublishAjaxController
  * @package bamboo\controllers\back\ajax
@@ -168,6 +169,7 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
             }
         }
         $downloadedFileContents = file_get_contents($editorialPlanDetail->photoUrl);
+        $img=base64_encode($downloadedFileContents);
         if($downloadedFileContents === false){
             throw new Exception('Failed to download file at: ' . $editorialPlanDetail->photoUrl);
         }
@@ -176,19 +178,16 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
         $fileName = 'temp.jpg';
         $save=file_put_contents($tempFolder.$fileName,$downloadedFileContents);
         $newFile=$tempFolder.$fileName;
-        $base64 = base64_encode($newFile);
+
 
 
 
         try {
             // Returns a `Facebook\FacebookResponse` object
             $response = $fb->post(
-               'https://graph.facebook.com/v2.11/me/photos',
+               '/'.$adAccountId . '/adimages/',
                 array (
-                    'url' => $editorialPlanDetail->photoUrl,
-                    'caption'=>$editorialPlanDetail->title,
-                    'published'=>'false'
-
+                    'bytes' =>$img
                 ),
                 $pageAccessToken
             );
@@ -200,24 +199,27 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
             exit;
         }
         $graphNode = $response->getGraphNode();
-$idImage =$graphNode['id'];
+$imagehash = $graphNode['images']['bytes']['hash'];
+
 
         try {
-
-
-
             // Returns a `Facebook\FacebookResponse` object
             $response = $fb->post(
                 '/'.$adAccountId.'/adcreatives',
                 array (
-                    'title' => $editorialPlanDetail->title,
                     'name' => $editorialPlanDetail->title,
-                    'body' => $editorialPlanDetail->description,
-                    'object_url'=>$editorialPlanDetail->linkDestination,
-                    'link_url'=>$editorialPlanDetail->linkDestination,
-                    'image_file'=>$editorialPlanDetail->photoUrl
+                    'object_story_spec'=>array(
+                        'page_id' => '422923137874806',
+                        'photo_data'=>array(
+                             'image_hash'=>$imagehash
+                        ),
+                     'title'=>$editorialPlanDetail->title,
+                     'body'=>$editorialPlanDetail->description,
+                     'link_url'=>$editorialPlanDetail->linkDestination,
+                     'object_url'=>$editorialPlanDetail->linkDestination
+                        ),
                 ),
-                $pageAccessToken
+               $pageAccessToken
             );
         } catch(Facebook\Exceptions\FacebookResponseException $e) {
             echo 'Graph returned an error: ' . $e->getMessage();
@@ -227,8 +229,10 @@ $idImage =$graphNode['id'];
             exit;
         }
         $graphNode = $response->getGraphNode();
+        $creativeId=$graphNode['id'];
         /* handle the result */
-       $creativeId=$graphNode['id'];
+
+
         $response = $fb->post(
             '/' . $adAccountId . '/ads',
             array(

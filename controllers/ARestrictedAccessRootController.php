@@ -10,6 +10,7 @@ use bamboo\core\router\CInternalRequest;
 use bamboo\core\router\CRouter;
 
 
+
 /**
  * Class ARestrictedAccessRootController
  * @package bamboo\blueseal\controllers
