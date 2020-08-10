@@ -169,24 +169,25 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
         }
         $downloadedFileContents = file_get_contents($editorialPlanDetail->photoUrl);
         if($downloadedFileContents === false){
-            throw new Exception('Failed to download file at: ' . $url);
+            throw new Exception('Failed to download file at: ' . $editorialPlanDetail->photoUrl);
         }
         //The path and filename that you want to save the file to.
         $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
         $fileName = 'temp.jpg';
         $save=file_put_contents($tempFolder.$fileName,$downloadedFileContents);
         $newFile=$tempFolder.$fileName;
-        $hashFile=hash_hmac('sha256', $newFile);
         $base64 = base64_encode($newFile);
 
 
 
         try {
             // Returns a `Facebook\FacebookResponse` object
-            $response = $fb->get(
-                '/'.$adAccountId.'/adimages',
+            $response = $fb->post(
+               'https://graph.facebook.com/v2.11/me/photos',
                 array (
-                    'filename' => $editorialPlanDetail->photoUrl
+                    'url' => $editorialPlanDetail->photoUrl,
+                    'caption'=>$editorialPlanDetail->title,
+                    'published'=>'false'
 
                 ),
                 $pageAccessToken
@@ -199,7 +200,7 @@ class CEditorialPlanDetailPublishAjaxController extends AAjaxController
             exit;
         }
         $graphNode = $response->getGraphNode();
-
+$idImage =$graphNode['id'];
 
         try {
 
