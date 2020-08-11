@@ -72,16 +72,19 @@ class CSelectFacebookAdSetAjaxController extends AAjaxController
             AdSetFields::NAME,
             AdSetFields::CONFIGURED_STATUS,
             AdSetFields::EFFECTIVE_STATUS,
+            AdSetFields::CAMPAIGN_ID,
             AdSetFields::ID,
         ));
 // Loop over objects
       if($adsets!=null) {
           foreach ($adsets as $adset) {
-              $nameAdSet = $adset->{CampaignFields::NAME} . PHP_EOL;
-              $idAdSet = $adset->{CampaignFields::ID} . PHP_EOL;
-              $status=$adset->{CampaignFields::EFFECTIVE_STATUS} . PHP_EOL;
-
-              $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status'=>$status,'error' => '0'];
+              $nameAdSet = $adset->{AdSetFields::NAME};
+              $idAdSet = $adset->{AdSetFields::ID};
+              $status=$adset->{AdSetFields::EFFECTIVE_STATUS};
+              $campaignId=$adset->{AdSetFields::CAMPAIGN_ID};
+            if($campaignId==$data['campaignId']) {
+                $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+            }
           }
       }else{
           $adSetList[] = ['idAdSet' => '0','nameAdSet' => '0','status'=>'0','error' => '1'];

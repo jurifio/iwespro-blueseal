@@ -43,6 +43,7 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
         } else {
             require '/home/shared/vendor/mailgun/vendor/autoload.php';
         }
+        $this->app->vendorLibraries->load("facebook");
         $this->app->vendorLibraries->load("facebookBusiness");
         $c = new CFacebookCookieSession($this->app);
         $fbConfig = $this->app->cfg()->fetch('miscellaneous','facebook');
@@ -63,12 +64,13 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
         $editorialPlanShopAsSocial = \Monkey::app()->repoFactory->create('EditorialPlanShopAsSocial')->findOneBy(['shopId' => $editorialPlan->shopId]);
         $pageAccessToken = $editorialPlanShopAsSocial->access_token;
         $adAccountId='act_'.$facebookMarketAccountId;
+        $groupAdsName=$data['groupAdsName'];
 
 
     $linkData = array(
         'name' => $data['campaignName'],
         'buying_type' => $data['buying_type'],
-        'objective' => $data['objective'],
+        'objective' => 'REACH',
         'lifetime_budget' => str_replace('.','',$data['lifetime_budget']),
         'status' => 'PAUSED',
         'special_ad_categories' =>'NONE',
@@ -87,7 +89,7 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
             }
             $graphNode = $response->getGraphNode();
 
-       /* $_SESSION['facebook_access_token']=$pageAccessToken;
+        $_SESSION['facebook_access_token']=$pageAccessToken;
          Api::init(
             $fbConfig['app_id'], // App ID
             $fbConfig['app_secret'],
@@ -100,21 +102,21 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
 
 
         $linkData1 = array(
-            'name' => $data['groupAdsName'],
+            'name' => $groupAdsName,
             'optimization_goal'=> $data['objective'],
             'billing_event' => 'IMPRESSIONS',
-            'bid_amount'=> 2,
-            'objective' => $data['objective'],
+            'objective' => 'REACH',
             'campaign_id'=> $graphNode['id'],
-            'lifetime_budget' => str_replace('.','',$data['lifetime_budget']),
             'start_time'=>$start_time,
             'end_time'=>$end_time,
             'status' => 'PAUSED',
+            'bid_amount'=>'500',
+            'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
 
         );
-        $response = $fb->post('https://graph.facebook.com/v2.11/'.$adAccountId.'/adsets',
-            $linkData1,$pageAccessToken);*/
-
+        $response1 = $fb->post('/' . $adAccountId . '/adsets',
+            $linkData1,$pageAccessToken);
+        $graphNode2=$response1->getGraphNode();
 
         $res = $graphNode['id'];
         return $res;
@@ -169,7 +171,7 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
         }
         $graphNode = $response->getGraphNode();
 
-        /* $_SESSION['facebook_access_token']=$pageAccessToken;
+         $_SESSION['facebook_access_token']=$pageAccessToken;
           Api::init(
              $fbConfig['app_id'], // App ID
              $fbConfig['app_secret'],
@@ -181,21 +183,22 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
          $end_time = (new \DateTime("+2 week"))->format(DateTime::ISO8601);
 
 
-         $linkData1 = array(
+       /*  $linkData1 = array(
              'name' => $data['groupAdsName'],
              'optimization_goal'=> $data['objective'],
              'billing_event' => 'IMPRESSIONS',
-             'bid_amount'=> 2,
              'objective' => $data['objective'],
              'campaign_id'=> $graphNode['id'],
-             'lifetime_budget' => str_replace('.','',$data['lifetime_budget']),
              'start_time'=>$start_time,
              'end_time'=>$end_time,
              'status' => 'PAUSED',
+             'bid_amount'=>'500',
+             'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
 
          );
          $response = $fb->post('https://graph.facebook.com/v2.11/'.$adAccountId.'/adsets',
-             $linkData1,$pageAccessToken);*/
+             $linkData1,$pageAccessToken);
+        $graphNode1 = $response->getGraphNode();*/
 
 
         $res = $graphNode['id'];

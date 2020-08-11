@@ -400,7 +400,8 @@ $(document).on('bs.post.save', function () {
             facebookCampaignId:facebookCampaignId,
             campaignId:campaignName,
             groupAdsName:groupAdsName,
-            isNewAdSet:isNewAdSet
+            isNewAdSet:isNewAdSet,
+            selecterCampaign:$('#selecterCampaign').val()
 
 
 
@@ -440,7 +441,8 @@ function addCampaign(){
             objective: $('#objective').val(),
             typeBudget: $('#typeBudget').val(),
             lifetime_budget: $('#lifetime_budget').val(),
-            editorialPlanId:$('#editorialPlanId').val()
+            editorialPlanId:$('#editorialPlanId').val(),
+            groupAdsName:$('#groupAdsName').val()
         }
         $.ajax({
             method: 'post',

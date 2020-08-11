@@ -79,12 +79,12 @@ class CSelectFacebookCampaignAjaxController extends AAjaxController
 // Loop over objects
       if($cursor!=null) {
           foreach ($cursor as $campaign) {
-              $nameCampaign = $campaign->{CampaignFields::NAME} . PHP_EOL;
-              $idCampaign = $campaign->{CampaignFields::ID} . PHP_EOL;
+              $nameCampaign = $campaign->{CampaignFields::NAME};
+              $idCampaign = $campaign->{CampaignFields::ID};
 
-              $objective = $campaign->{CampaignFields::OBJECTIVE} . PHP_EOL;
-              $buying_type = $campaign->{CampaignFields::BUYING_TYPE} . PHP_EOL;
-              $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS} . PHP_EOL;
+              $objective = $campaign->{CampaignFields::OBJECTIVE};
+              $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
+              $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
               $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status,'error' => '0'];
           }
       }else{

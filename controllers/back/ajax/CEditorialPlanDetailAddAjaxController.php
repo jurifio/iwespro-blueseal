@@ -31,6 +31,8 @@ use FacebookAds\Http\RequestInterface;
 use FacebookAds\Object\Values\AdCreativeCallToActionTypeValues;
 use FacebookAds\Object\Fields\AdCreativeFields;
 use FacebookAds\Object\Fields\AdFields;
+use FacebookAds\Object\Fields\CampaignFields;
+use FacebookAds\Object\Fields\AdsInsightsFields;
 
 class CEditorialPlanDetailAddAjaxController extends AAjaxController
 {
@@ -54,9 +56,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $argument = $data['argument'];
         $linkDestination = $data['linkDestination'];
         $facebookCampaignId = $data['facebookCampaignId'];
-        $campaignId = $data['campaignId'];
-        $groupAdsName = $data['groupAdsName'];
-        $isNewAdSet=$data['isNewAdSet'];
+        $campaignId = str_replace('\n','',$data['campaignId']);
+        $groupAdsName = str_replace('\n','',$data['groupAdsName']);
+        $selecterCampaign=$data['selecterCampaign'];
+        $isNewAdSet = $data['isNewAdSet'];
         if ($argument == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
         }
@@ -75,21 +78,33 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         if ($status == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Non hai selezionato lo stato</i>';
         }
+        $this->app->vendorLibraries->load("facebook");
+        $c = new CFacebookCookieSession($this->app);
+        $fbConfig = $this->app->cfg()->fetch('miscellaneous','facebook');
+        $fb = new Facebook([
+            'app_id' => $fbConfig['app_id'], // Replace {app-id} with your app id
+            'app_secret' => $fbConfig['app_secret'],
+            'default_graph_version' => 'v7.0',
+            'persistent_data_handler' => &$c
+        ]);
+
+        $this->app->vendorLibraries->load("facebookBusiness");
+        $fbConfig = $this->app->cfg()->fetch('miscellaneous','facebook');
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
-        $editorialPlan=\Monkey::app()->repoFactory->create('EditorialPlan')->findOneBy(['id'=>$data['editorialPlanId']]);
-        $facebookMarketAccountId=$editorialPlan->facebookMarketAccountId;
+        $editorialPlan = \Monkey::app()->repoFactory->create('EditorialPlan')->findOneBy(['id' => $data['editorialPlanId']]);
+        $facebookMarketAccountId = $editorialPlan->facebookMarketAccountId;
         $editorialPlanShopAsSocial = \Monkey::app()->repoFactory->create('EditorialPlanShopAsSocial')->findOneBy(['shopId' => $editorialPlan->shopId]);
         $pageAccessToken = $editorialPlanShopAsSocial->access_token;
-        $adAccountId='act_'.$facebookMarketAccountId;
-        $_SESSION['facebook_access_token']=$pageAccessToken;
+        $adAccountId = 'act_' . $facebookMarketAccountId;
+        $_SESSION['facebook_access_token'] = $pageAccessToken;
         Api::init(
             $fbConfig['app_id'], // App ID
             $fbConfig['app_secret'],
             $_SESSION['facebook_access_token']);
-            // Your user access token
-        $startEventForFacebook=STimeToolbox::FormatDateFromDBValue($startEventDate,DateTime::ISO8601);
-        $endEventForFacebook=STimeToolbox::FormatDateFromDBValue($endEventDate,DateTime::ISO8601);
+        // Your user access token
+        $startEventForFacebook = STimeToolbox::FormatDateFromDBValue($startEventDate,DateTime::ISO8601);
+        $endEventForFacebook = STimeToolbox::FormatDateFromDBValue($endEventDate,DateTime::ISO8601);
         $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate,'Y-m-d H:i:s');
         $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate,'Y-m-d H:i:s');
 
@@ -122,7 +137,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             // $groupimage='https://www.iwes.pro/assets/bs-dummy-16-9.png';
             $groupimage = '';
         }
-
+        $groupImage = 'https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/21GIUGNO.jpg';
         /** @var CRepo $editorialPlanDetailRepo */
         $editorialPlanDetailRepo = \Monkey::app()->repoFactory->create('EditorialPlanDetail');
 
@@ -159,7 +174,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
             $editorialPlanDetailInsert->isVisibleBodyEvent = $isVisibleBodyEvent;
             $editorialPlanDetailInsert->editorialPlanId = $editorialPlanId;
-            $insertionId='';
+            $insertionId = '';
 
             // eseguo la commit sulla tabella;
             switch ($argument) {
@@ -167,17 +182,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
 
                     break;
+                case '6':
                 case  '5':
-                    $this->app->vendorLibraries->load("facebook");
-                    $c = new CFacebookCookieSession($this->app);
-                    $fbConfig = $this->app->cfg()->fetch('miscellaneous','facebook');
-                    $fb = new Facebook([
-                        'app_id' => $fbConfig['app_id'], // Replace {app-id} with your app id
-                        'app_secret' => $fbConfig['app_secret'],
-                        'default_graph_version' => $fbConfig['default_graph_version'],
-                        'persistent_data_handler' => &$c
-                    ]);
-                    $pageAccessToken =$editorialPlanShopAsSocial->access_token;
 
 
                     $linkData = [
@@ -190,124 +196,170 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     try {
                         $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
 
                     } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
 
                     }
                     $graphNode = $response->getGraphNode();
-                    $insertionId=$graphNode['id'];
+                    $insertionId = $graphNode['id'];
+                    $editorialPlanDetailInsert->insertionId = $graphNode['id'];
 
-                    break;
-                case '6':
-                    break;
-                case '8':
                     break;
                 case '9':
-                    $this->app->vendorLibraries->load("facebook");
-                    $c = new CFacebookCookieSession($this->app);
-                    $fbConfig = $this->app->cfg()->fetch('miscellaneous','facebook');
-                    $fb = new Facebook([
-                        'app_id' => $fbConfig['app_id'], // Replace {app-id} with your app id
-                        'app_secret' => $fbConfig['app_secret'],
-                        'default_graph_version' => $fbConfig['default_graph_version'],
-                        'persistent_data_handler' => &$c
-                    ]);
-                    $pageAccessToken =$editorialPlanShopAsSocial->access_token;
-                    if($isNewAdSet=='1') {
-                        try {
+                case '8':
+                    if ($isNewAdSet == '2') {
 
-                                $adAccountId='act_'.$facebookMarketAccountId;
-                                $_SESSION['facebook_access_token']=$pageAccessToken;
-                                Api::init(
-                                    $fbConfig['app_id'], // App ID
-                                    $fbConfig['app_secret'],
-                                    $_SESSION['facebook_access_token'] // Your user access token
-                                );
-                                $account = new AdAccount($adAccountId);
-                                $params = array(
-                                    'limit' => 500,
-                                );
-                                $fields = array(
-                                    CampaignFields::NAME, /* <--- this is the error */
-                                    CampaignFields::OBJECTIVE,
-                                    CampaignFields::STATUS,
 
-                                );
-                                $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
-                                $campaignList=[];
+                        $account = new AdAccount($adAccountId);
+
+                        $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
+                        $campaignList = [];
 // Loop over objects
 
-                                    foreach ($cursor as $campaign) {
-                                        $nameCampaign = $campaign->{CampaignFields::NAME} . PHP_EOL;
-                                        $idCampaign = $campaign->{CampaignFields::ID} . PHP_EOL;
+                        foreach ($cursor as $campaign) {
+                            $nameCampaign = $campaign->{CampaignFields::NAME};
+                            $idCampaign = $campaign->{CampaignFields::ID};
 
-                                        $objective = $campaign->{CampaignFields::OBJECTIVE} . PHP_EOL;
-                                        $buying_type = $campaign->{CampaignFields::BUYING_TYPE} . PHP_EOL;
-                                        $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS} . PHP_EOL;
-                                        if($idCampaign==$campaignId)
-                                        $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
-                                        break;
-                                    }
-
-
-
-
-
-
-                            // Returns a `Facebook\FacebookResponse` object
-                            $response = $fb->post(
-                                '/' . $adAccountId . '/adsets',
-                                array(
-                                    'name' => $groupAdsName,
-                                    'start_time' =>$startEventForFacebook,
-                                    'end_time' => $endEventForFacebook,
-                                    'campaign_id' => $campaignId,
-                                    'billing_event' => 'IMPRESSIONS',
-                                    'bid_amount' => '500',
-                                    'optimization_goal' => $campaignList[0]['objective'],
-                                    'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
-                                    'status' => $campaignList[0]['effective_status'],
-                                ),
-                                $pageAccessToken
-                            );
-                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
-                           return  'Graph returned an error: ' . $e->getMessage();
-                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
-                            return 'Facebook SDK returned an error: ' . $e->getMessage();
-
+                            $objective = $campaign->{CampaignFields::OBJECTIVE};
+                            $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
+                            $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
+                            if ($idCampaign == $campaignId)
+                                $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                            break;
                         }
-                        $graphNode = $response->getGraphNode();
-                        $groupAdsName = $graphNode['id'];
                     }
-                    try{
-                    $response = $fb->post(
-                        '/' . $adAccountId . '/ads',
-                        array(
-                            'name' => $editorialPlanDetail->title,
-                            'adset_id' =>$groupAdsName,
-                            'creative'=>array('title'=>$editorialPlanDetail->title,'body'=>$editorialPlanDetail->description,'object_url'=>$editorialPlanDetail->linkDestination,'image_hash'=>$editorialPlanDetail->photoUrl),
-                            'status' => $campaignList[0]['effective_status'],
-                        ),
-                        $pageAccessToken
-                    );
+                    if($selecterCampaign==1){
+                        $adSetList = [];
+                        $adsets = $account->getAdSets(array(
+                            AdSetFields::NAME,
+                            AdSetFields::CONFIGURED_STATUS,
+                            AdSetFields::EFFECTIVE_STATUS,
+                            AdSetFields::ID,
+                            AdSetFields::CAMPAIGN_ID,
+                        ));
+// Loop over objects
 
+                        foreach ($adsets as $adset) {
+                            $nameAdSet = $adset->{AdSetFields::NAME};
+                            $idAdSet = $adset->{AdSetFields::ID};
+                            $status = $adset->{CampaignFields::STATUS};
+                            if ($idAdSet == $groupAdsName) {
+                                $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+                            }
+                        }
+
+
+
+                            try {
+                                // Returns a `Facebook\FacebookResponse` object
+                                $response = $fb->post(
+                                    '/' . $adAccountId . '/adsets',
+                                    array(
+                                        'name' => $adSetList[0]['nameAdSet'],
+                                        'start_time' => $startEventForFacebook,
+                                        'end_time' => $endEventForFacebook,
+                                        'campaign_id' => $campaignId,
+                                        'billing_event' => 'IMPRESSIONS',
+                                        'bid_amount' => '500',
+                                        'optimization_goal' => $campaignList[0]['objective'],
+                                        'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                                        'status' => $campaignList[0]['effective_status'],
+                                    ),
+                                    $pageAccessToken
+                                );
+                            } catch
+                            (Facebook\Exceptions\FacebookResponseException $e) {
+                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
+                                return 'Graph returned an error: ' . $e->getMessage();
+                            } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
+                                return 'Facebook SDK returned an error: ' . $e->getMessage();
+
+                            }
+                            $graphNode = $response->getGraphNode();
+
+                            $groupAdsName = $graphNode['id'];
+                        }
+
+
+
+
+                    $downloadedFileContents = file_get_contents($groupimage);
+                    $img = base64_encode($downloadedFileContents);
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/adimages/',
+                            array(
+                                'bytes' => $img
+                            ),
+                            $pageAccessToken
+                        );
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
-                        return  'Graph returned an error: ' . $e->getMessage();
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
                     } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
-                        return  'Graph returned an error: ' . $e->getMessage();
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
                     }
                     $graphNode = $response->getGraphNode();
-                    $editorialPlanDetailInsert->insertionId=$graphNode['id'];
+                    $imagehash = $graphNode['images']['bytes']['hash'];
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/adcreatives',
+                            array(
+                                'name' => $title,
+                                'object_story_spec' => array(
+                                    'page_id' => $editorialPlanShopAsSocial->page_id,
+                                    'photo_data' => array(
+                                        'image_hash' => $imagehash
+                                    ),
+                                    'title' => $title,
+                                    'body' => $description,
+                                    'link_url' => $linkDestination,
+                                    'object_url' => $linkDestination
+                                ),
+                            ),
+                            $pageAccessToken
+                        );
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $creativeId = $graphNode['id'];
+                    $editorialPlanDetailInsert->creativeId = $creativeId;
+                    try {
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/ads',
+                            array(
+                                'name' => $title,
+                                'adset_id' => $groupAdsName,
+                                'creative' => array('creative_id' => $creativeId),
+                                'status' => $campaignList[0]['effective_status'],
+                            ),
+                            $pageAccessToken
+                        );
+
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $editorialPlanDetailInsert->insertionId = $graphNode['id'];
                     break;
 
             }
-            if($isNewAdSet!='0') {
+            if ($isNewAdSet != '0') {
                 $editorialPlanDetailInsert->groupInsertionId = $groupAdsName;
             }
             $editorialPlanDetailInsert->smartInsert();
