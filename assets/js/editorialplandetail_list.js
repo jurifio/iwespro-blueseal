@@ -3,6 +3,8 @@
     var eventColor;
     var obj = null;
     var typeView = 1;
+    var facebookCampaignId='';
+    var groupInsertionId='';
     $(document).ready(function () {
         $(this).trigger('bs.load.photo');
         createcalendar(obj, 1);
@@ -225,6 +227,7 @@
                 eventRender: function (event, element) {
                     var bgRender = "#ffffff";
                     var bgTitle = "#ffffff";
+
 
                     eventColor = "";
                     bgTitle = '<div style="background-color:' + event.color + ';color:black;">';
@@ -875,13 +878,11 @@
                         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
                         start = $('#startEventDate').val();
                         end = $('#endEventDate').val();
-                        var facebookCampaignId = '';
                         if ($('#facebookCampaignId').length) {
                             facebookCampaignId = $('#facebookCampaignId').val();
                         } else {
                             facebookCampaignId = 'notExist';
                         }
-                        var campaignName = '';
                         if ($('#campaignName').length) {
                             campaignName = $('#campaignName').val();
                         } else {
@@ -962,6 +963,8 @@
                     var linkDestination = event.linkDestination;
                     var photoUrl = event.photoUrl;
                     var status = event.status;
+                    facebookCampaignId=event.facebookCampaignId;
+                    groupInsertionId=event.groupInsertionId;
                     var selectedDraft = "";
                     var selectedApproved = "";
                     var selectedRejected = "";
@@ -983,8 +986,7 @@
 
                     let url1 = window.location.href;
                     let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
-                    var facebookCampaignId=event.facebookCampaignId;
-                    var groupInsertionId=event.groupInsertionId;
+
                     var note = event.note;
                     var socialId = event.socialId;
                     var socialName = event.socialName;
@@ -1004,6 +1006,7 @@
                     cancelButton.remove();
                     var linkimg = "";
                     var link = event.photoUrl.split(",");
+
                     link.forEach(function (element) {
                         linkimg = linkimg + '<br/><img width="150px" src="' + element + '">';
                     });
@@ -1362,7 +1365,7 @@
                         url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
                         method: 'get',
                         data: {
-                            campaignId:$('#campaignName').val(),
+                            campaignId:facebookCampaignId,
                             editorialPlanId: editorialPlanId
                         },
                         dataType: 'json'
@@ -1492,6 +1495,9 @@
                                         socialId: socialId,
                                         title: title,
                                         note: note,
+                                        linkDestination:$('#linkDestination').val(),
+                                        campaignName:$('#campaignName').val(),
+                                        groupAdsName:$('#groupAdsName').val(),
 
 
                                     },
