@@ -137,7 +137,6 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             // $groupimage='https://www.iwes.pro/assets/bs-dummy-16-9.png';
             $groupimage = '';
         }
-        $groupImage = 'https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/21GIUGNO.jpg';
         /** @var CRepo $editorialPlanDetailRepo */
         $editorialPlanDetailRepo = \Monkey::app()->repoFactory->create('EditorialPlanDetail');
 
