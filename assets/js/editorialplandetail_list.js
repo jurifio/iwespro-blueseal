@@ -1,4 +1,5 @@
 (function ($) {
+
     var eventColor;
     var obj = null;
     var typeView = 1;
@@ -114,6 +115,7 @@
         });
 
     });
+
     $('#sintetic').on('click', function () {
         $('#calendar').fullCalendar('destroy');
         $('#appendDetailedChekbox').empty();
@@ -319,14 +321,24 @@
                     let bsModal1 = new $.bsModal('Invio', {
                         body: '<p>Inserisci un Evento per il Piano Editoriale</p>' +
                             '<div class=\"row\">' +
+                            '<div class ="col-md-3">' +
+                            '<div class="form-group form-group-default selectize-enabled">' +
+                            '<label htmlFor="editorialPlanId">Seleziona Piano Editoriale</label>' +
+                            '<select id="editorialPlanId"' +
+                            'name="editorialPlanId" className="full-width selectpicker"' +
+                            'required="required"' +
+                            'placeholder="Selezione il piano editoriale da utilizzare"' +
+                            'data-init-plugin="selectize"></select>' +
+                            '</div>' +
+                            '</div>' +
                             '<div class="col-md-3">' +
                             '<div class="form-group form-group-default selectize-enabled">' +
                             '<label for="editorialPlanArgumentId">Argomento Evento</label>' +
                             '<select id="editorialPlanArgumentId"' +
-                            ' name="editorialPlanArgumentId" class="full-width selectpicker"' +
-                            ' required="required"' +
-                            ' placeholder="Selezione l\'argomento da utilizzare"' +
-                            ' data-init-plugin="selectize"></select>' +
+                            'name="editorialPlanArgumentId" class="full-width selectpicker"' +
+                            'required="required"' +
+                            'placeholder="Selezione l\'argomento da utilizzare"' +
+                            'data-init-plugin="selectize"></select>' +
                             '</div>' +
                             '</div>' +
                             '<div class=\"col-md-3\">' +
@@ -336,7 +348,27 @@
                             'placeholder=\"Visible\" checked="true" name=\"isVisibleEditorialPlanArgument\" ">' +
                             '</div>' +
                             '</div>' +
+                            '<div class="col-md-3">' +
+                            '<div id="divSelecterCampaign" className="hide">' +
+                            '<div className="form-group form-group-default selectize-enabled">' +
+                            '<label htmlFor="selecterCampaign">Seleziona Operazione su </label>' +
+                            '<select id="selecterCampaign"' +
+                            'name="selecterCampaign" className="full-width selectpicker"' +
+                            'required="required"' +
+                            'placeholder="Selezione operazioni su campagna da utilizzare"' +
+                            'data-init-plugin="selectize">' +
+                            '<option value="">seleziona</option>' +
+                            '<option value="0">Crea Nuova</option>' +
+                            '<option value="1">Seleziona Esistente</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div id="divCampaign" class="hide">' +
 
+                            '</div>' +
+                            '<div class="row">' +
                             '<div class=\"col-md-3\">' +
                             '<div class=\"form-group form-group-default selectize-enabled\">' +
                             '<label for=\"titleEvent\">Titolo Azione Evento</label>' +
@@ -399,7 +431,7 @@
                             '<div class=\"col-md-6\">' +
                             '<div class=\"form-group form-group-default selectize-enabled\">' +
                             '<label for=\"bodyEvent\">Testo Evento</label>' +
-                            '<textarea id="bodyEvent" cols="100" rows="10" name="bodyEvent" placeholder="Inserisci il testo"></textarea>' +
+                            '<textarea id="bodyEvent" cols="50" rows="10" name="bodyEvent" placeholder="Inserisci il testo"></textarea>' +
                             '</div>' +
                             '</div>' +
                             '<div class=\"col-md-3\">' +
@@ -414,7 +446,7 @@
                             '<div class=\"col-md-6\">' +
                             '<div class=\"form-group form-group-default selectize-enabled\">' +
                             '<label for=\"note\">Note Evento </label>' +
-                            '<textarea id="note" cols="100" rows="10" name="note" placeholder="Inserisci le note"></textarea>' +
+                            '<textarea id="note" cols="50" rows="10" name="note" placeholder="Inserisci le note"></textarea>' +
                             '</div>' +
                             '</div>' +
                             '<div class=\"col-md-3\">' +
@@ -519,6 +551,23 @@
                         okButton.removeAttr("disabled");
                         $(document).trigger('bs.load.photo');
                     });
+                    $.ajax({
+                        method: 'GET',
+                        url: '/blueseal/xhr/GetTableContent',
+                        data: {
+                            table: 'EditorialPlan'
+                        },
+                        dataType: 'json'
+                    }).done(function (res2) {
+                        var select = $('#editorialPlanId');
+                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                        select.selectize({
+                            valueField: 'id',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: res2,
+                        });
+                    });
 
 
                     $.ajax({
@@ -557,6 +606,263 @@
                             options: res2,
                         });
                     });
+                    $('#selecterCampaign').change(function () {
+                        var selecterTypeOperation = $(this).val();
+                        if (selecterTypeOperation == '0') {
+                            var bodyForm = `               <div class="row">
+                                         <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="campaignName">Nome Della Campagna</label>
+                                                <input id="campaignName" class="form-control"
+                                                       placeholder="Inserisci il nome Campagna" name="campaignName"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                         <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="groupAdsName">Nome del Gruppo inserzioni</label>
+                                                <input id="groupAdsName" class="form-control"
+                                                       placeholder="Inserisci il Nome del gruppo Inserzioni" name="groupAdsName"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="buying_type">Tipo di Acquisto</label>
+                                                <select id="buying_type"
+                                                        name="buying_type" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione campagna da utilizzare"
+                                                        data-init-plugin="selectize">
+                                                        <option value="AUCTION">Asta</option>
+                                                        <option value="RESERVED">Copertura e Frequenza</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="objective">Obiettivo della Campagna</label>
+                                                <select id="objective"
+                                                        name="objective" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione campagna da utilizzare"
+                                                        data-init-plugin="selectize">
+                                                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                                                       <option value="REACH">Copertura</option>
+                                                       <option value="LOCAL_AWARENESS">Traffico</option>
+                                                       <option value="APP_INSTALLS">installazioni dell\'App</option>
+                                                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                                                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                                                       <option value="POST_ENGAGEMENT">interazione con i post</option>
+                                                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                                                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                                                       <option value="MESSAGES">Messaggi</option>
+                                                       <option value="CONVERSIONS">Conversioni</option>
+                                                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
+                                                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="lifetime_budget">Importo Budget Totale</label>
+                                                <input id="lifetime_budget" class="form-control"
+                                                       placeholder="Inserisci il Budget" name="lifetime_budget"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                           <div class="form-group form-group-default selectize-enabled">
+                                        <button class="btn btn-primary" id="addCampaign" name="addCampaign" onclick="addCampaign()" <span
+                                                class="fa fa-save">Salva Campagna</span></button>
+                                            <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/> 
+                                            <input type="hidden" id="isNewAdset" name="isNewAdset" value="1"/>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                            $('#divCampaign').removeClass('hide');
+                            $('#divCampaign').empty();
+                            $('#divCampaign').append(bodyForm);
+
+
+
+                        } else {
+
+                            var bodyForm = `<div class="row">
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                <label for="campaignName">Seleziona Campagna</label>
+                    <select id="campaignName"
+                           name="campaignName" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                   </select>
+               </div>
+           </div>
+            <div class="col-md-2">
+            <div id="divgroupAdsName">
+            
+            </div>
+            </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="buying_type">Tipo di Acquisto</label>
+                   <select id="buying_type"
+                           name="buying_type" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                       <option value="AUCTION">Asta</option>
+                       <option value="RESERVED">Copertura e Frequenza</option>
+                   </select>
+               </div>
+           </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="objective">Obiettivo della Campagna</label>
+                   <select id="objective"
+                           name="objective" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                       <option value="REACH">Copertura</option>
+                       <option value="LOCAL_AWARENESS">Traffico</option>
+                       <option value="APP_INSTALLS">installazioni dell\'App</option>
+                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                       <option value="POST_ENGAGEMENT">interazione con i post</option>
+                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                       <option value="MESSAGES">Messaggi</option>
+                       <option value="CONVERSIONS">Conversioni</option>
+                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
+                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
+                   </select>
+               </div>
+           </div>
+
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="lifetime_budget">Importo Budget Totale</label>
+                   <input id="lifetime_budget" class="form-control"
+                          placeholder="Inserisci il Budget" name="lifetime_budget"
+                          required="required">
+               </div>
+           </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <button class="btn btn-primary" id="updateCampaign" onclick="updateCampaign()"  type="button"><span
+                       class="fa fa-save">Aggiorna Campagna</span></button>
+                   <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/>
+                    <input type="hidden" id="isNewAdset" name="isNewAdset" value="2"/>
+               </div>
+           </div>
+       </div>`;
+                            $('#divCampaign').removeClass('hide');
+                            $('#divCampaign').empty();
+                            $('#divCampaign').append(bodyForm);
+
+                            $.ajax({
+                                url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
+                                method: 'get',
+                                data: {
+                                    editorialPlanId: $('#editorialPlanId').val()
+                                },
+                                dataType: 'json'
+                            }).done(function (res) {
+                                console.log(res);
+                                let campaignName = $('#campaignName');
+                                //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                                campaignName.selectize({
+                                    valueField: 'idCampaign',
+                                    labelField: 'nameCampaign',
+                                    searchField: ['nameCampaign'],
+                                    options: res,
+                                    render: {
+                                        item: function (item, escape) {
+                                            return '<div>' +
+                                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                                '</div>'
+                                        },
+                                        option: function (item, escape) {
+                                            return '<div>' +
+                                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                                '</div>'
+                                        }
+                                    }
+                                });
+                            });
+                            $('#campaignName').change(function () {
+                                var bodyGroupAdsName = `<div class="form-group form-group-default selectize-enabled">
+                <label for="groupAdsName">Seleziona il Gruppo Inserzioni</label>
+                    <select id="groupAdsName"
+                           name="groupAdsName" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione il Gruppo inserzioni"
+                           data-init-plugin="selectize">
+                   </select>
+               </div>`;
+                                $('#divgroupAdsName').empty();
+                                $('#divgroupAdsName').append(bodyGroupAdsName);
+                                $.ajax({
+                                    url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
+                                    method: 'get',
+                                    data: {
+                                        campaignId: $('#campaignName').val(),
+                                        editorialPlanId: $('#editorialPlanId').val()
+                                    },
+                                    dataType: 'json'
+                                }).done(function (res) {
+                                    console.log(res);
+                                    let groupAdsName = $('#groupAdsName');
+                                    //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                                    groupAdsName.selectize({
+                                        valueField: 'idAdSet',
+                                        labelField: 'nameAdSet',
+                                        searchField: ['nameAdSet'],
+                                        options: res,
+                                        render: {
+                                            item: function (item, escape) {
+                                                return '<div>' +
+                                                    '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                                                    '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                                                    '</div>'
+                                            },
+                                            option: function (item, escape) {
+                                                return '<div>' +
+                                                    '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                                                    '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                                                    '</div>'
+                                            }
+                                        }
+                                    });
+                                });
+
+
+                            });
+
+                        }
+
+                    });
+
+
+
+                    $('#editorialPlanArgumentId').change(function () {
+                        if ($('#editorialPlanArgumentId').val() > 1 && $('#editorialPlanArgumentId').val() < 10) {
+                            $('#divSelecterCampaign').removeClass('hide');
+                            $('#divSelecterCampaign').addClass('show');
+                        } else {
+                            $('#divSelecterCampaign').removeClass('show');
+                            $('#divSelecterCampaign').addClass('hide');
+                        }
+                    });
+
+
 
 
                     bsModal1.showCancelBtn();
@@ -569,6 +875,26 @@
                         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
                         start = $('#startEventDate').val();
                         end = $('#endEventDate').val();
+                        var facebookCampaignId = '';
+                        if ($('#facebookCampaignId').length) {
+                            facebookCampaignId = $('#facebookCampaignId').val();
+                        } else {
+                            facebookCampaignId = 'notExist';
+                        }
+                        var campaignName = '';
+                        if ($('#campaignName').length) {
+                            campaignName = $('#campaignName').val();
+                        } else {
+                            campaignName = 'notExist';
+                        }
+                        var groupAdsName = '';
+                        if ($('#groupAdsName').length) {
+                            groupAdsName = $('#groupAdsName').val();
+                        }
+                        var isNewAdSet = 0;
+                        if ($('#isNewAdset').length) {
+                            isNewAdSet = $('#isNewAdset').val();
+                        }
 
                         const data = {
                             title: $('#titleEvent').val(),
@@ -583,13 +909,18 @@
                             socialId: $('#socialPlanId').val(),
                             editorialPlanId: $('#editorialPlanId').val(),
                             notifyEmail: $('#notifyEmail').val(),
-                            linkDestination:$('#linkDestination').val(),
+                            linkDestination: $('#linkDestination').val(),
                             isEventVisible: isEvVisible,
                             isVisibleEditorialPlanArgument: isVisEdPlanArg,
                             isVisiblePhotoUrl: isVisPhoto,
                             isVisibleDescription: isVisDesc,
                             bodyEvent: $('#bodyEvent').val(),
                             isVisibleBodyEvent: isVisBody,
+                            facebookCampaignId: facebookCampaignId,
+                            campaignId: campaignName,
+                            groupAdsName: groupAdsName,
+                            isNewAdSet: isNewAdSet,
+                            selecterCampaign: $('#selecterCampaign').val()
 
 
                         };
@@ -628,7 +959,7 @@
                     var bodyEvent = event.bodyEvent;
                     var isVisibleBodyEvent = event.isVisibleBodyEvent;
                     var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
-                    var linkDestination=event.linkDestination;
+                    var linkDestination = event.linkDestination;
                     var photoUrl = event.photoUrl;
                     var status = event.status;
                     var selectedDraft = "";
@@ -649,9 +980,11 @@
                     }
 
                     var argumentName = event.argumentName;
+
                     let url1 = window.location.href;
                     let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
-
+                    var facebookCampaignId=event.facebookCampaignId;
+                    var groupInsertionId=event.groupInsertionId;
                     var note = event.note;
                     var socialId = event.socialId;
                     var socialName = event.socialName;
@@ -701,7 +1034,90 @@
                     let bsModal2 = new $.bsModal('Invio', {
                         body: '<p>Modifica l\'evento per il Piano Editoriale</p>' +
                             '<div class=\"row\">' +
-                            '<div class="col-xs-3">' +
+                            '<div class="col-md-3">'+
+                                '<div class="form-group form-group-default selectize-enabled">'+
+                                    '<label for="editorialPlanId">Seleziona Piano Editoriale</label>'+
+                                   '<select id="editorialPlanId"'+
+                                           'name="editorialPlanId" className="full-width selectpicker"'+
+                                            'required="required"'+
+                                            'placeholder="Selezione il piano editoriale da utilizzare"'+
+                                            'data-init-plugin="selectize"></select>'+
+                               '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class=\"row\">' +
+                            `<div class="col-md-2">
+                              <div class="form-group form-group-default selectize-enabled">
+                              <label for="campaignName">Seleziona Campagna</label>
+                              <select id="campaignName"
+                               name="campaignName" class="full-width selectpicker"
+                                required="required"
+                                placeholder="Selezione campagna da utilizzare"
+                                data-init-plugin="selectize">
+                               </select>
+                               </div>
+                               </div>
+                               <div class="col-md-2">
+                               <div class="form-group form-group-default selectize-enabled">
+                               <label for="groupAdsName">Seleziona il Gruppo Inserzioni</label>
+                               <select id="groupAdsName"
+                                name="groupAdsName" class="full-width selectpicker"
+                                required="required"
+                                placeholder="Selezione il Gruppo inserzioni"
+                                data-init-plugin="selectize">
+                                </select>
+             
+                               </div>
+                               </div>
+                        <div class="col-md-2">
+                         <div class="form-group form-group-default selectize-enabled">
+                         <label for="buying_type">Tipo di Acquisto</label>
+                   <select id="buying_type"
+                           name="buying_type" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                       <option value="AUCTION">Asta</option>
+                       <option value="RESERVED">Copertura e Frequenza</option>
+                   </select>
+               </div>
+           </div>
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="objective">Obiettivo della Campagna</label>
+                   <select id="objective"
+                           name="objective" class="full-width selectpicker"
+                           required="required"
+                           placeholder="Selezione campagna da utilizzare"
+                           data-init-plugin="selectize">
+                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                       <option value="REACH">Copertura</option>
+                       <option value="LOCAL_AWARENESS">Traffico</option>
+                       <option value="APP_INSTALLS">installazioni dell\'App</option>
+                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                       <option value="POST_ENGAGEMENT">interazione con i post</option>
+                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                       <option value="MESSAGES">Messaggi</option>
+                       <option value="CONVERSIONS">Conversioni</option>
+                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
+                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
+                   </select>
+               </div>
+           </div>
+
+           <div class="col-md-2">
+               <div class="form-group form-group-default selectize-enabled">
+                   <label for="lifetime_budget">Importo Budget Totale</label>
+                   <input id="lifetime_budget" class="form-control"
+                          placeholder="Inserisci il Budget" name="lifetime_budget"
+                          required="required">
+               </div>
+           </div>`+
+                            '</div>'+
+                            '<div class=\"row\">' +
+                            '<div class="col-md-3">'+
                             '<div class="form-group form-group-default selectize-enabled">' +
                             '<label for="editorialPlanArgumentId">Argomento Evento</label>' +
                             '<select id="editorialPlanArgumentId" name="editorialPlanArgumentId" class="full-width selectpicker"' +
@@ -774,7 +1190,7 @@
                             '<div class=\"col-md-6\">' +
                             '<div class=\"form-group form-group-default selectize-enabled\">' +
                             '<label for=\"bodyEvent\">Testo Evento</label>' +
-                            '<textarea id="bodyEvent" cols="150" rows="10" name="bodyEvent">' + bodyEvent + '</textarea>' +
+                            '<textarea id="bodyEvent" cols="50" rows="10" name="bodyEvent">' + bodyEvent + '</textarea>' +
                             '</div>' +
                             '</div>' +
                             '<div class=\"col-md-3\">' +
@@ -789,7 +1205,7 @@
                             '<div class=\"col-md-6\">' +
                             '<div class=\"form-group form-group-default selectize-enabled\">' +
                             '<label for=\"note\">Note Evento</label>' +
-                            '<textarea id="note" cols="100" rows="10" name="note" placeholder="Inserisci le note">' + note + '</textarea>' +
+                            '<textarea id="note" cols="50" rows="10" name="note" placeholder="Inserisci le note">' + note + '</textarea>' +
                             '</div>' +
                             '</div>' +
                             '<div class=\"col-md-3\">' +
@@ -866,9 +1282,119 @@
                             '<div><p>Cancella il Dettaglio</p></div>' +
                             '<input type="button" class="btn-success" id="cloneDetail" name="cloneDetail" value="Clona il Dettaglio del Piano"' +
                             '</div>' +
-                            '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + editorialPlanId + '\"/>' +
                             '<input type="hidden" id="editorialPlanDetailId" name="editorialPlanDetailId" value=\"' + editorialPlanDetailId + '\"/>'
                     });
+
+
+
+                    $.ajax({
+                        method: 'GET',
+                        url: '/blueseal/xhr/GetTableContent',
+                        data: {
+                            table: 'EditorialPlan'
+                        },
+                        dataType: 'json'
+                    }).done(function (res2) {
+                        var select = $('#editorialPlanId');
+                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                        select.selectize({
+                            valueField: 'id',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: res2,
+                            render: {
+                                item: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.name) + '</span>' +
+                                        '</div>'
+                                },
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.name) + '</span>' +
+                                        '</div>'
+                                }
+                            },
+                            onInitialize: function () {
+                                var selectize = this;
+                                selectize.setValue(editorialPlanId);
+                            }
+                    });
+
+                });
+                    $.ajax({
+                        url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
+                        method: 'GET',
+                        data: {
+                            editorialPlanId:editorialPlanId
+                        },
+                        dataType: 'json'
+                    }).done(function (res) {
+                        console.log(res);
+                        let campaignName = $('#campaignName');
+                        //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                        campaignName.selectize({
+                            valueField: 'idCampaign',
+                            labelField: 'nameCampaign',
+                            searchField: ['nameCampaign'],
+                            options: res,
+                            render: {
+                                item: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                        '</div>'
+                                },
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                        '</div>'
+                                }
+                            }, onInitialize: function () {
+                                let selectize = this;
+                                selectize.setValue(facebookCampaignId);
+                            }
+                        });
+                    });
+                    $.ajax({
+                        url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
+                        method: 'get',
+                        data: {
+                            campaignId:$('#campaignName').val(),
+                            editorialPlanId: editorialPlanId
+                        },
+                        dataType: 'json'
+                    }).done(function (res) {
+                        console.log(res);
+                        let groupAdsName = $('#groupAdsName');
+                        //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                        groupAdsName.selectize({
+                            valueField: 'idAdSet',
+                            labelField: 'nameAdSet',
+                            searchField: ['nameAdSet'],
+                            options: res,
+                            render: {
+                                item: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                                        '</div>'
+                                },
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                                        '</div>'
+                                }
+                            }, onInitialize: function () {
+                                let selectize = this;
+                                selectize.setValue(groupInsertionId);
+                            }
+                        });
+                    });
+
                     var photoUrl1 = [];
                     bsModal2.addClass('modal-wide');
                     bsModal2.addClass('modal-high');
@@ -897,7 +1423,10 @@
                         okButton.removeAttr("disabled");
                         $(document).trigger('bs.load.photo');
                     });
+                    var selected = $('#editorialPlanId').selectize();
+                    var selectize = selected[0].selectize;
 
+                    selectize.setValue(editorialPlanId);
                     if (isEventVisible == "1") {
                         $('#isEventVisible').prop('checked', true);
                     } else {
@@ -1082,7 +1611,7 @@
                             end: end,
                             argument: $('#editorialPlanArgumentId').val(),
                             description: $('#description').val(),
-                            linkDestination:$('#linkDestination').val(),
+                            linkDestination: $('#linkDestination').val(),
                             note: $('#note').val(),
                             isVisibleNote: isVisNote,
                             photoUrl: photo,
@@ -1414,4 +1943,52 @@
 
 })
 (jQuery);
+
+function addCampaign(){
+    const data = {
+        campaignName: $('#campaignName').val(),
+        buying_type: $('#buying_type').val(),
+        objective: $('#objective').val(),
+        typeBudget: $('#typeBudget').val(),
+        lifetime_budget: $('#lifetime_budget').val(),
+        editorialPlanId: $('#editorialPlanId').val(),
+        groupAdsName: $('#groupAdsName').val()
+    }
+    $.ajax({
+        method: 'post',
+        url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
+        data: data,
+        dataType: 'json'
+    }).done(function (res) {
+        $('#facebookCampaignId').val(res);
+    }).fail(function (res) {
+
+    }).always(function (res) {
+
+    });
+
+}
+
+function updateCampaign(){
+    const data = {
+        campaignId: $('#campaignName').val(),
+        buying_type: $('#buying_type').val(),
+        objective: $('#objective').val(),
+        typeBudget: $('#typeBudget').val(),
+        lifetime_budget: $('#lifetime_budget').val(),
+        editorialPlanId: $('#editorialPlanId').val()
+    }
+    $.ajax({
+        method: 'put',
+        url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
+        data: data,
+        dataType: 'json'
+    }).done(function (res) {
+        $('#facebookCampaignId').val(res);
+    }).fail(function (res) {
+    }).always(function (res) {
+
+    });
+
+}
 

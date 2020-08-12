@@ -56,6 +56,9 @@ class CEditorialPlanDetailListFullAjaxController extends AAjaxController
             $data[$i]["isVisibleEditorialPlanArgument"] = $singleDetail->isVisibleEditorialPlanArgument;
             $data[$i]["photoUrl"] = $singleDetail->photoUrl;
             $data[$i]["isVisiblePhotoUrl"] = $singleDetail->isVisiblePhotoUrl;
+            $data[$i]["linkDestination"]=$singleDetail->linkDestination;
+            $data[$i]["facebookCampaignId"]=$singleDetail->facebookCampaignId;
+            $data[$i]["groupInsertionId"]=$singleDetail->groupInsertionId;
             switch ($singleDetail->status) {
                 case "Draft":
                     $status = "Bozza";

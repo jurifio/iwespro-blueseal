@@ -51,6 +51,7 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
             foreach ($editorialDetails as $singleDetail) {
 
                 if ($markerSocial == $singleDetail->socialId) {
+                    $data[$i]['editorialPlanId']=$singleDetail->editorilaPlanId;
                     $data[$i]["allShops"] = $p;
                     $data[$i]["id"] = $singleDetail->id;
                     $data[$i]["title"] = $singleDetail->title;
@@ -64,6 +65,10 @@ class CEditorialPlanDetailListFilteredAjaxController extends AAjaxController
                     $data[$i]["isVisibleEditorialPlanArgument"] = $singleDetail->isVisibleEditorialPlanArgument;
                     $data[$i]["photoUrl"] = $singleDetail->photoUrl;
                     $data[$i]["isVisiblePhotoUrl"] = $singleDetail->isVisiblePhotoUrl;
+                    $data[$i]["linkDestination"]=$singleDetail->linkDestination;
+                    $data[$i]["facebookCampaignId"]=$singleDetail->facebookCampaignId;
+                    $data[$i]["groupInsertionId"]=$singleDetail->groupInsertionId;
+
                     switch ($singleDetail->status) {
                         case "Draft":
                             $status = "Bozza";
