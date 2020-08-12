@@ -1494,10 +1494,7 @@
                                         status: status,
                                         socialId: socialId,
                                         title: title,
-                                        note: note,
-                                        linkDestination:$('#linkDestination').val(),
-                                        campaignName:$('#campaignName').val(),
-                                        groupAdsName:$('#groupAdsName').val(),
+                                        note: note
 
 
                                     },
@@ -1790,7 +1787,10 @@
                             bodyEvent: bodyEvent,
                             isVisibleBodyEvent: isVisibleBodyEvent,
                             socialId: socialId,
-                            notifyEmail: notifyEmail
+                            notifyEmail: notifyEmail,
+                            linkDestination:$('#linkDestination').val(),
+                            campaignName:$('#campaignName').val(),
+                            groupAdsName:$('#groupAdsName').val(),
                         },
                         success: function () {
                             calendar.fullCalendar('refetchEvents');

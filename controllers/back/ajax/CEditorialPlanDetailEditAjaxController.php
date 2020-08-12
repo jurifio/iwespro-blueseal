@@ -39,22 +39,25 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $status = $data['status'];
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
-        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d H:i:s');
-        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d H:i:s');
+        $linkDestination = $data['linkDestination'];
+        $facebookCampaignId = $data['facebookCampaignId'];
+        $groupAdsName = $data['groupAdsName'];
+        $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate,'Y-m-d H:i:s');
+        $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate,'Y-m-d H:i:s');
         $editorialPlanDetailId = $data['editorialPlanDetailId'];
         $notifyEmail = $data['notifyEmail'];
-        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths', 'tempFolder') . "-plandetail/";
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempFolder') . "-plandetail/";
         $files = glob($tempFolder . "*.jpg");
         $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
-        if(count($photoUrl)>1) {
+        if (count($photoUrl) > 1) {
 
             foreach ($photoUrl as &$jpg) {
 
                 $jpg = $jpg;
             }
-            $groupimage = implode(",", $photoUrl);
-        }else{
-            $groupimage =$photoUrl;
+            $groupimage = implode(",",$photoUrl);
+        } else {
+            $groupimage = $photoUrl;
         }
         /* $startEventDate = STimeToolbox::FormatDateFromDBValue($startEventDate, 'Y-m-d h:m:s');
          $endEventDate = STimeToolbox::FormatDateFromDBValue($endEventDate, 'Y-m-d h:m:s');*/
@@ -76,7 +79,9 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         if (!empty($title)) {
             $editorialPlanDetail->title = $title;
         }
-
+        $editorialPlanDetail->linkDestination = $linkDestination;
+        $editorialPlanDetail->facebookCampaignId = $facebookCampaignId;
+        $editorialPlanDetail->groupAdsName = $groupAdsName;
         $editorialPlanDetail->isEventVisible = $isEventVisible;
         if (!empty($startEventDate)) {
             $editorialPlanDetail->startEventDate = $startEventDate;
@@ -175,7 +180,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
             if (!is_array($to)) {
                 $to = [$to];
             }
-            $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message, null, null, null, 'mailGun', false,null);
+            $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
         }
 
 
@@ -195,7 +200,9 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
         $socialId = $data['socialId'];
         $editorialPlanId = $data['editorialPlanId'];
         $notifyEmail = "yesNotify";
-
+        $campaignName = $data['campaignName'];
+        $linkDestination = $data['linkDestination'];
+        $groupAdsName = $data['groupAdsName'];
 
 
         $editorialPlanDetailId = $data['editorialPlanDetailId'];
@@ -250,7 +257,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
             if (!is_array($to)) {
                 $to = [$to];
             }
-            $emailRepo->newMail('Iwes IT Department <it@iwes.it>', $to, [], [], $subject, $message, null, null, null, 'mailGun', false,null);
+            $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
         }
         return $res;
     }
