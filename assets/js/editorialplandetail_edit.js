@@ -1,6 +1,8 @@
-
 (function ($) {
-
+    var editorialPlanId = $('#editorialPlanIdSelected').val();
+    var campaignSelected = $('#facebookCampaignId').val();
+    var groupInsertionId = $('#groupInsertionId').val();
+    var socialPlanId = $('#socialPlanIdSelected').val();
     Pace.ignore(function () {
         $.ajax({
             method: 'GET',
@@ -17,7 +19,26 @@
                 labelField: 'name',
                 searchField: 'name',
                 options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.name) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.name) + '</span>' +
+                            '</div>'
+                    }
+                },
+                onInitialize: function () {
+                    var selectize = this;
+                    selectize.setValue(editorialPlanId);
+                }
             });
+
         });
         $.ajax({
             method: 'GET',
@@ -34,8 +55,104 @@
                 labelField: 'titleArgument',
                 searchField: 'titleArgument',
                 options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.titleArgument) + '</span> - ' +
+                            '<span class="caption">' + escape(item.descriptionArgument) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.titleArgument) + '</span> - ' +
+                            '<span class="caption">' + escape(item.descriptionArgument) + '</span>' +
+                            '</div>'
+                    }
+                },
+                onInitialize: function () {
+                    var selectize = this;
+                    selectize.setValue($('#editorialPlanArgumentIdSelected').val());
+                }
+            });
+
+        });
+
+            $.ajax({
+                url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
+                method: 'GET',
+                data: {
+                    editorialPlanId: editorialPlanId
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                console.log(res);
+                let select = $('#campaignName');
+                  if (typeof (select.selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'idCampaign',
+                    labelField: 'nameCampaign',
+                    searchField: ['nameCampaign'],
+                    options: res,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                '</div>'
+                        }
+                    }, onInitialize: function () {
+                        let selectize = this;
+                        selectize.setValue(campaignSelected);
+                    }
+                });
+            });
+
+
+
+        $.ajax({
+            url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
+            method: 'get',
+            data: {
+                campaignId: campaignSelected,
+                editorialPlanId: editorialPlanId
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            let select = $('#groupAdsName');
+               if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'idAdSet',
+                labelField: 'nameAdSet',
+                searchField: ['nameAdSet'],
+                options: res,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                            '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                            '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                            '</div>'
+                    }
+                }, onInitialize: function () {
+                    let selectize = this;
+                    selectize.setValue(groupInsertionId);
+                }
             });
         });
+
+
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -51,25 +168,41 @@
                 labelField: 'name',
                 searchField: 'name',
                 options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.name) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.name) + '</span>' +
+                            '</div>'
+                    }
+                }, onInitialize: function () {
+                    let selectize = this;
+                    selectize.setValue(socialPlanId);
+                }
             });
         });
 
 
-
     });
-$('#editorialPlanArgumentId').change(function(){
-   if($('#editorialPlanArgumentId').val()>1 && $('#editorialPlanArgumentId').val()<10){
-        $('#divSelecterCampaign').removeClass('hide');
-       $('#divSelecterCampaign').addClass('show');
-   }else{
-       $('#divSelecterCampaign').removeClass('show');
-       $('#divSelecterCampaign').addClass('hide');
-   }
-});
-$('#selecterCampaign').change(function () {
-   var selecterTypeOperation = $(this).val();
-   if(selecterTypeOperation =='0'){
-       var bodyForm=`               <div class="row">
+    $('#editorialPlanArgumentId').change(function () {
+        if ($('#editorialPlanArgumentId').val() > 1 && $('#editorialPlanArgumentId').val() < 10) {
+            $('#divSelecterCampaign').removeClass('hide');
+            $('#divSelecterCampaign').addClass('show');
+        } else {
+            $('#divSelecterCampaign').removeClass('show');
+            $('#divSelecterCampaign').addClass('hide');
+        }
+    });
+    $('#selecterCampaign').change(function () {
+        var selecterTypeOperation = $(this).val();
+        if (selecterTypeOperation == '0') {
+            var bodyForm = `               <div class="row">
                                          <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="campaignName">Nome Della Campagna</label>
@@ -141,13 +274,13 @@ $('#selecterCampaign').change(function () {
                                             </div>
                                         </div>
                                     </div>`;
-       $('#divCampaign').removeClass('hide');
-       $('#divCampaign').empty();
-       $('#divCampaign').append(bodyForm);
+            $('#divCampaign').removeClass('hide');
+            $('#divCampaign').empty();
+            $('#divCampaign').append(bodyForm);
 
-   }else{
+        } else {
 
-       var bodyForm=`<div class="row">
+            var bodyForm = `<div class="row">
            <div class="col-md-2">
                <div class="form-group form-group-default selectize-enabled">
                 <label for="campaignName">Seleziona Campagna</label>
@@ -219,43 +352,47 @@ $('#selecterCampaign').change(function () {
                </div>
            </div>
        </div>`;
-   $('#divCampaign').removeClass('hide');
-   $('#divCampaign').empty();
-   $('#divCampaign').append(bodyForm);
-       $.ajax({
-           url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
-           method: 'get',
-           data: {
-               editorialPlanId:$('#editorialPlanId').val()
-           },
-           dataType: 'json'
-       }).done(function (res) {
-           console.log(res);
-           let campaignName = $('#campaignName');
-           //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
-           campaignName.selectize({
-               valueField: 'idCampaign',
-               labelField: 'nameCampaign',
-               searchField: ['nameCampaign'],
-               options: res,
-               render: {
-                   item: function (item, escape) {
-                       return '<div>' +
-                           '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
-                           '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
-                           '</div>'
-                   },
-                   option: function (item, escape) {
-                       return '<div>' +
-                           '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
-                           '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
-                           '</div>'
-                   }
-               }
-           });
-       });
-       $('#campaignName').change(function () {
-           var bodyGroupAdsName=`<div class="form-group form-group-default selectize-enabled">
+            $('#divCampaign').removeClass('hide');
+            $('#divCampaign').empty();
+            $('#divCampaign').append(bodyForm);
+            $.ajax({
+                url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
+                method: 'get',
+                data: {
+                    editorialPlanId: $('#editorialPlanId').val()
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                console.log(res);
+                let campaignName = $('#campaignName');
+                //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                campaignName.selectize({
+                    valueField: 'idCampaign',
+                    labelField: 'nameCampaign',
+                    searchField: ['nameCampaign'],
+                    options: res,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
+                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
+                                '</div>'
+                        }
+                    },
+                    onInitialize: function () {
+                        var selectize = this;
+                        selectize.setValue(facebookCampaignId);
+                    }
+                });
+            });
+            $('#campaignName').change(function () {
+                var bodyGroupAdsName = `<div class="form-group form-group-default selectize-enabled">
                 <label for="groupAdsName">Seleziona il Gruppo Inserzioni</label>
                     <select id="groupAdsName"
                            name="groupAdsName" class="full-width selectpicker"
@@ -264,53 +401,52 @@ $('#selecterCampaign').change(function () {
                            data-init-plugin="selectize">
                    </select>
                </div>`;
-           $('#divgroupAdsName').empty();
-           $('#divgroupAdsName').append( bodyGroupAdsName);
-           $.ajax({
-               url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
-               method: 'get',
-               data: {
-                   campaignId:$('#campaignName').val(),
-                   editorialPlanId: $('#editorialPlanId').val()
-               },
-               dataType: 'json'
-           }).done(function (res) {
-               console.log(res);
-               let groupAdsName = $('#groupAdsName');
-               //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
-               groupAdsName.selectize({
-                   valueField: 'idAdSet',
-                   labelField: 'nameAdSet',
-                   searchField: ['nameAdSet'],
-                   options: res,
-                   render: {
-                       item: function (item, escape) {
-                           return '<div>' +
-                               '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
-                               '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
-                               '</div>'
-                       },
-                       option: function (item, escape) {
-                           return '<div>' +
-                               '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
-                               '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
-                               '</div>'
-                       }
-                   }
-               });
-           });
+                $('#divgroupAdsName').empty();
+                $('#divgroupAdsName').append(bodyGroupAdsName);
+                $.ajax({
+                    url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
+                    method: 'get',
+                    data: {
+                        campaignId: $('#campaignName').val(),
+                        editorialPlanId: $('#editorialPlanId').val()
+                    },
+                    dataType: 'json'
+                }).done(function (res) {
+                    console.log(res);
+                    let groupAdsName = $('#groupAdsName');
+                    //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
+                    groupAdsName.selectize({
+                        valueField: 'idAdSet',
+                        labelField: 'nameAdSet',
+                        searchField: ['nameAdSet'],
+                        options: res,
+                        render: {
+                            item: function (item, escape) {
+                                return '<div>' +
+                                    '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                                    '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                                    '</div>'
+                            },
+                            option: function (item, escape) {
+                                return '<div>' +
+                                    '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
+                                    '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
+                                    '</div>'
+                            }
+                        }
+                    });
+                });
 
 
-       });
+            });
 
-   }
+        }
 
-});
-
+    });
 
 
 })(jQuery);
-var photoUrl=[];
+var photoUrl = [];
 Dropzone.autoDiscover = false;
 $(document).ready(function () {
 
@@ -340,7 +476,7 @@ $(document).ready(function () {
 });
 
 
-$(document).on('bs.post.save', function () {
+$(document).on('bs.post.update', function () {
     let bsModal = new $.bsModal('Salva Post', {
         body: '<div><p>Premere ok per Salvare il Piano Editoriale' +
             '</div>'
@@ -355,29 +491,26 @@ $(document).on('bs.post.save', function () {
         var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
         var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
         var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
-        var facebookCampaignId='';
-        if($('#facebookCampaignId').length){
-            facebookCampaignId=$('#facebookCampaignId').val();
-        }else{
-            facebookCampaignId='notExist';
-        }
-        var campaignName='';
-        if($('#campaignName').length){
-            campaignName=$('#campaignName').val();
-        }else{
-            campaignName='notExist';
-        }
-        var groupAdsName='';
-        if($('#groupAdsName').length) {
-            groupAdsName = $('#groupAdsName').val();
-        }
-        var isNewAdSet=0;
-        if($('#isNewAdset').length){
-            isNewAdSet=$('#isNewAdset').val();
+        var facebookCampaignId = '';
+
+        facebookCampaignId = $('#facebookCampaignId').val();
+
+
+        var campaignName = $('#campaignName').val();
+
+        var groupAdsName = '';
+
+        groupAdsName = $('#groupAdsName').val();
+        var NewAdSet = 0;
+        if ($('#isNewAdset').length) {
+            isNewAdSet = $('#isNewAdset').val();
         }
         start = $('#startEventDate').val();
         end = $('#endEventDate').val();
         const data = {
+            editorialPlandetailId:$('#editorialPlandetailId').val(),
+            insertionId:$('#insertionId').val(),
+            creativeId:$('#creativeId').val(),
             title: $('#titleEvent').val(),
             start: start,
             end: end,
@@ -397,16 +530,11 @@ $(document).on('bs.post.save', function () {
             isVisiblePhotoUrl: isVisPhoto,
             bodyEvent: $('#bodyEvent').val(),
             isVisibleBodyEvent: isVisBody,
-            facebookCampaignId:facebookCampaignId,
-            campaignId:campaignName,
-            groupAdsName:groupAdsName,
-            isNewAdSet:isNewAdSet,
-            lifetime_budget: $('#lifetime_budget').val(),
-            buying_type:$('#buying_type').val(),
-            objective:$('#objective').val(),
-            selecterCampaign:$('#selecterCampaign').val()
-
-
+            facebookCampaignId: facebookCampaignId,
+            campaignId: campaignName,
+            groupAdsName: groupAdsName,
+            isNewAdSet: isNewAdSet,
+            selecterCampaign: $('#selecterCampaign').val()
 
 
         };
@@ -429,7 +557,8 @@ $(document).on('bs.post.save', function () {
         });
     });
 });
-function addCampaign(){
+
+function addCampaign() {
     let bsModal = new $.bsModal('Salva Campagna', {
         body: '<div><p>Premere ok per Salvare la Campagna' +
             '</div>'
@@ -444,14 +573,14 @@ function addCampaign(){
             objective: $('#objective').val(),
             typeBudget: $('#typeBudget').val(),
             lifetime_budget: $('#lifetime_budget').val(),
-            editorialPlanId:$('#editorialPlanId').val(),
-            groupAdsName:$('#groupAdsName').val()
+            editorialPlanId: $('#editorialPlanId').val(),
+            groupAdsName: $('#groupAdsName').val()
         }
         $.ajax({
             method: 'post',
             url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
             data: data,
-            dataType:'json'
+            dataType: 'json'
         }).done(function (res) {
             bsModal.writeBody('Campagna Creata con successo');
             $('#facebookCampaignId').val(res);
@@ -467,7 +596,8 @@ function addCampaign(){
     });
 
 }
-function updateCampaign(){
+
+function updateCampaign() {
     let bsModal = new $.bsModal('Salva Campagna', {
         body: '<div><p>Premere ok per Salvare la Campagna' +
             '</div>'
@@ -482,13 +612,13 @@ function updateCampaign(){
             objective: $('#objective').val(),
             typeBudget: $('#typeBudget').val(),
             lifetime_budget: $('#lifetime_budget').val(),
-            editorialPlanId:$('#editorialPlanId').val()
+            editorialPlanId: $('#editorialPlanId').val()
         }
         $.ajax({
             method: 'put',
             url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
             data: data,
-            dataType:'json'
+            dataType: 'json'
         }).done(function (res) {
             bsModal.writeBody('Campagna Aggiornata con successo');
             $('#facebookCampaignId').val(res);

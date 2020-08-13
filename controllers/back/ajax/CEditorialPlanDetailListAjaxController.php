@@ -61,6 +61,9 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
             $data[$i]["facebookCampaignId"]=$singleDetail->facebookCampaignId;
             $data[$i]["groupInsertionId"]=$singleDetail->groupInsertionId;
             $data[$i]["editorialPlanId"]=$singleDetail->editorialPlanId;
+            $data[$i]['lifetime_budget']=$singleDetail->lifetime_budget;
+            $data[$i]['buying_type']=$singleDetail->buying_type;
+            $data[$i]['objective']=$singleDetail->objective;
             switch ($singleDetail->status) {
                 case "Draft":
                     $status = "Bozza";

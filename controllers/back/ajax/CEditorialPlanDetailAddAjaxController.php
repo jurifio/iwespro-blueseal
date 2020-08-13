@@ -56,6 +56,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $argument = $data['argument'];
         $linkDestination = $data['linkDestination'];
         $facebookCampaignId = $data['facebookCampaignId'];
+        $lifetime_budget=$data['lifetime_budget'];
         $campaignId = str_replace('\n','',$data['campaignId']);
         $groupAdsName = str_replace('\n','',$data['groupAdsName']);
         $selecterCampaign=$data['selecterCampaign'];
@@ -71,6 +72,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
+        $buying_type=$data['buyingType'];
+        $objective=$data['objective'];
 
         $photoUrl = (array_key_exists('photoUrl',$data)) ? $data['photoUrl'] : '';
         $unlinkphoto = [];
@@ -167,6 +170,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $editorialPlanDetailInsert->isVisibleNote = $isVisibleNote;
             $editorialPlanDetailInsert->socialId = $socialId;
             $editorialPlanDetailInsert->bodyEvent = $bodyEvent;
+            $editorialPlanDetailInsert->lifetime_budget=$lifetime_budget;
+            $editorialPlanDetailInsert->buying_type = $buying_type;
+            $editorialPlanDetailInsert->objective = $objective;
             if ($facebookCampaignId != 'notExist') {
                 $editorialPlanDetailInsert->facebookCampaignId = $facebookCampaignId;
             }

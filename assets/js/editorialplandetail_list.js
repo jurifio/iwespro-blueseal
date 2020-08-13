@@ -535,7 +535,7 @@
                         maxFilesize: 5,
                         maxFiles: 100,
                         parallelUploads: 10,
-                        acceptedFiles: "image/jpeg",
+                        acceptedFiles: "image/jpeg,video/*",
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
                         sending: function (file, xhr, formData) {
@@ -921,7 +921,10 @@
                             campaignId: campaignName,
                             groupAdsName: groupAdsName,
                             isNewAdSet: isNewAdSet,
-                            selecterCampaign: $('#selecterCampaign').val()
+                            selecterCampaign: $('#selecterCampaign').val(),
+                            lifetime_budget: $('#lifetime_budget').val(),
+                            buying_type:$('#buying_type').val(),
+                            objective:$('#objective').val(),
 
 
                         };
@@ -965,6 +968,9 @@
                     var status = event.status;
                     facebookCampaignId=event.facebookCampaignId;
                     groupInsertionId=event.groupInsertionId;
+                    var buying_type=event.buying_type;
+                    var lifetime_budget = event.lifetime_budget;
+                    var objective=event.objective;
                     var selectedDraft = "";
                     var selectedApproved = "";
                     var selectedRejected = "";
@@ -981,6 +987,193 @@
                     if (status === 'Published') {
                         selectedPublished = 'selected=selected';
                     }
+                    var buying_typeSelected='';
+                    if(buying_type=='AUCTION'){
+                        buying_typeSelected=`<option selected="selected" value="AUCTION">Asta</option>
+                        <option value="RESERVED">Copertura e Frequenza</option>`;
+                    }else{
+                        buying_typeSelected=`<option  value="AUCTION">Asta</option>
+                        <option  selected="selected" value="RESERVED">Copertura e Frequenza</option>`;
+                    }
+
+
+                    var checkedObjective='';
+                    switch (objective){
+                        case 'BRAND_AWARENESS':
+                            checkedObjective= `<option selected="selected" value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option value="REACH">Copertura</option>
+                            <option value="LOCAL_AWARENESS">Traffico</option>
+                            <option value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del
+                                catalogo
+                            </option>`;
+                            break;
+                        case 'REACH':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option selected="selected" value="REACH">Copertura</option>
+                            <option value="LOCAL_AWARENESS">Traffico</option>
+                            <option value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'LOCAL_AWARENESS':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option selected="selected" value="LOCAL_AWARENESS">Traffico</option>
+                            <option value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'APP_INSTALLS':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option selected="selected" value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'VIDEO_VIEWS':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option selected="selected" value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'LEAD_GENERATION':
+                             checkedObjective = `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option selected="selected" value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'POST_ENGAGEMENT':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option  value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option selected="selected" value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'PAGE_LIKES':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option  value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option  value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option selected="selected" value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'EVENT_RESPONSES'  :
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option  value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option  value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option  selected="selected" value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'MESSAGES':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option  value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option  value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option   value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option selected="selected" value="MESSAGES">Messaggi</option>
+                            <option value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'CONVERSIONS':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option  value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option  value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option   value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option  value="MESSAGES">Messaggi</option>
+                            <option selected="selected" value="CONVERSIONS">Conversioni</option>
+                            <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+                        case 'PRODUCT_CATALOG_SALES':
+                            checkedObjective= `<option value="BRAND_AWARENESS">Notorietà del Brand</option>
+                        <option  value="REACH">Copertura</option>
+                            <option  value="LOCAL_AWARENESS">Traffico</option>
+                            <option  value="APP_INSTALLS">installazioni dell\'App</option>
+                            <option  value="VIDEO_VIEWS">Visualizzazioni del Video</option>
+                            <option  value="LEAD_GENERATION">Generazione di Contatti</option>
+                            <option  value="POST_ENGAGEMENT">interazione con i post</option>
+                            <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
+                            <option   value="EVENT_RESPONSES">Risposte a un evento</option>
+                            <option  value="MESSAGES">Messaggi</option>
+                            <option  value="CONVERSIONS">Conversioni</option>
+                            <option selected="selected" value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>`;
+                            break;
+
+                    }
+
+
+
 
                     var argumentName = event.argumentName;
 
@@ -1079,9 +1272,7 @@
                            name="buying_type" class="full-width selectpicker"
                            required="required"
                            placeholder="Selezione campagna da utilizzare"
-                           data-init-plugin="selectize">
-                       <option value="AUCTION">Asta</option>
-                       <option value="RESERVED">Copertura e Frequenza</option>
+                           data-init-plugin="selectize">`+buying_typeSelected+`
                    </select>
                </div>
            </div>
@@ -1092,20 +1283,8 @@
                            name="objective" class="full-width selectpicker"
                            required="required"
                            placeholder="Selezione campagna da utilizzare"
-                           data-init-plugin="selectize">
-                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
-                       <option value="REACH">Copertura</option>
-                       <option value="LOCAL_AWARENESS">Traffico</option>
-                       <option value="APP_INSTALLS">installazioni dell\'App</option>
-                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
-                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
-                       <option value="POST_ENGAGEMENT">interazione con i post</option>
-                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
-                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
-                       <option value="MESSAGES">Messaggi</option>
-                       <option value="CONVERSIONS">Conversioni</option>
-                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
-                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
+                           data-init-plugin="selectize">`+checkedObjective+`
+                       
                    </select>
                </div>
            </div>
@@ -1115,7 +1294,7 @@
                    <label for="lifetime_budget">Importo Budget Totale</label>
                    <input id="lifetime_budget" class="form-control"
                           placeholder="Inserisci il Budget" name="lifetime_budget"
-                          required="required">
+                          required="required" value="`+lifetime_budget+`">
                </div>
            </div>`+
                             '</div>'+
@@ -1407,7 +1586,7 @@
                         maxFilesize: 5,
                         maxFiles: 100,
                         parallelUploads: 10,
-                        acceptedFiles: "image/jpeg",
+                        acceptedFiles: "image/jpeg,video/*",
                         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
                         uploadMultiple: true,
                         sending: function (file1, xhr, formData) {
@@ -1628,7 +1807,10 @@
                             isVisibleDescription: isVisDesc,
                             isVisiblePhotoUrl: isVisPhoto,
                             bodyEvent: $('#bodyEvent').val(),
-                            isVisibleBodyEvent: isVisBody
+                            isVisibleBodyEvent: isVisBody,
+                            lifetime_budget: $('#lifetime_budget').val(),
+                            buying_type:$('#buying_type').val(),
+                            objective:$('#objective').val(),
 
 
                         };
@@ -1717,7 +1899,11 @@
                                 bodyEvent: bodyEvent,
                                 isVisibleBodyEvent: isVisibleBodyEvent,
                                 socialId: socialId,
-                                notifyEmail: notifyEmail
+                                notifyEmail: notifyEmail,
+                                buying_type: $('#buying_type').val(),
+                                objective: $('#objective').val(),
+                                typeBudget: $('#typeBudget').val(),
+                                lifetime_budget: $('#lifetime_budget').val(),
                             },
                             success: function () {
                                 calendar.fullCalendar('refetchEvents');
@@ -1791,6 +1977,9 @@
                             linkDestination:$('#linkDestination').val(),
                             campaignName:$('#campaignName').val(),
                             groupAdsName:$('#groupAdsName').val(),
+                            lifetime_budget: $('#lifetime_budget').val(),
+                            buying_type:$('#buying_type').val(),
+                            objective:$('#objective').val(),
                         },
                         success: function () {
                             calendar.fullCalendar('refetchEvents');

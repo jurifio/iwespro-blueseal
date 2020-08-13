@@ -55,7 +55,7 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
 
 
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $opera = $blueseal . "editorial/editorial-pianodettagli-lista/";
+        $opera = $blueseal . "editorial/modifica-post/";
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
@@ -63,7 +63,7 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
             $editorialPlan = $editorialPlanRepo->findOneBy(['id' => $row["editorialPlanId"] ]);
             $row['row_id']=$row['id'];
 
-            $row['id'] = '<a href="' . $opera . $editorialPlan->id . '" >' . $row['id']. '</a>';
+            $row['id'] = '<a href="' . $opera . $row['id'] . '" >' . $row['id']. '</a>';
 
             $row['photoUrl']='<a href="#1" class="enlarge-your-img"><img width="50" src="' . $row['photoUrl']. '" /></a>';
 

@@ -72,20 +72,23 @@ class CSelectFacebookCampaignAjaxController extends AAjaxController
             CampaignFields::NAME, /* <--- this is the error */
             CampaignFields::OBJECTIVE,
             CampaignFields::STATUS,
+            CampaignFields::BUYING_TYPE,
+            CampaignFields::LIFETIME_BUDGET,
+
 
         );
-        $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
+        $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status','buying_type','lifetime_budget']);
         $campaignList=[];
 // Loop over objects
       if($cursor!=null) {
           foreach ($cursor as $campaign) {
               $nameCampaign = $campaign->{CampaignFields::NAME};
               $idCampaign = $campaign->{CampaignFields::ID};
-
               $objective = $campaign->{CampaignFields::OBJECTIVE};
               $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
+              $lifetime_budget=$campaign->{CampaignFields::LIFETIME_BUDGET};
               $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
-              $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status,'error' => '0'];
+              $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type, 'effective_status' => $effective_status,'lifetime_budget'=>$lifetime_budget, 'error' => '0'];
           }
       }else{
           $campaignList[] = ['idCampaign' => '0','nameCampaign' => '0','lifetime_budget' => '0','objective' => '0','buying_type' => '0','effective_status' => '0','error' => '1'];

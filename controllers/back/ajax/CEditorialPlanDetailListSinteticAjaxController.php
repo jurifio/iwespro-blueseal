@@ -55,6 +55,9 @@ class CEditorialPlanDetailListSinteticAjaxController extends AAjaxController
             $data[$i]["argumentName"] = $singleDetail->editorialPlanArgument->titleArgument;
             $data[$i]["isVisibleEditorialPlanArgument"] = $singleDetail->isVisibleEditorialPlanArgument;
            $data[$i]["photoUrl"] = "";
+           $data[$i]['lifetime_budget']=$singleDetail->lifetime_budget;
+           $data[$i]['buying_type']=$singleDetail->buying_type;
+           $data[$i]['objective']=$singleDetail->objective;
             $data[$i]["isVisiblePhotoUrl"] = $singleDetail->isVisiblePhotoUrl;
             switch ($singleDetail->status) {
                 case "Draft":
