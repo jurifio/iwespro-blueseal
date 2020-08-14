@@ -133,7 +133,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                 $jpg = $jpg;
 
             }
-
+            $isCarousel='0';
+            if (count($photoUrl)>1){
+                $isCarousel=1;
+            }
             /** @var array $groupimage */
             $groupimage = implode(",",$photoUrl);
         } else {
@@ -289,8 +292,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         }
 
 
-
-
+                $arrayPhotoHash=[];
+                if (count($photoUrl)<2) {
                     $downloadedFileContents = file_get_contents($groupimage);
                     $img = base64_encode($downloadedFileContents);
                     try {
@@ -303,42 +306,97 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $pageAccessToken
                         );
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
                         return 'Graph returned an error: ' . $e->getMessage();
                     } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
                         return 'Graph returned an error: ' . $e->getMessage();
                     }
                     $graphNode = $response->getGraphNode();
                     $imagehash = $graphNode['images']['bytes']['hash'];
-                    try {
-                        // Returns a `Facebook\FacebookResponse` object
+                }else{
+                    foreach ($photoUrl as $photoHash) {
+                        try{
                         $response = $fb->post(
-                            '/' . $adAccountId . '/adcreatives',
+                            '/' . $adAccountId . '/adimages/',
                             array(
-                                'name' => $title,
-                                'object_story_spec' => array(
-                                    'page_id' => $editorialPlanShopAsSocial->page_id,
-                                    'photo_data' => array(
-                                        'image_hash' => $imagehash
-                                    ),
-                                    'title' => $title,
-                                    'body' => $description,
-                                    'link_url' => $linkDestination,
-                                    'object_url' => $linkDestination
-                                ),
+                                'bytes' => $photoHash
                             ),
                             $pageAccessToken
                         );
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
                         return 'Graph returned an error: ' . $e->getMessage();
                     } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
                         return 'Graph returned an error: ' . $e->getMessage();
                     }
                     $graphNode = $response->getGraphNode();
-                    $creativeId = $graphNode['id'];
+                        $arrayPhotoHash[] =['description'=>$description,'image_hash'=>$graphNode['images']['bytes']['hash'],'link'=>$linkDestination,'name'=>$title];
+
+
+                    }
+                }
+
+                    if($isCarousel=='0') {
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adcreatives',
+                                array(
+                                    'name' => $title,
+                                    'object_story_spec' => array(
+                                        'page_id' => $editorialPlanShopAsSocial->page_id,
+                                        'photo_data' => array(
+                                            'image_hash' => $imagehash
+                                        ),
+                                        'title' => $title,
+                                        'body' => $description,
+                                        'link_url' => $linkDestination,
+                                        'object_url' => $linkDestination
+                                    ),
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        }
+                        $graphNode = $response->getGraphNode();
+                        $creativeId = $graphNode['id'];
+                    }else{
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adcreatives',
+                                array(
+                                    'name' => $title,
+                                    'object_story_spec' => array(
+                                        'page_id' => $editorialPlanShopAsSocial->page_id,
+                                        'child_attachments' => $arrayPhotoHash,
+                                        'title' => $title,
+                                        'body' => $description,
+                                        'link_url' => $linkDestination,
+                                        'object_url' => $linkDestination
+                                    ),
+                                ),
+                                $pageAccessToken
+
+                            );
+                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        }
+                        $graphNode = $response->getGraphNode();
+                        $creativeId = $graphNode['id'];
+
+                    }
                     $editorialPlanDetailInsert->creativeId = $creativeId;
                     try {
                         $response = $fb->post(

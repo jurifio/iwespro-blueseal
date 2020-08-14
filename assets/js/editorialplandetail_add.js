@@ -320,7 +320,7 @@ $(document).ready(function () {
         maxFilesize: 5,
         maxFiles: 100,
         parallelUploads: 10,
-        acceptedFiles: "image/jpeg,video/*",
+        acceptedFiles: "image/jpeg",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: true,
         sending: function (file, xhr, formData) {
