@@ -12,6 +12,8 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\email\CEmail;
 use bamboo\core\facebook\CFacebookCookieSession;
+use bamboo\core\utils\amazonPhotoManager\ImageManager;
+use bamboo\core\utils\amazonPhotoManager\S3Manager;
 use bamboo\domain\entities\CEditorialPlan;
 use bamboo\domain\entities\CEditorialPlanDetail;
 use bamboo\domain\entities\CEditorialPlanSocial;
@@ -33,6 +35,7 @@ use FacebookAds\Object\Fields\AdCreativeFields;
 use FacebookAds\Object\Fields\AdFields;
 use FacebookAds\Object\Fields\CampaignFields;
 use FacebookAds\Object\Fields\AdsInsightsFields;
+use FFMpeg;
 
 class CEditorialPlanDetailAddAjaxController extends AAjaxController
 {
@@ -72,16 +75,37 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-        $buying_type=$data['buyingType'];
+        $buying_type=$data['buying_type'];
         $objective=$data['objective'];
-
         $photoUrl = (array_key_exists('photoUrl',$data)) ? $data['photoUrl'] : '';
         $unlinkphoto = [];
         $status = $data['status'];
         if ($status == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Non hai selezionato lo stato</i>';
         }
+
+        $this->app->vendorLibraries->load("videoEditing");
         $this->app->vendorLibraries->load("facebook");
+        \Monkey::app()->vendorLibraries->load("amazon2723");
+        $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
+        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder').'-plandetail'."/";
+        $array_video=[];
+        if($data['video1']!=''){
+            $namePath=$tempFolder.trim($title).'1.jpg';
+            $ffmpeg =  FFMpeg\FFMpeg::create();
+            $video = $ffmpeg->open($data['video1']);
+            $video
+                ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1))
+                ->save($namePath);
+            $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
+            //$fileName=$tempFolder.$title.'1.jpg';
+            $fileName['name'] = trim($title).'1.jpg';
+            $res = $image->processImageEditorialUploadPhoto($fileName,  $fileName, $config['bucket'].'-editorial', 'plandetail-images');
+            $linkThumbVideo="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/".$fileName['name'];
+
+        }
+
+
         $c = new CFacebookCookieSession($this->app);
         $fbConfig = $this->app->cfg()->fetch('miscellaneous','facebook');
         $fb = new Facebook([
@@ -196,10 +220,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
                     $linkData = [
                         'message' => $editorialPlan->name,
-                        'name' => $editorialPlanDetail->title,
-                        'link' => $editorialPlanDetail->linkDestination,
-                        'description' => $editorialPlanDetail->description,
-                        'picture' => $editorialPlanDetail->photoUrl
+                        'name' => $title,
+                        'link' => $linkDestination,
+                        'description' => $description,
+                        'picture' => $photoUrl[0]
                     ];
                     try {
                         $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
@@ -292,7 +316,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         }
 
 
-                $arrayPhotoHash=[];
+                    $arrayPhotoHash=[];
+                    $i=0;
                 if (count($photoUrl)<2) {
                     $downloadedFileContents = file_get_contents($groupimage);
                     $img = base64_encode($downloadedFileContents);
@@ -315,12 +340,52 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $graphNode = $response->getGraphNode();
                     $imagehash = $graphNode['images']['bytes']['hash'];
                 }else{
+                    $arrayLink=[];
+                    $arrayDescription=[];
+                    $arrayTitle=[];
+                    $arrayVideo=[];
+                    if($data['imageUrl1']!=''){
+                        array_push($arrayLink,$data['imageUrl1']);
+                        array_push($arrayDescription,$data['descriptionImage1']);
+                        array_push($arrayTitle,$data['imageTitle1']);
+                    }
+                    if($data['imageUrl2']!=''){
+                        array_push($arrayLink,$data['imageUrl2']);
+                        array_push($arrayDescription,$data['descriptionImage2']);
+                        array_push($arrayTitle,$data['imageTitle2']);
+                    }
+                    if($data['imageUrl3']!=''){
+                        array_push($arrayLink,$data['imageUrl3']);
+                        array_push($arrayDescription,$data['descriptionImage3']);
+                        array_push($arrayTitle,$data['imageTitle3']);
+
+                    }
+                    if($data['imageUrl4']!=''){
+                        array_push($arrayLink,$data['imageUrl4']);
+                        array_push($arrayDescription,$data['descriptionImage4']);
+                        array_push($arrayTitle,$data['imageTitle4']);
+                    }
+                    if($data['imageUrl5']!=''){
+                        array_push($arrayLink,$data['imageUrl5']);
+                        array_push($arrayDescription,$data['descriptionImage5']);
+                        array_push($arrayTitle,$data['imageTitle5']);
+                    }
+                    if($data['imageUrl6']!=''){
+                        array_push($arrayLink,$data['imageUrl6']);
+                        array_push($arrayDescription,$data['descriptionImage6']);
+                        array_push($arrayTitle,$data['imageTitle6']);
+                    }
+
                     foreach ($photoUrl as $photoHash) {
+
+                        $downloadedFileContents = file_get_contents($photoHash);
+                        $img = base64_encode($downloadedFileContents);
+
                         try{
                         $response = $fb->post(
                             '/' . $adAccountId . '/adimages/',
                             array(
-                                'bytes' => $photoHash
+                                'bytes' => $img
                             ),
                             $pageAccessToken
                         );
@@ -332,9 +397,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         return 'Graph returned an error: ' . $e->getMessage();
                     }
                     $graphNode = $response->getGraphNode();
-                        $arrayPhotoHash[] =['description'=>$description,'image_hash'=>$graphNode['images']['bytes']['hash'],'link'=>$linkDestination,'name'=>$title];
-
-
+                        $arrayPhotoHash[] =['description'=>$arrayDescription[$i],'image_hash'=>$graphNode['images']['bytes']['hash'],'link'=>$arrayLink[$i],'name'=>$arrayTitle[$i]];
+                    $i++;
                     }
                 }
 
@@ -375,12 +439,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                                 array(
                                     'name' => $title,
                                     'object_story_spec' => array(
-                                        'page_id' => $editorialPlanShopAsSocial->page_id,
-                                        'child_attachments' => $arrayPhotoHash,
-                                        'title' => $title,
-                                        'body' => $description,
-                                        'link_url' => $linkDestination,
-                                        'object_url' => $linkDestination
+                                                                 'page_id' => $editorialPlanShopAsSocial->page_id,
+                                                                 'link_data' => array(
+                                                                                     'child_attachments'=>   $arrayPhotoHash,
+                                                                                     'link'=>$linkDestination),
                                     ),
                                 ),
                                 $pageAccessToken

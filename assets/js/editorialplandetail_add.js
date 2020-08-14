@@ -314,10 +314,10 @@ var photoUrl=[];
 Dropzone.autoDiscover = false;
 $(document).ready(function () {
 
-    let dropzone = new Dropzone("#dropzoneModal", {
+    var dropzone = new Dropzone("#dropzoneModal", {
         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-        maxFilesize: 5,
+        maxFilesize: 80,
         maxFiles: 100,
         parallelUploads: 10,
         acceptedFiles: "image/jpeg",
@@ -327,6 +327,7 @@ $(document).ready(function () {
 
         }
     });
+
 
     dropzone.on('addedfile', function (file) {
         let urlimage = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
@@ -404,10 +405,31 @@ $(document).on('bs.post.save', function () {
             lifetime_budget: $('#lifetime_budget').val(),
             buying_type:$('#buying_type').val(),
             objective:$('#objective').val(),
-            selecterCampaign:$('#selecterCampaign').val()
-
-
-
+            selecterCampaign:$('#selecterCampaign').val(),
+            imageTitle1:$('#imageTitle1').val(),
+            imageTitle2:$('#imageTitle2').val(),
+            imageTitle3:$('#imageTitle3').val(),
+            imageTitle4:$('#imageTitle4').val(),
+            imageTitle5:$('#imageTitle5').val(),
+            imageTitle6:$('#imageTitle6').val(),
+            imageUrl1:$('#imageUrl1').val(),
+            imageUrl2:$('#imageUrl2').val(),
+            imageUrl3:$('#imageUrl3').val(),
+            imageUrl4:$('#imageUrl4').val(),
+            imageUrl5:$('#imageUrl5').val(),
+            imageUrl6:$('#imageUrl6').val(),
+            descriptionImage1:$('#descriptionImage1').val(),
+            descriptionImage2:$('#descriptionImage2').val(),
+            descriptionImage3:$('#descriptionImage3').val(),
+            descriptionImage4:$('#descriptionImage4').val(),
+            descriptionImage5:$('#descriptionImage5').val(),
+            descriptionImage6:$('#descriptionImage6').val(),
+            video1:$('#video1').val(),
+            video2:$('#video2').val(),
+            video3:$('#video3').val(),
+            video4:$('#video4').val(),
+            video5:$('#video5').val(),
+            video6:$('#video6').val()
 
         };
 
