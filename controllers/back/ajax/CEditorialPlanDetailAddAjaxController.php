@@ -100,8 +100,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
             //$fileName=$tempFolder.$title.'1.jpg';
             $fileName['name'] = trim($title).'1.jpg';
-            $res = $image->processImageEditorialUploadPhoto($fileName,  $fileName, $config['bucket'].'-editorial', 'plandetail-images');
-            $linkThumbVideo="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/".$fileName['name'];
+            $res = $image->processImageEditorialUploadPhoto(trim($title).'1.jpg',  $fileName, $config['bucket'].'-editorial', 'plandetail-images');
+            $imageThumbVideo1="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/".$fileName['name'];
 
         }
 

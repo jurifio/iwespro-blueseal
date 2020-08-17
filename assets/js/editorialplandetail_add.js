@@ -190,7 +190,7 @@ $('#selecterCampaign').change(function () {
                        <option value="LOCAL_AWARENESS">Traffico</option>
                        <option value="APP_INSTALLS">installazioni dell\'App</option>
                        <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
-                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
+                       <option value="LEAD_GENERATION">Generazione di Contatti</option> 
                        <option value="POST_ENGAGEMENT">interazione con i post</option>
                        <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
                        <option value="EVENT_RESPONSES">Risposte a un evento</option>
