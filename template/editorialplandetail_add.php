@@ -26,6 +26,65 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
+                                            <label for="socialPlanId">Seleziona il media da Associare </label>
+                                            <select id="socialPlanId"
+                                                    required="required"
+                                                    name="socialPlanId"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Selezione il media da associare"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="status">Seleziona lo Stato</label>
+                                            <select id="status" name="status" required="required"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Seleziona lo stato"
+                                                    data-init-plugin="selectize">
+                                                <option value="new">Stato</option>
+                                                <option value="Draft">Bozza</option>
+                                                <option value="Approved">Approvata</option>
+                                                <option value="Rejected">Rifiutata</option>
+                                                <option value="Published">Pubblicata</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="startEventDate">Data Inizio Evento</label>
+                                            <input type="datetime-local" id="startEventDate" class="form-control"
+                                                   placeholder="Inserisci la Data di Inizio del Dettaglio"
+                                                   name="startEventDate" value=""
+                                                   required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="endEventDate">Data Fine Evento </label>
+                                            <input type="datetime-local" id="endEventDate" class="form-control"
+                                                   placeholder="Inserisci la Data della Fine del Dettaglio "
+                                                   name="endEventDate" value=""
+                                                   required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="notifyEmail">Notificare al Cliente</label>
+                                            <select id="notifyEmail" name="notifyEmail" required="required"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Seleziona"
+                                                    data-init-plugin="selectize">
+                                                <option value="notNotify">Non Inviare la Notifica</option>
+                                                <option value="yesNotify">Invia la Notifica</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
                                             <select id="editorialPlanId"
                                                     name="editorialPlanId" class="full-width selectpicker"
@@ -36,7 +95,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="editorialPlanArgumentId">Argomento Evento</label>
+                                            <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
                                             <select id="editorialPlanArgumentId"
                                                     name="editorialPlanArgumentId" class="full-width selectpicker"
                                                     required="required"
@@ -131,237 +190,397 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
-                                              id="photoUrl" name="photoUrl" action="POST">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="file">Immagine Evento max 6</label>
-                                                <div class="fallback">
-                                                    <input name="file" type="file" multiple/>
+                                <div id="divPostUploadImage">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
+                                                  id="photoUrl" name="photoUrl" action="POST">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="file">Caricamento Immagini</label>
+                                                    <div class="fallback">
+                                                        <input name="file" type="file" multiple/>
+                                                    </div>
                                                 </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isVisiblePhotoUrl">Visibile</label>
+                                                <input type="checkbox" id="isVisiblePhotoUrl" class="form-control"
+                                                       placeholder="Visible" checked="true" name="isVisiblePhotoUrl"/>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisiblePhotoUrl">Visibile</label>
-                                            <input type="checkbox" id="isVisiblePhotoUrl" class="form-control"
-                                                   placeholder="Visible" checked="true" name="isVisiblePhotoUrl"/>
                                         </div>
                                     </div>
                                 </div>
-                               <div class="row">
-                                   <div class="col-md-4">
-                                       <div class="form-group form-group-default selectize-enabled">
-                                           <label for="imageTitle1">Titolo Immagine1</label>
-                                           <textarea id="imageTitle1" class="form-control"
-                                                  placeholder="Inserisci il titolo per l'immagine 1" name="imageTitle1"
-                                           ></textarea>
-                                       </div>
-                                   </div>
-                                   <div class="col-md-4">
-                                       <div class="form-group form-group-default selectize-enabled">
-                                           <label for="descriptionImage1">Descrizione Immagine1</label>
-                                           <textarea id="descriptionImage1" class="form-control"
-                                                  placeholder="Inserisci la descrizione per l'immagine 1" name="descriptionImage1"
-                                           ></textarea>
-                                       </div>
-                                   </div>
-                                   <div class="col-md-4">
-                                       <div class="form-group form-group-default selectize-enabled">
-                                           <label for="imageUrl1">link Immagine1</label>
-                                           <textarea id="imageUrl1" class="form-control"
-                                                     placeholder="Inserisci il link per l'immagine 1" name="imageUrl1"
-                                           ></textarea>
-                                       </div>
-                                   </div>
-                               </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageTitle2">Titolo Immagine2</label>
-                                            <textarea id="imageTitle2" class="form-control"
-                                                      placeholder="Inserisci il titolo per l'immagine 1" name="imageTitle2"
-                                            ></textarea>
+                                <div id="divPostImage">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="postImageTitle">Titolo Immagine</label>
+                                                <textarea id="postImageTitle" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine "
+                                                          name="postImageTitle"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="descriptionImage2">Descrizione Immagine2</label>
-                                            <textarea id="descriptionImage2" class="form-control"
-                                                      placeholder="Inserisci la descrizione per l'immagine 2" name="descriptionImage1"
-                                            ></textarea>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="postDescriptionImage">Descrizione Immagine</label>
+                                                <textarea id="postDescriptionImage" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 1"
+                                                          name="postDescriptionImage"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageUrl2">link Immagine2</label>
-                                            <textarea id="imageUrl2" class="form-control"
-                                                      placeholder="Inserisci il link per l'immagine 2" name="imageUrl2"
-                                            ></textarea>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="postImageUrl">link Immagine</label>
+                                                <textarea id="postImageUrl" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 1"
+                                                          name="postImageUrl"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageTitle3">Titolo Immagine3</label>
-                                            <textarea id="imageTitle3" class="form-control"
-                                                      placeholder="Inserisci il titolo per l'immagine 3" name="imageTitle3"
-                                            ></textarea>
+                                <div id="divPostCarousel">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle1">Titolo Immagine1</label>
+                                                <textarea id="imageTitle1" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 1"
+                                                          name="imageTitle1"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage1">Descrizione Immagine1</label>
+                                                <textarea id="descriptionImage1" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 1"
+                                                          name="descriptionImage1"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl1">link Immagine1</label>
+                                                <textarea id="imageUrl1" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 1"
+                                                          name="imageUrl1"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="descriptionImage3">Descrizione Immagine3</label>
-                                            <textarea id="descriptionImage3" class="form-control"
-                                                      placeholder="Inserisci la descrizione per l'immagine 3" name="descriptionImage3"
-                                            ></textarea>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle2">Titolo Immagine2</label>
+                                                <textarea id="imageTitle2" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 1"
+                                                          name="imageTitle2"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage2">Descrizione Immagine2</label>
+                                                <textarea id="descriptionImage2" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 2"
+                                                          name="descriptionImage1"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl2">link Immagine2</label>
+                                                <textarea id="imageUrl2" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 2"
+                                                          name="imageUrl2"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageUrl3">link Immagine3</label>
-                                            <textarea id="imageUrl3" class="form-control"
-                                                      placeholder="Inserisci il link per l'immagine 3" name="imageUrl3"
-                                            ></textarea>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle3">Titolo Immagine3</label>
+                                                <textarea id="imageTitle3" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 3"
+                                                          name="imageTitle3"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage3">Descrizione Immagine3</label>
+                                                <textarea id="descriptionImage3" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 3"
+                                                          name="descriptionImage3"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl3">link Immagine3</label>
+                                                <textarea id="imageUrl3" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 3"
+                                                          name="imageUrl3"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageTitle4">Titolo Immagine4</label>
-                                            <textarea id="imageTitle4" class="form-control"
-                                                      placeholder="Inserisci il titolo per l'immagine 4" name="imageTitle4"
-                                            ></textarea>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle4">Titolo Immagine4</label>
+                                                <textarea id="imageTitle4" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 4"
+                                                          name="imageTitle4"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage4">Descrizione Immagine4</label>
+                                                <textarea id="descriptionImage4" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 4"
+                                                          name="descriptionImage4"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl4">link Immagine4</label>
+                                                <textarea id="imageUrl4" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 4"
+                                                          name="imageUrl4"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="descriptionImage4">Descrizione Immagine4</label>
-                                            <textarea id="descriptionImage4" class="form-control"
-                                                      placeholder="Inserisci la descrizione per l'immagine 4" name="descriptionImage4"
-                                            ></textarea>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle5">Titolo Immagine5</label>
+                                                <textarea id="imageTitle5" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 5"
+                                                          name="imageTitle5"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageUrl4">link Immagine4</label>
-                                            <textarea id="imageUrl4" class="form-control"
-                                                      placeholder="Inserisci il link per l'immagine 4" name="imageUrl4"
-                                            ></textarea>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage5">Descrizione Immagine5</label>
+                                                <textarea id="descriptionImage5" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 5"
+                                                          name="descriptionImage5"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageTitle5">Titolo Immagine5</label>
-                                            <textarea id="imageTitle5" class="form-control"
-                                                      placeholder="Inserisci il titolo per l'immagine 5" name="imageTitle5"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="descriptionImage5">Descrizione Immagine5</label>
-                                            <textarea id="descriptionImage5" class="form-control"
-                                                      placeholder="Inserisci la descrizione per l'immagine 5" name="descriptionImage5"
-                                                      ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageUrl5">link Immagine5</label>
-                                            <textarea id="imageUrl5" class="form-control"
-                                                      placeholder="Inserisci il link per l'immagine 5" name="imageUrl5"></textarea>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl5">link Immagine5</label>
+                                                <textarea id="imageUrl5" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 5"
+                                                          name="imageUrl5"></textarea>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle6">Titolo Immagine6</label>
+                                                <textarea id="imageTitle6" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 6"
+                                                          name="imageTitle6"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage6">Descrizione Immagine6</label>
+                                                <textarea id="descriptionImage6" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 6"
+                                                          name="descriptionImage6"
+                                                          required="required"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl6">link Immagine6</label>
+                                                <textarea id="imageUrl6" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 6"
+                                                          name="imageUrl6"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle7">Titolo Immagine7</label>
+                                                <textarea id="imageTitle7" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 7"
+                                                          name="imageTitle7"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage7">Descrizione Immagine7</label>
+                                                <textarea id="descriptionImage7" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 7"
+                                                          name="descriptionImage7"
+                                                          required="required"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl7">link Immagine7</label>
+                                                <textarea id="imageUrl7" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 7"
+                                                          name="imageUrl7"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle8">Titolo Immagine6</label>
+                                                <textarea id="imageTitle8" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 8"
+                                                          name="imageTitle8"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage8">Descrizione Immagine8</label>
+                                                <textarea id="descriptionImage8" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 8"
+                                                          name="descriptionImage8"
+                                                          required="required"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl8">link Immagine8</label>
+                                                <textarea id="imageUrl8" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 8"
+                                                          name="imageUrl8"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle9">Titolo Immagine9</label>
+                                                <textarea id="imageTitle9" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 9"
+                                                          name="imageTitle9"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage9">Descrizione Immagine9</label>
+                                                <textarea id="descriptionImage9" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 9"
+                                                          name="descriptionImage9"
+                                                          required="required"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl9">link Immagine6</label>
+                                                <textarea id="imageUrl9" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 9"
+                                                          name="imageUrl9"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageTitle10">Titolo Immagine10</label>
+                                                <textarea id="imageTitle10" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine 10"
+                                                          name="imageTitle6"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="descriptionImage10">Descrizione Immagine10</label>
+                                                <textarea id="descriptionImage10" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 10"
+                                                          name="descriptionImage10"
+                                                          required="required"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="imageUrl10">link Immagine10</label>
+                                                <textarea id="imageUrl10" class="form-control"
+                                                          placeholder="Inserisci il link per l'immagine 10"
+                                                          name="imageUrl10"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageTitle6">Titolo Immagine6</label>
-                                            <textarea id="imageTitle6" class="form-control"
-                                                      placeholder="Inserisci il titolo per l'immagine 6" name="imageTitle6"
-                                            ></textarea>
+                                <div id="postVideo">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="postVideoTitle">Titolo Video</label>
+                                                <textarea id="postImageTitle" class="form-control"
+                                                          placeholder="Inserisci il titolo per l'immagine "
+                                                          name="postImageTitle"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="descriptionImage6">Descrizione Immagine6</label>
-                                            <textarea id="descriptionImage6" class="form-control"
-                                                      placeholder="Inserisci la descrizione per l'immagine 6" name="descriptionImage6"
-                                                      required="required"></textarea>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="postDescriptionVideo">Descrizione Video</label>
+                                                <textarea id="postDescriptionVideo" class="form-control"
+                                                          placeholder="Inserisci la descrizione per l'immagine 1"
+                                                          name="postDescriptionVideo"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="imageUrl6">link Immagine6</label>
-                                            <textarea id="imageUrl6" class="form-control"
-                                                      placeholder="Inserisci il link per l'immagine 6" name="imageUrl6"
-                                            ></textarea>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="video1">link Video</label>
+                                                <textarea id="video1" class="form-control"
+                                                          placeholder="Inserisci il link per il video " name="video"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="postVideoCallToAction">Seleziona la Call To Action</label>
+                                                <select id="postVideoCallToAction"
+                                                        name="postVideoCallToAction" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione il piano editoriale da utilizzare"
+                                                        data-init-plugin="selectize">
+                                                    <option value="OPEN_LINK">APRI LINK</option>
+                                                    <option value="LIKE_PAGE">MI PIACE SU PAGINA</option>
+                                                    <option value="SHOP_NOW">SHOP NOW</option>
+                                                    <option value="CALL">CALL_ME</option>
+                                                    <option value="APPLY_NOW">APPLY NOW</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="video1">link Video1</label>
-                                            <textarea id="video1" class="form-control"
-                                                      placeholder="Inserisci il link per il video 1" name="video1"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="video2">link Video2</label>
-                                            <textarea id="video2" class="form-control"
-                                                      placeholder="Inserisci il link per il video 2" name="video2"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="video3">link Video3</label>
-                                            <textarea id="video3" class="form-control"
-                                                      placeholder="Inserisci il link per video 3" name="video3"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="video4">link Video4</label>
-                                            <textarea id="video4" class="form-control"
-                                                      placeholder="Inserisci il link per il video 4" name="video4"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="video5">link Video5</label>
-                                            <textarea id="video5" class="form-control"
-                                                      placeholder="Inserisci il link per il video 5" name="video5"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="video6">link Video6</label>
-                                            <textarea id="video6" class="form-control"
-                                                      placeholder="Inserisci il link per video 6" name="video6"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="form-group form-group-default selectize-enabled">
@@ -378,65 +597,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="socialPlanId">Seleziona il media da Associare </label>
-                                            <select id="socialPlanId"
-                                                    required="required"
-                                                    name="socialPlanId"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Selezione il media da associare"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="status">Seleziona lo Stato</label>
-                                            <select id="status" name="status" required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona lo stato"
-                                                    data-init-plugin="selectize">
-                                                <option value="new">Stato</option>
-                                                <option value="Draft">Bozza</option>
-                                                <option value="Approved">Approvata</option>
-                                                <option value="Rejected">Rifiutata</option>
-                                                <option value="Published">Pubblicata</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="startEventDate">Data Inizio Evento</label>
-                                            <input type="datetime-local" id="startEventDate" class="form-control"
-                                                   placeholder="Inserisci la Data di Inizio del Dettaglio"
-                                                   name="startEventDate" value=""
-                                                   required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="endEventDate">Data Fine Evento </label>
-                                            <input type="datetime-local" id="endEventDate" class="form-control"
-                                                   placeholder="Inserisci la Data della Fine del Dettaglio "
-                                                   name="endEventDate" value=""
-                                                   required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="notifyEmail">Notificare al Cliente</label>
-                                            <select id="notifyEmail" name="notifyEmail" required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona"
-                                                    data-init-plugin="selectize">
-                                                <option value="notNotify">Non Inviare la Notifica</option>
-                                                <option value="yesNotify">Invia la Notifica</option>
 
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

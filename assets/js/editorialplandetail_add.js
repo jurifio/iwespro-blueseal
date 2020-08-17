@@ -23,23 +23,6 @@
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
             data: {
-                table: 'EditorialPlanArgument'
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#editorialPlanArgumentId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'titleArgument',
-                searchField: 'titleArgument',
-                options: res2,
-            });
-        });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
                 table: 'EditorialPlanSocial'
             },
             dataType: 'json'
@@ -56,7 +39,32 @@
 
 
 
+
+
+
     });
+    var editorialPlanSocialSelected='';
+    $('#socialPlanId').on('change',function(){
+        editorialPlanSocialSelected=$(this).val();
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'EditorialPlanArgument',
+                condition: {editorialPlanSocialId: editorialPlanSocialSelected}
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#editorialPlanArgumentId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'titleArgument',
+                searchField: 'titleArgument',
+                options: res2,
+            });
+        });
+    })
 $('#editorialPlanArgumentId').change(function(){
    if($('#editorialPlanArgumentId').val()>1 && $('#editorialPlanArgumentId').val()<10){
         $('#divSelecterCampaign').removeClass('hide');
@@ -412,24 +420,36 @@ $(document).on('bs.post.save', function () {
             imageTitle4:$('#imageTitle4').val(),
             imageTitle5:$('#imageTitle5').val(),
             imageTitle6:$('#imageTitle6').val(),
+            imageTitle7:$('#imageTitle7').val(),
+            imageTitle8:$('#imageTitle8').val(),
+            imageTitle9:$('#imageTitle9').val(),
+            imageTitle10:$('#imageTitle10').val(),
             imageUrl1:$('#imageUrl1').val(),
             imageUrl2:$('#imageUrl2').val(),
             imageUrl3:$('#imageUrl3').val(),
             imageUrl4:$('#imageUrl4').val(),
             imageUrl5:$('#imageUrl5').val(),
             imageUrl6:$('#imageUrl6').val(),
+            imageUrl7:$('#imageUrl7').val(),
+            imageUrl8:$('#imageUrl8').val(),
+            imageUrl9:$('#imageUrl9').val(),
+            imageUrl10:$('#imageUrl10').val(),
             descriptionImage1:$('#descriptionImage1').val(),
             descriptionImage2:$('#descriptionImage2').val(),
             descriptionImage3:$('#descriptionImage3').val(),
             descriptionImage4:$('#descriptionImage4').val(),
             descriptionImage5:$('#descriptionImage5').val(),
             descriptionImage6:$('#descriptionImage6').val(),
+            descriptionImage7:$('#descriptionImage7').val(),
+            descriptionImage8:$('#descriptionImage8').val(),
+            descriptionImage9:$('#descriptionImage9').val(),
+            descriptionImage10:$('#descriptionImage10').val(),
+            postImageTitle:$('#postImageTitle').val(),
+            postDescriptionImage:$('#postDescriptionImage').val(),
+            postVideoTitle:$('#postVideoTitle').val(),
+            postDescriptionVideo:$('#postDescriptionVideo').val(),
+            postVideoCallToAction: $('#postVideoCallToAction').val(),
             video1:$('#video1').val(),
-            video2:$('#video2').val(),
-            video3:$('#video3').val(),
-            video4:$('#video4').val(),
-            video5:$('#video5').val(),
-            video6:$('#video6').val()
 
         };
 

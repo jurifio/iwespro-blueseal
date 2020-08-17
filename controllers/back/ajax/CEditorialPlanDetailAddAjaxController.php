@@ -59,10 +59,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $argument = $data['argument'];
         $linkDestination = $data['linkDestination'];
         $facebookCampaignId = $data['facebookCampaignId'];
-        $lifetime_budget=$data['lifetime_budget'];
+        $lifetime_budget = $data['lifetime_budget'];
         $campaignId = str_replace('\n','',$data['campaignId']);
         $groupAdsName = str_replace('\n','',$data['groupAdsName']);
-        $selecterCampaign=$data['selecterCampaign'];
+        $selecterCampaign = $data['selecterCampaign'];
         $isNewAdSet = $data['isNewAdSet'];
         if ($argument == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
@@ -75,8 +75,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $isVisibleNote = $data['isVisibleNote'];
         $description = $data['description'];
         $isVisibleDescription = $data['isVisibleDescription'];
-        $buying_type=$data['buying_type'];
-        $objective=$data['objective'];
+        $buying_type = $data['buying_type'];
+        $objective = $data['objective'];
         $photoUrl = (array_key_exists('photoUrl',$data)) ? $data['photoUrl'] : '';
         $unlinkphoto = [];
         $status = $data['status'];
@@ -87,21 +87,21 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $this->app->vendorLibraries->load("videoEditing");
         $this->app->vendorLibraries->load("facebook");
         \Monkey::app()->vendorLibraries->load("amazon2723");
-        $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder').'-plandetail'."/";
-        $array_video=[];
-        if($data['video1']!=''){
-            $namePath=$tempFolder.trim($title).'1.jpg';
-            $ffmpeg =  FFMpeg\FFMpeg::create();
+        $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempFolder') . '-plandetail' . "/";
+        $array_video = [];
+        if ($data['video1'] != '') {
+            $namePath = $tempFolder . trim($title) . '1.jpg';
+            $ffmpeg = FFMpeg\FFMpeg::create();
             $video = $ffmpeg->open($data['video1']);
             $video
                 ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1))
                 ->save($namePath);
-            $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
+            $image = new ImageManager(new S3Manager($config['credential']),$this->app,$tempFolder);
             //$fileName=$tempFolder.$title.'1.jpg';
-            $fileName['name'] = trim($title).'1.jpg';
-            $res = $image->processImageEditorialUploadPhoto(trim($title).'1.jpg',  $fileName, $config['bucket'].'-editorial', 'plandetail-images');
-            $imageThumbVideo1="https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/".$fileName['name'];
+            $fileName['name'] = trim($title) . '1.jpg';
+            $res = $image->processImageEditorialUploadPhoto(trim($title) . '1.jpg',$fileName,$config['bucket'] . '-editorial','plandetail-images');
+            $imageThumbVideo1 = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/" . $fileName['name'];
 
         }
 
@@ -157,9 +157,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                 $jpg = $jpg;
 
             }
-            $isCarousel='0';
-            if (count($photoUrl)>1){
-                $isCarousel=1;
+            $isCarousel = '0';
+            if (count($photoUrl) > 1) {
+                $isCarousel = 1;
             }
             /** @var array $groupimage */
             $groupimage = implode(",",$photoUrl);
@@ -197,7 +197,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $editorialPlanDetailInsert->isVisibleNote = $isVisibleNote;
             $editorialPlanDetailInsert->socialId = $socialId;
             $editorialPlanDetailInsert->bodyEvent = $bodyEvent;
-            $editorialPlanDetailInsert->lifetime_budget=$lifetime_budget;
+            $editorialPlanDetailInsert->lifetime_budget = $lifetime_budget;
             $editorialPlanDetailInsert->buying_type = $buying_type;
             $editorialPlanDetailInsert->objective = $objective;
             if ($facebookCampaignId != 'notExist') {
@@ -239,7 +239,6 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $editorialPlanDetailInsert->insertionId = $graphNode['id'];
 
                     break;
-                case '9':
                 case '8':
                     if ($isNewAdSet == '2') {
 
@@ -262,7 +261,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             break;
                         }
                     }
-                    if($selecterCampaign==1){
+                    if ($selecterCampaign == 1) {
                         $adSetList = [];
                         $adsets = $account->getAdSets(array(
                             AdSetFields::NAME,
@@ -283,126 +282,64 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         }
 
 
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adsets',
+                                array(
+                                    'name' => $adSetList[0]['nameAdSet'],
+                                    'start_time' => $startEventForFacebook,
+                                    'end_time' => $endEventForFacebook,
+                                    'campaign_id' => $campaignId,
+                                    'billing_event' => 'IMPRESSIONS',
+                                    'bid_amount' => '500',
+                                    'optimization_goal' => $campaignList[0]['objective'],
+                                    'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                                    'status' => $campaignList[0]['effective_status'],
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch
+                        (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
+                            return 'Facebook SDK returned an error: ' . $e->getMessage();
 
-                            try {
-                                // Returns a `Facebook\FacebookResponse` object
-                                $response = $fb->post(
-                                    '/' . $adAccountId . '/adsets',
-                                    array(
-                                        'name' => $adSetList[0]['nameAdSet'],
-                                        'start_time' => $startEventForFacebook,
-                                        'end_time' => $endEventForFacebook,
-                                        'campaign_id' => $campaignId,
-                                        'billing_event' => 'IMPRESSIONS',
-                                        'bid_amount' => '500',
-                                        'optimization_goal' => $campaignList[0]['objective'],
-                                        'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
-                                        'status' => $campaignList[0]['effective_status'],
-                                    ),
-                                    $pageAccessToken
-                                );
-                            } catch
-                            (Facebook\Exceptions\FacebookResponseException $e) {
-                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
-                                return 'Graph returned an error: ' . $e->getMessage();
-                            } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                                \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
-                                return 'Facebook SDK returned an error: ' . $e->getMessage();
-
-                            }
-                            $graphNode = $response->getGraphNode();
-
-                            $groupAdsName = $graphNode['id'];
                         }
+                        $graphNode = $response->getGraphNode();
+
+                        $groupAdsName = $graphNode['id'];
+                    }
 
 
-                    $arrayPhotoHash=[];
-                    $i=0;
-                if (count($photoUrl)<2) {
-                    $downloadedFileContents = file_get_contents($groupimage);
-                    $img = base64_encode($downloadedFileContents);
-                    try {
-                        // Returns a `Facebook\FacebookResponse` object
-                        $response = $fb->post(
-                            '/' . $adAccountId . '/adimages/',
-                            array(
-                                'bytes' => $img
-                            ),
-                            $pageAccessToken
-                        );
-                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
-                        return 'Graph returned an error: ' . $e->getMessage();
-                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
-                        return 'Graph returned an error: ' . $e->getMessage();
-                    }
-                    $graphNode = $response->getGraphNode();
-                    $imagehash = $graphNode['images']['bytes']['hash'];
-                }else{
-                    $arrayLink=[];
-                    $arrayDescription=[];
-                    $arrayTitle=[];
-                    $arrayVideo=[];
-                    if($data['imageUrl1']!=''){
-                        array_push($arrayLink,$data['imageUrl1']);
-                        array_push($arrayDescription,$data['descriptionImage1']);
-                        array_push($arrayTitle,$data['imageTitle1']);
-                    }
-                    if($data['imageUrl2']!=''){
-                        array_push($arrayLink,$data['imageUrl2']);
-                        array_push($arrayDescription,$data['descriptionImage2']);
-                        array_push($arrayTitle,$data['imageTitle2']);
-                    }
-                    if($data['imageUrl3']!=''){
-                        array_push($arrayLink,$data['imageUrl3']);
-                        array_push($arrayDescription,$data['descriptionImage3']);
-                        array_push($arrayTitle,$data['imageTitle3']);
+                    $arrayPhotoHash = [];
+                    $i = 0;
 
-                    }
-                    if($data['imageUrl4']!=''){
-                        array_push($arrayLink,$data['imageUrl4']);
-                        array_push($arrayDescription,$data['descriptionImage4']);
-                        array_push($arrayTitle,$data['imageTitle4']);
-                    }
-                    if($data['imageUrl5']!=''){
-                        array_push($arrayLink,$data['imageUrl5']);
-                        array_push($arrayDescription,$data['descriptionImage5']);
-                        array_push($arrayTitle,$data['imageTitle5']);
-                    }
-                    if($data['imageUrl6']!=''){
-                        array_push($arrayLink,$data['imageUrl6']);
-                        array_push($arrayDescription,$data['descriptionImage6']);
-                        array_push($arrayTitle,$data['imageTitle6']);
-                    }
-
-                    foreach ($photoUrl as $photoHash) {
-
-                        $downloadedFileContents = file_get_contents($photoHash);
+                        $downloadedFileContents = file_get_contents($groupimage);
                         $img = base64_encode($downloadedFileContents);
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adimages/',
+                                array(
+                                    'bytes' => $img
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        }
+                        $graphNode = $response->getGraphNode();
+                        $imagehash = $graphNode['images']['bytes']['hash'];
 
-                        try{
-                        $response = $fb->post(
-                            '/' . $adAccountId . '/adimages/',
-                            array(
-                                'bytes' => $img
-                            ),
-                            $pageAccessToken
-                        );
-                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
-                        return 'Graph returned an error: ' . $e->getMessage();
-                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
-                        return 'Graph returned an error: ' . $e->getMessage();
-                    }
-                    $graphNode = $response->getGraphNode();
-                        $arrayPhotoHash[] =['description'=>$arrayDescription[$i],'image_hash'=>$graphNode['images']['bytes']['hash'],'link'=>$arrayLink[$i],'name'=>$arrayTitle[$i]];
-                    $i++;
-                    }
-                }
 
-                    if($isCarousel=='0') {
+
                         try {
                             // Returns a `Facebook\FacebookResponse` object
                             $response = $fb->post(
@@ -414,51 +351,23 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                                         'photo_data' => array(
                                             'image_hash' => $imagehash
                                         ),
-                                        'title' => $title,
-                                        'body' => $description,
-                                        'link_url' => $linkDestination,
-                                        'object_url' => $linkDestination
+                                        'title' => $data['postImageTitle'],
+                                        'body' => $data['postImageDescription'],
+                                        'link_url' => $data['postImageUrl'],
+                                        'object_url' => $data['postImageUrl']
                                     ),
                                 ),
                                 $pageAccessToken
                             );
                         } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
                             return 'Graph returned an error: ' . $e->getMessage();
                         } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
                             return 'Graph returned an error: ' . $e->getMessage();
                         }
                         $graphNode = $response->getGraphNode();
                         $creativeId = $graphNode['id'];
-                    }else{
-                        try {
-                            // Returns a `Facebook\FacebookResponse` object
-                            $response = $fb->post(
-                                '/' . $adAccountId . '/adcreatives',
-                                array(
-                                    'name' => $title,
-                                    'object_story_spec' => array(
-                                                                 'page_id' => $editorialPlanShopAsSocial->page_id,
-                                                                 'link_data' => array(
-                                                                                     'child_attachments'=>   $arrayPhotoHash,
-                                                                                     'link'=>$linkDestination),
-                                    ),
-                                ),
-                                $pageAccessToken
-
-                            );
-                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
-                            return 'Graph returned an error: ' . $e->getMessage();
-                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController', 'Error', 'Graph returned an error: ' . $e->getMessage(), $e->getLine(), '');
-                            return 'Graph returned an error: ' . $e->getMessage();
-                        }
-                        $graphNode = $response->getGraphNode();
-                        $creativeId = $graphNode['id'];
-
-                    }
                     $editorialPlanDetailInsert->creativeId = $creativeId;
                     try {
                         $response = $fb->post(
@@ -482,6 +391,385 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $graphNode = $response->getGraphNode();
                     $editorialPlanDetailInsert->insertionId = $graphNode['id'];
                     break;
+                case 9:
+                    if ($isNewAdSet == '2') {
+
+
+                        $account = new AdAccount($adAccountId);
+
+                        $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
+                        $campaignList = [];
+// Loop over objects
+
+                        foreach ($cursor as $campaign) {
+                            $nameCampaign = $campaign->{CampaignFields::NAME};
+                            $idCampaign = $campaign->{CampaignFields::ID};
+
+                            $objective = $campaign->{CampaignFields::OBJECTIVE};
+                            $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
+                            $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
+                            if ($idCampaign == $campaignId)
+                                $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                            break;
+                        }
+                    }
+                    if ($selecterCampaign == 1) {
+                        $adSetList = [];
+                        $adsets = $account->getAdSets(array(
+                            AdSetFields::NAME,
+                            AdSetFields::CONFIGURED_STATUS,
+                            AdSetFields::EFFECTIVE_STATUS,
+                            AdSetFields::ID,
+                            AdSetFields::CAMPAIGN_ID,
+                        ));
+// Loop over objects
+
+                        foreach ($adsets as $adset) {
+                            $nameAdSet = $adset->{AdSetFields::NAME};
+                            $idAdSet = $adset->{AdSetFields::ID};
+                            $status = $adset->{CampaignFields::STATUS};
+                            if ($idAdSet == $groupAdsName) {
+                                $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+                            }
+                        }
+
+
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adsets',
+                                array(
+                                    'name' => $adSetList[0]['nameAdSet'],
+                                    'start_time' => $startEventForFacebook,
+                                    'end_time' => $endEventForFacebook,
+                                    'campaign_id' => $campaignId,
+                                    'billing_event' => 'IMPRESSIONS',
+                                    'bid_amount' => '500',
+                                    'optimization_goal' => $campaignList[0]['objective'],
+                                    'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                                    'status' => $campaignList[0]['effective_status'],
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch
+                        (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
+                            return 'Facebook SDK returned an error: ' . $e->getMessage();
+
+                        }
+                        $graphNode = $response->getGraphNode();
+
+                        $groupAdsName = $graphNode['id'];
+                    }
+
+
+                    $arrayPhotoHash = [];
+                    $i = 0;
+
+                    $arrayLink = [];
+                    $arrayDescription = [];
+                    $arrayTitle = [];
+                    $arrayVideo = [];
+                    if ($data['imageUrl1'] != '') {
+                        array_push($arrayLink,$data['imageUrl1']);
+                        array_push($arrayDescription,$data['descriptionImage1']);
+                        array_push($arrayTitle,$data['imageTitle1']);
+                    }
+                    if ($data['imageUrl2'] != '') {
+                        array_push($arrayLink,$data['imageUrl2']);
+                        array_push($arrayDescription,$data['descriptionImage2']);
+                        array_push($arrayTitle,$data['imageTitle2']);
+                    }
+                    if ($data['imageUrl3'] != '') {
+                        array_push($arrayLink,$data['imageUrl3']);
+                        array_push($arrayDescription,$data['descriptionImage3']);
+                        array_push($arrayTitle,$data['imageTitle3']);
+
+                    }
+                    if ($data['imageUrl4'] != '') {
+                        array_push($arrayLink,$data['imageUrl4']);
+                        array_push($arrayDescription,$data['descriptionImage4']);
+                        array_push($arrayTitle,$data['imageTitle4']);
+                    }
+                    if ($data['imageUrl5'] != '') {
+                        array_push($arrayLink,$data['imageUrl5']);
+                        array_push($arrayDescription,$data['descriptionImage5']);
+                        array_push($arrayTitle,$data['imageTitle5']);
+                    }
+                    if ($data['imageUrl6'] != '') {
+                        array_push($arrayLink,$data['imageUrl6']);
+                        array_push($arrayDescription,$data['descriptionImage6']);
+                        array_push($arrayTitle,$data['imageTitle6']);
+                    }
+                    if ($data['imageUrl7'] != '') {
+                        array_push($arrayLink,$data['imageUrl7']);
+                        array_push($arrayDescription,$data['descriptionImage7']);
+                        array_push($arrayTitle,$data['imageTitle7']);
+                    }
+                    if ($data['imageUrl8'] != '') {
+                        array_push($arrayLink,$data['imageUrl8']);
+                        array_push($arrayDescription,$data['descriptionImage8']);
+                        array_push($arrayTitle,$data['imageTitle8']);
+                    }
+                    if ($data['imageUrl9'] != '') {
+                        array_push($arrayLink,$data['imageUrl9']);
+                        array_push($arrayDescription,$data['descriptionImage9']);
+                        array_push($arrayTitle,$data['imageTitle9']);
+                    }
+                    if ($data['imageUrl10'] != '') {
+                        array_push($arrayLink,$data['imageUrl10']);
+                        array_push($arrayDescription,$data['descriptionImage10']);
+                        array_push($arrayTitle,$data['imageTitle10']);
+                    }
+
+                    foreach ($photoUrl as $photoHash) {
+
+                        $downloadedFileContents = file_get_contents($photoHash);
+                        $img = base64_encode($downloadedFileContents);
+
+                        try {
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adimages/',
+                                array(
+                                    'bytes' => $img
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        }
+                        $graphNode = $response->getGraphNode();
+                        $arrayPhotoHash[] = ['description' => $arrayDescription[$i],'image_hash' => $graphNode['images']['bytes']['hash'],'link' => $arrayLink[$i],'name' => $arrayTitle[$i]];
+                        $i++;
+                    }
+
+
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/adcreatives',
+                            array(
+                                'name' => $title,
+                                'object_story_spec' => array(
+                                    'page_id' => $editorialPlanShopAsSocial->page_id,
+                                    'link_data' => array(
+                                        'child_attachments' => $arrayPhotoHash,
+                                        'link' => $linkDestination),
+                                ),
+                            ),
+                            $pageAccessToken
+
+                        );
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $creativeId = $graphNode['id'];
+
+
+                    $editorialPlanDetailInsert->creativeId = $creativeId;
+                    try {
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/ads',
+                            array(
+                                'name' => $title,
+                                'adset_id' => $groupAdsName,
+                                'creative' => array('creative_id' => $creativeId),
+                                'status' => $campaignList[0]['effective_status'],
+                            ),
+                            $pageAccessToken
+                        );
+
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $editorialPlanDetailInsert->insertionId = $graphNode['id'];
+                    break;
+                case 10:
+                    if ($data['video1'] != '') {
+                        $postVideoTitle=$data['postVideoTitle'];
+                        $namePath = $tempFolder . trim($postVideoTitle) . '1.jpg';
+                        $ffmpeg = FFMpeg\FFMpeg::create();
+                        $video = $ffmpeg->open($data['video1']);
+                        $video
+                            ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1))
+                            ->save($namePath);
+                        $image = new ImageManager(new S3Manager($config['credential']),$this->app,$tempFolder);
+                        //$fileName=$tempFolder.$title.'1.jpg';
+                        $fileName['name'] = trim($postVideoTitle) . '1.jpg';
+                        $res = $image->processImageEditorialUploadPhoto(trim($postVideoTitle) . '1.jpg',$fileName,$config['bucket'] . '-editorial','plandetail-images');
+                        $imageThumbVideo1 = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/" . $fileName['name'];
+
+                    }
+                    if ($isNewAdSet == '2') {
+
+
+                        $account = new AdAccount($adAccountId);
+
+                        $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
+                        $campaignList = [];
+// Loop over objects
+
+                        foreach ($cursor as $campaign) {
+                            $nameCampaign = $campaign->{CampaignFields::NAME};
+                            $idCampaign = $campaign->{CampaignFields::ID};
+
+                            $objective = $campaign->{CampaignFields::OBJECTIVE};
+                            $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
+                            $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
+                            if ($idCampaign == $campaignId)
+                                $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                            break;
+                        }
+                    }
+                    if ($selecterCampaign == 1) {
+                        $adSetList = [];
+                        $adsets = $account->getAdSets(array(
+                            AdSetFields::NAME,
+                            AdSetFields::CONFIGURED_STATUS,
+                            AdSetFields::EFFECTIVE_STATUS,
+                            AdSetFields::ID,
+                            AdSetFields::CAMPAIGN_ID,
+                        ));
+// Loop over objects
+
+                        foreach ($adsets as $adset) {
+                            $nameAdSet = $adset->{AdSetFields::NAME};
+                            $idAdSet = $adset->{AdSetFields::ID};
+                            $status = $adset->{CampaignFields::STATUS};
+                            if ($idAdSet == $groupAdsName) {
+                                $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+                            }
+                        }
+
+
+                        try {
+                            // Returns a `Facebook\FacebookResponse` object
+                            $response = $fb->post(
+                                '/' . $adAccountId . '/adsets',
+                                array(
+                                    'name' => $adSetList[0]['nameAdSet'],
+                                    'start_time' => $startEventForFacebook,
+                                    'end_time' => $endEventForFacebook,
+                                    'campaign_id' => $campaignId,
+                                    'billing_event' => 'IMPRESSIONS',
+                                    'bid_amount' => '500',
+                                    'optimization_goal' => $campaignList[0]['objective'],
+                                    'targeting' => '{"geo_locations":{"countries":["IT"]},"facebook_positions":["feed"],"publisher_platforms":["facebook","audience_network"]}',
+                                    'status' => $campaignList[0]['effective_status'],
+                                ),
+                                $pageAccessToken
+                            );
+                        } catch
+                        (Facebook\Exceptions\FacebookResponseException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
+                            return 'Graph returned an error: ' . $e->getMessage();
+                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
+                            return 'Facebook SDK returned an error: ' . $e->getMessage();
+
+                        }
+                        $graphNode = $response->getGraphNode();
+
+                        $groupAdsName = $graphNode['id'];
+                    }
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/advideos',
+                            array(
+                                'title' => $data['postVideoTitle'],
+                                'description' => $data['postVideoDescription'],
+                                'file_url' => $data['video1'],
+                                'unpublished_content_type' => 'DRAFT',
+                                'name' => $data['postVideoTitle']
+                            ),
+                            $pageAccessToken
+                        );
+                    } catch
+                    (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'set Response adSet sdk');
+                        return 'Facebook SDK returned an error: ' . $e->getMessage();
+
+                    }
+                    $graphNode = $response->getGraphNode();
+
+                    $videoFacebookId = $graphNode['id'];
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/adcreatives',
+                            array(
+                                'name' => $title,
+                                'object_story_spec' => array(
+                                    'page_id' => $editorialPlanShopAsSocial->page_id,
+                                    'link_data' => array(
+                                        'child_attachments' => $arrayPhotoHash,
+                                        'link' => $linkDestination),
+                                ),
+                            ),
+                            $pageAccessToken
+
+                        );
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $creativeId = $graphNode['id'];
+
+
+                    $editorialPlanDetailInsert->creativeId = $creativeId;
+                    try {
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/ads',
+                            array(
+                                'name' => $title,
+                                'adset_id' => $groupAdsName,
+                                'creative' => array('creative_id' => $creativeId),
+                                'status' => $campaignList[0]['effective_status'],
+                            ),
+                            $pageAccessToken
+                        );
+
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error Sdk: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $editorialPlanDetailInsert->insertionId = $graphNode['id'];
+
+
+
+
+
+                    break;
+
 
             }
             if ($isNewAdSet != '0') {
