@@ -21,7 +21,6 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
-
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
@@ -139,7 +138,11 @@
         <bs-toolbar-button
                 data-remote="bs.publish.post.tosocial"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.preview.post.tosocial"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
+
 </body>
     </html><?php

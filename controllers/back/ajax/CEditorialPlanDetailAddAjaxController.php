@@ -743,7 +743,6 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                                 'title' => $data['postVideoTitle'],
                                 'description' => $data['postDescriptionVideo'],
                                 'file_url' => $data['video1'],
-                                'unpublished_content_type' => 'DRAFT',
                                 'name' => $data['postVideoTitle']
                             ),
                             $pageAccessToken
@@ -760,6 +759,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $graphNode = $response->getGraphNode();
 
                     $videoFacebookId = $graphNode['id'];
+                    sleep(3);
                     try {
                         // Returns a `Facebook\FacebookResponse` object
                         $response = $fb->post(
@@ -767,15 +767,11 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             array(
                                 'name' => $title,
                                 'object_story_spec' => array(
-                                    'page_id' => $editorialPlanShopAsSocial->page_id,
-                                    'video_data' => array(
-                                        'call_to_action' => array(
-                                            'type' => $data['postVideoCallToAction'],
-                                            'value' => array(
-                                                'page' => $editorialPlanShopAsSocial->page_id)
-                                        ),
-                                        'image_url' => $imageThumbVideo1,
-                                        'video_id' => $videoFacebookId),
+                                                             'page_id' => $editorialPlanShopAsSocial->page_id,
+                                                             'video_data' => array(
+                                                                                  'image_url' => $imageThumbVideo1,
+                                                                                  'video_id' => $videoFacebookId
+                                                             ),
                                 ),
                             ),
                             $pageAccessToken
@@ -795,7 +791,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $editorialPlanDetailInsert->creativeId = $creativeId;
                     $editorialPlanDetailInsert->postVideoCallToAction = $data['postVideoCallToAction'];
                     $editorialPlanDetailInsert->videoFacebookId = $videoFacebookId;
-                    $editorialPlanDetailInsert->postDescriptionVideo = $data['postVideoDescription'];
+                    $editorialPlanDetailInsert->postDescriptionVideo = $data['postDescriptionVideo'];
                     $editorialPlanDetailInsert->video1 = $data['video1'];
                     try {
                         $response = $fb->post(

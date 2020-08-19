@@ -39,6 +39,7 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
         P.startDate as startDateEditorial,
         P.endDate as endDateEditorial,
         E.name as socialName,
+        n.creativeId as creativeId,
         A.titleArgument as titleArgument,
         n.description as description,
         n.photoUrl as photoUrl
@@ -62,6 +63,7 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
             /** @var CEditorialPlan $editorialPlan */
             $editorialPlan = $editorialPlanRepo->findOneBy(['id' => $row["editorialPlanId"] ]);
             $row['row_id']=$row['id'];
+            $row['creativeId']=$row['creativeId'];
 
             $row['id'] = '<a href="' . $opera . $row['id'] . '" >' . $row['id']. '</a>';
 
