@@ -139,18 +139,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempFolder') . "-plandetail/";
         $files = glob($tempFolder . "*.jpg");
         $url = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
-        /*   foreach ($files as $jpg) {
 
-               $finalslash = strrpos($jpg, '/');
-               $photo = substr($jpg, $finalslash, 1000);
-               $photo = trim($photo);
-               $image = $url . $photo;
-               array_push($photoUrl, $image);
-
-               array_push($unlinkphoto,$photo);
-
-
-        }*/
         if ($photoUrl != '') {
             foreach ($photoUrl as &$jpg) {
 
@@ -164,7 +153,6 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             /** @var array $groupimage */
             $groupimage = implode(",",$photoUrl);
         } else {
-            // $groupimage='https://www.iwes.pro/assets/bs-dummy-16-9.png';
             $groupimage = '';
         }
         /** @var CRepo $editorialPlanDetailRepo */
@@ -175,11 +163,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
 
         if (empty($editorialPlanDetail)) {
-            //se la variabile non è istanziata inserisci in db
 
             /** @var CEditorialPlanDetail $editorialPlanDetailInsert */
             $editorialPlanDetailInsert = \Monkey::app()->repoFactory->create('EditorialPlanDetail')->getEmptyEntity();
-            //popolo la tabella
 
             $editorialPlanDetailInsert->title = $title;
             $editorialPlanDetailInsert->isEventVisible = $isEventVisible;
@@ -208,7 +194,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $editorialPlanDetailInsert->editorialPlanId = $editorialPlanId;
             $insertionId = '';
 
-            // eseguo la commit sulla tabella;
+
             switch ($argument) {
                 case '4':
 
@@ -317,57 +303,55 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $arrayPhotoHash = [];
                     $i = 0;
 
-                        $downloadedFileContents = file_get_contents($groupimage);
-                        $img = base64_encode($downloadedFileContents);
-                        try {
-                            // Returns a `Facebook\FacebookResponse` object
-                            $response = $fb->post(
-                                '/' . $adAccountId . '/adimages/',
-                                array(
-                                    'bytes' => $img
-                                ),
-                                $pageAccessToken
-                            );
-                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
-                            return 'Graph returned an error: ' . $e->getMessage();
-                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
-                            return 'Graph returned an error: ' . $e->getMessage();
-                        }
-                        $graphNode = $response->getGraphNode();
-                        $imagehash = $graphNode['images']['bytes']['hash'];
+                    $downloadedFileContents = file_get_contents($groupimage);
+                    $img = base64_encode($downloadedFileContents);
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/adimages/',
+                            array(
+                                'bytes' => $img
+                            ),
+                            $pageAccessToken
+                        );
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $imagehash = $graphNode['images']['bytes']['hash'];
 
 
-
-                        try {
-                            // Returns a `Facebook\FacebookResponse` object
-                            $response = $fb->post(
-                                '/' . $adAccountId . '/adcreatives',
-                                array(
-                                    'name' => $title,
-                                    'object_story_spec' => array(
-                                        'page_id' => $editorialPlanShopAsSocial->page_id,
-                                        'photo_data' => array(
-                                            'image_hash' => $imagehash
-                                        ),
-                                        'title' => $data['postImageTitle'],
-                                        'body' => $data['postImageDescription'],
-                                        'link_url' => $data['postImageUrl'],
-                                        'object_url' => $data['postImageUrl']
+                    try {
+                        $response = $fb->post(
+                            '/' . $adAccountId . '/adcreatives',
+                            array(
+                                'name' => $title,
+                                'object_story_spec' => array(
+                                    'page_id' => $editorialPlanShopAsSocial->page_id,
+                                    'photo_data' => array(
+                                        'image_hash' => $imagehash
                                     ),
+                                    'title' => $data['postImageTitle'],
+                                    'body' => $data['postImageDescription'],
+                                    'link_url' => $data['postImageUrl'],
+                                    'object_url' => $data['postImageUrl']
                                 ),
-                                $pageAccessToken
-                            );
-                        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
-                            return 'Graph returned an error: ' . $e->getMessage();
-                        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                            \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
-                            return 'Graph returned an error: ' . $e->getMessage();
-                        }
-                        $graphNode = $response->getGraphNode();
-                        $creativeId = $graphNode['id'];
+                            ),
+                            $pageAccessToken
+                        );
+                    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                        \Monkey::app()->applicationLog('CEditorialPlanDetailAddAjaxController','Error','Graph returned an error: ' . $e->getMessage(),$e->getLine(),'');
+                        return 'Graph returned an error: ' . $e->getMessage();
+                    }
+                    $graphNode = $response->getGraphNode();
+                    $creativeId = $graphNode['id'];
                     $editorialPlanDetailInsert->creativeId = $creativeId;
                     try {
                         $response = $fb->post(
@@ -399,7 +383,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
                         $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status']);
                         $campaignList = [];
-// Loop over objects
+
 
                         foreach ($cursor as $campaign) {
                             $nameCampaign = $campaign->{CampaignFields::NAME};
@@ -422,7 +406,6 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             AdSetFields::ID,
                             AdSetFields::CAMPAIGN_ID,
                         ));
-// Loop over objects
 
                         foreach ($adsets as $adset) {
                             $nameAdSet = $adset->{AdSetFields::NAME};
@@ -465,64 +448,93 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         $groupAdsName = $graphNode['id'];
                     }
 
-
                     $arrayPhotoHash = [];
                     $i = 0;
 
                     $arrayLink = [];
                     $arrayDescription = [];
                     $arrayTitle = [];
-                    $arrayVideo = [];
                     if ($data['imageUrl1'] != '') {
                         array_push($arrayLink,$data['imageUrl1']);
                         array_push($arrayDescription,$data['descriptionImage1']);
                         array_push($arrayTitle,$data['imageTitle1']);
+                        $editorialPlanDetailInsert->imageUrl1 = $data['imageUrl1'];
+                        $editorialPlanDetailInsert->imageTitle1 = $data['imageTitle1'];
+                        $editorialPlanDetailInsert->descriptionImage1 = $data['descriptionImage1'];
+
                     }
                     if ($data['imageUrl2'] != '') {
                         array_push($arrayLink,$data['imageUrl2']);
                         array_push($arrayDescription,$data['descriptionImage2']);
                         array_push($arrayTitle,$data['imageTitle2']);
+                        $editorialPlanDetailInsert->imageUrl2 = $data['imageUrl2'];
+                        $editorialPlanDetailInsert->imageTitle2 = $data['imageTitle2'];
+                        $editorialPlanDetailInsert->descriptionImage2 = $data['descriptionImage2'];
                     }
                     if ($data['imageUrl3'] != '') {
                         array_push($arrayLink,$data['imageUrl3']);
                         array_push($arrayDescription,$data['descriptionImage3']);
                         array_push($arrayTitle,$data['imageTitle3']);
+                        $editorialPlanDetailInsert->imageUrl3 = $data['imageUrl3'];
+                        $editorialPlanDetailInsert->imageTitle3 = $data['imageTitle3'];
+                        $editorialPlanDetailInsert->descriptionImage3 = $data['descriptionImage3'];
 
                     }
                     if ($data['imageUrl4'] != '') {
                         array_push($arrayLink,$data['imageUrl4']);
                         array_push($arrayDescription,$data['descriptionImage4']);
                         array_push($arrayTitle,$data['imageTitle4']);
+                        $editorialPlanDetailInsert->imageUrl4 = $data['imageUrl4'];
+                        $editorialPlanDetailInsert->imageTitle4 = $data['imageTitle4'];
+                        $editorialPlanDetailInsert->descriptionImage4 = $data['descriptionImage4'];
                     }
                     if ($data['imageUrl5'] != '') {
                         array_push($arrayLink,$data['imageUrl5']);
                         array_push($arrayDescription,$data['descriptionImage5']);
                         array_push($arrayTitle,$data['imageTitle5']);
+                        $editorialPlanDetailInsert->imageUrl5 = $data['imageUrl5'];
+                        $editorialPlanDetailInsert->imageTitle5 = $data['imageTitle5'];
+                        $editorialPlanDetailInsert->descriptionImage5 = $data['descriptionImage5'];
                     }
                     if ($data['imageUrl6'] != '') {
                         array_push($arrayLink,$data['imageUrl6']);
                         array_push($arrayDescription,$data['descriptionImage6']);
                         array_push($arrayTitle,$data['imageTitle6']);
+                        $editorialPlanDetailInsert->imageUrl6 = $data['imageUrl6'];
+                        $editorialPlanDetailInsert->imageTitle6 = $data['imageTitle6'];
+                        $editorialPlanDetailInsert->descriptionImage6 = $data['descriptionImage6'];
                     }
                     if ($data['imageUrl7'] != '') {
                         array_push($arrayLink,$data['imageUrl7']);
                         array_push($arrayDescription,$data['descriptionImage7']);
                         array_push($arrayTitle,$data['imageTitle7']);
+                        $editorialPlanDetailInsert->imageUrl7 = $data['imageUrl7'];
+                        $editorialPlanDetailInsert->imageTitle7 = $data['imageTitle7'];
+                        $editorialPlanDetailInsert->descriptionImage7 = $data['descriptionImage7'];
                     }
                     if ($data['imageUrl8'] != '') {
                         array_push($arrayLink,$data['imageUrl8']);
                         array_push($arrayDescription,$data['descriptionImage8']);
                         array_push($arrayTitle,$data['imageTitle8']);
+                        $editorialPlanDetailInsert->imageUrl8 = $data['imageUrl8'];
+                        $editorialPlanDetailInsert->imageTitle8 = $data['imageTitle8'];
+                        $editorialPlanDetailInsert->descriptionImage8 = $data['descriptionImage8'];
                     }
                     if ($data['imageUrl9'] != '') {
                         array_push($arrayLink,$data['imageUrl9']);
                         array_push($arrayDescription,$data['descriptionImage9']);
                         array_push($arrayTitle,$data['imageTitle9']);
+                        $editorialPlanDetailInsert->imageUrl9 = $data['imageUrl9'];
+                        $editorialPlanDetailInsert->imageTitle9 = $data['imageTitle9'];
+                        $editorialPlanDetailInsert->descriptionImage9 = $data['descriptionImage9'];
                     }
                     if ($data['imageUrl10'] != '') {
                         array_push($arrayLink,$data['imageUrl10']);
                         array_push($arrayDescription,$data['descriptionImage10']);
                         array_push($arrayTitle,$data['imageTitle10']);
+                        $editorialPlanDetailInsert->imageUrl10 = $data['imageUrl10'];
+                        $editorialPlanDetailInsert->imageTitle10 = $data['imageTitle10'];
+                        $editorialPlanDetailInsert->descriptionImage10 = $data['descriptionImage10'];
                     }
 
                     foreach ($photoUrl as $photoHash) {
@@ -547,7 +559,41 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         }
                         $graphNode = $response->getGraphNode();
                         $arrayPhotoHash[] = ['description' => $arrayDescription[$i],'image_hash' => $graphNode['images']['bytes']['hash'],'link' => $arrayLink[$i],'name' => $arrayTitle[$i]];
+                        switch (key($arrayLink[$i])) {
+                            case 'imageUrl1':
+                                $editorialPlanDetailInsert->imageHash1 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl2':
+                                $editorialPlanDetailInsert->imageHash2 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl3':
+                                $editorialPlanDetailInsert->imageHash3 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl4':
+                                $editorialPlanDetailInsert->imageHash4 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl5':
+                                $editorialPlanDetailInsert->imageHash5 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl6':
+                                $editorialPlanDetailInsert->imageHash6 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl7':
+                                $editorialPlanDetailInsert->imageHash7 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl8':
+                                $editorialPlanDetailInsert->imageHash8 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl9':
+                                $editorialPlanDetailInsert->imageHash9 = $graphNode['images']['bytes']['hash'];
+                                break;
+                            case 'imageUrl10':
+                                $editorialPlanDetailInsert->imageHash10 = $graphNode['images']['bytes']['hash'];
+                                break;
+
+                        }
                         $i++;
+
                     }
 
 
@@ -603,7 +649,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     break;
                 case 10:
                     if ($data['video1'] != '') {
-                        $postVideoTitle=$data['postVideoTitle'];
+                        $postVideoTitle = $data['postVideoTitle'];
                         $namePath = $tempFolder . trim($postVideoTitle) . '1.jpg';
                         $ffmpeg = FFMpeg\FFMpeg::create();
                         $video = $ffmpeg->open($data['video1']);
@@ -695,7 +741,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             '/' . $adAccountId . '/advideos',
                             array(
                                 'title' => $data['postVideoTitle'],
-                                'description' => $data['postVideoDescription'],
+                                'description' => $data['postDescriptionVideo'],
                                 'file_url' => $data['video1'],
                                 'unpublished_content_type' => 'DRAFT',
                                 'name' => $data['postVideoTitle']
@@ -722,9 +768,14 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                                 'name' => $title,
                                 'object_story_spec' => array(
                                     'page_id' => $editorialPlanShopAsSocial->page_id,
-                                    'link_data' => array(
-                                        'child_attachments' => $arrayPhotoHash,
-                                        'link' => $linkDestination),
+                                    'video_data' => array(
+                                        'call_to_action' => array(
+                                            'type' => $data['postVideoCallToAction'],
+                                            'value' => array(
+                                                'page' => $editorialPlanShopAsSocial->page_id)
+                                        ),
+                                        'image_url' => $imageThumbVideo1,
+                                        'video_id' => $videoFacebookId),
                                 ),
                             ),
                             $pageAccessToken
@@ -742,6 +793,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
 
                     $editorialPlanDetailInsert->creativeId = $creativeId;
+                    $editorialPlanDetailInsert->postVideoCallToAction = $data['postVideoCallToAction'];
+                    $editorialPlanDetailInsert->videoFacebookId = $videoFacebookId;
+                    $editorialPlanDetailInsert->postDescriptionVideo = $data['postVideoDescription'];
+                    $editorialPlanDetailInsert->video1 = $data['video1'];
                     try {
                         $response = $fb->post(
                             '/' . $adAccountId . '/ads',
@@ -763,9 +818,6 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     }
                     $graphNode = $response->getGraphNode();
                     $editorialPlanDetailInsert->insertionId = $graphNode['id'];
-
-
-
 
 
                     break;

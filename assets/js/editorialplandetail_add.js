@@ -73,6 +73,49 @@ $('#editorialPlanArgumentId').change(function(){
        $('#divSelecterCampaign').removeClass('show');
        $('#divSelecterCampaign').addClass('hide');
    }
+   var isFacebook=$(this).val();
+   switch(isFacebook){
+       case "5":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "8":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "9":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('show');
+           $('#divPostImage').addClass('hide');
+           $('#divPostCarousel').removeClass('hide');
+           $('#divPostCarousel').addClass('show');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "10":
+           $('#divPostUploadImage').removeClass('show');
+           $('#divPostUploadImage').addClass('hide');
+           $('#divPostImage').removeClass('show');
+           $('#divPostImage').addClass('hide');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('hide');
+           $('#postVideo').addClass('show');
+           break;
+   }
 });
 $('#selecterCampaign').change(function () {
    var selecterTypeOperation = $(this).val();

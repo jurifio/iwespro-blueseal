@@ -169,7 +169,7 @@
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="bodyEvent">Testo Evento</label>
                                             <textarea id="bodyEvent" cols="180" rows="10" name="bodyEvent"
-                                                      placeholder="Inserisci il testo dell'evento max 180 caratteri per riga"></textarea>
+                                                      placeholder="Inserisci il testo dell'evento "></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -190,7 +190,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="divPostUploadImage">
+                                <div id="divPostUploadImage" class="hide">
                                     <div class="row">
                                         <div class="col-md-10">
                                             <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
@@ -212,7 +212,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="divPostImage">
+                                <div id="divPostImage" class="hide">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -243,7 +243,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="divPostCarousel">
+                                <div id="divPostCarousel" class="hide">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -535,14 +535,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="postVideo">
+                                <div id="postVideo" class="hide">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="postVideoTitle">Titolo Video</label>
-                                                <textarea id="postImageTitle" class="form-control"
+                                                <textarea id="postVideoTitle" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine "
-                                                          name="postImageTitle"
+                                                          name="postVideoTitle"
                                                 ></textarea>
                                             </div>
                                         </div>
