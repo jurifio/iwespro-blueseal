@@ -136,9 +136,6 @@
                 data-remote="bs.add.post"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.publish.post.tosocial"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
                 data-remote="bs.preview.post.tosocial"
         ></bs-toolbar-button>
     </bs-toolbar-group>

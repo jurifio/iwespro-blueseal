@@ -43,7 +43,7 @@ class CSelectFacebookCampaignAjaxController extends AAjaxController
         $fb = new Facebook([
             'app_id' => $fbConfig['app_id'], // Replace {app-id} with your app id
             'app_secret' => $fbConfig['app_secret'],
-            'default_graph_version' => 'v5.0',
+            'default_graph_version' => 'v7.0',
             'persistent_data_handler' => &$c
         ]);
         $special_ad_categories=[];

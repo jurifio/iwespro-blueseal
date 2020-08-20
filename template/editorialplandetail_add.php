@@ -165,21 +165,11 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-10">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="bodyEvent">Testo Evento</label>
                                             <textarea id="bodyEvent" cols="180" rows="10" name="bodyEvent"
                                                       placeholder="Inserisci il testo dell'evento "></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="linkDestination">Link Destinazione</label>
-                                            <textarea id="linkDestination" cols="180" rows="1"
-                                                      placeholder="Inserisci  i link di destinazione"
-                                                      name="linkDestination"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -189,6 +179,17 @@
                                                    placeholder="Visible" checked="true" name="isVisibleBodyEvent"/>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="linkDestination">Link Destinazione</label>
+                                            <textarea id="linkDestination" cols="180" rows="1"
+                                                      placeholder="Inserisci  i link di destinazione"
+                                                      name="linkDestination"></textarea>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div id="divPostUploadImage" class="hide">
                                     <div class="row">
@@ -511,7 +512,7 @@
                                                 <label for="imageTitle10">Titolo Immagine10</label>
                                                 <textarea id="imageTitle10" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 10"
-                                                          name="imageTitle6"
+                                                          name="imageTitle10"
                                                 ></textarea>
                                             </div>
                                         </div>
@@ -594,6 +595,7 @@
                                             <label for="isVisibleNote">Visibile</label>
                                             <input type="checkbox" id="isVisibleNote" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleNote"/>
+                                            <input type="hidden" id="userId" name="userId" value="<?php echo  \Monkey::app()->getUser();?>"/>
                                         </div>
                                     </div>
                                 </div>

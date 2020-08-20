@@ -89,21 +89,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
         \Monkey::app()->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempFolder') . '-plandetail' . "/";
-        $array_video = [];
-        if ($data['video1'] != '') {
-            $namePath = $tempFolder . trim($title) . '1.jpg';
-            $ffmpeg = FFMpeg\FFMpeg::create();
-            $video = $ffmpeg->open($data['video1']);
-            $video
-                ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1))
-                ->save($namePath);
-            $image = new ImageManager(new S3Manager($config['credential']),$this->app,$tempFolder);
-            //$fileName=$tempFolder.$title.'1.jpg';
-            $fileName['name'] = trim($title) . '1.jpg';
-            $res = $image->processImageEditorialUploadPhoto(trim($title) . '1.jpg',$fileName,$config['bucket'] . '-editorial','plandetail-images');
-            $imageThumbVideo1 = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/" . $fileName['name'];
 
-        }
 
 
         $c = new CFacebookCookieSession($this->app);
@@ -244,8 +230,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
                             if ($idCampaign == $campaignId)
                                 $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                            $editorialPlanDetailInsert->facebookCampaignId=$idCampaign;
                             break;
                         }
+
                     }
                     if ($selecterCampaign == 1) {
                         $adSetList = [];
@@ -264,6 +252,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $status = $adset->{CampaignFields::STATUS};
                             if ($idAdSet == $groupAdsName) {
                                 $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+                                $editorialPlanDetailInsert->groupInsertionId=$idAdSet;
                             }
                         }
 
@@ -394,8 +383,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
                             if ($idCampaign == $campaignId)
                                 $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                            $editorialPlanDetailInsert->facebookCampaignId=$idCampaign;
                             break;
                         }
+
                     }
                     if ($selecterCampaign == 1) {
                         $adSetList = [];
@@ -413,6 +404,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $status = $adset->{CampaignFields::STATUS};
                             if ($idAdSet == $groupAdsName) {
                                 $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+                                $editorialPlanDetailInsert->groupInsertionId=$idAdSet;
                             }
                         }
 
@@ -681,6 +673,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
                             if ($idCampaign == $campaignId)
                                 $campaignList[] = ['idCampaign' => $idCampaign,'nameCampaign' => $nameCampaign,'objective' => $objective,'buying_type' => $buying_type,'effective_status' => $effective_status];
+                            $editorialPlanDetailInsert->facebookCampaignId=$idCampaign;
                             break;
                         }
                     }
@@ -701,6 +694,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                             $status = $adset->{CampaignFields::STATUS};
                             if ($idAdSet == $groupAdsName) {
                                 $adSetList[] = ['idAdSet' => $idAdSet,'nameAdSet' => $nameAdSet,'status' => $status,'error' => '0'];
+                                $editorialPlanDetailInsert->groupInsertionId=$idAdSet;
                             }
                         }
 
@@ -791,6 +785,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $editorialPlanDetailInsert->creativeId = $creativeId;
                     $editorialPlanDetailInsert->postVideoCallToAction = $data['postVideoCallToAction'];
                     $editorialPlanDetailInsert->videoFacebookId = $videoFacebookId;
+                    $editorialPlanDetailInsert->postVideoTitle = $data['postVideoTitle'];
                     $editorialPlanDetailInsert->postDescriptionVideo = $data['postDescriptionVideo'];
                     $editorialPlanDetailInsert->video1 = $data['video1'];
                     try {
@@ -823,7 +818,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             if ($isNewAdSet != '0') {
                 $editorialPlanDetailInsert->groupInsertionId = $groupAdsName;
             }
+            $editorialPlanDetailInsert->userId=$data['userId'];
             $editorialPlanDetailInsert->smartInsert();
+
 
 
             /*  foreach ($photoUrl as $file) {
@@ -846,6 +843,8 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $argumentName = $editorialPlanArgument->titleArgument;
             /** @var Ceditorial $to */
             $to = $shopEmail;
+            $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['userId'=>$data['userId']]);
+            $userEditor=[$userFind->email];
             $editorialPlanName = $editorialPlan->name;
             $subject = "Creazione Nuovo Dettaglio Piano Editoriale";
             $message = "Creazione Nuovo dettaglio Piano Editoriale<p>";
@@ -875,7 +874,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                 if (!is_array($to)) {
                     $to = [$to];
                 }
-                $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,$userEditor,[],$subject,$message,null,null,null,'mailGun',false,null);
             }
 
         } else {

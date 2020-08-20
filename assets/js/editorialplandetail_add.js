@@ -492,6 +492,7 @@ $(document).on('bs.post.save', function () {
             postVideoTitle:$('#postVideoTitle').val(),
             postDescriptionVideo:$('#postDescriptionVideo').val(),
             postVideoCallToAction: $('#postVideoCallToAction').val(),
+            userId:$('#userId').val(),
             video1:$('#video1').val(),
 
         };

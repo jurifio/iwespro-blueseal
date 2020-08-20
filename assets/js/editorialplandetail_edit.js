@@ -501,14 +501,14 @@ $(document).on('bs.post.update', function () {
         var groupAdsName = '';
 
         groupAdsName = $('#groupAdsName').val();
-        var NewAdSet = 0;
-        if ($('#isNewAdset').length) {
-            isNewAdSet = $('#isNewAdset').val();
+        var isNewAdSet=0;
+        if($('#isNewAdset').length){
+            isNewAdSet=$('#isNewAdset').val();
         }
         start = $('#startEventDate').val();
         end = $('#endEventDate').val();
         const data = {
-            editorialPlandetailId:$('#editorialPlandetailId').val(),
+            editorialPlanDetailId:$('#editorialPlanDetailIdSelected').val(),
             insertionId:$('#insertionId').val(),
             creativeId:$('#creativeId').val(),
             title: $('#titleEvent').val(),
@@ -534,14 +534,67 @@ $(document).on('bs.post.update', function () {
             campaignId: campaignName,
             groupAdsName: groupAdsName,
             isNewAdSet: isNewAdSet,
-            selecterCampaign: $('#selecterCampaign').val()
+            lifetime_budget: $('#lifetime_budget').val(),
+            buying_type:$('#buying_type').val(),
+            objective:$('#objective').val(),
+            selecterCampaign:$('#selecterCampaign').val(),
+            imageTitle1:$('#imageTitle1').val(),
+            imageTitle2:$('#imageTitle2').val(),
+            imageTitle3:$('#imageTitle3').val(),
+            imageTitle4:$('#imageTitle4').val(),
+            imageTitle5:$('#imageTitle5').val(),
+            imageTitle6:$('#imageTitle6').val(),
+            imageTitle7:$('#imageTitle7').val(),
+            imageTitle8:$('#imageTitle8').val(),
+            imageTitle9:$('#imageTitle9').val(),
+            imageTitle10:$('#imageTitle10').val(),
+            imageUrl1:$('#imageUrl1').val(),
+            imageUrl2:$('#imageUrl2').val(),
+            imageUrl3:$('#imageUrl3').val(),
+            imageUrl4:$('#imageUrl4').val(),
+            imageUrl5:$('#imageUrl5').val(),
+            imageUrl6:$('#imageUrl6').val(),
+            imageUrl7:$('#imageUrl7').val(),
+            imageUrl8:$('#imageUrl8').val(),
+            imageUrl9:$('#imageUrl9').val(),
+            imageUrl10:$('#imageUrl10').val(),
+            imageHash1:$('#imageHash1').val(),
+            imageHash2:$('#imageHash2').val(),
+            imageHash3:$('#imageHash3').val(),
+            imageHash4:$('#imageHash4').val(),
+            imageHash5:$('#imageHash5').val(),
+            imageHash6:$('#imageHash6').val(),
+            imageHash7:$('#imageHash7').val(),
+            imageHash8:$('#imageHash8').val(),
+            imageHash9:$('#imageHash9').val(),
+            imageHash10:$('#imageHash10').val(),
+            descriptionImage1:$('#descriptionImage1').val(),
+            descriptionImage2:$('#descriptionImage2').val(),
+            descriptionImage3:$('#descriptionImage3').val(),
+            descriptionImage4:$('#descriptionImage4').val(),
+            descriptionImage5:$('#descriptionImage5').val(),
+            descriptionImage6:$('#descriptionImage6').val(),
+            descriptionImage7:$('#descriptionImage7').val(),
+            descriptionImage8:$('#descriptionImage8').val(),
+            descriptionImage9:$('#descriptionImage9').val(),
+            descriptionImage10:$('#descriptionImage10').val(),
+            postImageTitle:$('#postImageTitle').val(),
+            postDescriptionImage:$('#postDescriptionImage').val(),
+            postVideoTitle:$('#postVideoTitle').val(),
+            postDescriptionVideo:$('#postDescriptionVideo').val(),
+            postVideoCallToAction: $('#postVideoCallToAction').val(),
+            userId:$('#userId').val(),
+            video1:$('#video1').val(),
+            groupInsertionId:$('#groupInsertionId').val(),
+
+
 
 
         };
 
         $.ajax({
             method: 'post',
-            url: '/blueseal/xhr/EditorialPlanDetailAddAjaxController',
+            url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
             data: data
         }).done(function (res) {
             bsModal.writeBody(res);
