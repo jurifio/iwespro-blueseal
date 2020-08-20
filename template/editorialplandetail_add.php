@@ -595,7 +595,7 @@
                                             <label for="isVisibleNote">Visibile</label>
                                             <input type="checkbox" id="isVisibleNote" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleNote"/>
-                                            <input type="hidden" id="userId" name="userId" value="<?php echo  \Monkey::app()->getUser();?>"/>
+                                            <input type="hidden" id="userId" name="userId" value="<?php echo \Monkey::app()->getUser()->getId();?>"/>
                                         </div>
                                     </div>
                                 </div>

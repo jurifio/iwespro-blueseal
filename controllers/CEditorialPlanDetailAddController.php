@@ -38,7 +38,6 @@ class CEditorialPlanDetailAddController extends ARestrictedAccessRootController
         /** @var ARepo $ePlanRepo */
         $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
-
         /** @var aRepo $ePlanSocialRepo */
         $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
          /** @var CEditorialPlanSocial $editorialPlanSocial */

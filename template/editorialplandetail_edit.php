@@ -31,6 +31,7 @@
                    value="<?php echo $editorialPlanDetail->insertionId; ?>"/>
             <input type="hidden" id="creativeId" name="creativeId"
                    value="<?php echo $editorialPlanDetail->creativeId; ?>"/>
+            <input type="hidden" id="userId" name="userId" value="<?php echo \Monkey::app()->getUser()->getId();?>"/>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
