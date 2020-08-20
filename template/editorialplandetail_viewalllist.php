@@ -138,6 +138,12 @@
         <bs-toolbar-button
                 data-remote="bs.preview.post.tosocial"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.approve.post.tosocial"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.disapprove.post.tosocial"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

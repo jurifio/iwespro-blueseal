@@ -191,7 +191,7 @@
 
     });
     $('#editorialPlanArgumentId').change(function () {
-        if ($('#editorialPlanArgumentId').val() > 1 && $('#editorialPlanArgumentId').val() < 10) {
+        if($('#editorialPlanArgumentId').val()==5 || $('#editorialPlanArgumentId').val()==8 || $('#editorialPlanArgumentId').val()==9  || $('#editorialPlanArgumentId').val()==10){
             $('#divSelecterCampaign').removeClass('hide');
             $('#divSelecterCampaign').addClass('show');
         } else {

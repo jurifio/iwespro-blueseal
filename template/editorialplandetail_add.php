@@ -42,11 +42,13 @@
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona lo stato"
                                                     data-init-plugin="selectize">
-                                                <option value="new">Stato</option>
+                                                <option value="">Seleziona</option>
                                                 <option value="Draft">Bozza</option>
+                                                <?php if( \Monkey::app()->getUser()->hasPermission('allShops')) {?>
                                                 <option value="Approved">Approvata</option>
                                                 <option value="Rejected">Rifiutata</option>
                                                 <option value="Published">Pubblicata</option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                     </div>

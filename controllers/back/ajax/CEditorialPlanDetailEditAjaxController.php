@@ -657,7 +657,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
                           $imageThumbVideo1 = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/" . $fileName['name'];
 
                       }
-                      if ($isNewAdSet == '2') {
+
 
 
                           $account = new AdAccount($adAccountId);
@@ -678,9 +678,9 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
                               $editorialPlanDetailUpdate->facebookCampaignId=$idCampaign;
                               break;
                           }
-                      }
-                      if ($selecterCampaign == 1) {
+
                           $adSetList = [];
+                          $account = new AdAccount($adAccountId);
                           $adsets = $account->getAdSets(array(
                               AdSetFields::NAME,
                               AdSetFields::CONFIGURED_STATUS,
@@ -730,7 +730,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
                           $graphNode = $response->getGraphNode();
 
                           $groupAdsName = $graphNode['id'];
-                      }
+
                       try {
                           // Returns a `Facebook\FacebookResponse` object
                           $response = $fb->post(
@@ -755,7 +755,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
                       $graphNode = $response->getGraphNode();
 
                       $videoFacebookId = $graphNode['id'];
-                      sleep(3);
+                      sleep(10);
                       try {
                           // Returns a `Facebook\FacebookResponse` object
                           $response = $fb->post(
@@ -821,14 +821,14 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
                   $editorialPlanDetailUpdate->groupInsertionId = $groupAdsName;
               }
               $editorialPlanDetailUpdate->userId=$data['userId'];
-              $editorialPlanDetailUpdate->smartInsert();
+              $editorialPlanDetailUpdate->update();
 
 
 
               /*  foreach ($photoUrl as $file) {
                     unlink($tempFolder . $file);
                 }*/
-              $res = "Dettaglio Piano Editoriale inserito con successo!";
+              $res = "Dettaglio Piano Editoriale modifica con successo!";
               /** @var ARepo $shopRepo */
               $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
@@ -845,11 +845,11 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
               $argumentName = $editorialPlanArgument->titleArgument;
               /** @var Ceditorial $to */
               $to = $shopEmail;
-              $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['userId'=>$data['userId']]);
+              $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$data['userId']]);
               $userEditor=[$userFind->email];
               $editorialPlanName = $editorialPlan->name;
-              $subject = "Creazione Nuovo Dettaglio Piano Editoriale";
-              $message = "Creazione Nuovo dettaglio Piano Editoriale<p>";
+              $subject = "Modifica  Dettaglio Piano Editoriale";
+              $message = "Modifica Nuovo dettaglio Piano Editoriale<p>";
               $message .= "Title:" . $title . "<p>";
               $message .= "Data di Inizio:" . $startEventDate . "<p>";
               $message .= "Data di Fine:" . $endEventDate . "<p>";

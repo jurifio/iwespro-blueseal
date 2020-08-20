@@ -753,7 +753,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                     $graphNode = $response->getGraphNode();
 
                     $videoFacebookId = $graphNode['id'];
-                    sleep(3);
+                    sleep(10);
                     try {
                         // Returns a `Facebook\FacebookResponse` object
                         $response = $fb->post(
@@ -843,7 +843,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $argumentName = $editorialPlanArgument->titleArgument;
             /** @var Ceditorial $to */
             $to = $shopEmail;
-            $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['userId'=>$data['userId']]);
+            $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$data['userId']]);
             $userEditor=[$userFind->email];
             $editorialPlanName = $editorialPlan->name;
             $subject = "Creazione Nuovo Dettaglio Piano Editoriale";
