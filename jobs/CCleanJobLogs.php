@@ -31,12 +31,21 @@ class CCleanJobLogs extends ACronJob
      * @param int $days
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    public function deleteJobLogs($days = 10)
+    public function deleteJobLogs($days = 3)
+
     {
-        $this->app->dbAdapter->query("DELETE FROM JobLog", []);
-
-
-		$this->app->cacheService->getCache('entities')->flush();
-        $this->report('deleted Job Logs', 'deleted ');
+        $rows = 0;
+        while ($res = $this->app->dbAdapter->query(" SELECT count(id) AS conto
+                                              FROM JobLog
+                                              WHERE `timestamp` < (NOW() - INTERVAL ? DAY)",
+                [$days])->fetchAll()[0]['conto']
+            > 0) {
+            $limit = 10000000;
+            $this->report( 'Working', 'res: '.$res.' limit: '.$limit);
+            $rows += $this->app->dbAdapter->query("DELETE FROM JobLog WHERE `timestamp` < (NOW() - INTERVAL ? DAY) LIMIT ?", [$days,$limit], true)->countAffectedRows();
+            $this->report('Working', 'rows: '.$rows);
+        }
+        $this->app->cacheService->getCache('entities')->flush();
+        $this->report('deleted Job Logs', 'deleted ' . $rows . ' rows');
     }
 }
