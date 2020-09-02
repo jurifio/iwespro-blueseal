@@ -34,18 +34,32 @@ class CCleanJobLogs extends ACronJob
     public function deleteJobLogs($days = 3)
 
     {
-        $rows = 0;
-        while ($res = $this->app->dbAdapter->query(" SELECT count(id) AS conto
-                                              FROM JobLog
-                                              WHERE `timestamp` < (NOW() - INTERVAL ? DAY)",
-                [$days])->fetchAll()[0]['conto']
-            > 0) {
-            $limit = 10000000;
-            $this->report( 'Working', 'res: '.$res.' limit: '.$limit);
-            $rows += $this->app->dbAdapter->query("DELETE FROM JobLog WHERE `timestamp` < (NOW() - INTERVAL ? DAY) LIMIT ?", [$days,$limit], true)->countAffectedRows();
-            $this->report('Working', 'rows: '.$rows);
+        if (ENV === 'prod') {
+            $db_host = '5.189.159.187';
+            $db_name = 'pickyshopfront';
+            $db_user = 'pickyshop4';
+            $db_pass = 'rrtYvg6W!';
+        } else {
+            $db_host = 'localhost';
+            $db_name = 'iwesPrestaDB';
+            $db_user = 'root';
+            $db_pass = 'geh44fed';
         }
-        $this->app->cacheService->getCache('entities')->flush();
-        $this->report('deleted Job Logs', 'deleted ' . $rows . ' rows');
+        $res = "";
+        try {
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $res = " connessione ok <br>";
+        } catch (PDOException $e) {
+            $res = $e->getMessage();
+        }
+        try {
+            $CCleanJobLogs = $db_con->prepare('delete from JobLog');
+            $CCleanJobLogs->execute();
+            \Monkey::app()->jobLog('CCleanJobLogs','success','Deleting JobLog',$e->getMessage());
+        }catch(\Throwable $e){
+            \Monkey::app()->jobLog('CCleanJobLogs','error','Error Deleting JobLog',$e->getMessage());
+        }
+
     }
 }
