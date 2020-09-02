@@ -33,7 +33,7 @@ class CCleanJobLogs extends ACronJob
      */
     public function deleteJobLogs($days = 10)
     {
-        $this->app->dbAdapter->query("DELETE FROM JobLog", [])->execute();
+        $this->app->dbAdapter->query("DELETE FROM JobLog", []);
 
 
 		$this->app->cacheService->getCache('entities')->flush();
