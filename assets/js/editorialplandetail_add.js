@@ -494,6 +494,7 @@ $(document).on('bs.post.save', function () {
             postVideoCallToAction: $('#postVideoCallToAction').val(),
             userId:$('#userId').val(),
             video1:$('#video1').val(),
+            type:'formInsert'
 
         };
 

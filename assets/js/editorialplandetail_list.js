@@ -1373,6 +1373,7 @@
                             postDescriptionVideo:$('#postDescriptionVideo').val(),
                             postVideoCallToAction: $('#postVideoCallToAction').val(),
                             video1:$('#video1').val(),
+                            typeAdd:'calendar',
 
 
                         };
