@@ -32,6 +32,7 @@ class CEditorialPlanAddController extends ARestrictedAccessRootController
     public function get()
     {
         $view = new VBase(array());
+
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/editorialplan_add.php');
 
         return $view->render([

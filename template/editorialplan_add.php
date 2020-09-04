@@ -45,8 +45,19 @@
                                                         placeholder="Seleziona la Lista"
                                                         data-init-plugin="selectize">
                                                 </select>
-
-                                            </div>                                            <p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="contract">Seleziona il contratto</label>
+                                                <select id="contract" name="contract"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -59,6 +70,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -69,6 +81,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
                                    
                                 </div>
