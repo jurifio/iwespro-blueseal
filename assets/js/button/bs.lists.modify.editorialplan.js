@@ -91,40 +91,21 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
     });
     $.ajax({
         method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
+        url: '/blueseal/xhr/SelectContractAjaxController',
         data: {
             table: 'Contracts'
 
         },
         dataType: 'json'
-    }).done(function (res2) {
-        var contractId = $('#contractId');
-        if (typeof (contractId[0].selectize) != 'undefined') contractId[0].selectize.destroy();
-        contractId.selectize({
+    }).done(function (res3) {
+        var selectContract = $('#contractId');
+        if(typeof (selectContract[0].selectize) != 'undefined') selectContract[0].selectize.destroy();
+        selectContract.selectize({
             valueField: 'id',
             labelField: 'name',
-            searchField: ['name'],
-            options: res2,
-            render: {
-                item: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) +  '</span> - ' +
-                        '<span class="caption">gender:' + escape(item.description) + '</span>' +
-                        '</div>'
-                },
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="label">' + escape(item.name) +  '</span> - ' +
-                        '<span class="caption">gender:' + escape(item.description) + '</span>' +
-                        '</div>'
-                }
-            },
-            onInitialize: function () {
-                var selectize = this;
-                selectize.setValue(selectedRows[0].contractId);
-            }
+            searchField: 'name',
+            options: res3,
         });
-
     });
 
 
