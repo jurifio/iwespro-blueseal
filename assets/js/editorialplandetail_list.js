@@ -1236,6 +1236,10 @@
                         var isFacebook=$(this).val();
                         switch(isFacebook){
                             case "5":
+                                $('#divSelecterCampaign').removeClass('show');
+                                $('#divSelecterCampaign').addClass('hide');
+                                $('#divCampaign').removeClass('show');
+                                $('#divCampaign').addClass('hide');
                                 $('#divPostUploadImage').removeClass('hide');
                                 $('#divPostUploadImage').addClass('show');
                                 $('#divPostImage').removeClass('hide');
