@@ -64,6 +64,11 @@
                                     data-orderable="true"
                                     class="center">Data Fine Piano
                                 </th>
+                                <th data-slug="contractName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Contratto
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

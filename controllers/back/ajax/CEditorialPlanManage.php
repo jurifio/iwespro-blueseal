@@ -37,6 +37,7 @@ class CEditorialPlanManage extends AAjaxController
         $startDate = $data['startDate'];
         $endDate = $data['endDate'];
         $shopId = $data['shopId'];
+        $contractId=$data['contract'];
 
 
         /** @var CRepo $editorialPlanRepo */
@@ -57,6 +58,7 @@ class CEditorialPlanManage extends AAjaxController
             $editorialPlanInsert->shopId = $shopId;
             $editorialPlanInsert->startDate = $startDate;
             $editorialPlanInsert->endDate = $endDate;
+            $editorialPlanInsert->contractId=$contractId;
 
 
             // eseguo la commit sulla tabella;

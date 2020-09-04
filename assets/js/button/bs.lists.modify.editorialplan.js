@@ -44,6 +44,17 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '</select>'+
         '</div>'+
         '</div>'+
+            '<div class="row">' +
+            '<div class="col-xs-12">' +
+
+            '<label for="contractId">Seleziona Il contratto</label>'+
+            '<select id="contractId" name="contractId"'+
+            'class="full-width selectpicker"'+
+            'placeholder="Seleziona la Lista"'+
+            'data-init-plugin="selectize" value="' +selectedRows[0].contractId+'">'+
+            '</select>'+
+            '</div>'+
+            '</div>'+
 
         '<div class="row">' +
         '<div class="col-xs-6>">' +
@@ -77,6 +88,43 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
             searchField: 'name',
             options: res2,
         });
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Contracts'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var contractId = $('#contractId');
+        if (typeof (contractId[0].selectize) != 'undefined') contractId[0].selectize.destroy();
+        contractId.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name'],
+            options: res2,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) +  '</span> - ' +
+                        '<span class="caption">gender:' + escape(item.description) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) +  '</span> - ' +
+                        '<span class="caption">gender:' + escape(item.description) + '</span>' +
+                        '</div>'
+                }
+            },
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue(selectedRows[0].contractId);
+            }
+        });
+
     });
 
 
