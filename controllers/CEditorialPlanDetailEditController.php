@@ -56,6 +56,7 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
         $editorialPlanDetailRepo=\Monkey::app()->repoFactory->create('EditorialPlanDetail');
         $editorialPlanDetailId =  \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $editorialPlanDetail=$editorialPlanDetailRepo->findOneBy(['id'=>$editorialPlanDetailId]);
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
         if (ENV == 'dev') {
             require '/media/sf_sites/vendor/mailgun/vendor/autoload.php';
         } else {
@@ -160,6 +161,7 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
             'nameCampaignSelected'=>$nameCampaignSelected,
             'adSetSelected'=>$adSetSelected,
             'nameAdSetSelected'=>$nameAdSetSelected,
+            'allShops'=>$allShops,
             'sidebar' => $this->sidebar->build()
 
         ]);

@@ -45,13 +45,21 @@
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="socialPlanId">Seleziona il media da Associare </label>
-
+                                            <?php if($allShops){ ?>
                                             <select id="socialPlanId"
                                                     required="required"
                                                     name="socialPlanId"
                                                     class="full-width selectpicker"
                                                     placeholder="Selezione il media da associare"
-                                                    data-init-plugin="selectize"></select>
+                                                    data-init-plugin="selectize" ></select>
+                                            <?php } else { ?>
+                                                <select id="socialPlanId"
+                                                    required="required"
+                                                    name="socialPlanId"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Selezione il media da associare"
+                                                    data-init-plugin="selectize" disabled></select>
+                                        <?php   } ?>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -86,6 +94,10 @@
                                             <select id="status" name="status" required="required"
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona lo stato"
+                                                <?php if(!$allShops) {
+                                                    echo " disabled ";
+                                                }
+                                                ?> >
                                                     data-init-plugin="selectize">
                                                 <?php echo $option ?>
                                             </select>
@@ -98,7 +110,11 @@
                                                    placeholder="Inserisci la Data di Inizio del Dettaglio"
                                                    name="startEventDate"
                                                    value="<?php echo (new \DateTime($editorialPlanDetail->startEventDate))->format('Y-m-d\TH:i:s'); ?>"
-                                                   required="required">
+                                                   required="required"
+                                                <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?> >
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -108,20 +124,34 @@
                                                    placeholder="Inserisci la Data della Fine del Dettaglio "
                                                    name="endEventDate"
                                                    value="<?php echo (new \DateTime($editorialPlanDetail->endEventDate))->format('Y-m-d\TH:i:s'); ?>"
-                                                   required="required">
+                                                   required="required"
+                                                   <?php if(!$allShops) {
+                                                       echo " disabled";
+                                                   }
+                                                       ?> >
+
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="notifyEmail">Notificare al Cliente</label>
+                                            <?php    if($allShops){ ?>
                                             <select id="notifyEmail" name="notifyEmail" required="required"
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona"
                                                     data-init-plugin="selectize">
                                                 <option value="notNotify">Non Inviare la Notifica</option>
                                                 <option value="yesNotify">Invia la Notifica</option>
-
                                             </select>
+                                            <?php }else{?>
+                                            <select id="notifyEmail" name="notifyEmail" required="required"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Seleziona"
+                                                    data-init-plugin="selectize" disabled>
+                                                <option value="notNotify">Non Inviare la Notifica</option>
+                                                <option value="yesNotify">Invia la Notifica</option>
+                                            </select>
+                                         <?php   }?>
                                         </div>
                                     </div>
                                 </div>
@@ -129,11 +159,19 @@
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
+                                            <?php    if($allShops){ ?>
                                             <select id="editorialPlanId"
                                                     name="editorialPlanId" class="full-width selectpicker"
                                                     required="required"
                                                     placeholder="Selezione il piano editoriale da utilizzare"
                                                     data-init-plugin="selectize"></select>
+                                            <?php }else{?>
+                                                <select id="editorialPlanId"
+                                                    name="editorialPlanId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Selezione il piano editoriale da utilizzare"
+                                                    data-init-plugin="selectize" disabled></select>
+                                            <?php }?>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -143,7 +181,10 @@
                                                     name="editorialPlanArgumentId" class="full-width selectpicker"
                                                     required="required"
                                                     placeholder="Selezione argomento da utilizzare"
-                                                    data-init-plugin="selectize"></select>
+                                                    data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                echo " disabled";
+                                            }
+                                            ?>></select>
 
                                         </div>
                                     </div>
@@ -170,7 +211,10 @@
                                                         name="selecterCampaign" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione operazioni su campagna da utilizzare"
-                                                        data-init-plugin="selectize">
+                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?>>
                                                     <option value="">seleziona</option>
                                                     <option value="0">Crea Nuova</option>
                                                     <option value="1" selected="selected">Esistente</option>
@@ -188,7 +232,10 @@
                                                         name="campaignName" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize">
+                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?>>
                                                     <?php echo'<option value="'.$campaignSelected.'">'.$nameCampaignSelected.'</option>'?>;
                                                 </select>
                                             </div>
@@ -200,7 +247,10 @@
                                                         name="groupAdsName" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione il Gruppo inserzioni"
-                                                        data-init-plugin="selectize">
+                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?>>
                                                 </select>
 
                                             </div>
@@ -212,7 +262,10 @@
                                                         name="buying_type" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize">
+                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?>>
                                                     <?php if ($editorialPlanDetail->buying_type == 'AUCTION') {
                                                         echo '<option selected="selected" value="AUCTION">Asta</option>
                                                     <option value="RESERVED">Copertura e Frequenza</option>';
@@ -230,7 +283,10 @@
                                                         name="objective" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize">
+                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?>>
                                                     <?php switch ($editorialPlanDetail->objective) {
                                                         case 'BRAND_AWARENESS':
                                                             echo '<option selected="selected" value="BRAND_AWARENESS">Notorietà del Brand</option>
@@ -414,7 +470,10 @@
                                                 <input id="lifetime_budget" class="form-control"
                                                        placeholder="Inserisci il Budget" name="lifetime_budget"
                                                        value="<?php echo $editorialPlanDetail->lifetime_budget; ?>"
-                                                       required="required">
+                                                       required="required"   <?php if(!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?>>
                                             </div>
                                         </div>
                                     </div>

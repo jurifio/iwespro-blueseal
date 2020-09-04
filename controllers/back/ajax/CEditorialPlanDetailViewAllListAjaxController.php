@@ -28,7 +28,33 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT n.id as id, 
+        $p = \Monkey::app()->getUser()->hasPermission('allShops');
+        $currentUser=$this->app->getUser()->getId();
+        /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
+        if ($p == false) {
+            $sql = "SELECT n.id as id, 
+        P.id as editorialPlanId,
+        n.title,
+        S.name as shopName,
+        n.startEventDate, 
+        n.endEventDate,
+        n.status,
+        P.name as nameEditorial, 
+        P.startDate as startDateEditorial,
+        P.endDate as endDateEditorial,
+        E.name as socialName,
+        n.creativeId as creativeId,
+        A.titleArgument as titleArgument,
+        n.description as description,
+        n.photoUrl as photoUrl
+        from EditorialPlanDetail n
+        INNER JOIN EditorialPlan P on n.editorialPlanId =P.id
+        INNER JOIN Shop S ON P.shopId = S.id
+        INNER JOIN EditorialPlanSocial E ON n.socialId=E.id
+        INNER JOIN EditorialPlanArgument A ON n.editorialPlanArgumentId = A.id where n.userId=".$currentUser." group by id order BY startDateEditorial asc";
+
+        } else {
+            $sql = "SELECT n.id as id, 
         P.id as editorialPlanId,
         n.title,
         S.name as shopName,
@@ -48,7 +74,11 @@ class CEditorialPlanDetailViewAllListAjaxController extends AAjaxController
         INNER JOIN Shop S ON P.shopId = S.id
         INNER JOIN EditorialPlanSocial E ON n.socialId=E.id
         INNER JOIN EditorialPlanArgument A ON n.editorialPlanArgumentId = A.id group by id order BY startDateEditorial asc";
+
+        }
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
+
+
 
         $datatable->doAllTheThings(true);
         /** @var CEditorialPlanRepo $editorialPlanRepo */
