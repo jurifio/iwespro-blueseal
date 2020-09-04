@@ -10,7 +10,7 @@
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#shopId');
+            let select = $('#shopId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -20,7 +20,9 @@
             });
         });
 
-    });
+
+
+    })
 
 
 })(jQuery);
@@ -61,25 +63,6 @@ $(document).on('bs.newEditorialPlan.save', function () {
     });
 });
 
-$('#shopId').change(function () {
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Contracts'
-        },
-        dataType: 'json'
-    }).done(function (res3) {
-        var selectContract = $('#contract');
-        if (typeof (selectContract[0].selectize) != 'undefined') selectContract[0].selectize.destroy();
-        selectContract.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res3,
-        });
-    });
-});
 
 
 

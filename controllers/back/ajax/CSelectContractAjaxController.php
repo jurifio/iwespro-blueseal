@@ -37,7 +37,7 @@ class CSelectContractAjaxController extends AAjaxController
             foreach ($contracts as $contract) {
 $foison=$foisonRepo->findOneBy(['id'=>$contract->foisonId]);
 $operator=$foison->name.' '.$foison->surname;
-                array_push($collectContract,['id'=>$contract->id,'name'=>$contract->name,'operator'=>$operator]);
+                $collectContract[] = ['id' => $contract->id,'name' => $contract->name,'operator' => $operator];
             }
 
         return json_encode($collectContract);

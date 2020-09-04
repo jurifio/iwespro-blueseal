@@ -4,7 +4,6 @@
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
-    <script src="https://cdn.ckeditor.com/4.8.0/standard-all/ckeditor.js"></script>
 </head>
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
@@ -55,7 +54,10 @@
                                                 <select id="contract" name="contract"
                                                         class="full-width selectpicker"
                                                         placeholder="Seleziona la Lista"
-                                                        data-init-plugin="selectize">
+                                                        echo '<option value="">seleziona</option>';
+                                                    <?php foreach($collectContract as $contract){
+                                                        echo '<option value="'.$contract['id'].'">'.$contract['name'].'-'.$contract['operator'].'</option>';
+                                                    }?>
                                                 </select>
                                             </div>
                                         </div>

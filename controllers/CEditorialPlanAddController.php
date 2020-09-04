@@ -34,10 +34,18 @@ class CEditorialPlanAddController extends ARestrictedAccessRootController
         $view = new VBase(array());
 
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/editorialplan_add.php');
+        $contracts=\Monkey::app()->repoFactory->create('Contracts')->findAll();
+        $foisonRepo=\Monkey::app()->repoFactory->create('Foison');
+        foreach ($contracts as $contract) {
+            $foison=$foisonRepo->findOneBy(['id'=>$contract->foisonId]);
+            $operator=$foison->name.' '.$foison->surname;
+            $collectContract[] = ['id' => $contract->id,'name' => $contract->name,'operator' => $operator];
+        }
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
+            'collectContract'=>$collectContract,
             'sidebar' => $this->sidebar->build()
         ]);
 
