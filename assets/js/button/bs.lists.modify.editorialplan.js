@@ -116,6 +116,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         let dateEndDate = $('#endDate').val();
         let name = $('#editorialPlanName').val();
         let shopId = $('#shopId').val();
+        let contract =$('#contractId').val();
 
         $.ajax({
             method: "put",
@@ -126,6 +127,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
                 dateEndDate: dateEndDate,
                 name: name,
                 shopId:shopId,
+                contract: contract,
             }
         }).done(function (res) {
             bsModal.writeBody(res);

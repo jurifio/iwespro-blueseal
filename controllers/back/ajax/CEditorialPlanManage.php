@@ -91,6 +91,7 @@ class CEditorialPlanManage extends AAjaxController
         $shopId = $data['shopId'];
         $startDate = $data["dateStartDate"];
         $endDate = $data["dateEndDate"];
+        $contractId=$data['contract'];
 
 
         /** @var CRepo $editorialPlan */
@@ -107,6 +108,9 @@ class CEditorialPlanManage extends AAjaxController
         }
         if ($shopId!="") {
             $editorialPlan->shopId = $shopId;
+        }
+        if ($contractId!=""){
+            $editorialPlan->contractId = $contractId;
         }
 
 
