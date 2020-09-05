@@ -516,7 +516,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageDescription">Creatività:Descrizione Immagine</label>
+                                                <label for="postImageDescription">Creatività:Descrizione Post</label>
                                                 <textarea id="postImageDescription" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 1"
                                                           name="postImageDescription"
