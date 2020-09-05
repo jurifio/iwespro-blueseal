@@ -31,7 +31,7 @@
                    value="<?php echo $editorialPlanDetail->insertionId; ?>"/>
             <input type="hidden" id="creativeId" name="creativeId"
                    value="<?php echo $editorialPlanDetail->creativeId; ?>"/>
-            <input type="hidden" id="userId" name="userId" value="<?php echo \Monkey::app()->getUser()->getId();?>"/>
+            <input type="hidden" id="userId" name="userId" value="<?php echo \Monkey::app()->getUser()->getId(); ?>"/>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="row">
@@ -45,21 +45,21 @@
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="socialPlanId">Seleziona il media da Associare </label>
-                                            <?php if($allShops){ ?>
-                                            <select id="socialPlanId"
-                                                    required="required"
-                                                    name="socialPlanId"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Selezione il media da associare"
-                                                    data-init-plugin="selectize" ></select>
+                                            <?php if ($allShops) { ?>
+                                                <select id="socialPlanId"
+                                                        required="required"
+                                                        name="socialPlanId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione il media da associare"
+                                                        data-init-plugin="selectize"></select>
                                             <?php } else { ?>
                                                 <select id="socialPlanId"
-                                                    required="required"
-                                                    name="socialPlanId"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Selezione il media da associare"
-                                                    data-init-plugin="selectize" disabled></select>
-                                        <?php   } ?>
+                                                        required="required"
+                                                        name="socialPlanId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione il media da associare"
+                                                        data-init-plugin="selectize" disabled></select>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -94,11 +94,11 @@
                                             <select id="status" name="status" required="required"
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona lo stato"
-                                                <?php if(!$allShops) {
+                                                <?php if (!$allShops) {
                                                     echo " disabled ";
                                                 }
                                                 ?> >
-                                                    data-init-plugin="selectize">
+                                                data-init-plugin="selectize">
                                                 <?php echo $option ?>
                                             </select>
                                         </div>
@@ -111,7 +111,7 @@
                                                    name="startEventDate"
                                                    value="<?php echo (new \DateTime($editorialPlanDetail->startEventDate))->format('Y-m-d\TH:i:s'); ?>"
                                                    required="required"
-                                                <?php if(!$allShops) {
+                                                <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?> >
@@ -125,33 +125,33 @@
                                                    name="endEventDate"
                                                    value="<?php echo (new \DateTime($editorialPlanDetail->endEventDate))->format('Y-m-d\TH:i:s'); ?>"
                                                    required="required"
-                                                   <?php if(!$allShops) {
-                                                       echo " disabled";
-                                                   }
-                                                       ?> >
+                                                <?php if (!$allShops) {
+                                                    echo " disabled";
+                                                }
+                                                ?> >
 
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="notifyEmail">Notificare al Cliente</label>
-                                            <?php    if($allShops){ ?>
-                                            <select id="notifyEmail" name="notifyEmail" required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona"
-                                                    data-init-plugin="selectize">
-                                                <option value="notNotify">Non Inviare la Notifica</option>
-                                                <option value="yesNotify">Invia la Notifica</option>
-                                            </select>
-                                            <?php }else{?>
-                                            <select id="notifyEmail" name="notifyEmail" required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona"
-                                                    data-init-plugin="selectize" disabled>
-                                                <option value="notNotify">Non Inviare la Notifica</option>
-                                                <option value="yesNotify">Invia la Notifica</option>
-                                            </select>
-                                         <?php   }?>
+                                            <?php if ($allShops) { ?>
+                                                <select id="notifyEmail" name="notifyEmail" required="required"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona"
+                                                        data-init-plugin="selectize">
+                                                    <option value="notNotify">Non Inviare la Notifica</option>
+                                                    <option value="yesNotify">Invia la Notifica</option>
+                                                </select>
+                                            <?php } else { ?>
+                                                <select id="notifyEmail" name="notifyEmail" required="required"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona"
+                                                        data-init-plugin="selectize" disabled>
+                                                    <option value="notNotify">Non Inviare la Notifica</option>
+                                                    <option value="yesNotify">Invia la Notifica</option>
+                                                </select>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -159,39 +159,41 @@
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
-                                            <?php    if($allShops){ ?>
-                                            <select id="editorialPlanId"
-                                                    name="editorialPlanId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione il piano editoriale da utilizzare"
-                                                    data-init-plugin="selectize"></select>
-                                            <?php }else{?>
+                                            <?php if ($allShops) { ?>
                                                 <select id="editorialPlanId"
-                                                    name="editorialPlanId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione il piano editoriale da utilizzare"
-                                                    data-init-plugin="selectize" disabled></select>
-                                            <?php }?>
+                                                        name="editorialPlanId" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione il piano editoriale da utilizzare"
+                                                        data-init-plugin="selectize"></select>
+                                            <?php } else { ?>
+                                                <select id="editorialPlanId"
+                                                        name="editorialPlanId" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione il piano editoriale da utilizzare"
+                                                        data-init-plugin="selectize" disabled></select>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="hidden" id='contractSelectId' name="contractSelectId" value="<?php echo $contractId?>"/>
-                                        <input type="hidden" id='foisonSelectId' name="foisonSelectId" value="<?php echo $foisonId?>"/>
+                                        <input type="hidden" id='contractSelectId' name="contractSelectId"
+                                               value="<?php echo $contractId ?>"/>
+                                        <input type="hidden" id='foisonSelectId' name="foisonSelectId"
+                                               value="<?php echo $foisonId ?>"/>
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="foisonId">Seleziona Operatore</label>
-                                            <?php    if($allShops){
+                                            <?php if ($allShops) {
                                                 echo '<select id="foisonId"
                                                         name="foisonId" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione Operatore"
                                                         data-init-plugin="selectize"></select>';
-                                             }else{
+                                            } else {
                                                 echo '<select id="foisonId"
                                                         name="foisonId" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione Operatore"
                                                         data-init-plugin="selectize" disabled></select>';
-                                             }?>
+                                            } ?>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -201,23 +203,23 @@
                                                     name="editorialPlanArgumentId" class="full-width selectpicker"
                                                     required="required"
                                                     placeholder="Selezione argomento da utilizzare"
-                                                    data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                    data-init-plugin="selectize" <?php if (!$allShops) {
                                                 echo " disabled";
                                             }
                                             ?>></select>
 
                                         </div>
                                     </div>
-                                    <?php if($allShops) {
-                                    echo'<div class="col-md-3">
+                                    <?php if ($allShops) {
+                                        echo '<div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="isVisibleEditorialPlanArgument">Visibile</label>';
-                                            if ($editorialPlanDetail->isVisibleEditorialPlanArgument == 1) {
-                                                $ischecked = ' checked="true"';
-                                            } else {
-                                                $ischecked = '';
-                                            }
-                                            echo '<input type="checkbox"'.$ischecked.' 
+                                        if ($editorialPlanDetail->isVisibleEditorialPlanArgument == 1) {
+                                            $ischecked = ' checked="true"';
+                                        } else {
+                                            $ischecked = '';
+                                        }
+                                        echo '<input type="checkbox"' . $ischecked . ' 
                                                    id="isVisibleEditorialPlanArgument"
                                                    class="form-control"
                                                    placeholder="Visible"
@@ -233,7 +235,7 @@
                                                         name="selecterCampaign" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione operazioni su campagna da utilizzare"
-                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                        data-init-plugin="selectize" <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?>>
@@ -254,11 +256,12 @@
                                                         name="campaignName" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                        data-init-plugin="selectize" <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?>>
-                                                    <?php echo'<option value="'.$campaignSelected.'">'.$nameCampaignSelected.'</option>'?>;
+                                                    <?php echo '<option value="' . $campaignSelected . '">' . $nameCampaignSelected . '</option>' ?>
+                                                    ;
                                                 </select>
                                             </div>
                                         </div>
@@ -269,7 +272,7 @@
                                                         name="groupAdsName" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione il Gruppo inserzioni"
-                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                        data-init-plugin="selectize" <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?>>
@@ -284,7 +287,7 @@
                                                         name="buying_type" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                        data-init-plugin="selectize" <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?>>
@@ -305,7 +308,7 @@
                                                         name="objective" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize"   <?php if(!$allShops) {
+                                                        data-init-plugin="selectize" <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?>>
@@ -492,7 +495,7 @@
                                                 <input id="lifetime_budget" class="form-control"
                                                        placeholder="Inserisci il Budget" name="lifetime_budget"
                                                        value="<?php echo $editorialPlanDetail->lifetime_budget; ?>"
-                                                       required="required"   <?php if(!$allShops) {
+                                                       required="required" <?php if (!$allShops) {
                                                     echo " disabled";
                                                 }
                                                 ?>>
@@ -510,21 +513,21 @@
                                                    required="required">
                                         </div>
                                     </div>
-                                    <?php if($allShops){
-                                    echo'<div class="col-md-2">
+                                    <?php if ($allShops) {
+                                        echo '<div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">';
-                                           if ($editorialPlanDetail->isEventVisible == 1) {
-                                                $ischecked = ' checked="true"';
-                                            } else {
-                                                $ischecked = '';
-                                            }
-                                            echo'<label for="isEventVisible">Visibile</label>
-                                            <input type="checkbox" '.$ischecked.' id="isEventVisible"
+                                        if ($editorialPlanDetail->isEventVisible == 1) {
+                                            $ischecked = ' checked="true"';
+                                        } else {
+                                            $ischecked = '';
+                                        }
+                                        echo '<label for="isEventVisible">Visibile</label>
+                                            <input type="checkbox" ' . $ischecked . ' id="isEventVisible"
                                                    class="form-control"
                                                    placeholder="Visible" name="isEventVisible"/>
                                         </div>
                                     </div>';
-                                           }?>
+                                    } ?>
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="description">Descrizione Evento</label>
@@ -533,46 +536,55 @@
                                                    value="<?php echo $editorialPlanDetail->description ?> "/>
                                         </div>
                                     </div>
-                                    <?php if($allShops) {?>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleDescription">Visibile</label>
-                                            <?php if ($editorialPlanDetail->isVisibleDescription == 1) {
-                                                $ischecked = ' checked="true"';
-                                            } else {
-                                                $ischecked = '';
-                                            } ?>
-                                            <input type="checkbox" id="isVisibleDescription" class="form-control"
-                                                   placeholder="Visible" <?php echo $ischecked; ?>
-                                                   name="isVisibleDescription">
+                                    <?php if ($allShops) { ?>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isVisibleDescription">Visibile</label>
+                                                <?php if ($editorialPlanDetail->isVisibleDescription == 1) {
+                                                    $ischecked = ' checked="true"';
+                                                } else {
+                                                    $ischecked = '';
+                                                } ?>
+                                                <input type="checkbox" id="isVisibleDescription" class="form-control"
+                                                       placeholder="Visible" <?php echo $ischecked; ?>
+                                                       name="isVisibleDescription">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php }?>
+                                    <?php } ?>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="bodyEvent">Testo Evento</label>
-                                            <textarea id="bodyEvent" cols="180" rows="10" name="bodyEvent"
-                                                      placeholder="Inserisci il testo"><?php echo $editorialPlanDetail->bodyEvent ?></textarea>
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group form-group-default selectize-enabled">
+                                                    <label for="bodyEvent">Testo Evento</label>
+                                                    <textarea id="bodyEvent" cols="180" rows="10" name="bodyEvent"
+                                                              placeholder="Inserisci il testo"><?php echo $editorialPlanDetail->bodyEvent ?></textarea>
+                                                </div>
+                                            </div>
+                                            <?php if ($allShops) { ?>
+                                                <div class="col-md-2">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <?php if ($editorialPlanDetail->isVisibleBodyEvent == 1) {
+                                                            $ischecked = ' checked="true"';
+                                                        } else {
+                                                            $ischecked = '';
+                                                        } ?>
+                                                        <label for="isVisibleBodyEvent">Visibile</label>
+                                                        <input type="checkbox" id="isVisibleBodyEvent"
+                                                               class="form-control"
+                                                               placeholder="Visible" <?php echo $ischecked; ?>
+                                                               name="isVisibleBodyEvent"/>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
-                                    <?php if($allShops) {?>
                                     <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <?php if ($editorialPlanDetail->isVisibleBodyEvent == 1) {
-                                                $ischecked = ' checked="true"';
-                                            } else {
-                                                $ischecked = '';
-                                            } ?>
-                                            <label for="isVisibleBodyEvent">Visibile</label>
-                                            <input type="checkbox" id="isVisibleBodyEvent" class="form-control"
-                                                   placeholder="Visible" <?php echo $ischecked; ?>
-                                                   name="isVisibleBodyEvent"/>
-                                        </div>
+                                        <b>Immagine
+                                            Evento</b> <?php echo '<img  width="250" src="' . $editorialPlanDetail->photoUrl . '"/>' ?>
                                     </div>
-                                    <?php }?>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-10">
@@ -582,27 +594,24 @@
                                                       placeholder="Inserisci le note"><?php echo $editorialPlanDetail->note ?></textarea>
                                         </div>
                                     </div>
-                                    <?php if($allShops) { ?>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <?php if ($editorialPlanDetail->isVisibleNote == 1) {
-                                                $ischecked = ' checked="true"';
-                                            } else {
-                                                $ischecked = '';
-                                            } ?>
-                                            <label for="isVisibleNote">Visibile</label>
-                                            <input type="checkbox" id="isVisibleNote" class="form-control"
-                                                   placeholder="Visible" <?php echo $ischecked ?>
-                                                   name="isVisibleNote"/>
+                                    <?php if ($allShops) { ?>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <?php if ($editorialPlanDetail->isVisibleNote == 1) {
+                                                    $ischecked = ' checked="true"';
+                                                } else {
+                                                    $ischecked = '';
+                                                } ?>
+                                                <label for="isVisibleNote">Visibile</label>
+                                                <input type="checkbox" id="isVisibleNote" class="form-control"
+                                                       placeholder="Visible" <?php echo $ischecked ?>
+                                                       name="isVisibleNote"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php }?>
+                                    <?php } ?>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-2">
-                                        Immagine Evento <?php echo '<img  width="50" src="' . $editorialPlanDetail->photoUrl . '"/>' ?>
-                                    </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-10">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="linkDestination">Link Destinazione</label>
                                             <input id="linkDestination" class="form-control"
@@ -611,24 +620,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php if($editorialPlanDetail->editorialPlanArgumentId==8 || $editorialPlanDetail->editorialPlanArgumentId==5 || $editorialPlanDetail->editorialPlanArgumentId==9){
+                                <?php if ($editorialPlanDetail->editorialPlanArgumentId == 8 || $editorialPlanDetail->editorialPlanArgumentId == 5 || $editorialPlanDetail->editorialPlanArgumentId == 9) {
                                     echo '<div id="divPostUploadImage" class="show">';
-                                }else{
+                                } else {
                                     echo '<div id="divPostUploadImage" class="hide">';
-                                }?>
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
-                                                  id="photoUrl" name="photoUrl" action="POST">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="file">Creatività:Immagine</label>
-                                                    <div class="fallback">
-                                                        <input name="file" type="file" multiple/>
-                                                    </div>
+                                } ?>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
+                                              id="photoUrl" name="photoUrl" action="POST">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="file">Creatività:Immagine</label>
+                                                <div class="fallback">
+                                                    <input name="file" type="file" multiple/>
                                                 </div>
-                                            </form>
-                                        </div>
-                                        <?php if($allShops) {?>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <?php if ($allShops) { ?>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="isVisiblePhotoUrl">Visibile</label>
@@ -642,443 +652,454 @@
                                                        name="isVisiblePhotoUrl"/>
                                             </div>
                                         </div>
-                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <?php if ($editorialPlanDetail->editorialPlanArgumentId == 8 || $editorialPlanDetail->editorialPlanArgumentId == 5) {
+                                echo '<div id="divPostImage" class="show">';
+                            } else {
+                                echo '<div id="divPostImage" class="hide">';
+                            } ?>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="postImageTitle">Creatività:Titolo Post</label>
+                                        <textarea id="postImageTitle" class="form-control"
+                                                  placeholder="Inserisci il titolo per l'immagine "
+                                                  name="postImageTitle"
+                                        ><?php echo $editorialPlanDetail->postImageTitle; ?></textarea>
                                     </div>
                                 </div>
-                                <?php if($editorialPlanDetail->editorialPlanArgumentId==8 || $editorialPlanDetail->editorialPlanArgumentId==5){
-                                    echo '<div id="divPostImage" class="show">';
-                                }else{
-                                    echo '<div id="divPostImage" class="hide">';
-                                }?>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageTitle">Creatività:Titolo Post</label>
-                                                <textarea id="postImageTitle" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine "
-                                                          name="postImageTitle"
-                                                ><?php echo $editorialPlanDetail->postImageTitle; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageDescription">Creatività:Descrizione Post </label>
-                                                <textarea id="postImageDescription" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="postImageDescription"
-                                                ><?php echo $editorialPlanDetail->postImageDescription; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageUrl">Creatività:link Immagine</label>
-                                                <textarea id="postImageUrl" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 1"
-                                                          name="postImageUrl"
-                                                ><?php echo $editorialPlanDetail->postImageUrl; ?></textarea>
-                                            </div>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="postImageDescription">Creatività:Descrizione Post </label>
+                                        <textarea id="postImageDescription" class="form-control"
+                                                  placeholder="Inserisci la descrizione per l'immagine 1"
+                                                  name="postImageDescription"
+                                        ><?php echo $editorialPlanDetail->postImageDescription; ?></textarea>
                                     </div>
                                 </div>
-                                <?php if($editorialPlanDetail->editorialPlanArgumentId==9){
-                                echo '<div id="divPostCarousel" class="show">';
-                                }else{
-                                    echo '<div id="divPostCarousel" class="hide">';
-                                }?>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle1">Creativita:Titolo Immagine1</label>
-                                                <textarea id="imageTitle1" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 1"
-                                                          name="imageTitle1"
-                                                ><?php echo $editorialPlanDetail->imageTitle1; ?></textarea>
-                                                <input type="hidden" id="imageHash1" name="imageHash1" value="<?php echo $editorialPlanDetail->imageHash1; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage1">Creatività:Descrizione Post Immagine1</label>
-                                                <textarea id="descriptionImage1" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="descriptionImage1"
-                                                ><?php echo $editorialPlanDetail->descriptionImage1; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl1">Creatività:link Immagine1</label>
-                                                <textarea id="imageUrl1" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 1"
-                                                          name="imageUrl1"
-                                                ><?php echo $editorialPlanDetail->imageUrl1; ?></textarea>
-                                            </div>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="postImageUrl">Creatività:link Immagine</label>
+                                        <textarea id="postImageUrl" class="form-control"
+                                                  placeholder="Inserisci il link per l'immagine 1"
+                                                  name="postImageUrl"
+                                        ><?php echo $editorialPlanDetail->postImageUrl; ?></textarea>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle2">Creatività:Titolo Post Immagine2</label>
-                                                <textarea id="imageTitle2" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 1"
-                                                          name="imageTitle2"
-                                                ><?php echo $editorialPlanDetail->imageTitle2; ?></textarea>
-                                                <input type="hidden" id="imageHash2" name="imageHash2" value="<?php echo $editorialPlanDetail->imageHash2; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage2">Creatività:Descrizione Immagine2</label>
-                                                <textarea id="descriptionImage2" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 2"
-                                                          name="descriptionImage1"
-                                                ><?php echo $editorialPlanDetail->descriptionImage2; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl2">Creatività:link Immagine2</label>
-                                                <textarea id="imageUrl2" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 2"
-                                                          name="imageUrl2"
-                                                ><?php echo $editorialPlanDetail->imageUrl2; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle3">Creatività:Titolo Post Immagine3</label>
-                                                <textarea id="imageTitle3" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 3"
-                                                          name="imageTitle3"
-                                                ><?php echo $editorialPlanDetail->imageTitle3; ?></textarea>
-                                                <input type="hidden" id="imageHash3" name="imageHash3"  value="<?php echo $editorialPlanDetail->imageHash3; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage3">Creatività:Descrizione Immagine3</label>
-                                                <textarea id="descriptionImage3" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 3"
-                                                          name="descriptionImage3"
-                                                ><?php echo $editorialPlanDetail->descriptionImage3; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl3">Creatività:link Immagine3</label>
-                                                <textarea id="imageUrl3" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 3"
-                                                          name="imageUrl3"
-                                                ><?php echo $editorialPlanDetail->imageUrl3; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle4">Creatività:Titolo Post Immagine4</label>
-                                                <textarea id="imageTitle4" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 4"
-                                                          name="imageTitle4"
-                                                ><?php echo $editorialPlanDetail->imageTitle4; ?></textarea>
-                                                <input type="hidden" id="imageHash4" name="imageHash4" value="<?php echo $editorialPlanDetail->imageHash4; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage4">Creatività:Descrizione Immagine4</label>
-                                                <textarea id="descriptionImage4" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 4"
-                                                          name="descriptionImage4"
-                                                ><?php echo $editorialPlanDetail->descriptionImage4; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl4">Creatività:link Immagine4</label>
-                                                <textarea id="imageUrl4" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 4"
-                                                          name="imageUrl4"
-                                                ><?php echo $editorialPlanDetail->imageUrl4; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle5">Creatività:Titolo Post Immagine5</label>
-                                                <textarea id="imageTitle5" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 5"
-                                                          name="imageTitle5"
-                                                ><?php echo $editorialPlanDetail->imageTitle5; ?></textarea>
-                                                <input type="hidden" id="imageHash5" name="imageHash5" value="<?php echo $editorialPlanDetail->imageHash5; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage5">Creatività:Descrizione Immagine5</label>
-                                                <textarea id="descriptionImage5" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 5"
-                                                          name="descriptionImage5"
-                                                ><?php echo $editorialPlanDetail->descriptionImage5; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl5">Creatività:link Immagine5</label>
-                                                <textarea id="imageUrl5" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 5"
-                                                          name="imageUrl5"><?php echo $editorialPlanDetail->imageUrl5; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if ($editorialPlanDetail->editorialPlanArgumentId == 9) {
+                            echo '<div id="divPostCarousel" class="show">';
+                        } else {
+                            echo '<div id="divPostCarousel" class="hide">';
+                        } ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle1">Creativita:Titolo Immagine1</label>
+                                    <textarea id="imageTitle1" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 1"
+                                              name="imageTitle1"
+                                    ><?php echo $editorialPlanDetail->imageTitle1; ?></textarea>
+                                    <input type="hidden" id="imageHash1" name="imageHash1"
+                                           value="<?php echo $editorialPlanDetail->imageHash1; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage1">Creatività:Descrizione Post Immagine1</label>
+                                    <textarea id="descriptionImage1" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 1"
+                                              name="descriptionImage1"
+                                    ><?php echo $editorialPlanDetail->descriptionImage1; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl1">Creatività:link Immagine1</label>
+                                    <textarea id="imageUrl1" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 1"
+                                              name="imageUrl1"
+                                    ><?php echo $editorialPlanDetail->imageUrl1; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle2">Creatività:Titolo Post Immagine2</label>
+                                    <textarea id="imageTitle2" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 1"
+                                              name="imageTitle2"
+                                    ><?php echo $editorialPlanDetail->imageTitle2; ?></textarea>
+                                    <input type="hidden" id="imageHash2" name="imageHash2"
+                                           value="<?php echo $editorialPlanDetail->imageHash2; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage2">Creatività:Descrizione Immagine2</label>
+                                    <textarea id="descriptionImage2" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 2"
+                                              name="descriptionImage1"
+                                    ><?php echo $editorialPlanDetail->descriptionImage2; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl2">Creatività:link Immagine2</label>
+                                    <textarea id="imageUrl2" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 2"
+                                              name="imageUrl2"
+                                    ><?php echo $editorialPlanDetail->imageUrl2; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle3">Creatività:Titolo Post Immagine3</label>
+                                    <textarea id="imageTitle3" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 3"
+                                              name="imageTitle3"
+                                    ><?php echo $editorialPlanDetail->imageTitle3; ?></textarea>
+                                    <input type="hidden" id="imageHash3" name="imageHash3"
+                                           value="<?php echo $editorialPlanDetail->imageHash3; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage3">Creatività:Descrizione Immagine3</label>
+                                    <textarea id="descriptionImage3" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 3"
+                                              name="descriptionImage3"
+                                    ><?php echo $editorialPlanDetail->descriptionImage3; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl3">Creatività:link Immagine3</label>
+                                    <textarea id="imageUrl3" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 3"
+                                              name="imageUrl3"
+                                    ><?php echo $editorialPlanDetail->imageUrl3; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle4">Creatività:Titolo Post Immagine4</label>
+                                    <textarea id="imageTitle4" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 4"
+                                              name="imageTitle4"
+                                    ><?php echo $editorialPlanDetail->imageTitle4; ?></textarea>
+                                    <input type="hidden" id="imageHash4" name="imageHash4"
+                                           value="<?php echo $editorialPlanDetail->imageHash4; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage4">Creatività:Descrizione Immagine4</label>
+                                    <textarea id="descriptionImage4" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 4"
+                                              name="descriptionImage4"
+                                    ><?php echo $editorialPlanDetail->descriptionImage4; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl4">Creatività:link Immagine4</label>
+                                    <textarea id="imageUrl4" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 4"
+                                              name="imageUrl4"
+                                    ><?php echo $editorialPlanDetail->imageUrl4; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle5">Creatività:Titolo Post Immagine5</label>
+                                    <textarea id="imageTitle5" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 5"
+                                              name="imageTitle5"
+                                    ><?php echo $editorialPlanDetail->imageTitle5; ?></textarea>
+                                    <input type="hidden" id="imageHash5" name="imageHash5"
+                                           value="<?php echo $editorialPlanDetail->imageHash5; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage5">Creatività:Descrizione Immagine5</label>
+                                    <textarea id="descriptionImage5" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 5"
+                                              name="descriptionImage5"
+                                    ><?php echo $editorialPlanDetail->descriptionImage5; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl5">Creatività:link Immagine5</label>
+                                    <textarea id="imageUrl5" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 5"
+                                              name="imageUrl5"><?php echo $editorialPlanDetail->imageUrl5; ?></textarea>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle6">Creatività:Titolo Post Immagine6</label>
-                                                <textarea id="imageTitle6" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 6"
-                                                          name="imageTitle6"
-                                                ><?php echo $editorialPlanDetail->imageTitle6; ?></textarea>
-                                                <input type="hidden" id="imageHash6" name="imageHash6" value="<?php echo $editorialPlanDetail->imageHash6; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage6">Creatività:Descrizione Immagine6</label>
-                                                <textarea id="descriptionImage6" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 6"
-                                                          name="descriptionImage6"
-                                                          required="required"><?php echo $editorialPlanDetail->descriptionImage6; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl6">Creatività:link Immagine6</label>
-                                                <textarea id="imageUrl6" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 6"
-                                                          name="imageUrl6"
-                                                ><?php echo $editorialPlanDetail->imageUrl6; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle7">Creatività:Titolo Post Immagine7</label>
-                                                <textarea id="imageTitle7" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 7"
-                                                          name="imageTitle7"
-                                                ><?php echo $editorialPlanDetail->imageTitle7; ?></textarea>
-                                                <input type="hidden" id="imageHash7" name="imageHash7" value="<?php echo $editorialPlanDetail->imageHash7; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage7">Creatività:Descrizione Immagine7</label>
-                                                <textarea id="descriptionImage7" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 7"
-                                                          name="descriptionImage7"
-                                                          required="required"><?php echo $editorialPlanDetail->descriptionImage7; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl7">Creatività:link Immagine7</label>
-                                                <textarea id="imageUrl7" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 7"
-                                                          name="imageUrl7"
-                                                ><?php echo $editorialPlanDetail->imageUrl7; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle8">Creatività:Titolo Post Immagine6</label>
-                                                <textarea id="imageTitle8" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 8"
-                                                          name="imageTitle8"
-                                                ><?php echo $editorialPlanDetail->imageTitle8; ?></textarea>
-                                                <input type="hidden" id="imageHash8" name="imageHash8" value="<?php echo $editorialPlanDetail->imageHash8; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage8">Creatività:Descrizione Immagine8</label>
-                                                <textarea id="descriptionImage8" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 8"
-                                                          name="descriptionImage8"
-                                                          required="required"><?php echo $editorialPlanDetail->descriptionImage8; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl8">Creatività:link Immagine8</label>
-                                                <textarea id="imageUrl8" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 8"
-                                                          name="imageUrl8"
-                                                ><?php echo $editorialPlanDetail->imageUrl8; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle9">Creatività:Titolo Post Immagine9</label>
-                                                <textarea id="imageTitle9" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 9"
-                                                          name="imageTitle9"
-                                                ><?php echo $editorialPlanDetail->imageTitle9; ?></textarea>
-                                                <input type="hidden" id="imageHash9" name="imageHash9" value="<?php echo $editorialPlanDetail->imageHash9; ?>"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage9">Creatività:Descrizione Immagine9</label>
-                                                <textarea id="descriptionImage9" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 9"
-                                                          name="descriptionImage9"
-                                                          required="required"><?php echo $editorialPlanDetail->imageUrl9; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl9">Creatività:link Immagine6</label>
-                                                <textarea id="imageUrl9" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 9"
-                                                          name="imageUrl9"
-                                                ><?php echo $editorialPlanDetail->imageUrl9; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle10">Creatività:Titolo Post Immagine10</label>
-                                                <textarea id="imageTitle10" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 10"
-                                                          name="imageTitle10"
-                                                ><?php echo $editorialPlanDetail->imageTitle10; ?></textarea>
-                                                <input type="hidden" id="imageHash10" name="imageHash10" value="<?php echo $editorialPlanDetail->imageHash10; ?>"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage10">Creatività:Descrizione Immagine10</label>
-                                                <textarea id="descriptionImage10" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 10"
-                                                          name="descriptionImage10"
-                                                          required="required"><?php echo $editorialPlanDetail->descriptionImage10; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl10">Creatività:link Immagine10</label>
-                                                <textarea id="imageUrl10" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 10"
-                                                          name="imageUrl10"
-                                                ><?php echo $editorialPlanDetail->imageUrl10; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                    <?php if($editorialPlanDetail->editorialPlanArgumentId==10){
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle6">Creatività:Titolo Post Immagine6</label>
+                                    <textarea id="imageTitle6" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 6"
+                                              name="imageTitle6"
+                                    ><?php echo $editorialPlanDetail->imageTitle6; ?></textarea>
+                                    <input type="hidden" id="imageHash6" name="imageHash6"
+                                           value="<?php echo $editorialPlanDetail->imageHash6; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage6">Creatività:Descrizione Immagine6</label>
+                                    <textarea id="descriptionImage6" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 6"
+                                              name="descriptionImage6"
+                                              required="required"><?php echo $editorialPlanDetail->descriptionImage6; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl6">Creatività:link Immagine6</label>
+                                    <textarea id="imageUrl6" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 6"
+                                              name="imageUrl6"
+                                    ><?php echo $editorialPlanDetail->imageUrl6; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle7">Creatività:Titolo Post Immagine7</label>
+                                    <textarea id="imageTitle7" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 7"
+                                              name="imageTitle7"
+                                    ><?php echo $editorialPlanDetail->imageTitle7; ?></textarea>
+                                    <input type="hidden" id="imageHash7" name="imageHash7"
+                                           value="<?php echo $editorialPlanDetail->imageHash7; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage7">Creatività:Descrizione Immagine7</label>
+                                    <textarea id="descriptionImage7" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 7"
+                                              name="descriptionImage7"
+                                              required="required"><?php echo $editorialPlanDetail->descriptionImage7; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl7">Creatività:link Immagine7</label>
+                                    <textarea id="imageUrl7" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 7"
+                                              name="imageUrl7"
+                                    ><?php echo $editorialPlanDetail->imageUrl7; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle8">Creatività:Titolo Post Immagine6</label>
+                                    <textarea id="imageTitle8" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 8"
+                                              name="imageTitle8"
+                                    ><?php echo $editorialPlanDetail->imageTitle8; ?></textarea>
+                                    <input type="hidden" id="imageHash8" name="imageHash8"
+                                           value="<?php echo $editorialPlanDetail->imageHash8; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage8">Creatività:Descrizione Immagine8</label>
+                                    <textarea id="descriptionImage8" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 8"
+                                              name="descriptionImage8"
+                                              required="required"><?php echo $editorialPlanDetail->descriptionImage8; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl8">Creatività:link Immagine8</label>
+                                    <textarea id="imageUrl8" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 8"
+                                              name="imageUrl8"
+                                    ><?php echo $editorialPlanDetail->imageUrl8; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle9">Creatività:Titolo Post Immagine9</label>
+                                    <textarea id="imageTitle9" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 9"
+                                              name="imageTitle9"
+                                    ><?php echo $editorialPlanDetail->imageTitle9; ?></textarea>
+                                    <input type="hidden" id="imageHash9" name="imageHash9"
+                                           value="<?php echo $editorialPlanDetail->imageHash9; ?>"/>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage9">Creatività:Descrizione Immagine9</label>
+                                    <textarea id="descriptionImage9" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 9"
+                                              name="descriptionImage9"
+                                              required="required"><?php echo $editorialPlanDetail->imageUrl9; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl9">Creatività:link Immagine6</label>
+                                    <textarea id="imageUrl9" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 9"
+                                              name="imageUrl9"
+                                    ><?php echo $editorialPlanDetail->imageUrl9; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageTitle10">Creatività:Titolo Post Immagine10</label>
+                                    <textarea id="imageTitle10" class="form-control"
+                                              placeholder="Inserisci il titolo per l'immagine 10"
+                                              name="imageTitle10"
+                                    ><?php echo $editorialPlanDetail->imageTitle10; ?></textarea>
+                                    <input type="hidden" id="imageHash10" name="imageHash10"
+                                           value="<?php echo $editorialPlanDetail->imageHash10; ?>"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="descriptionImage10">Creatività:Descrizione Immagine10</label>
+                                    <textarea id="descriptionImage10" class="form-control"
+                                              placeholder="Inserisci la descrizione per l'immagine 10"
+                                              name="descriptionImage10"
+                                              required="required"><?php echo $editorialPlanDetail->descriptionImage10; ?></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="imageUrl10">Creatività:link Immagine10</label>
+                                    <textarea id="imageUrl10" class="form-control"
+                                              placeholder="Inserisci il link per l'immagine 10"
+                                              name="imageUrl10"
+                                    ><?php echo $editorialPlanDetail->imageUrl10; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if ($editorialPlanDetail->editorialPlanArgumentId == 10) {
                         echo '<div id="postVideo" class="show">';
-                    }else{
+                    } else {
                         echo '<div id="postVideo" class="hide">';
-                    }?>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postVideoTitle">Creatività:Titolo Video</label>
-                                                <textarea id="postVideoTitle" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine "
-                                                          name="postVideoTitle"
-                                                ><?php echo $editorialPlanDetail->postVideoTitle; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postDescriptionVideo">Creatività:Descrizione Video</label>
-                                                <textarea id="postDescriptionVideo" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="postDescriptionVideo"
-                                                ><?php echo $editorialPlanDetail->postDescriptionVideo; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="video1">Creatività:link Video</label>
-                                                <textarea id="video1" class="form-control"
-                                                          placeholder="Inserisci il link per il video" name="video"><?php echo $editorialPlanDetail->video1; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postVideoCallToAction">Creatività:Seleziona la Call To Action</label>
-                                                <select id="postVideoCallToAction"
-                                                        name="postVideoCallToAction" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione il piano editoriale da utilizzare"
-                                                        data-init-plugin="selectize">
-                                                    <?php switch($editorialPlanDetail->postVideoCallToAction){
-                                                        case 'OPEN_LINK':
-                                                            echo ' <option selected="selected" value="OPEN_LINK">APRI LINK</option>
+                    } ?>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group form-group-default selectize-enabled">
+                                <label for="postVideoTitle">Creatività:Titolo Video</label>
+                                <textarea id="postVideoTitle" class="form-control"
+                                          placeholder="Inserisci il titolo per l'immagine "
+                                          name="postVideoTitle"
+                                ><?php echo $editorialPlanDetail->postVideoTitle; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group form-group-default selectize-enabled">
+                                <label for="postDescriptionVideo">Creatività:Descrizione Video</label>
+                                <textarea id="postDescriptionVideo" class="form-control"
+                                          placeholder="Inserisci la descrizione per l'immagine 1"
+                                          name="postDescriptionVideo"
+                                ><?php echo $editorialPlanDetail->postDescriptionVideo; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group form-group-default selectize-enabled">
+                                <label for="video1">Creatività:link Video</label>
+                                <textarea id="video1" class="form-control"
+                                          placeholder="Inserisci il link per il video"
+                                          name="video"><?php echo $editorialPlanDetail->video1; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group form-group-default selectize-enabled">
+                                <label for="postVideoCallToAction">Creatività:Seleziona la Call To Action</label>
+                                <select id="postVideoCallToAction"
+                                        name="postVideoCallToAction" class="full-width selectpicker"
+                                        required="required"
+                                        placeholder="Selezione il piano editoriale da utilizzare"
+                                        data-init-plugin="selectize">
+                                    <?php switch ($editorialPlanDetail->postVideoCallToAction) {
+                                        case 'OPEN_LINK':
+                                            echo ' <option selected="selected" value="OPEN_LINK">APRI LINK</option>
                                                     <option value="LIKE_PAGE">MI PIACE SU PAGINA</option>
                                                     <option value="SHOP_NOW">SHOP NOW</option>
                                                     <option value="CALL">CALL_ME</option>
                                                     <option value="APPLY_NOW">APPLY NOW</option>';
-                                                            break;
-                                                        case 'LIKE_PAGE':
-                                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
+                                            break;
+                                        case 'LIKE_PAGE':
+                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
                                                     <option selected="selected" value="LIKE_PAGE">MI PIACE SU PAGINA</option>
                                                     <option value="SHOP_NOW">SHOP NOW</option>
                                                     <option value="CALL">CALL_ME</option>
                                                     <option value="APPLY_NOW">APPLY NOW</option>';
-                                                            break;
-                                                        case 'SHOP_NOW':
-                                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
+                                            break;
+                                        case 'SHOP_NOW':
+                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
                                                     <option  value="LIKE_PAGE">MI PIACE SU PAGINA</option>
                                                     <option selected="selected" value="SHOP_NOW">SHOP NOW</option>
                                                     <option value="CALL">CALL_ME</option>
                                                     <option value="APPLY_NOW">APPLY NOW</option>';
-                                                            break;
-                                                        case 'CALL':
-                                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
+                                            break;
+                                        case 'CALL':
+                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
                                                     <option  value="LIKE_PAGE">MI PIACE SU PAGINA</option>
                                                     <option  value="SHOP_NOW">SHOP NOW</option>
                                                     <option selected="selected" value="CALL">CALL_ME</option>
                                                     <option value="APPLY_NOW">APPLY NOW</option>';
-                                                            break;
-                                                        case 'APPLY_NOW':
-                                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
+                                            break;
+                                        case 'APPLY_NOW':
+                                            echo ' <option  value="OPEN_LINK">APRI LINK</option>
                                                     <option  value="LIKE_PAGE">MI PIACE SU PAGINA</option>
                                                     <option  value="SHOP_NOW">SHOP NOW</option>
                                                     <option  value="CALL">CALL_ME</option>
                                                     <option selected="selected" value="APPLY_NOW">APPLY NOW</option>';
-                                                            break;
-                                                    }
-                                                   ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                            break;
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+</div>
+</div>
+</div>
+</div>
 
-    <?php include "parts/footer.php"; ?>
+<?php include "parts/footer.php"; ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
