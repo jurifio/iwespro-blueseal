@@ -58,11 +58,11 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
           $fason=$data['fason'];
           $linkDestination = $data['linkDestination'];
           $facebookCampaignId = $data['facebookCampaignId'];
-          $lifetime_budget = $data['lifetime_budget'];
-          $campaignId = str_replace('\n','',$data['campaignId']);
-          $groupAdsName = str_replace('\n','',$data['groupAdsName']);
-          $selecterCampaign = $data['selecterCampaign'];
-          $isNewAdSet = $data['isNewAdSet'];
+          $lifetime_budget = isset($data['lifetime_budget'])? $data['lifetime_budget']: '';
+          $campaignId = isset($data['campaignId'])?str_replace('\n','',$data['campaignId']):'';
+          $groupAdsName = isset($data['campaignId'])?str_replace('\n','',$data['groupAdsName']):'';
+          $selecterCampaign = isset($data['selecterCampaign'])?$data['selecterCampaign']:'';
+          $isNewAdSet = isset($data['isNewAdSet'])?$data['isNewAdSet']:'';
           if ($argument == '') {
               return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Argomento non selezionnato</i>';
           }
@@ -74,8 +74,8 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
           $isVisibleNote = $data['isVisibleNote'];
           $description = $data['description'];
           $isVisibleDescription = $data['isVisibleDescription'];
-          $buying_type = $data['buying_type'];
-          $objective = $data['objective'];
+          $buying_type = isset($data['buying_type'])?$data['buying_type']:'';
+          $objective = isset($data['objective'])?$data['objective']:'';
           $photoUrl = (array_key_exists('photoUrl',$data)) ? $data['photoUrl'] : '';
           $unlinkphoto = [];
           $status = $data['status'];

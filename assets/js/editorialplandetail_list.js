@@ -516,10 +516,10 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postDescriptionImage">Creatività:Descrizione Immagine</label>
-                                                <textarea id="postDescriptionImage" class="form-control"
+                                                <label for="postImageDescription">Creatività:Descrizione Immagine</label>
+                                                <textarea id="postImageDescription" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="postDescriptionImage"
+                                                          name="postImageDescription"
                                                 ></textarea>
                                             </div>
                                         </div>
@@ -1435,13 +1435,13 @@
                             descriptionImage9:$('#descriptionImage9').val(),
                             descriptionImage10:$('#descriptionImage10').val(),
                             postImageTitle:$('#postImageTitle').val(),
-                            postDescriptionImage:$('#postDescriptionImage').val(),
+                            postImageDescription:$('#postImageDescription').val(),
                             postVideoTitle:$('#postVideoTitle').val(),
                             postDescriptionVideo:$('#postDescriptionVideo').val(),
                             postVideoCallToAction: $('#postVideoCallToAction').val(),
                             foisonId:$('#foisonId').val(),
                             video1:$('#video1').val(),
-                            typeAdd:'formCalendar',
+                            type:'formCalendar',
 
 
                         };
