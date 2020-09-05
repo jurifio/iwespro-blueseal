@@ -557,7 +557,7 @@ $(document).on('bs.post.save', function () {
             descriptionImage9:$('#descriptionImage9').val(),
             descriptionImage10:$('#descriptionImage10').val(),
             postImageTitle:$('#postImageTitle').val(),
-            postDescriptionImage:$('#postDescriptionImage').val(),
+            postImageDescription:$('#postImageDescription').val(),
             postVideoTitle:$('#postVideoTitle').val(),
             postDescriptionVideo:$('#postDescriptionVideo').val(),
             postVideoCallToAction: $('#postVideoCallToAction').val(),

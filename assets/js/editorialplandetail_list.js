@@ -507,7 +507,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageTitle">Titolo Immagine</label>
+                                                <label for="postImageTitle">Creatività:Titolo Post</label>
                                                 <textarea id="postImageTitle" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine "
                                                           name="postImageTitle"
@@ -516,7 +516,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postDescriptionImage">Descrizione Immagine</label>
+                                                <label for="postDescriptionImage">Creatività:Descrizione Immagine</label>
                                                 <textarea id="postDescriptionImage" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 1"
                                                           name="postDescriptionImage"
@@ -525,7 +525,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageUrl">link Immagine</label>
+                                                <label for="postImageUrl">Creatività:link Immagine</label>
                                                 <textarea id="postImageUrl" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 1"
                                                           name="postImageUrl"
@@ -538,7 +538,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle1">Titolo Immagine1</label>
+                                                <label for="imageTitle1">Creatività:Titolo Post Immagine1</label>
                                                 <textarea id="imageTitle1" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 1"
                                                           name="imageTitle1"
@@ -547,7 +547,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage1">Descrizione Immagine1</label>
+                                                <label for="descriptionImage1">Creatività:Descrizione Immagine1</label>
                                                 <textarea id="descriptionImage1" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 1"
                                                           name="descriptionImage1"
@@ -556,7 +556,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl1">link Immagine1</label>
+                                                <label for="imageUrl1">Creatività:link Immagine1</label>
                                                 <textarea id="imageUrl1" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 1"
                                                           name="imageUrl1"
@@ -567,7 +567,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle2">Titolo Immagine2</label>
+                                                <label for="imageTitle2">Creatività:Titolo Post Immagine2</label>
                                                 <textarea id="imageTitle2" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 1"
                                                           name="imageTitle2"
@@ -576,7 +576,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage2">Descrizione Immagine2</label>
+                                                <label for="descriptionImage2">Creatività:Descrizione Immagine2</label>
                                                 <textarea id="descriptionImage2" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 2"
                                                           name="descriptionImage1"
@@ -585,7 +585,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl2">link Immagine2</label>
+                                                <label for="imageUrl2">Creatività:link Immagine2</label>
                                                 <textarea id="imageUrl2" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 2"
                                                           name="imageUrl2"
@@ -596,7 +596,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle3">Titolo Immagine3</label>
+                                                <label for="imageTitle3">Creatività:Titolo Post Immagine3</label>
                                                 <textarea id="imageTitle3" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 3"
                                                           name="imageTitle3"
@@ -605,7 +605,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage3">Descrizione Immagine3</label>
+                                                <label for="descriptionImage3">Creatività:Descrizione Immagine3</label>
                                                 <textarea id="descriptionImage3" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 3"
                                                           name="descriptionImage3"
@@ -614,7 +614,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl3">link Immagine3</label>
+                                                <label for="imageUrl3">Creatività:link Immagine3</label>
                                                 <textarea id="imageUrl3" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 3"
                                                           name="imageUrl3"
@@ -625,7 +625,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle4">Titolo Immagine4</label>
+                                                <label for="imageTitle4">Creatività:Titolo Post Immagine4</label>
                                                 <textarea id="imageTitle4" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 4"
                                                           name="imageTitle4"
@@ -634,7 +634,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage4">Descrizione Immagine4</label>
+                                                <label for="descriptionImage4">Creatività:Descrizione Immagine4</label>
                                                 <textarea id="descriptionImage4" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 4"
                                                           name="descriptionImage4"
@@ -643,7 +643,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl4">link Immagine4</label>
+                                                <label for="imageUrl4">Creatività:link Immagine4</label>
                                                 <textarea id="imageUrl4" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 4"
                                                           name="imageUrl4"
@@ -654,7 +654,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle5">Titolo Immagine5</label>
+                                                <label for="imageTitle5">Creatività:Titolo Post  Immagine5</label>
                                                 <textarea id="imageTitle5" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 5"
                                                           name="imageTitle5"
@@ -663,7 +663,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage5">Descrizione Immagine5</label>
+                                                <label for="descriptionImage5">Creatività:Descrizione Immagine5</label>
                                                 <textarea id="descriptionImage5" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 5"
                                                           name="descriptionImage5"
@@ -672,7 +672,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl5">link Immagine5</label>
+                                                <label for="imageUrl5">Creatività:link Immagine5</label>
                                                 <textarea id="imageUrl5" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 5"
                                                           name="imageUrl5"></textarea>
@@ -683,7 +683,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle6">Titolo Immagine6</label>
+                                                <label for="imageTitle6">Creatività:Titolo Post Immagine6</label>
                                                 <textarea id="imageTitle6" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 6"
                                                           name="imageTitle6"
@@ -692,7 +692,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage6">Descrizione Immagine6</label>
+                                                <label for="descriptionImage6">Creatività:Descrizione Immagine6</label>
                                                 <textarea id="descriptionImage6" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 6"
                                                           name="descriptionImage6"
@@ -701,7 +701,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl6">link Immagine6</label>
+                                                <label for="imageUrl6">Creatività:link Immagine6</label>
                                                 <textarea id="imageUrl6" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 6"
                                                           name="imageUrl6"
@@ -712,7 +712,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle7">Titolo Immagine7</label>
+                                                <label for="imageTitle7">Creatività:Titolo Post Immagine7</label>
                                                 <textarea id="imageTitle7" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 7"
                                                           name="imageTitle7"
@@ -721,7 +721,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage7">Descrizione Immagine7</label>
+                                                <label for="descriptionImage7">Creatività:Descrizione Immagine7</label>
                                                 <textarea id="descriptionImage7" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 7"
                                                           name="descriptionImage7"
@@ -730,7 +730,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl7">link Immagine7</label>
+                                                <label for="imageUrl7">Creatività:link Immagine7</label>
                                                 <textarea id="imageUrl7" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 7"
                                                           name="imageUrl7"
@@ -741,7 +741,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle8">Titolo Immagine6</label>
+                                                <label for="imageTitle8">Creatività:Titolo Post Immagine8</label>
                                                 <textarea id="imageTitle8" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 8"
                                                           name="imageTitle8"
@@ -750,7 +750,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage8">Descrizione Immagine8</label>
+                                                <label for="descriptionImage8">Creatività:Descrizione Immagine8</label>
                                                 <textarea id="descriptionImage8" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 8"
                                                           name="descriptionImage8"
@@ -759,7 +759,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl8">link Immagine8</label>
+                                                <label for="imageUrl8">Creatività:link Immagine8</label>
                                                 <textarea id="imageUrl8" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 8"
                                                           name="imageUrl8"
@@ -770,7 +770,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle9">Titolo Immagine9</label>
+                                                <label for="imageTitle9">Creatività:Titolo Post Immagine9</label>
                                                 <textarea id="imageTitle9" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 9"
                                                           name="imageTitle9"
@@ -779,7 +779,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage9">Descrizione Immagine9</label>
+                                                <label for="descriptionImage9">Creatività:Descrizione Immagine9</label>
                                                 <textarea id="descriptionImage9" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 9"
                                                           name="descriptionImage9"
@@ -788,7 +788,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl9">link Immagine6</label>
+                                                <label for="imageUrl9">Creatività:link Immagine6</label>
                                                 <textarea id="imageUrl9" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 9"
                                                           name="imageUrl9"
@@ -799,7 +799,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle10">Titolo Immagine10</label>
+                                                <label for="imageTitle10">Creatività:Titolo Post Immagine10</label>
                                                 <textarea id="imageTitle10" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine 10"
                                                           name="imageTitle6"
@@ -808,7 +808,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage10">Descrizione Immagine10</label>
+                                                <label for="descriptionImage10">Creatività:Descrizione Immagine10</label>
                                                 <textarea id="descriptionImage10" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 10"
                                                           name="descriptionImage10"
@@ -817,7 +817,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl10">link Immagine10</label>
+                                                <label for="imageUrl10">Creatività:link Immagine10</label>
                                                 <textarea id="imageUrl10" class="form-control"
                                                           placeholder="Inserisci il link per l'immagine 10"
                                                           name="imageUrl10"
@@ -830,7 +830,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postVideoTitle">Titolo Video</label>
+                                                <label for="postVideoTitle">Creatività:Titolo Video</label>
                                                 <textarea id="postVideoTitle" class="form-control"
                                                           placeholder="Inserisci il titolo per l'immagine "
                                                           name="postVideoTitle"
@@ -839,7 +839,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postDescriptionVideo">Descrizione Video</label>
+                                                <label for="postDescriptionVideo">Creatività:Descrizione Video</label>
                                                 <textarea id="postDescriptionVideo" class="form-control"
                                                           placeholder="Inserisci la descrizione per l'immagine 1"
                                                           name="postDescriptionVideo"
@@ -848,7 +848,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="video1">link Video</label>
+                                                <label for="video1">Creatività:link Video</label>
                                                 <textarea id="video1" class="form-control"
                                                           placeholder="Inserisci il link per il video " name="video"
                                                 ></textarea>
@@ -856,7 +856,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postVideoCallToAction">Seleziona la Call To Action</label>
+                                                <label for="postVideoCallToAction">Creatività:Seleziona la Call To Action</label>
                                                 <select id="postVideoCallToAction"
                                                         name="postVideoCallToAction" class="full-width selectpicker"
                                                         required="required"
@@ -2641,6 +2641,10 @@
                 selectable: true,
                 selectHelper: true,
                 editable: true,
+                eventClick: function (event) {
+                    var editorialPlanDetailId = event.id;
+                    window.location.href = '/blueseal/editorial/modifica-post/' + editorialPlanDetailId;
+                }
 
 
             });

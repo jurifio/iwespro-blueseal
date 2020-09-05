@@ -195,11 +195,14 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
                       $linkData = [
                           'message' => $editorialPlan->name,
-                          'name' => $title,
+                          'name' => $data['postImageTitle'],
                           'link' => $linkDestination,
-                          'description' => $description,
+                          'description' => $data['postImageDescription'],
                           'picture' => $photoUrl[0]
                       ];
+                  $editorialPlanDetailUpdate->postImageTitle=$data['postImageTitle'];
+                  $editorialPlanDetailUpdate->postImageUrl=$photoUrl[0];
+                  $editorialPlanDetailUpdate->postImageDescription=$data['postImageDescription'];
                       try {
                           $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
                       } catch (Facebook\Exceptions\FacebookResponseException $e) {
@@ -315,6 +318,10 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
                       }
                       $graphNode = $response->getGraphNode();
                       $imagehash = $graphNode['images']['bytes']['hash'];
+                      $editorialPlanDetailUpdate->postImageTitle=$data['postImageTitle'];
+                      $editorialPlanDetailUpdate->postImageUrl=$photoUrl[0];
+                      $editorialPlanDetailUpdate->postImageDescription=$data['postImageDescription'];
+                      $editorialPlanDetailUpdate->postImageHash=$imagehash;
 
 
                       try {

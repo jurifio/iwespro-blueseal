@@ -189,14 +189,17 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                 case '6':
                 case  '5':
 
-                if($data['type']=='') {
+                if($data['type']=='formInsert') {
                     $linkData = [
                         'message' => $editorialPlan->name,
-                        'name' => $title,
+                        'name' => $data['postImageTitle'],
                         'link' => $linkDestination,
-                        'description' => $description,
+                        'description' => $data['postImageDescription'],
                         'picture' => $photoUrl[0]
                     ];
+                    $editorialPlanDetailInsert->postImageTitle=$data['postImageTitle'];
+                    $editorialPlanDetailInsert->postImageUrl=$photoUrl[0];
+                    $editorialPlanDetailInsert->postDescriptionImage=$data['postDescriptionImage'];
                     try {
                         $response = $fb->post('/me/feed',$linkData,$pageAccessToken);
                     } catch (Facebook\Exceptions\FacebookResponseException $e) {
@@ -289,7 +292,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         $groupAdsName = $graphNode['id'];
                     }
 
-                    if($data['type']=='') {
+                    if($data['type']=='formInsert') {
                         $arrayPhotoHash = [];
                         $i = 0;
 
@@ -313,6 +316,10 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                         }
                         $graphNode = $response->getGraphNode();
                         $imagehash = $graphNode['images']['bytes']['hash'];
+                        $editorialPlanDetailInsert->postImageTitle=$data['postImageTitle'];
+                        $editorialPlanDetailInsert->postImageUrl=$photoUrl[0];
+                        $editorialPlanDetailInsert->postImageDescription=$data['postImageDescription'];
+                        $editorialPlanDetailInsert->postImageHash=$imagehash;
 
 
                         try {
@@ -441,7 +448,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
                         $groupAdsName = $graphNode['id'];
                     }
-                    if($data['type']=='') {
+                    if($data['type']=='formInsert') {
                         $arrayPhotoHash = [];
                         $i = 0;
 
