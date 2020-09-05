@@ -414,7 +414,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>
+                                            <label for="isVisibleEditorialPlanArgument">Tipo di Creatività Visibile</label>
                                             <input type="checkbox" id="isVisibleEditorialPlanArgument"
                                                    class="form-control"
                                                    placeholder="Visible" checked="true"
@@ -452,7 +452,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isEventVisible">Visibile</label>
+                                            <label for="isEventVisible">Titolo Evento Visibile</label>
                                             <input type="checkbox" id="isEventVisible" class="form-control"
                                                    placeholder="Visible" checked="true" name="isEventVisible"/>
                                         </div>
@@ -467,7 +467,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleDescription">Visibile</label>
+                                            <label for="isVisibleDescription">Descrizione Evento Visibile</label>
                                             <input type="checkbox" id="isVisibleDescription" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleDescription">
                                         </div>
@@ -495,7 +495,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleBodyEvent">Visibile</label>
+                                            <label for="isVisibleBodyEvent">Link Destinazione Visibile</label>
                                             <input type="checkbox" id="isVisibleBodyEvent" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleBodyEvent"/>
                                         </div>
@@ -882,7 +882,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleNote">Visibile</label>
+                                            <label for="isVisibleNote">Note Evento Visibili</label>
                                             <input type="checkbox" id="isVisibleNote" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleNote"/>
                                         </div>

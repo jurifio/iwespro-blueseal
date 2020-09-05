@@ -117,7 +117,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>
+                                            <label for="isVisibleEditorialPlanArgument">Tipo Creatività Visibile</label>
                                             <input type="checkbox" id="isVisibleEditorialPlanArgument"
                                                    class="form-control"
                                                    placeholder="Visible" checked="true"
@@ -155,7 +155,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isEventVisible">Visibile</label>
+                                            <label for="isEventVisible">Titolo Evento Visibile</label>
                                             <input type="checkbox" id="isEventVisible" class="form-control"
                                                    placeholder="Visible" checked="true" name="isEventVisible"/>
                                         </div>
@@ -170,7 +170,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleDescription">Visibile</label>
+                                            <label for="isVisibleDescription">Descrizione Evento Visibile</label>
                                             <input type="checkbox" id="isVisibleDescription" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleDescription">
                                         </div>
@@ -186,16 +186,33 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleBodyEvent">Visibile</label>
+                                            <label for="isVisibleBodyEvent"> Testo Evento Visibile</label>
                                             <input type="checkbox" id="isVisibleBodyEvent" class="form-control"
                                                    placeholder="Visible" checked="true" name="isVisibleBodyEvent"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="note">Note Evento</label>
+                                            <textarea id="note" cols="180" rows="10" name="note"
+                                                      placeholder="Inserisci le note"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="isVisibleNote">Note Evento Visibili</label>
+                                            <input type="checkbox" id="isVisibleNote" class="form-control"
+                                                   placeholder="Visible" checked="true" name="isVisibleNote"/>
+                                            <input type="hidden" id="userId" name="userId" value="<?php echo \Monkey::app()->getUser()->getId();?>"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="linkDestination">Creatività:Link Destinazione </label>
+                                            <label for="linkDestination">Link Destinazione </label>
                                             <textarea id="linkDestination" cols="180" rows="1"
                                                       placeholder="Inserisci  i link di destinazione"
                                                       name="linkDestination"></textarea>
@@ -218,7 +235,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isVisiblePhotoUrl">Visibile</label>
+                                                <label for="isVisiblePhotoUrl">Immagine Evento  Visibile</label>
                                                 <input type="checkbox" id="isVisiblePhotoUrl" class="form-control"
                                                        placeholder="Visible" checked="true" name="isVisiblePhotoUrl"/>
                                             </div>
@@ -594,23 +611,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="note">Note Evento</label>
-                                            <textarea id="note" cols="180" rows="10" name="note"
-                                                      placeholder="Inserisci le note"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleNote">Visibile</label>
-                                            <input type="checkbox" id="isVisibleNote" class="form-control"
-                                                   placeholder="Visible" checked="true" name="isVisibleNote"/>
-                                            <input type="hidden" id="userId" name="userId" value="<?php echo \Monkey::app()->getUser()->getId();?>"/>
-                                        </div>
-                                    </div>
-                                </div>
+
 
                             </div>
                         </div>

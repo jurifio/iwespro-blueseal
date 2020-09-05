@@ -179,19 +179,19 @@
                                         <input type="hidden" id='foisonSelectId' name="foisonSelectId" value="<?php echo $foisonId?>"/>
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="foisonId">Seleziona Operatore</label>
-                                            <?php    if($allShops){ ?>
-                                                <select id="foisonId"
+                                            <?php    if($allShops){
+                                                echo '<select id="foisonId"
                                                         name="foisonId" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione Operatore"
-                                                        data-init-plugin="selectize"></select>
-                                            <?php }else{?>
-                                                <select id="foisonId"
+                                                        data-init-plugin="selectize"></select>';
+                                             }else{
+                                                echo '<select id="foisonId"
                                                         name="foisonId" class="full-width selectpicker"
                                                         required="required"
                                                         placeholder="Selezione Operatore"
-                                                        data-init-plugin="selectize" disabled></select>
-                                            <?php }?>
+                                                        data-init-plugin="selectize" disabled></select>';
+                                             }?>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -208,21 +208,23 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <?php if($allShops) {
+                                    echo'<div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>
-                                            <?php if ($editorialPlanDetail->isVisibleEditorialPlanArgument == 1) {
+                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>';
+                                            if ($editorialPlanDetail->isVisibleEditorialPlanArgument == 1) {
                                                 $ischecked = ' checked="true"';
                                             } else {
                                                 $ischecked = '';
-                                            } ?>
-                                            <input type="checkbox" <?php echo $ischecked ?>
+                                            }
+                                            echo '<input type="checkbox"'.$ischecked.' 
                                                    id="isVisibleEditorialPlanArgument"
                                                    class="form-control"
                                                    placeholder="Visible"
                                                    name="isVisibleEditorialPlanArgument" ">
                                         </div>
-                                    </div>
+                                    </div>';
+                                    } ?>
                                     <div class="col-md-3">
                                         <div id="divSelecterCampaign">
                                             <div class="form-group form-group-default selectize-enabled">
@@ -508,19 +510,21 @@
                                                    required="required">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <?php if ($editorialPlanDetail->isEventVisible == 1) {
+                                    <?php if($allShops){
+                                    echo'<div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">';
+                                           if ($editorialPlanDetail->isEventVisible == 1) {
                                                 $ischecked = ' checked="true"';
                                             } else {
                                                 $ischecked = '';
-                                            } ?>
-                                            <label for="isEventVisible">Visibile</label>
-                                            <input type="checkbox" <?php echo $ischecked; ?> id="isEventVisible"
+                                            }
+                                            echo'<label for="isEventVisible">Visibile</label>
+                                            <input type="checkbox" '.$ischecked.' id="isEventVisible"
                                                    class="form-control"
                                                    placeholder="Visible" name="isEventVisible"/>
                                         </div>
-                                    </div>
+                                    </div>';
+                                           }?>
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="description">Descrizione Evento</label>
@@ -529,6 +533,7 @@
                                                    value="<?php echo $editorialPlanDetail->description ?> "/>
                                         </div>
                                     </div>
+                                    <?php if($allShops) {?>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="isVisibleDescription">Visibile</label>
@@ -542,6 +547,7 @@
                                                    name="isVisibleDescription">
                                         </div>
                                     </div>
+                                    <?php }?>
                                 </div>
 
                                 <div class="row">
@@ -552,6 +558,7 @@
                                                       placeholder="Inserisci il testo"><?php echo $editorialPlanDetail->bodyEvent ?></textarea>
                                         </div>
                                     </div>
+                                    <?php if($allShops) {?>
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <?php if ($editorialPlanDetail->isVisibleBodyEvent == 1) {
@@ -565,11 +572,39 @@
                                                    name="isVisibleBodyEvent"/>
                                         </div>
                                     </div>
+                                    <?php }?>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="linkDestination">Creatività:Link Destinazione</label>
+                                            <label for="note">Note Evento</label>
+                                            <textarea id="note" cols="180" rows="10" name="note"
+                                                      placeholder="Inserisci le note"><?php echo $editorialPlanDetail->note ?></textarea>
+                                        </div>
+                                    </div>
+                                    <?php if($allShops) { ?>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <?php if ($editorialPlanDetail->isVisibleNote == 1) {
+                                                $ischecked = ' checked="true"';
+                                            } else {
+                                                $ischecked = '';
+                                            } ?>
+                                            <label for="isVisibleNote">Visibile</label>
+                                            <input type="checkbox" id="isVisibleNote" class="form-control"
+                                                   placeholder="Visible" <?php echo $ischecked ?>
+                                                   name="isVisibleNote"/>
+                                        </div>
+                                    </div>
+                                    <?php }?>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Immagine Evento <?php echo '<img  width="50" src="' . $editorialPlanDetail->photoUrl . '"/>' ?>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="linkDestination">Link Destinazione</label>
                                             <input id="linkDestination" class="form-control"
                                                    placeholder="Inserisci la Destinazione " name="linkDestination"
                                                    value="<?php echo $editorialPlanDetail->linkDestination; ?>"/>
@@ -586,14 +621,14 @@
                                             <form id="dropzoneModal" class="dropzone" enctype="multipart/form-data"
                                                   id="photoUrl" name="photoUrl" action="POST">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="file">Creatività:Immagine
-                                                        Evento <?php echo '<img  width="50" src="' . $editorialPlanDetail->photoUrl . '"/>' ?></label>
+                                                    <label for="file">Creatività:Immagine</label>
                                                     <div class="fallback">
                                                         <input name="file" type="file" multiple/>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
+                                        <?php if($allShops) {?>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="isVisiblePhotoUrl">Visibile</label>
@@ -607,6 +642,7 @@
                                                        name="isVisiblePhotoUrl"/>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <?php if($editorialPlanDetail->editorialPlanArgumentId==8 || $editorialPlanDetail->editorialPlanArgumentId==5){
@@ -1033,28 +1069,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="note">Note Evento</label>
-                                            <textarea id="note" cols="180" rows="10" name="note"
-                                                      placeholder="Inserisci le note"><?php echo $editorialPlanDetail->note ?></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <?php if ($editorialPlanDetail->isVisibleNote == 1) {
-                                                $ischecked = ' checked="true"';
-                                            } else {
-                                                $ischecked = '';
-                                            } ?>
-                                            <label for="isVisibleNote">Visibile</label>
-                                            <input type="checkbox" id="isVisibleNote" class="form-control"
-                                                   placeholder="Visible" <?php echo $ischecked ?>
-                                                   name="isVisibleNote"/>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
