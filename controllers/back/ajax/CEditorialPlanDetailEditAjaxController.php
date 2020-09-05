@@ -55,6 +55,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
           $startEventDate = $data['start'];
           $endEventDate = $data['end'];
           $argument = $data['argument'];
+          $fason=$data['fason'];
           $linkDestination = $data['linkDestination'];
           $facebookCampaignId = $data['facebookCampaignId'];
           $lifetime_budget = $data['lifetime_budget'];
@@ -820,7 +821,9 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
               if ($isNewAdSet != '0') {
                   $editorialPlanDetailUpdate->groupInsertionId = $groupAdsName;
               }
-              $editorialPlanDetailUpdate->userId=$data['userId'];
+          $findFoison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$data['foison']]);
+          $userId=$findFoison->userId;
+              $editorialPlanDetailUpdate->userId=$userId;
               $editorialPlanDetailUpdate->update();
 
 
@@ -845,7 +848,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
               $argumentName = $editorialPlanArgument->titleArgument;
               /** @var Ceditorial $to */
               $to = $shopEmail;
-              $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$data['userId']]);
+              $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$userId]);
               $userEditor=[$userFind->email];
               $editorialPlanName = $editorialPlan->name;
               $subject = "Modifica  Dettaglio Piano Editoriale";

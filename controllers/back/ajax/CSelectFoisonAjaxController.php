@@ -35,7 +35,7 @@ class CSelectFoisonAjaxController extends AAjaxController
         $foisons=\Monkey::app()->repoFactory->create('Foison')->findAll();
             foreach ($foisons as $foison) {
 
-                array_push($collectFoison,['id'=>$foison->id,'name'=>$foison->name.' '.$foison->surname]);
+                array_push($collectFoison,['id'=>$foison->id,'name'=>$foison->name.' '.$foison->surname,'rank'=>$foison->rank]);
             }
 
         return json_encode($collectFoison);

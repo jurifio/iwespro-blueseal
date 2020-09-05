@@ -395,6 +395,15 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
+                                            <label for="foisonId">Seleziona Operatore</label>
+                                            <select id="foisonId"
+                                                    name="foisonId" class="full-width selectpicker"
+                                                    placeholder="Selezione Operatore"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
                                             <select id="editorialPlanArgumentId"
                                                     name="editorialPlanArgumentId" class="full-width selectpicker"
@@ -403,7 +412,7 @@
                                                     data-init-plugin="selectize"></select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="isVisibleEditorialPlanArgument">Visibile</label>
                                             <input type="checkbox" id="isVisibleEditorialPlanArgument"
@@ -412,7 +421,7 @@
                                                    name="isVisibleEditorialPlanArgument" ">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div id="divSelecterCampaign" class="hide">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="selecterCampaign">Seleziona Operazione su </label>
@@ -937,9 +946,26 @@
                             labelField: 'name',
                             searchField: 'name',
                             options: res2,
+                            render: {
+                                item: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.startDate) + ' | ' + escape(item.endDate) + '</span>' +
+                                        '</div>'
+                                },
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.startDate) + ' | ' + escape(item.endDate) + '</span>' +
+                                        '</div>'
+                                }
+                            },
+                            onInitialize: function () {
+                                var selectize = this;
+                                selectize.setValue($('#editorialPlanSelectId').val());
+                            }
                         });
                     });
-
 
                     $.ajax({
                         method: 'GET',
@@ -956,7 +982,43 @@
                             valueField: 'id',
                             labelField: 'name',
                             searchField: 'name',
-                            options: res2,
+                            options: res2
+                        });
+                    });
+
+                    $.ajax({
+                        method: 'GET',
+                        url: '/blueseal/xhr/SelectFoisonAjaxController',
+                        data: {
+                            table: 'Foison'
+                        },
+                        dataType: 'json'
+                    }).done(function (res3) {
+                        var select = $('#foisonId');
+                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                        select.selectize({
+                            valueField: 'id',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: res3,
+                            render: {
+                                item: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.rank) + '</span>' +
+                                        '</div>'
+                                },
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                                        '<span class="caption">' + escape(item.rank) + '</span>' +
+                                        '</div>'
+                                }
+                            },
+                            onInitialize: function () {
+                                var selectize = this;
+                                selectize.setValue($('#foisonSelectId').val());
+                            }
                         });
                     });
                     var editorialPlanSocialSelected = '';
@@ -980,6 +1042,7 @@
                                 options: res2,
                             });
                         });
+
                     });
                     $('#selecterCampaign').change(function () {
                         var selecterTypeOperation = $(this).val();
@@ -1376,6 +1439,7 @@
                             postVideoTitle:$('#postVideoTitle').val(),
                             postDescriptionVideo:$('#postDescriptionVideo').val(),
                             postVideoCallToAction: $('#postVideoCallToAction').val(),
+                            foisonId:$('#foisonId').val(),
                             video1:$('#video1').val(),
                             typeAdd:'formCalendar',
 

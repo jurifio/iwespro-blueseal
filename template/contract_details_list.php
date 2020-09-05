@@ -76,7 +76,7 @@
     <bs-toolbar-group data-group-label="Gestione dettagli contratti">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-check"
+                data-icon="fa-plus"
                 data-permission="/admin/content/add"
                 data-event="bs-contract-detail-add"
                 data-class="btn btn-default"
@@ -89,7 +89,7 @@
     <bs-toolbar-group data-group-label="Accetta contratto">
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-plus"
+                data-icon="fa-check"
                 data-permission="worker"
                 data-event="bs-contract-detail-accept"
                 data-class="btn btn-default"

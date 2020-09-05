@@ -156,7 +156,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
                                             <?php    if($allShops){ ?>
@@ -174,7 +174,27 @@
                                             <?php }?>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
+                                        <input type="hidden" id='contractSelectId' name="contractSelectId" value="<?php echo $contractId?>"/>
+                                        <input type="hidden" id='foisonSelectId' name="foisonSelectId" value="<?php echo $foisonId?>"/>
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="foisonId">Seleziona Operatore</label>
+                                            <?php    if($allShops){ ?>
+                                                <select id="foisonId"
+                                                        name="foisonId" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione Operatore"
+                                                        data-init-plugin="selectize"></select>
+                                            <?php }else{?>
+                                                <select id="foisonId"
+                                                        name="foisonId" class="full-width selectpicker"
+                                                        required="required"
+                                                        placeholder="Selezione Operatore"
+                                                        data-init-plugin="selectize" disabled></select>
+                                            <?php }?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanArgumentId">Argomento Evento</label>
                                             <select id="editorialPlanArgumentId"

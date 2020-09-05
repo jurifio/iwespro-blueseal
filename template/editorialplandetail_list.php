@@ -35,6 +35,10 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="col-md-2"style="border: 1px solid #a7a7a752; margin: 7px">
+                             <input type="hidden" id='contractSelectId' name="contractSelectId" value="<?php echo $contractId?>"/>
+                            <input type="hidden" id='foisonSelectId' name="foisonSelectId" value="<?php echo $foisonId?>"/>
+                            <input type="hidden" id='editorialPlanSelectId' name="editorialPlanSelectId" value="<?php echo $editorialPlan->id?>"/>
+
                             <div id='editorialPlanName'><b>Piano:</b><?php echo $editorialPlan->name; ?></div>
                         </div>
                         <div class="col-md-2"style="border: 1px solid #a7a7a752; margin: 7px">

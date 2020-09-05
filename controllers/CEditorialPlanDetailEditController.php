@@ -149,6 +149,17 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
         $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
          /** @var CEditorialPlanSocial $editorialPlanSocial */
          $editorialPlanSocial=$ePlanSocialRepo->findAll();
+        $contractId=$editorialPlan->contractId;
+        $contractsRepo=\Monkey::app()->repoFactory->create('Contracts');
+        $contracts=$contractsRepo->findOneBy(['id'=>$editorialPlan->contractId]);
+        if(count($contracts)>0){
+
+            $foisonId=$contracts->foisonId;
+
+        }else{
+            $contractId='';
+            $foisonId='';
+        }
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/editorialplandetail_edit.php');
@@ -162,6 +173,8 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
             'adSetSelected'=>$adSetSelected,
             'nameAdSetSelected'=>$nameAdSetSelected,
             'allShops'=>$allShops,
+            'contractId'=>$contractId,
+            'foisonId'=>$foisonId,
             'sidebar' => $this->sidebar->build()
 
         ]);

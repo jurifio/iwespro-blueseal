@@ -823,7 +823,9 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             if ($isNewAdSet != '0') {
                 $editorialPlanDetailInsert->groupInsertionId = $groupAdsName;
             }
-            $editorialPlanDetailInsert->userId=$this->app->getUser()->getId();
+            $findFoison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$data['foisonId']]);
+            $userId=$findFoison->userId;
+            $editorialPlanDetailInsert->userId=$userId;
             $editorialPlanDetailInsert->smartInsert();
 
 
@@ -848,7 +850,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $argumentName = $editorialPlanArgument->titleArgument;
             /** @var Ceditorial $to */
             $to = $shopEmail;
-            $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$this->app->getUser()->getId()]);
+            $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$userId]);
             $userEditor=[$userFind->email];
             $editorialPlanName = $editorialPlan->name;
             $subject = "Creazione Nuovo Dettaglio Piano Editoriale";

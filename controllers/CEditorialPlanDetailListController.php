@@ -37,10 +37,27 @@ class CEditorialPlanDetailListController extends ARestrictedAccessRootController
         //trovi il piano editoriale
         /** @var ARepo $ePlanRepo */
         $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
+        /** @var ARepo contractsRepo */
+
+
 
         /** @var CEditorialPlan $editorialPlan */
         $editorialPlan = $ePlanRepo->findOneBy(['id'=>$editorialPlanId]);
+        $contractId=$editorialPlan->contractId;
+        $contractsRepo=\Monkey::app()->repoFactory->create('Contracts');
+        $contracts=$contractsRepo->findOneBy(['id'=>$editorialPlan->contractId]);
+        if(count($contracts)>0){
+
+            $foisonId=$contracts->foisonId;
+
+        }else{
+            $contractId='';
+            $foisonId='';
+        }
+
+
         /** @var aRepo $ePlanSocialRepo */
+
         $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
          /** @var CEditorialPlanSocial $editorialPlanSocial */
          $editorialPlanSocial=$ePlanSocialRepo->findAll();
@@ -53,6 +70,8 @@ class CEditorialPlanDetailListController extends ARestrictedAccessRootController
             'page'=>$this->page,
             'sidebar' => $this->sidebar->build(),
             'editorialPlan'=> $editorialPlan,
+            'contractId'=>$contractId,
+            'foisonId'=>$foisonId,
             'editorialPlanSocial'=>$editorialPlanSocial,
 
         ]);

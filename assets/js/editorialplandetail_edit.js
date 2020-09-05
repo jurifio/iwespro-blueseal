@@ -3,7 +3,9 @@
     var campaignSelected = $('#facebookCampaignId').val();
     var groupInsertionId = $('#groupInsertionId').val();
     var socialPlanId = $('#socialPlanIdSelected').val();
+
     Pace.ignore(function () {
+
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -161,7 +163,7 @@
             },
             dataType: 'json'
         }).done(function (res2) {
-            var select = $('#socialPlanId');
+            let select = $('#socialPlanId');
             if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
             select.selectize({
                 valueField: 'id',
@@ -184,6 +186,41 @@
                 }, onInitialize: function () {
                     let selectize = this;
                     selectize.setValue(socialPlanId);
+                }
+            });
+        });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/SelectFoisonAjaxController',
+            data: {
+                table: 'Foison'
+            },
+            dataType: 'json'
+        }).done(function (res3) {
+            var foison=$('#foisonSelectId').val();
+            var select = $('#foisonId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res3,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.rank) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.rank) + '</span>' +
+                            '</div>'
+                    }
+                }, onInitialize: function () {
+                    let selectize = this;
+                    selectize.setValue(foison);
                 }
             });
         });
@@ -586,6 +623,7 @@ $(document).on('bs.post.update', function () {
             userId:$('#userId').val(),
             video1:$('#video1').val(),
             groupInsertionId:$('#groupInsertionId').val(),
+            fason:$('#fasonId').val(),
 
 
 

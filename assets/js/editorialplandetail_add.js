@@ -4,7 +4,7 @@
     Pace.ignore(function () {
         $.ajax({
             method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
+            url: '/blueseal/xhr/SelectEditorialPlanAjaxController',
             data: {
                 table: 'EditorialPlan'
             },
@@ -17,8 +17,23 @@
                 labelField: 'name',
                 searchField: 'name',
                 options: res2,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.foisonName) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.foisonName) + '</span>' +
+                            '</div>'
+                    }
+                }
             });
         });
+
         $.ajax({
             method: 'GET',
             url: '/blueseal/xhr/GetTableContent',
@@ -36,6 +51,37 @@
                 options: res2,
             });
         });
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/SelectFoisonAjaxController',
+            data: {
+                table: 'Foison'
+            },
+            dataType: 'json'
+        }).done(function (res3) {
+            var select = $('#foisonId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res3,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.rank) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">' + escape(item.rank) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
 
 
 
@@ -43,6 +89,25 @@
 
 
     });
+    var editorialPlanIdSelected='';
+    $('#editorialPlanId').on('change',function(){
+        editorialPlanIdSelected=$(this).val();
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/SelectEditorialPlanFilteredAjaxController',
+            data: {
+                editorialPlanIdSelected: editorialPlanIdSelected
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            if (res2!=''){
+                var $select = $('#foisonId').selectize();
+                var selectize = $select[0].selectize;
+                selectize.setValue(res2);
+            }
+        })
+    });
+
     var editorialPlanSocialSelected='';
     $('#socialPlanId').on('change',function(){
         editorialPlanSocialSelected=$(this).val();
@@ -64,6 +129,10 @@
                 options: res2,
             });
         });
+    })
+    $('#editorialPlanId').change(function(){
+
+
     })
 $('#editorialPlanArgumentId').change(function(){
    if($('#editorialPlanArgumentId').val()==5 || $('#editorialPlanArgumentId').val()==8 || $('#editorialPlanArgumentId').val()==9  || $('#editorialPlanArgumentId').val()==10){
@@ -494,6 +563,7 @@ $(document).on('bs.post.save', function () {
             postVideoCallToAction: $('#postVideoCallToAction').val(),
             userId:$('#userId').val(),
             video1:$('#video1').val(),
+            foisonId:$('#foisonId').val(),
             type:'formInsert'
 
         };
