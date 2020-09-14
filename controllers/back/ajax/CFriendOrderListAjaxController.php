@@ -233,7 +233,7 @@ class CFriendOrderListAjaxController extends AAjaxController
             }
             $invoice=$invoiceRepo->findOneBy(['orderId'=>$v->orderId,'invoiceSiteChar'=>'TP']);
             if($invoice){
-                $response['data'][$i]['invoiceNumber']=  "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoice->id . "&invoiceShopId=" . $invoice->invoiceShopId . "'>" . $invoice->invoiceNumber . "/" . $invoice->invoiceType . "</a><br />";
+                $response['data'][$i]['invoiceAll']=  "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoice->id . "&invoiceShopId=" . $invoice->invoiceShopId . "'>" . $invoice->invoiceNumber . "/" . $invoice->invoiceType . "</a><br />";
             }
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) {
