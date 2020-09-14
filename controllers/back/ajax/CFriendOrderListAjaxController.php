@@ -231,10 +231,6 @@ class CFriendOrderListAjaxController extends AAjaxController
                 $response['data'][$i]['invoiceAll'] .= $document->number . ' (id:' . $document->id . ')<br />';
                 $response['data'][$i]['invoiceNumber'] = $document->number . ' (id:' . $document->id . ')';
             }
-            $invoice=$invoiceRepo->findOneBy(['orderId'=>$v->orderId,'invoiceSiteChar'=>'TP']);
-            if($invoice!=null){
-                $response['data'][$i]['invoiceAll']=  "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoice->id . "&invoiceShopId=" . $invoice->invoiceShopId . "'>" . $invoice->invoiceNumber . "/" . $invoice->invoiceType . "</a><br />";
-            }
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) {
                 $response['data'][$i]['invoiceAll'] .= 'Reso: ' . $creditNote->number . ' (id:' . $creditNote->id . ')<br />';
