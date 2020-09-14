@@ -159,6 +159,7 @@ class CFriendOrderListAjaxController extends AAjaxController
 
         $lR = \Monkey::app()->repoFactory->create('Log');
         $orderLineStatuses = \Monkey::app()->repoFactory->create('OrderLineStatus')->findAll()->toArray();
+        $invoiceRepo=\Monkey::app()->repoFactory->create('Invoice');
         foreach ($orderLineStatuses as $k => $v) {
             $orderLineStatuses[$k] = $v->toArray();
         }
@@ -229,6 +230,10 @@ class CFriendOrderListAjaxController extends AAjaxController
             if ($document) {
                 $response['data'][$i]['invoiceAll'] .= $document->number . ' (id:' . $document->id . ')<br />';
                 $response['data'][$i]['invoiceNumber'] = $document->number . ' (id:' . $document->id . ')';
+            }
+            $invoice=$invoiceRepo->findOneBy(['orderId'=>$v->orderId,'invoiceSiteChar'=>'TP']);
+            if($invoice){
+                $response['data'][$i]['invoiceNumber']=  "<a target='_blank' href='/blueseal/xhr/InvoiceOnlyPrintAjaxController?orderId=" . $invoice->id . "&invoiceShopId=" . $invoice->invoiceShopId . "'>" . $invoice->invoiceNumber . "/" . $invoice->invoiceType . "</a><br />";
             }
             $creditNote = $olR->getFriendCreditNote($v);
             if ($creditNote) {
