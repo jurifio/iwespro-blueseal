@@ -20,7 +20,7 @@ $(document).on('bs-close-shooting', function () {
         bookings.push(v.c_bookingId);
     });
 
-    let bsModal = new $.bsModal('Cancella gli shooting', {
+    let bsModal = new $.bsModal('Chiudi gli shooting', {
         body: '<p>Sei sicuro di voler chiudere gli shooting selezionati?</p>'
     });
 
