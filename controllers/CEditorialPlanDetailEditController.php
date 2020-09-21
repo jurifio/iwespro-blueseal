@@ -56,6 +56,7 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
         $editorialPlanDetailRepo=\Monkey::app()->repoFactory->create('EditorialPlanDetail');
         $editorialPlanDetailId =  \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $editorialPlanDetail=$editorialPlanDetailRepo->findOneBy(['id'=>$editorialPlanDetailId]);
+        $controlForApp=preg_match('/scatto Social/',$editorialPlanDetail->title);
         $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
         if (ENV == 'dev') {
             require '/media/sf_sites/vendor/mailgun/vendor/autoload.php';
@@ -77,6 +78,7 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
 
 
         $editorialPlan=\Monkey::app()->repoFactory->create('EditorialPlan')->findOneBy(['id'=>$editorialPlanDetail->editorialPlanId]);
+
         $facebookMarketAccountId=$editorialPlan->facebookMarketAccountId;
         $editorialPlanShopAsSocial = \Monkey::app()->repoFactory->create('EditorialPlanShopAsSocial')->findOneBy(['shopId' => $editorialPlan->shopId]);
         $pageAccessToken = $editorialPlanShopAsSocial->access_token;
@@ -87,62 +89,69 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
             $fbConfig['app_secret'],
             $_SESSION['facebook_access_token'] // Your user access token
         );
-        $account = new AdAccount($adAccountId);
-        $params = array(
-            'limit' => 500,
-        );
-        $fields = array(
-            CampaignFields::NAME, /* <--- this is the error */
-            CampaignFields::OBJECTIVE,
-            CampaignFields::STATUS,
-            CampaignFields::BUYING_TYPE,
-            CampaignFields::LIFETIME_BUDGET,
+        if($controlForApp==0) {
+            $account = new AdAccount($adAccountId);
+            $params = array(
+                'limit' => 500,
+            );
+            $fields = array(
+                CampaignFields::NAME, /* <--- this is the error */
+                CampaignFields::OBJECTIVE,
+                CampaignFields::STATUS,
+                CampaignFields::BUYING_TYPE,
+                CampaignFields::LIFETIME_BUDGET,
 
 
-        );
-        $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status','buying_type','lifetime_budget']);
-        $campaignList=[];
+            );
+            $cursor = $account->getCampaigns(['id','name','objective','buying_type','effective_status','buying_type','lifetime_budget']);
+            $campaignList = [];
 // Loop over objects
-        $campaignSelected='';
-        $nameCampaignSelected='';
-        if($cursor!=null) {
-            foreach ($cursor as $campaign) {
-                $nameCampaign = $campaign->{CampaignFields::NAME};
-                $idCampaign = $campaign->{CampaignFields::ID};
-                $objective = $campaign->{CampaignFields::OBJECTIVE};
-                $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
-                $lifetime_budget = $campaign->{CampaignFields::LIFETIME_BUDGET};
-                $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
-                if($idCampaign==$editorialPlanDetail->facebookCampaignId){
-                    $campaignSelected=$idCampaign;
-                    $nameCampaignSelected=$nameCampaign;
+            $campaignSelected = '';
+            $nameCampaignSelected = '';
+            if ($cursor != null) {
+                foreach ($cursor as $campaign) {
+                    $nameCampaign = $campaign->{CampaignFields::NAME};
+                    $idCampaign = $campaign->{CampaignFields::ID};
+                    $objective = $campaign->{CampaignFields::OBJECTIVE};
+                    $buying_type = $campaign->{CampaignFields::BUYING_TYPE};
+                    $lifetime_budget = $campaign->{CampaignFields::LIFETIME_BUDGET};
+                    $effective_status = $campaign->{CampaignFields::EFFECTIVE_STATUS};
+                    if ($idCampaign == $editorialPlanDetail->facebookCampaignId) {
+                        $campaignSelected = $idCampaign;
+                        $nameCampaignSelected = $nameCampaign;
+                    }
                 }
             }
-        }
-        $adSetSelected='';
-        $nameAdSetSelected='';
-        $adSetList=[];
-        $adsets = $account->getAdSets(array(
-            AdSetFields::NAME,
-            AdSetFields::CONFIGURED_STATUS,
-            AdSetFields::EFFECTIVE_STATUS,
-            AdSetFields::CAMPAIGN_ID,
-            AdSetFields::ID,
-        ));
+            $adSetSelected = '';
+            $nameAdSetSelected = '';
+            $adSetList = [];
+            $adsets = $account->getAdSets(array(
+                AdSetFields::NAME,
+                AdSetFields::CONFIGURED_STATUS,
+                AdSetFields::EFFECTIVE_STATUS,
+                AdSetFields::CAMPAIGN_ID,
+                AdSetFields::ID,
+            ));
 // Loop over objects
-        if($adsets!=null) {
-            foreach ($adsets as $adset) {
-                $nameAdSet = $adset->{AdSetFields::NAME};
-                $idAdSet = $adset->{AdSetFields::ID};
-                $status=$adset->{AdSetFields::EFFECTIVE_STATUS};
-                $campaignId=$adset->{AdSetFields::CAMPAIGN_ID};
-                if($idAdSet==$editorialPlanDetail->groupInsertionId) {
-                   $adSetSelected=$idAdSet;
-                   $nameAdSetSelected=$nameAdSet;
+            if ($adsets != null) {
+                foreach ($adsets as $adset) {
+                    $nameAdSet = $adset->{AdSetFields::NAME};
+                    $idAdSet = $adset->{AdSetFields::ID};
+                    $status = $adset->{AdSetFields::EFFECTIVE_STATUS};
+                    $campaignId = $adset->{AdSetFields::CAMPAIGN_ID};
+                    if ($idAdSet == $editorialPlanDetail->groupInsertionId) {
+                        $adSetSelected = $idAdSet;
+                        $nameAdSetSelected = $nameAdSet;
+                    }
                 }
+            } else {
+                $adSetList[] = ['idAdSet' => '0','nameAdSet' => '0','status' => '0','error' => '1'];
             }
         }else{
-            $adSetList[] = ['idAdSet' => '0','nameAdSet' => '0','status'=>'0','error' => '1'];
+            $campaignSelected = '';
+            $nameCampaignSelected = '';
+            $adSetSelected='';
+            $nameAdSetSelected='';
         }
 
         /** @var aRepo $ePlanSocialRepo */
