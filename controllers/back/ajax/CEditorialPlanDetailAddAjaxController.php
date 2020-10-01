@@ -183,11 +183,12 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
 
             switch ($argument) {
                 case '4':
-
+                case '11':
 
                     break;
                 case '6':
                 case  '5':
+
 
                 if($data['type']=='formInsert') {
                     $linkData = [
