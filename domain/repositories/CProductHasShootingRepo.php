@@ -61,7 +61,6 @@ class CProductHasShootingRepo extends ARepo
                 }
 
             }
-
             $productId = explode('-',$productsId)[0];
             $productVariantId = explode('-',$productsId)[1];
 
