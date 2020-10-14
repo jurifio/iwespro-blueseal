@@ -35,24 +35,25 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
 //definisco l'ambiente di sviluppo
         if (ENV == 'dev') {
+            $ftp_server = '192.168.1.155';
             $pathlocal = '/media/sf_sites/iwespro/temp-remaster/';
             $save_to = '/media/sf_sites/iwespro/temp-remaster/';
             $save_to_dir = '/media/sf_sites/iwespro/temp-remaster';
-            $path = 'shootImport/incoming2';
+            $path = 'shootImport/resize';
             $remotepathTodo = 'shootImport/newage2/topublish_dev/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
 
         } else {
+            $ftp_server = 'fiber.office.iwes.it';
             $pathlocal = '/home/iwespro/public_html/temp-remaster/';
             $save_to = '/home/iwespro/public_html/temp-remaster/';
             $save_to_dir = '/home/iwespro/public_html/temp-remaster';
-            $path = 'shootImport/incoming';
+            $path = 'shootImport/resize';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
         }
-        $ftp_server = 'fiber.office.iwes.it';
         $ftp_server_port = "21";
         $ftp_user_name = 'jobimages';
         $ftp_user_pass = "cartne01";
@@ -86,16 +87,13 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
                     $localDirectory = $save_to_dir . $item;
                     if (!file_exists($localDirectory)) {
-                        mkdir($localDirectory);
+                        mkdir($localDirectory,0777, true);
                     }
                     if (!file_exists($localDirectory . '/' . $resultdate)) {
                         mkdir($localDirectory . '/' . $resultdate);
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
-                    copy($pathlocal . 'destination1125X1500.jpg', $remotetoLocalDirectory . '/destination1125X1500.jpg');
-                    copy($pathlocal . 'destination1200X1500.jpg', $remotetoLocalDirectory . '/destination1200X1500.jpg');
-                    copy($pathlocal . 'destination1200X1500.jpg', $remotetoLocalDirectory . '/destination1200X1600.jpg');
-                    copy($pathlocal . 'destination2000X2500.jpg', $remotetoLocalDirectory . '/destination2000X2500.jpg');
+
 
                     $folder = $item . '/' . $resultdate;
                     $directorypathArr = explode(DIRECTORY_SEPARATOR, $item);
@@ -164,118 +162,179 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
                     $source = $remotetoLocalDirectory . '/' . $filenametoextrat;
 
-                    /** @var   \bamboo\core\db\pandaorm\repositories\CRepo $repoShop */
-                    $repoShop = \Monkey::app()->repoFactory->create('Shop')->findAll();
-                    foreach ($repoShop as $stringitems) {
-                        $stringitem = $stringitems->name;
-                        if ($stringitem == 'pickyshop') {
-                            continue;
-                        } else {
-                            if (strpos($source, $stringitem) !== false) {
 
+                    $renameImage=1;
 
-                                /** @var integer $shopId */
-                                $shopId = $stringitems->id;
-                            } else {
-                                continue;
-                            }
-                        }
-
-
-                    }
-
-                    $repoDictionaryImageSizeRepo = \Monkey::app()->repoFactory->create('DictionaryImageSize')->findOneBy(['shopId' => $shopId]);
-                    \Monkey::app()->applicationLog('CdictionaryRemasterImageSizeJob', 'Report', 'ShopId in Remaster Image', "ShopId defined" . $shopId);
-                    $emptyZero = $repoDictionaryImageSizeRepo->emptyZero;
-                    $renameImage = $repoDictionaryImageSizeRepo->renameAction;
-                    if ($renameImage == 1) {
-                        if ($emptyZero != 1) {
-                            $sectional = substr($imagetoWork, -7, 3) . '.jpg';
-                            $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
-                        } else {
-                            $sectional = '00' . substr($imagetoWork, -5, 1) . '.jpg';
-                            $imagetoWorkName = substr($filename, 0, -4) . '_' . $sectional;
-                        }
-                    } else {
 
                         $imagetoWorkName =$filename;
-                    }
 
-                    $PuntoCopiaX = 0;
-                    $PuntoCopiaY = 0;
-                    $LarghezzaCopia = $repoDictionaryImageSizeRepo->widthImage;
-                    $AltezzaCopia = $repoDictionaryImageSizeRepo->heightImage;
-                    $divisoreX = $repoDictionaryImageSizeRepo->divisionByX;
-                    $divisoreY = $repoDictionaryImageSizeRepo->divisionByY;
-                    $percentualeVariazioneLarghezza = $repoDictionaryImageSizeRepo->widthPercentageVariation;
-                    $percentualeVariazioneAltezza = $repoDictionaryImageSizeRepo->heightPercentageVariation;
-                    $destination = $remotetoLocalDirectory . '/' . $repoDictionaryImageSizeRepo->destinationfile;
-                    $useDivision = $repoDictionaryImageSizeRepo->useDivision;
+
+
                     $NomeFile = $source;// carica il file
-//$percentualeVariazione = 1.8; //definisce la percentuale di variazione,se superiore 1 ingrandisce
-// legge dimensioni dell'immagine
+
                     $infoImage = getimagesize($NomeFile);
-//echo "larghezza = ".$infoImage[0]; // larghezza
-//echo "altezza = ".$infoImage[1]; // altezza
-// calcola ingrandimento o riduzione
-                    $larghezzaNEW = $LarghezzaCopia * $percentualeVariazioneLarghezza;
-                    $altezzaNEW = $AltezzaCopia * $percentualeVariazioneAltezza;
-//  misure per il centraggio dell'immagine
-                    if ($useDivision == 1) {
-                        $PuntoDestinazioneX = ($larghezzaNEW-$infoImage[0]) / $divisoreX;
-                        $PuntoDestinazioneY = ( $altezzaNEW-$infoImage[1]) / $divisoreY;
-                    } else {
-                        $PuntoDestinazioneX = $repoDictionaryImageSizeRepo->destinationXPoint;
-                        $PuntoDestinazioneY = $repoDictionaryImageSizeRepo->destinationYPoint;
-                    }
+
+
                     if ($renameImage == 1) {
                         ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
                     }else{
                         ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
                     }
+                    //nuova procudura
 
-// costruisce immagine per adesso vuota
-                    $Immagine_destinazione = imagecreatetruecolor($larghezzaNEW, $altezzaNEW);
-                    $Immagine_destinazione = imagecolorallocate($Immagine_destinazione, 255, 255, 255);
-// immagine originaria 'smiley.jpg' come destinazione
-                    $Immagine_destinazione = imagecreatefromjpeg($destination);
-                    $Immagine_Origine = imagecreatefromjpeg($NomeFile);
-// a questo punto $Immagine_destinazione e $Immagine_destinazione sono identiche
-// esegue la funzione
-                    imagecopyresampled($Immagine_destinazione, $Immagine_Origine,
-                        $PuntoDestinazioneX, $PuntoDestinazioneY,
-                        $PuntoCopiaX, $PuntoCopiaY,
-                        $larghezzaNEW, $altezzaNEW,
-                        $LarghezzaCopia, $AltezzaCopia
-                    );
+                    $img = imagecreatefromjpeg($source);
+
+//find the size of the borders
+                    $b_top = 0;
+                    $b_btm = 0;
+                    $b_lft = 0;
+                    $b_rt = 0;
+
+//top
+                    for(; $b_top < imagesy($img); ++$b_top) {
+                        for($x = 0; $x < imagesx($img); ++$x) {
+                            if(imagecolorat($img, $x, $b_top) != 0xFFFFFF) {
+                                break 2; //out of the 'top' loop
+                            }
+                        }
+                    }
+
+//bottom
+                    for(; $b_btm < imagesy($img); ++$b_btm) {
+                        for($x = 0; $x < imagesx($img); ++$x) {
+                            if(imagecolorat($img, $x, imagesy($img) - $b_btm-1) != 0xFFFFFF) {
+                                break 2; //out of the 'bottom' loop
+                            }
+                        }
+                    }
+
+//left
+                    for(; $b_lft < imagesx($img); ++$b_lft) {
+                        for($y = 0; $y < imagesy($img); ++$y) {
+                            if(imagecolorat($img, $b_lft, $y) != 0xFFFFFF) {
+                                break 2; //out of the 'left' loop
+                            }
+                        }
+                    }
+
+//right
+                    for(; $b_rt < imagesx($img); ++$b_rt) {
+                        for($y = 0; $y < imagesy($img); ++$y) {
+                            if(imagecolorat($img, imagesx($img) - $b_rt-1, $y) != 0xFFFFFF) {
+                                break 2; //out of the 'right' loop
+                            }
+                        }
+                    }
+
+//copy the contents, excluding the border
+                    $newimg = imagecreatetruecolor(
+                        imagesx($img)-($b_lft+$b_rt), imagesy($img)-($b_top+$b_btm));
+
+//copy the contents, excluding the border
+                    $targetImage = imagecreatetruecolor( imagesx($img)-($b_lft+$b_rt), imagesy($img)-($b_top+$b_btm));
+                    $width=imagesx($img)-($b_lft+$b_rt);
+                    $height=imagesy($img)-($b_top+$b_btm);
+                    imagecopy($targetImage, $img, 0, 0, $b_lft, $b_top, imagesx($targetImage), imagesy($targetImage));
+                    if($height>($width+($height/100*21.5))){
+                        $type='v';
+                    }else{
+                        $type='o';
+                    }
+
+
+
+
+                    if($type=='v'){
+                        $targetImage = imagecreatetruecolor( imagesx($img)-($b_lft+$b_rt), imagesy($img)-($b_top+$b_btm));
+                        $width=imagesx($img)-($b_lft+$b_rt);
+                        $height=imagesy($img)-($b_top+$b_btm);
+
+                        imagecopy($targetImage, $img, 0, 0, $b_lft, $b_top, imagesx($targetImage), imagesy($targetImage));
+                        /*header("Content-Type: image/jpeg");
+                        imagejpeg($targetImage);*/
+                        $ratioHeight=$height/1300;
+                        $newHeight=$height/$ratioHeight;
+                        $newWidth=$width/$ratioHeight;
+                        $newImage=imagescale($targetImage,$newWidth,$newHeight);
+
+
+                        $destination1 = imagecreatetruecolor(1125, 1500);
+                        /*
+                        $dst_x=(1125-imagesx($targetImage))/2;
+                        $dst_y=1500-imagesy($targetImage)-173;*/
+                        $dst_x=(1125-$newWidth)/2;
+                        $dst_y=(1500-$newHeight)-130;
+
+                        $color = imagecolorallocate($targetImage, 255, 255, 255);
+// fill entire image
+                        imagefill($destination1, 0, 0, $color);
+                        imagecopy($destination1, $newImage, $dst_x, $dst_y, 0, 0,$newWidth, $newHeight);
+
+
+
+                    }else {
+
+                        $targetImage = imagecreatetruecolor(imagesx($img) - ($b_lft + $b_rt),imagesy($img) - ($b_top + $b_btm));
+                        $width = imagesx($img) - ($b_lft + $b_rt);
+                        $height = imagesy($img) - ($b_top + $b_btm);
+
+                        imagecopy($targetImage,$img,0,0,$b_lft,$b_top,imagesx($targetImage),imagesy($targetImage));
+                        /*header("Content-Type: image/jpeg");
+                        imagejpeg($targetImage);*/
+                        $ratioHeight = $width / 1025;
+                        $newHeight = $height / $ratioHeight;
+                        $newWidth = $width / $ratioHeight;
+                        $newImage = imagescale($targetImage,$newWidth,$newHeight);
+
+
+                        $destination1 = imagecreatetruecolor(1125,1500);
+                        /*
+                        $dst_x=(1125-imagesx($targetImage))/2;
+                        $dst_y=1500-imagesy($targetImage)-173;*/
+                        $dst_x = (1125 - $newWidth)/2;
+                        $dst_y = (1500 - $newHeight) - 130;
+
+                        $color = imagecolorallocate($targetImage,255,255,255);
+// fill entire image
+                        imagefill($destination1,0,0,$color);
+                        imagecopy($destination1,$newImage,$dst_x,$dst_y,0,0,$newWidth,$newHeight);
+
+                    }
+
+
+
+
+
+
+
+
+
+                    // fine nuova procedura
+
+
+
+
+
+
+
 
                     if ($renameImage == 1) {
-                        imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
+
 
                         $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
-                        $source = imagecreatefromjpeg($filenameremaster);
-                        list($width, $height) = getimagesize($filenameremaster);
-                        $newwidth = 1125;
-                        $newheight = 1500;
-                        $destination1 = imagecreatetruecolor($newwidth, $newheight);
-                        imagecopyresampled($destination1, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
 
 
                         imagejpeg($destination1, $filenameremaster);
                         ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
                         //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
                         unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
-                        unlink($filenameremaster);
+
                     }else{
-                        imagejpeg($Immagine_destinazione, $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName); // salva file
+
 
                         $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
-                        $source = imagecreatefromjpeg($filenameremaster);
-                        list($width, $height) = getimagesize($filenameremaster);
-                        $newwidth = 1125;
-                        $newheight = 1500;
-                        $destination1 = imagecreatetruecolor($newwidth, $newheight);
-                        imagecopyresampled($destination1, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
 
 
                         imagejpeg($destination1, $filenameremaster);
@@ -287,10 +346,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
 
                 }
-                unlink($remotetoLocalDirectory . '/destination1125X1500.jpg');
-                unlink($remotetoLocalDirectory . '/destination1200X1500.jpg');
-                unlink($remotetoLocalDirectory . '/destination1200X1600.jpg');
-                unlink($remotetoLocalDirectory . '/destination2000X2500.jpg');
+
                 rmdir($remotetoLocalDirectory);
                 rmdir($localDirectory);
 
