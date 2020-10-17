@@ -29,12 +29,8 @@
         Pace.ignore(function () {
             var foisonSelect = $('select[name=\"foisonSelect\"]');
             $.ajax({
-                url: '/blueseal/xhr/SelectFoisonSelectedAjaxController',
+                url: '/blueseal/xhr/SelectAllFoisonAjaxController',
                 method: 'get',
-                data: {
-                    table: 'Foison',
-                    foisonSelectedId: $('#foisonSelectId').val()
-                },
                 dataType: 'json'
             }).done(function (res) {
                 console.log(res);
