@@ -27,7 +27,7 @@ use PDOException;
  * @date 07/01/2020
  * @since 1.0
  */
-class CSelectFoisonSelectedAjaxController extends AAjaxController
+class CSelectAllFoisonAjaxController extends AAjaxController
 {
     public function get()
     {
