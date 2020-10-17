@@ -130,7 +130,6 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione">
         <?php  $p = \Monkey::app()->getUser()->hasPermission('allShops');
-        /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
         if ($p == true) {?>
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
