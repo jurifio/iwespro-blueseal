@@ -158,6 +158,37 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
+                                            <label for="editorialPlanArgumentId">Argomento Evento</label>
+                                            <select id="editorialPlanArgumentId"
+                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Selezione argomento da utilizzare"
+                                                    data-init-plugin="selectize" <?php if (!$allShops) {
+                                                echo " disabled";
+                                            }
+                                            ?>></select>
+
+                                        </div>
+                                    </div>
+                                    <?php if ($allShops) {
+                                        echo '<div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>';
+                                        if ($editorialPlanDetail->isVisibleEditorialPlanArgument == 1) {
+                                            $ischecked = ' checked="true"';
+                                        } else {
+                                            $ischecked = '';
+                                        }
+                                        echo '<input type="checkbox"' . $ischecked . ' 
+                                                   id="isVisibleEditorialPlanArgument"
+                                                   class="form-control"
+                                                   placeholder="Visible"
+                                                   name="isVisibleEditorialPlanArgument" ">
+                                        </div>
+                                    </div>';
+                                    } ?>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
                                             <?php if ($allShops) { ?>
                                                 <select id="editorialPlanId"
@@ -196,37 +227,7 @@
                                             } ?>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="editorialPlanArgumentId">Argomento Evento</label>
-                                            <select id="editorialPlanArgumentId"
-                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione argomento da utilizzare"
-                                                    data-init-plugin="selectize" <?php if (!$allShops) {
-                                                echo " disabled";
-                                            }
-                                            ?>></select>
 
-                                        </div>
-                                    </div>
-                                    <?php if ($allShops) {
-                                        echo '<div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleEditorialPlanArgument">Visibile</label>';
-                                        if ($editorialPlanDetail->isVisibleEditorialPlanArgument == 1) {
-                                            $ischecked = ' checked="true"';
-                                        } else {
-                                            $ischecked = '';
-                                        }
-                                        echo '<input type="checkbox"' . $ischecked . ' 
-                                                   id="isVisibleEditorialPlanArgument"
-                                                   class="form-control"
-                                                   placeholder="Visible"
-                                                   name="isVisibleEditorialPlanArgument" ">
-                                        </div>
-                                    </div>';
-                                    } ?>
                                     <div class="col-md-3">
                                         <div id="divSelecterCampaign">
                                             <div class="form-group form-group-default selectize-enabled">

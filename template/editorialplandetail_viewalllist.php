@@ -129,11 +129,17 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione">
+        <?php  $p = \Monkey::app()->getUser()->hasPermission('allShops');
+        /** @var \bamboo\domain\entities\CEditorialPlanDetail $singleDetail */
+        if ($p == true) {?>
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.add.post"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.clone.post.tosocial"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.preview.post.tosocial"
@@ -144,6 +150,11 @@
         <bs-toolbar-button
                 data-remote="bs.disapprove.post.tosocial"
         ></bs-toolbar-button>
+
+        <bs-toolbar-button
+                data-remote="bs.delete.post.tosocial"
+        ></bs-toolbar-button>
+    <?php }?>
     </bs-toolbar-group>
 </bs-toolbar>
 

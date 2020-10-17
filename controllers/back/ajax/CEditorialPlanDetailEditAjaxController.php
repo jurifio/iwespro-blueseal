@@ -905,5 +905,23 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
           return $res;
       }
+      public function delete(){
+
+          $data = $this->app->router->request()->getRequestData();
+
+          $editorialPlanDetailId = $data['editorialPlanDetailId'];
+          /** @var CRepo $editorialPlanDetail */
+          $editorialPlanDetail = \Monkey::app()->repoFactory->create('editorialPlanDetail');
+
+          /** @var CEditorialPlanDetail $editorial */
+          $editorial = $editorialPlanDetail->findOneBy(['id' => $editorialPlanDetailId]);
+
+          $editorial->delete();
+
+
+          $res = "  Dettaglio Piano Editoriale Cancellato con Successo";
+          return $res;
+      }
+
     
 }

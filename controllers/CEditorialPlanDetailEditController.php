@@ -161,13 +161,15 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
         $contractId=$editorialPlan->contractId;
         $contractsRepo=\Monkey::app()->repoFactory->create('Contracts');
         $contracts=$contractsRepo->findOneBy(['id'=>$editorialPlan->contractId]);
-        if(count($contracts)>0){
-
-            $foisonId=$contracts->foisonId;
-
-        }else{
+        if(count($contracts)==0){
             $contractId='';
-            $foisonId='';
+        }
+
+        $foison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['userId'=>$editorialPlanDetail->userId]);
+        if($foison!=null){
+            $foisonId=$foison->id;
+        }else{
+            $foison='';
         }
 
         $view = new VBase(array());

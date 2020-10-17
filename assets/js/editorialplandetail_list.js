@@ -383,7 +383,18 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
+                                            <select id="editorialPlanArgumentId"
+                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Selezione argomento da utilizzare"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                    </div>
                                     <div class="col-md-3">
+                                  
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
                                             <select id="editorialPlanId"
@@ -402,16 +413,7 @@
                                                     data-init-plugin="selectize"></select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
-                                            <select id="editorialPlanArgumentId"
-                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione argomento da utilizzare"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="isVisibleEditorialPlanArgument">Tipo di Creatività Visibile</label>
@@ -986,41 +988,7 @@
                         });
                     });
 
-                    $.ajax({
-                        method: 'GET',
-                        url: '/blueseal/xhr/SelectFoisonAjaxController',
-                        data: {
-                            table: 'Foison'
-                        },
-                        dataType: 'json'
-                    }).done(function (res3) {
-                        var select = $('#foisonId');
-                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                        select.selectize({
-                            valueField: 'id',
-                            labelField: 'name',
-                            searchField: 'name',
-                            options: res3,
-                            render: {
-                                item: function (item, escape) {
-                                    return '<div>' +
-                                        '<span class="label">' + escape(item.name) + '</span> - ' +
-                                        '<span class="caption">' + escape(item.rank) + '</span>' +
-                                        '</div>'
-                                },
-                                option: function (item, escape) {
-                                    return '<div>' +
-                                        '<span class="label">' + escape(item.name) + '</span> - ' +
-                                        '<span class="caption">' + escape(item.rank) + '</span>' +
-                                        '</div>'
-                                }
-                            },
-                            onInitialize: function () {
-                                var selectize = this;
-                                selectize.setValue($('#foisonSelectId').val());
-                            }
-                        });
-                    });
+
                     var editorialPlanSocialSelected = '';
                     $('#socialPlanId').on('change', function () {
                         editorialPlanSocialSelected = $(this).val();
@@ -1289,6 +1257,42 @@
 
 
                     $('#editorialPlanArgumentId').change(function () {
+                        $.ajax({
+                            method: 'GET',
+                            url: '/blueseal/xhr/SelectFoisonAjaxController',
+                            data: {
+                                table: 'Foison',
+                                editorialPlanArgumentId: $('#editorialPlanArgumentId').val()
+                            },
+                            dataType: 'json'
+                        }).done(function (res3) {
+                            var select = $('#foisonId');
+                            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                            select.selectize({
+                                valueField: 'id',
+                                labelField: 'name',
+                                searchField: 'name',
+                                options: res3,
+                                render: {
+                                    item: function (item, escape) {
+                                        return '<div>' +
+                                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                                            '<span class="caption">' + escape(item.rank) + '</span>' +
+                                            '</div>'
+                                    },
+                                    option: function (item, escape) {
+                                        return '<div>' +
+                                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                                            '<span class="caption">' + escape(item.rank) + '</span>' +
+                                            '</div>'
+                                    }
+                                },
+                                onInitialize: function () {
+                                    var selectize = this;
+                                    selectize.setValue($('#foisonSelectId').val());
+                                }
+                            });
+                        });
                         if ($('#socialPlanId').val() == 1) {
                             $('#divSelecterCampaign').removeClass('hide');
                             $('#divSelecterCampaign').addClass('show');

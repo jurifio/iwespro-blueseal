@@ -27,26 +27,16 @@ use PDOException;
  * @date 07/01/2020
  * @since 1.0
  */
-class CSelectFoisonAjaxController extends AAjaxController
+class CSelectFoisonSelectedAjaxController extends AAjaxController
 {
     public function get()
     {
         $data = $this->app->router->request()->getRequestData();
 
-        $editorialPlanArgumentId = $data['editorialPlanArgumentId'];
+        $foisonSelectedId = $data['foisonSelectedId'];
         $collectFoison = [];
-        $foisons=\Monkey::app()->repoFactory->create('Foison')->findAll();
-        $foisonHasInterestRepo=\Monkey::app()->repoFactory->create('FoisonHasInterest');
-        $editorialPlanArgument=\Monkey::app()->repoFactory->create('EditorialPlanArgument')->findOneBy(['id'=>$editorialPlanArgumentId]);
-        $workCategoryId=$editorialPlanArgument->workCategoryId;
-            foreach ($foisons as $foison) {
-                $foisonHasInterest=$foisonHasInterestRepo->findOneBy(['foisonId'=>$foison->id,'workCategoryId'=>$workCategoryId]);
-                if ($foisonHasInterest!=null) {
-                    if($foisonHasInterest->foisonStatusId<4) {
-                        array_push($collectFoison,['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank]);
-                    }
-                }
-            }
+        $foisons=\Monkey::app()->repoFactory->create('Foison')->findBy(['id'=>$foisonSelectedId]);
+
             if(count($collectFoison)==0){
                 foreach ($foisons as $foison) {
                             array_push($collectFoison,['id' => $foison->id,'name' => $foison->name . ' ' . $foison->surname,'rank' => $foison->rank]);

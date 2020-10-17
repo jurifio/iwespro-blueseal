@@ -61,7 +61,7 @@ class CEditorialPlanDetailCloneAjaxController extends AAjaxController
         $editorialInsert->isEventVisible = $isEventVisible;
         $editorialInsert->editorialPlanArgumentId = $editorialPlanArgumentId;
         $editorialInsert->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
-        $editorialInsert->title = $title;
+        $editorialInsert->title = 'Copia di Post numero: $editorialPlanDetailId '.$title;
         $editorialInsert->isVisibleDescription = $isVisibleDescription;
         $editorialInsert->description = $description;
         $editorialInsert->photoUrl = $photoUrl;

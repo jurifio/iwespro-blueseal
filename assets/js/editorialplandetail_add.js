@@ -51,39 +51,41 @@
                 options: res2,
             });
         });
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/SelectFoisonAjaxController',
-            data: {
-                table: 'Foison'
-            },
-            dataType: 'json'
-        }).done(function (res3) {
-            var select = $('#foisonId');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: res3,
-                render: {
-                    item: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.name) + '</span> - ' +
-                            '<span class="caption">' + escape(item.rank) + '</span>' +
-                            '</div>'
-                    },
-                    option: function (item, escape) {
-                        return '<div>' +
-                            '<span class="label">' + escape(item.name) + '</span> - ' +
-                            '<span class="caption">' + escape(item.rank) + '</span>' +
-                            '</div>'
+        $('#editorialPlanArgumentId').on('change',function() {
+            $.ajax({
+                method: 'GET',
+                url: '/blueseal/xhr/SelectFoisonAjaxController',
+                data: {
+                    table: 'Foison',
+                    editorialPlanArgumentId: $('#editorialPlanArgumentId').val()
+                },
+                dataType: 'json'
+            }).done(function (res3) {
+                var select = $('#foisonId');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: res3,
+                    render: {
+                        item: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + '</span> - ' +
+                                '<span class="caption">' + escape(item.rank) + '</span>' +
+                                '</div>'
+                        },
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="label">' + escape(item.name) + '</span> - ' +
+                                '<span class="caption">' + escape(item.rank) + '</span>' +
+                                '</div>'
+                        }
                     }
-                }
+                });
             });
+
         });
-
-
 
 
 
@@ -183,6 +185,96 @@ $('#editorialPlanArgumentId').change(function(){
            $('#divPostCarousel').addClass('hide');
            $('#postVideo').removeClass('hide');
            $('#postVideo').addClass('show');
+           break;
+       case "11":
+           $('#divPostUploadImage').removeClass('show');
+           $('#divPostUploadImage').addClass('hide');
+           $('#divPostImage').removeClass('show');
+           $('#divPostImage').addClass('hide');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('hide');
+           $('#postVideo').addClass('show');
+           break;
+       case "12":
+           $('#divPostUploadImage').removeClass('show');
+           $('#divPostUploadImage').addClass('hide');
+           $('#divPostImage').removeClass('show');
+           $('#divPostImage').addClass('hide');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('hide');
+           $('#postVideo').addClass('show');
+           break;
+       case "13":
+           $('#divPostUploadImage').removeClass('show');
+           $('#divPostUploadImage').addClass('hide');
+           $('#divPostImage').removeClass('show');
+           $('#divPostImage').addClass('hide');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('hide');
+           $('#postVideo').addClass('show');
+           break;
+       case "14":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "16":
+           $('#divPostUploadImage').removeClass('show');
+           $('#divPostUploadImage').addClass('hide');
+           $('#divPostImage').removeClass('show');
+           $('#divPostImage').addClass('hide');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('hide');
+           $('#postVideo').addClass('show');
+           break;
+       case "17":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "18":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "19":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
+           break;
+       case "20":
+           $('#divPostUploadImage').removeClass('hide');
+           $('#divPostUploadImage').addClass('show');
+           $('#divPostImage').removeClass('hide');
+           $('#divPostImage').addClass('show');
+           $('#divPostCarousel').removeClass('show');
+           $('#divPostCarousel').addClass('hide');
+           $('#postVideo').removeClass('show');
+           $('#postVideo').addClass('hide');
            break;
    }
 });

@@ -87,6 +87,16 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group form-group-default selectize-enabled">
+                                            <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
+                                            <select id="editorialPlanArgumentId"
+                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Selezione argomento da utilizzare"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group form-group-default selectize-enabled">
                                             <label for="editorialPlanId">Seleziona Piano Editoriale</label>
                                             <select id="editorialPlanId"
                                                     name="editorialPlanId" class="full-width selectpicker"
@@ -105,16 +115,7 @@
                                                     data-init-plugin="selectize"></select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
-                                            <select id="editorialPlanArgumentId"
-                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione argomento da utilizzare"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
+
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="isVisibleEditorialPlanArgument">Tipo Creatività Visibile</label>
