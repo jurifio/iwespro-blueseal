@@ -185,9 +185,18 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
 
               switch ($argument) {
+
                   case '4':
                   case '11':
                   case '12':
+                  case '13':
+                  case '14':
+                  case '15':
+                  case '16':
+                  case '17':
+                  case '18':
+                  case '19':
+                  case '20':
 
 
                       break;
