@@ -34,7 +34,7 @@ class requestsubscribe extends AJWTManager
     public function get(){
         try {
             $name = \Monkey::app()->router->request()->getRequestData('name');
-            $surname = $name;
+            $surname =\Monkey::app()->router->request()->getRequestData('surname');
             $nickName = \Monkey::app()->router->request()->getRequestData('nickName');
             $birthday = \Monkey::app()->router->request()->getRequestData('birthday');
             $phone = \Monkey::app()->router->request()->getRequestData('phone');
@@ -232,7 +232,7 @@ class requestsubscribe extends AJWTManager
     public function post(){
         try {
             $name = \Monkey::app()->router->request()->getRequestData('name');
-            $surname = $name;
+            $surname =\Monkey::app()->router->request()->getRequestData('surname');
             $nickName = \Monkey::app()->router->request()->getRequestData('nickName');
             $birthday = \Monkey::app()->router->request()->getRequestData('birthday');
             $phone = \Monkey::app()->router->request()->getRequestData('phone');
