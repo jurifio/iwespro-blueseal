@@ -80,14 +80,36 @@ class CEditorialPlanSocialFilterAjaxController extends AAjaxController
 
         /** @var CObjectCollection $editorialPlanSocial */
         $editorialPlanSocial = \Monkey::app()->repoFactory->create('editorialPlanSocial')->findAll();
+        $user = \Monkey::app()->getUser()->id;
+        $allShops = \Monkey::app()->getUser()->hasPermission('allShops');
+     if($allShops==true) {
 
-        /** @var CEditorialPlanSocial $social */
-        foreach ($editorialPlanSocial as $social) {
-            $res["social"][$social->id] = $social->name;
-            $res["socialcolor"][$social->id] = $social->color;
-            $res["socialicon"][$social->id] = $social->iconSocial;
+         /** @var CEditorialPlanSocial $social */
+         foreach ($editorialPlanSocial as $social) {
+             $res["social"][$social->id] = $social->name;
+             $res["socialcolor"][$social->id] = $social->color;
+             $res["socialicon"][$social->id] = $social->iconSocial;
 
+         }
+     }else{
+        $foison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['userId'=>$user]);
+        if($foison!=null){
+         $foisonId=$foison->id;
         }
+        $foisonHasInterest=\Monkey::app()->repoFactory->create('FoisonHasInterest')->findBy(['foisonId'=>$foisonId]);
+        foreach($foisonHasInterest as $interest) {
+            if ($interest->foisonStatusId <= 3) {
+                $editorialPlanArgument = \Monkey::app()->repoFactory->create('EditorialPlanArgument')->findOneBy(['workCategoryId' => $interest->workCategoryId]);
+                if ($editorialPlanArgument != null) {
+                    $social = \Monkey::app()->repoFactory->create('editorialPlanSocial')->findOneBy(['id' => $editorialPlanArgument->editorialPlanSocialId]);
+                    $res["social"][$social->id] = $social->name;
+                    $res["socialcolor"][$social->id] = $social->color;
+                    $res["socialicon"][$social->id] = $social->iconSocial;
+                }
+            }
+        }
+
+     }
 
 
         return json_encode($res);

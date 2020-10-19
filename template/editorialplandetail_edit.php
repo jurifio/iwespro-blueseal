@@ -621,7 +621,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php if ($editorialPlanDetail->editorialPlanArgumentId == 8 || $editorialPlanDetail->editorialPlanArgumentId == 5 || $editorialPlanDetail->editorialPlanArgumentId == 9) {
+                                <?php if ($editorialPlanDetail->editorialPlanArgumentId == 8 || $editorialPlanDetail->editorialPlanArgumentId == 5 || $editorialPlanDetail->editorialPlanArgumentId == 9 || $editorialPlanDetail->editorialPlanArgumentId == 4 || $editorialPlanDetail->editorialPlanArgumentId == 14 || $editorialPlanDetail->editorialPlanArgumentId == 17 || $editorialPlanDetail->editorialPlanArgumentId == 18) {
                                     echo '<div id="divPostUploadImage" class="show">';
                                 } else {
                                     echo '<div id="divPostUploadImage" class="hide">';

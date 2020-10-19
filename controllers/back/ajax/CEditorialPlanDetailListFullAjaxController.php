@@ -90,7 +90,7 @@ class CEditorialPlanDetailListFullAjaxController extends AAjaxController
                 $i++;
             }else{
                 if ($singleDetail->userId == $this->app->getUser()->getId()) {
-                    $data[$i]["allShops"] = $p;
+                    $data[$i]["allShops"] = '1';
                     $data[$i]["id"] = $singleDetail->id;
                     $data[$i]["title"] = $singleDetail->title;
                     $data[$i]["start"] = $singleDetail->startEventDate;
