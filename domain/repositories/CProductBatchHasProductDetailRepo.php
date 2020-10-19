@@ -35,6 +35,16 @@ class CProductBatchHasProductDetailRepo extends ARepo
                 break;
             case 3:
                 $category = CWorkCategory::DET_DTC;
+                break;
+            case 5:
+                $category = CWorkCategory::DET_RUS;
+                break;
+            case 6:
+                $category = CWorkCategory::DET_CHI;
+                break;
+            case 7:
+                $category = CWorkCategory::DET_FRE;
+                break;
         }
 
         foreach ($productDetailIds as $productDetailId){

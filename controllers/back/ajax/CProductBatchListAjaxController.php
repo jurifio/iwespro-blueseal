@@ -147,6 +147,23 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::TXT_PRT:
                     case CWorkCategory::TXT_BRAND:
                     case CWorkCategory::TXT_FB:
+                    case CWorkCategory::TXT_COPY_BLOG_POST:
+                    case CWorkCategory::TXT_COPY_BRAND:
+                    case CWorkCategory::TXT_FB_CR:
+                    case CWorkCategory::TXT_FB_VID:
+                    case CWorkCategory::TXT_IN_PHOTO_FEED:
+                    case CWorkCategory::TXT_IN_PHOTO_STORY:
+                    case CWorkCategory::TXT_IN_VIDEO_FEED:
+                    case CWorkCategory::TXT_IN_VIDEO_STORY:
+                    case CWorkCategory::POST_YOUTUBE_VIDEO:
+                    case CWorkCategory::POST_TWITTER_VIDEO:
+                    case CWorkCategory::POST_TIKTOK_VIDEO:
+                    case CWorkCategory::POST_WHATSAPP:
+                    case CWorkCategory::STREAM_TWITCH:
+                    case CWorkCategory::STREAM_YOUTUBE:
+
+
+
                         $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                     case CWorkCategory::DET_ENG:
@@ -154,6 +171,15 @@ class CProductBatchListAjaxController extends AAjaxController
                         break;
                     case CWorkCategory::DET_DTC:
                         $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_DTC . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                    case CWorkCategory::DET_RUS:
+                        $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_RUS . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                    case CWorkCategory::DET_CHI:
+                        $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_CHI . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
+                    case CWorkCategory::DET_FRE:
+                        $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_FRE . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                 }
 
@@ -182,7 +208,7 @@ class CProductBatchListAjaxController extends AAjaxController
                         $row["id"] = '<a href="'.$blueseal.$pbr->contractDetails->workCategory->slug.'/'.$pLangId.'?' . 'pbId=' . $pbr->id . '&' .$parUrl.'" target="_blank">'.$pbr->id.'</a>';
                     }
 
-                } else if ($pbr->contractDetails->workCategory->id == CWorkCategory::DET_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::DET_DTC) {
+                } else if ($pbr->contractDetails->workCategory->id == CWorkCategory::DET_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::DET_DTC|| $pbr->contractDetails->workCategory->id == CWorkCategory::DET_RUS|| $pbr->contractDetails->workCategory->id == CWorkCategory::DET_CHI|| $pbr->contractDetails->workCategory->id == CWorkCategory::DET_FRE) {
                     if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
                         $row["id"] = $pbr->id;
                     } else {

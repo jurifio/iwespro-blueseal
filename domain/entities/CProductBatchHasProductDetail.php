@@ -29,6 +29,9 @@ class CProductBatchHasProductDetail extends AEntity
 
     const LANG_ENG = 2;
     const LANG_DTC = 3;
+    CONST LANG_RUS = 5;
+    CONST LANG_CHI =6;
+    CONST LANG_FRE =7;
 
     protected $entityTable = 'ProductBatchHasProductDetail';
     protected $primaryKeys = ['productBatchId','productDetailId', 'langId'];

@@ -142,7 +142,11 @@ class CProductBatch extends AEntity
                 }
                 break;
             case CWorkCategory::DET_ENG:
-            case CWorkCategory::DET_TTC:
+            case CWorkCategory::DET_DTC:
+            case CWorkCategory::DET_RUS:
+            case CWorkCategory::DET_CHI:
+            case CWorkCategory::DET_FRE:
+
                 $elems = $this->productBatchHasProductDetail;
                 break;
         }
