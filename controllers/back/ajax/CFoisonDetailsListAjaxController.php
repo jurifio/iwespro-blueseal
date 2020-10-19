@@ -105,6 +105,9 @@ class CFoisonDetailsListAjaxController extends AAjaxController
                         break;
                     case CWorkCategory::NAME_ENG:
                     case CWorkCategory::NAME_DTC:
+                    case CWorkCategory::NAME_RUS:
+                    case CWorkCategory::NAME_CHI:
+                    case CWorkCategory::NAME_FRE:
                         $row["id"] = '<a href="'.$url.CWorkCategory::SLUG_EMPTY_TRANS.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                     case CWorkCategory::TXT_FAS:
@@ -113,13 +116,27 @@ class CFoisonDetailsListAjaxController extends AAjaxController
                     case CWorkCategory::TXT_PRT:
                     case CWorkCategory::TXT_BRAND:
                     case CWorkCategory::TXT_FB:
+                    case CWorkCategory::TXT_COPY_BLOG_POST:
+                    case CWorkCategory::TXT_COPY_BRAND:
+                    case CWorkCategory::TXT_FB_CR:
+                    case CWorkCategory::TXT_FB_VID:
+                    case CWorkCategory::TXT_IN_PHOTO_FEED:
+                    case CWorkCategory::TXT_IN_PHOTO_STORY:
+                    case CWorkCategory::TXT_IN_VIDEO_FEED:
+                    case CWorkCategory::TXT_IN_VIDEO_STORY:
+                    case CWorkCategory::POST_YOUTUBE_VIDEO:
+                    case CWorkCategory::POST_TWITTER_VIDEO:
+                    case CWorkCategory::POST_TIKTOK_VIDEO:
+                    case CWorkCategory::POST_WHATSAPP:
+                    case CWorkCategory::STREAM_TWITCH:
+                    case CWorkCategory::STREAM_YOUTUBE:
                         $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                 }
 
 
             } else {
-                if($pbr->contractDetails->workCategory->id != CWorkCategory::NAME_ENG && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_DTC ){
+                if($pbr->contractDetails->workCategory->id != CWorkCategory::NAME_ENG && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_DTC && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_RUS && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_CHI && $pbr->contractDetails->workCategory->id != CWorkCategory::NAME_FRE   ){
                     //$row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
 
                     if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
@@ -127,7 +144,7 @@ class CFoisonDetailsListAjaxController extends AAjaxController
                     } else {
                         $row["id"] = '<a href="'.$url.$pbr->contractDetails->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
                     }
-                } else if($pbr->contractDetails->workCategory->id == CWorkCategory::NAME_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_DTC) {
+                } else if($pbr->contractDetails->workCategory->id == CWorkCategory::NAME_ENG || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_DTC|| $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_RUS || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_CHI || $pbr->contractDetails->workCategory->id == CWorkCategory::NAME_FRE) {
 
                     if($pbr->isUnassigned == 1 && $isWorker && !$allShop){
                         $row["id"] = $pbr->id;

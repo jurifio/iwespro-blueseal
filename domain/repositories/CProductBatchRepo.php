@@ -234,6 +234,15 @@ class CProductBatchRepo extends ARepo
             case 3:
                 if ($wk == CWorkCategory::NAME_DTC) $correct = true;
                 break;
+            case 5:
+                if ($wk == CWorkCategory::NAME_RUS) $correct = true;
+                break;
+            case 6:
+                if ($wk == CWorkCategory::NAME_CHI) $correct = true;
+                break;
+            case 7:
+                if ($wk == CWorkCategory::NAME_FRE) $correct = true;
+                break;
         }
 
         return $correct;
@@ -323,6 +332,9 @@ class CProductBatchRepo extends ARepo
                 break;
             case CWorkCategory::NAME_ENG:
             case CWorkCategory::NAME_DTC:
+            case CWorkCategory::NAME_RUS:
+            case CWorkCategory::NAME_CHI:
+            case CWorkCategory::NAME_FRE:
                 /** @var CProductBatchHasProductNameRepo $pnR */
                 $pnR = \Monkey::app()->repoFactory->create('ProductBatchHasProductName');
                 $langId = $notNormalized[0]->langId;
@@ -339,6 +351,20 @@ class CProductBatchRepo extends ARepo
             case CWorkCategory::TXT_PRT:
             case CWorkCategory::TXT_BRAND:
             case CWorkCategory::TXT_FB:
+            case CWorkCategory::TXT_COPY_BLOG_POST:
+            case CWorkCategory::TXT_COPY_BRAND:
+            case CWorkCategory::TXT_FB_CR:
+            case CWorkCategory::TXT_FB_VID:
+            case CWorkCategory::TXT_IN_PHOTO_FEED:
+            case CWorkCategory::TXT_IN_PHOTO_STORY:
+            case CWorkCategory::TXT_IN_VIDEO_FEED:
+            case CWorkCategory::TXT_IN_VIDEO_STORY:
+            case CWorkCategory::POST_YOUTUBE_VIDEO:
+            case CWorkCategory::POST_TWITTER_VIDEO:
+            case CWorkCategory::POST_TIKTOK_VIDEO:
+            case CWorkCategory::POST_WHATSAPP:
+            case CWorkCategory::STREAM_TWITCH:
+            case CWorkCategory::STREAM_YOUTUBE:
 
                 /** @var CProductBatchTextManageRepo $pbtmR */
                 $pbtmR = \Monkey::app()->repoFactory->create('ProductBatchTextManage');
