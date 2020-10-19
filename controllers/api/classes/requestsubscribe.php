@@ -131,6 +131,7 @@ class requestsubscribe extends AJWTManager
             return true;
         }catch(\Throwable $e){
             \Monkey::app()->applicationLog('requestsubscribe','Error','error api subscribe: ' . $e->getMessage(),$e->getLine(),$e->getCode());
+            return false;
         }
 
     }
