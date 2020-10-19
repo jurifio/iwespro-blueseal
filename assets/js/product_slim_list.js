@@ -24,7 +24,7 @@ $('#btnsearchplus').click(function(){
     if ($('#stored').prop("checked")) {
         stored = '&stored=1';
     }
-    var url='/blueseal/prodotti-slim?'+season+productZeroQuantity+productStatus+productBrand+shop+stored;
+    var url='/blueseal/prodotti/slim?'+season+productZeroQuantity+productStatus+productBrand+shop+stored;
 
     window.location.href=url;
 });
