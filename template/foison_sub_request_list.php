@@ -83,7 +83,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione Foison">
+    <bs-toolbar-group data-group-label="Gestione Operator">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-check"
