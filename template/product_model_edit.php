@@ -467,7 +467,7 @@
                     data-remote="bs.product.details.new"
             ></bs-toolbar-button>
         </bs-toolbar-group>
-        <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per fason">
+        <bs-toolbar-group data-group-label="Aggiungi/elimina categorie per operator">
             <bs-toolbar-button
                     data-remote="bs.details.research.fason"
             ></bs-toolbar-button>

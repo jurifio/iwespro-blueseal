@@ -91,7 +91,7 @@
                 data-event="bs-foison-accept-subscribe"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Accetta il Fason"
+                data-title="Accetta Operator"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>

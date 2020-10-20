@@ -33,7 +33,7 @@ $(document).on('bs-modify-product-sheet-category', function () {
     });
 
 
-    let bsModal = new $.bsModal('Crea nuovi dettagli per la ricerca fason', {
+    let bsModal = new $.bsModal('Crea nuovi dettagli per la ricerca Operator', {
         body: `
         <div>
             <p>Seleziona la categoria</p>

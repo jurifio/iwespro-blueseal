@@ -102,7 +102,7 @@ class CBookingWorkManage extends AAjaxController
                 /** @var CEmailRepo $mail */
                 $mail = \Monkey::app()->repoFactory->create('Email');
                 $name = $user->foison->name . " " . $user->foison->surname;
-                $body = "Il fason $name ha prenotato il lotto numero $pbId";
+                $body = "L\'Operator $name ha prenotato il lotto numero $pbId";
                 $mail->newMail('gianluca@iwes.it', ["gianluca@iwes.it"], [], [], 'Prenotazione lotto', $body, null, null, null, 'mailGun', false,null);
             }
 

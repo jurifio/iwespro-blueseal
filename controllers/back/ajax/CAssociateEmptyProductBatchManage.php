@@ -56,7 +56,7 @@ class CAssociateEmptyProductBatchManage extends AAjaxController
 
         /** @var CFoison $fason*/
         $fason = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$foisonId]);
-        if(!is_null($fason->activeProductBatch)) return "il fason ha gia un lotto";
+        if(!is_null($fason->activeProductBatch)) return "l\'Operator ha gia un lotto";
 
         /** @var CProductBatchRepo $pbRepo */
         $pbRepo = \Monkey::app()->repoFactory->create('ProductBatch');

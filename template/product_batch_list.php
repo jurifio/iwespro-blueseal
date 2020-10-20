@@ -152,7 +152,7 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-        <bs-toolbar-group data-group-label="Associa lotto a fason">
+        <bs-toolbar-group data-group-label="Associa lotto a Operator">
             <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-arrows-h"
@@ -160,7 +160,7 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.product.batch.to.fason"
-                data-title="Associa lotto a fason"
+                data-title="Associa lotto a operator"
                 data-placement="bottom"
             ></bs-toolbar-button>
         </bs-toolbar-group>

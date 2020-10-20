@@ -14,7 +14,7 @@ window.buttonSetup = {
 $(document).on('bs-del-cat-fason', function () {
 
 
-    let bsModal = new $.bsModal('Elimina dettagli per la ricerca fason', {
+    let bsModal = new $.bsModal('Elimina dettagli per la ricerca operator', {
         body: `
         <p>Procedere con l'eliminazione?</p>
         `
