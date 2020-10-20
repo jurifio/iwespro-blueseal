@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-lg-12 h2">
                            Benvenuti nella sezione di riposizionamento foto<br><p>
-                                Per poter riposizionare le foto bisogna inserire nella path del nas <b>\\192.168.1.155\shootImport\resize le foto da elaborare</b><br>
+                                Per poter riposizionare le foto bisogna inserire nella path del nas <b>\\192.168.1.155\shootImport\resize</b> le foto da elaborare<br>
                                 una volta posizionata la cartella  cliccare sul tasto Remasterizzazione Foto <span class="fa fa-rocket"></span><br>
                                 attendere la fine dell'elaborazione e il risultato dell'elaborazione si troverà nella cartella <b>\\192.168.1.155\shootImport\newage2\topublish</b><br>
                                 le  originali verrano inserite in <b>\\192.168.1.155\shootImport\newage2\original</b><br>
