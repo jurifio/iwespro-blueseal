@@ -2536,6 +2536,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/shooting/operazioni-su-immagini(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImageOperationController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/shooting/righe-shooting/:id(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShootingDetailsListController"
