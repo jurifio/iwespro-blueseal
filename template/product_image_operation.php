@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <?php if($app->user()->hasPermission('allShops')): ?>
-                                <img style="width: 100%" src="/assets/rocketimage.png">
+                                <img style="width: 100%" src="/assets/img/rocketimage.png">
                             <?php else: ?>
 
                             <?php endif; ?>
