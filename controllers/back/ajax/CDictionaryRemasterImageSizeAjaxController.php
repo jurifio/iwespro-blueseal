@@ -49,7 +49,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             $pathlocal = '/home/iwespro/public_html/temp-remaster/';
             $save_to = '/home/iwespro/public_html/temp-remaster/';
             $save_to_dir = '/home/iwespro/public_html/temp-remaster';
-            $path = 'shootImport/resize';
+            $path = '/shootImport/resize';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
