@@ -153,6 +153,9 @@
         <bs-toolbar-button
                 data-remote="bs.delete.post.tosocial"
         ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-remote="bs.ranking.post"
+            ></bs-toolbar-button>
     <?php }?>
     </bs-toolbar-group>
 </bs-toolbar>

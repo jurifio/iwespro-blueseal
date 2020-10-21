@@ -72,7 +72,7 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <?php if($perm): ?>
-    <bs-toolbar-group data-group-label="Gestione Foison">
+    <bs-toolbar-group data-group-label="Gestione Operator">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"

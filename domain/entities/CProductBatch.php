@@ -132,6 +132,14 @@ class CProductBatch extends AEntity
             case CWorkCategory::TXT_PRT:
             case CWorkCategory::TXT_BRAND:
             case CWorkCategory::TXT_FB:
+            case CWorkCategory::TXT_COPY_BLOG_POST:
+            case CWorkCategory::TXT_COPY_BRAND:
+            case CWorkCategory::TXT_FB_CR:
+            case CWorkCategory::TXT_FB_VID:
+            case CWorkCategory::TXT_IN_PHOTO_FEED:
+            case CWorkCategory::TXT_IN_PHOTO_STORY:
+            case CWorkCategory::TXT_IN_VIDEO_FEED:
+            case CWorkCategory::TXT_IN_VIDEO_STORY:
                 $elems = new CObjectCollection();
                 $productBatchTextManageColl = $this->productBatchTextManage;
                 if(!$productBatchTextManageColl->isEmpty()){

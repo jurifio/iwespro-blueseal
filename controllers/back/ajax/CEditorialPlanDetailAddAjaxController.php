@@ -840,18 +840,27 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             if ($isNewAdSet != '0') {
                 $editorialPlanDetailInsert->groupInsertionId = $groupAdsName;
             }
-            $findFoison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$data['foisonId']]);
-            $userId=$findFoison->userId;
-            $editorialPlanDetailInsert->userId=$userId;
+            if($data['foisonId']!=null || $data['foisonId']!='' ) {
+                $findFoison = \Monkey::app()->repoFactory->create('Foison')->findOneBy(['id' => $data['foisonId']]);
+                $userId = $findFoison->userId;
+                $foisonId = $findFoison->id;
+
+                $editorialPlanDetailInsert->userId = $userId;
+            }
             $editorialPlanDetailInsert->smartInsert();
+
+
 
 
 
             /*  foreach ($photoUrl as $file) {
                   unlink($tempFolder . $file);
               }*/
+
+
             $res = "Dettaglio Piano Editoriale inserito con successo!";
-            /** @var ARepo $shopRepo */
+
+                    /** @var ARepo $shopRepo */
             $ePlanRepo = \Monkey::app()->repoFactory->create('EditorialPlan');
 
             /** @var CEditorialPlan $editorialPlan */
@@ -865,40 +874,97 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             /** @var CEditorialPlanArgument $editorialPlanArgument */
             $editorialPlanArgument = $editorialPlanArgumentRepo->findOneBy(['id' => $argument]);
             $argumentName = $editorialPlanArgument->titleArgument;
-            /** @var Ceditorial $to */
-            $to = $shopEmail;
-            $userFind=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$userId]);
-            $userEditor=[$userFind->email];
-            $editorialPlanName = $editorialPlan->name;
-            $subject = "Creazione Nuovo Dettaglio Piano Editoriale";
-            $message = "Creazione Nuovo dettaglio Piano Editoriale<p>";
-            $message .= "Title:" . $title . "<p>";
-            $message .= "Data di Inizio:" . $startEventDate . "<p>";
-            $message .= "Data di Fine:" . $endEventDate . "<p>";
-            $message .= "Argomento:" . $argumentName . "<p>";
-            $message .= "Descrizione:" . $description . "<p>";
-            $message .= "Stato:" . $status . "<p>";
-            $message .= "Note:" . $note . "<p>";
-            /** @var ARepo $ePlanSocialRepo */
-            $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
-            /** @var CEditorialPlanSocial $editorialPlanSocial */
-            $editorialPlanSocial = $ePlanSocialRepo->findOneBy(['id' => $socialId]);
-
-            /** @var CObjectCollection $editorialPlanSocialName */
-            $editorialPlanSocialName = $editorialPlanSocial->name . "<p>";
-            $message .= "Media utilizzato:" . $editorialPlanSocialName . "<p>";
-            $message .= "Piano Editoriale:" . $editorialPlanName . "<p>";
+            $workCategoryId=$editorialPlanArgument->workCategoryId;
+            /** @var CSectional $sectional */
+            $sectional=\Monkey::app()->repoFactory->create('Sectional')->findOneBy(['id'=>$workCategoryId]);
+            $newSectional=$sectional->last+1;
+            $codeSectional=$sectional->code;
 
 
-            if ($notifyEmail === "yesNotify") {
 
-                if (ENV == 'dev') return false;
-                /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
-                $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                if (!is_array($to)) {
-                    $to = [$to];
+                $resulto = \Monkey::app()->dbAdapter->query('select max(id) as id from EditorialPlanDetail ',[])->fetchAll();
+                foreach ($resulto as $resultDetail) {
+                    $lastRowDetailId = $resultDetail['id'];
                 }
-                $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,$userEditor,[],$subject,$message,null,null,null,'mailGun',false,null);
+                $pbr = \Monkey::app()->repoFactory->create('ProductBatch')->getEmptyEntity();
+                $pbr->description = $description;
+                $today = new \DateTime();
+                $creationDate = $today->format('Y-m-d H:i:s');
+            $earlier = new \DateTime($creationDate);
+            $later = new \DateTime($startEventDate);
+
+
+            $diff = $later->diff($earlier)->format("%a");
+                $pbr->creationDate = $creationDate;
+                $pbr->scheduledDelivery = $startEventDate;
+                $pbr->sectional = $codeSectional . '/' . $nesSectional;
+                $pbr->workCategoryId = $workCategoryId;
+                $pbr->estimatedWorkDays = $diff;
+            if($data['foisonId']!=null || $data['foisonId']!='' ) {
+
+                $pbr->isUnassigned = 0;
+                $contracts=\Monkey::app()->repoFactory->create('Contracts')->findBy(['foisonId'=>$data['foisonId']]);
+                foreach($contracts as $contract){
+                    $contractDetails=\Monkey::app()->repoFactory->create('ContractDetails')->findOneBy(['workCategoryId'=>$workCategoryId,'contractId'=>$contract->id]);
+                    if ($contractDetails!=null){
+                        $pbr->contractDetails=$contractDetails->id;
+                        $wcpl=\Monkey::app()->repoFactory->create('WorkCategoryPriceList')->findOneBy(['id'=>$contractDetails->workPriceListId,'workCategoryId'=>$contractDetails->workCategoryId]);
+                        $pbr->value=$wcpl->price;
+                        $pbr->unitPrice=$wcpl->price;
+                        if($contractDetails->isVariable!=0){
+                            $pbr->isFixed='0';
+                        }else{
+                            $pbr->isFixed=1;
+                        }
+                    }
+                }
+                $pbr->marketplace=0;
+            }else{
+                $ppbr->isUnassigned = 1;
+                $wcpl=\Monkey::app()->repoFactory->create('WorkCategoryPriceList')->findOneBy(['workCategoryId'=>$workCategoryId,'isDefault'=>1]);
+                $pbr->value=$wcpl->price;
+                $pbr->unitPrice=$wcpl->price;
+                $pbr->marketplace=1;
+            }
+                $pbr->editorialPlanDetailId=$lastRowDetailId;
+                $pbr->insert();
+
+            if($data['foisonId']!=null || $data['foisonId']!='' ) {
+                /** @var Ceditorial $to */
+                $to = $shopEmail;
+                $userFind = \Monkey::app()->repoFactory->create('User')->findOneBy(['id' => $userId]);
+                $userEditor = [$userFind->email];
+                $editorialPlanName = $editorialPlan->name;
+                $subject = "Creazione Nuovo Dettaglio Piano Editoriale";
+                $message = "Creazione Nuovo dettaglio Piano Editoriale<p>";
+                $message .= "Title:" . $title . "<p>";
+                $message .= "Data di Inizio:" . $startEventDate . "<p>";
+                $message .= "Data di Fine:" . $endEventDate . "<p>";
+                $message .= "Argomento:" . $argumentName . "<p>";
+                $message .= "Descrizione:" . $description . "<p>";
+                $message .= "Stato:" . $status . "<p>";
+                $message .= "Note:" . $note . "<p>";
+                /** @var ARepo $ePlanSocialRepo */
+                $ePlanSocialRepo = \Monkey::app()->repoFactory->create('EditorialPlanSocial');
+                /** @var CEditorialPlanSocial $editorialPlanSocial */
+                $editorialPlanSocial = $ePlanSocialRepo->findOneBy(['id' => $socialId]);
+
+                /** @var CObjectCollection $editorialPlanSocialName */
+                $editorialPlanSocialName = $editorialPlanSocial->name . "<p>";
+                $message .= "Media utilizzato:" . $editorialPlanSocialName . "<p>";
+                $message .= "Piano Editoriale:" . $editorialPlanName . "<p>";
+
+
+                if ($notifyEmail === "yesNotify") {
+
+                    if (ENV == 'dev') return false;
+                    /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+                    $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                    if (!is_array($to)) {
+                        $to = [$to];
+                    }
+                    $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,$userEditor,[],$subject,$message,null,null,null,'mailGun',false,null);
+                }
             }
 
         } else {

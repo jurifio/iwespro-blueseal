@@ -73,7 +73,10 @@ class CProductBatchListAjaxController extends AAjaxController
                   pb.timingRank,
                   pb.qualityRank,
                   pb.tolleranceDelivery,
-                  pb.estimatedWorkDays
+                  pb.estimatedWorkDays,
+                  pb.editorialPlanDetailId
+                   
+            
             FROM ProductBatch pb
             LEFT JOIN ContractDetails cd ON pb.contractDetailsId = cd.id
             LEFT JOIN WorkCategory wk ON cd.workCategoryId = wk.id
@@ -94,6 +97,7 @@ class CProductBatchListAjaxController extends AAjaxController
 
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $url = $blueseal."work/lotti/";
+        $urlEditorial=$blueseal."editorial/modifica-post/";
 
         /** @var CProductBatchRepo $pbrRepo */
         $pbrRepo = \Monkey::app()->repoFactory->create('ProductBatch');
@@ -146,6 +150,9 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::TXT_INFL:
                     case CWorkCategory::TXT_PRT:
                     case CWorkCategory::TXT_BRAND:
+
+                    $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                        break;
                     case CWorkCategory::TXT_FB:
                     case CWorkCategory::TXT_COPY_BLOG_POST:
                     case CWorkCategory::TXT_COPY_BRAND:
@@ -161,10 +168,7 @@ class CProductBatchListAjaxController extends AAjaxController
                     case CWorkCategory::POST_WHATSAPP:
                     case CWorkCategory::STREAM_TWITCH:
                     case CWorkCategory::STREAM_YOUTUBE:
-
-
-
-                        $row["id"] = '<a href="'.$url.$pbr->workCategory->slug.'/'.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
+                    $row["id"] = '<a href="'.$urlEditorial.$pbr->editorialPlanDetailId.'" target="_blank">'.$pbr->id.'</a>';
                         break;
                     case CWorkCategory::DET_ENG:
                         $row["id"] = '<a href="'.$blueseal.$pbr->workCategory->slug . '/' . CProductBatchHasProductDetail::LANG_ENG . '?pbId='.$pbr->id.'" target="_blank">'.$pbr->id.'</a>';
