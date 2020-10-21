@@ -57,7 +57,6 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
         $ftp_server_port = "21";
         $ftp_user_name = 'jobimages';
         $ftp_user_pass = "cartne01";
-
 // setto la connessione al ftp
         $conn_id = ftp_connect($ftp_server, $ftp_server_port);
 // Eseguo il login con  username e password
@@ -72,6 +71,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             ftp_pasv($conn_id, true);
             // prendo il contenuto di tutta la directory sul server
             $contents = ftp_nlist($conn_id, $path);
+
             // output $contents
             foreach ($contents as $item) {
                 echo "directory";
@@ -87,14 +87,10 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
                     $localDirectory = $save_to_dir . $item;
                     if (!file_exists($localDirectory)) {
-                        if (!mkdir($localDirectory,0777,true) && !is_dir($localDirectory)) {
-                            throw new \RuntimeException(sprintf('Directory "%s" was not created',$localDirectory));
-                        }
+                        mkdir($localDirectory,0777, true);
                     }
                     if (!file_exists($localDirectory . '/' . $resultdate)) {
-                        if (!mkdir($concurrentDirectory = $localDirectory . '/' . $resultdate) && !is_dir($concurrentDirectory)) {
-                            throw new \RuntimeException(sprintf('Directory "%s" was not created',$concurrentDirectory));
-                        }
+                        mkdir($localDirectory . '/' . $resultdate);
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
 
