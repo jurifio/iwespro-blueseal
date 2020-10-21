@@ -49,7 +49,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             $pathlocal = '/home/iwespro/public_html/temp-remaster/';
             $save_to = '/home/iwespro/public_html/temp-remaster/';
             $save_to_dir = '/home/iwespro/public_html/temp-remaster';
-            $path = 'shootImport/resize';
+            $path = '/shootImport/resize';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
@@ -87,10 +87,14 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
                     $localDirectory = $save_to_dir . $item;
                     if (!file_exists($localDirectory)) {
-                        mkdir($localDirectory,0777, true);
+                        if (!mkdir($localDirectory,0777,true) && !is_dir($localDirectory)) {
+                            throw new \RuntimeException(sprintf('Directory "%s" was not created',$localDirectory));
+                        }
                     }
                     if (!file_exists($localDirectory . '/' . $resultdate)) {
-                        mkdir($localDirectory . '/' . $resultdate);
+                        if (!mkdir($concurrentDirectory = $localDirectory . '/' . $resultdate) && !is_dir($concurrentDirectory)) {
+                            throw new \RuntimeException(sprintf('Directory "%s" was not created',$concurrentDirectory));
+                        }
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
 
