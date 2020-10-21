@@ -39,7 +39,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             $pathlocal = '/media/sf_sites/iwespro/temp-remaster/';
             $save_to = '/media/sf_sites/iwespro/temp-remaster/';
             $save_to_dir = '/media/sf_sites/iwespro/temp-remaster';
-            $path = '/shootImport/resize';
+            $path = 'shootImport/resize';
             $remotepathTodo = 'shootImport/newage2/topublish_dev/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
@@ -49,7 +49,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             $pathlocal = '/home/iwespro/public_html/temp-remaster/';
             $save_to = '/home/iwespro/public_html/temp-remaster/';
             $save_to_dir = '/home/iwespro/public_html/temp-remaster';
-            $path = '/shootImport/resize';
+            $path = 'shootImport/resize';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
@@ -57,6 +57,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
         $ftp_server_port = "21";
         $ftp_user_name = 'jobimages';
         $ftp_user_pass = "cartne01";
+
 // setto la connessione al ftp
         $conn_id = ftp_connect($ftp_server, $ftp_server_port);
 // Eseguo il login con  username e password
@@ -71,7 +72,6 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
             ftp_pasv($conn_id, true);
             // prendo il contenuto di tutta la directory sul server
             $contents = ftp_nlist($conn_id, $path);
-
             // output $contents
             foreach ($contents as $item) {
                 echo "directory";
@@ -90,7 +90,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                         mkdir($localDirectory,0777, true);
                     }
                     if (!file_exists($localDirectory . '/' . $resultdate)) {
-                        mkdir($localDirectory . '/' . $resultdate);
+                        mkdir($localDirectory . '/' . $resultdate,0777,true);
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
 
@@ -126,19 +126,26 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                     }
                     $result = in_array($image, ftp_nlist($conn_id, dirname($image)));
                     if ($result == true) {
-                        // ftp_get($conn_id,$image,$localDirectory.$image,FTP_BINARY);
+                        //   ftp_get($conn_id,$image,$localDirectory.$image,FTP_BINARY);
                         $curl = curl_init();
                         curl_setopt($curl, CURLOPT_URL, "ftp://" . $ftp_server . $image); #input
                         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
                         curl_setopt($curl, CURLOPT_USERPWD, $ftp_user_name . ":" . $ftp_user_pass);
                         $imagetopath = $image;
                         $pathArr = explode(DIRECTORY_SEPARATOR, $imagetopath);
-                        $filenametoextrat = end($pathArr);
-                        $file = fopen($remotetoLocalDirectory . '/' . $filenametoextrat, 'w');
+                        $filenametoextrat=end($pathArr);
+                        $filenametoextrat = str_replace('#','_',$filenametoextrat);
+                        $filenametoextrat = str_replace(' ','_', $filenametoextrat);
+                        $filenametoextrat = str_replace('.','dariconvertire', $filenametoextrat);
+                        $filenametoextrat = str_replace('dariconvertirejpg','.jpg', $filenametoextrat);
+                        $filenametoextrat = str_replace('dariconvertire','', $filenametoextrat);
+                           ftp_get($conn_id,$remotetoLocalDirectory . '/' . $filenametoextrat,$image,FTP_BINARY);
+
+                        /*$file = fopen($remotetoLocalDirectory . '/' . $filenametoextrat, 'w');
                         curl_setopt($curl, CURLOPT_FILE, $file); #output
                         curl_exec($curl);
                         curl_close($curl);
-                        fclose($file);
+                        fclose($file);*/
                         ftp_delete($conn_id, $image);
                     }
                     echo $save_to_dir . $image . "<br>";
@@ -166,13 +173,13 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                     $renameImage=1;
 
 
-                        $imagetoWorkName =$filename;
+                    $imagetoWorkName =$filename;
 
 
 
-                    $NomeFile = $source;// carica il file
 
-                    $infoImage = getimagesize($NomeFile);
+
+
 
 
                     if ($renameImage == 1) {
@@ -329,7 +336,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                         ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
                         //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
                         unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
-
+                       // unlink($filenameremaster);
                     }else{
 
 
@@ -340,7 +347,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                         imagejpeg($destination1, $filenameremaster);
                         ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
                         unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
-                       // unlink($filenameremaster);
+                        // unlink($filenameremaster);
                     }
 
 
