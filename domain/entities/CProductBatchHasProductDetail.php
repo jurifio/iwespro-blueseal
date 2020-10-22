@@ -26,6 +26,9 @@ class CProductBatchHasProductDetail extends AEntity
 {
     const UNFIT_PRODUCT_DETAIL_ENG = 34;
     const UNFIT_PRODUCT_DETAIL_DTC = 37;
+    const UNFIT_PRODUCT_DETAIL_RUS = 40;
+    const UNFIT_PRODUCT_DETAIL_CIN = 43;
+    const UNFIT_PRODUCT_DETAIL_FRE = 46;
 
     const LANG_ENG = 2;
     const LANG_DTC = 3;

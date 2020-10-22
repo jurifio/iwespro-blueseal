@@ -26,6 +26,9 @@ class CProductBatchHasProductName extends AEntity
 {
     const UNFIT_PRODUCT_NAME_ENG = 9;
     const UNFIT_PRODUCT_NAME_DTC = 12;
+    const UNFIT_PRODUCT_NAME_FRE = 59;
+    const UNFIT_PRODUCT_NAME_RUS = 62;
+    const UNFIT_PRODUCT_NAME_CIN= 65;
 
     protected $entityTable = 'ProductBatchHasProductName';
     protected $primaryKeys = ['productBatchId','productName','langId'];

@@ -262,7 +262,10 @@ class CProductBatchDetailsManage extends AAjaxController
         }
 
         if ((($lang == 2 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG))
-            || ($lang == 3 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC)) {
+            || ($lang == 3 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC)
+            || ($lang == 5 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_RUS)
+            || ($lang == 6 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_CIN)
+            || ($lang == 7 && $catId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_FRE)) {
             /** @var CProductBatch $pba */
             $pba = $pbhpn->productBatch;
             $pba->isFixed = 0;
@@ -287,7 +290,10 @@ class CProductBatchDetailsManage extends AAjaxController
         }
 
         if ((($lang == 2 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_ENG))
-            || ($lang == 3 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC)) {
+            || ($lang == 3 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC)
+            || ($lang == 5 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_RUS)
+            || ($lang == 6 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_CIN)
+            || ($lang == 7 && $catId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_FRE)) {
             /** @var CProductBatch $pba */
             $pba = $pbhpd->productBatch;
             $pba->isFixed = 0;

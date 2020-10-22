@@ -53,7 +53,10 @@ class CProductDetailTranslationBatchManage extends AAjaxController
 
 
             if((($lang == 2 && $catToChange == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_ENG))
-            || ($lang == 3 && $catToChange == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC)) {
+            || ($lang == 3 && $catToChange == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC)
+                || ($lang == 5 && $catToChange == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_RUS)
+                || ($lang == 6 && $catToChange == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_CIN)
+                || ($lang == 7 && $catToChange == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_FRE)) {
                 /** @var CProductBatch $pb */
                 $pb = $pbhpd->productBatch;
 

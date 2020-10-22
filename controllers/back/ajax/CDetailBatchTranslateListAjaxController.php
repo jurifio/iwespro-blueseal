@@ -132,10 +132,16 @@ class CDetailBatchTranslateListAjaxController extends AAjaxController
 
 
             if (($pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_ENG
-                        || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC) && $pBHpD->productBatch->unfitDate == 0) {
+                        || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC
+                    || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_RUS
+                    || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_CIN
+                    || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_FRE) && $pBHpD->productBatch->unfitDate == 0) {
                     $stepName = '<p style="color: red; font-weight: bold">' . $pBHpD->workCategorySteps->name . ' IN VERIFICA, NON MODIFICARE!</p>';
                 } else if ($pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_ENG
-                    || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC) {
+                    || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC
+                || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_RUS
+                || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_CIN
+                || $pBHpD->workCategoryStepsId == CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_FRE) {
                     $stepName = '<p style="color: red; font-weight: bold">' . $pBHpD->workCategorySteps->name . ' DA MODIFICARE</p>';
                 } else {
                     $stepName = $pBHpD->workCategorySteps->name;

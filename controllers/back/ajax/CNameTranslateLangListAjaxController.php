@@ -186,10 +186,16 @@ class CNameTranslateLangListAjaxController extends AAjaxController
                 if (is_null($inBatch->workCategoryStepsId)) {
                     $stepName = '-';
                 } else if (($inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG
-                        || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC) && $inBatch->productBatch->unfitDate == 0) {
+                        || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC
+                        || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_RUS
+                   || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_CIN
+                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_FRE) && $inBatch->productBatch->unfitDate == 0) {
                     $stepName = '<p style="color: red; font-weight: bold">' . $inBatch->workCategorySteps->name . ' IN VERIFICA, NON MODIFICARE!</p>';
                 } else if ($inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG
-                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC) {
+                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC
+                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_RUS
+                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_CIN
+                    || $inBatch->workCategoryStepsId == CProductBatchHasProductName::UNFIT_PRODUCT_NAME_FRE) {
                     $stepName = '<p style="color: red; font-weight: bold">' . $inBatch->workCategorySteps->name . ' DA MODIFICARE</p>';
                 } else {
                     $stepName = $inBatch->workCategorySteps->name;

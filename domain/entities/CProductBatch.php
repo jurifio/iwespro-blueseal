@@ -76,6 +76,9 @@ class CProductBatch extends AEntity
                     break;
                 case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_ENG:
                 case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_DTC:
+                case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_RUS:
+                case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_CIN:
+                case CProductBatchHasProductName::UNFIT_PRODUCT_NAME_FRE:
                     $unfitElement[] =
                         ' | Lotto: ' . $elem->productBatchId .
                         ' | Name: ' . $elem->productName;
@@ -86,6 +89,9 @@ class CProductBatch extends AEntity
                     break;
                 case CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_ENG:
                 case CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_DTC:
+                case CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_RUS:
+                case CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_FRE:
+                case CProductBatchHasProductDetail::UNFIT_PRODUCT_DETAIL_CIN:
                     $unfitElement[] =
                         ' | Lotto: ' . $elem->productBatchId .
                         ' | Dettaglio: ' . $elem->productDetailId;
