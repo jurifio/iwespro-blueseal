@@ -309,22 +309,6 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                     }
 
 
-
-
-
-
-
-
-
-                    // fine nuova procedura
-
-
-
-
-
-
-
-
                     if ($renameImage == 1) {
 
 
