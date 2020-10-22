@@ -2703,6 +2703,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/lotti/produzione-immagini/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImageProductionBatchListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/lotti/brands/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBrandBatchDetailsListController"

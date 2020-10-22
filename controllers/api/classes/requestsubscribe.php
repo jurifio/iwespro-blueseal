@@ -82,6 +82,7 @@ class requestsubscribe extends AJWTManager
             $att31 = \Monkey::app()->router->request()->getRequestData('att31');
             $att32 = \Monkey::app()->router->request()->getRequestData('att32');
             $att33 = \Monkey::app()->router->request()->getRequestData('att33');
+            $att34 = \Monkey::app()->router->request()->getRequestData('att34');
             if(isset($att1)) {
                 $att[1] = $att1;
             }
@@ -177,6 +178,9 @@ class requestsubscribe extends AJWTManager
             }
             if(isset($att33)) {
                 $att[33] = $att33;
+            }
+            if(isset($att34)) {
+                $att[34] = $att34;
             }
 
 
@@ -281,6 +285,7 @@ class requestsubscribe extends AJWTManager
             $att31 = \Monkey::app()->router->request()->getRequestData('att31');
             $att32 = \Monkey::app()->router->request()->getRequestData('att32');
             $att33 = \Monkey::app()->router->request()->getRequestData('att33');
+            $att34 = \Monkey::app()->router->request()->getRequestData('att34');
             if(isset($att1)) {
                 $att[1] = $att1;
             }
@@ -376,6 +381,9 @@ class requestsubscribe extends AJWTManager
             }
             if(isset($att33)) {
                 $att[33] = $att33;
+            }
+            if(isset($att34)) {
+                $att[34] = $att34;
             }
 
 

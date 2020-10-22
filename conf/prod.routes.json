@@ -2905,6 +2905,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/lotti/produzione-immagini/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImageProductionBatchListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/lotti/traduzione-nomi/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductNameTranslationListController"

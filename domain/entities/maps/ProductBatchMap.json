@@ -46,6 +46,12 @@
                 "childKeys" : ["productBatchId"],
                 "type" : "OneToMany"
             },{
+                "name" : "productBatchHasProductionImage",
+                "entity" : "ProductBatchHasProductionImage",
+                "parentKeys": ["id"],
+                "childKeys" : ["productBatchId"],
+                "type" : "OneToMany"
+            },{
                 "name" : "workPriceList",
                 "entity" : "WorkPriceList",
                 "parentKeys": ["workPriceListId"],
