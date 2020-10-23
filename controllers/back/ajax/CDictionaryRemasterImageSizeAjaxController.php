@@ -27,6 +27,8 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
     public function POST()
     {
+        set_time_limit(0);
+        ini_set('memory_limit', '2048M');
         $today = new \DateTime();
         $resultdate = $today->format('Y-m-d');
         /**@var CRepo $repoDictionaryImageSizeRepo
@@ -69,7 +71,7 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
         } else {
             echo "Success</br>";
             // enabling passive mode
-            ftp_pasv($conn_id, true);
+            ftp_pasv($conn_id, false);
             // prendo il contenuto di tutta la directory sul server
             $contents = ftp_nlist($conn_id, $path);
             // output $contents
