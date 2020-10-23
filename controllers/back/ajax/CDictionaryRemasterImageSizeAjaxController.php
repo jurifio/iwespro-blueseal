@@ -89,14 +89,10 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
 
                     $localDirectory = $save_to_dir . $item;
                     if (!file_exists($localDirectory)) {
-                        if (!mkdir($localDirectory,0777,false) && !is_dir($localDirectory)) {
-                            throw new \RuntimeException(sprintf('Directory "%s" was not created',$localDirectory));
-                        }
+                        mkdir($localDirectory);
                     }
                     if (!file_exists($localDirectory . '/' . $resultdate)) {
-                        if (!mkdir($concurrentDirectory = $localDirectory . '/' . $resultdate,0777,false) && !is_dir($concurrentDirectory)) {
-                            throw new \RuntimeException(sprintf('Directory "%s" was not created',$concurrentDirectory));
-                        }
+                        mkdir($localDirectory . '/' . $resultdate);
                     }
                     $remotetoLocalDirectory = $localDirectory . '/' . $resultdate;
 
