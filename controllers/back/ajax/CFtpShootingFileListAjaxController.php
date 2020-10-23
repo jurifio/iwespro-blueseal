@@ -33,33 +33,34 @@ class CFtpShootingFileListAjaxController extends AAjaxController
     public function get()
     {
         if (ENV == 'dev') {
-            $ftp_server = 'dev.iwes.pro';
+            $ftp_server = 'ftp.iwes.pro';
             $pathlocal = '/media/sf_sites/iwespro/temp-remaster/';
-            $save_to = '/media/sf_sites/iwespro/temp-remaster/';
+            $save_to = '/home/iwespro/public_html/imgTransfer';
             $save_to_dir = '/media/sf_sites/iwespro/temp-remaster';
-            $path = 'shootImport/resize';
+            $path = '/public_html/imgTransfer/';
             $remotepathTodo = 'shootImport/newage2/topublish_dev/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
 
         } else {
-            $ftp_server = 'fiber.office.iwes.it';
+            $ftp_server = 'ftp.iwes.pro';
             $pathlocal = '/home/iwespro/public_html/temp-remaster/';
             $save_to = '/home/iwespro/public_html/temp-remaster/';
             $save_to_dir = '/home/iwespro/public_html/temp-remaster';
-            $path = 'shootImport/resize';
+            $path = '/public_html/imgTransfer/';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
         }
         $ftp_server_port = "21";
-        $ftp_user_name = 'app@iwes.pro';
+        $ftp_user_name = 'iwespro';
         $ftp_user_pass = "Cartne01!";
+        $shops = \Monkey::app()->repoFactory->create('Shop')->findAll();
 
 // setto la connessione al ftp
-        $conn_id = ftp_connect($ftp_server, $ftp_server_port);
+        $conn_id = ftp_connect($ftp_server,$ftp_server_port);
 // Eseguo il login con  username e password
-        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+        $login_result = ftp_login($conn_id,$ftp_user_name,$ftp_user_pass);
 
 // check connessione e risultato del login
         if ((!$conn_id) || (!$login_result)) {
@@ -67,12 +68,15 @@ class CFtpShootingFileListAjaxController extends AAjaxController
         } else {
             echo "Success</br>";
             // enabling passive mode
-            ftp_pasv($conn_id, false);
+            ftp_pasv($conn_id,false);
             // prendo il contenuto di tutta la directory sul server
-            $contents = ftp_nlist($conn_id, $path);
+            $contents = ftp_nlist($conn_id,$path);
             // output $contents
+            $response = [];
+            $response ['data'] = [];
+            $i = 1;
+            $shopName = '';
             foreach ($contents as $item) {
-                echo "directory";
                 $item = trim($item,'/');
                 $item = '/' . $item;
                 if ($item === '/') {
@@ -80,22 +84,30 @@ class CFtpShootingFileListAjaxController extends AAjaxController
                     return true;
 
                 }
+                $result = in_array($item, ftp_nlist($conn_id, dirname($item)));
+                if ($result == true) {
+                    $pathArr = explode(DIRECTORY_SEPARATOR,$item);
+                    $filenametoextrat = end($pathArr);
+                    foreach ($shops as $shop) {
+                        $shopToFind = 'shop_' . $shop->id . '_';
+                        if (strpos($filenametoextrat,$shopToFind) !== false) {
+                            $shopName = $shop->name;
+                            break;
+                        }
+                    }
+                }
 
+
+                $row = [];
+                $row["DT_RowId"] = 'row__' . $i;
+                $row["id"] = $i;
+                $row['file'] = '<i class="fa fa-file-archive-o" aria-hidden="true"></i> '. $filenametoextrat;
+                $row['shopName']=$shopName;
+                $response['data'][] = $row;
             }
-
-        $sql = "SELECT id as id, shopId as shopId   FROM SiteApi ";
-
-        $datatable = new CDataTables($sql, ['id'], $_GET, false);
-
-        $datatable->doAllTheThings('true');
-
-        foreach ($datatable->getResponseSetData() as $key => $row) {
-
-            $datatable->setResponseDataSetRow($key, $row);
-
         }
 
-        return $datatable->responseOut();
+        return json_encode($response);
     }
 
 

@@ -32,7 +32,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="shooting_file_list"
-                               data-controller="CFtpShootingFileListAjaxController"
+                               data-controller="FtpShootingFileListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -44,10 +44,15 @@
                                     data-orderable="true"
                                     class="center">id
                                 </th>
-                                <th data-slug="shopId"
+                                <th data-slug="shopName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">shopId
+                                    class="center">Shop di Provenienza
+                                </th>
+                                <th data-slug="file"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Archivio Foto
                                 </th>
                             </tr>
                             </thead>
