@@ -2536,6 +2536,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/shooting/ftp-immagini-lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CFtpShootingFileListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/shooting/operazioni-su-immagini(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImageOperationController"
