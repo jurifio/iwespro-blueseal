@@ -70,13 +70,19 @@ class CFtpShootingFileListAjaxController extends AAjaxController
             // enabling passive mode
             ftp_pasv($conn_id,false);
             // prendo il contenuto di tutta la directory sul server
-            $contents = ftp_nlist($conn_id,$path);
+            $buff = ftp_rawlist($conn_id, '/');
+
+// close the connection
+            ftp_close($conn_id);
+
+// output the buffer
+            var_dump($buff);
             // output $contents
             $response = [];
             $response ['data'] = [];
             $i = 1;
             $shopName = '';
-            foreach ($contents as $item) {
+            foreach ($buff as $item) {
                 $item = trim($item,'/');
                 $item = '/' . $item;
                 if ($item === '/') {
