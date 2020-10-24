@@ -2,15 +2,15 @@ window.buttonSetup = {
     tag:"a",
     icon:"fa-film",
     permission:"/admin/product/edit",
-    event:"bs-product-preview-video",
+    event:"bs-product-preview-video2",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Visualizza Video 1 ",
+    title:"Visualizza Video 2 ",
     placement:"bottom",
     toggle:"modal"
 };
 
-$(document).on('bs-product-preview-video', function () {
+$(document).on('bs-product-preview-video2', function () {
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 
@@ -21,12 +21,12 @@ $(document).on('bs-product-preview-video', function () {
         }).open();
         return false;
     }
-   var video =selectedRows[0].video;
+   var video =selectedRows[0].video2;
     var poster=selectedRows[0].dummyPicture;
     var body='';
     if (video!=null){
         body='<video  width="450" height="600" poster="'+poster+'" controls autoplay>'+
-            '<source src="'+video+'" type="video/mp4">';
+                        '<source src="'+video+'" type="video/mp4">';
     }else{
         body =`non Ci sono Video`;
     }
