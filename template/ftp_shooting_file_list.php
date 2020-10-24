@@ -10,7 +10,7 @@
     <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms', 'tables'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -71,46 +71,7 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione">
         <bs-toolbar-button
-            data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.listsiteapi.check"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.listcategory.update"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.listcategory.create"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.quantity.update"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.color.update"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.insert.productprestashop"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.image.update"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.colorproductprestashop.update"        >
-        </bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.billingjournal.insert"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.dictionarysizeimage.run"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.dictionarysizerenameimage.run"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.dictionarysizerenametometaimage.run"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.getfattureincloud.list"
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

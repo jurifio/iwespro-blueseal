@@ -138,9 +138,11 @@ class CDictionaryRemasterImageSizeAjaxController extends AAjaxController
                         $filenametoextrat=end($pathArr);
                         $filenametoextrat = str_replace('#','_',$filenametoextrat);
                         $filenametoextrat = str_replace(' ','_', $filenametoextrat);
-                        $filenametoextrat = str_replace('.','dariconvertire', $filenametoextrat);
-                        $filenametoextrat = str_replace('dariconvertirejpg','.jpg', $filenametoextrat);
-                        $filenametoextrat = str_replace('dariconvertire','', $filenametoextrat);
+                        $countPoint=substr_count($filenametoextrat, '.');
+                        if($countPoint==2){
+                            $filenametoextrat=preg_replace('(.)', '_', $filenametoextrat, 1);
+
+                        }
                            ftp_get($conn_id,$remotetoLocalDirectory . '/' . $filenametoextrat,$image,FTP_BINARY);
 
                         /*$file = fopen($remotetoLocalDirectory . '/' . $filenametoextrat, 'w');
