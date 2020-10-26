@@ -64,6 +64,9 @@
             <bs-toolbar-button
                     data-remote="bs.dictionarysizeimage.run"
             ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-remote="bs.dictionarysizeimagedresses.run"
+            ></bs-toolbar-button>
 
         </bs-toolbar-group>
     </bs-toolbar>
