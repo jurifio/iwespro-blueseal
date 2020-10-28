@@ -60,11 +60,11 @@ class CExplodeZipAjaxController extends AAjaxController
         if (ENV == 'dev') {
             $pathFileZip = '/media/sf_sites/iwespro/imgTransfer/';
             $pathFileDest = '/media/sf_sites/iwespro/client/public/media/folderImages';
-            $pathBackUp = '/media/sf_sites/iwespro/client/public/productsync/'.$shopName.'/';
+            $pathBackUp = '/media/sf_sites/iwespro/client/public/productsync/'.$shopName.'/photos/';
         } else {
             $pathFileZip = '/home/iwespro/public_html/imgTransfer/';
             $pathFileDest = '/home/iwespro/public_html/client/public/media/folderImages';
-            $pathBackUp = '/home/iwespro/public_html/client/public/productsync/'.$shopName.'/';
+            $pathBackUp = '/home/iwespro/public_html/client/public/productsync/'.$shopName.'/photos/';
         }
         try {
             $zip_obj = new ZipArchive;
