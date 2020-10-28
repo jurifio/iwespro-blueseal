@@ -73,6 +73,9 @@
         <bs-toolbar-button
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.explodeto.folder"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

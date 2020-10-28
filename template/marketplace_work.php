@@ -50,7 +50,7 @@
                                                         unitario: <?php echo "<strong>" . $rPrice . "€</strong>" ?>
                                                         <br>
                                                         Prezzo
-                                                        totale: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $rPrice * $el . "€</strong>" ?>
+                                                            totale: <?php echo $el == 0 ? '<strong>Coming soon</strong>' : "<strong>" . $rPrice * $el . "€</strong>" ?>
                                                         <br>
                                                         Giorni stimati di
                                                         lavoro: <?php echo "<strong>" . $pb->estimatedWorkDays . "</strong>"; ?>

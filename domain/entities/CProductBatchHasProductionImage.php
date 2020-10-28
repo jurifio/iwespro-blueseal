@@ -23,4 +23,16 @@ class CProductBatchHasProductionImage extends AEntity
 {
 	protected $entityTable = 'ProductBatchHasProductionImage';
 	protected $primaryKeys = ['id'];
+    public function isComplete()
+    {
+
+        $elems = $this->getElements();
+
+        foreach ($elems as $elem) {
+            if (!is_null($elem->workCategorySteps->rgt)) return false;
+        }
+
+        return true;
+
+    }
 }

@@ -2677,6 +2677,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/work/lotti/produzione-immagini/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchHasProductionImageListController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/lotti/prodotti/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEmptyProductBatchDetailsListController"

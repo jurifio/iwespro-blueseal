@@ -28,6 +28,7 @@ use bamboo\domain\repositories\CWorkCategoryStepsRepo;
  * @property CObjectCollection $productBatchHasProductBrand
  * @property CObjectCollection $productBatchTextManage
  * @property CObjectCollection $productBatchDetails
+ * @property CObjectCollection $productBatchHasProductionImage
  * @property CObjectCollection $productBatchHasProductDetail
  *
  *
@@ -154,6 +155,9 @@ class CProductBatch extends AEntity
                         $elems->add($productBatchTextManage);
                     }
                 }
+                break;
+            case CWorkCategory::POST_PRODUCTION_IMAGE:
+                $elems =  $this->productBatchHasProductionImage;
                 break;
             case CWorkCategory::DET_ENG:
             case CWorkCategory::DET_DTC:

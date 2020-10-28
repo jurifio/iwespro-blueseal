@@ -54,6 +54,7 @@ class CWorkCategory extends AEntity
     const POST_WHATSAPP =30;
     const STREAM_TWITCH=32;
     const STREAM_YOUTUBE=33;
+    const POST_PRODUCTION_IMAGE=34;
 
     const SLUG_EMPTY_NORM = 'prodotti';
     const SLUG_EMPTY_BRAND = 'brands';
