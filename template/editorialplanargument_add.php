@@ -58,6 +58,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="editorialPlanSocialId">Seleziona il Social Correlato</label>
+                                                <select id="editorialPlanSocialId" name="editorialPlanSocialId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="workCategoryId">Seleziona La Categoria Operator</label>
+                                                <select id="workCategoryId" name="workCategoryId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona la Lista"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

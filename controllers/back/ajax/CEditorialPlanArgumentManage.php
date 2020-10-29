@@ -37,6 +37,8 @@ class CEditorialPlanArgumentManage extends AAjaxController
         $titleArgument = $data['titleArgument'];
         $type = $data['type'];
         $descriptionArgument =$data['descriptionArgument'];
+        $workCategoryId=$data['workCategoryId'];
+        $editorialPlanSocialId=$data['editorialPlanSocialId'];
 
 
 
@@ -58,7 +60,8 @@ class CEditorialPlanArgumentManage extends AAjaxController
             $editorialPlanArgumentInsert->titleArgument = $titleArgument;
             $editorialPlanArgumentInsert->type = $type;
             $editorialPlanArgumentInsert->descriptionArgument = $descriptionArgument;
-
+            $editorialPlanArgumentInsert->editorialPlanSocialId = $editorialPlanSocialId;
+            $editorialPlanArgumentInsert->workCategoryId = $workCategoryId;
 
 
             // eseguo la commit sulla tabella;
@@ -98,6 +101,8 @@ class CEditorialPlanArgumentManage extends AAjaxController
         $titleArgument = $data["titleArgument"];
         $type=$data["type"];
         $descriptionArgument =$data["descriptionArgument"];
+        $editorialPlanSocialId=$data["editorialPlanSocialId"];
+        $workCategoryId=$data["workCategoryId"];
 
 
         /** @var CRepo $editorialPlanArgumentRepo */
@@ -108,6 +113,8 @@ class CEditorialPlanArgumentManage extends AAjaxController
         $editorialPlanArgument->titleArgument = $titleArgument;
         $editorialPlanArgument->type = $type;
         $editorialPlanArgument->descriptionArgument = $descriptionArgument;
+        $editorialPlanArgument->workCategoryId=$workCategoryId;
+        $editorialPlanArgument->editorialPlanSocialId=$editorialPlanSocialId;
 
 
 

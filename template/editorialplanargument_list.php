@@ -59,6 +59,16 @@
                                     data-orderable="true"
                                     class="center">Descrizione Argomento
                                 </th>
+                                <th data-slug="editorialPlanSocialName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Social Correlato
+                                </th>
+                                <th data-slug="workCategoryName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Categoria Operator
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
