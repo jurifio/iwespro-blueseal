@@ -38,6 +38,7 @@ class CEditorialPlanManage extends AAjaxController
         $endDate = $data['endDate'];
         $shopId = $data['shopId'];
         $contractId=$data['contract'];
+        $facebookMarketAccountId=$data['facebookMarketAccountId'];
 
 
         /** @var CRepo $editorialPlanRepo */
@@ -59,6 +60,7 @@ class CEditorialPlanManage extends AAjaxController
             $editorialPlanInsert->startDate = $startDate;
             $editorialPlanInsert->endDate = $endDate;
             $editorialPlanInsert->contractId=$contractId;
+            $editorialPlanInsert->facebookMarketAccountId=$facebookMarketAccountId;
 
 
             // eseguo la commit sulla tabella;
@@ -92,6 +94,7 @@ class CEditorialPlanManage extends AAjaxController
         $startDate = $data["dateStartDate"];
         $endDate = $data["dateEndDate"];
         $contractId=$data['contract'];
+        $facebookMarketAccountId=$data['facebookMarketAccountId'];
 
 
         /** @var CRepo $editorialPlan */
@@ -111,6 +114,9 @@ class CEditorialPlanManage extends AAjaxController
         }
         if ($contractId!=""){
             $editorialPlan->contractId = $contractId;
+        }
+        if($facebookMarketAccountId!=null){
+            $editorialPlan->facebookMarketAccountId=$facebookMarketAccountId;
         }
 
 

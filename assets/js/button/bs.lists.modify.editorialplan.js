@@ -69,7 +69,14 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         '<input autocomplete="off" type="datetime-local" id="endDate"' +
         'class="form-control" name="endDate" value="' + selectedRows[0].endDate + '">' +
         '</div>' +
-        '</div>'
+        '</div>'+
+        '<div class=\"row\">' +
+                '<div class=\"col-xs-12>\">' +
+            '<label for="facebookMarketAccountId">Data di Fine Piano Editoriale</label>' +
+            '<input autocomplete="off" type="text" id="facebookMarketAccountId"' +
+            'class="form-control" name="facebookMarketAccountId" value="' + selectedRows[0].facebookMarketAccountId + '">' +
+            '</div>' +
+            '</div>'
     });
     $.ajax({
         method:'GET',
@@ -117,6 +124,8 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
         let name = $('#editorialPlanName').val();
         let shopId = $('#shopId').val();
         let contract =$('#contractId').val();
+        let facebookMarketAccountId=$('#facebookMarketAccountId').val();
+
 
         $.ajax({
             method: "put",
@@ -128,6 +137,7 @@ $(document).on('bs-editorialplan-edit', function (e, element, button) {
                 name: name,
                 shopId:shopId,
                 contract: contract,
+                facebookMarketAccountId:facebookMarketAccountId
             }
         }).done(function (res) {
             bsModal.writeBody(res);

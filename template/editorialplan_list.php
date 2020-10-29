@@ -69,6 +69,11 @@
                                     data-orderable="true"
                                     class="center">Contratto
                                 </th>
+                                <th data-slug="facebookMarketAccountId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Account Pubblicitario Facebook
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

@@ -83,6 +83,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="facebookMarketAccountId">Account Pubblicitario Facebook</label>
+                                                <input type="text" id="facebookMarketAccountId" class="form-control"
+                                                       placeholder="Inserisci account Pubblicitario Facebook" name="facebookMarketAccountId"
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                    </div>
 
 
                                    

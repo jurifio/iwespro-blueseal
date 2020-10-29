@@ -42,7 +42,8 @@ $(document).on('bs.newEditorialPlan.save', function () {
             startDate: $('#startDate').val(),
             endDate: $('#endDate').val(),
             shopId: $('#shopId').val(),
-            contract:$('#contract').val()
+            contract:$('#contract').val(),
+            facebookMarketAccountId:$('#facebookMarketAccountId').val()
 
         };
         $.ajax({

@@ -17,7 +17,7 @@ class CEditorialPlanListAjaxController extends AAjaxController
 
     public function get()
     {
-        $sql = "SELECT n.id, n.name, S.name as shopName,  n.startDate, n.endDate,c.id as contractId, c.name as contractName from EditorialPlan n 
+        $sql = "SELECT n.id, n.name, S.name as shopName,  n.startDate, n.endDate,c.id as contractId, c.name as contractName, n.facebookMarketAccountId from EditorialPlan n 
         INNER JOIN Shop S ON n.shopId = S.id
         left join Contracts c on n.contractId=c.id";
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
