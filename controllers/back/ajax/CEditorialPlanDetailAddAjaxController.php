@@ -897,7 +897,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
             $diff = $later->diff($earlier)->format("%a");
                 $pbr->creationDate = $creationDate;
                 $pbr->scheduledDelivery = $startEventDate;
-                $pbr->sectional = $codeSectional . '/' . $nesSectional;
+                $pbr->sectional = $codeSectional . '/' . $newSectional;
                 $pbr->workCategoryId = $workCategoryId;
                 $pbr->estimatedWorkDays = $diff;
             if($data['foisonId']!=null || $data['foisonId']!='' ) {
