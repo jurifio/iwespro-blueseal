@@ -218,6 +218,10 @@
                                     data-orderable="true"
                                     class="center">Stato
                                 </th>
+                                <th data-slug="shooting"
+                                    data-searchable="true"
+                                    data-orderable="true">Shooting
+                                </th>
                                 <th data-slug="hasQty"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Quantità disp.
@@ -280,10 +284,7 @@
                                     data-searchable="true"
                                     data-orderable="false">Prodotto
                                 </th>
-                                <th data-slug="shooting"
-                                    data-searchable="true"
-                                    data-orderable="true">Shooting
-                                </th>
+
                                 <th data-slug="inPrestashop"
                                     data-searchable="true"
                                     data-orderable="true">Prestashop
@@ -348,6 +349,12 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.print.aztec"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.shooting.change"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.shooting.delete"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Attributi Prodotti">

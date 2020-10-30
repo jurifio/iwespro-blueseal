@@ -70,7 +70,7 @@ class CCreateFacebookCampaignAjaxController extends AAjaxController
     $linkData = array(
         'name' => $data['campaignName'],
         'buying_type' => $data['buying_type'],
-        'objective' => 'REACH',
+        'objective' => 'AUCTION',
         'lifetime_budget' => str_replace('.','',$data['lifetime_budget']),
         'status' => 'PAUSED',
         'special_ad_categories' =>'NONE',

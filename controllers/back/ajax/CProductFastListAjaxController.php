@@ -89,19 +89,18 @@ class CProductFastListAjaxController extends AAjaxController
         if ($productBrandId == 0) {
             $sqlFilterBrand = '';
         } else {
-            $sqlFilterBrand = 'and p.productBrandId='.$productBrandId;
+            $sqlFilterBrand = 'and p.productBrandId=' . $productBrandId;
         }
         if ($shopid == 0) {
             $sqlFilterShop = '';
         } else {
-            $sqlFilterShop = 'and s.id='.$shopid;
+            $sqlFilterShop = 'and s.id=' . $shopid;
         }
         if ($stored == 0) {
             $sqlFilterStored = '';
         } else {
-            $sqlFilterStored = 'and p.stored='.$stored;
+            $sqlFilterStored = 'and p.stored=' . $stored;
         }
-
 
 
         $sql = "SELECT
@@ -124,6 +123,7 @@ class CProductFastListAjaxController extends AAjaxController
                   s.id                                                                                              AS shopId,
                   s.name                                                                                            AS row_shop,
                   concat(phs.shootingId)                                                             AS shooting,
+                    if (concat(phs.shootingId)='','no','sì')                                           as hasShooting,
                   concat(doc.number)                                                             AS doc_number,
                   (SELECT count(*)
                    FROM ShopHasProduct
@@ -189,7 +189,7 @@ class CProductFastListAjaxController extends AAjaxController
                     ProductHasShooting phs 
                       JOIN Shooting shoot ON phs.shootingId = shoot.id
                         LEFT JOIN Document doc ON shoot.friendDdt = doc.id) 
-                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored. ' ' . $sqlFilterShooting;
+                                ON p.productVariantId = phs.productVariantId AND p.id = phs.productId where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand . ' ' . $sqlFilterShop . ' ' . $sqlFilterStored . ' ' . $sqlFilterShooting;
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
@@ -232,7 +232,7 @@ class CProductFastListAjaxController extends AAjaxController
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
             $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
             $row['row_dummyUrl'] = $val->getDummyPictureUrl();
-            $row['productCard'] = (!$val->getProductCardUrl() ? '-' :'<a href="#1" class="enlarge-your-img"><img width="50" src="'. $val->getProductCardUrl().'"/></a>');
+            $row['productCard'] = (!$val->getProductCardUrl() ? '-' : '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getProductCardUrl() . '"/></a>');
             $row['row_pCardUrl'] = (!$val->getProductCardUrl() ? '-' : $val->getProductCardUrl());
             $row['details'] = "";
             foreach ($val->productSheetActual as $k => $v) {
@@ -240,9 +240,9 @@ class CProductFastListAjaxController extends AAjaxController
                     $row['details'] .= '<span class="small">' . $v->productDetail->productDetailTranslation->getFirst()->name . "</span><br />";
                 }
             }
-            $row['dummyPicture']=$val->getDummyPictureUrl();
+            $row['dummyPicture'] = $val->getDummyPictureUrl();
             $row['hasPhotos'] = ($val->productPhoto->count()) ? 'sì' : 'no';
-            $row['dummyVideo'] = ($val->dummyVideo!=null) ? 'sì' : 'no';
+            $row['dummyVideo'] = ($val->dummyVideo != null) ? 'sì' : 'no';
             $row['hasDetails'] = (2 < $val->productSheetActual->count()) ? 'sì' : 'no';
             $row['season'] = '<span class="small">' . $val->productSeason->name . " " . $val->productSeason->year . '</span>';
 
@@ -258,13 +258,13 @@ class CProductFastListAjaxController extends AAjaxController
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
             $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
-            $onlyCatalogue='';
-            if($val->onlyCatalogue==1){
-                $onlyCatalogue='solo catalogo';
-            }else{
-                $onlyCatalogue='in vendita';
+            $onlyCatalogue = '';
+            if ($val->onlyCatalogue == 1) {
+                $onlyCatalogue = 'solo catalogo';
+            } else {
+                $onlyCatalogue = 'in vendita';
             }
-            $row['status'] = $val->productStatus->name. ' '.$onlyCatalogue;
+            $row['status'] = $val->productStatus->name . ' ' . $onlyCatalogue;
             $row['productPriority'] = $val->sortingPriorityId;
 
             $qty = 0;
@@ -326,11 +326,19 @@ class CProductFastListAjaxController extends AAjaxController
             $sids = "";
             $ddtNumbers = "";
             /** @var CShooting $singleShooting */
+            $countShooting = 0;
             foreach ($val->shooting as $singleShooting) {
                 $sids .= '<br />' . $singleShooting->id;
                 $ddtNumbers .= '<br />' . $docRepo->findShootingFriendDdt($singleShooting);
+                $countShooting++;
             }
-            $row["shooting"] = $sids;
+            if ($countShooting > 0) {
+                $row['shooting'] = 'sì';
+
+                $row["shooting"] = $sids;
+            } else {
+                $row['shooting'] = 'no';
+            }
             $row["doc_number"] = $ddtNumbers;
             $row["inPrestashop"] = is_null($val->prestashopHasProduct) ? 'no' : 'si';
 
