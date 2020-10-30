@@ -38,7 +38,7 @@ $(document).on('bs-product-shooting-delete', function (e, element, button) {
     });
 
     let bsModal = new $.bsModal('Cancella prodotti in shooting', {
-        body: 'Vuoi Canellare i Prodotti selezionati dallo Shooting'
+        body: 'Vuoi Cancellare i Prodotti selezionati dallo Shooting'
     });
 
     bsModal.showCancelBtn();

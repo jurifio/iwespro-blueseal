@@ -313,9 +313,6 @@
                 data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
                 data-remote="bs.set.onlycatalogue"
         ></bs-toolbar-button>
         <bs-toolbar-button
@@ -481,6 +478,11 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.productmanage.correlation.delete"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione  Correlazioni">
+        <bs-toolbar-button
+                data-remote="bs.product.storehouse.quantity"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
