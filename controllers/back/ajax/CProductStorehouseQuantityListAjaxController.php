@@ -56,9 +56,9 @@ class CProductStorehouseQuantityListAjaxController extends AAjaxController
                  group BY dst.shopId,st.name,dst.qty   Order BY ps.name,st.name asc
         ',[])->fetchAll();
         if (count($resultProduct) > 0) {
-            $stock.='<table><thead><th>Shop</th><th>Magazzino</th><th>taglia</th><th>qt</th></thead><tbody>';
+            $stock.='<div class="row"><div class="col-md-3">Shop</div><div class="col-md-3">Magazzino</div><div class="col-md-3">taglia</div><div class="col-md-3">qt</div></div>';
             foreach ($resultProduct as $res) {
-                $stock.='<tr><td>'.$res['shopName'].'</td><td>'.$res['storeHouse'].'</td><td>'.$res['productSizeId'].'</td><td>'.$res['qty'].'</td></tr>';
+                $stock.='<div class="row"><div class="col-md-3">'.$res['shopName'].'</div><div class="col-md-3">'.$res['storeHouse'].'</div><div class="col-md-3">'.$res['productSizeId'].'</div><div class="col-md-3">'.$res['qty'].'</div></div>';
 
             }
             $stock.='</tbody></table>';
