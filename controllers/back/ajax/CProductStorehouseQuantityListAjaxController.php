@@ -43,12 +43,12 @@ class CProductStorehouseQuantityListAjaxController extends AAjaxController
                dst.size as sizeName
                `st`.`name` as storeHouse,
                dst.qty as qty,
-                s.name as shopName
+                `s`.`name` as shopName
                from 
                  DirtySkuHasStoreHouse dst 
                 join Storehouse st on dst.storeHouseId=st.id  
                    join Shop s on dst.shopId=s.id
-                join ProductSize ps on dst.productSizeId=ps.id where  dp.productId='.$productId.' and dp.productVariantId='.$productVariantId.' 
+                join ProductSize ps on dst.productSizeId=ps.id where  dst.productId='.$productId.' and dst.productVariantId='.$productVariantId.' 
                  group BY dst.shopId,st.name,dst.qty   Order BY ps.name,st.name asc
         ',[])->fetchAll();
         if (count($resultProduct) > 0) {
