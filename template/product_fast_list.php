@@ -480,7 +480,7 @@
                 data-remote="bs.productmanage.correlation.delete"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione  Correlazioni">
+    <bs-toolbar-group data-group-label="Gestione Magazzini">
         <bs-toolbar-button
                 data-remote="bs.product.storehouse.quantity"
         ></bs-toolbar-button>
