@@ -36,20 +36,22 @@ class CProductStorehouseQuantityListAjaxController extends AAjaxController
         $codeProduct=explode('-',$product);
         $productId=$codeProduct[0];
         $productVariantId = $codeProduct[1];
-        $resultProduct = $this->app->dbAdapter->query('SELECT dst.id as dirtyProductId, 
+        $resultProduct = $this->app->dbAdapter->query('
+                 
+                 SELECT 
                dst.productId as productId, 
                dst.productVariantId as productVariantId, 
                dst.shopId as shopId, 
-               dst.size as sizeName
-               `st`.`name` as storeHouse,
+               dst.size as sizeName,
+               `st`.`name` AS `storeHouse`,
                dst.qty as qty,
                 `s`.`name` as shopName
                from 
                  DirtySkuHasStoreHouse dst 
-                join Storehouse st on dst.storeHouseId=st.id  
-                   join Shop s on dst.shopId=s.id
-                join ProductSize ps on dst.productSizeId=ps.id where  dst.productId='.$productId.' and dst.productVariantId='.$productVariantId.' 
-                 group BY dst.shopId,st.name,dst.qty   Order BY ps.name,st.name asc
+                 join Storehouse st on dst.storeHouseId=st.id  
+                join Shop s on dst.shopId=s.id
+                join ProductSize ps on dst.productSizeId=ps.id where  dst.productId='.$productId.' and dst.productVariantId='.$productVariantId.'
+                 group BY dst.storeHouseId,dst.qty,dst.size   Order BY ps.name,st.name asc
         ',[])->fetchAll();
         if (count($resultProduct) > 0) {
             $stock.='<div class="row"><div class="col-md-3">Shop</div><div class="col-md-3">Magazzino</div><div class="col-md-3">taglia</div><div class="col-md-3">qt</div></div>';
