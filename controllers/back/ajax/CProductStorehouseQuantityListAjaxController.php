@@ -36,20 +36,16 @@ class CProductStorehouseQuantityListAjaxController extends AAjaxController
         $codeProduct=explode('-',$product);
         $productId=$codeProduct[0];
         $productVariantId = $codeProduct[1];
-        $resultProduct = $this->app->dbAdapter->query('SELECT dp.id as dirtyProductId, 
-               dp.productId as productId, 
-               dp.productVariantId as productVariantId, 
-               dpe.generalColor as color,
-               dp.shopId as shopId, 
-               ps.name as productSizeId, 
+        $resultProduct = $this->app->dbAdapter->query('SELECT dst.id as dirtyProductId, 
+               dst.productId as productId, 
+               dst.productVariantId as productVariantId, 
+               dst.shopId as shopId, 
+               dst.size as sizeName
                `st`.`name` as storeHouse,
                dst.qty as qty,
                 s.name as shopName
-               from DirtyProduct dp 
-              
-               join DirtyProductExtend dpe on dp.id =dpe.dirtyProductId
-               join DirtySku  ds on dp.id = ds.dirtyProductId 
-                join DirtySkuHasStoreHouse dst on dp.id=dst.dirtyProductId
+               from 
+                 DirtySkuHasStoreHouse dst 
                 join Storehouse st on dst.storeHouseId=st.id  
                    join Shop s on dst.shopId=s.id
                 join ProductSize ps on dst.productSizeId=ps.id where  dp.productId='.$productId.' and dp.productVariantId='.$productVariantId.' 
@@ -58,7 +54,7 @@ class CProductStorehouseQuantityListAjaxController extends AAjaxController
         if (count($resultProduct) > 0) {
             $stock.='<div class="row"><div class="col-md-3">Shop</div><div class="col-md-3">Magazzino</div><div class="col-md-3">taglia</div><div class="col-md-3">qt</div></div>';
             foreach ($resultProduct as $res) {
-                $stock.='<div class="row"><div class="col-md-3">'.$res['shopName'].'</div><div class="col-md-3">'.$res['storeHouse'].'</div><div class="col-md-3">'.$res['productSizeId'].'</div><div class="col-md-3">'.$res['qty'].'</div></div>';
+                $stock.='<div class="row"><div class="col-md-3">'.$res['shopName'].'</div><div class="col-md-3">'.$res['storeHouse'].'</div><div class="col-md-3">'.$res['sizeName'].'</div><div class="col-md-3">'.$res['qty'].'</div></div>';
 
             }
             $stock.='</tbody></table>';
