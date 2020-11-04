@@ -67,12 +67,9 @@ class CGenerateDummyJob extends ACronJob
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 'sì', 'no') ='sì' and
-                   p.dummyPicture = 'bs-dummy-16-9.png'  AND
-              `ps`.`id` NOT IN (6, 7, 8, 12, 13)
-               AND (`s`.`importer` IS NOT NULL)
-               AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
-            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
-HAVING (sum(`ds`.`qty`) > 0)";
+                   p.dummyPicture = 'bs-dummy-16-9.png'  
+           
+            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
             $res = $this->app->dbAdapter->query($query,[])->fetchAll();
             foreach ($res as $result) {
                 $product = $productRepo->findOneBy(['id' => $result['productId'],'productVariantId' => $result['productVariantId']]);
