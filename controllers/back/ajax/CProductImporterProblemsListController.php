@@ -15,7 +15,7 @@ class CProductImporterProblemsListController extends AAjaxController
     public function get()
     {
         $bluesealBase = $this->app->baseUrl(false) . "/blueseal/";
-
+/*
         $query =
             "SELECT
               `p`.`id`                                                         AS `productId`,
@@ -57,7 +57,7 @@ class CProductImporterProblemsListController extends AAjaxController
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
           HAVING (sum(`ds`.`qty`) > 0)";
 //*/
-/*
+
         $query="SELECT
               `p`.`id`                                                         AS `productId`,
               `p`.`productVariantId`                                           AS `productVariantId`,
@@ -98,8 +98,9 @@ class CProductImporterProblemsListController extends AAjaxController
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
-            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
-*/
+            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
+HAVING (sum(`ds`.`qty`) > 0)";
+
         $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
