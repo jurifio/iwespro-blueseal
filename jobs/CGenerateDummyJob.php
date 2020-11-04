@@ -22,6 +22,7 @@ class CGenerateDummyJob extends ACronJob
     public function run($args = null)
     {
         $this->generateDummy();
+        $this->report('CGenerateDummyJob','StartJob');
     }
 
 
@@ -79,9 +80,9 @@ HAVING (sum(`ds`.`qty`) > 0)";
                 $product->dummyPicture = $url;
                 $product->update();
             }
-            \Monkey::app()->applicationLog('CGenerateDummyJob','Repoert','Dummy Genration Complete','');
+            $this->report('CGenerateDummyJob','Report','Dummy Genration Complete');
         }catch (\Throwable $e){
-            \Monkey::app()->applicationLog('CGenerateDummyJob','error','Error on Dummy',$e->getMessage());
+            $this->report('CGenerateDummyJob','error','Error on Dummy '.$e->getMessage());
         }
     }
 
