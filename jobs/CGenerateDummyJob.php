@@ -80,7 +80,7 @@ HAVING (sum(`ds`.`qty`) > 0)";
                 $product->dummyPicture = $url;
                 $product->update();
             }
-            $this->report('CGenerateDummyJob','Report','Dummy Genration Complete');
+            $this->report('CGenerateDummyJob','Report','Dummy Generation Complete');
         }catch (\Throwable $e){
             $this->report('CGenerateDummyJob','error','Error on Dummy '.$e->getMessage());
         }
