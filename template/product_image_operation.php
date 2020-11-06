@@ -49,9 +49,14 @@
                                 le  originali verrano inserite in <b>\\192.168.1.155\shootImport\newage2\original</b><br>
                             <p>
                                 Per poter adattare le foto bisogna inserire nella path del nas <b>\\192.168.1.155\shootImport\resizesocial</b> la cartella con le  foto da elaborare<br>
-                                una volta posizionata la cartella  cliccare sul tasto Remasterizzazione Foto Indossato <span class="fa fa-fighter-jet"></span><br>
+                                una volta posizionata la cartella  cliccare sul tasto Remasterizzazione Foto Socialo <span class="fa fa-rocket"></span><br>
                                 attendere la fine dell'elaborazione e il risultato dell'elaborazione si troverà nella cartella <b>\\192.168.1.155\shootImport\newage2\topublish</b><br>
                                 le  originali verrano inserite in <b>\\192.168.1.155\shootImport\newage2\original</b><br>
+                            <p>
+                                Per poter topgliere l'audio  inserire nella path del nas <b>\\192.168.1.155\shootImport\workvideo</b> la cartella con i video  da elaborare<br>
+                                una volta posizionata la cartella  cliccare sul tasto Remasterizzazione  Audio su Video  <span class="fa fa-volume-off"></span><br>
+                                attendere la fine dell'elaborazione e il risultato dell'elaborazione si troverà nella cartella <b>\\192.168.1.155\shootImport\newage2\topublish</b><br>
+                                i video  originali verrano inseriti in <b>\\192.168.1.155\shootImport\newage2\original</b><br>
 
                         </div>
                     </div>
@@ -79,6 +84,9 @@
             ></bs-toolbar-button>
             <bs-toolbar-button
                     data-remote="bs.dictionarysocialsizeimage.run"
+            ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-remote="bs.dictionaryvideo.run"
             ></bs-toolbar-button>
         </bs-toolbar-group>
     </bs-toolbar>

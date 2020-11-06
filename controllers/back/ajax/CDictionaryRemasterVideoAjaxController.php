@@ -22,7 +22,7 @@ use bamboo\domain\entities\CBillingJournal;
  * @since 1.0
  */
 
-class CDictionaryRemasterSocialImageSizeAjaxController extends AAjaxController
+class CDictionaryRemasterVideoAjaxController extends AAjaxController
 {
 
     public function POST()
@@ -41,7 +41,7 @@ class CDictionaryRemasterSocialImageSizeAjaxController extends AAjaxController
             $pathlocal = '/media/sf_sites/iwespro/temp-remaster/';
             $save_to = '/media/sf_sites/iwespro/temp-remaster/';
             $save_to_dir = '/media/sf_sites/iwespro/temp-remaster';
-            $path = 'shootImport/resizesocial';
+            $path = 'shootImport/workvideo';
             $remotepathTodo = 'shootImport/newage2/topublish_dev/';
             $remotepathOriginal = '/shootImport/newage2/original_dev/';
             $remotepathToRename = '/shootImport/newage2/torename_dev/';
@@ -51,7 +51,7 @@ class CDictionaryRemasterSocialImageSizeAjaxController extends AAjaxController
             $pathlocal = '/home/iwespro/public_html/temp-remaster/';
             $save_to = '/home/iwespro/public_html/temp-remaster/';
             $save_to_dir = '/home/iwespro/public_html/temp-remaster';
-            $path = 'shootImport/resizesocial';
+            $path = 'shootImport/workvideo';
             $remotepathTodo = 'shootImport/newage2/topublish/';
             $remotepathOriginal = '/shootImport/newage2/original/';
             $remotepathToRename = '/shootImport/newage2/torename/';
@@ -71,7 +71,11 @@ class CDictionaryRemasterSocialImageSizeAjaxController extends AAjaxController
         } else {
             echo "Success</br>";
             // enabling passive mode
-            ftp_pasv($conn_id, false);
+            if (ENV == 'dev') {
+                ftp_pasv($conn_id,true);
+            }else{
+                ftp_pasv($conn_id,false);
+            }
             // prendo il contenuto di tutta la directory sul server
             $contents = ftp_nlist($conn_id, $path);
             // output $contents
@@ -174,7 +178,7 @@ class CDictionaryRemasterSocialImageSizeAjaxController extends AAjaxController
                     $source = $remotetoLocalDirectory . '/' . $filenametoextrat;
 
 
-                    $renameImage=1;
+
 
 
                     $imagetoWorkName =$filename;
@@ -186,157 +190,26 @@ class CDictionaryRemasterSocialImageSizeAjaxController extends AAjaxController
 
 
 
-                    if ($renameImage == 1) {
+
                         ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
-                    }else{
-                        ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
-                    }
-                    //nuova procudura
-
-                    $img = imagecreatefromjpeg($source);
-
-//find the size of the borders
-                    $b_top = 0;
-                    $b_btm = 0;
-                    $b_lft = 0;
-                    $b_rt = 0;
-
-//top
-                    for(; $b_top < imagesy($img); ++$b_top) {
-                        for($x = 0; $x < imagesx($img); ++$x) {
-                            if(imagecolorat($img, $x, $b_top) != 0xFFFFFF) {
-                                break 2; //out of the 'top' loop
-                            }
-                        }
-                    }
-
-//bottom
-                    for(; $b_btm < imagesy($img); ++$b_btm) {
-                        for($x = 0; $x < imagesx($img); ++$x) {
-                            if(imagecolorat($img, $x, imagesy($img) - $b_btm-1) != 0xFFFFFF) {
-                                break 2; //out of the 'bottom' loop
-                            }
-                        }
-                    }
-
-//left
-                    for(; $b_lft < imagesx($img); ++$b_lft) {
-                        for($y = 0; $y < imagesy($img); ++$y) {
-                            if(imagecolorat($img, $b_lft, $y) != 0xFFFFFF) {
-                                break 2; //out of the 'left' loop
-                            }
-                        }
-                    }
-
-//right
-                    for(; $b_rt < imagesx($img); ++$b_rt) {
-                        for($y = 0; $y < imagesy($img); ++$y) {
-                            if(imagecolorat($img, imagesx($img) - $b_rt-1, $y) != 0xFFFFFF) {
-                                break 2; //out of the 'right' loop
-                            }
-                        }
-                    }
-
-//copy the contents, excluding the border
-                    $newimg = imagecreatetruecolor(
-                        imagesx($img)-($b_lft+$b_rt), imagesy($img)-($b_top+$b_btm));
-
-//copy the contents, excluding the border
-                    $targetImage = imagecreatetruecolor( imagesx($img)-($b_lft+$b_rt), imagesy($img)-($b_top+$b_btm));
-                    $width=imagesx($img)-($b_lft+$b_rt);
-                    $height=imagesy($img)-($b_top+$b_btm);
-                    imagecopy($targetImage, $img, 0, 0, $b_lft, $b_top, imagesx($targetImage), imagesy($targetImage));
-                    if($height>($width+($height/100*21.5))){
-                        $type='v';
-                    }else{
-                        $type='o';
-                    }
 
 
 
 
-                    if($type=='v'){
-                        $targetImage = imagecreatetruecolor( imagesx($img)-($b_lft+$b_rt), imagesy($img)-($b_top+$b_btm));
-                        $width=imagesx($img)-($b_lft+$b_rt);
-                        $height=imagesy($img)-($b_top+$b_btm);
 
-                        imagecopy($targetImage, $img, 0, 0, $b_lft, $b_top, imagesx($targetImage), imagesy($targetImage));
-                        /*header("Content-Type: image/jpeg");
-                        imagejpeg($targetImage);*/
-                        $ratioHeight=$height/1300;
-                        $newHeight=$height/$ratioHeight;
-                        $newWidth=$width/$ratioHeight;
-                        $newImage=imagescale($targetImage,$newWidth,$newHeight);
-
-
-                        $destination1 = imagecreatetruecolor(1125, 1500);
-                        /*
-                        $dst_x=(1125-imagesx($targetImage))/2;
-                        $dst_y=1500-imagesy($targetImage)-173;*/
-                        $dst_x=(1125-$newWidth)/2;
-                        $dst_y=(1500-$newHeight)-130;
-
-                        $color = imagecolorallocate($targetImage, 255, 255, 255);
-// fill entire image
-                        imagefill($destination1, 0, 0, $color);
-                        imagecopy($destination1, $newImage, $dst_x, $dst_y, 0, 0,$newWidth, $newHeight);
+                        $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . 'remaster_'.$imagetoWorkName;
 
 
 
-                    }else {
+                    $cmd = "ffmpeg -i ".$source." -vcodec copy -an ".$filenameremaster;
+//$cmd = "ffmpeg -y -i /media/sf_sites/iwespro/temp/video.mp4 -i /media/sf_sites/iwespro/temp/audio.mp3 -shortest -vcodec libx264 -acodec libfaac -b:v 1000k -refs 6 -coder 1 -sc_threshold 40 -flags +loop -me_range 16 -subq 7 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -trellis 1 -b:a 128k -pass 1 -passlogfile /media/sf_sites/iwespro/temp-remaster/shootImport/resize/carte1610ok/2020-10-23/video3.mp4";
+                    exec($cmd,$output);
+                        ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/remaster_' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
+                        unlink($filenameremaster);
+                        unlink($save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName);
 
-                        $targetImage = imagecreatetruecolor(imagesx($img) - ($b_lft + $b_rt),imagesy($img) - ($b_top + $b_btm));
-                        $width = imagesx($img) - ($b_lft + $b_rt);
-                        $height = imagesy($img) - ($b_top + $b_btm);
-
-                        imagecopy($targetImage,$img,0,0,$b_lft,$b_top,imagesx($targetImage),imagesy($targetImage));
-                        /*header("Content-Type: image/jpeg");
-                        imagejpeg($targetImage);*/
-                        $ratioHeight = $width / 1025;
-                        $newHeight = $height / $ratioHeight;
-                        $newWidth = $width / $ratioHeight;
-                        $newImage = imagescale($targetImage,$newWidth,$newHeight);
-
-
-                        $destination1 = imagecreatetruecolor(1125,1500);
-                        /*
-                        $dst_x=(1125-imagesx($targetImage))/2;
-                        $dst_y=1500-imagesy($targetImage)-173;*/
-                        $dst_x = (1125 - $newWidth)/2;
-                        $dst_y = (1500 - $newHeight) - 130;
-
-                        $color = imagecolorallocate($targetImage,255,255,255);
-// fill entire image
-                        imagefill($destination1,0,0,$color);
-                        imagecopy($destination1,$newImage,$dst_x,$dst_y,0,0,$newWidth,$newHeight);
-
-                    }
-
-
-                    if ($renameImage == 1) {
-
-
-                        $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
-
-
-
-                        imagejpeg($destination1, $filenameremaster);
-                        ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
-                        //  ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
-                        unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
-                       // unlink($filenameremaster);
-                    }else{
-
-
-                        $filenameremaster = $save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName;
-
-
-
-                        imagejpeg($destination1, $filenameremaster);
-                        ftp_put($conn_id, $remotepathToRename . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
-                        unlink($remotetoLocalDirectory . '/' . $filenametoextrat);
                         // unlink($filenameremaster);
-                    }
+
 
 
 
