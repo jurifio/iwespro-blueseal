@@ -69,7 +69,7 @@ class CProductVideoAjaxManage extends AAjaxController
             $res = $image->processVideoUploadProduct($_FILES['file']['name'], $fileName, $config['bucket'], $product->productBrand->slug);
         }catch(RedPandaAssetException $e){
             $this->app->router->response()->raiseProcessingError();
-            return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
+            return 'Non  e stato possibile processare il file';
         }
         $position=substr($fileProduct, -5, 1);
         switch($position){
@@ -86,7 +86,6 @@ class CProductVideoAjaxManage extends AAjaxController
                 $product->dummyVideo3='https://cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
                 break;
         }
-        $product->dummyVideo='https://cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
         $product->update();
 
 
