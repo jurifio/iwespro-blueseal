@@ -83,7 +83,7 @@ class CProductVideoAjaxManage extends AAjaxController
                 $product->dummyVideo3='https://cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
                 break;
             case "4":
-                $product->dummyVideo3='https://cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
+                $product->dummyVideo4='https://cdn.iwes.it/'.$product->productBrand->slug.'/'.$fileProduct;
                 break;
         }
         $product->update();
