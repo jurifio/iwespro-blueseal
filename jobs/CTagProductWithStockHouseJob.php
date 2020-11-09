@@ -57,7 +57,7 @@ class CTagProductWithStockHouseJob extends ACronJob
         $res = "";
         $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
         $storehouseRepo = \Monkey::app()->repoFactory->create('Storehouse');
-        $dirtySkuHaStoreHouseRepo = \Monkey::app()->repoFactory->create('dirtySkuHasStoreHouse');
+        $dirtySkuHasStoreHouseRepo = \Monkey::app()->repoFactory->create('dirtySkuHasStoreHouse');
 
         foreach ($shopRepo as $value) {
             $this->report('CTagProductWithStockHouseJob','Shop To Import' . $value->name);
@@ -85,10 +85,12 @@ class CTagProductWithStockHouseJob extends ACronJob
                     $rowFindTag = $stmtFindTag->fetchAll(PDO::FETCH_ASSOC);
                     if ($rowFindTag[0]['countTag'] != 0) {
                         $tagId = $rowFindTag[0]['tagId'];
+                        \Monkey::app()->applicationReport('CTagProductWithStockHouseJob','idTag',$tagId,'');
                     } else {
                         $stmtInsertTag = $db_con->prepare('INSERT INTO Tag (slug,isPublic,sortingPriorityId) values("' . $storeTag . '",0,999)');
                         $stmtInsertTag->execute();
                         $tagId = $db_con->lastInsertId();
+                        \Monkey::app()->applicationReport('CTagProductWithStockHouseJob','idTag',$tagId,'');
                         $stmInsertTagTranslation = $db_con->prepare('INSERT INTO TagTranslation (tagId, langId,`name`)VALUES("' . $tagId . '",1,"' . $store->name . '")');
                         $stmInsertTagTranslation->execute();
 
@@ -99,13 +101,13 @@ class CTagProductWithStockHouseJob extends ACronJob
                 }
 
                 try {
-                    $collect = $dirtySkuHaStoreHouseRepo->findBy(['shopId' => $shop,'storeHouseId' => $store->id]);
-                    foreach ($collect as $pr) {
+                    $collectProduct = $dirtySkuHasStoreHouseRepo->findBy(['shopId' => $shop,'storeHouseId' => $store->id]);
+                    foreach ($collectProduct as $pr) {
                         $stmtFindPrTag = $db_con->prepare('SELECT count(*) as prExist FROM ProductHasTag 
                     where productId=' . $pr->productId . ' and productVariantId=' . $pr->productVariantId . ' and tagId=' . $tagId);
                         $stmtFindPrTag->execute();
                         $rowFindPrTag = $stmtFindPrTag->fetchAll(PDO::FETCH_ASSOC);
-                        if ($rowFindPrTag[0]['prExist'] != 0) {
+                        if ($rowFindPrTag[0]['prExist'] > 0) {
                             continue;
                         } else {
                             $stmtInsertPrTag = $db_con->prepare('INSERT INTO ProductHasTag (productId,productVariantId,tagId,position) values(' . $pr->productId . ',' . $pr->productVariantId . ',' . $tagId . ',null)');
@@ -113,8 +115,7 @@ class CTagProductWithStockHouseJob extends ACronJob
                         }
 
                     }
-                }
-                catch(\Throwable $e){
+                }catch(\Throwable $e){
                     \Monkey::app()->applicationReport('CTagProductWithStockHouseJob','error','Cannot InsertTag',$e->getLine().'-'.$e->getMessage());
                 }
 
