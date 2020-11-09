@@ -103,17 +103,19 @@ class CTagProductWithStockHouseJob extends ACronJob
                 try {
                     $collectProduct = $dirtySkuHasStoreHouseRepo->findBy(['shopId' => $shop,'storeHouseId' => $store->id]);
                     foreach ($collectProduct as $pr) {
-                        $stmtFindPrTag = $db_con->prepare('SELECT count(*) as prExist FROM ProductHasTag 
+                        if ($pr->productId != null || $pr->productId!='') {
+                            $stmtFindPrTag = $db_con->prepare('SELECT count(*) as prExist FROM ProductHasTag 
                     where productId=' . $pr->productId . ' and productVariantId=' . $pr->productVariantId . ' and tagId=' . $tagId);
-                        $stmtFindPrTag->execute();
-                        $rowFindPrTag = $stmtFindPrTag->fetchAll(PDO::FETCH_ASSOC);
-                        if ($rowFindPrTag[0]['prExist'] > 0) {
-                            continue;
-                        } else {
-                            $stmtInsertPrTag = $db_con->prepare('INSERT INTO ProductHasTag (productId,productVariantId,tagId,position) values(' . $pr->productId . ',' . $pr->productVariantId . ',' . $tagId . ',null)');
-                            $stmtInsertPrTag->execute();
-                        }
+                            $stmtFindPrTag->execute();
+                            $rowFindPrTag = $stmtFindPrTag->fetchAll(PDO::FETCH_ASSOC);
+                            if ($rowFindPrTag[0]['prExist'] > 0) {
+                                continue;
+                            } else {
+                                $stmtInsertPrTag = $db_con->prepare('INSERT INTO ProductHasTag (productId,productVariantId,tagId,position) values(' . $pr->productId . ',' . $pr->productVariantId . ',' . $tagId . ',null)');
+                                $stmtInsertPrTag->execute();
+                            }
 
+                        }
                     }
                 }catch(\Throwable $e){
                     \Monkey::app()->applicationReport('CTagProductWithStockHouseJob','error','Cannot InsertTag',$e->getLine().'-'.$e->getMessage());
