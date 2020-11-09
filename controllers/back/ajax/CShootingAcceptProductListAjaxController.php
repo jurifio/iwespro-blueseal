@@ -70,6 +70,7 @@ FROM `Product` `p`
       JOIN Shooting shoot ON phs.shootingId = shoot.id
       LEFT JOIN Document doc ON shoot.friendDdt = doc.id)
     ON p.productVariantId = phs.productVariantId AND p.id = phs.productId
+where `PS`.id >33 and `PS`.id in(19,26)
 ORDER BY `p`.`creationDate` DESC
                ";
 
