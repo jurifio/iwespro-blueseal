@@ -61,10 +61,9 @@ $(document).on('bs-product-correlation.insert', function () {
                 </div>
                
                 <div class="row">
-                <div class="form-group form-group-default">
+               <div class="form-group form-group-default">
                                         <label for="amount">Valore</label>
-                                        <textarea class="form-control" name="amount" id="amount"
-                                                  value=""></textarea>
+                                        <input type="text" id="amount" name="amount" step="0.01" value=""/>
                                     </div>
                 </div>
                 <div class="row">  

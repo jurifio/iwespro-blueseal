@@ -77,16 +77,10 @@
                 data-remote="bs.product.look.insert"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.correlation.modify"
+                data-remote="bs.product.look.modify"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.correlation.delete"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productpopulatecolour.correlation"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.goto.correlation"
+                data-remote="bs.product.look.delete"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
