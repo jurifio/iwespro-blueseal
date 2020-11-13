@@ -229,7 +229,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
                 $row['friendSalePrices'][] = $shp->salePrice;
                 $productCorrelationc = $productCorrelationRepo->findAll();
                 foreach($productCorrelationc as $productCorrelation){
-                    $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId,'lookId'=>$productCorrelation->id]);
+                    $findProductCorrelationc=$productHasProductCorrelationRepo->findBy(['productId'=>$shp->productId,'productVariantId'=>$shp->productVariantId,'shopId'=>$shp->shopId,'productLookId'=>$productCorrelation->id]);
                     $correl=$productCorrelation->name;
                     foreach($findProductCorrelationc as $pr){
                             $LOOK.=$correl.':'.$pr->productId.'-'.$pr->productVariantId.'</br>';

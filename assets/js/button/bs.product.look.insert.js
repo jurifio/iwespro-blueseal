@@ -30,8 +30,8 @@ $(document).on('bs-product-correlation.insert', function () {
                 </div>
                 <div class="row">
                 <div class="form-group form-group-default">
-                                        <label for="nero">Note</label>
-                                        <textarea class="form-control" name="nero" id="nero"
+                                        <label for="note">Note</label>
+                                        <textarea class="form-control" name="ntoe" id="note"
                                                   value=""></textarea>
                                     </div>
                 </div>
@@ -122,6 +122,7 @@ $(document).on('bs-product-correlation.insert', function () {
             typeDiscount:$('#typeDiscount').val(),
             discountActive:$('#discountActive').val(),
             amount:$('#amount').val(),
+            note:$('#note').val(),
             image:urldef
         };
         $.ajax({

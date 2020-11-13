@@ -41,9 +41,20 @@ class CProductLookAjaxController extends AAjaxController
             return 'Esiste Già una Look con questo nome';
         }
         $pc=$productLookRepo->getEmptyEntity();
-        $i=1;
+        $i=0;
         foreach($images as $image){
-            $pc->image.$i=$image;
+            if($i==0) {
+                $pc->image = $image;
+            }elseif($i==1){
+                $pc->image2 = $image;
+            }elseif($i==2){
+                $pc->image3 = $image;
+            }elseif($i==4){
+                $pc->image4 = $image;
+            }else{
+                break;
+            }
+
             $i++;
         }
         $pc->name=$name;
@@ -90,9 +101,11 @@ class CProductLookAjaxController extends AAjaxController
         $productHasProductLookRepo=\Monkey::app()->repoFactory->create('ProductHasProductLook');
         $id=$data['id'];
         /** @var CProductHasProductLook $phpc */
-        $phpc=$productHasProductLookRepo->findBy(['correlationId'=>$id]);
-        foreach ($phpc as $values){
-            $values->delete();
+        $phpc=$productHasProductLookRepo->findBy(['productLookId'=>$id]);
+        if($phpc) {
+            foreach ($phpc as $values) {
+                $values->delete();
+            }
         }
         /** @var CProductLook $pc */
         $pc=$productLookRepo->findOneBy(['id'=>$id]);

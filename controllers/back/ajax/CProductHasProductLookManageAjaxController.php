@@ -54,10 +54,10 @@ class CProductHasProductLookManageAjaxController extends AAjaxController
             $productId = $prod[0];
             $productVariantId = $prod[1];
             $shopId = $shopHasProductRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId])->shopId;
-            $findProduct = $productHasProductLookRepo->findOneBy(['lookId' => $code,'productId' => $productId,'productVariantId' => $productVariantId,'shopId' => $shopId]);
+            $findProduct = $productHasProductLookRepo->findOneBy(['productLookId' => $code,'productId' => $productId,'productVariantId' => $productVariantId,'shopId' => $shopId]);
             if ($findProduct == null) {
                 $productLook = $productHasProductLookRepo->getEmptyEntity();
-                $productLook->lookId = $code;
+                $productLook->productLookId = $code;
                 $productLook->productId = $productId;
                 $productLook->productVariantId = $productVariantId;
                 $productLook->shopId = $shopId;
