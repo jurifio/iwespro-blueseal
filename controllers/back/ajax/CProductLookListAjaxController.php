@@ -27,6 +27,11 @@ class CProductLookListAjaxController extends AAjaxController
                   `p`.`id`                                          AS `id`,
                   `p`.`name`                                       AS `name`,
                   `p`.`image`                                      AS `image`,
+                  `p`.`image2`                                      AS `image2`,
+                  `p`.`image3`                                      AS `image3`,
+                  `p`.`image4`                                      AS `image4`,
+       
+       
                    if(`p`.`discountActive`=0,'si','no')                                      AS `discountActive`,
                    if(`p`.`typeDiscount`=1,'percentuale','Fisso') as typeDiscount,
                    `p`.`amount` as amount 
@@ -53,6 +58,9 @@ class CProductLookListAjaxController extends AAjaxController
                 $response['data'][$i]['id'] = $v->id;
                 $response['data'][$i]['name'] = $v->name;
                 $response['data'][$i]['image'] = ($v->image!=null)? '<img width="50px" src="'.$v->image.'"/>': '';
+                $response['data'][$i]['image2'] = ($v->image2!=null)? '<img width="50px" src="'.$v->image2.'"/>': '';
+                $response['data'][$i]['image3'] = ($v->image3!=null)? '<img width="50px" src="'.$v->image3.'"/>': '';
+                $response['data'][$i]['image4'] = ($v->image3!=null)? '<img width="50px" src="'.$v->image4.'"/>': '';
                 $response['data'][$i]['discountActive'] = ($v->discountActive==1)?'si':'no';
                 $response['data'][$i]['typeDiscount'] = ($v->typeDiscount==1)?'percentuale':'fisso';
                 $response['data'][$i]['amount'] = number_format($v->amount,2,',','');
