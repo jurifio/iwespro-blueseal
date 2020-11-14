@@ -28,7 +28,7 @@ $('#btnsearchplus').click(function(){
     if ($('#productShooting').prop("checked")) {
         productShooting = '&productShooting=1';
     }
-    var url='/blueseal/lista-prodotti-correlati-veloce?'+season+productZeroQuantity+productStatus+productBrand+shop+stored+productShooting;
+    var url='/blueseal/lista-prodotti-look-veloce?'+season+productZeroQuantity+productStatus+productBrand+shop+stored+productShooting;
 
     window.location.href=url;
 });

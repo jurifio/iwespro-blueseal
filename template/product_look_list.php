@@ -82,6 +82,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.look.delete"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.look.list"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 

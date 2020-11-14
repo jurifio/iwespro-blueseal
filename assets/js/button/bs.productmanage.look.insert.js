@@ -45,7 +45,7 @@ $(document).on('bs-productmanage-look-insert', function () {
     });
     $.ajax({
         method: 'GET',
-        url: '/blueseal/xhr/ProductHasProductCorrelationManageAjaxController',
+        url: '/blueseal/xhr/ProductHasProductLookManageAjaxController',
         dataType: 'json'
     }).done(function (res2) {
         let select = $('#code');

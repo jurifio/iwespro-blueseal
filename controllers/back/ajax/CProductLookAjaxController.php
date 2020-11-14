@@ -25,7 +25,7 @@ class CProductLookAjaxController extends AAjaxController
     public function post()
     {
         $data = \Monkey::app()->router->request()->getRequestData();
-        $productLookRepo=\Monkey::app()->repoFactory->create('Productlook');
+        $productLookRepo=\Monkey::app()->repoFactory->create('ProductLook');
         $name=$data['name'];
         $images=$data['image'];
         $discountActive=$data['discountActive'];
