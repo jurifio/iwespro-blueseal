@@ -244,7 +244,7 @@ left JOIN ProductHasProductPhoto p ON i.id=p.productPhotoId WHERE i.size='1124' 
             if(count($resImage)>0){
                 $tableImage.='<tr>';
             foreach($resImage as $res) {
-                $linkImage=
+
                         $tableImage.='<td><a href="#1" class="enlarge-your-img"><img width="50" src="https://cdn.iwes.it/'.$val->productBrand->slug.'/'.$res['linkimage'].'"/></a></td>';
             }
             $tableImage.='</tr>';
