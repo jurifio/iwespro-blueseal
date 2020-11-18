@@ -237,7 +237,7 @@ class CProductFastWithImageListAjaxController extends AAjaxController
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
                 $tableImage='<table>';
 
-            $sqlQuery="SELECT concat(p.productId,'-',p.productVariantId,'-00',i.`order`,'-',i.size,'.jpg') as linkimage,i.order AS ord FROM ProductPhoto i
+            $sqlQuery="SELECT concat(p.productId,'-',p.productVariantId,'-0',i.`order`,'-',i.size,'.jpg') as linkimage,i.order AS ord FROM ProductPhoto i
 left JOIN ProductHasProductPhoto p ON i.id=p.productPhotoId WHERE i.size='1124' AND p.productId=".$val->id." AND p.productVariantId=".$val->productVariantId." GROUP BY p.productId,p.productVariantId,i.order";
             $resImage=\Monkey::app()->dbAdapter->query($sqlQuery,[])->fetchAll();
 
