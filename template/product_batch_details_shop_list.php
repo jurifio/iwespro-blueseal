@@ -143,12 +143,10 @@
                 data-remote="bs.product.name.insert"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <?php if($allShops): ?>
-    <bs-toolbar-group data-group-label="Termina lavorazione sul prodotto">
+    <bs-toolbar-group data-group-label="Stato Lavorazioni">
         <bs-toolbar-button
-                data-remote="bs.change.product.status.batch"
+                data-remote="bs.product.processingUpdate"
         ></bs-toolbar-button>
-        <?php endif; ?>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Istruzioni">
         <bs-toolbar-button

@@ -43,7 +43,6 @@ class CProductBatchDetailsShopListAjaxController extends AAjaxController
         $isShopUser = $user->hasPermission('/admin/product/edit');
         $userHasShopRepo=\Monkey::app()->repoFactory->create('UserHasShop');
         $user = \Monkey::app()->getUser()->id;
-        $shopId='all';
         if($allShops){
             $shopId='all';
         }else{
@@ -62,6 +61,8 @@ if ($shopId!='all'){
                  p.id,
                  p.id as productId,  
                  p.productVariantId,
+                 SHP.shopId= as shopId,
+                 s.`name` as shopName,  
                  pb.name as brand,
                  concat(pse.name, ' ', pse.year) AS season,
                  pcg.name AS colorGroup,
@@ -71,7 +72,9 @@ if ($shopId!='all'){
            JOIN ProductBrand pb ON p.productBrandId = pb.id
            JOIN ProductSeason pse ON p.productSeasonId = pse.id
            JOIN ProductVariant pv ON p.productVariantId = pv.id
-           JOIN ShopHasProduct SHP on p.id = SHP.productId and p.productVariantId = SHP.productVariantId   
+           JOIN ShopHasProduct SHP on p.id = SHP.productId and p.productVariantId = SHP.productVariantId 
+           JOIN Shop s on SHP.shopId = s.id    
+               
            LEFT JOIN ProductColorGroup pcg ON p.productColorGroupId = pcg.id
            LEFT JOIN (ProductHasProductCategory ppc
                          JOIN ProductCategory pc ON ppc.productCategoryId = pc.id
