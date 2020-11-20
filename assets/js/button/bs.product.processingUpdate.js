@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-check-square-o",
-    permission:"/admin/product/edit&&allShops",
+    permission:"/admin/product/edit&&allShops&&/admin/product/list",
     event:"bs-product-processingUpdate",
     class:"btn btn-default",
     rel:"tooltip",
