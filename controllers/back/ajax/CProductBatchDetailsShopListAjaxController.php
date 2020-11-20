@@ -67,6 +67,7 @@ if ($shopId!='all'){
                  p.productVariantId,
                  SHP.shopId as shopId,
                  s.name as shopName,  
+                 p.processing as processing,
                  pb.name as brand,
                   PS.name as statusName, 
                  concat(pse.name, ' ', pse.year) AS season,
@@ -113,7 +114,7 @@ if ($shopId!='all'){
             $row["id"] = $product->printId();
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $product->id.'-'.$product->productVariantId;
-            $row['status']=$product->processing;
+            $row['processing']=$product->processing;
 
 
 

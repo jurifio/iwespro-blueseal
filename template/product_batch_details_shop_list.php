@@ -63,7 +63,7 @@
                                 <th data-slug="details"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Dettagli</th>
-                                <th data-slug="status"
+                                <th data-slug="processing"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Stato della Lavorazione</th>
                                 <th data-slug="dummy"
