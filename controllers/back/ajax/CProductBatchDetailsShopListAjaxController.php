@@ -113,7 +113,7 @@ if ($shopId!='all'){
             $row["id"] = $product->printId();
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $product->id.'-'.$product->productVariantId;
-            $row['status']=$product->productStatus->name;
+            $row['status']=$product->processing;
 
 
 
