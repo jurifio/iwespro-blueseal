@@ -135,7 +135,7 @@
                 data-tag="a"
                 data-icon="fa-exchange"
                 data-permission="/admin/product/edit"
-                data-event="bs.add.presta.product"
+                data-event="bs.adding.presta"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Pubblica Prodotti su marketPlace"

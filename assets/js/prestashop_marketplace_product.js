@@ -1,5 +1,5 @@
 (function ($) {
-    $(document).on('bs.add.presta.product', function () {
+    $(document).on('bs.adding.presta', function () {
 
         let loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
         //Prendo tutti i lotti selezionati
