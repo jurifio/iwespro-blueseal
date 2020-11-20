@@ -45,6 +45,9 @@
                                 <th data-slug="productName"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Nome del prodotto</th>
+                                <th data-slug="shopName"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Shop del prodotto</th>
                                 <th data-slug="season"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione</th>

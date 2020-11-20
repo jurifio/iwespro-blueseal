@@ -62,7 +62,7 @@ if ($shopId!='all'){
                  p.id as productId,  
                  p.productVariantId,
                  SHP.shopId= as shopId,
-                 s.`name` as shopName,  
+                 s.name as shopName,  
                  pb.name as brand,
                  concat(pse.name, ' ', pse.year) AS season,
                  pcg.name AS colorGroup,
