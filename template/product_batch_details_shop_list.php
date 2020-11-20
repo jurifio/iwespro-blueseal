@@ -102,7 +102,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-sitemap"
-                data-permission="admin/product/list"
+                data-permission="/admin/product/edit&&allShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-category-edit-worker"
@@ -119,7 +119,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-tasks"
-                data-permission="admin/product/list"
+                data-permission="/admin/product/edit&&allShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-product-details.merge-worker"
@@ -129,7 +129,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-object-group"
-                data-permission="admin/product/list"
+                data-permission="/admin/product/edit&&allShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs-product-model-insertIntoProducts-worker"
