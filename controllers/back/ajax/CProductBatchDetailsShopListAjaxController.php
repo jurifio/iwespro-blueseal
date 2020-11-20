@@ -41,8 +41,8 @@ class CProductBatchDetailsShopListAjaxController extends AAjaxController
         $isWorker = $user->hasPermission('worker');
         $allShops = $user->hasPermission('allShops');
         $isShopUser = $user->hasPermission('/admin/product/edit');
-        if(isset($this->data['shopId'])){
-            $shopId=$this->data['shopId'];
+        if(isset($this->data['shopid'])){
+            $shopId=$this->data['shopid'];
         }else {
             $userHasShopRepo = \Monkey::app()->repoFactory->create('UserHasShop');
             $user = \Monkey::app()->getUser()->id;
@@ -89,7 +89,7 @@ if ($shopId!='all'){
 
         $datatable->doAllTheThings();
 
-
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
@@ -102,6 +102,10 @@ if ($shopId!='all'){
 
             $row["productId"] = $product->id;
             $row["productVariantId"] = $product->productVariantId;
+            if($shopId!='all') {
+                $shops = $shopRepo->findOneBy(['id' => $shopId]);
+                $row['shopName'] = $shops->name;
+            }
 
             $row["id"] = $product->printId();
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
