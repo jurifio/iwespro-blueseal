@@ -66,7 +66,7 @@ from ProductPublicSku pps
 
   join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))
 
-where (`p`.`qty` > 0) and (p.productStatusId=6) ". $condition .  " group by productId, productVariantId";
+where (`p`.`qty` > 0) and (p.productStatusId IN (6,11)) ". $condition .  " group by productId, productVariantId";
 
 /** inizio query**/
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

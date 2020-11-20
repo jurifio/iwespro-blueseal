@@ -69,7 +69,7 @@ from ProductPublicSku pps
 
   join `ProductStatus` `ps` on((`p`.`productStatusId` = `ps`.`id`))
 
-where (`p`.`qty` > 0) and (p.productStatusId=6)
+where (`p`.`qty` > 0) and (p.productStatusId IN (6,11)
 group by productId, productVariantId";
 
 
