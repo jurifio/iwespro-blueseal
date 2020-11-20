@@ -34,13 +34,17 @@ class CProductBatchDetailsShopListController extends ARestrictedAccessRootContro
         $isWorker = $user->hasPermission('worker');
         $allShops = $user->hasPermission('allShops');
         $isShopUser = $user->hasPermission('/admin/product/edit');
-        $userHasShopRepo=\Monkey::app()->repoFactory->create('UserHasShop');
-        $user = \Monkey::app()->getUser()->id;
-        if($allShops){
-            $shopId='all';
-        }else{
-            $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$user]);
-            $shopId=$userHasShop->userId;
+        if(isset($_GET['shopId'])){
+            $shopId=$_GET['shopId'];
+        }else {
+            $userHasShopRepo = \Monkey::app()->repoFactory->create('UserHasShop');
+            $user = \Monkey::app()->getUser()->id;
+            if ($allShops) {
+                $shopId = 'all';
+            } else {
+                $userHasShop = $userHasShopRepo->findOneBy(['userId' => $user]);
+                $shopId = $userHasShop->userId;
+            }
         }
 
 
