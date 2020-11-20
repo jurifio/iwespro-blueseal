@@ -39,6 +39,9 @@
                                 <th data-slug="productVariantId"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Variante del prodotto</th>
+                                <th data-slug="itemno"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Cpf</th>
                                 <th data-slug="brand"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand</th>

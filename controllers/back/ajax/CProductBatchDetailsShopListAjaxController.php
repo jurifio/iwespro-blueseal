@@ -69,6 +69,7 @@ if ($shopId!='all'){
                  s.name as shopName,  
                  p.processing as processing,
                  pb.name as brand,
+                   p.itemno as itemno,
                   PS.name as statusName, 
                  concat(pse.name, ' ', pse.year) AS season,
                  pcg.name AS colorGroup,
@@ -110,6 +111,7 @@ if ($shopId!='all'){
                 $shops = $shopRepo->findOneBy(['id' => $shopId]);
                 $row['shopName'] = $shops->name;
             }
+            $row['itemno']=$product->itemno;
 
             $row["id"] = $product->printId();
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
