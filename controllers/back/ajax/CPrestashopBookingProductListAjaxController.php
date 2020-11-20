@@ -53,28 +53,30 @@ class CPrestashopBookingProductListAjaxController extends AAjaxController
             $mhs=$mhsRepo->findAll();
             foreach($mhs as $mp) {
                 /** @var CObjectCollection $products */
-                $products = $productRepo->findBy(['productStatusId' => 6]);
+                $products = $productRepo->findAll();
                 foreach ($products as $product) {
-                    /** @var CProductBrand $productBrand */
-                    $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
-                    if ($productBrand->hasMarketplaceRights == 1) {
-                        /** @var CMarketplaceHasShopBrandRights $mhsbr */
-                        $mhsbr = $marketplaceHasShopBrandRightsRepo->findOneBy(['marketplaceHasShopId' => $mp->id,'productBrandId' => $product->productBrandId]);
-                        if ($mhsbr != null) {
-                            /**@var CPrestashopHasProduct $phpFind */
-                            $phpFind = $phpRepo->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $mp->id]);
-                            if ($phpFind == null) {
+                    if($product->productStatusId==6 || $product->productStatusId==11) {
+                        /** @var CProductBrand $productBrand */
+                        $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
+                        if ($productBrand->hasMarketplaceRights == 1) {
+                            /** @var CMarketplaceHasShopBrandRights $mhsbr */
+                            $mhsbr = $marketplaceHasShopBrandRightsRepo->findOneBy(['marketplaceHasShopId' => $mp->id,'productBrandId' => $product->productBrandId]);
+                            if ($mhsbr != null) {
+                                /**@var CPrestashopHasProduct $phpFind */
+                                $phpFind = $phpRepo->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $mp->id]);
+                                if ($phpFind == null) {
 
-                                /** @var CPrestashopHasProduct $phpInsert */
-                                $phpInsert=$phpRepo->getEmptyEntity();
-                                $phpInsert->productId = $product->id;
-                                $phpInsert->productVariantId = $product->productVariantId;
-                                $phpInsert->marketplaceHasShopId = $mp->id;
-                                $phpInsert->modifyType = 'nf';
-                                $phpInsert->variantValue = 0.0;
-                                $phpInsert->insert();
-                                $res.='inserimento Prodotto '.$product->id.'-'.$product->productVariantId. 'su marketplace '.$mp->name.'<br>';
+                                    /** @var CPrestashopHasProduct $phpInsert */
+                                    $phpInsert = $phpRepo->getEmptyEntity();
+                                    $phpInsert->productId = $product->id;
+                                    $phpInsert->productVariantId = $product->productVariantId;
+                                    $phpInsert->marketplaceHasShopId = $mp->id;
+                                    $phpInsert->modifyType = 'nf';
+                                    $phpInsert->variantValue = 0.0;
+                                    $phpInsert->insert();
+                                    $res .= 'inserimento Prodotto ' . $product->id . '-' . $product->productVariantId . 'su marketplace ' . $mp->name . '<br>';
 
+                                }
                             }
                         }
                     }
