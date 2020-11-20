@@ -44,12 +44,13 @@ class CManageProductForPrestashopListAjaxController extends AAjaxController
             $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$pId, 'productVariantId'=>$pVariantId]);
 
 
-            if(!is_null($product->prestashopHasProduct) || $product->productStatusId != 6 || $product->productStatusId != 11) continue;
+            if(is_null($product->prestashopHasProduct) ||  $product->productStatusId == 6 || $product->productStatusId == 11) {
 
-            $prestashopHasProduct = $prestashopHasProductRepo->getEmptyEntity();
-            $prestashopHasProduct->productId = $pId;
-            $prestashopHasProduct->productVariantId = $pVariantId;
-            $prestashopHasProduct->smartInsert();
+                $prestashopHasProduct = $prestashopHasProductRepo->getEmptyEntity();
+                $prestashopHasProduct->productId = $pId;
+                $prestashopHasProduct->productVariantId = $pVariantId;
+                $prestashopHasProduct->smartInsert();
+            }
         }
 
         return true;
