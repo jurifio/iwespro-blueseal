@@ -36,7 +36,6 @@ class CProductBatchDetailsShopListController extends ARestrictedAccessRootContro
         $isShopUser = $user->hasPermission('/admin/product/edit');
         $userHasShopRepo=\Monkey::app()->repoFactory->create('UserHasShop');
         $user = \Monkey::app()->getUser()->id;
-        $shopId='all';
         if($allShops){
             $shopId='all';
         }else{
@@ -46,7 +45,7 @@ class CProductBatchDetailsShopListController extends ARestrictedAccessRootContro
 
 
 
-        /** @var CProductBatch $productBatch */
+
         //$productBatch = \Monkey::app()->repoFactory->create('ProductBatch')->findOneBy(['id'=> $productBatchId]);
 
         $view = new VBase(array());
