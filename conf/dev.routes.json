@@ -2677,6 +2677,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/normalizzazione-prodotti(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchDetailsShopListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/work/lotti/produzione-immagini/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductBatchHasProductionImageListController"
