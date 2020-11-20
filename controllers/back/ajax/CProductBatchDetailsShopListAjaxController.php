@@ -68,6 +68,7 @@ if ($shopId!='all'){
                  SHP.shopId as shopId,
                  s.name as shopName,  
                  pb.name as brand,
+                  PS.name as statusName, 
                  concat(pse.name, ' ', pse.year) AS season,
                  pcg.name AS colorGroup,
                  pv.description AS colorNameManufacturer,
@@ -75,7 +76,9 @@ if ($shopId!='all'){
            FROM  Product p 
            JOIN ProductBrand pb ON p.productBrandId = pb.id
            JOIN ProductSeason pse ON p.productSeasonId = pse.id
-           JOIN ProductVariant pv ON p.productVariantId = pv.id
+           JOIN ProductVariant pv ON p.productVariantId = pv.id 
+           JOIN ProductStatus PS on p.productStatusId =PS.id    
+               
            JOIN ShopHasProduct SHP on p.id = SHP.productId and p.productVariantId = SHP.productVariantId 
            JOIN Shop s on SHP.shopId = s.id    
                
@@ -110,7 +113,7 @@ if ($shopId!='all'){
             $row["id"] = $product->printId();
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $product->id.'-'.$product->productVariantId;
-
+            $row['status']=$product->productStatus->name;
 
 
 

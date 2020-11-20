@@ -63,6 +63,9 @@
                                 <th data-slug="details"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Dettagli</th>
+                                <th data-slug="status"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Stato Prodotto</th>
                                 <th data-slug="dummy"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Immagine</th>
@@ -106,16 +109,7 @@
                 data-title="Cambia Categoria ai prodotti selezionati"
                 data-placement="bottom"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-paint-brush"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs-product-namesMerge-worker"
-                data-title="Copia i nomi dei prodotti"
-                data-placement="bottom"
-        ></bs-toolbar-button>
+
         <bs-toolbar-button
                 data-remote="bs.product.namesMerge"
         ></bs-toolbar-button>
@@ -164,18 +158,6 @@
                 data-target="_blank"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <?php if($allShops): ?>
-    <bs-toolbar-group data-group-label="Elimina prodotti">
-        <bs-toolbar-button
-                data-remote="bs.delete.product.from.batch"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Inserisci nota">
-        <bs-toolbar-button
-                data-remote="bs.note.product.batch"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <?php endif; ?>
 </bs-toolbar>
 </body>
 </html>
