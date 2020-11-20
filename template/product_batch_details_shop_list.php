@@ -65,7 +65,7 @@
                                     data-orderable="false" class="center">Dettagli</th>
                                 <th data-slug="status"
                                     data-searchable="false"
-                                    data-orderable="false" class="center">Stato Prodotto</th>
+                                    data-orderable="false" class="center">Stato della Lavorazione</th>
                                 <th data-slug="dummy"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Immagine</th>
