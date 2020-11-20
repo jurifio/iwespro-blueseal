@@ -27,6 +27,8 @@ class CMarketplaceProductManageController extends AAjaxController
                 $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
                 if ($account->marketplace->type == 'cpc') {
                     $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' => $cpc,'activeAutomatic'=>$activeAutomatic];
+                }else{
+                    $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' =>0,'activeAutomatic'=>0];
                 }
         }
 
