@@ -97,6 +97,7 @@ if ($shopId!='all'){
         $datatable->doAllTheThings();
 
         $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+        $dirtyProductRepo=\Monkey::app()->repoFactory->create('DirtyProduct');
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         foreach ($datatable->getResponseSetData() as $key=>$row) {
 
@@ -119,7 +120,8 @@ if ($shopId!='all'){
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $product->id.'-'.$product->productVariantId;
             $row['processing']=$product->processing;
-            $row['extId']=$product->dirtyProduct->extId;
+            $dirtyProduct=$dirtyProductRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+            $row['extId']=$dirtyProduct->extId;
 
 
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
