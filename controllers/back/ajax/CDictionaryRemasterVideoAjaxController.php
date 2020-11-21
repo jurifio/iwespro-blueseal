@@ -193,7 +193,15 @@ class CDictionaryRemasterVideoAjaxController extends AAjaxController
 
                         ftp_put($conn_id, $remotepathOriginal . $directoryName . '_' . $resultdate . '/' . $filenametoextrat, $source, FTP_BINARY);
 
-
+/*$save_to_dir = '/home/iwespro/public_html/temp-remaster';
+                    $ftp_server = 'fiber.office.iwes.it';
+                    $pathlocal = '/home/iwespro/public_html/temp-remaster/';
+                    $save_to = '/home/iwespro/public_html/temp-remaster/';
+                    $save_to_dir = '/home/iwespro/public_html/temp-remaster';
+                    $path = 'shootImport/workvideo';
+                    $remotepathTodo = 'shootImport/newage2/topublish/';
+                    $remotepathOriginal = '/shootImport/newage2/original/';
+                    $remotepathToRename = '/shootImport/newage2/torename/';*/
 
 
 
@@ -204,7 +212,8 @@ class CDictionaryRemasterVideoAjaxController extends AAjaxController
                     $cmd = "ffmpeg -i ".$source." -vcodec copy -an ".$filenameremaster;
 //$cmd = "ffmpeg -y -i /media/sf_sites/iwespro/temp/video.mp4 -i /media/sf_sites/iwespro/temp/audio.mp3 -shortest -vcodec libx264 -acodec libfaac -b:v 1000k -refs 6 -coder 1 -sc_threshold 40 -flags +loop -me_range 16 -subq 7 -i_qfactor 0.71 -qcomp 0.6 -qdiff 4 -trellis 1 -b:a 128k -pass 1 -passlogfile /media/sf_sites/iwespro/temp-remaster/shootImport/resize/carte1610ok/2020-10-23/video3.mp4";
                     exec($cmd,$output);
-                        ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/remaster_' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
+                    sleep(4);
+                        ftp_put($conn_id, $remotepathTodo . $directoryName . '_' . $resultdate . '/' . $imagetoWorkName, $filenameremaster, FTP_BINARY);
                         unlink($filenameremaster);
                         unlink($save_to_dir . $item . '/' . $resultdate . '/' . $imagetoWorkName);
 
