@@ -801,7 +801,7 @@ $(document).on('bs.post.update', function () {
             userId:$('#userId').val(),
             video1:$('#video1').val(),
             groupInsertionId:$('#groupInsertionId').val(),
-            fason:$('#fasonId').val(),
+            fason:$('#foisonId').val(),
 
 
 

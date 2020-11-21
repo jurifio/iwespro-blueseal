@@ -839,7 +839,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
               if ($isNewAdSet != '0') {
                   $editorialPlanDetailUpdate->groupInsertionId = $groupAdsName;
               }
-          $findFoison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$data['foison']]);
+          $findFoison=\Monkey::app()->repoFactory->create('Foison')->findOneBy(['id'=>$data['fason']]);
           $userId=$findFoison->userId;
               $editorialPlanDetailUpdate->userId=$userId;
               $editorialPlanDetailUpdate->update();
