@@ -176,12 +176,19 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
               $editorialPlanDetailUpdate->isVisibleBodyEvent = $isVisibleBodyEvent;
               $editorialPlanDetailUpdate->editorialPlanId = $editorialPlanId;
+          switch($argument) {
+              case 5:
+              case 8:
+              case 9:
+              case 10 :
+              case 11:
+                  $ad = new Ad($insertionId);
+                  $ad->deleteSelf();
+                  $creative = new AdCreative($creativeId);
+                  $creative->deleteSelf();
+                  break;
+          }
 
-
-          $ad = new Ad($insertionId);
-          $ad->deleteSelf();
-          $creative = new AdCreative($creativeId);
-          $creative->deleteSelf();
 
 
               switch ($argument) {
