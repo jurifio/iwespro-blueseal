@@ -150,7 +150,7 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
 
               /** @var CEditorialPlanDetail $editorialPlanDetailUpdate */
               $editorialPlanDetailUpdate = \Monkey::app()->repoFactory->create('EditorialPlanDetail')->findOneBy(['id'=>$editorialPlanDetailId]);
-
+              $oldImg=  $editorialPlanDetailUpdate->photoUrl;
               $editorialPlanDetailUpdate->title = $title;
               $editorialPlanDetailUpdate->isEventVisible = $isEventVisible;
               $editorialPlanDetailUpdate->startEventDate = $startEventDate;
@@ -159,7 +159,9 @@ class CEditorialPlanDetailEditAjaxController extends AAjaxController
               $editorialPlanDetailUpdate->isVisibleEditorialPlanArgument = $isVisibleEditorialPlanArgument;
               $editorialPlanDetailUpdate->description = $description;
               $editorialPlanDetailUpdate->isVisibleDescription = $isVisibleDescription;
-              $editorialPlanDetailUpdate->photoUrl = $groupimage;
+          if(count($photoUrl)>0){
+          $editorialPlanDetailUpdate->photoUrl = $groupimage;
+      }
               $editorialPlanDetailUpdate->isVisiblePhotoUrl = $isVisiblePhotoUrl;
               $editorialPlanDetailUpdate->status = $status;
               $editorialPlanDetailUpdate->note = $note;
