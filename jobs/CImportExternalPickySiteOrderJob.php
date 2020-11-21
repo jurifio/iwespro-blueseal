@@ -764,7 +764,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrderLine->remoteOrderLineSellerId = $rowOrderLine['remoteOrderLineSellerId'];
                                 $insertOrderLine->remoteShopSellerId = $shop;
                                 $insertOrderLine->remoteOrderSellerId = $rowOrderLine['remoteOrderSellerId'];
-                                $isnertOrderLine->orderTypeId=$rowOrderLine['orderTypeId'];
+                                $insertOrderLine->orderTypeId=$rowOrderLine['orderTypeId'];
                                 $insertOrderLine->insert();
 
                             }
