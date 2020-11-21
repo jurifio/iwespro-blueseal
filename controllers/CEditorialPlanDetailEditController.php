@@ -184,7 +184,7 @@ class CEditorialPlanDetailEditController extends ARestrictedAccessRootController
         if($foison!=null){
             $foisonId=$foison->id;
         }else{
-            $foison='';
+            $foisonId='';
         }
 
         $view = new VBase(array());
