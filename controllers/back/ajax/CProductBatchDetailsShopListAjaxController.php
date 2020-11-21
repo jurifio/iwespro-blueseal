@@ -74,12 +74,14 @@ if ($shopId!='all'){
                  concat(pse.name, ' ', pse.year) AS season,
                  pcg.name AS colorGroup,
                  pv.description AS colorNameManufacturer,
-                 pc.id  AS categoryId
+                 pc.id  AS categoryId,
+                   dp.extId id as extId
            FROM  Product p 
            JOIN ProductBrand pb ON p.productBrandId = pb.id
            JOIN ProductSeason pse ON p.productSeasonId = pse.id
            JOIN ProductVariant pv ON p.productVariantId = pv.id 
            JOIN ProductStatus PS on p.productStatusId =PS.id    
+           JOIN DirtyProduct dp on p.id=dp.productId and p.productVariantId=dp.productVariantId    
                
            JOIN ShopHasProduct SHP on p.id = SHP.productId and p.productVariantId = SHP.productVariantId 
            JOIN Shop s on SHP.shopId = s.id    
@@ -117,7 +119,7 @@ if ($shopId!='all'){
             //$row["productCode"] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $product->id . '&productVariantId=' . $product->productVariantId . '">' . $product->id . '-' . $product->productVariantId . '</a>';
             $row["productCode"] = $product->id.'-'.$product->productVariantId;
             $row['processing']=$product->processing;
-
+            $row['extId']=$product->dirtyProduct->extId;
 
 
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
