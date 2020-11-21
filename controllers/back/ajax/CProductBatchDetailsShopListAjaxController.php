@@ -75,7 +75,7 @@ if ($shopId!='all'){
                  pcg.name AS colorGroup,
                  pv.description AS colorNameManufacturer,
                  pc.id  AS categoryId,
-                   dp.extId id as extId
+                   dp.extId  as extId
            FROM  Product p 
            JOIN ProductBrand pb ON p.productBrandId = pb.id
            JOIN ProductSeason pse ON p.productSeasonId = pse.id
