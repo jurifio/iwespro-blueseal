@@ -110,10 +110,7 @@ if ($shopId!='all'){
 
             $row["productId"] = $product->id;
             $row["productVariantId"] = $product->productVariantId;
-            if($shopId!='all') {
-                $shops = $shopRepo->findOneBy(['id' => $shopId]);
-                $row['shopName'] = $shops->name;
-            }
+
             $row['itemno']=$product->itemno;
 
             $row["id"] = $product->printId();
@@ -122,6 +119,14 @@ if ($shopId!='all'){
             $row['processing']=$product->processing;
             $dirtyProduct=$dirtyProductRepo->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
             $row['extId']=$dirtyProduct->extId;
+            $productShop=$dirtyProduct->shopId;
+            if($shopId!='all') {
+                $shops = $shopRepo->findOneBy(['id' => $shopId]);
+                $row['shopName'] = $shops->name;
+            }else{
+                $shops = $shopRepo->findOneBy(['id' => $productShop]);
+                $row['shopName'] = $shops->name;
+            }
 
 
             $row['colorGroup'] = '<span class="small">' . (!is_null($product->productColorGroup) ? $product->productColorGroup->productColorGroupTranslation->getFirst()->name : "[Non assegnato]") . '</span>';
