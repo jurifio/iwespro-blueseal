@@ -920,7 +920,7 @@ class CEditorialPlanDetailAddAjaxController extends AAjaxController
                 }
                 $pbr->marketplace=0;
             }else{
-                $ppbr->isUnassigned = 1;
+                $pbr->isUnassigned = 1;
                 $wcpl=\Monkey::app()->repoFactory->create('WorkCategoryPriceList')->findOneBy(['workCategoryId'=>$workCategoryId,'isDefault'=>1]);
                 $pbr->value=$wcpl->price;
                 $pbr->unitPrice=$wcpl->price;
