@@ -198,7 +198,7 @@
                 data-event="bs.marketplace.remove.sale"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Togli i prodotti dal saldo i prodotti"
+                data-title="Togli i prodotti dal saldo sul Marketplace"
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>

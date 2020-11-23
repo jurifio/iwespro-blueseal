@@ -874,7 +874,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $this->ws->edit($opt);
 
         } catch (\PrestaShopWebserviceException $e) {
-            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while update product name (on sale)',$e->getMessage());
+            \Monkey::app()->applicationLog('CPrestashopProduct','Error','Error while update product name (on sale)',$e-getLine(). '-'.$e->getMessage());
             return false;
         }
 
