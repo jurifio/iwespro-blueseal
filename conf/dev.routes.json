@@ -3946,6 +3946,19 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/ticket(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTicketListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
         }
     ]
 }
