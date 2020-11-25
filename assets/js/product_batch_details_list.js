@@ -966,7 +966,13 @@
                 '</div><div class="form-group">' +
                 '<label for="productCategories">Categorie</label>' +
                 '<select id="productCategories" name="productCategories" class="form-control required"></select>' +
-                '</div>'
+                '</div>'+
+                '<div class="form-group">' +
+                    '<label for="textAddDetail">Aggiungi Dettaglio Mancante</label>' +
+                    '<input type="text" id="textAddDetail" name="textAddDetail" class="form-control required"/>' +
+                    '</div><div class="form-group">' +
+                '<button class="success" id="btnAddDetail"  onclick="addDetail()" type="button"><span class="fa fa-plus">Aggiungi</span></button></div>' +
+                '<div id="resultInsert"></div>'
             );
 
             $("#ProductName_1_name").selectize({
@@ -1082,3 +1088,32 @@
         });
     });
 })();
+function addDetail(){
+    var field = $('#textAddDetail');
+
+    if ('' === field.val()) {
+        $('.modal-alert').css('display', 'block');
+    } else {
+        $.ajax({
+                type: "POST",
+                async: false,
+                url: "/blueseal/xhr/ProductNameAdd",
+                data: {
+                    name: field.val()
+                }
+            }
+        ).done(function (res) {
+            if ('ok' == res) {
+                $('#resultInsert').empty();
+                $('#resultInsert').append('Il Nuovo Dettaglio '+ field.val() +' è stato inserito ');
+                field.val(null);
+            } else {
+                $('#resultInsert').empty();
+                $('#resultInsert').append('Il Nuovo Dettaglio non  stato inserito '+res);
+            }
+
+        });
+    }
+
+
+}
