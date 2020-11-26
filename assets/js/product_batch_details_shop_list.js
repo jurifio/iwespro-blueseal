@@ -1097,7 +1097,7 @@ function addDetail(){
         $.ajax({
                 type: "POST",
                 async: false,
-                url: "/blueseal/xhr/ProductNameAdd",
+                url: "/blueseal/xhr/ProductDetailAddNewAjaxController",
                 data: {
                     name: field.val()
                 }
