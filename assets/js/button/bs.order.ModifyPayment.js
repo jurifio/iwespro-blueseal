@@ -49,26 +49,30 @@ $(document).on('bs-order-ModifyPayment', function () {
                 }
             });
         });
-    });
 
 
-    modal.setOkEvent(function () {
-       let  orderPaymentMethod = $('#orderPaymentMethodId').val();
+        modal.setOkEvent(function () {
+            let orderPaymentMethod = $('#orderPaymentMethodId').val();
 
-        $.ajax({
-            url: '/blueseal/xhr/ChangeOrderPaymentMethodAjaxController',
-            method: 'POST',
-            data: {
-                orderId: orderId,
-                orderPaymentMethod: orderPaymentMethod
-            }
-        }).done(function (res) {
-            modal.writeBody(res);
-        }).fail(function (res) {
-            modal.writeBody(res);
-        }).always(function (res) {
-            modal.writeBody(res);
+            $.ajax({
+                url: '/blueseal/xhr/ChangeOrderPaymentMethodAjaxController',
+                method: 'POST',
+                data: {
+                    orderId: orderId,
+                    orderPaymentMethod: orderPaymentMethod
+                }
+            }).done(function (res) {
+                modal.writeBody(res);
+            }).fail(function (res) {
+                modal.writeBody(res);
+            }).always(function (res) {
+                modal.setOkEvent(function () {
+                    modal.hide();
+
+                });
+                modal.showOkBtn();
+            });
         });
-    });
 
+    });
 });

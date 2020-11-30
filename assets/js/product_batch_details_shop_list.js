@@ -368,11 +368,11 @@
             'Aggiorna i dettagli da un prodotto',
             {
                 body:
-                '<div class="' + colCont + '">' +
-                '<div class="detail-form"><div style="min-height: 250px"><p>Seleziona il prodotto da usare come modello:</p><select class="full-width" placehoder="Seleziona il Prodotto da usare" name="productCodeSelect" id="productCodeSelect"><option value=""></option></select></div></div></div>' +
-                '<div class="' + colImage + '">' +
-                '<img width="100%" src="' + url + '" />' +
-                '</div>',
+                    '<div class="' + colCont + '">' +
+                    '<div class="detail-form"><div style="min-height: 250px"><p>Seleziona il prodotto da usare come modello:</p><select class="full-width" placehoder="Seleziona il Prodotto da usare" name="productCodeSelect" id="productCodeSelect"><option value=""></option></select></div></div></div>' +
+                    '<div class="' + colImage + '">' +
+                    '<img width="100%" src="' + url + '" />' +
+                    '</div>',
                 okButtonEvent: function () {
                     var id = $('#productCodeSelect').val();
                     $('.detail-form').html('<div class="form-group">' +
@@ -559,7 +559,7 @@
         $('.modal-body').css({
             "max-height":"none"
         });
-        
+
         let pId = '';
         let pVariantId = '';
         var type = 'model';
@@ -881,7 +881,7 @@
                                 rendResCatsSpec = '<div>' +
                                     escape(item.name) + ' | ' +
                                     escape(item.desc) + ' | ' +
-                                "<img style='width: 50px' src='" + escape(item.img) + "'>" +
+                                    "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                                     '</div>';
                             }
 
@@ -893,7 +893,7 @@
                                 '</div>';
                         }
                     }
-                    });
+                });
                 $('.selectize-dropdown-content').css({
                     "max-height":"500px"
                 });
@@ -1103,10 +1103,23 @@ function addDetail(){
                 }
             }
         ).done(function (res) {
-            if ('ok' == res) {
+            if (res) {
                 $('#resultInsert').empty();
                 $('#resultInsert').append('Il Nuovo Dettaglio '+ field.val() +' è stato inserito ');
-                field.val(null);
+                var result=res.split("-");
+                var newValue=result[1];
+                var j=0;
+                var elemento='element';
+                $("select[id*='ProductDetail']").each(function () {
+                    var element=$(this);
+
+                    var selectize_element = element[0].selectize;
+                    selectize_element.addOption({
+                        value: newValue,
+                        text:field.val()
+                    });
+                    selectize_element.addItem(newValue);
+                });
             } else {
                 $('#resultInsert').empty();
                 $('#resultInsert').append('Il Nuovo Dettaglio non  stato inserito '+res);

@@ -76,6 +76,28 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
     else echo number_format($line->netPrice, 2);?></td>
 <td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) echo "Seleziona il Friend";
     else echo number_format($line->cost, 2); ?></td>
+
+<?php
+if(number_format($line->friendRevenue,0)==0){
+    $find=0;
+    $lastGoodPrice=0;
+$orderLineFind=\Monkey::app()->repoFactory->create('OrderLine')->findBy([
+        'productId'=>$line->productId,
+        'productVariantId'=>$line->productVariantId,
+        'productSizeId'=>$line->productSizeId]);
+        foreach($orderLineFind as $findLastPrice){
+            if($findLastPrice->friendRevenue>0){
+                $lastGoodPrice=$findLastPrice->friendRevenue;
+                $find=1;
+                break;
+            }
+        }
+        if($find==0){
+            $shopFind=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$line->shopId]);
+            $lastGoodPrice=$line->netPrice-($line->netPrice/100*20);
+            $find=1;
+        }
+} ?>
 <td class="center"><?php if (($line->isFriendChangable()) && (4 > $line->orderLineStatus->phase)) {
                             if (4 > $line->orderLineStatus->phase) echo "Seleziona il Friend";
                             else echo number_format($line->friendRevenue, 2);
@@ -85,7 +107,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
                                   enctype="multipart/form-data" role="form"  name="changeLineShop" method="PUT">
                                 <input type="hidden" name="orderId" value="<?php echo $line->orderId ?>" />
                                 <input type="hidden" name="orderLineId" value="<?php echo $line->id ?>" />
-                                <input type="text" name="change_revenue" value="<?php echo isset($line->friendRevenue) && $line->friendRevenue > 1 ? number_format($line->friendRevenue,2) : number_format($actualSku->friendRevenue,2) ?>" />
+                                <input type="text" name="change_revenue" value="<?php echo isset($line->friendRevenue) && $line->friendRevenue > 1 ? number_format($line->friendRevenue,2) : number_format($lastGoodPrice,2) ?>" />
                                 <button id="changeRevenue" class="btn btn-success" type="submit"><i class="fa fa-sliders"></i></button>
                             </form>
                    <?php } ?>
