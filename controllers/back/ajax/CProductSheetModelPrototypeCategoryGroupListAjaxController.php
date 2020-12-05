@@ -52,7 +52,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
         if ($productZeroQuantity == 1) {
             $sqlFilterQuantity = '';
         } else {
-            $sqlFilterQuantity = 'and count(pmp.id))<1';
+            $sqlFilterQuantity = 'and count(pmp.id)<1';
         }
 
         $sql = "
@@ -67,9 +67,8 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             FROM ProductSheetModelPrototypeCategoryGroup catG
             LEFT JOIN ProductSheetModelPrototypeMacroCategoryGroup catMacroG ON catG.macroCategoryGroupId = catMacroG.id
             LEFT JOIN ProductSheetModelPrototype pmp ON catG.id = pmp.categoryGroupId
-             WHERE 1 = 1  ".$sqlFilterQuantity." 
-            GROUP BY catG.id
-        ";
+             WHERE 1=1  ".$sqlFilterQuantity." 
+            GROUP BY catG.id ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
