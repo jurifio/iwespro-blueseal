@@ -305,6 +305,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/tag-esclusivo(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductTagExclusiveListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/dettagli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductDetailListController"
@@ -1490,6 +1504,48 @@
             "pattern": "/blueseal/tag/modifica/:id(/?)",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTagEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/tag-esclusivo(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagExclusiveListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
+            "pattern": "/blueseal/tag-esclusivo/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagExclusiveAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/tag-esclusivo/modifica/:id(/?)",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CTagExclusiveEditController"
             },
             "filters": {
                 "id": "[0-9]+"

@@ -114,6 +114,9 @@
                 data-placement="bottom"
         ></bs-toolbar-button>
         <?php endif; ?>
+        <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

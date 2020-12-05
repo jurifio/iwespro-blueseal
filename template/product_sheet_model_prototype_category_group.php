@@ -20,6 +20,28 @@
                     </div>
                 </div>
             </div>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center" style="padding-top: 130px;">
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default">
+                                    <label for="productZeroQuantity">Visualizza  Categorie con 0 Modelli</label>
+                                    <?php if($productZeroQuantity==1) {
+                                        echo '<input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
+                                    }else{
+                                        echo '<input type="checkbox"  id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -29,6 +51,7 @@
                                data-controller="ProductSheetModelPrototypeCategoryGroupListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
+                               data-product-zero-quantity="<?php echo $productZeroQuantity?>"
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
@@ -138,6 +161,9 @@
                 data-event="bs.product.sheet.model.cat.group.name.find.sub"
                 data-title="Trova e sostituisce"
                 data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

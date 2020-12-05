@@ -1,10 +1,10 @@
 <div class="panel">
     <ul class="nav nav-tabs nav-tabs-simple">
         <li class="active">
-            <a data-toggle="tab" href="#add">Assegna Tag</a>
+            <a data-toggle="tab" href="#add">Assegna Sezione Esclusiva</a>
         </li>
         <li>
-            <a data-toggle="tab" href="#delete">Rimuovi Tag</a>
+            <a data-toggle="tab" href="#delete">Rimuovi Sezione Esclusivo</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3>
-                        <span class="semi-bold">Aggiungi Tag</span>
+                        <span class="semi-bold">Aggiungi Sezione Esclusiva</span>
                     </h3>
                 </div>
                 <div class="col-md-12">
@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3>
-                        <span class="semi-bold">Rimuovi Tag</span>
+                        <span class="semi-bold">Rimuovi Sezione Esclusiva</span>
                     </h3>
                 </div>
                 <div class="col-md-12">

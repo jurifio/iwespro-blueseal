@@ -44,6 +44,17 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
     public function get()
     {
 
+        if (isset($_REQUEST['productZeroQuantity'])) {
+            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = '';
+        }
+        if ($productZeroQuantity == 1) {
+            $sqlFilterQuantity = '';
+        } else {
+            $sqlFilterQuantity = 'and count(pmp.id))<1';
+        }
+
         $sql = "
             SELECT
               catG.id,
@@ -56,6 +67,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             FROM ProductSheetModelPrototypeCategoryGroup catG
             LEFT JOIN ProductSheetModelPrototypeMacroCategoryGroup catMacroG ON catG.macroCategoryGroupId = catMacroG.id
             LEFT JOIN ProductSheetModelPrototype pmp ON catG.id = pmp.categoryGroupId
+             WHERE 1 = 1  ".$sqlFilterQuantity." 
             GROUP BY catG.id
         ";
 
@@ -75,7 +87,7 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             $row['id'] = $cat->id;
             $row['name'] = $cat->name;
             $row['description'] = $cat->description;
-            $row['models'] = $cat->productSheetModelPrototype->count();
+            $row['models'] = ($cat->productSheetModelPrototype->count()==0)? 'Vuoto': $cat->productSheetModelPrototype->count();
             $row['image'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $cat->imageUrl . '" /></a>';
             $row['macroName'] = (is_null($cat->macroCategoryGroupId) ? '-' : $cat->productSheetModelPrototypeMacroCategoryGroup->name);
 
