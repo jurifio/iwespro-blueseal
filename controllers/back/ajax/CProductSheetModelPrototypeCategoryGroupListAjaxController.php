@@ -44,17 +44,6 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
     public function get()
     {
 
-        if (isset($_REQUEST['productZeroQuantity'])) {
-            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
-        } else {
-            $productZeroQuantity = '';
-        }
-        if ($productZeroQuantity == 1) {
-            $sqlFilterQuantity = '';
-        } else {
-            $sqlFilterQuantity = 'and count(pmp.id)<1';
-        }
-
         $sql = "
             SELECT
               catG.id,
@@ -67,7 +56,6 @@ class CProductSheetModelPrototypeCategoryGroupListAjaxController extends AAjaxCo
             FROM ProductSheetModelPrototypeCategoryGroup catG
             LEFT JOIN ProductSheetModelPrototypeMacroCategoryGroup catMacroG ON catG.macroCategoryGroupId = catMacroG.id
             LEFT JOIN ProductSheetModelPrototype pmp ON catG.id = pmp.categoryGroupId
-             WHERE 1=1  ".$sqlFilterQuantity." 
             GROUP BY catG.id ";
 
         $datatable = new CDataTables($sql, ['id'], $_GET, true);

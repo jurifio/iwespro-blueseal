@@ -31,17 +31,10 @@ class CProductSheetModelPrototypeCategoryGroupListController extends ARestricted
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/product_sheet_model_prototype_category_group.php');
-        if(isset($_GET['productZeroQuantity'])) {
-            $productZeroQuantity=$_GET['productZeroQuantity'];
-        }else{
-            $productZeroQuantity=0;
-        }
-
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
-            'productZeroQuantity'=>$productZeroQuantity,
             'sidebar' => $this->sidebar->build()
         ]);
     }

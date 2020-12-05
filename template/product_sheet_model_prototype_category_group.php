@@ -23,35 +23,11 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <div class="row" align="center" style="padding-top: 130px;">
-                            <div class="col-md-2">
-                                <div class="form-group form-group-default">
-                                    <label for="productZeroQuantity">Visualizza  Categorie con 0 Modelli</label>
-                                    <?php if($productZeroQuantity==1) {
-                                        echo '<input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
-                                    }else{
-                                        echo '<input type="checkbox"  id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="panel panel-transparent">
-                    <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_sheet_model_prototype_category_group"
                                data-controller="ProductSheetModelPrototypeCategoryGroupListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-product-zero-quantity="<?php echo $productZeroQuantity?>"
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
