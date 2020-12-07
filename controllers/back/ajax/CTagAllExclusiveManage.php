@@ -33,11 +33,7 @@ class CTagAllExclusiveManage extends AAjaxController
     public function post()
     {
         try {
-            $res='';
-            //prendo i dati passati in input
-            $data = \Monkey::app()->router->request()->getRequestData();
-            $tagExclusive = \Monkey::app()->repoFactory->create('TagExclusive')->findOneBy(['slug' => 'all']);
-            $tagExclusiveId = $tagExclusive->id;
+
             $res='';
             //prendo i dati passati in input
             $data = \Monkey::app()->router->request()->getRequestData();
