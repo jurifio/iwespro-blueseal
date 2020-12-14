@@ -591,52 +591,68 @@ $('#invoiceSelectNumber').change(function(){
 var rowInvoice=[];
 var counterRow=0;
 function addRowProduct(){
-    let counterRowView=counterRow+1;
-    let vatRow=parseFloat($('#netTotalRow').val())/100*parseFloat($('#percVat').val());
-    let discountRowAmount=parseFloat($('#netTotalRow').val())/100*parseFloat($('#discountRow').val());
-    let grossTotalRow=parseFloat($('#netTotalRow').val())+vatRow;
-    let percDiscountRow=parseFloat($('#discountRow').val());
-    percDiscountRow.toFixed(2);
-    let rowInvoiceSingle=[];
-    var insertRow={idRow:counterRow, idProduct:$('#idProduct').val(),price:$('#price').val(),description:$('#description').val(),qty:$('#qty').val(),netTotalRow:$('#netTotalRow').val(),vatRow:vatRow,percDiscountRow:percDiscountRow,discountRowAmount:discountRowAmount,grossTotalRow:grossTotalRow,billRegistryTypeTaxesProductId:$('#billRegistryTypeTaxesProductId').val()};
-    rowInvoice.push(insertRow);
-    var oldGrossTotal=parseFloat($('#grossTotal').val());
-    var grossTotal=oldGrossTotal+grossTotalRow;
-    var oldNetTotal=parseFloat($('#netTotal').val());
-    var netTotal=oldNetTotal+parseFloat($('#netTotalRow').val());
-    var oldDiscountTotal=parseFloat($('#discountTotal').val());
-    var discountTotal=oldDiscountTotal+discountRowAmount;
-    var oldVatTotal=parseFloat($('#vatTotal').val());
-    var vatTotal=oldVatTotal+vatRow;
-    var netTotalRow=parseFloat($('#price').val())*parseInt($('#qty').val());
-    $('#netTotal').val(netTotal.toFixed(2));
-    $('#discountTotal').val(discountTotal.toFixed(2));
-    $('#vatTotal').val(vatTotal.toFixed(2));
-    $('#grossTotal').val(grossTotal.toFixed(2));
-    let myrowInvoice='<tr id="productRowTr'+counterRow+'"><td>'+counterRowView+'</td>';
-    myrowInvoice+='<td>'+$('#nameProduct').val()+'</td>';
-    myrowInvoice+='<td>'+$('#description').val()+'</td>';
-    myrowInvoice+='<td>'+parseFloat($('#price').val()).toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+$('#qty').val()+'</td>';
-    myrowInvoice+='<td>'+netTotalRow.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+$('#discountRow').val()+' %</td>';
-    myrowInvoice+='<td>'+discountRowAmount.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+$('#percVat').val()+' %</td>';
-    myrowInvoice+='<td>'+vatRow.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td>'+grossTotalRow.toFixed(2)+' &euro;</td>';
-    myrowInvoice+='<td><button class="success" id="deleteRowInvoiceButton'+counterRowView+'" onclick="deleteRowInvoice(' + counterRow + ','+counterRowView+')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
+    if($('#billRegistryTypeTaxesProductId').val()!=null || $('#qty').val()!=null ) {
+        let counterRowView = counterRow + 1;
+        let vatRow = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#percVat').val());
+        let discountRowAmount = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#discountRow').val());
+        let grossTotalRow = parseFloat($('#netTotalRow').val()) + vatRow;
+        let percDiscountRow = parseFloat($('#discountRow').val());
+        percDiscountRow.toFixed(2);
+        let rowInvoiceSingle = [];
+        var insertRow = {
+            idRow: counterRow,
+            idProduct: $('#idProduct').val(),
+            price: $('#price').val(),
+            description: $('#description').val(),
+            qty: $('#qty').val(),
+            netTotalRow: $('#netTotalRow').val(),
+            vatRow: vatRow,
+            percDiscountRow: percDiscountRow,
+            discountRowAmount: discountRowAmount,
+            grossTotalRow: grossTotalRow,
+            billRegistryTypeTaxesProductId: $('#billRegistryTypeTaxesProductId').val()
+        };
+        rowInvoice.push(insertRow);
+        var oldGrossTotal = parseFloat($('#grossTotal').val());
+        var grossTotal = oldGrossTotal + grossTotalRow;
+        var oldNetTotal = parseFloat($('#netTotal').val());
+        var netTotal = oldNetTotal + parseFloat($('#netTotalRow').val());
+        var oldDiscountTotal = parseFloat($('#discountTotal').val());
+        var discountTotal = oldDiscountTotal + discountRowAmount;
+        var oldVatTotal = parseFloat($('#vatTotal').val());
+        var vatTotal = oldVatTotal + vatRow;
+        var netTotalRow = parseFloat($('#price').val()) * parseInt($('#qty').val());
+        $('#netTotal').val(netTotal.toFixed(2));
+        $('#discountTotal').val(discountTotal.toFixed(2));
+        $('#vatTotal').val(vatTotal.toFixed(2));
+        $('#grossTotal').val(grossTotal.toFixed(2));
+        let myrowInvoice = '<tr id="productRowTr' + counterRow + '"><td>' + counterRowView + '</td>';
+        myrowInvoice += '<td>' + $('#nameProduct').val() + '</td>';
+        myrowInvoice += '<td>' + $('#description').val() + '</td>';
+        myrowInvoice += '<td>' + parseFloat($('#price').val()).toFixed(2) + ' &euro;</td>';
+        myrowInvoice += '<td>' + $('#qty').val() + '</td>';
+        myrowInvoice += '<td>' + netTotalRow.toFixed(2) + ' &euro;</td>';
+        myrowInvoice += '<td>' + $('#discountRow').val() + ' %</td>';
+        myrowInvoice += '<td>' + discountRowAmount.toFixed(2) + ' &euro;</td>';
+        myrowInvoice += '<td>' + $('#percVat').val() + ' %</td>';
+        myrowInvoice += '<td>' + vatRow.toFixed(2) + ' &euro;</td>';
+        myrowInvoice += '<td>' + grossTotalRow.toFixed(2) + ' &euro;</td>';
+        myrowInvoice += '<td><button class="success" id="deleteRowInvoiceButton' + counterRowView + '" onclick="deleteRowInvoice(' + counterRow + ',' + counterRowView + ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
 
-    $('#myRowInvoice').append(myrowInvoice);
-    counterRow=counterRow+1;
-    $('#idProduct').data('selectize').setValue('');
-    $('#nameProduct').val('');
-    $('#qty').val('');
-    $('#um').val('');
-    $('#price').val('');
-    $('#description').val('');
-    $('#discountRow').val('0.00');
-    $('#billRegistryTypeTaxesProductId').data('selectize').setValue('');
-    $('#netTotalRow').val('');
+        $('#myRowInvoice').append(myrowInvoice);
+        counterRow = counterRow + 1;
+        $('#idProduct').data('selectize').setValue('');
+        $('#nameProduct').val('');
+        $('#qty').val('');
+        $('#um').val('');
+        $('#price').val('');
+        $('#description').val('');
+        $('#discountRow').val('0.00');
+        $('#billRegistryTypeTaxesProductId').data('selectize').setValue('');
+        $('#netTotalRow').val('');
+    }else{
+        alert('ricordati di compilare tutti i campi  iva prodotto e quantità')
+    }
 
 
 
