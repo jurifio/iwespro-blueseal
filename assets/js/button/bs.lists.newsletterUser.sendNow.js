@@ -31,7 +31,6 @@ $(document).on('bs-newNewsletterUser-sendNow', function () {
         bsModal.setOkEvent(function () {
             $('#messageGenereateHide').removeClass('hide');
             $('#messageGenereateHide').addClass('show');
-            bsModal.hideOkBtn();
             const data = {
                 id: idNewsletterUser,
             };
