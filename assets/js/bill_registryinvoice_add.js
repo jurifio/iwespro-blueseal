@@ -591,7 +591,7 @@ $('#invoiceSelectNumber').change(function(){
 var rowInvoice=[];
 var counterRow=0;
 function addRowProduct(){
-    if($('#billRegistryTypeTaxesProductId').val()!=null || $('#qty').val()!=null ) {
+    if($('#billRegistryTypeTaxesProductId').val()!='null' || $('#qty').val()!='' ) {
         let counterRowView = counterRow + 1;
         let vatRow = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#percVat').val());
         let discountRowAmount = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#discountRow').val());
@@ -651,17 +651,8 @@ function addRowProduct(){
         $('#billRegistryTypeTaxesProductId').data('selectize').setValue('');
         $('#netTotalRow').val('');
     }else{
-        alert('ricordati di compilare tutti i campi  iva prodotto e quantità')
+        alert('ricordati di compilare tutti i campi  iva prodotto e quantità');
     }
-
-
-
-
-
-
-
-
-
 
 }
 function deleteRowInvoice(counterRow,counterRowView){
