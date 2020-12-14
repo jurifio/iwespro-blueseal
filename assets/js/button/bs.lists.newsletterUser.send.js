@@ -17,7 +17,7 @@ $(document).on('bs-newNewsletterUser-send', function () {
         if (selectedRows.length === 1) {
 
 
-            var idNewsletterUser = selectedRows[0].id;
+            var idNewsletterUser = selectedRows[0].DT_RowId;
 
             let bsModal = new $.bsModal('Invio', {
                 body: '<p>Invia La Newsletter selezionata</p>' +
@@ -31,7 +31,6 @@ $(document).on('bs-newNewsletterUser-send', function () {
         bsModal.setOkEvent(function () {
             $('#messageGenereateHide').removeClass('hide');
             $('#messageGenereateHide').addClass('show');
-            bsModal.hideOkBtn();
             const data = {
                 idNewsletterUser: idNewsletterUser,
             };
