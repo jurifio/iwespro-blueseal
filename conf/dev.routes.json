@@ -4103,6 +4103,20 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/marketplace/marketplace-shop/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasShopAddController"
+            },
+            "filters": {}
+        ,
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

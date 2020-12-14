@@ -63,6 +63,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
             /** @var CNewsletter $newsletter */
             $newsletter = $newsletterRepo->findOneBy(['id' => $row["id"]]);
             if ($row['submissionDate'] == "") {
+                $row['DT_RowId'] =$row['id'];
                 $row['id'] = '<a href="' . $opera . $newsletter->id . '">' . $newsletter->id . '</a>';
                 $row['name'] = $newsletter->name;
                 $row['sendAddressDate'] = $newsletter->sendAddressDate;
