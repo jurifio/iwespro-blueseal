@@ -36,7 +36,7 @@ $(document).on('bs-delete-post-tosocial', function (e, element, button) {
 
 
         $.ajax({
-            method: "put",
+            method: "delete",
             url: "/blueseal/xhr/EditorialPlanDetailEditAjaxController",
             data: {
                 editorialPlanDetailId: id
