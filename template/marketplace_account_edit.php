@@ -1017,7 +1017,6 @@
             </div>
         </div>
     </div>
-    <?php include "parts/footer.php" ?>
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>

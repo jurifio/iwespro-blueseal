@@ -114,6 +114,16 @@
             data-title="Configurazioni"
             data-event="bs.marketplace-account.config.href"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-file-o fa-plus"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi un nuovo aggregatore"
+                data-placement="bottom"
+                data-href="/blueseal/marketplace/account-inserisci"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

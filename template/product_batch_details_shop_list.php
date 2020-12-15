@@ -25,9 +25,9 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="size_full_list"
+                               data-datatable-name="product_batch_details_shop_list"
                                data-controller="ProductBatchDetailsShopListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-url="<?php echo $app->urlForBluesealXhr();?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500"
                                data-shopid="<?php echo $shopId ?>">

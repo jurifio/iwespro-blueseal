@@ -217,8 +217,18 @@
             data-event="bs.invoice.delete"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Cancellla Fattura"
+            data-title="Cancella Fattura"
             data-placement="bottom">
+        </bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-recycle"
+                data-permission="AllShops"
+                data-event="btn.delete.invoice.fromactivepaymentbill"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Disassocia Fatture da Relativa Distinta"
+                data-placement="bottom">
         </bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"

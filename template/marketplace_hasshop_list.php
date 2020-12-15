@@ -111,11 +111,11 @@
                 data-tag="a"
                 data-icon="fa-plus-circle"
                 data-permission="/admin/marketing"
-                data-event="bs.marketplace.shop.add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Salva"
                 data-placement="bottom"
+                data-href="/blueseal/marketplace/marketplace-shop/aggiungi"
         ></bs-toolbar-button>
 
     </bs-toolbar-group>

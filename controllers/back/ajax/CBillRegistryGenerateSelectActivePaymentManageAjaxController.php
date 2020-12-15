@@ -134,5 +134,50 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
         return $res;
 
     }
+    public function delete()
+    {
+        try{
+        $res='';
+        $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+        $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
+        $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
+        $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
+        $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
+        $data = $this->app->router->request()->getRequestData();
+        $selected = $data['selectedInvoice'];
+        foreach($selected as $is){
+            $invoice=$billRegistryInvoiceRepo->findOneBy(['id'=>$is]);
+            $amountInvoice=$invoice->grossTotal;
+            $invoiceNumber=$invoice->invoiceNumber.'-'.$invoice->invoiceType.'/'.$invoice->invoiceYear;
+            $braps=$billRegistryTimeTableRepo->findOneBy(['billRegistryInvoiceId'=>$is]);
+            $billRegistryActivePaymentSlipId=$braps->billRegistryActivePaymentSlipId;
+            $paymentBillActive=$billRegistryActivePaymentSlipRepo->findOneBy(['id'=>$billRegistryActivePaymentSlipId]);
+
+            if($paymentBillActive) {
+                $newAmount=$paymentBillActive->amount-$amountInvoice;
+                $paymentBillActive->amount=$newAmount;
+                $bt = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $is]);
+                foreach ($bt as $timePayment) {
+                    $timePayment->billRegistryActivePaymentSlipId = null;
+                    $timePayment->update();
+                }
+                return ' la fattura '.$invoiceNumber. ' è stata disassociata';
+            }else{
+                return 'Non è stata trovata la distinta da disassociare per la fattura '.$invoiceNumber;
+            }
+
+        }
+
+        return 'fine lavoro';
+
+        } catch
+        (\Throwable $e) {
+            \Monkey::app()->applicationLog('CBillRegistryGenerateActivePaymentSlipManageAjaxController','error','Remove Invoice from PaymentSlip ',$e->getMessage(),'');
+            $res = 'errore ' . $e;
+        }
+
+        return $res;
+
+    }
 
 }

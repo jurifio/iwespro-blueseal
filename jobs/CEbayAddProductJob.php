@@ -10,7 +10,7 @@ use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductSku;
 use PDO;
-
+use PDOException;
 /**
  * Class CEbayAddProductJob
  * @package bamboo\blueseal\jobs
@@ -40,7 +40,7 @@ class CEbayAddProductJob extends ACronJob
      */
     private function addProductsInEbay()
     {
-        $xml = '';
+
         if (ENV === 'prod') {
             $db_host = '5.189.159.187';
             $db_name = 'iwesPrestaDB';
@@ -52,7 +52,7 @@ class CEbayAddProductJob extends ACronJob
             $db_user = 'root';
             $db_pass = 'geh44fed';
         }
-        $res = "";
+
         try {
             $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
             $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
@@ -127,11 +127,11 @@ class CEbayAddProductJob extends ACronJob
 
 
                     foreach ($reservedIds as $reservedId) {
-                        $getIfProductEbay=$db_con->prepare('select count(*) as existInEbay from  ps_fastbay1_product where id_product='.$reservedId['prestaId']. ' and 
+                        $getIfProductEbay = $db_con->prepare('select count(*) as existInEbay from  ps_fastbay1_product where id_product=' . $reservedId['prestaId'] . ' and 
                             id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId']);
                         $getIfProductEbay->execute();
-                        $rowGetIfProductEbay=$getIfProductEbay->fetchAll(PDO::FETCH_ASSOC);
-                        if($rowGetIfProductEbay[0]['existInEbay']!=0) continue;
+                        $rowGetIfProductEbay = $getIfProductEbay->fetchAll(PDO::FETCH_ASSOC);
+                        if ($rowGetIfProductEbay[0]['existInEbay'] != 0) continue;
 
 
                         $getReference = $db_con->prepare('select count(*) as countProductRow,  
@@ -150,7 +150,7 @@ class CEbayAddProductJob extends ACronJob
                             $getCategoryId->execute();
 
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
-                            if($rowGetCategoryId[0]['countRecord']==0){
+                            if ($rowGetCategoryId[0]['countRecord'] == 0) {
                                 continue;
                             }
                             $xml = '';
@@ -234,7 +234,7 @@ class CEbayAddProductJob extends ACronJob
                                     }
                                 } else {
                                     /**  @var CProduct $findProductsIsOnSale */
-                                    $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
+                                    $findProductsIsOnSale = $productRepo->findOneBy(['id' => $sku->productId,'productVariantId' => $sku->productVariantId])->isOnSale;
                                     if ($findProductsIsOnSale == 0) {
                                         $xml .= '<StartPrice currencyID="EUR">' . number_format($sku->price,2,'.','') . '</StartPrice>';
                                     } else {
@@ -261,8 +261,8 @@ class CEbayAddProductJob extends ACronJob
                                 $xml .= '</Variation>';
                             }
                             $xml .= '</Variations>';
-                            $xml.='<ListingDuration>GTC</ListingDuration>';
-                            $xml.='<ListingType>FixedPriceItem</ListingType>';
+                            $xml .= '<ListingDuration>GTC</ListingDuration>';
+                            $xml .= '<ListingType>FixedPriceItem</ListingType>';
                             $xml .= '<PictureDetails>';
                             $productHasProductPhoto = \Monkey::app()->repoFactory->create('ProductHasProductPhoto')->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             foreach ($productHasProductPhoto as $phs) {
@@ -276,7 +276,7 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<ItemSpecifics>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[MPN]]></Name>';
-                            $xml .= '<Value><![CDATA[' . $sku->productId . '-' . $sku->productVariantId .'-' . $sku->productSizeId . ']]></Value>';
+                            $xml .= '<Value><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></Value>';
                             $xml .= '</NameValueList>';
                             $xml .= '<NameValueList>';
                             $xml .= '<Name><![CDATA[Marca]]></Name>';
@@ -320,7 +320,7 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<ConditionID>1000</ConditionID>';
                             if ($marketplace['isPriceHub'] == '0') {
                                 if ($phphmhs->titleModified == "1" && $phphmhs->isOnSale == "1") {
-                                    $percSc =number_format(100 * ($phphmhs->price - $phphmhs->salePrice)/$phphmhs->price,0);
+                                    $percSc = number_format(100 * ($phphmhs->price - $phphmhs->salePrice) / $phphmhs->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $phphmhs->price . '€ a ' . $phphmhs->salePrice
                                         . '€ ' .
@@ -340,11 +340,11 @@ class CEbayAddProductJob extends ACronJob
 
                                     $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
                                 }
-                            }else{
+                            } else {
                                 /**  @var CProduct $findProductsIsOnSale */
-                                $findProductsIsOnSale=$productRepo->findOneBy(['id'=>$sku->productId,'productVariantId'=>$sku->productVariantId])->isOnSale;
+                                $findProductsIsOnSale = $productRepo->findOneBy(['id' => $sku->productId,'productVariantId' => $sku->productVariantId])->isOnSale;
                                 if ($findProductsIsOnSale == "1") {
-                                    $percSc =number_format(100 * ($sku->price - $sku->salePrice)/$sku->price,0);
+                                    $percSc = number_format(100 * ($sku->price - $sku->salePrice) / $sku->price,0);
                                     $name = $product->productBrand->name
                                         . ' Sconto del ' . $percSc . '% da ' . $sku->price . '€ a ' . $sku->salePrice
                                         . '€ ' .
@@ -1122,16 +1122,16 @@ footer {
 
 
                                 $res .= 'risultato' . var_dump($response);
-                                $this->report('CEbayAddProductJob', 'Report ',$response);
+                                $this->report('CEbayAddProductJob','Report ',$response);
                                 sleep(1);
 
                                 $reponseNewProduct = new \SimpleXMLElement($response);
-                                $this->report('CEbayAddProductJob', 'Report ',$xml);
+                                $this->report('CEbayAddProductJob','Report ',$xml);
                                 $id_product_ref = $reponseNewProduct->ItemID;
                                 $today = new \DateTime();
                                 $now = $today->format('Y-m-d H:i:s');
                                 sleep(1);
-                                if(strlen($id_product_ref)>8) {
+                                if (strlen($id_product_ref) > 8) {
                                     $updateProductReference = $db_con->prepare(sprintf("INSERT INTO ps_fastbay1_product (id_country,id_product,id_attribute,id_product_ref,date_add,date_upd,revise_zero,id_shop,id_marketplace)
 VALUES (8,
         '%s',
@@ -1149,10 +1149,9 @@ VALUES (8,
                                 }
 
 
-
-                                $this->report('CEbayAddProductJob', 'Report ' .$reservedId['prestaId'].'-' .$id_product_ref,$xml);
+                                $this->report('CEbayAddProductJob','Report ' . $reservedId['prestaId'] . '-' . $id_product_ref,$xml);
                             } catch (\Throwable $e) {
-                                $this->report('CEbayAddProductJob', 'Error '.$reservedId['prestaId'].'-' .$id_product_ref.' linea :'.$e->getLine(),$e->getMessage(). var_dump($response));
+                                $this->report('CEbayAddProductJob','Error ' . $reservedId['prestaId'] . '-' . $id_product_ref . ' linea :' . $e->getLine(),$e->getMessage() . var_dump($response));
 
                             }
                         }

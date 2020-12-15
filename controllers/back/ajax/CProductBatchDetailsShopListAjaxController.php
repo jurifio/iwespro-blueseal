@@ -40,7 +40,7 @@ class CProductBatchDetailsShopListAjaxController extends AAjaxController
         $user = \Monkey::app()->getUser();
         $isWorker = $user->hasPermission('worker');
         $allShops = $user->hasPermission('allShops');
-        $isShopUser = $user->hasPermission('/admin/product/edit');
+        $isShopUser = $user->hasPermission('/admin/product/list');
         if(isset($this->data['shopid'])){
             $shopId=$this->data['shopid'];
         }else {

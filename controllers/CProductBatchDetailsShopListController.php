@@ -33,7 +33,7 @@ class CProductBatchDetailsShopListController extends ARestrictedAccessRootContro
         $user = \Monkey::app()->getUser();
         $isWorker = $user->hasPermission('worker');
         $allShops = $user->hasPermission('allShops');
-        $isShopUser = $user->hasPermission('/admin/product/edit');
+        $isShopUser = $user->hasPermission('/admin/product/list');
         if(isset($_GET['shopId'])){
             $shopId=$_GET['shopId'];
         }else {
