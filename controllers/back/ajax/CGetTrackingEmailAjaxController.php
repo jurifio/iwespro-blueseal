@@ -310,6 +310,71 @@ class CGetTrackingEmailAjaxController extends AAjaxController
             ]);
 
         }
+        $mgClient = new Mailgun('key-1d5fe7e72fab58615be0d245d90e9e56');
+        $domain = 'thomasboutique.it';
+        $queryString = array(
+            'begin'        => $beginDate,
+            'end'          =>$endDate,
+            'ascending'    => 'yes',
+            'pretty'       => 'yes',
+            'recipient'    => $email,
+            'event'        => 'delivered'
+        );
+
+# Make the call to the client.
+        $result = $mgClient->get("$domain/events", $queryString);
+
+
+        foreach ($result->http_response_body->items as $list ) {
+            if(!empty($list->timestamp)) {
+                $oraInvio = $list->timestamp;
+            }else{
+                $oraInvio='';
+            }
+            if (!empty($list->envelope->sender)) {
+                $sender= $list->envelope->sender;
+            }else{
+                $sender='';
+            }
+            if (!empty($list->envelope->targets)) {
+                $targets=$list->envelope->targets;
+            }else{
+                $targets='';
+            }
+            if (!empty($list->message->headers->to)) {
+                $to=$list->message->headers->to;
+            }else{
+                $to='';
+            }
+            if (!empty($list->message->headers->from)) {
+                $from=$list->message->headers->from;
+            }else{
+                $from='';
+            }
+            if (!empty($list->message->headers->subject)) {
+                $subject=$list->message->headers->subject;
+            }else{
+                $subject='';
+            }
+            if (!empty($list->message->headers->$messageId)) {
+
+                $link="<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $list->message->headers->$messageId . "&orderId=".$orderId."'>link</a><br />";
+            }else{
+                $link='';
+            }
+            if ($list->event=='Delivered') {
+                array_push($trackLine,[
+                    'oraInvio' => date('d-m-Y H:s:i',$oraInvio),
+                    'sender' => $sender,
+                    'targets' => $targets,
+                    'from' => $from,
+                    'to' => $to,
+                    'subject' => $subject,
+                    'link' => $link
+                ]);
+            }
+
+        }
 
 
         return json_encode($trackLine);
