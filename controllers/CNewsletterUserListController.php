@@ -4,6 +4,7 @@
 
 namespace bamboo\blueseal\controllers;
 
+use bamboo\core\exceptions\RedPandaInvalidArgumentException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 
@@ -15,7 +16,7 @@ class CNewsletterUserListController extends ARestrictedAccessRootController
 
     /**
      * @return string
-     * @throws \bamboo\core\exceptions\RedPandaInvalidArgumentException
+     * @throws RedPandaInvalidArgumentException
      */
 
     public function get()

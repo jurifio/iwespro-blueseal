@@ -5,7 +5,6 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CNewsletterCampaign;
-use bamboo\domain\repositories\CNewsletterCampaignRepo;
 use bamboo\domain\entities\COrder;
 use bamboo\core\jobs\ACronJob;
 use bamboo\domain\repositories\CNewsletterRepo;
@@ -29,12 +28,7 @@ class CNewsletterSendNow extends AAjaxController
 
 
 
-    /**
-     * @return mixed
-     * @throws BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
+
 
     public function put(){
         $data  = $this->app->router->request()->getRequestData();

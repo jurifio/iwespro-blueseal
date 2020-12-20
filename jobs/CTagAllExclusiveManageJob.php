@@ -57,7 +57,7 @@ class CTagAllExclusiveManageJob extends ACronJob
             $res='';
             //prendo i dati passati in input
             $data = \Monkey::app()->router->request()->getRequestData();
-            $tagExclusive = \Monkey::app()->repoFactory->create('TagExclusive')->findOneBy(['slug' => 'all']);
+            $tagExclusive = \Monkey::app()->repoFactory->create('TagExclusive')->findOneBy(['id' => 1]);
             $tagExclusiveId = $tagExclusive->id;
             $ProductHasTagExclusiveRepo = \Monkey::app()->repoFactory->create('ProductHasTagExclusive');
             $res = \Monkey::app()->dbAdapter->query('SELECT p.id, p.productVariantId from Product p where p.qty>0', []) -> fetchAll();
@@ -65,14 +65,14 @@ class CTagAllExclusiveManageJob extends ACronJob
             foreach ($res as $result) {
 
                 $phte = $ProductHasTagExclusiveRepo->findOneBy(['productId' => $result['id'],'productVariantId' => $result['productVariantId']]);
-                if ($phte) {
+                if ($phte!=null) {
                     continue;
                 } else {
-                    $phteInsert = $ProductHasTagExclusiveRepo->getEmptyEntity();
-                    $phteInsert->productId = $result['id'];
-                    $phteInsert->productVariantId = $result['productVariantId'];
-                    $phteInsert->tagExclusiveId = $tagExclusiveId;
-                    $phteInsert->insert();
+                    $phte = $ProductHasTagExclusiveRepo->getEmptyEntity();
+                    $phte->productId = $result['id'];
+                    $phte->productVariantId = $result['productVariantId'];
+                    $phte->tagExclusiveId = $tagExclusiveId;
+                    $phte->insert();
                 }
             }
 

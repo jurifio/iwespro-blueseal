@@ -454,7 +454,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="nameProduct">Nome Prodotto</label>
-                                        <input id="nameProduct" autocomplete="off" type="text"
+                                        <input id="nameProduct" disabled="disabled" autocomplete="off" type="text"
                                                class="form-control" name="nameProduct" value=""
                                         />
                                     </div>

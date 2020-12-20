@@ -591,7 +591,8 @@ $('#invoiceSelectNumber').change(function(){
 var rowInvoice=[];
 var counterRow=0;
 function addRowProduct(){
-    if($('#billRegistryTypeTaxesProductId').val()!='') {
+
+    if ($('#billRegistryTypeTaxesProductId').val()!='' && $('#price').val()!='' && $('#qty').val()!='' && $('#description').val()!='' ) {
         let counterRowView = counterRow + 1;
         let vatRow = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#percVat').val());
         let discountRowAmount = parseFloat($('#netTotalRow').val()) / 100 * parseFloat($('#discountRow').val());

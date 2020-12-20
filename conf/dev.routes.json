@@ -4117,6 +4117,20 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/applicazioni/lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPageListController"
+            },
+            "filters": {}
+        ,
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
