@@ -622,7 +622,7 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                         echo '<td>' . $invoiceRow->description . '</td>';
                                         echo '<td>' . number_format($invoiceRow->priceRow,2,',','') . '&euro;</td>';
                                         echo '<td>' . $invoiceRow->qty . '</td>';
-                                        echo '<td>' . invoicenumber_format(($invoiceRow->priceRow + $invoiceRow->discountRow + $invoiceRow->vatRow) / $invoiceRow->qty,2,',','') . '&euro;</td>';
+                                        echo '<td>' . number_format(($invoiceRow->priceRow + $invoiceRow->discountRow + $invoiceRow->vatRow) / $invoiceRow->qty,2,',','') . '&euro;</td>';
                                         echo '<td>' . number_format($invoiceRow->percentDiscount,2,',','') . '&percnt;</td>';
                                         echo '<td>' . number_format($invoiceRow->discountRow,2,',','') . '&euro;</td>';
                                         $vat = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $invoiceRow->billRegistryTypeTaxesId]);
