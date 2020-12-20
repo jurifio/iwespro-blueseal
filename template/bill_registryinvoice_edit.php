@@ -608,28 +608,30 @@ border-color: darkgrey darkgrey darkgrey darkgrey;">
                                 <?php
                                 $nameProduct = '';
                                 $codeProduct = '';
-                                foreach ($brir as $invoiceRow) {
-                                    if ($invoiceRow->billRegistryProductId != 0 || $invoiceRow->billRegistryProductId != null) {
-                                        $brpFind = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $invoiceRow->billRegistryProductId]);
-                                        if ($brpFind != null) {
-                                            $nameProduct = $brpFind->nameProduct;
-                                            $codeProduct = $brpFind->codeProduct;
+                                if($brir) {
+                                    foreach ($brir as $invoiceRow) {
+                                        if ($invoiceRow->billRegistryProductId != 0 || $invoiceRow->billRegistryProductId != null) {
+                                            $brpFind = \Monkey::app()->repoFactory->create('BillRegistryProduct')->findOneBy(['id' => $invoiceRow->billRegistryProductId]);
+                                            if ($brpFind != null) {
+                                                $nameProduct = $brpFind->nameProduct;
+                                                $codeProduct = $brpFind->codeProduct;
+                                            }
                                         }
+                                        echo '<tr id="productRowTr' . $invoiceRow->id . '"><td>' . $invoiceRow->id . '</td>';
+                                        echo '<td>' . $nameProduct . '</td>';
+                                        echo '<td>' . $invoiceRow->description . '</td>';
+                                        echo '<td>' . number_format($invoiceRow->priceRow,2,',','') . '&euro;</td>';
+                                        echo '<td>' . $invoiceRow->qty . '</td>';
+                                        echo '<td>' . invoicenumber_format(($invoiceRow->priceRow + $invoiceRow->discountRow + $invoiceRow->vatRow) / $invoiceRow->qty,2,',','') . '&euro;</td>';
+                                        echo '<td>' . number_format($invoiceRow->percentDiscount,2,',','') . '&percnt;</td>';
+                                        echo '<td>' . number_format($invoiceRow->discountRow,2,',','') . '&euro;</td>';
+                                        $vat = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $invoiceRow->billRegistryTypeTaxesId]);
+                                        echo '<td>' . number_format($vat->perc,2,',','') . '&percnt;</td>';
+                                        echo '<td>' . number_format($invoiceRow->vatRow,2,',','') . '&euro;</td>';
+                                        echo '<td>' . number_format($invoiceRow->grossTotalRow,2,',','') . '&euro;</td>';
+                                        echo '<td><button class="success" id="modifyRowInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowInvoiceEdit(' . $invoiceRow->id . ',' . $invoiceRow->id . ')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
+                                        echo '<td><button class="success" id="deleteRowInvoiceButton' . $invoiceRow->id . '" onclick="deleteRowInvoiceEdit(' . $invoiceRow->id . ',' . $invoiceRow->id . ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                                     }
-                                    echo '<tr id="productRowTr' . $invoiceRow->id . '"><td>' . $invoiceRow->id . '</td>';
-                                    echo '<td>' . $nameProduct . '</td>';
-                                    echo '<td>' . $invoiceRow->description . '</td>';
-                                    echo '<td>' . number_format($invoiceRow->priceRow,2,',','') . '&euro;</td>';
-                                    echo '<td>' . $invoiceRow->qty . '</td>';
-                                    echo '<td>' . number_format(($invoiceRow->priceRow + $invoiceRow->discountRow + $invoiceRow->vatRow) / $invoiceRow->qty,2,',','') . '&euro;</td>';
-                                    echo '<td>' . number_format($invoiceRow->percentDiscount,2,',','') . '&percnt;</td>';
-                                    echo '<td>' . number_format($invoiceRow->discountRow,2,',','') . '&euro;</td>';
-                                    $vat = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $invoiceRow->billRegistryTypeTaxesId]);
-                                    echo '<td>' . number_format($vat->perc,2,',','') . '&percnt;</td>';
-                                    echo '<td>' . number_format($invoiceRow->vatRow,2,',','') . '&euro;</td>';
-                                    echo '<td>' . number_format($invoiceRow->grossTotalRow,2,',','') . '&euro;</td>';
-                                    echo '<td><button class="success" id="modifyRowInvoiceButton' . $invoiceRow->id . '" onclick="modifyRowInvoiceEdit(' . $invoiceRow->id . ',' . $invoiceRow->id . ')" type="button"><span class="fa fa-eraser">Modifica</span></button></td>';
-                                    echo '<td><button class="success" id="deleteRowInvoiceButton' . $invoiceRow->id . '" onclick="deleteRowInvoiceEdit(' . $invoiceRow->id . ',' . $invoiceRow->id . ')" type="button"><span class="fa fa-eraser">Elimina</span></button></td></tr>';
                                 }
                                 ?>
                             </table>
