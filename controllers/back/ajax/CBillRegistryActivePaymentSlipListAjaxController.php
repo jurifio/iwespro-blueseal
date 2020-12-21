@@ -81,13 +81,19 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $clientList='';
             $impAmount=0;
             $amountSlip=0;
-            $typePayment='';
+            $finalTypePayment='';
             $bps=$billRegistryPaymentSlipRepo->findOneBy(['id'=>$paymentBill->statusId]);
             $timeTable=$billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentSlipId'=>$paymentBill->id]);
             foreach($timeTable as $tt){
                 $amountSlip+=$tt->amountPayment;
                 $invoice=$billRegistryInvoiceRepo->findOneBy(['id'=>$tt->billRegistryInvoiceId]);
                 $typePayment=$billRegistryTypePaymentRepo->findOneBy(['id'=>$invoice->billRegistryTypePaymentId]);
+                if($typePayment){
+                    $finalTypePayment=$typePayment->name;
+                }else{
+                    $finalTypePayment='';
+                }
+
                 $client=$billRegistryClientRepo->findOneBy(['id'=>$invoice->billRegistryClientId]);
                 $clientAccount=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$client->id]);
                 if($clientAccount!=null){
@@ -120,7 +126,7 @@ class CBillRegistryActivePaymentSlipListAjaxController extends AAjaxController
             $row['submissionDate'] = $paymentBill->submissionDate ?? 'Non Sottomessa';
             $row['impAmount']=number_format($impAmount,'2',',','.').' &euro;';
             $row['impSlip']=number_format($amountSlip,'2',',','.').' &euro;';
-            $row['typePayment']=$typePayment->name;
+            $row['typePayment']=$finalTypePayment;
             if($pb!=null) {
                 $row['impInizialePassive']= ($pb->amount!=null) ?
                     number_format($pb->amount,'2',',','.') . ' &euro;'
