@@ -47,7 +47,7 @@ class CBillRegistryGenerateSelectActivePaymentManageAjaxController extends AAjax
                 $billRegistryTypePaymentRepo = \Monkey::app()->repoFactory->create('BillRegistryTypePayment');
                 $billRegistryActivePaymentSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
                 try{
-                $res = $this->app->dbAdapter->query('SELECT   group_concat(btt.id) as id,SUM(btt.amountPayment) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
+                $res = $this->app->dbAdapter->query('SELECT   group_concat(btt.id) as id,SUM(format(btt.amountPayment,2)) AS amountPayment,MAX(btt.dateEstimated) AS paymentDate FROM BillRegistryTimeTable btt 
 JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillRegistryTypePayment brtp ON bri.billRegistryTypePaymentId=brtp.id 
  where btt.amountPaid =0 and bri.id in('.$selectedInvoice.')
  group BY bri.billRegistryClientId,date_format(btt.dateEstimated,"%d-%c-%Y"),bri.billRegistryTypePaymentId',[])->fetchAll();
@@ -100,7 +100,7 @@ JOIN BillRegistryInvoice bri ON btt.billRegistryInvoiceId=bri.id left JOIN BillR
 
                     $braps = $billRegistryActivePaymentSlipRepo->getEmptyEntity();
 
-                    $braps->amount = $result['amountPayment'];
+                    $braps->amount = number_format($result['amountPayment'],2,'.','');
                     $braps->numberSlip =  $numberDocument;
                     $braps->creationDate = $creationDate;
                     $braps->paymentDate = $result['paymentDate'];
