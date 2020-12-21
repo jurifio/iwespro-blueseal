@@ -7,6 +7,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
 use bamboo\core\exceptions\BambooShipmentException;
 use bamboo\domain\entities\COrderLine;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
@@ -51,10 +52,14 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
             $billRegistryPaymentActiveSlipRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
             $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
             $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+            $billRegistryClientRepo=\Monkey::app()->repoFactory->create('BillRegistryClient');
+            $billRegistryClientAccountRepo=\Monkey::app()->repoFactory->create('BillRegistryClientAccount');
+            $shopRepo=\Monkey::app()->repoFactory->create('Shop');
             $brpas = $billRegistryPaymentActiveSlipRepo->findOneBy(['id' => $billRegistryActivePaymentSlipId]);
 
 
             $p = $paymentBillRepo->findOneBy(['id' => $paymentBillId]);
+            $paymentSlip=$p->id;
             if($paAmountPaid==0){
                 $paymentRest=$p->amount;
             }else{
@@ -79,7 +84,13 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                 $p->update();
 
             $i = 1;
+
             $brtt = $billRegistryTimeTableRepo->findBy(['billRegistryActivePaymentSlipId' => $billRegistryActivePaymentSlipId]);
+            $invoiceIds=$brtt;
+            $client=$billRegistryClientRepo->findOneBy(['id'=>$brtt->billRegistryClientId]);
+
+            $emailCustomer=[$client->emailAddress];
+            $companyName=$client->companyName;
             if ($brtt != null) {
                 foreach ($brtt as $payment) {
 
@@ -101,6 +112,18 @@ class CBillRegistryActivePaymentSlipManageAjaxController extends AAjaxController
                             $p->isPaid = 1;
                             $p->note = $tempNote.'<br>compensata con distinta Attiva n. ' . $billRegistryActivePaymentSlipId;
                             $p->update();
+
+                            /** @var CEmailRepo $mailRepo */
+                            $mailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $mailRepo->newPackagedMail('sendadjustementtocustomer', 'no-reply@iwes.pro', $emailCustomer, [], ['amministrazione@iwes.it'], [
+                                'invoiceIds' => $invoiceIds,
+                                'slipArray' => $slipArray,
+                                'numberSlip' => $numberSlip,
+                                'slipTotalAmount' => $slipTotalAmount,
+                                'slipFinalDate' =>$slipFinalDate,
+                                'dateEstimated'=>$dateEstimated
+                            ],'MailGun',$attachment);
+
                         }
                     } elseif ($ratePayment > $amountPayment) {
                         $payment->amountPaid = number_format($amountPayment,2);

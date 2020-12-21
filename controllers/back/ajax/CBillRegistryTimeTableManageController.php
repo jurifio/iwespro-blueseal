@@ -79,7 +79,7 @@ class CBillRegistryTimeTableManageController extends AAjaxController
         $datePayment = $dateP->format('Y-m-d H:i:s');
         $billRegistryTimeTable = \Monkey::app()->repoFactory->create('BillRegistryTimeTable')->findOneBy(['id'=>$billRegistryTimeTableId]);
         if($billRegistryTimeTable->billRegistryActivePaymentSlipId == null) {
-            $billRegistryTimeTable->amountPayment = $amountPayment;
+            $billRegistryTimeTable->amountPayment = number_format($amountPayment,2);
             $billRegistryTimeTable->dateEstimated = $datePayment;
             $billRegistryTimeTable->description=$description;
             $billRegistryTimeTable->update();
