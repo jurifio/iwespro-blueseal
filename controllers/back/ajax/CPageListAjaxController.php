@@ -135,7 +135,7 @@ class CPageListAjaxController extends AAjaxController
             $response['data'][$i]['namePost'] = $namePost;
             $sectionTitle='';
             $sidebarGroupTitle='';
-            $sb=$sidebarRepo->findOneBy(['pageId'=>$val->id]);
+           /* $sb=$sidebarRepo->findOneBy(['pageId'=>$val->id]);
             if($sb){
                 $sidebarGroup=$sidebarGroupRepo->findOneBy(['id'=>$sb->sidebarGroupId]);
                 if(count($sidebarGroup)>0) {
@@ -163,7 +163,7 @@ class CPageListAjaxController extends AAjaxController
             }else{
                 $response['data'][$i]['sectionTitle'] = '';
                 $response['data'][$i]['sidebarGroupTitle'] = '';
-            }
+            }*/
 
             $i++;
         }
