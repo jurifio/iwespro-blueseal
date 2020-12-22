@@ -23,50 +23,34 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="marketplace_hasshop_list"
-                               data-controller="MarketPlaceHasShopListAjaxController"
+                               data-datatable-name="marketplace_hasnewshop_list"
+                               data-controller="MarketPlaceHasNewShopListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
                                data-display-length="200">
                             <thead>
                             <tr>
-                                <th data-slug="id"
+                                <th data-slug="code"
                                           data-searchable="true"
                                           data-orderable="true"
-                                          class="center">Id
+                                          class="center">Marketplace Account
                                 </th>
-                                <th data-slug="shopName"
+                                <th data-slug="marketplaceAccountName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Shop
+                                    class="center">MarketPlace Account
                                 </th>
-                                <th data-slug="markeplaceName"
+                                <th data-slug="marketplaceName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">MarketPlace
                                 </th>
-                                <th data-slug="typeSync"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Tipo Sincronizzazione
-                                </th>
-                                <th data-slug="imgMarketPlace"
+                                <th data-slug="img"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Immagine
                                 </th>
-                                <th data-slug="prestashopId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Prestashop Id
-                                </th>
-                                <th data-slug="priceRule"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Listino Da Shop
-                                </th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -82,40 +66,19 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Esportazione">
-        <bs-toolbar-button
-                data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione">
-        <bs-toolbar-button
-                data-remote="bs.lists.create.associatemarketplace"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-eur"
-                data-permission="/admin/marketing"
-                data-event="bs.marketplace.price.rules"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Politica Prezzi Prodotti su Marketplace"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-
-        <bs-toolbar-button
-                data-remote="bs.lists.delete.asociatemarketplacehasshop"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Nuovo shop">
+    <bs-toolbar-group data-group-label="Gestione Regole">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus-circle"
                 data-permission="/admin/marketing"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Salva"
+                data-title="Nuova Regola"
                 data-placement="bottom"
                 data-href="/blueseal/marketplace/marketplace-shop/aggiungi"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.marketplacehasnewshop"
         ></bs-toolbar-button>
 
     </bs-toolbar-group>

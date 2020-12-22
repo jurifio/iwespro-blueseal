@@ -264,7 +264,7 @@
                                             <div class="col-md-2">
                                                 <div class="form-group form-group-default required">
                                                     <label for="percentSalePrice">Percentuale %</label>
-                                                    <input id="percentSalePride" autocomplete="off" type="text"
+                                                    <input id="percentSalePrice" autocomplete="off" type="text"
                                                            class="form-control" name="percentSalePrice" value="0"
                                                            required="required"/>
                                                 </div>
