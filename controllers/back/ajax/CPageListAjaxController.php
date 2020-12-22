@@ -133,14 +133,20 @@ class CPageListAjaxController extends AAjaxController
             $sb=$sidebarRepo->findOneBy(['pageId'=>$val->id]);
             if($sb){
                 $sidebarGroup=$sidebarGroupRepo->findOneBy(['id'=>$sb->sidebarGroupId]);
-                $sidebarSectionId=$sidebarGroup->sidebarSectionId;
-                $sidebarSection=$sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId'=>$sidebarSectionId,'langId'=>'1']);
-                $sectionTitle=$sidebarSection->title;
-                $sidebarGroupTranslation=$sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId'=>$sb->sidebarGroupId,'langId'=>'1']);
-                $sidebarGroupTitle=$sidebarGroupTranslation->title;
+                if($sidebarGroup) {
+                    $sidebarSectionId = $sidebarGroup->sidebarSectionId;
+                    $sidebarSection = $sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId' => $sidebarSectionId,'langId' => '1']);
+                    $sectionTitle = $sidebarSection->title;
+                    $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId' => $sb->sidebarGroupId,'langId' => '1']);
+                    $sidebarGroupTitle = $sidebarGroupTranslation->title;
+                    $response['data'][$i]['sectionTitle'] = $sectionTitle;
+                    $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
+                }else{
+                    $response['data'][$i]['sectionTitle'] = '';
+                    $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
+                }
             }
-            $response['data'][$i]['sectionTitle'] = $sectionTitle;
-            $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
+
             $i++;
         }
         return json_encode($response);
