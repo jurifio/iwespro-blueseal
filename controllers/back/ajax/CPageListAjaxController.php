@@ -4,6 +4,11 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CPage;
+use bamboo\domain\entities\CSidebarGroupTranslation;
+use bamboo\domain\entities\CSidebar;
+use bamboo\domain\entities\CSideBarSectionTranslation;
+use bamboo\domain\entities\CSidebarGroup;
+
 
 /**
  * Class CPageListAjaxController
@@ -131,18 +136,15 @@ class CPageListAjaxController extends AAjaxController
             $sectionTitle='';
             $sidebarGroupTitle='';
             $sb=$sidebarRepo->findOneBy(['pageId'=>$val->id]);
-            if($sb!=null){
+            if($sb){
                 $sidebarGroup=$sidebarGroupRepo->findOneBy(['id'=>$sb->sidebarGroupId]);
-                if($sidebarGroup!=null) {
+                if($sidebarGroup) {
                     $sidebarSectionId = $sidebarGroup->sidebarSectionId;
-                    $sidebarSection = $sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId' => $sidebarSectionId,'langId' => '1']);
+                    $sidebarSection = $sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId'=>$sidebarSectionId,'langId'=>1]);
                     $sectionTitle = $sidebarSection->title;
-                    $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId' => $sb->sidebarGroupId,'langId' => '1']);
+                    $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId'=>$sb->sidebarGroupId,'langId'=>1]);
                     $sidebarGroupTitle = $sidebarGroupTranslation->title;
                     $response['data'][$i]['sectionTitle'] = $sectionTitle;
-                    $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
-                }else{
-                    $response['data'][$i]['sectionTitle'] = '';
                     $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
                 }
             }else{
