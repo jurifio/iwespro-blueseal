@@ -32,14 +32,6 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Nome</th>
-                                <th data-slug="sectionTitle"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Sezione</th>
-                                <th data-slug="sidebarGroupTitle"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Sottogruppo</th>
                                 <th data-slug="url"
                                     data-searchable="false"
                                     data-orderable="false"
