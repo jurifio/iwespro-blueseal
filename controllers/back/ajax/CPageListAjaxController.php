@@ -141,11 +141,21 @@ class CPageListAjaxController extends AAjaxController
                 if($sidebarGroup) {
                     $sidebarSectionId = $sidebarGroup->sidebarSectionId;
                     $sidebarSection = $sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId'=>$sidebarSectionId,'langId'=>1]);
-                    $sectionTitle = $sidebarSection->title;
-                    $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId'=>$sb->sidebarGroupId,'langId'=>1]);
-                    $sidebarGroupTitle = $sidebarGroupTranslation->title;
-                    $response['data'][$i]['sectionTitle'] = $sectionTitle;
-                    $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
+                    if($sidebatSection) {
+                        $sectionTitle = $sidebarSection->title;
+                        $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId' => $sb->sidebarGroupId,'langId' => 1]);
+                        if($sidebarGroupTranslation) {
+                            $sidebarGroupTitle = $sidebarGroupTranslation->title;
+                            $response['data'][$i]['sectionTitle'] = $sectionTitle;
+                            $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
+                        }else{
+                            $response['data'][$i]['sectionTitle'] = $sectionTitle;
+                            $response['data'][$i]['sidebarGroupTitle'] = '';
+                        }
+                    }else{
+                        $response['data'][$i]['sectionTitle'] = '';
+                        $response['data'][$i]['sidebarGroupTitle'] = '';
+                    }
                 }else{
                     $response['data'][$i]['sectionTitle'] = '';
                     $response['data'][$i]['sidebarGroupTitle'] = '';
