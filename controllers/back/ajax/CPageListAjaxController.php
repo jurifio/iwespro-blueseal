@@ -145,6 +145,9 @@ class CPageListAjaxController extends AAjaxController
                     $response['data'][$i]['sectionTitle'] = '';
                     $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
                 }
+            }else{
+                $response['data'][$i]['sectionTitle'] = '';
+                $response['data'][$i]['sidebarGroupTitle'] = '';
             }
 
             $i++;
