@@ -125,7 +125,7 @@ class CPageListAjaxController extends AAjaxController
             $namePost='';
             $btp=$postTranslationRepo->findOneBy(['postId'=>$val->postId,'langId'=>'1']);
             if($btp){
-                $namePost=$btp->name;
+                $namePost=$btp->title;
             }
             $response['data'][$i]['namePost'] = $namePost;
             $sectionTitle='';

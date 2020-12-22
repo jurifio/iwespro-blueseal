@@ -48,7 +48,7 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">pagina Template</th>
-                                <th data-slug="pageTitle"
+                                <th data-slug="namePost"
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Guida Collegata</th>
@@ -73,15 +73,8 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione menu">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-plus"
-            data-permission="/admin/product/add"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Aggiungi un nuovo menu"
-            data-placement="bottom"
-            data-href="/blueseal/menu/aggiungi">
-        </bs-toolbar-button>
+                data-remote="bs.add.guide"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Esportazione">
         <bs-toolbar-button
