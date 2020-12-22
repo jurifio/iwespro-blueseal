@@ -138,13 +138,13 @@ class CPageListAjaxController extends AAjaxController
             $sb=$sidebarRepo->findOneBy(['pageId'=>$val->id]);
             if($sb){
                 $sidebarGroup=$sidebarGroupRepo->findOneBy(['id'=>$sb->sidebarGroupId]);
-                if($sidebarGroup) {
+                if(count($sidebarGroup)>0) {
                     $sidebarSectionId = $sidebarGroup->sidebarSectionId;
                     $sidebarSection = $sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId'=>$sidebarSectionId,'langId'=>1]);
-                    if($sidebatSection) {
+                    if(count($sidebatSection)>0) {
                         $sectionTitle = $sidebarSection->title;
                         $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId' => $sb->sidebarGroupId,'langId' => 1]);
-                        if($sidebarGroupTranslation) {
+                        if(count($sidebarGroupTranslation)>0) {
                             $sidebarGroupTitle = $sidebarGroupTranslation->title;
                             $response['data'][$i]['sectionTitle'] = $sectionTitle;
                             $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
