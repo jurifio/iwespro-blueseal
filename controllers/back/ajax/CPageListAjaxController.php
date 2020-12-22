@@ -146,6 +146,9 @@ class CPageListAjaxController extends AAjaxController
                     $sidebarGroupTitle = $sidebarGroupTranslation->title;
                     $response['data'][$i]['sectionTitle'] = $sectionTitle;
                     $response['data'][$i]['sidebarGroupTitle'] = $sidebarGroupTitle;
+                }else{
+                    $response['data'][$i]['sectionTitle'] = '';
+                    $response['data'][$i]['sidebarGroupTitle'] = '';
                 }
             }else{
                 $response['data'][$i]['sectionTitle'] = '';
