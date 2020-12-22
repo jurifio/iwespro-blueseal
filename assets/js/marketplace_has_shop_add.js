@@ -261,21 +261,11 @@ $('#brandExclusion').change( function(){
 
 var paral;
 var newparal;
-$('#brandIdParallel').change( function(){
-    paral = $('#brandsPar').val();
-    newparal=paral + this.value + ',';
+$('#BrandIdParallel').change( function(){
+    paral=$('#brandsPar').val();
+    newparal=paral+this.value + ',';
     $('#brandsPar').val(newparal);
-
 });
-
-
-
-
-
-
-
-
-
 
 
 

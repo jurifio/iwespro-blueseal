@@ -505,7 +505,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default">
                                                     <input type="text" id="brandsPar" name="brandsPar"
-                                                           value="0"/>
+                                                           value=""/>
                                                 </div>
                                             </div>
                                         </div>
