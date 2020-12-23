@@ -1147,7 +1147,11 @@ VALUES (8,
                                     $updateProductReference->execute();
 
                                 }
-
+                                $phpms=\Monkey::app()->repoFactory->create(['PrestashopHasProductHasMarketplaceHasShop'])->findOneBy(['productId'=>$reservedId['productId'],'productVariantId'=>$reservedId['productVariantId'],'marketplaceHasShopId'=>$marketplace['prestashopId']]);
+                                if(is_null($phpms->refMarketplaceId)){
+                                    $phpms->refMarketplaceId= $id_product_ref ;
+                                    $phpms->update();
+                                }
 
                                 $this->report('CEbayAddProductJob','Report ' . $reservedId['prestaId'] . '-' . $id_product_ref,$xml);
                             } catch (\Throwable $e) {
