@@ -1119,15 +1119,23 @@ footer {
                                 //$xmlresponse = new \SimpleXMLElement($response);
 
 
+                                $this->report('CEbayReviseProductJob','Report ',$response);
+                                sleep(1);
+
+                                $reponseNewProduct = new \SimpleXMLElement($response);
+                                $this->report('CEbayAddProductJob','Report ',$xml);
+                                $id_product_ref = $reponseNewProduct->ItemID;
+
+
                                 sleep(1);
                                 $this->report('CEbayReviseProductJob','Report  Revise' . $rowsGetReference[0]['id_product_ref'],$xml);
                                 $phpms=\Monkey::app()->repoFactory->create(['PrestashopHasProductHasMarketplaceHasShop'])->findOneBy(['productId'=>$reservedId['productId'],'productVariantId'=>$reservedId['productVariantId'],'marketplaceHasShopId'=>$marketplace['prestashopId']]);
                                 if(is_null($phpms->refMarketplaceId)){
-                                    $phpms->refMarketplaceId=$rowGetReference[0]['id_product_ref'];
+                                    $phpms->refMarketplaceId=$id_product_ref;
                                     $phpms->update();
                                 }
                             } catch (\Throwable $e) {
-                                $this->report('CEbayReviseProductJob','Error' ,$e);
+                                $this->report('CEbayReviseProductJob','Error' ,$e->getLine().'-'.$e->getMessage());
 
                             }
                         }
