@@ -170,7 +170,24 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         }else{
             $brandParallel=$brandsParallel;
         }
-
+        $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
+        $findNextNumber = $this->app->dbAdapter->query('SELECT max(id)+1  as maxIdMarketplaceHasShop from MarketplaceHasShop',[])->fetchAll()[0]['maxIdMarketplaceHasShop'];
+        $marketplaceFind=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$marketplaceId]);
+        $urlSite=$findUrlSite->urlSite;
+        $marketplaceHasShopFind=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId'=>$shopId,'marketplaceId'=>$marketplaceId]);
+        if(!$marketplaceHasShopFind){
+            $marketplaceHasShopId=$findNextNumber;
+            $marketplaceInsert=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
+            $marketplaceInsert->shopId=$shopId;
+            $marketplaceInsert->marketplaceId=$marketplaceId;
+            $marketplaceInsert->typeSync=0;
+            $marketplaceInsert->name=ucfirst($findUrlSite->name).'-'.ucfirst($marketplaceFind->name);
+            $marketplaceInsert->isPriceHub=1;
+            $marketplaceInsert->prestashopId=$findNextNumber;
+            $marketplaceInsert->insert();
+        }else{
+            $marketplaceHasShopId=$marketplaceHasShopFind->id;
+        }
 
 
         $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
@@ -205,12 +222,12 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "paypalEmail": "transazioni@cartechinishop.com",
     "modifier": "0",';
        }
+        $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
-        $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
-        $urlSite=$findUrlSite->urlSite;
-        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->getEmptyEntity();
+
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->getEmptyEntity();
         $marketplaceAccount->marketplaceId = $marketplaceId;
         $marketplaceAccount->name = $marketplace_account_name;
         $marketplaceAccount->config = $collectUpdate;
@@ -380,6 +397,24 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         }else{
             $brandParallel=$brandsParallel;
         }
+        $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
+        $findNextNumber = $this->app->dbAdapter->query('SELECT max(id)+1  as maxIdMarketplaceHasShop from MarketplaceHasShop',[])->fetchAll()[0]['maxIdMarketplaceHasShop'];
+        $marketplaceFind=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$marketplaceId]);
+        $urlSite=$findUrlSite->urlSite;
+        $marketplaceHasShopFind=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId'=>$shopId,'marketplaceId'=>$marketplaceId]);
+        if(!$marketplaceHasShopFind){
+            $marketplaceHasShopId=$findNextNumber;
+            $marketplaceInsert=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
+            $marketplaceInsert->shopId=$shopId;
+            $marketplaceInsert->marketplaceId=$marketplaceId;
+            $marketplaceInsert->typeSync=0;
+            $marketplaceInsert->name=ucfirst($findUrlSite->name).'-'.ucfirst($marketplaceFind->name);
+            $marketplaceInsert->isPriceHub=1;
+            $marketplaceInsert->prestashopId=$findNextNumber;
+            $marketplaceInsert->insert();
+        }else{
+            $marketplaceHasShopId=$marketplaceHasShopFind->id;
+        }
 
 
 
@@ -415,11 +450,10 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "paypalEmail": "transazioni@cartechinishop.com",
     "modifier": "0",';
         }
+        $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
-        $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
-        $urlSite=$findUrlSite->urlSite;
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->findOneBy(['id'=>$marketplaceAccountId]);
         $marketplaceAccount->marketplaceId = $marketplaceId;
         $marketplaceAccount->name = $marketplace_account_name;
