@@ -149,7 +149,7 @@ class CEbayReviseProductJob extends ACronJob
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             $lastUpdateProduct=$product->lastUpdate;
-                            $phpms = \Monkey::app()->repoFactory->create(['PrestashopHasProductHasMarketplaceHasShop'])->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId'=>2]);
+                            $phpms = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                             $lastUpdateMarketplaceProduct = $phpms->lastUpdate;
                             if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
                                 continue;
