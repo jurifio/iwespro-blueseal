@@ -139,7 +139,7 @@ class CEbayReviseProductJob extends ACronJob
                         $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($rowsGetReference == null) {
-                            continue;
+                            continue ;
                         } else {
                             $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
@@ -148,12 +148,13 @@ class CEbayReviseProductJob extends ACronJob
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                            $lastUpdateProduct = $product->lastUpdate;
-                            $phpms = \Monkey::app()->repoFactory->create(['PrestashopHasProductHasMarketplaceHasShop'])->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
+                            $lastUpdateProduct=$product->lastUpdate;
+                            $phpms = \Monkey::app()->repoFactory->create(['PrestashopHasProductHasMarketplaceHasShop'])->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId'=>2]);
                             $lastUpdateMarketplaceProduct = $phpms->lastUpdate;
                             if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
                                 continue;
                             }
+
 
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
@@ -1137,13 +1138,13 @@ footer {
                                 sleep(1);
                                 $this->report('CEbayReviseProductJob','Report  Revise ' . $rowsGetReference[0]['id_product_ref'],$xml);
 
-                                if ($phpms) {
+                                if($phpms) {
                                     $phpms->refMarketplaceId = $rowsGetReference[0]['id_product_ref'];
-                                    $phpms->lastUpdate = $product->lastUpdate;
+                                    $phpms->lastUpdate=$product->lastUpdate;
                                     $phpms->update();
                                 }
                             } catch (\Throwable $e) {
-                                $this->report('CEbayReviseProductJob','Error',$e->getLine() . '-' . $e->getMessage());
+                                $this->report('CEbayReviseProductJob','Error' ,$e->getLine().'-'.$e->getMessage());
 
                             }
                         }
