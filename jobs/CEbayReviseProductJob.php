@@ -151,13 +151,14 @@ class CEbayReviseProductJob extends ACronJob
                             $lastUpdateProduct = $product->lastUpdate;
                             $phpms = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                             $lastUpdateMarketplaceProduct = $phpms->lastUpdate;
-                            if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
-                                continue;
-                            }
                             if ($product->qty == 0) {
                                 closeEbayProduct($product,$market['marketplaceId']);
                                 continue;
                             }
+                            if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
+                                continue;
+                            }
+
 
 
                             $xml = '';
