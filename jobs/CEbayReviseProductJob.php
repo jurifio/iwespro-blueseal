@@ -1162,7 +1162,7 @@ footer {
     }
     public function closeEbayProduct(CProduct $product,$marketPlaceReference)
     {
-        $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->productId,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $marketPlaceReference]);
+        $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $marketPlaceReference]);
         if ($findProductToWork->isPublished == 1) {
             if ($findProductToWork->refMarketplaceId != '') {
                 $request = '<?xml version="1.0" encoding="utf-8"?>
