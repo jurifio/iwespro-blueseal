@@ -1169,7 +1169,7 @@ footer {
 <EndItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
   <!-- Call-specific Input Fields -->
   <EndingReason>NotAvailable</EndingReason>
-  <ItemID> ItemIDType (string) </ItemID>
+  <ItemID>'.$findProductToWork->refMarketplaceId.'</ItemID>
   <!-- Standard Input Fields -->
   <ErrorLanguage>it_IT</ErrorLanguage>
   <MessageID></MessageID>
