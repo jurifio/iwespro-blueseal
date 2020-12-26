@@ -139,7 +139,7 @@ class CEbayReviseProductJob extends ACronJob
                         $rowsGetReference = $getReference->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($rowsGetReference == null) {
-                            continue ;
+                            continue;
                         } else {
                             $getCategoryId = $db_con->prepare('select   dest_shop as StoreCategoryID, dest_ebay as dest_ebay  from ps_fastbay1_catmapping where id_ps=' . $rowsGetReference[0]['id_category_default'] . '
                      and id_shop=' . $marketplace['prestashopId'] . ' and id_marketplace=' . $market['marketplaceId'] . ' limit 1');
@@ -148,10 +148,14 @@ class CEbayReviseProductJob extends ACronJob
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                            $lastUpdateProduct=$product->lastUpdate;
+                            $lastUpdateProduct = $product->lastUpdate;
                             $phpms = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                             $lastUpdateMarketplaceProduct = $phpms->lastUpdate;
                             if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
+                                continue;
+                            }
+                            if ($product->qty == 0) {
+                                closeEbayProduct($product,$market['marketplaceId']);
                                 continue;
                             }
 
@@ -1138,13 +1142,13 @@ footer {
                                 sleep(1);
                                 $this->report('CEbayReviseProductJob','Report  Revise ' . $rowsGetReference[0]['id_product_ref'],$xml);
 
-                                if($phpms) {
+                                if ($phpms) {
                                     $phpms->refMarketplaceId = $rowsGetReference[0]['id_product_ref'];
-                                    $phpms->lastUpdate=$product->lastUpdate;
+                                    $phpms->lastUpdate = $product->lastUpdate;
                                     $phpms->update();
                                 }
                             } catch (\Throwable $e) {
-                                $this->report('CEbayReviseProductJob','Error' ,$e->getLine().'-'.$e->getMessage());
+                                $this->report('CEbayReviseProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
                             }
                         }
@@ -1153,5 +1157,92 @@ footer {
                 }
             }
         }
+        function closeEbayProduct(CProduct $product,$marketPlaceReference)
+        {
+            $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->productId,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $marketPlaceReference]);
+            if ($findProductToWork->isPublished == 1) {
+                if ($findProductToWork->refMarketplaceId != '') {
+                    $request = '<?xml version="1.0" encoding="utf-8"?>
+<EndItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+  <!-- Call-specific Input Fields -->
+  <EndingReason>NotAvailable</EndingReason>
+  <ItemID> ItemIDType (string) </ItemID>
+  <!-- Standard Input Fields -->
+  <ErrorLanguage>it_IT</ErrorLanguage>
+  <MessageID></MessageID>
+  <Version>741</Version>
+  <WarningLevel>High</WarningLevel>
+</EndItemRequest>';
+                    $devID = '9c29584f-1f9e-4c60-94dc-84f786d8670e';
+                    $appID = 'VendiloS-c310-4f4c-88a9-27362c05ea78';
+                    $certID = '3050bb00-db24-4842-999c-b943deb09d1a';
+                    $siteID = 101;
+
+                    $apiUrl = 'https://api.ebay.com/ws/api.dll';
+                    $apiCall = 'EndItemRequest';
+                    $compatibilityLevel = 741;
+
+                    $runame = 'Vendilo_SpA-VendiloS-c310-4-prlqnbrjv';
+                    $loginURL = 'https://signin.ebay.it/ws/eBayISAPI.dll';
+
+                    $headers = array(
+                        // Regulates versioning of the XML interface for the API
+                        'X-EBAY-API-COMPATIBILITY-LEVEL: ' . $compatibilityLevel,
+                        // Set the keys
+                        'X-EBAY-API-DEV-NAME: ' . $devID,
+                        'X-EBAY-API-APP-NAME: ' . $appID,
+                        'X-EBAY-API-CERT-NAME: ' . $certID,
+                        // The name of the call we are requesting
+                        'X-EBAY-API-CALL-NAME: ' . $apiCall,
+                        // SiteID must also be set in the Request's XML
+                        // SiteID = 0 (US) - UK = 3, Canada = 2, Australia = 15, ....
+                        // SiteID Indicates the eBay site to associate the call with
+                        'X-EBAY-API-SITEID: ' . $siteID
+                    );
+                    $connection = curl_init();
+                    curl_setopt($connection,CURLOPT_URL,$apiUrl);
+
+                    curl_setopt($connection,CURLINFO_HEADER_OUT,true);
+// Stop CURL from verifying the peer's certificate
+                    curl_setopt($connection,CURLOPT_SSL_VERIFYPEER,0);
+                    curl_setopt($connection,CURLOPT_SSL_VERIFYHOST,0);
+
+// Set the headers (Different headers depending on the api call !)
+
+                    curl_setopt($connection,CURLOPT_HTTPHEADER,$headers);
+
+                    curl_setopt($connection,CURLOPT_POST,1);
+
+// Set the XML body of the request
+                    curl_setopt($connection,CURLOPT_POSTFIELDS,$request);
+
+// Set it to return the transfer as a string from curl_exec
+                    curl_setopt($connection,CURLOPT_RETURNTRANSFER,1);
+
+// Send the Request
+                    $response = curl_exec($connection);
+
+
+                    $closeProduct = new \SimpleXMLElement($response);
+                    if ($closeProduct->Ack = 'Success') {
+                        $findProductToWork->isPublished = 0;
+                        $findProductToWork->lasUpdate = $product->lastUpdate;
+                        $findProductToWork->update();
+                        $this->report('CEbayReviseProductJob','Report  Revise  Close Product' . $findProductToWork->productId . '-' . $findProductToWork->productVarinatId . '-Ref: ' . $findProductToWork->refMarketplaceId);
+                        return true;
+                    } else {
+                        $this->report('CEbayReviseProductJob','Report  Revise  Close Product' . $findProductToWork->productId . '-' . $findProductToWork->productVarinatId . '-Ref: ' . $findProductToWork->refMarketplaceId . '-' . $closeProduct->Errors->ShortMessage);
+                        return false;
+                    }
+                } else {
+                    return true;
+                }
+
+
+            } else {
+                return true;
+            }
+        }
     }
+
 }

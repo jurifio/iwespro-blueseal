@@ -1150,6 +1150,8 @@ VALUES (8,
                                 $phpms=\Monkey::app()->repoFactory->create(['PrestashopHasProductHasMarketplaceHasShop'])->findOneBy(['productId'=>$reservedId['productId'],'productVariantId'=>$reservedId['productVariantId'],'marketplaceHasShopId'=>$marketplace['prestashopId']]);
                                 if(is_null($phpms->refMarketplaceId)){
                                     $phpms->refMarketplaceId= $id_product_ref ;
+                                    $phpms->isPublished=1;
+                                    $phpms->lastUpdate=$product->lastUpdate;
                                     $phpms->update();
                                 }
 
