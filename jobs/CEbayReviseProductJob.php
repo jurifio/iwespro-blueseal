@@ -236,6 +236,9 @@ class CEbayReviseProductJob extends ACronJob
                             $lastUpdateProduct = $product->lastUpdate;
                             $phpms = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                             $lastUpdateMarketplaceProduct = $phpms->lastUpdate;
+                            if($phpms->isPublished==0){
+                                continue;
+                            }
                             if ($product->qty == 0) {
                                /* $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $market['marketplaceId']]);
                                 if ($findProductToWork) {
@@ -314,9 +317,9 @@ class CEbayReviseProductJob extends ACronJob
                                 }*/
                                 continue;
                             }
-                            if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
+                           /* if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
                                 continue;
-                            }
+                            }*/
 
 
                             $xml = '';
