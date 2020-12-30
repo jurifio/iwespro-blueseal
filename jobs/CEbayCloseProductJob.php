@@ -41,6 +41,7 @@ class CEbayCloseProductJob extends ACronJob
                 $phphmhs = $phphmhsRepo->findBy(['isPublished' => 1]);
                 foreach ($phphmhs as $productInMarketplace) {
                     $product = $productRepo->findOneBy(['id' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+                    $this->report('CEbayCloseProductJob','lavoro il prodotto '.$productInMarketplace->productId.'-'.$productInMarketplace->productVariantId);
                     if ($product->qty == 0) {
                         $productInMarketplace->isPublished = 0;
                         $productInMarketplace->update();
