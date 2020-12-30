@@ -172,8 +172,9 @@ class CEbayAddProductJob extends ACronJob
                                try {
                                    $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $market['marketplaceId']]);
                                    if ($findProductToWork != null) {
+                                       $this->report('CEbayReviseProductJob','trova prodotto' , $reservedId['productId'] . '-' . $reservedId['productVariantId']);
                                        if ($findProductToWork->isPublished == 1) {
-
+                                           $this->report('CEbayReviseProductJob','se pubblicato' , $reservedId['productId'] . '-' . $reservedId['productVariantId']);
                                            $request = '<?xml version="1.0" encoding="utf-8"?>
 <EndItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
  <!-- Call-specific Input Fields -->
