@@ -183,7 +183,7 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<Name>Taglia</Name>';
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                            $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                            /*$shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             if (!in_array($shopHasProduct->shopId, $checkProductShop)) {
                                 $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $market['marketplaceId']]);
                                 if ($findProductToWork) {
@@ -261,7 +261,7 @@ class CEbayAddProductJob extends ACronJob
 
                                 }
                                 continue;
-                            }
+                            }*/
                             $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
                             $slugBrand = $productBrand->slug;
                             $brandName = $productBrand->name;
