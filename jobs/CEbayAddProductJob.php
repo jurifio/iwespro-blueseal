@@ -48,7 +48,7 @@ class CEbayAddProductJob extends ACronJob
  */
 
         if (ENV === 'prod') {
-            $db_host = '5.189.159.187';
+            $db_host = 'localhost';
             $db_name = 'iwesPrestaDB';
             $db_user = 'pickyshop4';
             $db_pass = 'rrtYvg6W!';
