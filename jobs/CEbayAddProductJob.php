@@ -246,6 +246,7 @@ class CEbayAddProductJob extends ACronJob
                                 $xml .= '<VariationProductListingDetails>';
                                 $xml .= '<EAN>' . $sku->ean . '</EAN>';
                                 $xml .= '<UPC>Non applicabile</UPC>';
+                                $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
                                 $xml .= '</VariationProductListingDetails>';
                                 $xml .= '<VariationSpecifics>';
                                 $xml .= '<NameValueList>';

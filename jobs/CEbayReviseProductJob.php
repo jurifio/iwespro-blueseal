@@ -252,6 +252,7 @@ class CEbayReviseProductJob extends ACronJob
                                 $xml .= '<VariationProductListingDetails>';
                                 $xml .= '<EAN>' . $sku->ean . '</EAN>';
                                 $xml .= '<UPC>Non applicabile</UPC>';
+                                $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
                                 $xml .= '</VariationProductListingDetails>';
                                 $xml .= '<VariationSpecifics>';
                                 $xml .= '<NameValueList>';
@@ -1227,15 +1228,11 @@ footer {
                 $response = curl_exec($connection);
 
 
-                $closeProduct = new \SimpleXMLElement($response);
-                if ($closeProduct->Ack = 'Success') {
                     $findProductToWork->isPublished = 0;
                     $findProductToWork->lasUpdate = $product->lastUpdate;
                     $findProductToWork->update();
                     $this->report('CEbayReviseProductJob','Report  Revise  Close Product' . $findProductToWork->productId . '-' . $findProductToWork->productVarinatId . '-Ref: ' . $findProductToWork->refMarketplaceId);
-                } else {
-                    $this->report('CEbayReviseProductJob','Report  Revise  Close Product' . $findProductToWork->productId . '-' . $findProductToWork->productVarinatId . '-Ref: ' . $findProductToWork->refMarketplaceId . '-' . $closeProduct->Errors->ShortMessage);
-                }
+
             }
 
 

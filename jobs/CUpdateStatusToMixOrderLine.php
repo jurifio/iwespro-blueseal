@@ -168,7 +168,6 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                     }
                 }
 
-
             }
         }
 
