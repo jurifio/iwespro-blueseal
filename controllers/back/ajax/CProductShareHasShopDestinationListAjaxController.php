@@ -55,7 +55,7 @@ class CProductShareHasShopDestinationListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings('true');
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $opera = $blueseal . "marketplace/ prodotti-paralleli-shop/modifica/";
+        $opera = $blueseal . "marketplace/shop-paralleli/modifica/";
         foreach ($datatable->getResponseSetData() as $key => $row) {
             $row['DT_RowId']=$row['id'];
             $row['DT_RowCode']=$row['id'].'-'.$row['marketplaceId'];

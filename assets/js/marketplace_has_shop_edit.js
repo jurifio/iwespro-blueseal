@@ -30,7 +30,7 @@ $(document).ready(function () {
             maxFilesize: 5,
             maxFiles: 100,
             parallelUploads: 10,
-            acceptedFiles: "image/jpeg",
+            acceptedFiles: "image/*",
             dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
             uploadMultiple: true,
             sending: function (file, xhr, formData) {
@@ -269,7 +269,7 @@ $('#BrandIdParallel').change( function(){
 
 
 
-$(document).on('bs.marketplacehasshop-account.save', function () {
+$(document).on('bs.productsharehasshopdestination-account.save', function () {
     let bsModal = new $.bsModal('Inserimento Marketplace', {
         body: '<p>Confermare?</p>'
     });

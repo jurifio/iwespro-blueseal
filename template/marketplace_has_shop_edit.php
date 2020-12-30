@@ -93,7 +93,7 @@
                                             <button type="button" class="btn btn-primary" name="uploadLogo"
                                                     id="uploadLogo">carica Logo
                                             </button>
-                                            <input id="logoFile" type="hidden" value=""/>
+                                            <input id="logoFile" type="hidden" value="<?php echo (isset($marketplaceAccount->config['logoFile'])) ? $marketplaceAccount->config['logoFile'] : ''; ?>"/>
                                             <div id="returnFileLogo"><?php echo (isset($marketplaceAccount->config['logoFile'])) ? '<img width="50" src="' . $marketplaceAccount->config['logoFile'] . '"/>' : ''; ?></div>
                                         </div>
                                         <div class="col-md-2">

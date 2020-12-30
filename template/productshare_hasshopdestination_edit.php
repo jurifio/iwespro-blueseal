@@ -89,7 +89,7 @@
                                             <button type="button" class="btn btn-primary" name="uploadLogo"
                                                     id="uploadLogo">carica Logo
                                             </button>
-                                            <input id="logoFile" type="hidden" value=""/>
+                                            <input id="logoFile" type="hidden" value="<?php echo (isset($marketplaceAccount->config['logoFile'])) ? $marketplaceAccount->config['logoFile'] : ''; ?>"/>
                                             <div id="returnFileLogo"><?php echo (isset($marketplaceAccount->config['logoFile'])) ? '<img width="50" src="' . $marketplaceAccount->config['logoFile'] . '"/>' : ''; ?></div>
                                         </div>
                                         <div class="col-md-2">
@@ -195,6 +195,7 @@
                                                     } ?>
                                                 </select>
                                             </div>
+                                        </div>
                                         <div class="col-md-10">
                                             <?php
                                             if (isset($marketplaceAccount->config['typeAssign'])) {
@@ -224,7 +225,7 @@
                                             ?>
                                         </div>
                                     </div>
-                                    <div id="rawRule" class="hide">
+                                    <div id="rawRule">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
@@ -243,8 +244,19 @@
 
                                             <div class="col-md-12">
                                                 <input type="text" id="brands" name="brands"
-                                                       value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'] : ''; ?>"/>
+                                                       value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'].',' : ''; ?>"/>
                                             </div>
+                                        </div>
+
+                                            <?php  $brandExists = explode(',',$marketplaceAccount->config['brands']);
+                                            foreach($brandExists as $brandExist ){
+                                                $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandExist]);
+                                               if($productBrands){
+                                                   echo '<div class="row" id="brandDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btn-'.$productBrands->id.'" onclick="lessBrand('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+                                               }
+                                            }
+                                            ?>
+                                        <div id="appendBrandsPublishPar">
                                         </div>
                                     </div>
                                 </div>
@@ -262,7 +274,27 @@
                                         <h5 class="m-t-12">Regole di Attribuzione Prodotti Paralleli</h5>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isActivePublish">Seleziona se Attivo
+                                                </label>
+                                                <select id="isActivePublish"
+                                                        name="isActivePublish"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione se attivo"
+                                                        data-init-plugin="selectize">
+                                                    <option value=""></option>
+                                                    <?php if ($marketplaceAccount->config['isActivePublish'] == 1) {
+                                                        echo '<option selected value="1">Si</option>';
+                                                        echo '<option value="0">No</option>';
+                                                    } else {
+                                                        echo '<option  value="1">Si</option>';
+                                                        echo '<option  selected value="0">No</option>';
+                                                    } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
                                             <?php
                                             if (isset($marketplaceAccount->config['typeAssignParallel'])) {
                                                 if ($marketplaceAccount->config['typeAssignParallel'] == "1") {
@@ -290,8 +322,23 @@
                                             }
                                             ?>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <input type="hidden" id="productStatusIdSelected" id="productStatusIdSelected"
+                                                       value="<?php echo (isset($marketplaceAccount->config['productStatusId'])) ? $marketplaceAccount->config['productStatusId'] : ''; ?>"/>
+                                                <label for="productStatusId">Seleziona lo Stato Con Cui verranno
+                                                    pubblicati i Prodotti
+                                                </label>
+                                                <select id="productStatusId"
+                                                        name="productStatusId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione Lo stato"
+                                                        data-init-plugin="selectize">
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div id="rawRuleParallel" class="hide">
+                                    <div id="rawRuleParallel">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
@@ -307,13 +354,22 @@
                                             </div>
                                         </div>
                                         <div class="row">
-
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default">
                                                     <input type="text" id="brandsPar" name="brandsPar"
-                                                           value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'] : ''; ?>"/>
+                                                           value="<?php echo (isset($marketplaceAccount->config['brandParallel'])) ? $marketplaceAccount->config['brandParallel'].',' : ''; ?>"/>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <?php  $brandExists=explode(',',$marketplaceAccount->config['brandParallel']);
+                                        foreach($brandExists as $brandExist ){
+                                            $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandExist]);
+                                            if($productBrands){
+                                                echo '<div class="row" id="brandParallelDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btnParallel-'.$productBrands->id.'" onclick="lessBrandParallel('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+                                            }
+                                        }
+                                        ?>
+                                        <div id="appendBrandsPar">
                                         </div>
                                     </div>
                                 </div>
@@ -337,7 +393,7 @@
                 data-tag="a"
                 data-icon="fa-floppy-o"
                 data-permission="/admin/product/add"
-                data-event="bs.marketplacehasshop-account.save"
+                data-event="bs.productsharehasshopdestination-account.save"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Salva"

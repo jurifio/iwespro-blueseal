@@ -30,7 +30,7 @@ $(document).ready(function () {
             maxFilesize: 5,
             maxFiles: 100,
             parallelUploads: 10,
-            acceptedFiles: "image/jpeg",
+            acceptedFiles: "image/*",
             dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
             uploadMultiple: true,
             sending: function (file, xhr, formData) {
@@ -215,36 +215,7 @@ $(':radio[name="activeFullPrice"]').change(function(){
        $('#appendBrand').append('tutti');
    }
 });
-var Selection;
-$(':radio[name="activeSalePrice"]').change(function(){
-    var brandExclusion='';
-    Selection=this.value;
-    if(Selection=='2'){
-        $('#rawSalePrice').removeClass('hide');
-        $('#rawSalePrice').addClass('show');
-        brandExclusion='';
-        $('#brandSaleExclusion').val(brandExclusion)
-        $('#divBrandExclusion').empty();
-    } else{
-        $('#rawSalePrice').removeClass('show');
-        $('#rawSalePrice').addClass('hide');
-        brandExclusion='0';
-        $('#brandSaleExclusion').val(brandExclusion)
-        $('#divBrandExclusion').empty();
-        $('#divBrandExclusion').append('Tutti');
-    }
-});
-var SelectionNameCatalog;
-$(':radio[name="checkNameCatalog"]').change(function(){
-    SelectionNameCatalog=this.value;
-    if(SelectionNameCatalog=='2'){
-        $('#rawName').removeClass('hide');
-        $('#rawName').addClass('show');
-    } else{
-        $('#rawName').removeClass('show');
-        $('#rawName').addClass('hide');
-    }
-});
+
 var typeAssign;
 $(':radio[name="typeAssign"]').change(function(){
     typeAssign=this.value;
@@ -296,13 +267,6 @@ $('#brandExclusion').change( function(){
 var paral;
 var newparal;
 $('#BrandIdParallel').change( function(){
-    if($('#shopId').find('option:selected').length<2){
-        let bsModal = new $.bsModal('Attenzione', {
-            body: '<p>Devi selezionare prima lo shop per vedere i Brand da pubblicare</p>'
-        });
-        bsModal.showCancelBtn();
-
-    }
     paral=$('#brandsPar').val();
     newparal=paral+this.value + ',';
     $('#brandsPar').val(newparal);

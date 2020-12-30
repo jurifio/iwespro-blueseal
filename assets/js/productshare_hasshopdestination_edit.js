@@ -30,7 +30,7 @@ $(document).ready(function () {
             maxFilesize: 5,
             maxFiles: 100,
             parallelUploads: 10,
-            acceptedFiles: "image/jpeg",
+            acceptedFiles: "image/*",
             dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
             uploadMultiple: true,
             sending: function (file, xhr, formData) {
@@ -74,7 +74,7 @@ $(document).ready(function () {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Marketplace',
-            condition: {type: "marketplace"}
+            condition: {type: "website"}
 
         },
         dataType: 'json'
@@ -89,6 +89,26 @@ $(document).ready(function () {
         });
         select[0].selectize.setValue($('#marketplaceSelectedId').val());
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'ProductStatus'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#productStatusId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+        select[0].selectize.setValue($('#productStatusIdSelected').val());
+    });
+
 
     $.ajax({
         method: 'GET',
@@ -109,60 +129,70 @@ $(document).ready(function () {
         });
         select[0].selectize.setValue($('#langSelectId').val());
     });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'ProductBrand',
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#brandExclusion');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
+    $('#shopId').change(function(){
+        $.ajax({
+            url: '/blueseal/xhr/SelectShopBrandsAjaxController',
+            method: 'get',
+            data: {
+                shopId:$('#shopId').val()
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            let brandId = $('#brandId');
+            if (typeof (brandId[0].selectize) != 'undefined') brandId[0].selectize.destroy();
+            brandId.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">Marketplace:' + escape(item.hasMarketplaceRights) + ' | Aggregatori:' + escape(item.hasAggregator) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">Marketplace:' + escape(item.hasMarketplaceRights) + ' | Aggregatori:' + escape(item.hasAggregator) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
         });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'ProductBrand',
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#brandId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'ProductBrand',
-
-        },
-        dataType: 'json'
-    }).done(function (res3) {
-        var selectParallel = $('#BrandIdParallel');
-        if (typeof (selectParallel[0].selectize) != 'undefined') selectParallel[0].selectize.destroy();
-        selectParallel.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res3,
+        $.ajax({
+            url: '/blueseal/xhr/SelectOtherShopBrandsAjaxController',
+            method: 'get',
+            data: {
+                shopId:$('#shopId').val()
+            },
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            let BrandIdParallel = $('#BrandIdParallel');
+            if (typeof (BrandIdParallel[0].selectize) != 'undefined') BrandIdParallel[0].selectize.destroy();
+            BrandIdParallel.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">Marketplace:' + escape(item.hasMarketplaceRights) + ' | Aggregatori:' + escape(item.hasAggregator) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.name) + '</span> - ' +
+                            '<span class="caption">Marketplace:' + escape(item.hasMarketplaceRights) + ' | Aggregatori:' + escape(item.hasAggregator) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
         });
 
     });
@@ -247,17 +277,12 @@ $('#brandId').change( function(){
      valueBrand=$('#brands').val();
     newValueBrand=valueBrand+this.value+',';
     $('#brands').val(newValueBrand);
+    $('#appendBrandsPublishPar').append(`
+    <div id="brandAddDiv-`+$('#brandId').val()+`" class="row"><div class="col-md-12">`+$('#brandId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnAdd-`+$('#brandId').val()+`" onclick="lessBrandAdd(`+$('#brandId').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 
 });
 
-var valueBrandSale;
-var newValueBrandSale;
-$('#brandExclusion').change( function(){
-    valueBrandSale=$('#brandSaleExclusion').val();
-    newValueBrandSale=valueBrandSale+this.value+',';
-    $('#brandSaleExclusion').val(newValueBrandSale);
 
-});
 
 var paral;
 var newparal;
@@ -265,12 +290,14 @@ $('#BrandIdParallel').change( function(){
     paral=$('#brandsPar').val();
     newparal=paral+this.value + ',';
     $('#brandsPar').val(newparal);
+    $('#appendBrandsPar').append(`
+    <div id="brandParallelAddDiv-`+$('#brandIdParallel').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelAdd-`+$('#BrandIdParallel').val()+`" onclick="lessBrandParallelAdd(`+$('#BrandIdParallel').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
 
 
 
-$(document).on('bs.marketplacehasshop-account.save', function () {
-    let bsModal = new $.bsModal('Inserimento Marketplace', {
+$(document).on('bs.productsharehasshopdestination-account.save', function () {
+    let bsModal = new $.bsModal('Modifica Regole Prodotti Paralleli', {
         body: '<p>Confermare?</p>'
     });
 
@@ -281,74 +308,45 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
         }
     });
     var lang = $('#lang').val();
-    var marketplaceAccountId=$('#marketplaceAccountId').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
+    var marketplaceAccountId=$('#marketplaceAccountId').val();
     var slug = $('#slug').val();
     var shopId = $('#shopId').val();
     var marketplaceId =$('#marketplaceId').val();
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
+    var isActiveShare = $('#isActiveShare').val();
+    var isActivePublish = $('#isActivePublish').val();
     var logoFile = $('#logoFile').val();
-    var activeFullPrice = $('#activeFullPrice').val();
-    var signFullPrice = $('#signFullPrice').val();
-    var percentFullPrice = $('#percentFullPrice').val();
-    var optradio = $('#optradio').val();
-    var optradioactive = $('#optradioactive').val();
-    var activeSalePrice = $('#activeSalePrice').val();
-    var signSale = $('#signSale').val();
-    var percentSalePrice = $('#percentSalePrice').val();
-    var optradioSalePrice = $('#optradioSalePrice').val();
-    var dateStartPeriod1 = $('#dateStartPeriod1').val();
-    var dateEndPeriod1 = $('#dateEndPeriod1').val();
-    var dateStartPeriod2 = $('#dateStartPeriod2').val();
-    var dateEndPeriod2 = $('#dateEndPeriod2').val();
-    var dateStartPeriod3 = $('#dateStartPeriod3').val();
-    var dateEndPeriod3 = $('#dateEndPeriod3').val();
-    var dateStartPeriod4 = $('#dateStartPeriod4').val();
-    var dateEndPeriod4=$('#dateEndPeriod4').val();
-    var brandSaleExclusion=$('#brandSaleExclusion').val();
-
-    var checkNameCatalog = $('#checkNameCatalog').val();
-    var optradioName = $('#optradioName').val();
+    var productStatusId=$('#productStatusId').val();
     var typeAssign = $('#typeAssign').val();
     var brands = $('#brands').val();
     var typeAssignParallel = $('#typeAssignParallel').val();
     var brandsSelectionParallel = $('#brandsPar').val();
+    if(brandsSelectionParallel==','){
+        brandsSelectionParallel='0';
+    }
+    if(brands==','){
+        brands='0';
+    }
 
 
 
 
     var config = '?nameMarketPlace=' + marketplace_account_name + '&' +
-    'marketplaceAccountId=' + marketplaceAccountId + '&' +
         'lang=' + lang + '&' +
         'shopId=' + shopId + '&' +
         'marketplaceId=' + marketplaceId + '&' +
+        'marketplaceAccountId=' + marketplaceAccountId + '&' +
         'slug=' + slug + '&' +
         'logoFile=' + logoFile + '&' +
         'isActive=' + isActive + '&' +
-        'activeFullPrice=' + activeFullPrice + '&' +
-        'signSale=' + signSale + '&' +
-        'percentFullPrice=' + percentFullPrice + '&' +
-        'signFullPrice=' + signFullPrice + '&' +
-        'optradio=' + optradio + '&' +
-        'optradioactive=' + optradioactive + '&' +
-        'activeSalePrice=' + activeSalePrice + '&' +
-        'percentSalePrice=' + percentSalePrice + '&' +
-        'optradioSalePrice=' + optradioSalePrice + '&' +
-        'dateStartPeriod1=' + dateStartPeriod1 + '&' +
-        'dateEndPeriod1=' + dateEndPeriod1 + '&' +
-        'dateStartPeriod2=' + dateStartPeriod2 + '&' +
-        'dateEndPeriod2=' + dateEndPeriod2 + '&' +
-        'dateStartPeriod3=' + dateStartPeriod3 + '&' +
-        'dateEndPeriod3=' + dateEndPeriod3 + '&' +
-        'dateStartPeriod4=' + dateStartPeriod4 + '&' +
-        'dateEndPeriod4=' + dateEndPeriod4 + '&' +
+        'isActiveShare=' + isActiveShare + '&' +
+        'isActivePublish=' + isActivePublish + '&' +
         'nameAdminister=' + nameAdminister + '&' +
         'emailNotify=' + emailNotify + '&' +
-        'brandSaleExclusion=' + brandSaleExclusion + '&' +
-        'checkNameCatalog=' + checkNameCatalog + '&' +
-        'optradioName=' + optradioName + '&' +
+        'productStatusId=' + productStatusId + '&' +
         'typeAssign=' + typeAssign + '&' +
         'brands=' + brands+ '&' +
         'typeAssignParallel=' + typeAssignParallel + '&' +
@@ -357,7 +355,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         var data = 1;
-        var urldef = "/blueseal/xhr/MarketplaceAccountHasShopInsertManage" + config;
+        var urldef = "/blueseal/xhr/ProductShareHasShopDestinationInsertManage" + config;
         $.ajax({
             method: "PUT",
             url: urldef,
@@ -444,4 +442,85 @@ $(document).on('click','#checkedAll',function () {
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
+
+function lessBrandAdd(brandId){
+    var divToErase='#brandAddDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brands').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    $('#brands').val(newValueToChange+',');
+    $(divToErase).empty();
+}
+function lessBrand(brandId){
+    var divToErase='#brandDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brands').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    $('#brands').val(newValueToChange+',');
+    $(divToErase).empty();
+}
+function lessBrandParallelAdd(brandId){
+    var divToErase='#brandParallelAddDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brandsPar').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    $('#brandsPar').val(newValueToChange+',');
+    $(divToErase).empty();
+}
+function lessBrandParallel(brandId){
+    var divToErase='#brandParallelDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brandsPar').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    $('#brandsPar').val(newValueToChange+',');
+    $(divToErase).empty();
+}
 
