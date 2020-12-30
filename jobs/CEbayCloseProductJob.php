@@ -33,25 +33,6 @@ class CEbayCloseProductJob extends ACronJob
     public function run($args = null)
     {
         $this->report('CEbayCloseProductJob','start','');
-        if (ENV === 'prod') {
-            $db_host = '5.189.159.187';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'iwesprestashop';
-            $db_pass = 'X+]l&LEa]zSI';
-        } else {
-            $db_host = 'localhost';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'root';
-            $db_pass = 'geh44fed';
-        }
-        $res = "";
-        try {
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            $res = " connessione ok <br>";
-        } catch (PDOException $e) {
-            $res = $e->getMessage();
-        }
         try {
             $productRepo = \Monkey::app()->repoFactory->create('Product');
             $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
@@ -63,19 +44,27 @@ class CEbayCloseProductJob extends ACronJob
                     if ($product->qty == 0) {
                         $productInMarketplace->isPublished = 0;
                         $productInMarketplace->update();
-                        $request = '<?xml version="1.0" encoding="utf-8"?>
-<EndItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-  <RequesterCredentials>
-    <eBayAuthToken>v^1.1#i^1#r^1#p^3#I^3#f^0#t^Ul4xMF8xOjk3MDVGODY4MkI3QUI4QkZGNzlGRTAwMjQwMjk4NkI4XzBfMSNFXjI2MA==</eBayAuthToken>
-  </RequesterCredentials>
-  <EndingReason>NotAvailable</EndingReason>
-  <ItemID>' . $productInMarketplace->refMarketplaceId . '</ItemID>
-  <!-- Standard Input Fields -->
-  <ErrorLanguage>it_IT</ErrorLanguage>
-  <MessageID></MessageID>
-  <Version>741</Version>
-  <WarningLevel>High</WarningLevel>
-</EndItemRequest>';
+                        $request = '<?xml version="1.0" encoding="utf-8"?>';
+                        $request .='<EndItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
+  $request .='<RequesterCredentials>';
+    $request .='<eBayAuthToken>v^1.1#i^1#r^1#p^3#I^3#f^0#t^Ul4xMF8xOjk3MDVGODY4MkI3QUI4QkZGNzlGRTAwMjQwMjk4NkI4XzBfMSNFXjI2MA==</eBayAuthToken>';
+  $request .='</RequesterCredentials>';
+                        $request .='<ItemID>' . $productInMarketplace->refMarketplaceId . '</ItemID>';
+                        $request .='<EndingReason>NotAvailable</EndingReason>';
+                        $request .='<ErrorLanguage>it_IT</ErrorLanguage>';
+
+                        $request .='</EndItemRequest>';
+                        $request = preg_replace(
+                            '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'
+                            . '|[\x00-\x7F][\x80-\xBF]+'
+                            . '|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*'
+                            . '|[\xC2-\xDF]((?![\x80-\xBF])|[\x80-\xBF]{2,})'
+                            . '|[\xE0-\xEF](([\x80-\xBF](?![\x80-\xBF]))|(?![\x80-\xBF]{2})|[\x80-\xBF]{3,})/S',
+                            '?',
+                            $request
+                        );
+
+                        $request = preg_replace('/\xE0[\x80-\x9F][\x80-\xBF]' . '|\xED[\xA0-\xBF][\x80-\xBF]/S','?',$request);
                         $devID = '9c29584f-1f9e-4c60-94dc-84f786d8670e';
                         $appID = 'VendiloS-c310-4f4c-88a9-27362c05ea78';
                         $certID = '3050bb00-db24-4842-999c-b943deb09d1a';
@@ -102,28 +91,34 @@ class CEbayCloseProductJob extends ACronJob
                             // SiteID Indicates the eBay site to associate the call with
                             'X-EBAY-API-SITEID: ' . $siteID
                         );
-                        $connection = curl_init();
-                        curl_setopt($connection,CURLOPT_URL,$apiUrl);
+                        try {
+                            $connection = curl_init();
+                            curl_setopt($connection,CURLOPT_URL,$apiUrl);
 
-                        curl_setopt($connection,CURLINFO_HEADER_OUT,true);
+                            curl_setopt($connection,CURLINFO_HEADER_OUT,true);
 // Stop CURL from verifying the peer's certificate
-                        curl_setopt($connection,CURLOPT_SSL_VERIFYPEER,0);
-                        curl_setopt($connection,CURLOPT_SSL_VERIFYHOST,0);
+                            curl_setopt($connection,CURLOPT_SSL_VERIFYPEER,0);
+                            curl_setopt($connection,CURLOPT_SSL_VERIFYHOST,0);
 
 // Set the headers (Different headers depending on the api call !)
 
-                        curl_setopt($connection,CURLOPT_HTTPHEADER,$headers);
+                            curl_setopt($connection,CURLOPT_HTTPHEADER,$headers);
 
-                        curl_setopt($connection,CURLOPT_POST,1);
+                            curl_setopt($connection,CURLOPT_POST,1);
 
 // Set the XML body of the request
-                        curl_setopt($connection,CURLOPT_POSTFIELDS,$request);
+                            curl_setopt($connection,CURLOPT_POSTFIELDS,$request);
 
 // Set it to return the transfer as a string from curl_exec
-                        curl_setopt($connection,CURLOPT_RETURNTRANSFER,1);
+                            curl_setopt($connection,CURLOPT_RETURNTRANSFER,1);
 
 // Send the Request
-                        $response = curl_exec($connection);
+                            $response = curl_exec($connection);
+                            $this->report('CEbayCloseProductJob','Report ',$response);
+
+                        }catch(\Throwable $e){
+                            $this->report('CEbayCloseProductJob','error call','Depublish '.$productInMarketplace->productId.'-'.$productInMarketplace->productVariantId.'-'.$productInMarketplace->refMarketplaceId);
+                        }
 
 
                         $this->report('CEbayCloseProductJob','Success','Depublish '.$productInMarketplace->productId.'-'.$productInMarketplace->productVariantId.'-'.$productInMarketplace->refMarketplaceId);
