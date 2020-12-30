@@ -168,7 +168,7 @@ class CEbayAddProductJob extends ACronJob
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
 
                             $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                           if ($shopHasProduct->shopId!=1 || $shopHasProduct->shopId!=51 || $shopHasProduct->shopId!=58) {
+                           /*if ($shopHasProduct->shopId!=1 || $shopHasProduct->shopId!=51 || $shopHasProduct->shopId!=58) {
                                try {
                                    $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $market['marketplaceId']]);
                                    if ($findProductToWork != null) {
@@ -251,6 +251,7 @@ class CEbayAddProductJob extends ACronJob
                                }
                                continue;
                            }
+                           */
                             if($product->qty==0){
                                 continue;
                             }
