@@ -183,7 +183,8 @@ class CEbayAddProductJob extends ACronJob
                             $xml .= '<Name>Taglia</Name>';
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                            if (!in_array($product->shopHasProduct->shopId, $checkProductShop)) {
+                            $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                            if (!in_array($shopHasProduct->shopId, $checkProductShop)) {
                                 $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $market['marketplaceId']]);
                                 if ($findProductToWork) {
                                     if ($findProductToWork->isPublished == 1) {
@@ -1206,7 +1207,6 @@ footer {
                                 //$xmlresponse = new \SimpleXMLElement($response);
 
 
-                                $res .= 'risultato' . var_dump($response);
                                 $this->report('CEbayAddProductJob','Report ',$response);
                                 sleep(1);
 
@@ -1242,7 +1242,7 @@ VALUES (8,
 
                                 $this->report('CEbayAddProductJob','Report ' . $reservedId['prestaId'] . '-' . $id_product_ref,$xml);
                             } catch (\Throwable $e) {
-                                $this->report('CEbayAddProductJob','Error ' . $reservedId['prestaId'] . '-' . $id_product_ref . ' linea :' . $e->getLine(),$e->getMessage() . var_dump($response));
+                                $this->report('CEbayAddProductJob','Error ' . $reservedId['prestaId'] . '-' . $id_product_ref . ' linea :' . $e->getLine(),$e->getMessage() . $xml);
 
                             }
                         }

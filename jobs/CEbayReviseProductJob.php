@@ -152,7 +152,8 @@ class CEbayReviseProductJob extends ACronJob
                             $rowGetCategoryId = $getCategoryId->fetchAll(PDO::FETCH_ASSOC);
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                            if (!in_array($product->shopHasProduct->shopId, $checkProductShop)) {
+                            $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                            if (!in_array($shopHasProduct->shopId, $checkProductShop)) {
                                 $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $market['marketplaceId']]);
                                 if ($findProductToWork) {
                                     if ($findProductToWork->isPublished == 1) {
