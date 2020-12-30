@@ -40,12 +40,18 @@ class CEbayAddProductJob extends ACronJob
      */
     private function addProductsInEbay()
     {
+/*
+ $db_host = '5.189.159.187';
+            $db_name = 'iwesPrestaDB';
+            $db_user = 'iwesprestashop';
+            $db_pass = 'X+]l&LEa]zSI';
+ */
 
         if (ENV === 'prod') {
             $db_host = '5.189.159.187';
             $db_name = 'iwesPrestaDB';
-            $db_user = 'iwesprestashop';
-            $db_pass = 'X+]l&LEa]zSI';
+            $db_user = 'pickyshop4';
+            $db_pass = 'rrtYvg6W!';
         } else {
             $db_host = 'localhost';
             $db_name = 'iwesPrestaDB';
