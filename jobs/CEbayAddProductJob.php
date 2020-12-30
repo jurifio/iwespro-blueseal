@@ -61,7 +61,7 @@ class CEbayAddProductJob extends ACronJob
             $res = $e->getMessage();
         }
         $checkProductShop=[];
-        $shopActive=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>'1']);
+        $shopActive=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
          foreach($shopActive as $shopActives){
              $checkProductShop[]=[$shopActives->id];
          }
@@ -166,7 +166,7 @@ class CEbayAddProductJob extends ACronJob
                             $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                            if (!in_array($shopHasProduct->shopId, $checkProductShop)) {
                                $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $market['marketplaceId']]);
-                               if ($findProductToWork) {
+                               if ($findProductToWork!=null) {
                                    if ($findProductToWork->isPublished == 1) {
 
                                        $request = '<?xml version="1.0" encoding="utf-8"?>
