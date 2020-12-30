@@ -32,15 +32,7 @@ class CEbayCloseProductJob extends ACronJob
      */
     public function run($args = null)
     {
-        $this->CloseProductsInEbay();
-    }
-
-    /**
-     * @throws \bamboo\core\exceptions\BambooDBALException
-     */
-    private function CloseProductsInEbay()
-    {
-        $xml = '';
+        $this->report('CEbayCloseProductJob','start','');
         if (ENV === 'prod') {
             $db_host = '5.189.159.187';
             $db_name = 'iwesPrestaDB';
@@ -143,6 +135,7 @@ class CEbayCloseProductJob extends ACronJob
             $this->report('CEbayCloseProductJob','ERROR',$e->getMessage().'-'.$e->getLine());
 
         }
+        $this->report('CEbayCloseProductJob','End','');
 
     }
 
