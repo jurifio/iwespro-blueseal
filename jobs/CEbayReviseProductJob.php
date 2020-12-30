@@ -60,10 +60,10 @@ class CEbayReviseProductJob extends ACronJob
         } catch (PDOException $e) {
             $res = $e->getMessage();
         }
-        $checkProductShop=[];
-        $shopActive=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>'1']);
-        foreach($shopActive as $shopActives){
-            $checkProductShop[]=[$shopActives->id];
+        $checkProductShop = [];
+        $shopActive = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => '1']);
+        foreach ($shopActive as $shopActives) {
+            $checkProductShop[] = [$shopActives->id];
         }
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $addressBookRepo = \Monkey::app()->repoFactory->create('AddressBook');
@@ -237,7 +237,7 @@ class CEbayReviseProductJob extends ACronJob
                             $phpms = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
                             $lastUpdateMarketplaceProduct = $phpms->lastUpdate;
                             if ($product->qty == 0) {
-                                $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $market['marketplaceId']]);
+                               /* $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId,'marketplaceHasShopId' => $market['marketplaceId']]);
                                 if ($findProductToWork) {
                                     if ($findProductToWork->isPublished == 1) {
 
@@ -311,7 +311,7 @@ class CEbayReviseProductJob extends ACronJob
                                     }
 
 
-                                }
+                                }*/
                                 continue;
                             }
                             if ($lastUpdateProduct == $lastUpdateMarketplaceProduct) {
@@ -381,50 +381,52 @@ class CEbayReviseProductJob extends ACronJob
                             /** @var CProductSku $productSku */
                             $productSku = $productSkuRepo->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             foreach ($productSku as $sku) {
-                                $getReferenceIdProductAttribute = $db_con->prepare('select ppas.id_product_attribute as id_product_attribute, ppa.ean13 from ps_product_attribute ppa
+                                if ($sku->stockQty > 0) {
+                                    $getReferenceIdProductAttribute = $db_con->prepare('select ppas.id_product_attribute as id_product_attribute, ppa.ean13 from ps_product_attribute ppa
                         join ps_product_attribute_shop ppas on ppas.id_product_attribute=ppa.id_product_attribute and ppas.id_product=ppa.id_product
                         where  ppas.id_product=' . $reservedId['prestaId'] . ' and ppas.id_shop=' . $marketplace['prestashopId'] . ' and ppa.reference="' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . '" limit 1');
-                                $getReferenceIdProductAttribute->execute();
-                                $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
-                                $xml .= '<Variation>';
-                                // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
-                                $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
-                                $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
-                                if ($marketplace['isPriceHub'] == 0) {
-                                    if ($phphmhs->isOnSale == 0) {
-                                        $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
-                                    } else {
-                                        $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
+                                    $getReferenceIdProductAttribute->execute();
+                                    $rowsGetReferenceIdProductAttribute = $getReferenceIdProductAttribute->fetchAll(PDO::FETCH_ASSOC);
+                                    $xml .= '<Variation>';
+                                    // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
+                                    $xml .= '<SKU>' . $reservedId['productId'] . '-' . $reservedId['productVariantId'] . '-' . $sku->productSizeId . '</SKU>';
+                                    $phphmhs = $phphmhsRepo->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $marketplace['prestashopId']]);
+                                    if ($marketplace['isPriceHub'] == 0) {
+                                        if ($phphmhs->isOnSale == 0) {
+                                            $xml .= '<StartPrice>' . number_format($phphmhs->price,2,'.','') . '</StartPrice>';
+                                        } else {
+                                            $xml .= '<StartPrice>' . number_format($phphmhs->salePrice,2,'.','') . '</StartPrice>';
 
-                                    }
-                                } else {
-                                    /**  @var CProduct $findProductsIsOnSale */
-                                    $findProductsIsOnSale = $productRepo->findOneBy(['id' => $sku->productId,'productVariantId' => $sku->productVariantId])->isOnSale;
-                                    if ($findProductsIsOnSale == 0) {
-                                        $xml .= '<StartPrice>' . number_format($sku->price,2,'.','') . '</StartPrice>';
+                                        }
                                     } else {
-                                        $xml .= '<StartPrice>' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
+                                        /**  @var CProduct $findProductsIsOnSale */
+                                        $findProductsIsOnSale = $productRepo->findOneBy(['id' => $sku->productId,'productVariantId' => $sku->productVariantId])->isOnSale;
+                                        if ($findProductsIsOnSale == 0) {
+                                            $xml .= '<StartPrice>' . number_format($sku->price,2,'.','') . '</StartPrice>';
+                                        } else {
+                                            $xml .= '<StartPrice>' . number_format($sku->salePrice,2,'.','') . '</StartPrice>';
 
+                                        }
                                     }
+                                    $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
+                                    $xml .= '<VariationProductListingDetails>';
+                                    $xml .= '<EAN>' . $sku->ean . '</EAN>';
+                                    $xml .= '<UPC>Non applicabile</UPC>';
+                                    $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
+                                    $xml .= '</VariationProductListingDetails>';
+                                    $xml .= '<VariationSpecifics>';
+                                    $xml .= '<NameValueList>';
+                                    $xml .= '<Name>Taglia</Name>';
+                                    $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
+                                    $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                                    $xml .= '</NameValueList>';
+                                    $xml .= '<NameValueList>';
+                                    $xml .= '<Name>Color</Name>';
+                                    $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
+                                    $xml .= '</NameValueList>';
+                                    $xml .= '</VariationSpecifics>';
+                                    $xml .= '</Variation>';
                                 }
-                                $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
-                                $xml .= '<VariationProductListingDetails>';
-                                $xml .= '<EAN>' . $sku->ean . '</EAN>';
-                                $xml .= '<UPC>Non applicabile</UPC>';
-                                $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
-                                $xml .= '</VariationProductListingDetails>';
-                                $xml .= '<VariationSpecifics>';
-                                $xml .= '<NameValueList>';
-                                $xml .= '<Name>Taglia</Name>';
-                                $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
-                                $xml .= '<Value>' . $productSizeColl->name . '</Value>';
-                                $xml .= '</NameValueList>';
-                                $xml .= '<NameValueList>';
-                                $xml .= '<Name>Color</Name>';
-                                $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
-                                $xml .= '</NameValueList>';
-                                $xml .= '</VariationSpecifics>';
-                                $xml .= '</Variation>';
                             }
                             $xml .= '</Variations>';
                             $xml .= '<PictureDetails>';
