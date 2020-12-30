@@ -160,9 +160,7 @@ class CEbayAddProductJob extends ACronJob
                             }
                             /** @var CProduct $product */
                             $product = $productRepo->findOneBy(['id' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
-                            if($product->qty==0){
-                                continue;
-                            }
+
                             $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                            if (!in_array($shopHasProduct->shopId, $checkProductShop)) {
                                $findProductToWork = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId'],'marketplaceHasShopId' => $market['marketplaceId']]);
@@ -242,6 +240,9 @@ class CEbayAddProductJob extends ACronJob
                                }
                                continue;
                            }
+                            if($product->qty==0){
+                                continue;
+                            }
                             $xml = '';
                             $xml .= '<?xml version="1.0" encoding="utf-8"?>';
                             $xml .= '<AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
