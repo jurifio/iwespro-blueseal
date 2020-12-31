@@ -38,7 +38,7 @@ class CEbayCloseProductJob extends ACronJob
             $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
             $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => 3,'isActive' => 1]);
             foreach ($marketplaceAccounts as $marketplaceAccount) {
-                $phphmhs = $phphmhsRepo->findAll();
+                $phphmhs = $phphmhsRepo->findBy(['isPublished'=>1]);
                 foreach ($phphmhs as $productInMarketplace) {
                     $product = $productRepo->findOneBy(['id' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                     $this->report('CEbayCloseProductJob','lavoro il prodotto '.$productInMarketplace->productId.'-'.$productInMarketplace->productVariantId);
