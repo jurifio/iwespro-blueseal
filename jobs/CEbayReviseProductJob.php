@@ -1144,11 +1144,11 @@ footer {
                                 //$xmlresponse = new \SimpleXMLElement($response);
 
 
-                                $this->report('CEbayReviseProductJob','Report ',$response);
+                                $this->report('CEbayReviseProductJob','Report Response '. $rowsGetReference[0]['id_product_ref'],$response);
                                 sleep(1);
 
                                 $reponseNewProduct = new \SimpleXMLElement($response);
-                                $this->report('CEbayAddProductJob','Report ',$xml);
+
                                 $id_product_ref = $reponseNewProduct->ItemID;
 
 
