@@ -103,7 +103,7 @@ class CEbayCloseProductJob extends ACronJob
 // Send the Request
                             $response = curl_exec($connection);
                             $this->report('CEbayCloseProductJob','Report ',$response);
-
+                            sleep(2);
                         } catch (\Throwable $e) {
                             $this->report('CEbayCloseProductJob','error call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
                         }
