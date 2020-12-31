@@ -259,7 +259,7 @@ class CEbayReviseProductJob extends ACronJob
                                     }
                                     $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
                                     $xml .= '<VariationProductListingDetails>';
-                                    $xml .= '<EAN>' . $sku->ean . '</EAN>';
+                                    $xml .= '<EAN></EAN>';
                                     $xml .= '<UPC>Non applicabile</UPC>';
                                     $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
                                     $xml .= '</VariationProductListingDetails>';
