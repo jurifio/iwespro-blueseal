@@ -57,11 +57,11 @@ class CProductHasShopDestinationJob extends ACronJob
                             $pshsd = $pshsdRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'shopId' => $product['shopId']]);
                             if ($pshsd) {
                                 if ($product['qty'] > 0) {
-                                    $pshpsd->isPublished = 1;
+                                    $pshsd->isPublished = 1;
                                 } else {
-                                    $pshpsd->isPublished = 0;
+                                    $pshsd->isPublished = 0;
                                 }
-                                $pshpsd->update();
+                                $pshsd->update();
                             } else {
                                 if ($product['qty'] > 0) {
                                     $pshsdInsert = $pshsdRepo->getEmptyEntity();
