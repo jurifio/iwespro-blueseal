@@ -117,7 +117,7 @@ class CProductHasShopDestinationJob extends ACronJob
                                     $phsdInsert->shopIdOrigin = $product['shopId'];
                                     $phsdInsert->shopIdDestination = $marketplaceAccount->config['shop'];
                                     $phsdInsert->statusId = $marketplaceAccount->config['productStatusId'];
-                                    $pshsdInsert->insert();
+                                    $phsdInsert->insert();
                                 }
                             }
                         }
