@@ -188,10 +188,6 @@ class CEbayReviseProductJob extends ACronJob
                             $xml .= '</PrimaryCategory>';
                             $xml .= '<HitCounter>RetroStyle</HitCounter>';
                             $xml .= '<Variations>';
-                            $xml .= '<VariationSpecificsSet>';
-                            $xml .= '<NameValueList>';
-                            $xml .= '<Name>Taglia</Name>';
-
                             $productBrand = $productBrandRepo->findOneBy(['id' => $product->productBrandId]);
                             $slugBrand = $productBrand->slug;
                             $brandName = $productBrand->name;
@@ -214,18 +210,11 @@ class CEbayReviseProductJob extends ACronJob
                                         'productSizeId' => $sizeId->productSizeId]);
                                 if ($skusValue != null) {
                                     if ($skusValue->stockQty != '0') {
-                                        $xml .= '<Value>' . $productSize->name . '</Value>';
                                     }
                                 }
                             }
-                            $xml .= '</NameValueList>';
                             //variante colore
                             $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['id' => $reservedId['productVariantId']]);
-                            $xml .= '<NameValueList>';
-                            $xml .= '<Name>Color</Name>';
-                            $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
-                            $xml .= '</NameValueList>';
-                            $xml .= '</VariationSpecificsSet>';
                             //varianti taglie
                             /** @var CProductSku $productSku */
                             $productSku = $productSkuRepo->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
