@@ -215,7 +215,7 @@ class CEbayReviseProductJob extends ACronJob
                             }
                             //variante colore
                             $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['id' => $reservedId['productVariantId']]);
-                            //varianti taglie
+                            //varianti taglie n
                             /** @var CProductSku $productSku */
                             $productSku = $productSkuRepo->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
                             foreach ($productSku as $sku) {
