@@ -78,7 +78,7 @@ class CEbayNewReviseProductJob extends ACronJob
         $productInMarketplaceRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
         $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => 3,'isActive' => 1]);
         foreach ($marketplaceAccounts as $marketplaceAccount) {
-            $goods = $productInMarketplaceRepo->findBy(['isPublished' => 1,'markeplaceHasShopId' => $marketplaceAccount->config['markeplaceHasShopId']]);
+            $goods = $productInMarketplaceRepo->findBy(['isPublished' => 1,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
             foreach ($goods as $good) {
                 /**  @var CProduct $product * */
                 $product = \Monkey::app()->repoFactory->create('Product')->finOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
