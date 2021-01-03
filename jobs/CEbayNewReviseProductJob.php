@@ -896,7 +896,7 @@ footer {
     </Description>';
 
                 $xml .= '<Storefront><StoreCategoryID>4895391011</StoreCategoryID></Storefront><PostalCode>62012</PostalCode>';
-                $xml .= '<Location>' . $rowCompanyCity[0]['company_city'] . '</Location>';
+                $xml .= '<Location>' . $addressBook->city . '</Location>';
                 $xml .= '<DispatchTimeMax>2</DispatchTimeMax>';
                 $xml .= '<PaymentMethods>PayPal</PaymentMethods>';
                 $xml .= '<PayPalEmailAddress>transazioni@cartechinishop.com</PayPalEmailAddress>';
@@ -985,7 +985,7 @@ footer {
                     $response = curl_exec($connection);
 
 
-                    $this->report('CEbayReviseProductJob','Report Response ' . $rowsGetReference[0]['id_product_ref'],$response);
+                    $this->report('CEbayReviseProductJob','Report Response ' . $good->refMarketplaceId,$response);
                     sleep(1);
 
                     $reponseNewProduct = new \SimpleXMLElement($response);
@@ -994,7 +994,7 @@ footer {
 
 
                     sleep(1);
-                    $this->report('CEbayReviseProductJob','Report  Revise ' . $rowsGetReference[0]['id_product_ref'],$xml);
+                    $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
 
 
                         $good->lastUpdate = $product->lastUpdate;
