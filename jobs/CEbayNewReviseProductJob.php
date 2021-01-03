@@ -104,12 +104,12 @@ class CEbayNewReviseProductJob extends ACronJob
                     $productEan = '';
                 }
                 $brands = explode(',',$marketplaceAccount->config['brands']);
-                if (in_array($product->productbrandId,$brands)) {
+                if (in_array($product->productBrandId,$brands)) {
                     continue;
                 }
 
                 $brandParallel = explode(',',$marketplaceAccount->config['brandParallel']);
-                if (in_array($product->productbrandId,$brandParallel)) {
+                if (in_array($product->productBrandId,$brandParallel)) {
                     continue;
                 }
                 $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);
