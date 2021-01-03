@@ -389,7 +389,7 @@
                                         <h5 class="m-t-12">Listino Saldo</h5>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-10">
                                             <?php
                                             if (isset($marketplaceAccount->config['activeSalePrice'])) {
                                                 if ($marketplaceAccount->config['activeSalePrice'] == "1") {
@@ -421,6 +421,14 @@
                                                                                id="activeSalePrice" value="2">Saldi
                                                 Attivi Personalizzati</label>';
                                             } ?>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="maxPercentSalePrice">Percentuale Massima di sconto  %</label>
+                                                <input id="maxPercentSalePrice" autocomplete="off" type="text"
+                                                       class="form-control" name="maxPercentSalePrice" value="<?php echo (isset($marketplaceAccount->config['maxPercentSalePrice'])) ? $marketplaceAccount->config['maxPercentSalePrice'] : ''; ?>"
+                                                       required="required"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div id="rawSalePrice">

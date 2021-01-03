@@ -298,6 +298,7 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
     var activeSalePrice = $('#activeSalePrice').val();
     var signSale = $('#signSale').val();
     var percentSalePrice = $('#percentSalePrice').val();
+    var maxPercentSalePrice = $('#maxPercentSalePrice').val();
     var optradioSalePrice = $('#optradioSalePrice').val();
     var dateStartPeriod1 = $('#dateStartPeriod1').val();
     var dateEndPeriod1 = $('#dateEndPeriod1').val();
@@ -335,6 +336,7 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
         'optradioactive=' + optradioactive + '&' +
         'activeSalePrice=' + activeSalePrice + '&' +
         'percentSalePrice=' + percentSalePrice + '&' +
+        'maxPercentSalePrice=' + maxPercentSalePrice + '&' +
         'optradioSalePrice=' + optradioSalePrice + '&' +
         'dateStartPeriod1=' + dateStartPeriod1 + '&' +
         'dateEndPeriod1=' + dateEndPeriod1 + '&' +

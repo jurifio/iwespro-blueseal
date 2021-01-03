@@ -47,6 +47,11 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $lang = $_GET['lang'];
         }
+        if ($_GET['maxPercentSalePrice'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai impostato la percentuale massima per lo sconto sui marketplace</i>';
+        } else {
+            $maxPercentSalePrice = $_GET['maxPercentSalePrice'];
+        }
         if ($_GET['shopId'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Shop non valorizzato</i>';
         } else {
@@ -87,7 +92,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $activeSalePrice = $_GET['activeSalePrice'];
         }
-        $signSale=$_GET['signSale'];
+        $signSale = $_GET['signSale'];
         $percentSalePrice = $_GET['percentSalePrice'];
         $optradioSalePrice = $_GET['optradioSalePrice'];
 
@@ -131,12 +136,12 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $dateEndPeriod4 = $_GET['dateEndPeriod4'];
         }
-        $brandSaleExclusion =$_GET['brandSaleExclusion'];
-        if($brandSaleExclusion!='0'){
+        $brandSaleExclusion = $_GET['brandSaleExclusion'];
+        if ($brandSaleExclusion != '0') {
             str_replace(',,',',',$brandSaleExclusion);
-            $brandSale=substr($brandSaleExclusion,0,-1);
-        }else{
-            $brandSale=$brandSaleExclusion;
+            $brandSale = substr($brandSaleExclusion,0,-1);
+        } else {
+            $brandSale = $brandSaleExclusion;
         }
 
         if ($_GET['checkNameCatalog'] == "") {
@@ -144,7 +149,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $checkNameCatalog = $_GET['checkNameCatalog'];
         }
-        $optradioName=$_GET['optradioName'];
+        $optradioName = $_GET['optradioName'];
 
         if ($_GET['typeAssign'] == "") {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non è stata selezionata Attribuita la la regola per i prezzi dei prodotti proprietari</i>';
@@ -156,37 +161,37 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $typeAssignParallel = $_GET['typeAssignParallel'];
         }
-        $brands=$_GET['brands'];
-        if($brands!='0'){
+        $brands = $_GET['brands'];
+        if ($brands != '0') {
             str_replace(',,',',',$brands);
-            $brand=substr($brands,0,-1);
-        }else{
-            $brand=$brands;
+            $brand = substr($brands,0,-1);
+        } else {
+            $brand = $brands;
         }
-        $brandsParallel=$_GET['brandsParallel'];
-        if($brandsParallel!='0'){
+        $brandsParallel = $_GET['brandsParallel'];
+        if ($brandsParallel != '0') {
             str_replace(',,',',',$brandsParallel);
-                $brandParallel=substr($brandsParallel,0,-1);
-        }else{
-            $brandParallel=$brandsParallel;
+            $brandParallel = substr($brandsParallel,0,-1);
+        } else {
+            $brandParallel = $brandsParallel;
         }
         $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
         $findNextNumber = $this->app->dbAdapter->query('SELECT max(id)+1  as maxIdMarketplaceHasShop from MarketplaceHasShop',[])->fetchAll()[0]['maxIdMarketplaceHasShop'];
-        $marketplaceFind=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$marketplaceId]);
-        $urlSite=$findUrlSite->urlSite;
-        $marketplaceHasShopFind=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId'=>$shopId,'marketplaceId'=>$marketplaceId]);
-        if(!$marketplaceHasShopFind){
-            $marketplaceHasShopId=$findNextNumber;
-            $marketplaceInsert=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
-            $marketplaceInsert->shopId=$shopId;
-            $marketplaceInsert->marketplaceId=$marketplaceId;
-            $marketplaceInsert->typeSync=0;
-            $marketplaceInsert->name=ucfirst($findUrlSite->name).'-'.ucfirst($marketplaceFind->name);
-            $marketplaceInsert->isPriceHub=1;
-            $marketplaceInsert->prestashopId=$findNextNumber;
+        $marketplaceFind = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $marketplaceId]);
+        $urlSite = $findUrlSite->urlSite;
+        $marketplaceHasShopFind = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId' => $marketplaceId]);
+        if (!$marketplaceHasShopFind) {
+            $marketplaceHasShopId = $findNextNumber;
+            $marketplaceInsert = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
+            $marketplaceInsert->shopId = $shopId;
+            $marketplaceInsert->marketplaceId = $marketplaceId;
+            $marketplaceInsert->typeSync = 0;
+            $marketplaceInsert->name = ucfirst($findUrlSite->name) . '-' . ucfirst($marketplaceFind->name);
+            $marketplaceInsert->isPriceHub = 1;
+            $marketplaceInsert->prestashopId = $findNextNumber;
             $marketplaceInsert->insert();
-        }else{
-            $marketplaceHasShopId=$marketplaceHasShopFind->id;
+        } else {
+            $marketplaceHasShopId = $marketplaceHasShopFind->id;
         }
 
 
@@ -194,10 +199,10 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $collectUpdate .= ' "isActive":"' . $isActive . '","activeFullPrice":"' . $activeFullPrice . '","signSale":"' . $signSale . '","percentFullPrice":"' . $percentFullPrice . '","signFullPrice":"' . $signFullPrice . '",';
         $collectUpdate .= '"optradio":"' . $optradio . '","optradioactive":"' . $optradioactive . '","activeSalePrice":"' . $activeSalePrice . '",';
         $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '",';
-        $collectUpdate .= '"percentSalePrice":"' . $percentSalePrice . '","optradioSalePrice":"' . $optradioSalePrice . '","dateStartPeriod1":"' . $dateStartPeriod1 . '","dateEndPeriod1":"' . $dateEndPeriod1 . '","dateStartPeriod2":"' . $dateStartPeriod2 . '","dateEndPeriod2":"' . $dateEndPeriod2 . '",';
+        $collectUpdate .= '"maxPercentSalePrice":"' . $maxPercentSalePrice . '","percentSalePrice":"' . $percentSalePrice . '","optradioSalePrice":"' . $optradioSalePrice . '","dateStartPeriod1":"' . $dateStartPeriod1 . '","dateEndPeriod1":"' . $dateEndPeriod1 . '","dateStartPeriod2":"' . $dateStartPeriod2 . '","dateEndPeriod2":"' . $dateEndPeriod2 . '",';
         $collectUpdate .= '"dateStartPeriod3":"' . $dateStartPeriod3 . '","dateEndPeriod3":"' . $dateEndPeriod3 . '","dateStartPeriod4":"' . $dateStartPeriod4 . '","dateEndPeriod4":"' . $dateEndPeriod4 . '",';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify . '","checkNameCatalog":"' . $checkNameCatalog . '","optradioName":"' . $optradioName . '","typeAssign":"' . $typeAssign . '",';
-        if ($marketplaceId==3) {
+        if ($marketplaceId == 3) {
             $collectUpdate .= '"COD": "0",
     "shipping": [
         {
@@ -221,7 +226,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "userToken": "AgAAAA**AQAAAA**aAAAAA**mDD8Wg**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6AFlIekDZKGpw2dj6x9nY+seQ**ECoDAA**AAMAAA**ZXkcpdsnzIff5OAWBzjD8620Mufn6RBRGnOjhyY0lvDeS7f2dPLljsrXYq69BYPZPVaJvnXMO1mLsYsTFcvsE0IF6qpGwVKzm5Ik+f9UIXHHgq0su//TOk+MVWs8vO43UG43gFgo8ffUOC+udNS8kV8RoKS/yEOia4xhyx8cF2VPIzRpa3tthkxBEW+qdVuMMF81XdRA7ixnHFRYtPIAWzgiFbYyKyWx0JcHMZVd9trMzDaMLWgP4ZnwIJgyAfuxWjqtcnaCKWA/1n593fXPxA2ooSxsl4LRvHMHBw+DGEilbqlHybcugGQjRMyaCxj189oK3NdlTCOWgv9vuw7COR0GMtp0jMVy6T76wIDRXgYTDEymu688ijWeHtxEUOLLP/KmE9RZ/DqhwhoZCd0IoXlrikIWY12GJfY9ghxNe2zccHMhr2dgTAEViSSzfZvEMmcLbMYO9nnzHjmHuWBGrxtq7wOGAIx82R+i7nUOgZZ7FCO2lXq3xE8uJw2TZLRll64d/mQHJYEitIYkX5pF8vlef8Fe6vQ+XlmWuHy6rxKqjoui0o0hsH0pdY5vCbPG4+c6hexiEwegTVGtmGmDtOFSnDfAmsByY6vltDFhYsQrLPhetcfZtFlp9baZwZ0Jn96lXZ7dzif8qPD5tuXYjDlJzZf6PLehW0tvA9dxqBKTLHAKZGny9b3IMFyOK7LRhJf7faSInfLFf23M+PB6blpb6RxHC4MZBSsWuSkYhY4krTlUwSNltoL9nyh279O5",
     "paypalEmail": "transazioni@cartechinishop.com",
     "modifier": "0",';
-       }
+        }
         $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
@@ -236,14 +241,12 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $marketplaceAccount->insert();
 
 
-
         \Monkey::app()->applicationLog('MarketPlaceAccountHasShopInsert','Report','Insert','Insert Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
         return 'Inserimento Eseguito con Successo';
     }
 
 
-
-        public function put()
+    public function put()
     {
 
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
@@ -262,6 +265,11 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">slug non definito</i>';
         } else {
             $slug = $_GET['slug'];
+        }
+        if ($_GET['maxPercentSalePrice'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai impostato la percentuale massima per lo sconto sui marketplace</i>';
+        } else {
+            $maxPercentSalePrice = $_GET['maxPercentSalePrice'];
         }
 
         if ($_GET['lang'] == '') {
@@ -309,7 +317,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $activeSalePrice = $_GET['activeSalePrice'];
         }
-        $signSale=$_GET['signSale'];
+        $signSale = $_GET['signSale'];
         $percentSalePrice = $_GET['percentSalePrice'];
         $optradioSalePrice = $_GET['optradioSalePrice'];
 
@@ -353,12 +361,12 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $dateEndPeriod4 = $_GET['dateEndPeriod4'];
         }
-        $brandSaleExclusion =$_GET['brandSaleExclusion'];
-        if($brandSaleExclusion!='0'){
+        $brandSaleExclusion = $_GET['brandSaleExclusion'];
+        if ($brandSaleExclusion != '0') {
             str_replace(',,',',',$brandSaleExclusion);
-            $brandSale=substr($brandSaleExclusion,0,-1);
-        }else{
-            $brandSale=$brandSaleExclusion;
+            $brandSale = substr($brandSaleExclusion,0,-1);
+        } else {
+            $brandSale = $brandSaleExclusion;
         }
 
         if ($_GET['checkNameCatalog'] == "") {
@@ -366,11 +374,11 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $checkNameCatalog = $_GET['checkNameCatalog'];
         }
-        $optradioName=$_GET['optradioName'];
-        if($_GET['marketplaceAccountId']=''){
+        $optradioName = $_GET['optradioName'];
+        if ($_GET['marketplaceAccountId'] = '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Prego Seleziona un Regola Valida torna alla lista </i>';
-        }else{
-            $marketplaceAccountId=$_GET['marketplaceAccountId'];
+        } else {
+            $marketplaceAccountId = $_GET['marketplaceAccountId'];
         }
 
         if ($_GET['typeAssign'] == "") {
@@ -383,49 +391,48 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         } else {
             $typeAssignParallel = $_GET['typeAssignParallel'];
         }
-        $brands=$_GET['brands'];
-        if($brands!='0'){
+        $brands = $_GET['brands'];
+        if ($brands != '0') {
             str_replace(',,',',',$brands);
-            $brand=substr($brands,0,-1);
-        }else{
-            $brand=$brands;
+            $brand = substr($brands,0,-1);
+        } else {
+            $brand = $brands;
         }
-        $brandsParallel=$_GET['brandsParallel'];
-        if($brandsParallel!='0'){
+        $brandsParallel = $_GET['brandsParallel'];
+        if ($brandsParallel != '0') {
             str_replace(',,',',',$brandsParallel);
-            $brandParallel=substr($brandsParallel,0,-1);
-        }else{
-            $brandParallel=$brandsParallel;
+            $brandParallel = substr($brandsParallel,0,-1);
+        } else {
+            $brandParallel = $brandsParallel;
         }
         $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
         $findNextNumber = $this->app->dbAdapter->query('SELECT max(id)+1  as maxIdMarketplaceHasShop from MarketplaceHasShop',[])->fetchAll()[0]['maxIdMarketplaceHasShop'];
-        $marketplaceFind=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$marketplaceId]);
-        $urlSite=$findUrlSite->urlSite;
-        $marketplaceHasShopFind=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId'=>$shopId,'marketplaceId'=>$marketplaceId]);
-        if(!$marketplaceHasShopFind){
-            $marketplaceHasShopId=$findNextNumber;
-            $marketplaceInsert=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
-            $marketplaceInsert->shopId=$shopId;
-            $marketplaceInsert->marketplaceId=$marketplaceId;
-            $marketplaceInsert->typeSync=0;
-            $marketplaceInsert->name=ucfirst($findUrlSite->name).'-'.ucfirst($marketplaceFind->name);
-            $marketplaceInsert->isPriceHub=1;
-            $marketplaceInsert->prestashopId=$findNextNumber;
+        $marketplaceFind = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $marketplaceId]);
+        $urlSite = $findUrlSite->urlSite;
+        $marketplaceHasShopFind = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId' => $marketplaceId]);
+        if (!$marketplaceHasShopFind) {
+            $marketplaceHasShopId = $findNextNumber;
+            $marketplaceInsert = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->getEmptyEntity();
+            $marketplaceInsert->shopId = $shopId;
+            $marketplaceInsert->marketplaceId = $marketplaceId;
+            $marketplaceInsert->typeSync = 0;
+            $marketplaceInsert->name = ucfirst($findUrlSite->name) . '-' . ucfirst($marketplaceFind->name);
+            $marketplaceInsert->isPriceHub = 1;
+            $marketplaceInsert->prestashopId = $findNextNumber;
             $marketplaceInsert->insert();
-        }else{
-            $marketplaceHasShopId=$marketplaceHasShopFind->id;
+        } else {
+            $marketplaceHasShopId = $marketplaceHasShopFind->id;
         }
-
 
 
         $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","activeFullPrice":"' . $activeFullPrice . '","signSale":"' . $signSale . '","percentFullPrice":"' . $percentFullPrice . '","signFullPrice":"' . $signFullPrice . '",';
         $collectUpdate .= '"optradio":"' . $optradio . '","optradioactive":"' . $optradioactive . '","activeSalePrice":"' . $activeSalePrice . '",';
         $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '",';
-        $collectUpdate .= '"percentSalePrice":"' . $percentSalePrice . '","optradioSalePrice":"' . $optradioSalePrice . '","dateStartPeriod1":"' . $dateStartPeriod1 . '","dateEndPeriod1":"' . $dateEndPeriod1 . '","dateStartPeriod2":"' . $dateStartPeriod2 . '","dateEndPeriod2":"' . $dateEndPeriod2 . '",';
+        $collectUpdate .= '"maxPercentSalePrice":"' . $maxPercentSalePrice . '","percentSalePrice":"' . $percentSalePrice . '","optradioSalePrice":"' . $optradioSalePrice . '","dateStartPeriod1":"' . $dateStartPeriod1 . '","dateEndPeriod1":"' . $dateEndPeriod1 . '","dateStartPeriod2":"' . $dateStartPeriod2 . '","dateEndPeriod2":"' . $dateEndPeriod2 . '",';
         $collectUpdate .= '"dateStartPeriod3":"' . $dateStartPeriod3 . '","dateEndPeriod3":"' . $dateEndPeriod3 . '","dateStartPeriod4":"' . $dateStartPeriod4 . '","dateEndPeriod4":"' . $dateEndPeriod4 . '",';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify . '","checkNameCatalog":"' . $checkNameCatalog . '","optradioName":"' . $optradioName . '","typeAssign":"' . $typeAssign . '",';
-        if ($marketplaceId==3) {
+        if ($marketplaceId == 3) {
             $collectUpdate .= '"COD": "0",
     "shipping": [
         {
@@ -454,7 +461,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
-        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->findOneBy(['id'=>$marketplaceAccountId]);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->findOneBy(['id' => $marketplaceAccountId]);
         $marketplaceAccount->marketplaceId = $marketplaceId;
         $marketplaceAccount->name = $marketplace_account_name;
         $marketplaceAccount->config = $collectUpdate;
@@ -463,13 +470,14 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $marketplaceAccount->update();
 
 
-
         \Monkey::app()->applicationLog('MarketPlaceAccountHasShopInsert','Report','Insert','Modify Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
         return 'Modifica Eseguita con Successo';
     }
-    public function delete(){
+
+    public function delete()
+    {
         $id = $this->app->router->request()->getRequestData('id');
-        $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$id]);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id' => $id]);
         $marketplaceAccount->delete();
         return 'MarketplaceAccount Cancellato definitivamente ricordati di disabilitare il job associato se esiste';
 

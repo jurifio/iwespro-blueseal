@@ -307,7 +307,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
     var dateStartPeriod4 = $('#dateStartPeriod4').val();
     var dateEndPeriod4=$('#dateEndPeriod4').val();
     var brandSaleExclusion=$('#brandSaleExclusion').val();
-
+    var maxPercentSalePrice = $('#maxPercentSalePrice').val();
     var checkNameCatalog = $('#checkNameCatalog').val();
     var optradioName = $('#optradioName').val();
     var typeAssign = $('#typeAssign').val();
@@ -328,6 +328,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
         'activeFullPrice=' + activeFullPrice + '&' +
         'signSale=' + signSale + '&' +
         'percentFullPrice=' + percentFullPrice + '&' +
+        'maxPercentSalePrice=' + maxPercentSalePrice + '&' +
         'signFullPrice=' + signFullPrice + '&' +
         'optradio=' + optradio + '&' +
         'optradioactive=' + optradioactive + '&' +
