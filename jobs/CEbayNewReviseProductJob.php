@@ -81,7 +81,7 @@ class CEbayNewReviseProductJob extends ACronJob
             $goods = $productInMarketplaceRepo->findBy(['isPublished' => 1,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
             foreach ($goods as $good) {
                 /**  @var CProduct $product * */
-                $product = \Monkey::app()->repoFactory->create('Product')->finOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
+                $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
                 if ($product->qty == 0) {
                     continue;
                 }
