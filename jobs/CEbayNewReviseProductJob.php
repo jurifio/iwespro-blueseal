@@ -141,10 +141,10 @@ class CEbayNewReviseProductJob extends ACronJob
                 $xml .= '<HitCounter>RetroStyle</HitCounter>';
                 $xml .= '<Variations>';
                 //variante colore
-                $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['id' => $reservedId['productVariantId']]);
+                $productVariant = \Monkey::app()->repoFactory->create('ProductVariant')->findOneBy(['id' => $good->productVariantId]);
                 //varianti taglie n
                 /** @var CProductSku $productSku */
-                $productSku = $productSkuRepo->findBy(['productId' => $reservedId['productId'],'productVariantId' => $reservedId['productVariantId']]);
+                $productSku = $productSkuRepo->findBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
                 foreach ($productSku as $sku) {
                     if ($sku->stockQty > 0) {
                         $xml .= '<Variation>';
