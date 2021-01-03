@@ -992,11 +992,10 @@ footer {
                     sleep(1);
                     $this->report('CEbayReviseProductJob','Report  Revise ' . $rowsGetReference[0]['id_product_ref'],$xml);
 
-                    if ($phpms) {
-                        $phpms->refMarketplaceId = $rowsGetReference[0]['id_product_ref'];
-                        $phpms->lastUpdate = $product->lastUpdate;
-                        $phpms->update();
-                    }
+
+                        $good->lastUpdate = $product->lastUpdate;
+                        $good->update();
+
                 } catch (\Throwable $e) {
                     $this->report('CEbayReviseProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
