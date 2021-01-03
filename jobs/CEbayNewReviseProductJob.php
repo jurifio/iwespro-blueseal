@@ -83,7 +83,7 @@ class CEbayNewReviseProductJob extends ACronJob
             $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shop']]);
             $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
             foreach ($goods as $good) {
-                if($good->refMarketplaceId==null || $good->refMarketplaceId==''){
+                if(is_null($good->refMarketplaceId)){
                     continue;
                 }
                 /**  @var CProduct $product * */
