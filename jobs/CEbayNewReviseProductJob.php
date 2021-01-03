@@ -88,7 +88,9 @@ class CEbayNewReviseProductJob extends ACronJob
                 if ($product->lastUpdate == $good->lastUpdate) {
                     continue;
                 }
-                $category = \Monkey::app()->repoFactory->create('ProductCategoryHasMarketplaceAccountCategory')->findOneBy(['marketplaceId' => 3,'marketplaceAccountId' => 3,'productCategoryId' => $product->productCategoryId]);
+                $productCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$good->productId,'productVariantId' => $good->productVariantId]);
+                $productCategoryId=$productCategory->productCategoryId;
+                $category = \Monkey::app()->repoFactory->create('ProductCategoryHasMarketplaceAccountCategory')->findOneBy(['marketplaceId' => 3,'marketplaceAccountId' => 3,'productCategoryId' => $productCategoryId]);
                 if (!$category) {
                     continue;
                 }
