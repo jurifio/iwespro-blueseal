@@ -79,9 +79,13 @@ class CEbayNewReviseProductJob extends ACronJob
         $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => 3,'isActive' => 1]);
         foreach ($marketplaceAccounts as $marketplaceAccount) {
             $goods = $productInMarketplaceRepo->findBy(['isPublished' => 1,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+
             $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shop']]);
             $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
             foreach ($goods as $good) {
+                if($good->refMarketplaceId==null || $good->refMarketplaceId==''){
+                    continue;
+                }
                 /**  @var CProduct $product * */
                 $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
                 if ($product->qty == 0) {
