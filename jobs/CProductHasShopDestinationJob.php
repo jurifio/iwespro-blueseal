@@ -48,7 +48,7 @@ class CProductHasShopDestinationJob extends ACronJob
                         if ($marketplaceAccount->config['brands'] == 0 || $marketplaceAccount->config['brands'] == '') {
                             $sqlBrandFilter = 'and 1=1';
                         } else {
-                            $sqlBrandFilter = 'and p.productCategoryId not in (' . $marketplaceAccount->config['brands'] . ')';
+                            $sqlBrandFilter = 'and p.productBrandId not in (' . $marketplaceAccount->config['brands'] . ')';
                         }
                         $sql = 'select p.id as productId, p.productVariantId as productVariantId,p.qty as qty, shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where shp.shopId=' . $marketplaceAccount->config['shop'] . '  ' . $sqlBrandFilter;
@@ -95,7 +95,7 @@ class CProductHasShopDestinationJob extends ACronJob
                         if ($marketplaceAccount->config['brandParallel'] == 0 || $marketplaceAccount->config['brandParallel'] == '') {
                             $sqlBrandFilter = 'and 1=1';
                         } else {
-                            $sqlBrandFilter = 'and p.productCategoryId not in (' . $marketplaceAccount->config['brandParallel'] . ')';
+                            $sqlBrandFilter = 'and p.productBrandId not in (' . $marketplaceAccount->config['brandParallel'] . ')';
                         }
                         $sql = 'select p.id as productId, p.productVariantId as productVariantId,p.qty as qty, shp.shopId as shopId,shp.isPublished as isPublished from Product p join ProductShareHasShopDestination shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where shp.shopId !=' . $marketplaceAccount->config['shop'] . '  ' . $sqlBrandFilter;
