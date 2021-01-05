@@ -85,7 +85,7 @@ class CBillRegistryInvoiceListAjaxController extends AAjaxController
                     $numberSlip='distinta n: '.$braps->numberSlip;
                 }
                 $dateNow=new \DateTime();
-                $dateEstimated=new \dateTime($bt->dateEstimated);
+                $dateEstimated=new \DateTime($bt->dateEstimated);
                 if($dateNow>$dateEstimated && $bt->amountPaid==0 ){
                     $rowPayment.='<i style="color:red;
                     font-size: 12px;

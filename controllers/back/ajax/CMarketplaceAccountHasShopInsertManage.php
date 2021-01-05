@@ -227,6 +227,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "paypalEmail": "transazioni@cartechinishop.com",
     "modifier": "0",';
         }
+        $collectUpdate .= '"dateUpdate":"2011-01-01 00:00:00",';
         $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
@@ -251,6 +252,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
 
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $data = $this->app->router->request()->getRequestData();
+        $dateUpdate=(new \DateTime())->format('Y-m-d H:i:s');
         if ($_GET['nameMarketPlace'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Nome Marketplace non inserito</i>';
         } else {
@@ -457,6 +459,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "paypalEmail": "transazioni@cartechinishop.com",
     "modifier": "0",';
         }
+        $collectUpdate .= '"dateUpdate":"' . $dateUpdate . '",';
         $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
