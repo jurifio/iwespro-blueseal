@@ -41,30 +41,9 @@ class CEbayNewAddProductJob extends ACronJob
     private function AddProductsInEbay()
     {
         $xml = '';
-        if (ENV === 'prod') {
-            $db_host = '5.189.159.187';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'iwesprestashop';
-            $db_pass = 'X+]l&LEa]zSI';
-        } else {
-            $db_host = 'localhost';
-            $db_name = 'iwesPrestaDB';
-            $db_user = 'root';
-            $db_pass = 'geh44fed';
-        }
-        $res = "";
-        try {
-            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
-            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            $res = " connessione ok <br>";
-        } catch (PDOException $e) {
-            $res = $e->getMessage();
-        }
-        $checkProductShop = [];
+
         $shopActive = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => '1']);
-        foreach ($shopActive as $shopActives) {
-            $checkProductShop[] = [$shopActives->id];
-        }
+
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $addressBookRepo = \Monkey::app()->repoFactory->create('AddressBook');
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
