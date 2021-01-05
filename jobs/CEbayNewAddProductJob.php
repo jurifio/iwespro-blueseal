@@ -12,7 +12,7 @@ use bamboo\domain\entities\CProductSku;
 use PDO;
 
 /**
- * Class CEbayReviseProductJob
+ * Class CEbayNewAddProductJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -24,7 +24,7 @@ use PDO;
  * @date 27/04/2020
  * @since 1.0
  */
-class CEbayNewReviseProductJob extends ACronJob
+class CEbayNewAddProductJob extends ACronJob
 {
 
     /**
@@ -32,13 +32,13 @@ class CEbayNewReviseProductJob extends ACronJob
      */
     public function run($args = null)
     {
-        $this->ReviseProductsInEbay();
+        $this->AddProductsInEbay();
     }
 
     /**
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    private function ReviseProductsInEbay()
+    private function AddProductsInEbay()
     {
         $xml = '';
         if (ENV === 'prod') {
@@ -78,20 +78,14 @@ class CEbayNewReviseProductJob extends ACronJob
         $productInMarketplaceRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
         $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => 3,'isActive' => 1]);
         foreach ($marketplaceAccounts as $marketplaceAccount) {
-            $goods = $productInMarketplaceRepo->findBy(['isPublished' => 1,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+            $goods = $productInMarketplaceRepo->findBy(['isPublished' => 2,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
 
             $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shop']]);
             $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
             foreach ($goods as $good) {
-                if(is_null($good->refMarketplaceId)){
-                    continue;
-                }
                 /**  @var CProduct $product * */
                 $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
                 if ($product->qty == 0) {
-                    continue;
-                }
-                if ($product->lastUpdate == $good->lastUpdate) {
                     continue;
                 }
                 $productCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$good->productId,'productVariantId' => $good->productVariantId]);
@@ -104,30 +98,29 @@ class CEbayNewReviseProductJob extends ACronJob
                 $slugBrand = $productBrand->slug;
                 $brandName = $productBrand->name;
                 $productEanParent = $productEanRepo->findOneBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId,'productSizeId' => 0]);
-                if ($productEanParent != null) {
+                if ($productEanParent) {
                     $productEan = $productEanParent->ean;
                 } else {
-                    $productEan = '';
-                }
-                $brands = explode(',',$marketplaceAccount->config['brands']);
-                if (in_array($product->productBrandId,$brands)) {
-                    continue;
+                    $productEanSelect =$productEanRepo->findOneBy(['used'=>0]);
+                    $productEan=$productEanSelect->ean;
+                    $productEanSelect->productId=$good->productId;
+                    $productEanSelect->productVariantId=$good->productVariantId;
+                    $productEanSelect->productSizeId=0;
+                    $productEanSelect->usedForParent=1;
+                    $productEanSelect->brandAssociate=$product->productBrandId;
+                    $productEanSelect->shopId=$marketplaceAccount->config['shop'];
+                    $productEanSelect->update();
                 }
 
-                $brandParallel = explode(',',$marketplaceAccount->config['brandParallel']);
-                if (in_array($product->productBrandId,$brandParallel)) {
-                    continue;
-                }
-                $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);
                 $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $product->productSizeGroupId]);
                 $productSizeGroupHasProductSize = $productSizeGroupHasProductSizeRepo->findBy(['ProductSizeGroupId' => $productSizeGroup->id]);
                 $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
                 //etichetta taglie
-                $isOnSale = $product->isOnSale;
+                $isOnSale = $good->isOnSale;
 
                 $xml = '';
                 $xml .= '<?xml version="1.0" encoding="utf-8"?>';
-                $xml .= '<ReviseFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';
+                $xml .= '<AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
                 $xml .= '<ErrorLanguage>it_IT</ErrorLanguage>';
                 $xml .= '<WarningLevel>High</WarningLevel>';
                 //intestazione prodotto
@@ -164,7 +157,7 @@ class CEbayNewReviseProductJob extends ACronJob
 
                         $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
                         $xml .= '<VariationProductListingDetails>';
-                        $findSkuEan=$productEanRepo->findOneBy(['productId' => $sku->productId,'productVariantId' => $sku->productVariantId,'productSizeId' => $sku->productSizeId]);
+                       $findSkuEan=$productEanRepo->findOneBy(['productId' => $sku->productId,'productVariantId' => $sku->productVariantId,'productSizeId' => $sku->productSizeId]);
                         if ($findSkuEan) {
                             $productSkuEan = $findSkuEan->ean;
                         } else {
@@ -180,7 +173,8 @@ class CEbayNewReviseProductJob extends ACronJob
                             $productSkuEanSelect->update();
                         }
 
-                        $xml .= '<EAN>' . $productSkuEan . '</EAN>';
+                            $xml .= '<EAN>' . $productSkuEan . '</EAN>';
+
                         $xml .= '<UPC>Non applicabile</UPC>';
                         $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
                         $xml .= '</VariationProductListingDetails>';
@@ -940,7 +934,7 @@ footer {
     <eBayAuthToken>v^1.1#i^1#r^1#p^3#I^3#f^0#t^Ul4xMF8xOjk3MDVGODY4MkI3QUI4QkZGNzlGRTAwMjQwMjk4NkI4XzBfMSNFXjI2MA==</eBayAuthToken>
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>
-</ReviseFixedPriceItem>';
+</AddItemRequest>';
                 $xml = preg_replace(
                     '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'
                     . '|[\x00-\x7F][\x80-\xBF]+'
@@ -958,7 +952,7 @@ footer {
                 $siteID = 0;
 
                 $apiUrl = 'https://api.ebay.com/ws/api.dll';
-                $apiCall = 'ReviseFixedPriceItem';
+                $apiCall = 'AddItem';
                 $compatibilityLevel = 741;
 
                 $runame = 'Vendilo_SpA-VendiloS-c310-4-prlqnbrjv';
@@ -1001,25 +995,26 @@ footer {
 
 // Send the Request
                     $response = curl_exec($connection);
+                    //$xmlresponse = new \SimpleXMLElement($response);
 
 
-                    $this->report('CEbayReviseProductJob','Report Response ' . $good->refMarketplaceId,$response);
+                    $this->report('CEbayAddProductJob','Report ',$response);
                     sleep(1);
 
                     $reponseNewProduct = new \SimpleXMLElement($response);
-
-                    $id_product_ref = $reponseNewProduct->ItemID;
-
-
+                    $this->report('CEbayNewAddProductJob','Report ',$xml);
+                    $refMarketplaceId = $reponseNewProduct->ItemID;
+                    $today = new \DateTime();
+                    $now = $today->format('Y-m-d H:i:s');
                     sleep(1);
-                    $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
+                    $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
 
-
+                        $good->refMarketplaceId=$refMarketplaceId;
                         $good->lastUpdate = $product->lastUpdate;
                         $good->update();
-
+                    $this->report('CEbayNewAddProductJob','Report ' . $refMarketplaceId, $xml);
                 } catch (\Throwable $e) {
-                    $this->report('CEbayReviseProductJob','Error',$e->getLine() . '-' . $e->getMessage());
+                    $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
                 }
             }
