@@ -104,10 +104,18 @@ class CEbayNewReviseProductJob extends ACronJob
                 $slugBrand = $productBrand->slug;
                 $brandName = $productBrand->name;
                 $productEanParent = $productEanRepo->findOneBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId,'productSizeId' => 0]);
-                if ($productEanParent != null) {
+                if ($productEanParent) {
                     $productEan = $productEanParent->ean;
                 } else {
-                    $productEan = '';
+                    $productEanSelect =$productEanRepo->findOneBy(['used'=>0]);
+                    $productEan=$productEanSelect->ean;
+                    $productEanSelect->productId=$good->productId;
+                    $productEanSelect->productVariantId=$good->productVariantId;
+                    $productEanSelect->productSizeId=0;
+                    $productEanSelect->usedForParent=1;
+                    $productEanSelect->brandAssociate=$product->productBrandId;
+                    $productEanSelect->shopId=$marketplaceAccount->config['shop'];
+                    $productEanSelect->update();
                 }
                 $brands = explode(',',$marketplaceAccount->config['brands']);
                 if (in_array($product->productBrandId,$brands)) {
@@ -246,8 +254,8 @@ class CEbayNewReviseProductJob extends ACronJob
                 if ($good->titleModified == "1" && $good->isOnSale == "1") {
                     $percSc = number_format(100 * ($good->price - $good->salePrice) / $good->price,0);
                     $name = $product->productBrand->name
-                        . ' Sconto del ' . $percSc . '% da ' . $good->price . '€ a ' . $good->salePrice
-                        . '€ ' .
+                        . ' Sconto del ' . $percSc . '% da ' . number_format($good->price,'2','.','') . ' € a ' . number_format($good->salePrice,'2','.','')
+                        . ' € ' .
                         $product->itemno
                         . ' ' .
                         $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
