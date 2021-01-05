@@ -219,8 +219,8 @@ class CEbayNewAddProductJob extends ACronJob
                 if ($good->titleModified == "1" && $good->isOnSale == "1") {
                     $percSc = number_format(100 * ($good->price - $good->salePrice) / $good->price,0);
                     $name = $product->productBrand->name
-                        . ' Sconto del ' . $percSc . '% da ' . $good->price . '€ a ' . $good->salePrice
-                        . '€ ' .
+                        . ' Sconto del ' . $percSc . '% da ' . number_format($good->price,'2','.','') . ' € a ' . number_format($good->salePrice,'2','.','')
+                        . ' € ' .
                         $product->itemno
                         . ' ' .
                         $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
