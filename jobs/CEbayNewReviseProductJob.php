@@ -696,7 +696,6 @@ footer {
 <li><input id="tab1" class="css-tab" name="tab" checked="checked" type="radio" /> <label for="tab1" class="tab-label">SPEDIZIONI</label>
 <div id="tab-content1" class="tab-content">
 <h2>MODALITA\'</h2>
-<p><br /> SPEDIZIONE IMMEDIATA ANCHE IN CONTRASSEGNO</p>
 <p>ACQUISTA ORA E RICEVI IN 24/48 ORE !!! (sabato e domenica esclusi)</p>
 <h2><a name="disponibilita-dei-prodotti"></a>Disponibilit&agrave; dei prodotti</h2>';
                 $xml .= '<p>Ricevuto l\'ordine, ' . $addressBook->subject . ' procede, prima della spedizione, al controllo qualit&agrave; e alla conferma mediante e-mail dell\'ordine in lavorazione. Qualora gli articoli ordinati non siano pi&ugrave; disponibili o non abbiano superato il controllo qualit&agrave; ne daremo immediata comunicazione al cliente proponendo possibili alternative.</p>';
@@ -796,11 +795,6 @@ footer {
 <p>Durante il processo di acquisto &egrave; possibile scegliere &ldquo;Bonifico Bancario&rdquo; come modalit&agrave; di pagamento. Il Cliente riceve automaticamente una email contenente i dati bancari di Cartechinishop.com. I prodotti ordinati verranno riservati in attesa dell&rsquo;arrivo del bonifico bancario sul conto. Il cliente dovr&agrave; inviare via email copia del pagamento entro 48 ore oltrepassate le quali l&rsquo;ordine verr&agrave; automaticamente cancellato. Scegliendo la &ldquo;modalit&agrave; di pagamento&rdquo; Bonifico Bancario dovr&agrave; trasferire il totale dell&rsquo;ordine al seguente conto bancario, indicando il numero dell&rsquo;ordine:</p>';
                 $xml .= '<p>' . $addressBook->subject . '<br /> IBAN:' . $addressBook->iban . '</p>';
                 $xml .= '<p>L\'ordine sar&agrave; spedito subito dopo la ricezione dell&rsquo;accredito sul nostro conto bancario.</p>
-<h2><a name="contrassegno"></a>Contrassegno</h2>
-<p>Il pagamento con contrassegno &egrave; valido solo per i seguenti paesi: <strong>Italia</strong> e per importi inferiori a 1.000 EUR</p>
-<p>Tramite questo metodo di pagamento pagherai il totale dell\'ordine direttamente al corriere al momento della consegna. Ricordati di preparare l\'importo esatto dell\'ordine in quanto il corriere non &egrave; autorizzato a dare resto. Non &egrave; possibile pagare il contrassegno con assegno bancario di nessun genere</p>
-<h2><a name="pick-and-pay"></a>Pick And Pay</h2>
-<p>Se lo preferisci puoi prenotare il tuo ordine e ritirarlo presso la nostra sede. L\'indirizzo della sede e gli orari di apertura al pubblico ti verranno comunicati durante il processo di acquisto.</p>
 </div>
 </li>
 <li><input id="tab4" class="css-tab" name="tab" type="radio" /> <label for="tab4" class="tab-label">RESTITUZIONE</label>
