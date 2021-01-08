@@ -32,7 +32,9 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               php.productId,
               php.productVariantId,
               pps.price,
-              pb.name  as `brand`,
+              pb.name  as `brand`, 
+              p.externalId AS externalId,
+
               group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
@@ -143,6 +145,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
             $row['totalQty'] = '<span class="small">' .$php->product->qty.'</span>';
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->printId().'"></table>';
+            $row['externalId']='<span class="small">' . $php->product->itemno .  '</span>';
 
 
             /** @var CMarketplaceHasShop $mhsCron */

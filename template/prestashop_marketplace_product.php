@@ -35,7 +35,11 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Dummy
+                                    data-default-order="desc">Foto
+                                </th>
+                                <th data-slug="shop"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop
                                 </th>
                                 <th data-slug="brand"
                                     data-required="true"
@@ -43,6 +47,13 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">brand
                                 </th>
+                                <th data-slug="externalId"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Cpf
+                                </th>
+
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
@@ -91,10 +102,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Origine di<br>Pubblicazione
                                 </th>
-                                <th data-slug="shop"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shop
-                                </th>
+
                                 <th data-slug="season"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stagione
