@@ -93,7 +93,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Id Marketplace
                                 </th>
-                                <th data-slug="productStatusMarketplace"
+                                <th data-slug="productStatusMarketplaceId"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"

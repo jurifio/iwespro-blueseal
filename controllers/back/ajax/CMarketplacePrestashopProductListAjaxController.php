@@ -41,7 +41,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
               php.prestaId,
-              psm.`name` as productStatusMarketplace,     
+              psm.`name` as productStatusMarketplaceId,     
               phphmhs.refMarketplaceId as refMarketplaceId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
@@ -128,7 +128,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
-            $row['productStatusMarketplace'] = $php->productStatusMarketplace->name;
+            $row['productStatusMarketplaceId'] = $php->productStatusMarketplace->name;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
             $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
