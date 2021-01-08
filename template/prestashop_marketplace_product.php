@@ -53,7 +53,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Id Marketplace
+                                    data-default-order="desc">Id Prodotto MP
                                 </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
