@@ -87,7 +87,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Saldo in Picky
                                 </th>
-                                <th data-slug="RefMarketplaceId"
+                                <th data-slug="refMarketplaceId"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
