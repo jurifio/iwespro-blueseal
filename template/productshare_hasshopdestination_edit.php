@@ -294,7 +294,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <?php
                                             if (isset($marketplaceAccount->config['typeAssignParallel'])) {
                                                 if ($marketplaceAccount->config['typeAssignParallel'] == "1") {
@@ -324,7 +324,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <input type="hidden" id="productStatusIdSelected" id="productStatusIdSelected"
+                                                <input type="hidden" id="productStatus" id="productStatusId"
                                                        value="<?php echo (isset($marketplaceAccount->config['productStatusId'])) ? $marketplaceAccount->config['productStatusId'] : ''; ?>"/>
                                                 <label for="productStatusId">Seleziona lo Stato Con Cui verranno
                                                     pubblicati i Prodotti
