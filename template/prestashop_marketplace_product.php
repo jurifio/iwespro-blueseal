@@ -77,13 +77,13 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Importo saldo <br>sui marketplace
+                                    data-default-order="desc">Imp. saldo <br>sui marketplace
                                 </th>
                                 <th data-slug="pickySale"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Saldo in Picky
+                                    data-default-order="desc">Saldo in Shop
                                 </th>
                                 <th data-slug="productStatusMarketplaceId"
                                     data-required="true"
