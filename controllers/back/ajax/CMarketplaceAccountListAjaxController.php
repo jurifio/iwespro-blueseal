@@ -41,20 +41,25 @@ class CMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxContr
         $response ['data'] = [];
 
         foreach ($marketplaceAccounts as $val) {
+            if($val['marketplaceType']=='cpc') {
             $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['marketplaceId' => $val['marketplaceId'], 'id' => $val['marketplaceAccountId']]);
-            $row = [];
-            $row["DT_RowId"] = $marketplaceAccount->printId();
-            $row['code'] = $marketplaceAccount->printId();
-            $row['marketplace'] = $marketplaceAccount->marketplace->name;
-            $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
-            $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
-            $row['productCount'] = $val['productCount'];
-            $row['visits'] = $val['visits'];
-            $row['orders'] = $val['orders'];
-            $row['ordersIds'] = $val['ordersIds'];
-            $row['cost'] = $val['cost'];
-            $row['orderTotal'] = $val['orderTotal'];
-            $response['data'][] = $row;
+
+                $row = [];
+                $row["DT_RowId"] = $marketplaceAccount->printId();
+                $row['code'] = $marketplaceAccount->printId();
+                $row['marketplace'] = $marketplaceAccount->marketplace->name;
+                $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
+                $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
+                $row['productCount'] = $val['productCount'];
+                $row['visits'] = $val['visits'];
+                $row['orders'] = $val['orders'];
+                $row['ordersIds'] = $val['ordersIds'];
+                $row['cost'] = $val['cost'];
+                $row['orderTotal'] = $val['orderTotal'];
+                $response['data'][] = $row;
+            }else{
+                continue;
+            }
         }
 
         return json_encode($response);

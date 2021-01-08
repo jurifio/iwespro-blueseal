@@ -33,11 +33,11 @@
                                 <th data-slug="marketplaceType"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Tipo Marketplace</th>
+                                    class="center">Tipo Aggregatore</th>
                                 <th data-slug="marketplace"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Marketplace</th>
+                                    class="center">Aggregatore</th>
                                 <th data-slug="marketplaceAccount"
                                     data-searchable="true"
                                     data-orderable="true"

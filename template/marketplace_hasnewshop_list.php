@@ -51,6 +51,11 @@
                                     data-orderable="true"
                                     class="center">Immagine
                                 </th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Attivo
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

@@ -45,7 +45,7 @@ class CMarketPlaceHasNewShopListAjaxController extends AAjaxController
                       `ma`.`name` as marketplaceAccountName,
                       `ma`.`urlSite` as urlSite,
                       `ma`.`config` as config,
-                       if(`ma`.isActive=1,'Attivo','Non Attivo') as isActive 
+                       if(`ma`.isActive=1,'Si','No') as isActive 
                       
                 FROM MarketplaceAccount ma 
                  join Marketplace m on ma.marketplaceId=m.id

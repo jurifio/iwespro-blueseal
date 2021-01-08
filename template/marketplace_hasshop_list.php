@@ -56,17 +56,6 @@
                                     data-orderable="true"
                                     class="center">Immagine
                                 </th>
-                                <th data-slug="prestashopId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Prestashop Id
-                                </th>
-                                <th data-slug="priceRule"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Listino Da Shop
-                                </th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -106,10 +95,23 @@
                 data-remote="bs.lists.delete.asociatemarketplacehasshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Nuovo shop">
+    <bs-toolbar-group data-group-label="Nuovo Regola">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus-circle"
+                data-permission="/admin/marketing"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Salva"
+                data-placement="bottom"
+                data-href="/blueseal/marketplace/marketplace-shop/aggiungi"
+        ></bs-toolbar-button>
+
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Nuovo Marketplace">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
                 data-permission="/admin/marketing"
                 data-class="btn btn-default"
                 data-rel="tooltip"
