@@ -65,19 +65,19 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato
+                                    data-default-order="desc">Stato di Pubblicazione
                                 </th>
                                 <th data-slug="sale"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato saldo sui marketplace
+                                    data-default-order="desc">Stato <br>saldo<br>sui marketplace
                                 </th>
                                 <th data-slug="salePrice"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Importo saldo sui marketplace
+                                    data-default-order="desc">Importo<br>saldo sui<br>marketplace
                                 </th>
                                 <th data-slug="pickySale"
                                     data-required="true"
@@ -89,7 +89,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato di Pubblicazione
+                                    data-default-order="desc">Origine<br>di<br>Pubblicazione
                                 </th>
                                 <th data-slug="shop"
                                     data-searchable="true"
