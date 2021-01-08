@@ -58,7 +58,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Prezzi Shop<br>pr.Pieno(pr.Saldo)
+                                    data-default-order="desc">Prezzi Shop<br>pr.Pieno(pr.Saldo)-stato Saldo
                                 </th>
                                 <th data-slug="refMarketplaceId"
                                     data-required="true"
