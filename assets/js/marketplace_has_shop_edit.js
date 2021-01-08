@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+
     document.getElementById('insertMarketPlace').style.display = "block";
     $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
@@ -168,103 +169,110 @@ $(document).ready(function () {
     });
 
 
-
 });
 var SelectionFullPrice;
-$(':radio[name="activeFullPrice"]').change(function(){
-    SelectionFullPrice=this.value;
-   if(SelectionFullPrice=='2'){
-       $('#rawFullPrice').removeClass('hide');
-       $('#rawFullPrice').addClass('show');
-   } else{
-       $('#rawFullPrice').removeClass('show');
-       $('#rawFullPrice').addClass('hide');
-       $('#appendBrand').empty();
-       $('#appendBrand').append('tutti');
-   }
+$(':radio[name="activeFullPrice"]').change(function () {
+    SelectionFullPrice = this.value;
+    if (SelectionFullPrice == '2') {
+        $('#rawFullPrice').removeClass('hide');
+        $('#rawFullPrice').addClass('show');
+    } else {
+        $('#rawFullPrice').removeClass('show');
+        $('#rawFullPrice').addClass('hide');
+        $('#appendBrand').empty();
+        $('#appendBrand').append('tutti');
+    }
 });
 var Selection;
-$(':radio[name="activeSalePrice"]').change(function(){
-    var brandExclusion='';
-    Selection=this.value;
-    if(Selection=='2'){
+$(':radio[name="activeSalePrice"]').change(function () {
+    var brandExclusion = '';
+    Selection = this.value;
+    if (Selection == '2') {
         $('#rawSalePrice').removeClass('hide');
         $('#rawSalePrice').addClass('show');
-        brandExclusion='';
+        brandExclusion = '';
         $('#brandSaleExclusion').val(brandExclusion)
         $('#divBrandExclusion').empty();
-    } else{
+    } else {
         $('#rawSalePrice').removeClass('show');
         $('#rawSalePrice').addClass('hide');
-        brandExclusion='0';
+        brandExclusion = '0';
         $('#brandSaleExclusion').val(brandExclusion)
         $('#divBrandExclusion').empty();
         $('#divBrandExclusion').append('Tutti');
     }
 });
 var SelectionNameCatalog;
-$(':radio[name="checkNameCatalog"]').change(function(){
-    SelectionNameCatalog=this.value;
-    if(SelectionNameCatalog=='2'){
+$(':radio[name="checkNameCatalog"]').change(function () {
+    SelectionNameCatalog = this.value;
+    if (SelectionNameCatalog == '2') {
         $('#rawName').removeClass('hide');
         $('#rawName').addClass('show');
-    } else{
+    } else {
         $('#rawName').removeClass('show');
         $('#rawName').addClass('hide');
     }
 });
 var typeAssign;
-$(':radio[name="typeAssign"]').change(function(){
-    typeAssign=this.value;
-    if(typeAssign=='2'){
+$(':radio[name="typeAssign"]').change(function () {
+    typeAssign = this.value;
+    if (typeAssign == '2') {
         $('#rawRule').removeClass('hide');
         $('#rawRule').addClass('show');
-        $('#brands').val('');
 
-    } else{
+
+    } else {
         $('#rawRule').removeClass('show');
         $('#rawRule').addClass('hide');
-        $('#brands').value='0';
+
     }
 });
 var typeAssignParallel;
-$(':radio[name="typeAssignParallel"]').change(function(){
-    typeAssignParallel=this.value;
-    if(typeAssignParallel=='2'){
+$(':radio[name="typeAssignParallel"]').change(function () {
+    typeAssignParallel = this.value;
+    if (typeAssignParallel == '2') {
         $('#rawRuleParallel').removeClass('hide');
         $('#rawRuleParallel').addClass('show');
-        $('#brandsParallel').val('');
 
-    } else{
+
+    } else {
         $('#rawRuleParallel').removeClass('show');
         $('#rawRuleParallel').addClass('hide');
-        $('#brandsParallel').value='0';
+
     }
 });
+
 var valueBrand;
 var newValueBrand;
-$('#brandId').change( function(){
-     valueBrand=$('#brands').val();
-    newValueBrand=valueBrand+this.value+',';
-    $('#brands').val(newValueBrand);
+$('#brandId').change(function () {
+    valueBrand = $('#brandis').val();
+    newValueBrand = valueBrand + this.value + ',';
+    $('#brandis').val(newValueBrand);
+    $('#appendBrandsPublishPar').append(`
+    <div id="brandAddDiv-`+$('#brandId').val()+`" class="row"><div class="col-md-12">`+$('#brandId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnAdd-`+$('#brandId').val()+`" onclick="lessBrandAdd(`+$('#brandId').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 
 });
 
 var valueBrandSale;
 var newValueBrandSale;
-$('#brandExclusion').change( function(){
-    valueBrandSale=$('#brandSaleExclusion').val();
-    newValueBrandSale=valueBrandSale+this.value+',';
+$('#brandExclusion').change(function () {
+    valueBrandSale = $('#brandSaleExclusion').val();
+    newValueBrandSale = valueBrandSale + this.value + ',';
+
     $('#brandSaleExclusion').val(newValueBrandSale);
+    $('#appendBrandsSalePublishPar').append(`
+    <div id="brandSaleAddDiv-` + $('#brandExclusion').val() + `" class="row"><div class="col-md-12">` + $('#brandExclusion :selected').text() + `</div><div class="col-md-2"> <button class="success" id="btnSaleAdd-` + $('#brandExclusion').val() + `" onclick="lessBrandSaleAdd(` + $('#brandExclusion').val() + `)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 
 });
 
 var paral;
 var newparal;
-$('#BrandIdParallel').change( function(){
-    paral=$('#brandsPar').val();
-    newparal=paral+this.value + ',';
+$('#BrandIdParallel').change(function () {
+    paral = $('#brandsPar').val();
+    newparal = paral + this.value + ',';
     $('#brandsPar').val(newparal);
+    $('#appendBrandsPar').append(`
+    <div id="brandParallelAddDiv-`+$('#brandIdParallel').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelAdd-`+$('#BrandIdParallel').val()+`" onclick="lessBrandParallelAdd(`+$('#BrandIdParallel').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
 
 
@@ -274,18 +282,18 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
         body: '<p>Confermare?</p>'
     });
 
-    var val='';
-    $(':checkbox:checked').each(function(i){
-        if($(this)!=$('#checkedAll')) {
+    var val = '';
+    $(':checkbox:checked').each(function (i) {
+        if ($(this) != $('#checkedAll')) {
             val = val + $(this).val() + ',';
         }
     });
     var lang = $('#lang').val();
-    var marketplaceAccountId=$('#marketplaceAccountId').val();
+    var marketplaceAccountId = $('#marketplaceAccountId').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
     var slug = $('#slug').val();
     var shopId = $('#shopId').val();
-    var marketplaceId =$('#marketplaceId').val();
+    var marketplaceId = $('#marketplaceId').val();
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
@@ -307,21 +315,19 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
     var dateStartPeriod3 = $('#dateStartPeriod3').val();
     var dateEndPeriod3 = $('#dateEndPeriod3').val();
     var dateStartPeriod4 = $('#dateStartPeriod4').val();
-    var dateEndPeriod4=$('#dateEndPeriod4').val();
-    var brandSaleExclusion=$('#brandSaleExclusion').val();
+    var dateEndPeriod4 = $('#dateEndPeriod4').val();
+    var brandSaleExclusion = $('#brandSaleExclusion').val();
 
     var checkNameCatalog = $('#checkNameCatalog').val();
     var optradioName = $('#optradioName').val();
     var typeAssign = $('#typeAssign').val();
-    var brands = $('#brands').val();
+    var brands = $('#brandis').val();
     var typeAssignParallel = $('#typeAssignParallel').val();
     var brandsSelectionParallel = $('#brandsPar').val();
 
 
-
-
     var config = '?nameMarketPlace=' + marketplace_account_name + '&' +
-    'marketplaceAccountId=' + marketplaceAccountId + '&' +
+        'marketplaceAccountId=' + marketplaceAccountId + '&' +
         'lang=' + lang + '&' +
         'shopId=' + shopId + '&' +
         'marketplaceId=' + marketplaceId + '&' +
@@ -352,7 +358,7 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
         'checkNameCatalog=' + checkNameCatalog + '&' +
         'optradioName=' + optradioName + '&' +
         'typeAssign=' + typeAssign + '&' +
-        'brands=' + brands+ '&' +
+        'brands=' + brands + '&' +
         'typeAssignParallel=' + typeAssignParallel + '&' +
         'brandsParallel=' + brandsSelectionParallel;
 
@@ -419,6 +425,7 @@ function myFunction() {
         }
     }
 }
+
 function myShopFunction() {
     // Declare variables
     var input, filter, table, tr, td, s, txtValue;
@@ -441,9 +448,155 @@ function myShopFunction() {
     }
 }
 
-$(document).on('click','#checkedAll',function () {
+$(document).on('click', '#checkedAll', function () {
 
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
+
+function lessBrandAdd(brandId) {
+    var divToErase = '#brandAddDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandis').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandis').val(newValueToChange);
+    } else {
+        $('#brandis').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrand(brandId) {
+    var divToErase = '#brandDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandis').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+        if (newValueToChange[i] == valueToDelete) {
+            newValueToChange.splice(i, 1);
+        }
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandis').val(newValueToChange);
+    } else {
+        $('#brandis').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrandParallelAdd(brandId) {
+    var divToErase = '#brandParallelAddDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandsPar').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    }else{
+        $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrandParallel(brandId) {
+    var divToErase = '#brandParallelDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandsPar').val();
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    }else{
+        $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrandSaleAdd(brandId) {
+    var divToErase = '#brandSaleAddDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandSaleExclusion').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandSaleExclusion').val(newValueToChange);
+    } else {
+        $('#brandSaleExclusion').val(newValueToChange + ',');
+    }
+
+
+    $(divToErase).empty();
+}
+
+function lessBrandSale(brandId) {
+    var divToErase = '#brandSaleDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandSaleExclusion').val();
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandSaleExclusion').val(newValueToChange);
+    } else {
+        $('#brandSaleExclusion').val(newValueToChange + ',');
+    }
+
+    $(divToErase).empty();
+}
 

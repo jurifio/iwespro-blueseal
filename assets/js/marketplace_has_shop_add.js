@@ -219,12 +219,12 @@ $(':radio[name="typeAssign"]').change(function(){
     if(typeAssign=='2'){
         $('#rawRule').removeClass('hide');
         $('#rawRule').addClass('show');
-        $('#brands').val('');
+        $('#brandis').val('');
 
     } else{
         $('#rawRule').removeClass('show');
         $('#rawRule').addClass('hide');
-        $('#brands').value='0';
+        $('#brandis').value='0';
     }
 });
 var typeAssignParallel;
@@ -244,9 +244,9 @@ $(':radio[name="typeAssignParallel"]').change(function(){
 var valueBrand;
 var newValueBrand;
 $('#brandId').change( function(){
-     valueBrand=$('#brands').val();
-    newValueBrand=valueBrand+this.value+',';
-    $('#brands').val(newValueBrand);
+    $('#brandis').val(newValueBrand);
+    $('#appendBrandsPublishPar').append(`
+    <div id="brandAddDiv-`+$('#brandId').val()+`" class="row"><div class="col-md-12">`+$('#brandId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnAdd-`+$('#brandId').val()+`" onclick="lessBrandAdd(`+$('#brandId').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 
 });
 
@@ -256,6 +256,8 @@ $('#brandExclusion').change( function(){
     valueBrandSale=$('#brandSaleExclusion').val();
     newValueBrandSale=valueBrandSale+this.value+',';
     $('#brandSaleExclusion').val(newValueBrandSale);
+    $('#appendBrandsSalePublishPar').append(`
+    <div id="brandSaleAddDiv-` + $('#brandExclusion').val() + `" class="row"><div class="col-md-12">` + $('#brandExclusion :selected').text() + `</div><div class="col-md-2"> <button class="success" id="btnSaleAdd-` + $('#brandExclusion').val() + `" onclick="lessBrandSaleAdd(` + $('#brandExclusion').val() + `)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 
 });
 
@@ -265,6 +267,8 @@ $('#BrandIdParallel').change( function(){
     paral=$('#brandsPar').val();
     newparal=paral+this.value + ',';
     $('#brandsPar').val(newparal);
+    $('#appendBrandsPar').append(`
+    <div id="brandParallelAddDiv-`+$('#brandIdParallel').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelAdd-`+$('#BrandIdParallel').val()+`" onclick="lessBrandParallelAdd(`+$('#BrandIdParallel').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
 
 
@@ -311,7 +315,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
     var checkNameCatalog = $('#checkNameCatalog').val();
     var optradioName = $('#optradioName').val();
     var typeAssign = $('#typeAssign').val();
-    var brands = $('#brands').val();
+    var brands = $('#brandis').val();
     var typeAssignParallel = $('#typeAssignParallel').val();
     var brandsSelectionParallel = $('#brandsPar').val();
 
@@ -443,4 +447,132 @@ $(document).on('click','#checkedAll',function () {
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
+
+function lessBrand(brandId) {
+    var divToErase = '#brandDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandis').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+        if (newValueToChange[i] == valueToDelete) {
+            newValueToChange.splice(i, 1);
+        }
+    }
+    for (var i=0; i<brandArray.length;i++){
+        if (brandArray[i] == valueToDelete) {
+            brandArray.splice(i, 1);
+        }
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandis').val(newValueToChange);
+    } else {
+        $('#brandis').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrandParallelAdd(brandId) {
+    var divToErase = '#brandParallelAddDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandsPar').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    }else{
+        $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrandParallel(brandId) {
+    var divToErase = '#brandParallelDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandsPar').val();
+    var newValueToChange = [];
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    }else{
+        $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+
+function lessBrandSaleAdd(brandId) {
+    var divToErase = '#brandSaleAddDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandSaleExclusion').val();
+    var strlen = valueToChange.length - 1;
+    valueToChange = valueToChange.substr(0, strlen);
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandSaleExclusion').val(newValueToChange);
+    } else {
+        $('#brandSaleExclusion').val(newValueToChange + ',');
+    }
+
+
+    $(divToErase).empty();
+}
+
+function lessBrandSale(brandId) {
+    var divToErase = '#brandSaleDiv-' + brandId;
+    var valueToDelete = brandId;
+    var valueToChange = $('#brandSaleExclusion').val();
+    var newValueToChange = [];
+    newValueToChange = valueToChange.split(',');
+    for (var i = 0; i < newValueToChange.length; i++) {
+
+        if (newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange = newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandSaleExclusion').val(newValueToChange);
+    } else {
+        $('#brandSaleExclusion').val(newValueToChange + ',');
+    }
+
+    $(divToErase).empty();
+}
 

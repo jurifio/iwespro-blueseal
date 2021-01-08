@@ -139,7 +139,11 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $brandSaleExclusion = $_GET['brandSaleExclusion'];
         if ($brandSaleExclusion != '0') {
             str_replace(',,',',',$brandSaleExclusion);
-            $brandSale = substr($brandSaleExclusion,0,-1);
+            if(substr($brandSaleExclusion,-1)==',') {
+                $brandSale = substr($brandSaleExclusion,0,-1);
+            }else{
+                $brandSale = $brandSaleExclusion;
+            }
         } else {
             $brandSale = $brandSaleExclusion;
         }
@@ -164,14 +168,22 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $brands = $_GET['brands'];
         if ($brands != '0') {
             str_replace(',,',',',$brands);
-            $brand = substr($brands,0,-1);
+            if(substr($brands,-1)==',') {
+                $brand = substr($brands,0,-1);
+            }else{
+                $brand=$brands;
+            }
         } else {
             $brand = $brands;
         }
         $brandsParallel = $_GET['brandsParallel'];
         if ($brandsParallel != '0') {
             str_replace(',,',',',$brandsParallel);
-            $brandParallel = substr($brandsParallel,0,-1);
+            if(substr($brandsParallel,-1)==',') {
+                $brandParallel = substr($brandsParallel,0,-1);
+            }else{
+                $brandParallel=$brandsParallel;
+            }
         } else {
             $brandParallel = $brandsParallel;
         }
@@ -366,7 +378,11 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $brandSaleExclusion = $_GET['brandSaleExclusion'];
         if ($brandSaleExclusion != '0') {
             str_replace(',,',',',$brandSaleExclusion);
-            $brandSale = substr($brandSaleExclusion,0,-1);
+            if(substr($brandSaleExclusion,-1)==',') {
+                $brandSale = substr($brandSaleExclusion,0,-1);
+            }else{
+                $brandSale = $brandSaleExclusion;
+            }
         } else {
             $brandSale = $brandSaleExclusion;
         }
@@ -396,14 +412,22 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $brands = $_GET['brands'];
         if ($brands != '0') {
             str_replace(',,',',',$brands);
-            $brand = substr($brands,0,-1);
+            if(substr($brands,-1)==',') {
+                $brand = substr($brands,0,-1);
+            }else{
+                $brand=$brands;
+            }
         } else {
             $brand = $brands;
         }
         $brandsParallel = $_GET['brandsParallel'];
         if ($brandsParallel != '0') {
             str_replace(',,',',',$brandsParallel);
-            $brandParallel = substr($brandsParallel,0,-1);
+            if(substr($brandsParallel,-1)==',') {
+                $brandParallel = substr($brandsParallel,0,-1);
+            }else{
+                $brandParallel=$brandsParallel;
+            }
         } else {
             $brandParallel = $brandsParallel;
         }

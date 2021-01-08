@@ -645,6 +645,16 @@
                                                    value="<?php echo (isset($marketplaceAccount->config['brandSaleExclusion'])) ? $marketplaceAccount->config['brandSaleExclusion'] : ''; ?>"/>
                                         </div>
                                     </div>
+                                    <?php  $brandSaleExists = explode(',',$marketplaceAccount->config['brandSaleExclusion']);
+                                    foreach($brandSaleExists as $brandSaleExist ){
+                                        $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandSaleExist]);
+                                        if($productBrands){
+                                            echo '<div class="row" id="brandSaleDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btn-'.$productBrands->id.'" onclick="lessBrandSale('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+                                        }
+                                    }
+                                    ?>
+                                    <div id="appendBrandsSalePublishPar">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -797,10 +807,21 @@
                                         <div class="row">
 
                                             <div class="col-md-12">
-                                                <input type="text" id="brands" name="brands"
+                                                <input type="text" id="brandis" name="brandis"
                                                        value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'] : ''; ?>"/>
                                             </div>
                                         </div>
+                                        <?php  $brandExists = explode(',',$marketplaceAccount->config['brands']);
+                                        foreach($brandExists as $brandExist ){
+                                            $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandExist]);
+                                            if($productBrands){
+                                                echo '<div class="row" id="brandDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btn-'.$productBrands->id.'" onclick="lessBrand('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+                                            }
+                                        }
+                                        ?>
+                                        <div id="appendBrandsPublishPar">
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -866,9 +887,19 @@
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default">
                                                     <input type="text" id="brandsPar" name="brandsPar"
-                                                           value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'] : ''; ?>"/>
+                                                           value="<?php echo (isset($marketplaceAccount->config['brandParallel'])) ? $marketplaceAccount->config['brandParallel'] : ''; ?>"/>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <?php  $brandExistsParallel=explode(',',$marketplaceAccount->config['brandParallel']);
+                                        foreach($brandExistsParallel as $brandExistParallel ){
+                                            $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandExistParallel]);
+                                            if($productBrands){
+                                                echo '<div class="row" id="brandParallelDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btnParallel-'.$productBrands->id.'" onclick="lessBrandParallel('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+                                            }
+                                        }
+                                        ?>
+                                        <div id="appendBrandsPar">
                                         </div>
                                     </div>
                                 </div>

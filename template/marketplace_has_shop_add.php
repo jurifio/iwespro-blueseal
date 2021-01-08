@@ -383,6 +383,8 @@
                                                    value=""/>
                                         </div>
                                     </div>
+                                    <div id="appendBrandsSalePublishPar">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -465,8 +467,10 @@
                                         <div class="row">
 
                                             <div class="col-md-12">
-                                                <input type="text" id="brands" name="brands" value="0"/>
+                                                <input type="text" id="brandis" name="brandis" value="0"/>
                                             </div>
+                                        </div>
+                                        <div id="appendBrandsPublishPar">
                                         </div>
                                     </div>
                                 </div>
@@ -516,6 +520,8 @@
                                                            value=""/>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div id="appendBrandsPar">
                                         </div>
                                     </div>
                                 </div>
