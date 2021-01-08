@@ -41,6 +41,8 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
               php.prestaId,
+              psm.`name` as productStatusMarketplace,     
+              phphmhs.refMarketplaceId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
@@ -48,8 +50,9 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock
             FROM PrestashopHasProduct php
+                join ProductStatusMarketplace psm on php.producStatusMarketplaceId=psm.id
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
-            JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
+            left JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
             LEFT JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId
@@ -67,6 +70,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
+            where p.qty>0
             GROUP BY php.productId, php.productVariantId 
         ";
 
@@ -102,6 +106,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['marketplaceAssociation'] = $associations;
             $row['sale'] = $onSale;
             $row['salePrice'] = $salePrice;
+            $row['refMarketplaceId']=$pHPHmHs->refMarketplaceId;
 
 
             switch ($php->status) {
@@ -120,6 +125,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
+            $row['productStatusMarketplace'] = $php->productStatusMarketplace->name;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
             $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';

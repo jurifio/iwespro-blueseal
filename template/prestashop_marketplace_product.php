@@ -87,6 +87,19 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Saldo in Picky
                                 </th>
+                                <th data-slug="RefMarketplaceId"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Id Marketplace
+                                </th>
+                                <th data-slug="productStatusMarketplace"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Stato di Pubblicazione
+                                </th>
+
                                 <th data-slug="prestaId"
                                     data-required="true"
                                     data-searchable="true"

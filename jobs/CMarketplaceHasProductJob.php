@@ -102,6 +102,7 @@ class CMarketplaceHasProductJob extends ACronJob
                                     } else {
                                         $pshsd->status = 1;
                                     }
+                                    $pshsd->productStatusMarkeplaceId=2;
                                     $pshsd->update();
                                 } else {
 
@@ -136,6 +137,7 @@ class CMarketplaceHasProductJob extends ACronJob
                                     $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
                                     $pshsd->status = 0;
                                     $pshsd->lastUpdate = '2011-01-01 00:00:00';
+                                    $pshsd->productStatusMarkeplaceId=2;
                                     $pshsdInsert->insert();
 
                                 }
@@ -161,7 +163,7 @@ class CMarketplaceHasProductJob extends ACronJob
                 if ($marketplaceAccount) {
                     if ($marketplaceAccount->config['isActivePublish'] == 1) {
                         $now = strtotime(date("Y-m-d"));
-                        $dateStartPeriod1 = strtotime($marketplaceAccount->config['dateStartPeriod1'] . ' 00:00:00');;
+                        $dateStartPeriod1 = strtotime($marketplaceAccount->config['dateStartPeriod1'] . ' 00:00:00');
                         $dateEndPeriod1 = strtotime($marketplaceAccount->config['dateEndPeriod1'] . ' 23:59:59');
                         $dateStartPeriod2 = strtotime($marketplaceAccount->config['dateStartPeriod2'] . ' 00:00:00');
                         $dateEndPeriod2 = strtotime($marketplaceAccount->config['dateEndPeriod2'] . ' 23:59:59');
@@ -202,11 +204,12 @@ class CMarketplaceHasProductJob extends ACronJob
                                     shp.variantValueSale as variantValueSale,
                                     shp.maxPercentSalePrice as maxPercentSalePrice,
                                     sp.price as price,
-                                    sp.salePrice as salePrice
-                        from Product p join PrestashopHasProduct shp on p.id=shp.productId
+                                    sp.salePrice as salePrice,
+                                    shp.typePublish as typePublish
+                        from Product p join PrestashopHasProduct shp on p.id=shp.productId  
                                                                             
  and p.productVariantId=shp.productVariantId
-join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
+join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where shp.typePublish=2 and shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
                             $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
