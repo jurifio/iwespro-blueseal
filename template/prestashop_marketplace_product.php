@@ -72,18 +72,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Stato Pubblicazione<br>Marketplace
                                 </th>
-                                <th data-slug="sale"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Stato saldo<br>sui marketplace
-                                </th>
-                                <th data-slug="salePrice"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Imp. saldo <br>sui marketplace
-                                </th>
+
                                 <th data-slug="productStatusMarketplaceId"
                                     data-required="true"
                                     data-searchable="true"

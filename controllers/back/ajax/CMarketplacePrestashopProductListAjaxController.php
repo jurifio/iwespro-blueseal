@@ -35,7 +35,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               pb.name  as `brand`, 
               p.externalId AS externalId,
 
-              group_concat(concat(s.name, ' | ', m.name, ' | Price: ', phphmhs.price )) AS marketplaceAssociation,
+              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified  )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,     
@@ -104,14 +104,12 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
           /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
-                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
-                $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Yes') . ' | Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>';
-                $salePrice .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale price: ' . $pHPHmHs->salePrice . '<br>';
+                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . ' | Sale price: ' . $pHPHmHs->salePrice . ' | Sale: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' | Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>';
+
 
             }
             $row['marketplaceAssociation'] = $associations;
-            $row['sale'] = $onSale;
-            $row['salePrice'] = $salePrice;
+
 
 
 
