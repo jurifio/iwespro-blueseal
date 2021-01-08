@@ -59,25 +59,25 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Associazioni
+                                    data-default-order="desc">Associazioni<br>Marketplace
                                 </th>
                                 <th data-slug="status"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato<br>di Pubblicazione<br>Marketplace
+                                    data-default-order="desc">Stato Pubblicazione<br>Marketplace
                                 </th>
                                 <th data-slug="sale"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato <br>saldo<br>sui marketplace
+                                    data-default-order="desc">Stato saldo<br>sui marketplace
                                 </th>
                                 <th data-slug="salePrice"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Importo<br>saldo sui<br>marketplace
+                                    data-default-order="desc">Importo saldo <br>sui marketplace
                                 </th>
                                 <th data-slug="pickySale"
                                     data-required="true"
@@ -89,7 +89,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Origine<br>di<br>Pubblicazione
+                                    data-default-order="desc">Origine di<br>Pubblicazione
                                 </th>
                                 <th data-slug="shop"
                                     data-searchable="true"
