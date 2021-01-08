@@ -53,7 +53,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Id Prodotto MP
+                                    data-default-order="desc">Id Prodotto<br>Marketplace
                                 </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
@@ -65,7 +65,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato di Pubblicazione
+                                    data-default-order="desc">Stato<br>di Pubblicazione<br>Marketplace
                                 </th>
                                 <th data-slug="sale"
                                     data-required="true"
