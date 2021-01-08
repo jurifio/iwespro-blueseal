@@ -50,7 +50,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock
             FROM PrestashopHasProduct php
-                join ProductStatusMarketplace psm on php.producStatusMarketplaceId=psm.id
+                join ProductStatusMarketplace psm on php.productStatusMarketplaceId=psm.id
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
             left JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
