@@ -94,6 +94,8 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $associations = '';
             $onSale = '';
             $salePrice = '';
+            $refMarketplaceId='';
+
 
 
 
@@ -102,11 +104,12 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                 $associations .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Price: ' . $pHPHmHs->price . '<br>';
                 $onSale .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Yes') . ' | Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>';
                 $salePrice .= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | Sale price: ' . $pHPHmHs->salePrice . '<br>';
+                $refMarketplaceId.= $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' | MarketplaceId: ' . $pHPHmHs->refMarketplaceId . '<br>';
             }
             $row['marketplaceAssociation'] = $associations;
             $row['sale'] = $onSale;
             $row['salePrice'] = $salePrice;
-            $row['refMarketplaceId']=$pHPHmHs->refMarketplaceId;
+            $row['refMarketplaceId']=$refMarketplaceId;
 
 
             switch ($php->status) {
