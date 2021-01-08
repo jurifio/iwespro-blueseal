@@ -43,17 +43,17 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">brand
                                 </th>
-                                <th data-slug="refMarketplaceId"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Id Marketplace
-                                </th>
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Prezzi Shop<br>pr.Pieno(pr.Saldo)
+                                </th>
+                                <th data-slug="refMarketplaceId"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Id Marketplace
                                 </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
@@ -66,12 +66,6 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Stato
-                                </th>
-                                <th data-slug="productStatus"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Stato<br>Prodotto<br>su Iwes
                                 </th>
                                 <th data-slug="sale"
                                     data-required="true"
@@ -91,7 +85,6 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Saldo in Picky
                                 </th>
-
                                 <th data-slug="productStatusMarketplaceId"
                                     data-required="true"
                                     data-searchable="true"
