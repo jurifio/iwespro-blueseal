@@ -43,13 +43,17 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">brand
                                 </th>
-
-
+                                <th data-slug="refMarketplaceId"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Id Marketplace
+                                </th>
                                 <th data-slug="price"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Prezzo
+                                    data-default-order="desc">Prezzi Shop<br>pr.Pieno(pr.Saldo)
                                 </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
@@ -87,30 +91,12 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Saldo in Picky
                                 </th>
-                                <th data-slug="refMarketplaceId"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Id Marketplace
-                                </th>
+
                                 <th data-slug="productStatusMarketplaceId"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Stato di Pubblicazione
-                                </th>
-
-                                <th data-slug="prestaId"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Prestashop Id
-                                </th>
-                                <th data-slug="cronjobReservation"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Marketplace prossimo inserimento
                                 </th>
                                 <th data-slug="shop"
                                     data-searchable="true"
