@@ -190,7 +190,8 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="BrandId">Seleziona i Brand da escludere (Devi Selezionare prima lo Shop per popolare la selezione)
+                                                    <label for="BrandId">Seleziona i Brand da escludere (Devi
+                                                        Selezionare prima lo Shop per popolare la selezione)
                                                     </label>
                                                     <select id="brandId"
                                                             name="brandId"
@@ -227,7 +228,8 @@
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isActivePublish">Seleziona se Attiva la Pubblicazione (Devi Selezionare prima lo Shop per popolare la selezione)
+                                                <label for="isActivePublish">Seleziona se Attiva la Pubblicazione (Devi
+                                                    Selezionare prima lo Shop per popolare la selezione)
                                                 </label>
                                                 <select id="isActivePublish"
                                                         name="isActivePublish"
@@ -241,7 +243,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label class="radio-inline"><input type="radio" id="typeAssignParallel"
                                                                                name="typeAssignParallel" value="1">Assegnazione
                                                 Automatica tutti i Brand</label>
@@ -249,7 +251,7 @@
                                                                                name="typeAssignParallel" value="2">Assegnazione
                                                 Per Brand con opzioni di esclusione</label>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="productStatusId">Seleziona lo Stato Con Cui verranno
                                                     pubblicati i Prodotti
@@ -265,28 +267,70 @@
                                     </div>
                                     <div id="rawRuleParallel" class="hide">
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="BrandIdParallel">Seleziona i Brand da escludere
-                                                    </label>
-                                                    <select id="BrandIdParallel"
-                                                            name="BrandIdParallel"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione dei Brand"
-                                                            data-init-plugin="selectize">
-                                                    </select>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="BrandIdParallel">Seleziona i Brand da escludere
+                                                            </label>
+                                                            <select id="BrandIdParallel"
+                                                                    name="BrandIdParallel"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione dei Brand"
+                                                                    data-init-plugin="selectize">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default">
+                                                            <input type="text" id="brandsPar" name="brandsPar"
+                                                                   value=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="appendBrandsPar">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group form-group-default">
-                                                    <input type="text" id="brandsPar" name="brandsPar"
-                                                           value=""/>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="BrandIdParallelPubblication">Seleziona i Brand da Pubblicare con Stato personalizzato
+                                                            </label>
+                                                            <select id="BrandIdParallelPubblication"
+                                                                    name="BrandIdParallelPubblication"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione dei Brand"
+                                                                    data-init-plugin="selectize">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="productStatusPublishId">Seleziona lo Stato
+                                                            </label>
+                                                            <select id="productStatusPublishId"
+                                                                    name="productStatusPublishId"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione Lo stato"
+                                                                    data-init-plugin="selectize">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default">
+                                                            <input type="text" id="brandsParPubblication" name="brandsParPubblication"
+                                                                   value=""/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="appendBrandsParPubblication">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div id="appendBrandsPar">
                                         </div>
                                     </div>
                                 </div>

@@ -97,8 +97,9 @@ class CProductHasShopDestinationJob extends ACronJob
                         } else {
                             $sqlBrandFilter = 'and p.productBrandId not in (' . $marketplaceAccount->config['brandParallel'] . ')';
                         }
-                        $sql = 'select p.id as productId, p.productVariantId as productVariantId,p.qty as qty, shp.shopId as shopId,shp.isPublished as isPublished from Product p join ProductShareHasShopDestination shp on p.id=shp.productId
+                        $sql = 'select p.id as productId, p.productVariantId as productVariantId,p.qty as qty, shp.shopId as shopId,shp.isPublished as isPublished, p.productBrandId as productBrandId from Product p join ProductShareHasShopDestination shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where shp.shopId !=' . $marketplaceAccount->config['shop'] . '  ' . $sqlBrandFilter;
+                        $brandParallelPubblication=$marketplaceAccount->config['brandParallelPubblication'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
                             $phsd = $phsdRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'shopIdOrigin' => $product['shopId'],'shopIdDestination'=>$marketplaceAccount->config['shop']]);
@@ -106,7 +107,15 @@ class CProductHasShopDestinationJob extends ACronJob
                                 if ($product['isPublished'] == 0) {
                                     $phsd->delete();
                                 } else {
-                                    $phsd->statusId = $marketplaceAccount->config['productStatusId'];
+                                $statusId=$marketplaceAccount->config['productStatusId'];
+                                    foreach($brandParallelPubblication as $bpp){
+                                        $brandParameter=explode('-',$bpp);
+                                        if($brandParameter[0]==$product['productBrandId']) {
+                                            $statusId = $brandParameter[1];
+                                            break;
+                                        }
+                                    }
+                                    $phsd->statusId=$statusId;
                                     $phsd->update();
                                 }
                             } else {
@@ -116,7 +125,15 @@ class CProductHasShopDestinationJob extends ACronJob
                                     $phsdInsert->productVariantId = $product['productVariantId'];
                                     $phsdInsert->shopIdOrigin = $product['shopId'];
                                     $phsdInsert->shopIdDestination = $marketplaceAccount->config['shop'];
-                                    $phsdInsert->statusId = $marketplaceAccount->config['productStatusId'];
+                                    $statusId=$marketplaceAccount->config['productStatusId'];
+                                    foreach($brandParallelPubblication as $bpp){
+                                        $brandParameter=explode('-',$bpp);
+                                        if($brandParameter[0]==$product['productBrandId']) {
+                                            $statusId = $brandParameter[1];
+                                            break;
+                                        }
+                                    }
+                                    $phsd->statusId=$statusId;
                                     $phsdInsert->insert();
                                 }
                             }

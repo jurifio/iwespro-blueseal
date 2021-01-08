@@ -113,6 +113,13 @@ class CProductShareHasShopDestinationInsertManage extends AAjaxController
         }else{
             $brandParallel=$brandsParallel;
         }
+        $brandsParallelPubblication=$_GET['brandsParallelPubblication'];
+        if($brandsParallelPubblication!='0'){
+            str_replace(',,',',',$brandsParallelPubblication);
+            $brandParallelPubblication=substr($brandsParallelPubblication,0,-1);
+        }else{
+            $brandParallelPubblication=$brandsParallelPubblication;
+        }
         $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
 
         $urlSite=$findUrlSite->urlSite;
@@ -121,7 +128,7 @@ class CProductShareHasShopDestinationInsertManage extends AAjaxController
 
         $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","isActiveShare":"' . $isActiveShare . '","isActivePublish":"' . $isActivePublish . '","productStatusId":"' . $productStatusId  . '",';
-        $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '",';
+        $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '","brandParallelPubblication":"' . $brandParallelPubblication . '",';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify   . '","typeAssign":"' . $typeAssign . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
@@ -235,6 +242,16 @@ class CProductShareHasShopDestinationInsertManage extends AAjaxController
             $brandParallel=$brandsParallel;
         }
         $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
+        $brandsParallelPubblication=$_GET['brandsParallelPubblication'];
+        if($brandsParallelPubblication!='0'){
+            str_replace(',,',',',$brandsParallelPubblication);
+            $brandParallelPubblication=substr($brandsParallelPubblication,0,-1);
+        }else{
+            $brandParallelPubblication=$brandsParallelPubblication;
+        }
+        $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
+
+        $urlSite=$findUrlSite->urlSite;
 
         $urlSite=$findUrlSite->urlSite;
 
@@ -242,7 +259,7 @@ class CProductShareHasShopDestinationInsertManage extends AAjaxController
 
         $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","isActiveShare":"' . $isActiveShare . '","isActivePublish":"' . $isActivePublish . '","productStatusId":"' . $productStatusId  . '",';
-        $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '",';
+        $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '","brandParallelPubblication":"' . $brandParallelPubblication . '",';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify   . '","typeAssign":"' . $typeAssign . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");

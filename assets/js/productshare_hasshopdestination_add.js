@@ -92,6 +92,25 @@ $(document).ready(function () {
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
+            table: 'ProductStatus'
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var selectPublish = $('#productStatusPublishId');
+        if (typeof (selectPublish[0].selectize) != 'undefined') selectPublish[0].selectize.destroy();
+        selectPublish.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+        selectPublish[0].selectize.setValue('11');
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
             table: 'Marketplace',
             condition: {type: "website"}
 
@@ -198,6 +217,38 @@ $('#shopId').change(function(){
             }
         });
     });
+    $.ajax({
+        url: '/blueseal/xhr/SelectOtherShopBrandsAjaxController',
+        method: 'get',
+        data: {
+            shopId:$('#shopId').val()
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        console.log(res);
+        let BrandIdParallelPubblication = $('#BrandIdParallelPubblication');
+        if (typeof (BrandIdParallelPubblication[0].selectize) != 'undefined') BrandIdParallelPubblication[0].selectize.destroy();
+        BrandIdParallelPubblication.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: ['name'],
+            options: res,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                        '<span class="caption">Marketplace:' + escape(item.hasMarketplaceRights) + ' | Aggregatori:' + escape(item.hasAggregator) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.name) + '</span> - ' +
+                        '<span class="caption">Marketplace:' + escape(item.hasMarketplaceRights) + ' | Aggregatori:' + escape(item.hasAggregator) + '</span>' +
+                        '</div>'
+                }
+            }
+        });
+    });
 
 });
 
@@ -273,6 +324,16 @@ $('#BrandIdParallel').change( function(){
     $('#appendBrandsPar').append(`
    <div id="brandParallelAddDiv-`+$('#brandIdParallel').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelAdd-`+$('#BrandIdParallel').val()+`" onclick="lessBrandParallelAdd(`+$('#BrandIdParallel').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
+var paralPublish;
+var newparalPublish;
+$('#BrandIdParallelPubblication').change( function(){
+    paralPublish=$('#BrandIdParallelPubblication').val();
+
+    newparalPublish=paralPublish+this.value +'-'+$('#productStatusPublishId').val()+',';
+    $('#brandsPar').val(newparal);
+    $('#appendBrandsParPubblication').append(`
+    <div id="brandParallelPubblicationAddDiv-`+$('#brandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallelPubblication :selected').text() + `-` + $('#productStatusPublishId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelPublishAdd-`+$('#brandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`" onclick="lessBrandParallelPublishAdd('`+$('#brandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`')" type="button"><span  class="fa fa-close"></span></button></div></div>`);
+});
 
 
 $(document).on('bs.productsharehasshopdestination-account.save', function () {
@@ -302,6 +363,16 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
     var brands = $('#brands').val();
     var typeAssignParallel = $('#typeAssignParallel').val();
     var brandsSelectionParallel = $('#brandsPar').val();
+    var brandsSelectionParallelPubblication= $('#brandsParPubblication').val();
+    if(brandsSelectionParallel==',' || brandsSelectionParallel==''){
+        brandsSelectionParallel='0';
+    }
+    if(brands==',' || brands==','){
+        brands='0';
+    }
+    if(brandsSelectionParallelPubblication==',' || brandsSelectionParallelPubblication==''){
+        brandsSelectionParallelPubblication='0';
+    }
 
 
 
@@ -321,6 +392,7 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
         'typeAssign=' + typeAssign + '&' +
         'brands=' + brands+ '&' +
         'typeAssignParallel=' + typeAssignParallel + '&' +
+        'brandsParallelPubblication='+brandsSelectionParallelPubblication + '&' +
         'brandsParallel=' + brandsSelectionParallel;
 
     bsModal.showCancelBtn();
@@ -509,6 +581,54 @@ function lessBrandParallel(brandId){
         $('#brandsPar').val(newValueToChange);
     } else {
         $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+function lessBrandParallelPublishAdd(brandId){
+    var divToErase='#brandParallelPubblicationAddDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brandsParPubblication').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsParPubblication').val(newValueToChange);
+    } else {
+        $('#brandsParPubblication').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+function lessBrandParallelPublish(brandId){
+    var divToErase='#brandParallelPubblicationDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brandsParPubblication').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsParPubblication').val(newValueToChange);
+    } else {
+        $('#brandsParPubblication').val(newValueToChange + ',');
     }
     $(divToErase).empty();
 }

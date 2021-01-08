@@ -89,7 +89,8 @@
                                             <button type="button" class="btn btn-primary" name="uploadLogo"
                                                     id="uploadLogo">carica Logo
                                             </button>
-                                            <input id="logoFile" type="hidden" value="<?php echo (isset($marketplaceAccount->config['logoFile'])) ? $marketplaceAccount->config['logoFile'] : ''; ?>"/>
+                                            <input id="logoFile" type="hidden"
+                                                   value="<?php echo (isset($marketplaceAccount->config['logoFile'])) ? $marketplaceAccount->config['logoFile'] : ''; ?>"/>
                                             <div id="returnFileLogo"><?php echo (isset($marketplaceAccount->config['logoFile'])) ? '<img width="50" src="' . $marketplaceAccount->config['logoFile'] . '"/>' : ''; ?></div>
                                         </div>
                                         <div class="col-md-2">
@@ -244,18 +245,18 @@
 
                                             <div class="col-md-12">
                                                 <input type="text" id="brands" name="brands"
-                                                       value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'].',' : ''; ?>"/>
+                                                       value="<?php echo (isset($marketplaceAccount->config['brands'])) ? $marketplaceAccount->config['brands'] . ',' : ''; ?>"/>
                                             </div>
                                         </div>
 
-                                            <?php  $brandExists = explode(',',$marketplaceAccount->config['brands']);
-                                            foreach($brandExists as $brandExist ){
-                                                $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandExist]);
-                                               if($productBrands){
-                                                   echo '<div class="row" id="brandDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btn-'.$productBrands->id.'" onclick="lessBrand('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
-                                               }
+                                        <?php $brandExists = explode(',',$marketplaceAccount->config['brands']);
+                                        foreach ($brandExists as $brandExist) {
+                                            $productBrands = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $brandExist]);
+                                            if ($productBrands) {
+                                                echo '<div class="row" id="brandDiv-' . $productBrands->id . '"><div class="col-md-2">' . $productBrands->name . '</div><div class="col-md-2"> <button class="success" id="btn-' . $productBrands->id . '" onclick="lessBrand(' . $productBrands->id . ')" type="button"><span  class="fa fa-close"></span></button></div></div>';
                                             }
-                                            ?>
+                                        }
+                                        ?>
                                         <div id="appendBrandsPublishPar">
                                         </div>
                                     </div>
@@ -324,7 +325,8 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <input type="hidden" id="productStatus" id="productStatusId"
+                                                <input type="hidden" id="productStatusIdSelected"
+                                                       name="productStatusIdSelected"
                                                        value="<?php echo (isset($marketplaceAccount->config['productStatusId'])) ? $marketplaceAccount->config['productStatusId'] : ''; ?>"/>
                                                 <label for="productStatusId">Seleziona lo Stato Con Cui verranno
                                                     pubblicati i Prodotti
@@ -340,36 +342,88 @@
                                     </div>
                                     <div id="rawRuleParallel">
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="BrandIdParallel">Seleziona i Brand da escludere
-                                                    </label>
-                                                    <select id="BrandIdParallel"
-                                                            name="BrandIdParallel"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione dei Brand"
-                                                            data-init-plugin="selectize">
-                                                    </select>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="BrandIdParallel">Seleziona i Brand da escludere
+                                                            </label>
+                                                            <select id="BrandIdParallel"
+                                                                    name="BrandIdParallel"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione dei Brand"
+                                                                    data-init-plugin="selectize">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default">
+                                                            <input type="text" id="brandsPar" name="brandsPar"
+                                                                   value="<?php echo (isset($marketplaceAccount->config['brandParallel'])) ? $marketplaceAccount->config['brandParallel'] . ',' : ''; ?>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php $brandExists = explode(',',$marketplaceAccount->config['brandParallel']);
+                                                foreach ($brandExists as $brandExist) {
+                                                    $productBrands = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $brandExist]);
+                                                    if ($productBrands) {
+                                                        echo '<div class="row" id="brandParallelDiv-' . $productBrands->id . '"><div class="col-md-2">' . $productBrands->name . '</div><div class="col-md-2"> <button class="success" id="btnParallel-' . $productBrands->id . '" onclick="lessBrandParallel(' . $productBrands->id . ')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+                                                    }
+                                                }
+                                                ?>
+                                                <div id="appendBrandsPar">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group form-group-default">
-                                                    <input type="text" id="brandsPar" name="brandsPar"
-                                                           value="<?php echo (isset($marketplaceAccount->config['brandParallel'])) ? $marketplaceAccount->config['brandParallel'].',' : ''; ?>"/>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="BrandIdParallelPubblication">Seleziona i Brand da Pubblicare con Stato personalizzato
+                                                            </label>
+                                                            <select id="BrandIdParallelPubblication"
+                                                                    name="BrandIdParallelPubblication"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione dei Brand"
+                                                                    data-init-plugin="selectize">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="productStatusPublishId">Seleziona lo Stato
+                                                            </label>
+                                                            <select id="productStatusPublishId"
+                                                                    name="productStatusPublishId"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione Lo stato"
+                                                                    data-init-plugin="selectize">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group form-group-default">
+                                                            <input type="text" id="brandsParPubblication" name="brandsParPubblication"
+                                                                   value="<?php echo (isset($marketplaceAccount->config['brandParallelPubblication'])) ? $marketplaceAccount->config['brandParallelPubblication'] . ',' : ''; ?>"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php $brandExists = explode(',',$marketplaceAccount->config['brandParallelPubblication']);
+                                                foreach ($brandExists as $brandExist) {
+                                                    $br=explode('-',$brandExist);
+
+                                                    $productBrands = \Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id' => $br[0]]);
+                                                    $productStatus=\Monkey::app()->repoFactory->create('ProductStatus')->findOneBy(['id' => $br[1]]);
+                                                        echo '<div class="row" id="brandParallelPubblicationDiv-' . $productBrands->id .'-'.$productStatus->id. '"><div class="col-md-4">' . $productBrands->name . '-'.$productStatus->name.'</div><div class="col-md-6"> <button class="success" id="btnParallelPubblication-' . $productBrands->id .'-'.$productStatus->id. '" onclick="lessBrandParallelPublish(\'' . $productBrands->id .'-'.$productStatus->id. '\')" type="button"><span  class="fa fa-close"></span></button></div></div>';
+
+                                                }
+                                                ?>
+                                                <div id="appendBrandsParPubblication">
                                                 </div>
                                             </div>
-                                        </div>
-                                        <?php  $brandExists=explode(',',$marketplaceAccount->config['brandParallel']);
-                                        foreach($brandExists as $brandExist ){
-                                            $productBrands=\Monkey::app()->repoFactory->create('ProductBrand')->findOneBy(['id'=>$brandExist]);
-                                            if($productBrands){
-                                                echo '<div class="row" id="brandParallelDiv-'.$productBrands->id.'"><div class="col-md-2">'.$productBrands->name.'</div><div class="col-md-2"> <button class="success" id="btnParallel-'.$productBrands->id.'" onclick="lessBrandParallel('.$productBrands->id.')" type="button"><span  class="fa fa-close"></span></button></div></div>';
-                                            }
-                                        }
-                                        ?>
-                                        <div id="appendBrandsPar">
                                         </div>
                                     </div>
                                 </div>
