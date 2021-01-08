@@ -42,7 +42,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               php.status,
               php.prestaId,
               psm.`name` as productStatusMarketplace,     
-              phphmhs.refMarketplaceId,
+              phphmhs.refMarketplaceId as refMarketplaceId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
