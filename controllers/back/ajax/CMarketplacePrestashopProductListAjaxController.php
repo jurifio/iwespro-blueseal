@@ -84,6 +84,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
         /** @var CRepo $mhsRepo */
         $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
+        $productStatusMarketplaceRepo=\Monkey::app()->repoFactory->create('ProductStatusMarketplace');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CPrestashopHasProduct $php */
@@ -128,7 +129,12 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')';
             $row['pickySale'] = $php->product->isOnSale == 0 ? 'No' : 'Yes';
             $row['prestaId'] = $php->prestaId;
-            $row['productStatusMarketplaceId'] = $php->productStatusMarketplace->name;
+            $productStatusMarketplace=$productStatusMarketplaceRepo->findOneBy(['id'=>$php->productStatusMarketplaceId]);
+            if($productStatusMarketplace) {
+                $row['productStatusMarketplaceId'] = $productStatusMarketplace->name;
+            }else{
+                $row['productStatusMarketplaceId'] = '';
+            }
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
             $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
