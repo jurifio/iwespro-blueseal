@@ -347,12 +347,12 @@ $('#BrandIdParallel').change( function(){
 var paralPublish;
 var newparalPublish;
 $('#BrandIdParallelPubblication').change( function(){
-    paralPublish=$('#BrandIdParallelPubblication').val();
+    paralPublish=$('#brandsParPubblication').val();
 
     newparalPublish=paralPublish+this.value +'-'+$('#productStatusPublishId').val()+',';
-    $('#brandsPar').val(newparal);
+    $('#brandsParPubblication').val(newparalPublish);
     $('#appendBrandsParPubblication').append(`
-    <div id="brandParallelPubblicationAddDiv-`+$('#brandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallelPubblication :selected').text() + `-` + $('#productStatusPublishId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelPublishAdd-`+$('#brandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`" onclick="lessBrandParallelPublishAdd('`+$('#brandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`')" type="button"><span  class="fa fa-close"></span></button></div></div>`);
+    <div id="brandParallelPubblicationAddDiv-`+ $('#BrandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallelPubblication :selected').text() + `-` + $('#productStatusPublishId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelPublishAdd-`+$('#BrandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`" onclick="lessBrandParallelPublishAdd('`+$('#BrandIdParallelPubblication').val()+`-`+$('#productStatusPublishId').val()+`')" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
 
 
