@@ -104,7 +104,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
           /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
-                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>';
+                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br><hr>';
 
 
             }
