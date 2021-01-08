@@ -251,7 +251,7 @@ $('#brandId').change( function(){
     newValueBrand=valueBrand+this.value+',';
     $('#brands').val(newValueBrand);
     $('#appendBrandsPublishPar').append(`
-    <div class="row"><div class="col-md-12">`+$('#brandId :selected').text()+`</div></div>`);
+    <div id="brandAddDiv-`+$('#brandId').val()+`" class="row"><div class="col-md-12">`+$('#brandId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnAdd-`+$('#brandId').val()+`" onclick="lessBrandAdd(`+$('#brandId').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
 
 
@@ -271,7 +271,7 @@ $('#BrandIdParallel').change( function(){
     newparal=paral+this.value + ',';
     $('#brandsPar').val(newparal);
     $('#appendBrandsPar').append(`
-    <div class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div></div>`);
+   <div id="brandParallelAddDiv-`+$('#brandIdParallel').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelAdd-`+$('#BrandIdParallel').val()+`" onclick="lessBrandParallelAdd(`+$('#BrandIdParallel').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
 });
 
 
@@ -413,4 +413,103 @@ $(document).on('click','#checkedAll',function () {
     $('input:checkbox').not(this).prop('checked', this.checked);
 
 });
+
+
+
+function lessBrandAdd(brandId){
+    var divToErase='#brandAddDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brands').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brands').val(newValueToChange);
+    } else {
+        $('#brands').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+function lessBrand(brandId){
+    var divToErase='#brandDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brands').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brands').val(newValueToChange);
+    } else {
+        $('#brands').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+function lessBrandParallelAdd(brandId){
+    var divToErase='#brandParallelAddDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brandsPar').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    } else {
+        $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
+function lessBrandParallel(brandId){
+    var divToErase='#brandParallelDiv-'+brandId;
+    var valueToDelete=brandId;
+    var valueToChange=$('#brandsPar').val();
+    var strlen=valueToChange.length-1;
+    valueToChange=valueToChange.substr(0,strlen);
+    var newValueToChange=[];
+    newValueToChange=valueToChange.split(',');
+    for( var i = 0; i < newValueToChange.length; i++){
+
+        if ( newValueToChange[i] == valueToDelete) {
+
+            newValueToChange.splice(i, 1);
+        }
+
+    }
+    newValueToChange=newValueToChange.toString();
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    } else {
+        $('#brandsPar').val(newValueToChange + ',');
+    }
+    $(divToErase).empty();
+}
 

@@ -460,7 +460,11 @@ function lessBrandAdd(brandId){
 
     }
     newValueToChange=newValueToChange.toString();
-    $('#brands').val(newValueToChange+',');
+    if (newValueToChange == '') {
+        $('#brands').val(newValueToChange);
+    } else {
+        $('#brands').val(newValueToChange + ',');
+    }
     $(divToErase).empty();
 }
 function lessBrand(brandId){
@@ -480,7 +484,11 @@ function lessBrand(brandId){
 
     }
     newValueToChange=newValueToChange.toString();
-    $('#brands').val(newValueToChange+',');
+    if (newValueToChange == '') {
+        $('#brands').val(newValueToChange);
+    } else {
+        $('#brands').val(newValueToChange + ',');
+    }
     $(divToErase).empty();
 }
 function lessBrandParallelAdd(brandId){
@@ -500,7 +508,11 @@ function lessBrandParallelAdd(brandId){
 
     }
     newValueToChange=newValueToChange.toString();
-    $('#brandsPar').val(newValueToChange+',');
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    } else {
+        $('#brandsPar').val(newValueToChange + ',');
+    }
     $(divToErase).empty();
 }
 function lessBrandParallel(brandId){
@@ -520,7 +532,11 @@ function lessBrandParallel(brandId){
 
     }
     newValueToChange=newValueToChange.toString();
-    $('#brandsPar').val(newValueToChange+',');
+    if (newValueToChange == '') {
+        $('#brandsPar').val(newValueToChange);
+    } else {
+        $('#brandsPar').val(newValueToChange + ',');
+    }
     $(divToErase).empty();
 }
 
