@@ -18,7 +18,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="amazon_marketplace_product"
+                               data-datatable-name="Amazon_marketplace_product"
                                data-controller="AmazonMarketplaceProductListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
@@ -31,7 +31,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Codice prodotto
                                 </th>
-                                <th data-slug="marketplaceshopName"
+                                <th data-slug="marketplaceShopName"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
@@ -78,14 +78,14 @@
                                     data-default-order="desc">Titolo
                                 </th>
 
-                                <th data-slug="price"
+                                <th data-slug="marketplacePrice"
                                     data-required="true"
                                     data-visible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">pr.Pieno;
                                 </th>
-                                <th data-slug="salePrice"
+                                <th data-slug="marketplaceSalePrice"
                                     data-required="true"
                                     data-visible="false"
                                     data-searchable="true"

@@ -143,6 +143,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
             $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
             $mpas = $mpaRepo->findBy(['marketplaceId' => 3,'isActive' => 1]);
+            $tableSaldi='';
             if($mpas) {
                 foreach ($mpas as $mpa) {
                     if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
