@@ -46,7 +46,7 @@ class CEbayCloseProductJob extends ACronJob
                         $this->report('CEbayCloseProductJob','lavoro il prodotto ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId);
 
 
-                        if ($product->qty == 0) {
+                        if ($product->qty == 0 && $productInMarketplace->isPublished==1) {
 
 
                             $request = '<?xml version="1.0" encoding="utf-8"?>';
