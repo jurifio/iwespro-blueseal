@@ -31,7 +31,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Codice prodotto
                                 </th>
-                                <th data-slug="marketplaceshopName"
+                                <th data-slug="marketplaceShopName"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
