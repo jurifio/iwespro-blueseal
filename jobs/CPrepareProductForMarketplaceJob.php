@@ -60,7 +60,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                           if($phs->productStatusMarketplaceId==4){
                               $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
                               if($phphmhs){
-                                  $phphmhs->isPublished=2;
+                                  $phphmhs->isPublished=3;
                                   $phphmhs->update();
                                   $this->report('CPrepareProductForMarketplaceJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id);
                               }

@@ -176,6 +176,7 @@ class CPrestashopProduct extends APrestashopMarketplace
 
             $pHp->prestaId = (int)$xmlResponseProduct->children()->children()->id;
             $pHp->status = 1;
+            $php->productStatusMarketplaceId=3;
             $pHp->update();
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrestashopProduct','error','Update PrestashopHasProduct',$e);
@@ -187,6 +188,7 @@ class CPrestashopProduct extends APrestashopMarketplace
             $phphmhs->productVariantId = $pHp->productVariantId;
             $phphmhs->marketplaceHasShopId = $marketplaceHasShop->id;
             $phphmhs->price = $productPrice;
+            $phphmhs->isPublished=0;
             $phphmhs->smartInsert();
 
             return true;

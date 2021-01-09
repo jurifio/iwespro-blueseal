@@ -63,7 +63,7 @@ class CPrepareProductForMarketplaceAjaxController extends AAjaxController
                             if($phs->productStatusMarketplaceId==4){
                                 $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
                                 if($phphmhs){
-                                    $phphmhs->isPublished=2;
+                                    $phphmhs->isPublished=3;
                                     $phphmhs->update();
                                    \Monkey::app()->applicationLog('CPrepareProductForMarketplaceAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,'');
                                    return 'Report booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id;

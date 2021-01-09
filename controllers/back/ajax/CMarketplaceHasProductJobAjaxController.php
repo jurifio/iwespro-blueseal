@@ -155,7 +155,7 @@ class CMarketplaceHasProductJobAjaxController extends AAjaxController
             \Monkey::app()->applicationLog('CMarketplaceHasProductJobAjaxController','Report','End Work publishing','');
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CMarketplaceHasProductJobAjaxController','Error','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
-
+            return 'Error see applicationLog';
         }
         try {
             \Monkey::app()->applicationLog('CMarketplaceHasProductJobAjaxController','Report','startPublish','');
@@ -630,13 +630,14 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                 }
             }
             \Monkey::app()->applicationLog('CMarketplaceHasProductJobAjaxController','Report','End Work Publishing Eligible Products to marketplace','');
+
         } catch
         (\Throwable $e) {
             \Monkey::app()->applicationLog('CMarketplaceHasProductJobAjaxController','Error','ERROR Work Publishing Eligible Products to marketplace',$e->getMessage() . '-' . $e->getLine());
-
+              return 'Error see application log';
         }
 
-
+        return 'ok  Job Pubblicazione Eseguita con successo';
     }
 
 }

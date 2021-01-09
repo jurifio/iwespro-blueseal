@@ -62,7 +62,7 @@ class CPrestashopHasProductManage extends AAjaxController
         $products = new CObjectCollection();
         foreach ($this->data['products'] as $productCode) {
             $productIds = explode('-',$productCode);
-            $shopId=$marketplaceHasShopRepo->findOneBy(['prestashopId'=>$this->data['marketplaceHasShopId']])->shopId;
+            $shopId=$marketplaceHasShopRepo->findOneBy(['id'=>$this->data['marketplaceHasShopId'],'isActive'=>1])->shopId;
             $isProductShop=$shopHasProductRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopId'=>$shopId]);
             $isProductHasShopDestination=$phsdRepo->findOneBy(['productId'=>$productIds[0], 'productVariantId'=>$productIds[1],'shopIdDestination'=>$shopId]);
             if($isProductShop!=null) {
