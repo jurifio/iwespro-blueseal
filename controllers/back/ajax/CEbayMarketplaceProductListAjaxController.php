@@ -100,7 +100,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $php = $phpRepo->findOneBy($row);
             $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
-            $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId)?$php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId:'';
+            $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId) ?: '';
             $row['marketplaceshopName'] = $php->marketplaceHasShop->name;
             $row['marketplacePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
             $row['marketplaceSalePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
@@ -111,7 +111,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             }
             $row['titleModified'] = ($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1) ? 'si' : 'no';
             $row['isOnSale'] = ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) ? 'si' : 'no';
-            if ($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1 && $php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) {
+            if (($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1) && ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1)) {
                 $percSc = number_format(100 * ($php->prestashopHasProductHasMarketplaceHasShop->price - $php->prestashopHasProductHasMarketplaceHasShop->salePrice) / $php->prestashopHasProductHasMarketplaceHasShop->price,0);
                 $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->price,'2','.','') . ' € a ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->salePrice,'2','.','') . ' € ' .
                     $php->product->itemno
