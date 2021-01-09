@@ -100,7 +100,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $php = $phpRepo->findOneBy($row);
             $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
-            $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId) ?: '';
+           // $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId) ?: '';
             $row['marketplaceshopName'] = $php->marketplaceHasShop->name;
             $row['marketplacePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
             $row['marketplaceSalePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
