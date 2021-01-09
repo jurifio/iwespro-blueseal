@@ -49,11 +49,7 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Cpf
                                 </th>
-                                <th data-slug="shop"
-                                    data-visible="false"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Shop
-                                </th>
+
                                 <th data-slug="price"
                                     data-required="true"
                                     data-visible="false"
@@ -92,6 +88,11 @@
                                 <th data-slug="stock"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Stock
+                                </th>
+                                <th data-slug="shop"
+                                    data-visible="false"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Shop
                                 </th>
                             </tr>
                             </thead>
