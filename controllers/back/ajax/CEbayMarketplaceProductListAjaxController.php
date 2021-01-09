@@ -156,24 +156,25 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
             $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
             $mpas = $mapRepo->findBy(['marketplaceId' => 3,'isActive' => 1]);
-            $tableSaldi = '';
-            foreach ($mpas as $mpa) {
-                if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
-                    $tableSaldi = '<table><tr><td colspan="2">periodi saldi</td></tr><tr><td>dal</td><td>al </td></tr>';
-                    $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
-                    $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
-                    $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
-                    $dateEndPeriod2 = ($mpa->config['dateEndPeriod2'] != '') ? (new \DateTime($mpa->config['dateEndPeriod2']))->format('d-m-Y') : 'non definito';
-                    $dateStartPeriod3 = ($mpa->config['dateStartPeriod3'] != '') ? (new \DateTime($mpa->config['dateStartPeriod3']))->format('d-m-Y') : "non definto";
-                    $dateEndPeriod3 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod3']))->format('d-m-Y') : "non definito";
-                    $dateStartPeriod4 = ($mpa->config['dateStartPeriod4'] != '') ? (new \DateTime($mpa->config['dateStartPeriod4']))->format('d-m-Y') : 'non definito';
-                    $dateEndPeriod4 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod4']))->format('d-m-Y') : 'non definito';
-                    $tableSaldi .= '<tr><td>' . $dateStartPeriod1 . '</td><td>' . $dateEndPeriod1 . '</td></tr>';
-                    $tableSaldi .= '<tr><td>' . $dateStartPeriod2 . '</td><td>' . $dateEndPeriod2 . '</td></tr>';
-                    $tableSaldi .= '<tr><td>' . $dateStartPeriod3 . '</td><td>' . $dateEndPeriod3 . '</td></tr>';
-                    $tableSaldi .= '<tr><td>' . $dateStartPeriod4 . '</td><td>' . $dateEndPeriod4 . '</td></tr>';
-                    $tableSaldi .= '</table>';
-                    break;
+            if($mpas) {
+                foreach ($mpas as $mpa) {
+                    if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
+                        $tableSaldi = '<table><tr><td colspan="2">periodi saldi</td></tr><tr><td>dal</td><td>al </td></tr>';
+                        $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
+                        $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
+                        $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
+                        $dateEndPeriod2 = ($mpa->config['dateEndPeriod2'] != '') ? (new \DateTime($mpa->config['dateEndPeriod2']))->format('d-m-Y') : 'non definito';
+                        $dateStartPeriod3 = ($mpa->config['dateStartPeriod3'] != '') ? (new \DateTime($mpa->config['dateStartPeriod3']))->format('d-m-Y') : "non definto";
+                        $dateEndPeriod3 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod3']))->format('d-m-Y') : "non definito";
+                        $dateStartPeriod4 = ($mpa->config['dateStartPeriod4'] != '') ? (new \DateTime($mpa->config['dateStartPeriod4']))->format('d-m-Y') : 'non definito';
+                        $dateEndPeriod4 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod4']))->format('d-m-Y') : 'non definito';
+                        $tableSaldi .= '<tr><td>' . $dateStartPeriod1 . '</td><td>' . $dateEndPeriod1 . '</td></tr>';
+                        $tableSaldi .= '<tr><td>' . $dateStartPeriod2 . '</td><td>' . $dateEndPeriod2 . '</td></tr>';
+                        $tableSaldi .= '<tr><td>' . $dateStartPeriod3 . '</td><td>' . $dateEndPeriod3 . '</td></tr>';
+                        $tableSaldi .= '<tr><td>' . $dateStartPeriod4 . '</td><td>' . $dateEndPeriod4 . '</td></tr>';
+                        $tableSaldi .= '</table>';
+                        break;
+                    }
                 }
             }
             $row['tableSaldi']=$tableSaldi;

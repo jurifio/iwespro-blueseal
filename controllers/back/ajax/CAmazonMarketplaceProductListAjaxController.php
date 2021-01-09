@@ -34,14 +34,15 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               pps.price,
               pb.name  as `brand`, 
               p.externalId AS externalId,
-                   
-
-              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified,' | Aggiornamento: ',if(phphmhs.result=1, concat('Eseguito ',phphmhs.lastTimeOperation),concat('Fallito ',phphmhs.lastTimeOperation))  )) AS marketplaceAssociation,
+              phphmhs.price as marketplacePrice,
+              phphmhs.salePrice as marketplaceSalePrice,
+             concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
+              if(phphmhs.isOnSale=1,'si','no'),     
+             if(phphmhs.titleModified=1,'si','no'),     
               p.isOnSale AS pickySale,
               p.qty as totalQty,
-              PS.name as productStatus,     
-              group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified)) AS sale,
-              group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
+              PS.name as productStatus,   
+              if(phphmhs.isOnSale=1,phphmhs.salePrice,phphmhs.price) as activePrice,    
               php.status,
               php.prestaId,
               psm.`name` as productStatusMarketplaceId,     
@@ -51,14 +52,16 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
                concat(shop.id, '-', shop.name)                                                                     AS shop,
                concat(pse.name, ' ', pse.year)                                                               AS season,
-               psiz.name                                                                                             AS stock
+               psiz.name                                                                                             AS stock,
+               mhs.name as marketplaceShopName    
             FROM PrestashopHasProduct php
                 join ProductStatusMarketplace psm on php.productStatusMarketplaceId=psm.id
             JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
+             join ProductVariant pv on php.productVariantId=pv.id   
             left JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
-            JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId 
+             JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId and php.marketplaceHasShopId=phphmhs.marketplaceHasShopId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
             LEFT JOIN Marketplace m ON mhs.marketplaceId = m.id
@@ -73,12 +76,12 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and m.id=4
+            where p.qty>0 and m.id=4 and phphmhs.isPublished=1
             GROUP BY phphmhs.productId, phphmhs.productVariantId,phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
         ";
 
 
-        $datatable = new CDataTables($sql, ['productId', 'productVariantId'], $_GET, true);
+        $datatable = new CDataTables($sql,['productId','productVariantId'],$_GET,true);
 
         $datatable->doAllTheThings();
 
@@ -87,31 +90,41 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
 
         /** @var CRepo $mhsRepo */
         $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
-        $productStatusMarketplaceRepo=\Monkey::app()->repoFactory->create('ProductStatusMarketplace');
+        $mpaRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
+        $productStatusMarketplaceRepo = \Monkey::app()->repoFactory->create('ProductStatusMarketplace');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CPrestashopHasProduct $php */
             $php = $phpRepo->findOneBy($row);
-
+            $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
-
-            $associations = '';
-            $onSale = '';
-            $salePrice = '';
-            $refMarketplaceId='';
-
-
-
-
-          /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
-            foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
-                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>'. ' |<br> Aggiornamento: ' . ($pHPHmHs->result == 1 ? 'Eseguito '.$pHPHmHs->lastTimeOperation : 'Fallito '.$pHPHmHs->lastTimeOperation) . '<br><hr>';
-
-
+            $row['refMarketplaceId'] = $php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId;
+            $row['marketplaceshopName'] = $php->marketplaceHasShop->name;
+            $row['price'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
+            $row['salePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
+            if ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) {
+                $row['activePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
+            } else {
+                $row['activePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
             }
-            $row['marketplaceAssociation'] = $associations;
-
-
+            $row['titleModified'] = ($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1) ? 'si' : 'no';
+            $row['isOnSale'] = ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) ? 'si' : 'no';
+            if ($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1 && $php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) {
+                $percSc = number_format(100 * ($php->prestashopHasProductHasMarketplaceHasShop->price - $php->prestashopHasProductHasMarketplaceHasShop->salePrice) / $php->prestashopHasProductHasMarketplaceHasShop->price,0);
+                $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->price,'2','.','') . ' € a ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->salePrice,'2','.','') . ' € ' .
+                    $php->product->itemno
+                    . ' ' .
+                    $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+            } else {
+                $name = $php->product->productCategoryTranslation->findOneByKey('langId',1)->name
+                    . ' ' .
+                    $php->product->productBrand->name
+                    . ' ' .
+                    $php->product->itemno
+                    . ' ' .
+                    $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+            }
+            $row['title'] = $name;
 
 
             switch ($php->status) {
@@ -125,24 +138,47 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                     $row['status'] = '';
                     break;
             }
-            $row['brand']=$php->product->productBrand->name;
-            $row['productStatus']=$php->product->productStatus->name;
-            $isOnSale=$php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
-            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' .$isOnSale ;
+            $row['brand'] = $php->product->productBrand->name;
+            $row['productStatus'] = $php->product->productStatus->name;
+            $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
+            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
             $row['prestaId'] = $php->prestaId;
-            $productStatusMarketplace=$productStatusMarketplaceRepo->findOneBy(['id'=>$php->productStatusMarketplaceId]);
-            if($productStatusMarketplace) {
+            $productStatusMarketplace = $productStatusMarketplaceRepo->findOneBy(['id' => $php->productStatusMarketplaceId]);
+            if ($productStatusMarketplace) {
                 $row['productStatusMarketplaceId'] = $productStatusMarketplace->name;
-            }else{
+            } else {
                 $row['productStatusMarketplaceId'] = '';
             }
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
-            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
-            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
-            $row['totalQty'] = '<span class="small">' .$php->product->qty.'</span>';
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->printId().'"></table>';
-            $row['externalId']='<span class="small">' . $php->product->itemno .  '</span>';
-
+            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
+            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
+            $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
+            $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
+            $tableSaldi = '';
+            $mpas = $mapRepo->findBy(['marketplaceId' => 4,'isActive' => 1]);
+           if($mpas) {
+               foreach ($mpas as $mpa) {
+                   if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
+                       $tableSaldi = '<table><tr><td colspan="2">periodi saldi</td></tr><tr><td>dal</td><td>al </td></tr>';
+                       $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
+                       $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
+                       $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
+                       $dateEndPeriod2 = ($mpa->config['dateEndPeriod2'] != '') ? (new \DateTime($mpa->config['dateEndPeriod2']))->format('d-m-Y') : 'non definito';
+                       $dateStartPeriod3 = ($mpa->config['dateStartPeriod3'] != '') ? (new \DateTime($mpa->config['dateStartPeriod3']))->format('d-m-Y') : "non definto";
+                       $dateEndPeriod3 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod3']))->format('d-m-Y') : "non definito";
+                       $dateStartPeriod4 = ($mpa->config['dateStartPeriod4'] != '') ? (new \DateTime($mpa->config['dateStartPeriod4']))->format('d-m-Y') : 'non definito';
+                       $dateEndPeriod4 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod4']))->format('d-m-Y') : 'non definito';
+                       $tableSaldi .= '<tr><td>' . $dateStartPeriod1 . '</td><td>' . $dateEndPeriod1 . '</td></tr>';
+                       $tableSaldi .= '<tr><td>' . $dateStartPeriod2 . '</td><td>' . $dateEndPeriod2 . '</td></tr>';
+                       $tableSaldi .= '<tr><td>' . $dateStartPeriod3 . '</td><td>' . $dateEndPeriod3 . '</td></tr>';
+                       $tableSaldi .= '<tr><td>' . $dateStartPeriod4 . '</td><td>' . $dateEndPeriod4 . '</td></tr>';
+                       $tableSaldi .= '</table>';
+                       break;
+                   }
+               }
+           }
+            $row['tableSaldi']=$tableSaldi;
 
             /** @var CMarketplaceHasShop $mhsCron */
             $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
@@ -155,7 +191,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                 $row['cronjobOperation'] = 'Type operation: ' . $php->modifyType . ' | Operation amount: ' . $php->variantValue;
             }
 
-            $datatable->setResponseDataSetRow($key, $row);
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
         return $datatable->responseOut();
