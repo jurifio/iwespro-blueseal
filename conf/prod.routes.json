@@ -4117,6 +4117,32 @@
                 "DELETE",
                 "PUT"
             ]
+        },{
+            "pattern": "/blueseal/prodotti/marketplace/ebay/prodotti-lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CEbayMarketplaceProductListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },{
+            "pattern": "/blueseal/prodotti/marketplace/amazon/prodotti-lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CAmazonMarketplaceProductListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
