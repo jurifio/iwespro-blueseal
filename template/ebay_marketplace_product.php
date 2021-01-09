@@ -78,14 +78,14 @@
                                     data-default-order="desc">Titolo
                                 </th>
 
-                                <th data-slug="price"
+                                <th data-slug="marketplacePrice"
                                     data-required="true"
                                     data-visible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">pr.Pieno;
                                 </th>
-                                <th data-slug="salePrice"
+                                <th data-slug="marketplaceSalePrice"
                                     data-required="true"
                                     data-visible="false"
                                     data-searchable="true"

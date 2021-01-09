@@ -46,6 +46,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               if(phphmhs.isOnSale=1,phphmhs.salePrice,phphmhs.price) as activePrice,    
               php.status,
               php.prestaId,
+              '' as tableSaldi,     
               psm.`name` as productStatusMarketplaceId,     
               phphmhs.refMarketplaceId as refMarketplaceId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
@@ -101,8 +102,8 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
             $row['refMarketplaceId'] = $php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId;
             $row['marketplaceshopName'] = $php->marketplaceHasShop->name;
-            $row['price'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
-            $row['salePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
+            $row['marketplacePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
+            $row['marketplaceSalePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
             if ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) {
                 $row['activePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
             } else {
