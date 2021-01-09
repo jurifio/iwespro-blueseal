@@ -105,7 +105,6 @@ class CMarketplaceHasProductJob extends ACronJob
                                     $pshsd->productStatusMarkeplaceId=2;
                                     $pshsd->update();
                                 } else {
-
                                     $pshsdInsert = $phsRepo->getEmptyEntity();
                                     $pshsdInsert->productId = $product['productId'];
                                     $pshsdInsert->productVariantId = $product['productVariantId'];
@@ -135,7 +134,7 @@ class CMarketplaceHasProductJob extends ACronJob
                                         }
                                     }
                                     $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
-                                    $pshsd->status = 0;
+                                    $pshsd->status = 2;
                                     $pshsd->lastUpdate = '2011-01-01 00:00:00';
                                     $pshsd->productStatusMarkeplaceId=2;
                                     $pshsdInsert->insert();

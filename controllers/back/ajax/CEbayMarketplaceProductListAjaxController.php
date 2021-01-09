@@ -34,14 +34,13 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               pps.price,
               pb.name  as `brand`, 
               p.externalId AS externalId,
-                   
-
-              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified,' | Aggiornamento: ',if(phphmhs.result=1, concat('Eseguito ',phphmhs.lastTimeOperation),concat('Fallito ',phphmhs.lastTimeOperation))  )) AS marketplaceAssociation,
+              phphmhs.price as marketplacePrice,
+              phphmhs.salePrice as marketplaceSalePrice,
+              if(phphmhs.isOnSale=1,'si','no'),     
+             if(phphmhs.titleModified=1,'si','no'),     
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,     
-              group_concat(concat(s.name, ' | ', m.name, ' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified)) AS sale,
-              group_concat(concat(s.name, ' | ', m.name, ' | Sale price: ', phphmhs.salePrice)) AS salePrice,
               php.status,
               php.prestaId,
               psm.`name` as productStatusMarketplaceId,     
@@ -58,7 +57,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             left JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
-             JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId 
+             JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId and php.marketplaceHasShopId=phphmhs=marketplaceHasShopId
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
             LEFT JOIN Marketplace m ON mhs.marketplaceId = m.id
@@ -73,7 +72,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and m.id=3
+            where p.qty>0 and m.id=3 and phphmhs is not null 
             GROUP BY phphmhs.productId, phphmhs.productVariantId,phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
         ";
 
