@@ -39,7 +39,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
              concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
               if(phphmhs.isOnSale=1,'si','no'),     
              if(phphmhs.titleModified=1,'si','no'),     
-              p.isOnSale AS pickySale,
+              phphmhs.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,   
                concat(p.itemno, ' # ', pv.name)                                                              AS title,     
