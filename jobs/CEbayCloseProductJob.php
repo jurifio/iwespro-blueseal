@@ -108,10 +108,7 @@ class CEbayCloseProductJob extends ACronJob
                                 $response = curl_exec($connection);
                                 $xmlResult = new \SimpleXMLElement($response);
                                  if($xmlResult->Ack=='Success') {
-                                     $productInMarketplace->isPublished = 0;
-                                     $productInMarketplace->result=1;
-                                     $productInMarketplace->update();
-                                     $this->report('CEbayCloseProductJob','Report Close for quantity 0 ',$response);
+
                                      $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
                                      if ($phs) {
                                          $phs->productStatusMarketplaceId = 5;
@@ -119,11 +116,14 @@ class CEbayCloseProductJob extends ACronJob
                                          $phs->update();
                                          $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
                                      }
+                                     $productInMarketplace->delete();
+                                     $this->report('CEbayCloseProductJob','Report Close for quantity 0 ',$response);
                                      sleep(2);
                                  }else{
+                                     $this->report('CEbayCloseProductJob','Error Api Call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId.' '. $response);
                                      $productInMarketplace->result=0;
                                      $productInMarketplace->update();
-                                     $this->report('CEbayCloseProductJob','Error Api Call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId.' '. $response);
+
                                      sleep(2);
                                  }
                             } catch (\Throwable $e) {
@@ -197,9 +197,7 @@ class CEbayCloseProductJob extends ACronJob
                             $response = curl_exec($connection);
                             $xmlResult = new \SimpleXMLElement($response);
                             if($xmlResult->Ack=='Success') {
-                                $productInMarketplace->isPublished = 0;
-                                $productInMarketplace->result=1;
-                                $productInMarketplace->update();
+
                                 $this->report('CEbayCloseProductJob','Report Close for Admin Request ',$response);
                                 $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
                                 if ($phs) {
@@ -208,6 +206,7 @@ class CEbayCloseProductJob extends ACronJob
                                     $phs->update();
                                     $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
                                 }
+                                $productInMarketplace->delete();
                                 sleep(2);
                             }else{
                                 $productInMarketplace->result=0;

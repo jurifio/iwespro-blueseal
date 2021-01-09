@@ -31,6 +31,18 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Codice prodotto
                                 </th>
+                                <th data-slug="marketplaceshopName"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Marketplace
+                                </th>
+                                <th data-slug="refMarketplaceId"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Id Marketplace
+                                </th>
                                 <th data-slug="dummy"
                                     data-required="true"
                                     data-searchable="true"
@@ -43,11 +55,27 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">brand
                                 </th>
+                                <th data-slug="stock"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Stock
+                                </th>
+                                <th data-slug="cpf"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">cpd
+                                </th>
                                 <th data-slug="externalId"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Cpf
+                                    data-default-order="desc">ext Id
+                                </th>
+                                <th data-slug="title"
+                                    data-required="true"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Titolo
                                 </th>
 
                                 <th data-slug="price"
@@ -55,26 +83,28 @@
                                     data-visible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Prezzi Shop<br>pr.Pieno(pr.Saldo)-stato Saldo
+                                    data-default-order="desc">pr.Pieno;
                                 </th>
-                                <th data-slug="marketplaceAssociation"
+                                <th data-slug="salePrice"
                                     data-required="true"
+                                    data-visible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Associazioni<br>Marketplace
+                                    data-default-order="desc">pr.in Saldo;
                                 </th>
-                                <th data-slug="status"
+                                <th data-slug="isOnSale"
                                     data-required="true"
+                                    data-visible="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato Pubblicazione<br>Marketplace
+                                    data-default-order="desc">Saldo Attivi;
                                 </th>
-
-                                <th data-slug="productStatusMarketplaceId"
+                                <th data-slug="activePrice"
                                     data-required="true"
+                                    data-visible="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Origine di<br>Pubblicazione
+                                    data-default-order="desc">Prezzo Attivo;
                                 </th>
 
                                 <th data-slug="season"
@@ -85,10 +115,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">quantità Totali
                                 </th>
-                                <th data-slug="stock"
+                                <th data-slug="tableSaldi"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">Stock
+                                    data-orderable="true" class="center">Periodo Saldi
                                 </th>
+
                                 <th data-slug="shop"
                                     data-visible="false"
                                     data-searchable="true"
