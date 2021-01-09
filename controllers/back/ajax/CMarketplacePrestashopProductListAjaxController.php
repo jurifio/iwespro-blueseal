@@ -120,9 +120,6 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                 case 2:
                     $row['status'] = CPrestashopHasProduct::TOUPDATE;
                     break;
-                case 0:
-                    $row['status'] = CPrestashopHasProduct::TOINSERT;
-                    break;
                 default:
                     $row['status'] = '';
                     break;

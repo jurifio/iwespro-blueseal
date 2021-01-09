@@ -104,7 +104,7 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<WarningLevel>High</WarningLevel>';
                 //intestazione prodotto
                 $xml .= '<Item>';
-                $xml .= '<ItemID>' . $good->refMarketplaceId . '</ItemID>';
+                $xml .= '<AutoPay>false</AutoPay>';
                 $xml .= '<Country>IT</Country>';
                 $xml .= '<Currency>EUR</Currency>';
                 $xml .= '<PostalCode>62012</PostalCode>';
@@ -113,7 +113,6 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<BestOfferEnabled>False</BestOfferEnabled>';
                 $xml .= '</BestOfferDetails>';
                 $xml .= '<PrimaryCategory>';
-
                 $xml .= '<CategoryID>' . $category->marketplaceAccountCategoryId . '</CategoryID>';
                 $xml .= '</PrimaryCategory>';
                 $xml .= '<HitCounter>RetroStyle</HitCounter>';
@@ -975,17 +974,26 @@ footer {
                     sleep(1);
 
                     $reponseNewProduct = new \SimpleXMLElement($response);
-                    $this->report('CEbayNewAddProductJob','Report ',$xml);
-                    $refMarketplaceId = $reponseNewProduct->ItemID;
-                    $today = new \DateTime();
-                    $now = $today->format('Y-m-d H:i:s');
-                    sleep(1);
-                    $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
+                    if($responseNewProduct->Ack=='Success') {
+                        $this->report('CEbayNewAddProductJob','Report ',$xml);
+                        $refMarketplaceId = $reponseNewProduct->ItemID;
+                        $today = new \DateTime();
+                        $now = $today->format('Y-m-d H:i:s');
+                        sleep(1);
+                        $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
 
-                        $good->refMarketplaceId=$refMarketplaceId;
+                        $good->refMarketplaceId = $refMarketplaceId;
                         $good->lastUpdate = $product->lastUpdate;
+                        $good->result = 1;
+                        $good->isPublished=1;
                         $good->update();
-                    $this->report('CEbayNewAddProductJob','Report ' . $refMarketplaceId, $xml);
+                        $this->report('CEbayNewAddProductJob','Report ' . $refMarketplaceId,$xml);
+                    }else{
+
+                        $good->result = 0;
+                        $good->update();
+                        $this->report('CEbayNewAddProductJob','Error api Call ' .$good->productId. '-'.$good->productVariantId,$xml);
+                    }
                 } catch (\Throwable $e) {
                     $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 

@@ -1011,14 +1011,20 @@ footer {
                     $reponseNewProduct = new \SimpleXMLElement($response);
 
                     $id_product_ref = $reponseNewProduct->ItemID;
-
-
-                    sleep(1);
-                    $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
+                    if($responseNewProduct->Ack=='Success') {
 
 
                         $good->lastUpdate = $product->lastUpdate;
+                        $good->result=1;
                         $good->update();
+                        $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
+                        sleep(1);
+                    }else{
+                        $good->result=0;
+                        $good->update();
+                        $this->report('CEbayReviseProductJob','Error api call  Revise ' . $good->refMarketplaceId,$xml);
+                        sleep(1);
+                    }
 
                 } catch (\Throwable $e) {
                     $this->report('CEbayReviseProductJob','Error',$e->getLine() . '-' . $e->getMessage());

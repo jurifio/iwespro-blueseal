@@ -48,8 +48,7 @@ class CEbayCloseProductJob extends ACronJob
 
                         if ($product->qty == 0) {
 
-                            $productInMarketplace->isPublished = 0;
-                            $productInMarketplace->update();
+
                             $request = '<?xml version="1.0" encoding="utf-8"?>';
                             $request .= '<EndFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
                             $request .= '<RequesterCredentials>';
@@ -107,14 +106,26 @@ class CEbayCloseProductJob extends ACronJob
 
 // Send the Request
                                 $response = curl_exec($connection);
-                                $this->report('CEbayCloseProductJob','Report Close for quantity 0 ',$response);
-                                $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
-                                if ($phs) {
-                                    $phs->productStatusMarketplaceId = 5;
-                                    $phs->update();
-                                    $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
-                                }
-                                sleep(2);
+                                $xmlResult = new \SimpleXMLElement($response);
+                                 if($xmlResult->Ack=='Success') {
+                                     $productInMarketplace->isPublished = 0;
+                                     $productInMarketplace->result=1;
+                                     $productInMarketplace->update();
+                                     $this->report('CEbayCloseProductJob','Report Close for quantity 0 ',$response);
+                                     $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
+                                     if ($phs) {
+                                         $phs->productStatusMarketplaceId = 5;
+                                         $phs->status=0;
+                                         $phs->update();
+                                         $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
+                                     }
+                                     sleep(2);
+                                 }else{
+                                     $productInMarketplace->result=0;
+                                     $productInMarketplace->update();
+                                     $this->report('CEbayCloseProductJob','Error Api Call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId.' '. $response);
+                                     sleep(2);
+                                 }
                             } catch (\Throwable $e) {
                                 $this->report('CEbayCloseProductJob','error call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
                             }
@@ -126,8 +137,7 @@ class CEbayCloseProductJob extends ACronJob
                         }
                     } else {
 
-                        $productInMarketplace->isPublished = 0;
-                        $productInMarketplace->update();
+
                         $request = '<?xml version="1.0" encoding="utf-8"?>';
                         $request .= '<EndFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
                         $request .= '<RequesterCredentials>';
@@ -185,14 +195,26 @@ class CEbayCloseProductJob extends ACronJob
 
 // Send the Request
                             $response = curl_exec($connection);
-                            $this->report('CEbayCloseProductJob','Report Close from Request Admin',$response);
-                            $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
-                            if ($phs) {
-                                $phs->productStatusMarketplaceId = 5;
-                                $phs->update();
-                                $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
+                            $xmlResult = new \SimpleXMLElement($response);
+                            if($xmlResult->Ack=='Success') {
+                                $productInMarketplace->isPublished = 0;
+                                $productInMarketplace->result=1;
+                                $productInMarketplace->update();
+                                $this->report('CEbayCloseProductJob','Report Close for Admin Request ',$response);
+                                $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
+                                if ($phs) {
+                                    $phs->productStatusMarketplaceId = 5;
+                                    $phs->status=0;
+                                    $phs->update();
+                                    $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
+                                }
+                                sleep(2);
+                            }else{
+                                $productInMarketplace->result=0;
+                                $productInMarketplace->update();
+                                $this->report('CEbayCloseProductJob','Error Api Call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId.' '. $response);
+                                sleep(2);
                             }
-                            sleep(2);
                         } catch (\Throwable $e) {
                             $this->report('CEbayCloseProductJob','error call','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
                         }
