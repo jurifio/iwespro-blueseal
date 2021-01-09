@@ -48,7 +48,8 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               php.prestaId,
               '' as tableSaldi,     
               psm.`name` as productStatusMarketplaceId,     
-              phphmhs.refMarketplaceId as refMarketplaceId,
+              phphmhs.refMarketplaceId as refMarketplaceId,      
+              phphmhs.marketplaceHasShopId as marketplaceHasShopId,     
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
@@ -97,11 +98,11 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CPrestashopHasProduct $php */
-            $php = $phpRepo->findOneBy($row);
+            $php = $phpRepo->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId'],'marketplaceHasShopid'=>$row['marketplaceHasShopId']]);
             $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
            // $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId) ?: '';
-          //  $row['marketplaceshopName'] = $php->marketplaceHasShop->name;
+            $row['marketplaceShopName'] = $php->marketplaceHasShop->name;
             $row['marketplacePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
             $row['marketplaceSalePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
             if ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) {
