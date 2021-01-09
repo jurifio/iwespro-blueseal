@@ -90,7 +90,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
 
         /** @var CPrestashopHasProductRepo $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
-        /** @var CRepo $phpms */
+        /** @var CRepo $phpmsRepo */
         $phpmsRepo=\Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
 
         /** @var CRepo $mhsRepo */
