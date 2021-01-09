@@ -142,9 +142,9 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             }
             $row['brand'] = $php->product->productBrand->name;
             $row['productStatus'] = $php->product->productStatus->name;
-            $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
+
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
-            $row['prestaId'] = $php->prestaId;
+
             $productStatusMarketplace = $productStatusMarketplaceRepo->findOneBy(['id' => $php->productStatusMarketplaceId]);
             if ($productStatusMarketplace) {
                 $row['productStatusMarketplaceId'] = $productStatusMarketplace->name;
@@ -157,7 +157,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
             $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
             $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
-            $mpas = $mapRepo->findBy(['marketplaceId' => 3,'isActive' => 1]);
+            $mpas = $mpaRepo->findBy(['marketplaceId' => 3,'isActive' => 1]);
             if($mpas) {
                 foreach ($mpas as $mpa) {
                     if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
