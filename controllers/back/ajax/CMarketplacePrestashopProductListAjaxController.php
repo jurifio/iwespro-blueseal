@@ -36,7 +36,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               p.externalId AS externalId,
                    
 
-              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified,' | Aggiornamento: ',if(phphmhs.result=1, concat('Eseguito ',phphmhs.lastOperation),concat('Fallito ',phphmhs.lastOperation))  )) AS marketplaceAssociation,
+              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified,' | Aggiornamento: ',if(phphmhs.result=1, concat('Eseguito ',phphmhs.lastTimeOperation),concat('Fallito ',phphmhs.lastTimeOperation))  )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,     
@@ -105,7 +105,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
           /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
-                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>'. ' |<br> Aggiornamento: ' . ($pHPHmHs->result == 1 ? 'Eseguito '.$pHPHmHs->lastOperation : 'Fallito '.$pHPHmHs->lastOperation) . '<br><hr>';
+                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>'. ' |<br> Aggiornamento: ' . ($pHPHmHs->result == 1 ? 'Eseguito '.$pHPHmHs->lastTimeOperation : 'Fallito '.$pHPHmHs->lastTimeOperation) . '<br><hr>';
 
 
             }
