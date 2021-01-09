@@ -72,7 +72,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and m.id=3 and phphmhs is not null 
+            where p.qty>0 and m.id=3 
             GROUP BY phphmhs.productId, phphmhs.productVariantId,phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
         ";
 
