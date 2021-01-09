@@ -48,6 +48,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               psm.`name` as productStatusMarketplaceId,     
               phphmhs.refMarketplaceId as refMarketplaceId,
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
+           concat(p.itemno, ' # ', pv.name)                                                              AS title,    
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
                concat(shop.id, '-', shop.name)                                                                     AS shop,

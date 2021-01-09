@@ -42,6 +42,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,   
+               concat(p.itemno, ' # ', pv.name)                                                              AS title,     
               if(phphmhs.isOnSale=1,phphmhs.salePrice,phphmhs.price) as activePrice,    
               php.status,
               php.prestaId,
