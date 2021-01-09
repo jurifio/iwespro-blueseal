@@ -204,6 +204,31 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Emulatori Jobs">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-flag"
+                data-permission="/admin/product/edit"
+                data-event="bs.marketplace.prepare.product"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Prepara prodotti per marketplace"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-flag-checkered"
+                data-permission="/admin/product/edit"
+                data-event="bs.marketplaceaccountrule.publish.product"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Pubblica prodotti per Account asssociato a Marketplace"
+                data-placement="bottom"
+                data-toggle="modal"
+        ></bs-toolbar-button>
+
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>

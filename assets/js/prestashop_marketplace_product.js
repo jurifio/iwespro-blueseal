@@ -448,6 +448,78 @@
             });
         });
     });
+    $(document).on('bs.marketplace.prepare.product', function () {
+
+
+        products='';
+
+
+        let bsModal = new $.bsModal('Selezione Prodotti per Shop associato al Marketplace ', {
+            body: `Emulatore Job popolamento tabella Prodotti per Marketplace `
+        });
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            bsModal.writeBody('<img src="/assets/img/ajax-loader.gif" />');
+
+            const data = {
+                products: products,
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/PrepareProductForMarketplaceAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody(res);
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
+    $(document).on('bs.marketplaceaccountrule.publish.product', function () {
+
+
+        products='';
+
+
+        let bsModal = new $.bsModal('Pubblicazione prodotti in base a regole Marketplace ', {
+            body: `Emulatore Job popolamento tabella Prodotti per MarketplaceAccount  e gestione coda di pubblicazione e aggiornamento`
+        });
+
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            bsModal.writeBody('<img src="/assets/img/ajax-loader.gif" />');
+
+            const data = {
+                products: products,
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/MarketplaceHasProductJobAjaxController',
+                data: data
+            }).done(function (res) {
+                bsModal.writeBody(res);
+            }).fail(function (res) {
+                bsModal.writeBody(res);
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+                    bsModal.hide();
+                    $.refreshDataTable();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    });
     $(document).on('bs.add.presta.product.all', function () {
 
 
