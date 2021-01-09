@@ -98,7 +98,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CPrestashopHasProduct $php */
-            $php = $phpRepo->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId'],'marketplaceHasShopid'=>$row['marketplaceHasShopId']]);
+            $php = $phpRepo->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId'],'marketplaceHasShopId'=>$row['marketplaceHasShopId']]);
             $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
            // $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId) ?: '';
