@@ -88,15 +88,12 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings();
 
-        /** @var CPrestashopHasProductRepo $phpRepo */
-        $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
-        /** @var CRepo $phpmsRepo */
+
         $phpmsRepo=\Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
 
         /** @var CRepo $mhsRepo */
         $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
         $mpaRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
-        $productStatusMarketplaceRepo = \Monkey::app()->repoFactory->create('ProductStatusMarketplace');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CPrestashopHasProductHasMarketplaceHasShop $php */
@@ -116,7 +113,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['isOnSale'] = ($php->isOnSale == 1) ? 'si' : 'no';
             if (($php->titleModified == 1) && ($php->isOnSale == 1)) {
                 $percSc = number_format(100 * ($php->price - $php->salePrice) / $php->price,0);
-                $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->price,'2','.','') . ' € a ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->salePrice,'2','.','') . ' € ' .
+                $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->price,'2','.','') . ' € a ' . number_format($php->salePrice,'2','.','') . ' € ' .
                     $php->product->itemno
                     . ' ' .
                     $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
