@@ -57,18 +57,18 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock,
                mhs.name as marketplaceShopName    
-            FROM PrestashopHasProduct php
-                join ProductStatusMarketplace psm on php.productStatusMarketplaceId=psm.id
-            JOIN ProductPublicSku pps ON pps.productId = php.productId AND pps.productVariantId = php.productVariantId
-             join ProductVariant pv on php.productVariantId=pv.id   
-            left JOIN Product p ON php.productId = p.id AND php.productVariantId = p.productVariantId    
+            FROM PrestashopHasProductHasMarketplaceHasShop phphmhs join PrestashopHasProduct php ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId and php.marketplaceHasShopId=phphmhs.marketplaceHasShopId
+              left  join ProductStatusMarketplace psm on php.productStatusMarketplaceId=psm.id
+            JOIN ProductPublicSku pps ON pps.productId = phphmhs.productId AND pps.productVariantId = phphmhs.productVariantId
+             join ProductVariant pv on phphmhs.productVariantId=pv.id   
+            left JOIN Product p ON phphmhs.productId = p.id AND phphmhs.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
-             JOIN PrestashopHasProductHasMarketplaceHasShop phphmhs ON php.productId = phphmhs.productId AND php.productVariantId = phphmhs.productVariantId and php.marketplaceHasShopId=phphmhs.marketplaceHasShopId
+    
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
             LEFT JOIN Marketplace m ON mhs.marketplaceId = m.id
-            LEFT JOIN MarketplaceHasShop mhs2 ON php.marketplaceHasShopId = mhs2.id
+            LEFT JOIN MarketplaceHasShop mhs2 ON phphmhs.marketplaceHasShopId = mhs2.id
             LEFT JOIN Shop s2 ON mhs2.shopId = s2.id
             LEFT JOIN Marketplace m2 ON mhs2.marketplaceId = m2.id
             JOIN ShopHasProduct sp
@@ -84,12 +84,14 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
         ";
 
 
-        $datatable = new CDataTables($sql,['productId','productVariantId'],$_GET,true);
+        $datatable = new CDataTables($sql,['productId','productVariantId','marketplaceHasShopId'],$_GET,true);
 
         $datatable->doAllTheThings();
 
         /** @var CPrestashopHasProductRepo $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
+        /** @var CRepo $phpms */
+        $phpmsRepo=\Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
 
         /** @var CRepo $mhsRepo */
         $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
@@ -97,24 +99,24 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
         $productStatusMarketplaceRepo = \Monkey::app()->repoFactory->create('ProductStatusMarketplace');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
-            /** @var CPrestashopHasProduct $php */
-            $php = $phpRepo->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId'],'marketplaceHasShopId'=>$row['marketplaceHasShopId']]);
+            /** @var CPrestashopHasProductHasMarketplaceHasShop $php */
+            $php = $phpmsRepo->findOneBy($row);
             $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
            // $row['refMarketplaceId'] = ($php->prestashopHasProductHasMarketplaceHasShop->refMarketplaceId) ?: '';
             $row['marketplaceShopName'] = $php->marketplaceHasShop->name;
-            $row['marketplacePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
-            $row['marketplaceSalePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
-            if ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) {
-                $row['activePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->salePrice;
+            $row['marketplacePrice'] = $php->price;
+            $row['marketplaceSalePrice'] = $php->salePrice;
+            if ($php->isOnSale == 1) {
+                $row['activePrice'] = $php->salePrice;
             } else {
-                $row['activePrice'] = $php->prestashopHasProductHasMarketplaceHasShop->price;
+                $row['activePrice'] = $php->price;
             }
-            $row['titleModified'] = ($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1) ? 'si' : 'no';
-            $row['isOnSale'] = ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1) ? 'si' : 'no';
-            if (($php->prestashopHasProductHasMarketplaceHasShop->titleModified == 1) && ($php->prestashopHasProductHasMarketplaceHasShop->isOnSale == 1)) {
-                $percSc = number_format(100 * ($php->prestashopHasProductHasMarketplaceHasShop->price - $php->prestashopHasProductHasMarketplaceHasShop->salePrice) / $php->prestashopHasProductHasMarketplaceHasShop->price,0);
-                $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->price,'2','.','') . ' € a ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->salePrice,'2','.','') . ' € ' .
+            $row['titleModified'] = ($php->titleModified == 1) ? 'si' : 'no';
+            $row['isOnSale'] = ($php->isOnSale == 1) ? 'si' : 'no';
+            if (($php->titleModified == 1) && ($php->isOnSale == 1)) {
+                $percSc = number_format(100 * ($php->price - $php->salePrice) / $php->price,0);
+                $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->price,'2','.','') . ' € a ' . number_format($php->prestashopHasProductHasMarketplaceHasShop->salePrice,'2','.','') . ' € ' .
                     $php->product->itemno
                     . ' ' .
                     $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
@@ -146,12 +148,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
 
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
 
-            $productStatusMarketplace = $productStatusMarketplaceRepo->findOneBy(['id' => $php->productStatusMarketplaceId]);
-            if ($productStatusMarketplace) {
-                $row['productStatusMarketplaceId'] = $productStatusMarketplace->name;
-            } else {
-                $row['productStatusMarketplaceId'] = '';
-            }
+
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
             $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
