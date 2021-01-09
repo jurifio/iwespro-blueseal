@@ -136,7 +136,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['brand'] = $php->product->productBrand->name;
             $row['productStatus'] = $php->product->productStatus->name;
 
-            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
+
 
 
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
