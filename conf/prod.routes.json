@@ -1916,7 +1916,7 @@
             ]
         },
         {
-            "pattern": "/blueseal/prodotti/marketplace/prestashop(/)?",
+            "pattern": "/blueseal/prodotti/marketplace/prodotti-lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPrestashopMarketplaceProductListController"
             },
