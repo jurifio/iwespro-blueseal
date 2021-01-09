@@ -132,17 +132,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['title'] = $name;
 
 
-            switch ($php->status) {
-                case 1:
-                    $row['status'] = CPrestashopHasProduct::UPDATED;
-                    break;
-                case 2:
-                    $row['status'] = CPrestashopHasProduct::TOUPDATE;
-                    break;
-                default:
-                    $row['status'] = '';
-                    break;
-            }
+
             $row['brand'] = $php->product->productBrand->name;
             $row['productStatus'] = $php->product->productStatus->name;
 
