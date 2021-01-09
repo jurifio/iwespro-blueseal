@@ -1008,9 +1008,9 @@ footer {
                     $this->report('CEbayReviseProductJob','Report Response ' . $good->refMarketplaceId,$response);
                     sleep(1);
 
-                    $reponseNewProduct = new \SimpleXMLElement($response);
+                    $responseNewProduct = new \SimpleXMLElement($response);
 
-                    $id_product_ref = $reponseNewProduct->ItemID;
+                    $id_product_ref = $responseNewProduct->ItemID;
                     if($responseNewProduct->Ack=='Success') {
 
 

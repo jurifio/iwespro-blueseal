@@ -973,10 +973,10 @@ footer {
                     $this->report('CEbayAddProductJob','Report ',$response);
                     sleep(1);
 
-                    $reponseNewProduct = new \SimpleXMLElement($response);
+                    $responseNewProduct = new \SimpleXMLElement($response);
                     if($responseNewProduct->Ack=='Success') {
                         $this->report('CEbayNewAddProductJob','Report ',$xml);
-                        $refMarketplaceId = $reponseNewProduct->ItemID;
+                        $refMarketplaceId = $responseNewProduct->ItemID;
                         $today = new \DateTime();
                         $now = $today->format('Y-m-d H:i:s');
                         sleep(1);
