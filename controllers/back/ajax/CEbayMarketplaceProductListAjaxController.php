@@ -147,7 +147,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             if($mpas) {
                 foreach ($mpas as $mpa) {
                     if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
-                        $tableSaldi = '<table><tr><tr><td width="50%">dal</td><td width="50%">al </td></tr>';
+                        $tableSaldi = '<table class="nested-table inner-size-table"><tr><tr><td width="50%">dal</td><td width="50%">al </td></tr>';
                         $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
                         $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
                         $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
