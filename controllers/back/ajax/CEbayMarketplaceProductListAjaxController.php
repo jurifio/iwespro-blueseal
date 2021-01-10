@@ -109,10 +109,10 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                 case $php->lastTypeOperation = 0;
                     $lastTypeOperation = 'da inserire';
                     break;
-                case $php->lastTypeOperation = 1;
+                case $php->lastTypeOperation = 2;
                     $lastTypeOperation = 'ADD';
                     break;
-                case $php->lastTypeOperation = 2;
+                case $php->lastTypeOperation = 1;
                     $lastTypeOperation = 'REVISE';
                     break;
             }

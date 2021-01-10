@@ -36,6 +36,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
               p.externalId AS externalId,
               phphmhs.price as marketplacePrice,
               phphmhs.salePrice as marketplaceSalePrice,
+                    phphmhs.lastTypeOperation as lastTypeOperation,
              concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
               if(phphmhs.isOnSale=1,'si','no'),     
              if(phphmhs.titleModified=1,'si','no'),     
