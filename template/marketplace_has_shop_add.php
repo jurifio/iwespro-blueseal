@@ -106,24 +106,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="shopId">Seleziona Lo Shop
+                                                <label for="marketplaceHasShopId">Seleziona il MarketPlace Cliente
                                                 </label>
-                                                <select id="shopId"
-                                                        name="shopId"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Selezione lo Shop"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="marketplaceId">Seleziona il MarketPlace
-                                                </label>
-                                                <select id="marketplaceId"
-                                                        name="marketplaceId"
+                                                <select id="marketplaceHasShopId"
+                                                        name="marketplaceHasShopId"
                                                         class="full-width selectpicker"
                                                         placeholder="Selezione il marketplace"
                                                         data-init-plugin="selectize">
@@ -131,7 +119,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default required">
                                                 <label for="nameAdminister">Account Manager</label>
                                                 <input id="nameAdminister" autocomplete="off" type="text"
@@ -139,7 +127,7 @@
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default required">
                                                 <label for="emailNotify">Email Notifica </label>
                                                 <input id="emailNotify" autocomplete="off" type="text"

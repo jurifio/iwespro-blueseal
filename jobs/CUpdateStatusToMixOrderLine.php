@@ -103,7 +103,7 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                         $statusForRemote = 'ORD_MIX';
                         $orders->update();
                         $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
-                    } elseif ($countStatusCancel >= 1 && $countStatusShipped >= 1 && $countStatusWorking == 0) {
+                    } elseif (($countStatusCancel >= 1) && ($countStatusShipped >= 1) && $countStatusWorking == 0) {
                         $orders->status = 'ORD_MIX';
                         $statusForRemote = 'ORD_MIX';
                         $orders->update();

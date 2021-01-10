@@ -51,7 +51,7 @@
                                         <input type="hidden" id="marketplaceAccountId" name="marketplaceAccountId"
                                                value="<?php echo $marketplaceAccount->id ?>"/>
                                         <input type="hidden" id="marketplaceSelectedId" id="marketplaceSelectedId"
-                                               value="<?php echo $marketplaceAccount->marketplaceId ?>"/>
+                                               value="<?php echo $marketplaceAccount->config['marketplaceHasShopId'] ?>"/>
                                         <input type="hidden" id="langSelectId" id="langSelectId"
                                                value="<?php echo $langSelectId ?>"/>
                                     </div>
@@ -119,26 +119,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <input type="hidden" id="shopSelected" id="shopSelected"
-                                                       value="<?php echo (isset($marketplaceAccount->config['shop'])) ? $marketplaceAccount->config['shop'] : ''; ?>"/>
-                                                <label for="shopId">Seleziona Lo Shop
+                                                <label for="marketplaceHasShopId">Seleziona il MarketPlace
                                                 </label>
-                                                <select id="shopId"
-                                                        name="shopId"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Selezione lo Shop"
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="marketplaceId">Seleziona il MarketPlace
-                                                </label>
-                                                <select id="marketplaceId"
-                                                        name="marketplaceId"
+                                                <select id="marketplaceHasShopId"
+                                                        name="marketplaceHasShopId"
                                                         class="full-width selectpicker"
                                                         placeholder="Selezione il marketplace"
                                                         data-init-plugin="selectize">
@@ -146,16 +132,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default required">
                                                 <label for="nameAdminister">Account Manager</label>
                                                 <input id="nameAdminister" autocomplete="off" type="text"
                                                        class="form-control" name="nameAdminister"
-                                                       value="<?php echo (isset($marketplaceAccount->config['nameAdminister'])) ? $marketplaceAccount->config['nameAdminister'] : ''; ?>""
+                                                       value="<?php echo (isset($marketplaceAccount->config['nameAdminister'])) ? $marketplaceAccount->config['nameAdminister'] : ''; ?>"
                                                 required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group form-group-default required">
                                                 <label for="emailNotify">Email Notifica </label>
                                                 <input id="emailNotify" autocomplete="off" type="text"

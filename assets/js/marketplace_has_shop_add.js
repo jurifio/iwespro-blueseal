@@ -73,9 +73,7 @@ $(document).ready(function () {
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'Marketplace',
-            condition: {type: "marketplace"}
-
+            table: 'MarketplaceHasShop'
         },
         dataType: 'json'
     }).done(function (res2) {
@@ -287,8 +285,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
     var lang = $('#lang').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
     var slug = $('#slug').val();
-    var shopId = $('#shopId').val();
-    var marketplaceId =$('#marketplaceId').val();
+    var marketplaceHasShopId =$('#marketplaceHasShopId').val();
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
@@ -324,8 +321,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
 
     var config = '?nameMarketPlace=' + marketplace_account_name + '&' +
         'lang=' + lang + '&' +
-        'shopId=' + shopId + '&' +
-        'marketplaceId=' + marketplaceId + '&' +
+        'marketplaceHasShopId=' + marketplaceHasShopId + '&' +
         'slug=' + slug + '&' +
         'logoFile=' + logoFile + '&' +
         'isActive=' + isActive + '&' +

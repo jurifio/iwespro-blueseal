@@ -50,37 +50,17 @@ $(document).ready(function () {
             $(document).trigger('bs.load.photo');
         });
     });
+
     $.ajax({
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'Shop',
-            condition: {hasEcommerce: 1}
+            table: 'MarketplaceHasShop',
 
         },
         dataType: 'json'
     }).done(function (res2) {
-        var select = $('#shopId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2
-        });
-        select[0].selectize.setValue($('#shopSelected').val());
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Marketplace',
-            condition: {type: "marketplace"}
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#marketplaceId');
+        var select = $('#marketplaceHasShopId');
         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
@@ -292,8 +272,7 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
     var marketplaceAccountId = $('#marketplaceAccountId').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
     var slug = $('#slug').val();
-    var shopId = $('#shopId').val();
-    var marketplaceId = $('#marketplaceId').val();
+    var marketplaceHasShopId = $('#marketplaceHasShopId').val();
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
@@ -329,8 +308,7 @@ $(document).on('bs.productsharehasshopdestination-account.save', function () {
     var config = '?nameMarketPlace=' + marketplace_account_name + '&' +
         'marketplaceAccountId=' + marketplaceAccountId + '&' +
         'lang=' + lang + '&' +
-        'shopId=' + shopId + '&' +
-        'marketplaceId=' + marketplaceId + '&' +
+        'marketplaceHasShopId=' + marketplaceHasShopId + '&' +
         'slug=' + slug + '&' +
         'logoFile=' + logoFile + '&' +
         'isActive=' + isActive + '&' +
