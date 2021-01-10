@@ -115,7 +115,11 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">quantità Totali
                                 </th>
-
+                                <th data-slug="lastOperation"
+                                    data-visible="false"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">lastOperation
+                                </th>
                                 <th data-slug="shop"
                                     data-visible="false"
                                     data-searchable="true"

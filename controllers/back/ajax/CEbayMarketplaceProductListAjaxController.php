@@ -36,6 +36,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               p.externalId AS externalId,
               phphmhs.price as marketplacePrice,
               phphmhs.salePrice as marketplaceSalePrice,
+                   phphmhs.lastTypeOperation as lastTypeOperation,
              concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
               if(phphmhs.isOnSale=1,'si','no'),     
              if(phphmhs.titleModified=1,'si','no'),     
@@ -104,6 +105,18 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['marketplaceShopName'] = $php->marketplaceHasShop->name;
             $row['marketplacePrice'] = $php->price;
             $row['marketplaceSalePrice'] = $php->salePrice;
+            switch (true) {
+                case $php->lastTypeOperation = 0;
+                    $lastTypeOperation = 'da inserire';
+                    break;
+                case $php->lastTypeOperation = 1;
+                    $lastTypeOperation = 'ADD';
+                    break;
+                case $php->lastTypeOperation = 2;
+                    $lastTypeOperation = 'REVISE';
+                    break;
+            }
+            $row['lastTypeOperation'] =$lastTypeOperation. ' '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s');
             if ($php->isOnSale == 1) {
                 $row['activePrice'] = $php->salePrice;
             } else {
