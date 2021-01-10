@@ -63,7 +63,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">cpd
+                                    data-default-order="desc">cpf
                                 </th>
                                 <th data-slug="externalId"
                                     data-required="true"

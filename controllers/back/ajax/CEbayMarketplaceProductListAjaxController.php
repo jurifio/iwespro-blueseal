@@ -147,7 +147,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             if($mpas) {
                 foreach ($mpas as $mpa) {
                     if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
-                        $tableSaldi = '<table><tr><td colspan="2">periodi saldi</td></tr><tr><td>dal</td><td>al </td></tr>';
+                        $tableSaldi = '<table><tr><tr><td width="50%">dal</td><td width="50%">al </td></tr>';
                         $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
                         $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
                         $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
@@ -156,10 +156,10 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                         $dateEndPeriod3 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod3']))->format('d-m-Y') : "non definito";
                         $dateStartPeriod4 = ($mpa->config['dateStartPeriod4'] != '') ? (new \DateTime($mpa->config['dateStartPeriod4']))->format('d-m-Y') : 'non definito';
                         $dateEndPeriod4 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod4']))->format('d-m-Y') : 'non definito';
-                        $tableSaldi .= '<tr><td>' . $dateStartPeriod1 . '</td><td>' . $dateEndPeriod1 . '</td></tr>';
-                        $tableSaldi .= '<tr><td>' . $dateStartPeriod2 . '</td><td>' . $dateEndPeriod2 . '</td></tr>';
-                        $tableSaldi .= '<tr><td>' . $dateStartPeriod3 . '</td><td>' . $dateEndPeriod3 . '</td></tr>';
-                        $tableSaldi .= '<tr><td>' . $dateStartPeriod4 . '</td><td>' . $dateEndPeriod4 . '</td></tr>';
+                        $tableSaldi .= '<tr><td width="50%">' . $dateStartPeriod1 . '</td><td width="50%">' . $dateEndPeriod1 . '</td></tr>';
+                        $tableSaldi .= '<tr><td width="50%">' . $dateStartPeriod2 . '</td><td width="50%">' . $dateEndPeriod2 . '</td></tr>';
+                        $tableSaldi .= '<tr><td width="50%">' . $dateStartPeriod3 . '</td><td width="50%">' . $dateEndPeriod3 . '</td></tr>';
+                        $tableSaldi .= '<tr><td width="50%">' . $dateStartPeriod4 . '</td><td width="50%">' . $dateEndPeriod4 . '</td></tr>';
                         $tableSaldi .= '</table>';
                         break;
                     }
