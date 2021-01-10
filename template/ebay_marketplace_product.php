@@ -115,10 +115,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">quantità Totali
                                 </th>
-                                <th data-slug="lastOperation"
+                                <th data-slug="lastTypeOperation"
                                     data-visible="false"
                                     data-searchable="true"
-                                    data-orderable="true" class="center">lastOperation
+                                    data-orderable="true" class="center">Ultima Operazione
                                 </th>
                                 <th data-slug="shop"
                                     data-visible="false"
