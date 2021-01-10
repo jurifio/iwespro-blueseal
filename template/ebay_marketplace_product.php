@@ -115,15 +115,16 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">quantità Totali
                                 </th>
-                                <th data-slug="tableSaldi"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Periodo Saldi
-                                </th>
 
                                 <th data-slug="shop"
                                     data-visible="false"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Shop
+                                </th>
+                                <th data-slug="tableSaldi"
+                                    data-searchable="false"
+                                    data-visible="false"
+                                    data-orderable="false" class="center">Periodo Saldi
                                 </th>
                             </tr>
                             </thead>
