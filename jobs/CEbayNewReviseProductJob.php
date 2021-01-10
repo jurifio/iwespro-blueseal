@@ -1016,6 +1016,7 @@ footer {
 
                         $good->lastUpdate = $product->lastUpdate;
                         $good->result=1;
+                        $good->lastTypeOperation=1;
                         $good->update();
                         $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
                         sleep(1);

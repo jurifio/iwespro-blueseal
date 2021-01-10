@@ -36,7 +36,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
               p.externalId AS externalId,
                    
 
-              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified,' | Aggiornamento: ',if(phphmhs.result=1, concat('Eseguito ',phphmhs.lastTimeOperation),concat('Fallito ',phphmhs.lastTimeOperation))  )) AS marketplaceAssociation,
+              group_concat(concat(phphmhs.refMarketplaceId,' | ',s.name, ' | ', m.name, ' | Price: ', phphmhs.price,' | Sale price: ', phphmhs.salePrice,' | Sale: ', phphmhs.isOnSale, ' | Titolo modificato: ', phphmhs.titleModified,' | Operazione: ',if(phphmhs.lastTypeOperation=0,'da inserire ','inserito '),if(phphmhs.result=1, concat('Eseguito ',phphmhs.lastTimeOperation),concat('Fallito ',phphmhs.lastTimeOperation))  )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,     
@@ -78,7 +78,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
         ";
 
 
-        $datatable = new CDataTables($sql, ['productId', 'productVariantId'], $_GET, true);
+        $datatable = new CDataTables($sql,['productId','productVariantId'],$_GET,true);
 
         $datatable->doAllTheThings();
 
@@ -87,7 +87,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
 
         /** @var CRepo $mhsRepo */
         $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
-        $productStatusMarketplaceRepo=\Monkey::app()->repoFactory->create('ProductStatusMarketplace');
+        $productStatusMarketplaceRepo = \Monkey::app()->repoFactory->create('ProductStatusMarketplace');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
             /** @var CPrestashopHasProduct $php */
@@ -98,20 +98,28 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
             $associations = '';
             $onSale = '';
             $salePrice = '';
-            $refMarketplaceId='';
+            $refMarketplaceId = '';
 
 
-
-
-          /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
+            /** @var CPrestashopHasProductHasMarketplaceHasShop $pHPHmHs */
             foreach ($php->prestashopHasProductHasMarketplaceHasShop as $pHPHmHs) {
-                $associations .= $pHPHmHs->refMarketplaceId. ' | '.$pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>'. ' |<br> Aggiornamento: ' . ($pHPHmHs->result == 1 ? 'Eseguito '.$pHPHmHs->lastTimeOperation : 'Fallito '.$pHPHmHs->lastTimeOperation) . '<br><hr>';
+                $lastTypeOperation = 'da Inserire';
+                switch (true) {
+                    case $pHPHmHs->lastTypeOperation = 0;
+                        $lastTypeOperation = 'da inserire';
+                        break;
+                    case $pHPHmHs->lastTypeOperation = 1;
+                        $lastTypeOperation = 'ADD';
+                        break;
+                    case $pHPHmHs->lastTypeOperation = 2;
+                        $lastTypeOperation = 'REVISE';
+                        break;
+                }
+                $associations .= $pHPHmHs->refMarketplaceId . ' | ' . $pHPHmHs->marketplaceHasShop->shop->name . ' | ' . $pHPHmHs->marketplaceHasShop->marketplace->name . ' |<br> Price: ' . $pHPHmHs->price . ' ( ' . $pHPHmHs->salePrice . ' ) | Saldo: ' . ($pHPHmHs->isOnSale == 0 ? 'No' : 'Si') . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$lastTypeOperation.' ' . ($pHPHmHs->result == 1 ? 'Eseguito ' . $pHPHmHs->lastTimeOperation : 'Fallito ' . $pHPHmHs->lastTimeOperation) . '<br><hr>';
 
 
             }
             $row['marketplaceAssociation'] = $associations;
-
-
 
 
             switch ($php->status) {
@@ -125,23 +133,23 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                     $row['status'] = '';
                     break;
             }
-            $row['brand']=$php->product->productBrand->name;
-            $row['productStatus']=$php->product->productStatus->name;
-            $isOnSale=$php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
-            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' .$isOnSale ;
+            $row['brand'] = $php->product->productBrand->name;
+            $row['productStatus'] = $php->product->productStatus->name;
+            $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
+            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
             $row['prestaId'] = $php->prestaId;
-            $productStatusMarketplace=$productStatusMarketplaceRepo->findOneBy(['id'=>$php->productStatusMarketplaceId]);
-            if($productStatusMarketplace) {
+            $productStatusMarketplace = $productStatusMarketplaceRepo->findOneBy(['id' => $php->productStatusMarketplaceId]);
+            if ($productStatusMarketplace) {
                 $row['productStatusMarketplaceId'] = $productStatusMarketplace->name;
-            }else{
+            } else {
                 $row['productStatusMarketplaceId'] = '';
             }
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
-            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />', true) . '</span>';
-            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year .  '</span>';
-            $row['totalQty'] = '<span class="small">' .$php->product->qty.'</span>';
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="'.$php->product->printId().'"></table>';
-            $row['externalId']='<span class="small">' . $php->product->itemno .  '</span>';
+            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
+            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
+            $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
+            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
+            $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
 
 
             /** @var CMarketplaceHasShop $mhsCron */
@@ -155,7 +163,7 @@ class CMarketplacePrestashopProductListAjaxController extends AAjaxController
                 $row['cronjobOperation'] = 'Type operation: ' . $php->modifyType . ' | Operation amount: ' . $php->variantValue;
             }
 
-            $datatable->setResponseDataSetRow($key, $row);
+            $datatable->setResponseDataSetRow($key,$row);
         }
 
         return $datatable->responseOut();

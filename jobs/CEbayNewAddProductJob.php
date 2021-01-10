@@ -985,6 +985,7 @@ footer {
                         $good->refMarketplaceId = $refMarketplaceId;
                         $good->lastUpdate = $product->lastUpdate;
                         $good->result = 1;
+                        $good->lastTypeOperation=2;
                         $good->isPublished=1;
                         $good->update();
                         $this->report('CEbayNewAddProductJob','Report ' . $refMarketplaceId,$xml);
