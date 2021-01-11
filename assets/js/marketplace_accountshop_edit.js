@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 
-    document.getElementById('insertMarketPlace').style.display = "block";
+    document.getElementById('insertMarketPlaceAccount').style.display = "block";
     $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
 
@@ -55,12 +55,12 @@ $(document).ready(function () {
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'MarketplaceHasShop',
+            table: 'Marketplace',
 
         },
         dataType: 'json'
     }).done(function (res2) {
-        var select = $('#marketplaceHasShopId');
+        var select = $('#marketplaceId');
         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
@@ -75,31 +75,13 @@ $(document).ready(function () {
         method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
-            table: 'Lang',
+            table: 'Shop',
+            condition: {hasEcommerce: 1}
 
         },
         dataType: 'json'
     }).done(function (res2) {
-        var select = $('#lang');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'lang',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-        select[0].selectize.setValue($('#langSelectId').val());
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'ProductBrand',
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#brandExclusion');
+        var select = $('#shopId');
         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
@@ -107,158 +89,13 @@ $(document).ready(function () {
             searchField: 'name',
             options: res2,
         });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'ProductBrand',
-
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#brandId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
-
-    });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'ProductBrand',
-
-        },
-        dataType: 'json'
-    }).done(function (res3) {
-        var selectParallel = $('#BrandIdParallel');
-        if (typeof (selectParallel[0].selectize) != 'undefined') selectParallel[0].selectize.destroy();
-        selectParallel.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res3,
-        });
-
+        select[0].selectize.setValue($('#shopSelectId').val());
     });
 
 
-});
-var SelectionFullPrice;
-$(':radio[name="activeFullPrice"]').change(function () {
-    SelectionFullPrice = this.value;
-    if (SelectionFullPrice == '2') {
-        $('#rawFullPrice').removeClass('hide');
-        $('#rawFullPrice').addClass('show');
-    } else {
-        $('#rawFullPrice').removeClass('show');
-        $('#rawFullPrice').addClass('hide');
-        $('#appendBrand').empty();
-        $('#appendBrand').append('tutti');
-    }
-});
-var Selection;
-$(':radio[name="activeSalePrice"]').change(function () {
-    var brandExclusion = '';
-    Selection = this.value;
-    if (Selection == '2') {
-        $('#rawSalePrice').removeClass('hide');
-        $('#rawSalePrice').addClass('show');
-        brandExclusion = '';
-        $('#brandSaleExclusion').val(brandExclusion)
-        $('#divBrandExclusion').empty();
-    } else {
-        $('#rawSalePrice').removeClass('show');
-        $('#rawSalePrice').addClass('hide');
-        brandExclusion = '0';
-        $('#brandSaleExclusion').val(brandExclusion)
-        $('#divBrandExclusion').empty();
-        $('#divBrandExclusion').append('Tutti');
-    }
-});
-var SelectionNameCatalog;
-$(':radio[name="checkNameCatalog"]').change(function () {
-    SelectionNameCatalog = this.value;
-    if (SelectionNameCatalog == '2') {
-        $('#rawName').removeClass('hide');
-        $('#rawName').addClass('show');
-    } else {
-        $('#rawName').removeClass('show');
-        $('#rawName').addClass('hide');
-    }
-});
-var typeAssign;
-$(':radio[name="typeAssign"]').change(function () {
-    typeAssign = this.value;
-    if (typeAssign == '2') {
-        $('#rawRule').removeClass('hide');
-        $('#rawRule').addClass('show');
 
-
-    } else {
-        $('#rawRule').removeClass('show');
-        $('#rawRule').addClass('hide');
-
-    }
-});
-var typeAssignParallel;
-$(':radio[name="typeAssignParallel"]').change(function () {
-    typeAssignParallel = this.value;
-    if (typeAssignParallel == '2') {
-        $('#rawRuleParallel').removeClass('hide');
-        $('#rawRuleParallel').addClass('show');
-
-
-    } else {
-        $('#rawRuleParallel').removeClass('show');
-        $('#rawRuleParallel').addClass('hide');
-
-    }
-});
-
-var valueBrand;
-var newValueBrand;
-$('#brandId').change(function () {
-    valueBrand = $('#brandis').val();
-    newValueBrand = valueBrand + this.value + ',';
-    $('#brandis').val(newValueBrand);
-    $('#appendBrandsPublishPar').append(`
-    <div id="brandAddDiv-`+$('#brandId').val()+`" class="row"><div class="col-md-12">`+$('#brandId :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnAdd-`+$('#brandId').val()+`" onclick="lessBrandAdd(`+$('#brandId').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
-
-});
-
-var valueBrandSale;
-var newValueBrandSale;
-$('#brandExclusion').change(function () {
-    valueBrandSale = $('#brandSaleExclusion').val();
-    newValueBrandSale = valueBrandSale + this.value + ',';
-
-    $('#brandSaleExclusion').val(newValueBrandSale);
-    $('#appendBrandsSalePublishPar').append(`
-    <div id="brandSaleAddDiv-` + $('#brandExclusion').val() + `" class="row"><div class="col-md-12">` + $('#brandExclusion :selected').text() + `</div><div class="col-md-2"> <button class="success" id="btnSaleAdd-` + $('#brandExclusion').val() + `" onclick="lessBrandSaleAdd(` + $('#brandExclusion').val() + `)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
-
-});
-
-var paral;
-var newparal;
-$('#BrandIdParallel').change(function () {
-    paral = $('#brandsPar').val();
-    newparal = paral + this.value + ',';
-    $('#brandsPar').val(newparal);
-    $('#appendBrandsPar').append(`
-    <div id="brandParallelAddDiv-`+$('#brandIdParallel').val()+`" class="row"><div class="col-md-12">`+$('#BrandIdParallel :selected').text()+`</div><div class="col-md-2"> <button class="success" id="btnParallelAdd-`+$('#BrandIdParallel').val()+`" onclick="lessBrandParallelAdd(`+$('#BrandIdParallel').val()+`)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
-});
-
-
-
-$(document).on('bs.marketplace-account.save', function () {
-    let bsModal = new $.bsModal('Modifica Regola Marketplace', {
+$(document).on('bs.marketplaceaccountshop-account.save', function () {
+    let bsModal = new $.bsModal('Modifica Marketplace Account', {
         body: '<p>Confermare?</p>'
     });
 
@@ -268,82 +105,28 @@ $(document).on('bs.marketplace-account.save', function () {
             val = val + $(this).val() + ',';
         }
     });
-    var lang = $('#lang').val();
-    var marketplaceAccountId = $('#marketplaceAccountId').val();
+    var marketplaceId = $('#marketplaceId').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
-    var slug = $('#slug').val();
+    var shopId = $('#shopId').val();
     var marketplaceHasShopId = $('#marketplaceHasShopId').val();
-    var nameAdminister = $('#nameAdminister').val();
-    var emailNotify = $('#emailNotify').val();
+
     var isActive = $('#isActive').val();
     var logoFile = $('#logoFile').val();
-    var activeFullPrice = $('#activeFullPrice').val();
-    var signFullPrice = $('#signFullPrice').val();
-    var percentFullPrice = $('#percentFullPrice').val();
-    var optradio = $('#optradio').val();
-    var optradioactive = $('#optradioactive').val();
-    var activeSalePrice = $('#activeSalePrice').val();
-    var signSale = $('#signSale').val();
-    var percentSalePrice = $('#percentSalePrice').val();
-    var maxPercentSalePrice = $('#maxPercentSalePrice').val();
-    var optradioSalePrice = $('#optradioSalePrice').val();
-    var dateStartPeriod1 = $('#dateStartPeriod1').val();
-    var dateEndPeriod1 = $('#dateEndPeriod1').val();
-    var dateStartPeriod2 = $('#dateStartPeriod2').val();
-    var dateEndPeriod2 = $('#dateEndPeriod2').val();
-    var dateStartPeriod3 = $('#dateStartPeriod3').val();
-    var dateEndPeriod3 = $('#dateEndPeriod3').val();
-    var dateStartPeriod4 = $('#dateStartPeriod4').val();
-    var dateEndPeriod4 = $('#dateEndPeriod4').val();
-    var brandSaleExclusion = $('#brandSaleExclusion').val();
 
-    var checkNameCatalog = $('#checkNameCatalog').val();
-    var optradioName = $('#optradioName').val();
-    var typeAssign = $('#typeAssign').val();
-    var brands = $('#brandis').val();
-    var typeAssignParallel = $('#typeAssignParallel').val();
-    var brandsSelectionParallel = $('#brandsPar').val();
 
 
     var config = '?nameMarketPlace=' + marketplace_account_name + '&' +
-        'marketplaceAccountId=' + marketplaceAccountId + '&' +
-        'lang=' + lang + '&' +
+        'marketplaceId=' + marketplaceId + '&' +
         'marketplaceHasShopId=' + marketplaceHasShopId + '&' +
-        'slug=' + slug + '&' +
+        'shopId=' + shopId + '&' +
         'logoFile=' + logoFile + '&' +
-        'isActive=' + isActive + '&' +
-        'activeFullPrice=' + activeFullPrice + '&' +
-        'signSale=' + signSale + '&' +
-        'percentFullPrice=' + percentFullPrice + '&' +
-        'signFullPrice=' + signFullPrice + '&' +
-        'optradio=' + optradio + '&' +
-        'optradioactive=' + optradioactive + '&' +
-        'activeSalePrice=' + activeSalePrice + '&' +
-        'percentSalePrice=' + percentSalePrice + '&' +
-        'maxPercentSalePrice=' + maxPercentSalePrice + '&' +
-        'optradioSalePrice=' + optradioSalePrice + '&' +
-        'dateStartPeriod1=' + dateStartPeriod1 + '&' +
-        'dateEndPeriod1=' + dateEndPeriod1 + '&' +
-        'dateStartPeriod2=' + dateStartPeriod2 + '&' +
-        'dateEndPeriod2=' + dateEndPeriod2 + '&' +
-        'dateStartPeriod3=' + dateStartPeriod3 + '&' +
-        'dateEndPeriod3=' + dateEndPeriod3 + '&' +
-        'dateStartPeriod4=' + dateStartPeriod4 + '&' +
-        'dateEndPeriod4=' + dateEndPeriod4 + '&' +
-        'nameAdminister=' + nameAdminister + '&' +
-        'emailNotify=' + emailNotify + '&' +
-        'brandSaleExclusion=' + brandSaleExclusion + '&' +
-        'checkNameCatalog=' + checkNameCatalog + '&' +
-        'optradioName=' + optradioName + '&' +
-        'typeAssign=' + typeAssign + '&' +
-        'brands=' + brands + '&' +
-        'typeAssignParallel=' + typeAssignParallel + '&' +
-        'brandsParallel=' + brandsSelectionParallel;
+        'isActive=' + isActive;
+
 
     bsModal.showCancelBtn();
     bsModal.setOkEvent(function () {
         var data = 1;
-        var urldef = "/blueseal/xhr/MarketplaceAccountHasShopInsertManage" + config;
+        var urldef = "/blueseal/xhr/MarketplaceAccountShopInsertManage" + config;
         $.ajax({
             method: "PUT",
             url: urldef,

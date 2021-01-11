@@ -117,7 +117,7 @@
                 data-rel="tooltip"
                 data-title="Salva"
                 data-placement="bottom"
-                data-href="/blueseal/marketplace/marketplace-shop/aggiungi"
+                data-href="/blueseal/marketplace/account-shop/aggiungi"
         ></bs-toolbar-button>
 
     </bs-toolbar-group>

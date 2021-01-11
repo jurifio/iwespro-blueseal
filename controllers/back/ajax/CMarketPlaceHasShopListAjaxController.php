@@ -52,7 +52,7 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
         $datatable->doAllTheThings('true');
         $imgMarketPlacePath=\Monkey::app()->baseUrl(FALSE)."/images/imgorder/";
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $opera = $blueseal . "prodotti/marketplace/associate/sale?id=";
+        $opera = $blueseal . "marketplace/account-shop/modifica/";
         foreach ($datatable->getResponseSetData() as $key => $row) {
             $row['DT_RowId']=$row['id'];
             $row['id'] = '<a href="' . $opera .  $row['id'] . '">' .  $row['id'] . '</a>';
@@ -64,7 +64,7 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
         }
 
         $image=$row['imgMarketPlace'];
-        $row['imgMarketPlace']="<img width='80' src='".$imgMarketPlacePath.$image."'</img>";
+        $row['imgMarketPlace']="<img width='80' src='".$image."'</img>";
 
             $datatable->setResponseDataSetRow($key,$row);
         }
