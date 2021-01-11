@@ -103,7 +103,7 @@ $(document).on('bs.marketplaceaccountshop-account.save', function () {
     });
 
     var marketplace_account_name = $('#marketplace_account_name').val();
-    var shopId= =$('#shopId').val();
+    var shopId= $('#shopId').val();
     var marketplaceId =$('#marketplaceId').val();
     var isActive = $('#isActive').val();
     var logoFile = $('#logoFile').val();
