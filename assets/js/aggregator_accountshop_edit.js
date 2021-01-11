@@ -56,6 +56,7 @@ $(document).ready(function () {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Marketplace',
+            condition:{type:'cpc'}
 
         },
         dataType: 'json'
