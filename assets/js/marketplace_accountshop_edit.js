@@ -359,5 +359,5 @@ function lessBrandSale(brandId) {
     }
 
     $(divToErase).empty();
-}
+});
 
