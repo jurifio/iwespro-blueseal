@@ -43,7 +43,7 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
         }
 
         if ($_GET['isActive'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato aggregatore </i>';
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato Marketplace Account </i>';
         } else {
             $isActive = $_GET['isActive'];
         }
@@ -69,7 +69,7 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
             $marketplaceInsert->insert();
             $marketplaceUpdate=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId'=>$marketplaceId]);
             $marketplaceId=$marketplaceUpdate->id;
-            $marketplaceUpdate->prestahopId=$marketplaceId;
+            $marketplaceUpdate->prestashopId=$marketplaceId;
             $marketplaceUpdate->update();
             \Monkey::app()->applicationLog('MarketPlaceAccountShopInsert','Report','Insert','Insert Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
             return 'Creazione MarketplaceAccount '.$marketplace_account_name.' con '.$marketplaceId;
@@ -101,7 +101,7 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
         }
 
         if ($_GET['isActive'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato aggregatore </i>';
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato Marketplace Account </i>';
         } else {
             $isActive = $_GET['isActive'];
         }

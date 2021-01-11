@@ -11,7 +11,7 @@ use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
 
 
 /**
- * Class CMarketPlaceHasShopListAjaxController
+ * Class CAggregatorHasShopListAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -26,7 +26,7 @@ use bamboo\blueseal\remote\readextdbtable\CReadExtDbTable;
 
 
 
-class CMarketPlaceHasShopListAjaxController extends AAjaxController
+class CAggregatorHasShopListAjaxController extends AAjaxController
 {
 
     public function get()
@@ -39,11 +39,10 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
                       s.name as shopName , 
                       ma.name as markeplaceName,  
                       mhs.typeSync as typeSync,
-                      mhs.imgMarketPlace as imgMarketPlace,
-                      mhs.prestashopId as prestashopId,
+                      mhs.imgAggregator as imgAggregator,
                       if(mhs.isPriceHub='1','Si','No') as priceRule 
                       
-                FROM MarketplaceHasShop mhs 
+                FROM AggregatorHasShop mhs 
                 inner join Marketplace ma on mhs.marketplaceId=ma.id
                 inner join Shop s on mhs.shopId=s.id";
 
@@ -52,7 +51,7 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
         $datatable->doAllTheThings('true');
         $imgMarketPlacePath=\Monkey::app()->baseUrl(FALSE)."/images/imgorder/";
         $blueseal = $this->app->baseUrl(false) . '/blueseal/';
-        $opera = $blueseal . "marketplace/account-shop/modifica/";
+        $opera = $blueseal . "aggregatori/account-shop/modifica/";
         foreach ($datatable->getResponseSetData() as $key => $row) {
             $row['DT_RowId']=$row['id'];
             $row['id'] = '<a href="' . $opera .  $row['id'] . '">' .  $row['id'] . '</a>';
@@ -63,8 +62,8 @@ class CMarketPlaceHasShopListAjaxController extends AAjaxController
             $row['typeSync']='manuale';
         }
 
-        $image=$row['imgMarketPlace'];
-        $row['imgMarketPlace']="<img width='80' src='".$image."'</img>";
+        $image=$row['imgAggregator'];
+        $row['imgAggregator']="<img width='80' src='".$image."'</img>";
 
             $datatable->setResponseDataSetRow($key,$row);
         }

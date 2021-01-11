@@ -23,8 +23,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="marketplace_hasshop_list"
-                               data-controller="MarketPlaceHasShopListAjaxController"
+                               data-datatable-name="aggregator_hasshop_list"
+                               data-controller="AggregatorHasShopListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="100, 200, 500, 1000, 2000"
@@ -44,14 +44,14 @@
                                 <th data-slug="markeplaceName"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">MarketPlace
+                                    class="center">Aggregatore
                                 </th>
                                 <th data-slug="typeSync"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Tipo Sincronizzazione
                                 </th>
-                                <th data-slug="imgMarketPlace"
+                                <th data-slug="imgAggregator"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Immagine
@@ -92,7 +92,7 @@
         ></bs-toolbar-button>
 
         <bs-toolbar-button
-                data-remote="bs.lists.delete.marketplacehasshop"
+                data-remote="bs.lists.delete.aggregatorhasshop"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Nuovo Regola">
@@ -104,11 +104,11 @@
                 data-rel="tooltip"
                 data-title="Salva"
                 data-placement="bottom"
-                data-href="/blueseal/marketplace/marketplace-shop/aggiungi"
+                data-href="/blueseal/marketplace/account-inserisci"
         ></bs-toolbar-button>
 
     </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Nuovo Marketplace">
+    <bs-toolbar-group data-group-label="Nuovo Account Aggregatore">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-plus"
@@ -117,7 +117,7 @@
                 data-rel="tooltip"
                 data-title="Salva"
                 data-placement="bottom"
-                data-href="/blueseal/marketplace/account-shop/aggiungi"
+                data-href="/blueseal/aggregatori/account-shop/aggiungi"
         ></bs-toolbar-button>
 
     </bs-toolbar-group>
