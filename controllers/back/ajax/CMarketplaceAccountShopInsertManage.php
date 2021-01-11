@@ -63,7 +63,7 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
             $marketplaceInsert->marketplaceId=$marketplaceId;
             $marketplaceInsert->shopId=$shopId;
             $marketplaceInsert->typeSync=1;
-            $marketplaceInsert->imgMarketplace='https://iwes.s3.amazonaws.com/iwes-aggregator/'.$logoFile;
+            $marketplaceInsert->imgMarketplace=$logoFile;
             $marketplaceInsert->isPriceHub=1;
             $marketplaceInsert->isActive=$isActive;
             $marketplaceInsert->insert();
@@ -118,7 +118,7 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
             $marketplaceFind->name = $marketplace_account_name;
             $marketplaceFind->marketplaceId = $marketplaceId;
             $marketplaceFind->shopId = $shopId;
-            $marketplaceFind->imgMarketplace = 'https://iwes.s3.amazonaws.com/iwes-aggregator/'.$logoFile;
+            $marketplaceFind->imgMarketplace = $logoFile;
             $marketplaceFind->isActive = $isActive;
             $marketplaceFind->update();
 

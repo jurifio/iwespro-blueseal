@@ -63,7 +63,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             $aggregatorInsert->marketplaceId=$marketplaceId;
             $aggregatorInsert->shopId=$shopId;
             $aggregatorInsert->typeSync=1;
-            $aggregatorInsert->imgAggregator='https://iwes.s3.amazonaws.com/iwes-aggregator/'.$logoFile;
+            $aggregatorInsert->imgAggregator=$logoFile;
             $aggregatorInsert->isPriceHub=1;
             $aggregatorInsert->isActive=$isActive;
             $aggregatorInsert->insert();
@@ -117,7 +117,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             $aggregatorFind->name = $marketplace_account_name;
             $aggregatorFind->marketplaceId = $marketplaceId;
             $aggregatorFind->shopId = $shopId;
-            $aggregatorFind->imgAggregator = 'https://iwes.s3.amazonaws.com/iwes-aggregator/'.$logoFile;
+            $aggregatorFind->imgAggregator = $logoFile;
             $aggregatorFind->isActive = $isActive;
             $aggregatorFind->update();
 
