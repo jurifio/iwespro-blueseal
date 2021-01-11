@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    document.getElementById('insertMarketPlaceShopAccount').style.display = "block";
+    document.getElementById('insertMarketPlaceAccount').style.display = "block";
     $('#uploadLogo').click(function () {
         let bsModal = $('#bsModal');
 

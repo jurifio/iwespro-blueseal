@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="tab">
                         <div class="col-md-12">
-                            <button class="tablinks" onclick="openTab(event, 'insertMarketPlaceShopAccount')">Crea Marketplace Account
+                            <button class="tablinks" onclick="openTab(event, 'insertMarketPlaceAccount')">Crea Marketplace Account
                             </button>
                         </div>
                     </div>
