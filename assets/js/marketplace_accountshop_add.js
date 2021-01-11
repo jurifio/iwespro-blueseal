@@ -129,6 +129,7 @@ $(document).ready(function () {
             }).always(function (res) {
                 bsModal.setOkEvent(function () {
                     bsModal.showOkBtn();
+                    bsModal.hide();
                 });
                 bsModal.showOkBtn();
             });
