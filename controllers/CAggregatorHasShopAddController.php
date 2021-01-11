@@ -20,7 +20,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 class CAggregatorHasShopAddController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "aggregator_hasshop_add";
+    protected $pageSlug = "aggregator_accountshop_add";
 
     public function get()
     {
