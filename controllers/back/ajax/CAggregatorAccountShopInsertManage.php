@@ -39,7 +39,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
         if ($_GET['shopId'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">shop non selezionato</i>';
         } else {
-            $slug = $_GET['shopId'];
+            $shopId = $_GET['shopId'];
         }
 
         if ($_GET['isActive'] == '') {
