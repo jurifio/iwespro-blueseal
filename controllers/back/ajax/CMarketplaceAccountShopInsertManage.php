@@ -83,7 +83,7 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
     {
 
         $data = $this->app->router->request()->getRequestData();
-        $marketplaceHasShopId = $_GET['marketplaceHaShopId'];
+        $marketplaceHasShopId = $_GET['marketplaceHasShopId'];
         if ($_GET['nameMarketPlace'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Nome Marketplace non inserito</i>';
         } else {
