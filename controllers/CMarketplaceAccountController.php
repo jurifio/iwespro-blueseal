@@ -334,7 +334,7 @@ foreach($campaigns as $campaign) {
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'marketplaceAccountGet' => $marketplaceAccountGet,
-            'optionShop'=>$optionAggregator,
+            'optionAggregator'=>$optionAggregator,
             'marketplaceAccount' => $marketplaceAccount,
             'marketplaceConfig' => $marketplaceConfig,
             'marketplaceCode' => $marketplaceCode,
