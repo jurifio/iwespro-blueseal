@@ -139,7 +139,6 @@
                                                             class="full-width selectpicker"
                                                             placeholder="Selezione lo Shop"
                                                             data-init-plugin="selectize">
-
                                                     </select>
 
                                                 </div>
