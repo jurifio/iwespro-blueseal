@@ -129,21 +129,22 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-12">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="shopId">Seleziona Lo Shop
+                                                    <label for="aggregatorHasShopId">Seleziona Account Aggregatore
                                                     </label>
-                                                    <select id="shopId"
-                                                            name="shopId"
+                                                    <select id="aggregatorHasShopId"
+                                                            name="aggregatorHasShopId"
                                                             class="full-width selectpicker"
-                                                            placeholder="Selezione lo Shop"
+                                                            placeholder="Selezione Account Aggregatore"
                                                             data-init-plugin="selectize">
                                                     </select>
 
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
 
                                     <div class="row">
@@ -297,27 +298,6 @@
                                                        class="form-control" name="budget12" value=""
                                                        required="required"/>
 
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="selectCreation">Devi Creare Anche l'aggregatore ?
-                                                    </label>
-                                                    <select id="selectCreation"
-                                                            name="selectCreation"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione la Categoria 1 da Escludere "
-                                                            data-init-plugin="selectize">
-                                                        <option value=""></option>
-                                                        <option value="1">Si</option>
-                                                        <option value="2">No</option>
-                                                    </select>
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

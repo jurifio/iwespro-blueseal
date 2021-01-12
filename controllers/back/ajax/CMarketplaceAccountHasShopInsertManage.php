@@ -192,7 +192,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
         $urlSite = $findUrlSite->urlSite;
 
-        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
+        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shopId":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","activeFullPrice":"' . $activeFullPrice . '","signSale":"' . $signSale . '","percentFullPrice":"' . $percentFullPrice . '","signFullPrice":"' . $signFullPrice . '",';
         $collectUpdate .= '"optradio":"' . $optradio . '","optradioactive":"' . $optradioactive . '","activeSalePrice":"' . $activeSalePrice . '",';
         $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '",';
@@ -423,7 +423,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $urlSite = $findUrlSite->urlSite;
 
 
-        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
+        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shopId":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","activeFullPrice":"' . $activeFullPrice . '","signSale":"' . $signSale . '","percentFullPrice":"' . $percentFullPrice . '","signFullPrice":"' . $signFullPrice . '",';
         $collectUpdate .= '"optradio":"' . $optradio . '","optradioactive":"' . $optradioactive . '","activeSalePrice":"' . $activeSalePrice . '",';
         $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '",';

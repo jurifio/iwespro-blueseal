@@ -126,7 +126,7 @@ class CProductShareHasShopDestinationInsertManage extends AAjaxController
 
 
 
-        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
+        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shopId":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","isActiveShare":"' . $isActiveShare . '","isActivePublish":"' . $isActivePublish . '","productStatusId":"' . $productStatusId  . '",';
         $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '","brandParallelPubblication":"' . $brandParallelPubblication . '",';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify   . '","typeAssign":"' . $typeAssign . '",';
@@ -257,7 +257,7 @@ class CProductShareHasShopDestinationInsertManage extends AAjaxController
 
 
 
-        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
+        $collectUpdate = '{"nameMarketplace":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shopId":"' . $shopId . '","isActive":"' . $isActive . '","marketplaceId":"' . $marketplaceId . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "isActive":"' . $isActive . '","isActiveShare":"' . $isActiveShare . '","isActivePublish":"' . $isActivePublish . '","productStatusId":"' . $productStatusId  . '",';
         $collectUpdate .= '"typeAssignParallel":"' . $typeAssignParallel . '","brandParallel":"' . $brandParallel . '","brandParallelPubblication":"' . $brandParallelPubblication . '",';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify   . '","typeAssign":"' . $typeAssign . '",';

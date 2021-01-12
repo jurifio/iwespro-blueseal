@@ -118,7 +118,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <input type="hidden" id="shopSelected" id="shopSelected"
-                                                       value="<?php echo (isset($marketplaceAccount->config['shop'])) ? $marketplaceAccount->config['shop'] : ''; ?>"/>
+                                                       value="<?php echo (isset($marketplaceAccount->config['shopId'])) ? $marketplaceAccount->config['shopId'] : ''; ?>"/>
                                                 <label for="shopId">Seleziona Lo Shop
                                                 </label>
                                                 <select id="shopId"

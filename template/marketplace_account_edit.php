@@ -153,14 +153,14 @@
                                         <div class="col-md-3">
                                             <div class="form-group form-group-default required">
                                                 <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="shopId">Seleziona Lo Shop
+                                                    <label for="aggregatorHasShopId">Seleziona aggregatore Account
                                                     </label>
-                                                    <select id="shopId"
-                                                            name="shopId"
+                                                    <select id="aggregatorHasShopId"
+                                                            name="aggregatorHasShopId"
                                                             class="full-width selectpicker"
-                                                            placeholder="Selezione lo Shop"
+                                                            placeholder="Seleziona aggregatore Account"
                                                             data-init-plugin="selectize">
-                                                        <?php echo $optionShop;?>
+                                                        <?php echo $optionAggregator;?>
                                                     </select>
 
                                                 </div>

@@ -306,9 +306,9 @@ $(document).ready(function () {
 
 
 
-$('#shopId').change(function () {
+$('#aggregatorHasShopId').change(function () {
     $('#rawBrands').empty();
-    var shopSelect = $('#shopId').val();
+    var shopSelect = $('#aggregatorHasShopId').val();
     $.ajax({
         url: '/blueseal/xhr/SelectBrandMarketplaceAccountAjaxController',
         method: 'get',
@@ -340,66 +340,7 @@ $('#shopId').change(function () {
 
 });
 
-$('#selectCreation').change(function () {
-    if ($('#selectCreation').val() == 1) {
-        $('#divmarketplace').empty();
-        $('#divmarketplace').append(`
-         <div class="col-md-12">
-                                        <div class="form-group form-group-default required">
-                                            <input type="hidden" id="typeInsertion" name="typeInsertion" value="1"/>
-                                            <label for="marketplaceName">Nome Aggregatore</label>
-                                            <input id="marketplaceName" autocomplete="off" type="text"
-                                                   class="form-control" name="marketplaceName" value=""
-                                                   required="required"/>
-                                            <span class="bs red corner label"><i
-                                                        class="fa fa-asterisk"></i></span>
-                                        </div>
-                                    </div>
-        
-        `);
-    } else {
-        $('#divmarketplace').empty();
-        $('#divmarketplace').append(`
-         <div class="col-md-12">
-                                        <div class="form-group form-group-default required">
-                                         <input type="hidden" id="typeInsertion" name="typeInsertion" value="2"/>
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="marketplaceName">Nome Aggregatore
-                                                </label>
-                                                <select id="marketplaceName"
-                                                        name="marketplaceName"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Selezione l'aggregatore "
-                                                        data-init-plugin="selectize">
-                                                </select>
-                                                <span class="bs red corner label"><i
-                                                            class="fa fa-asterisk"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-        `);
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/GetTableContent',
-            data: {
-                table: 'Marketplace',
-                condition: {type: 'cpc'}
 
-            },
-            dataType: 'json'
-        }).done(function (res2) {
-            var select = $('#marketplaceName');
-            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-            select.selectize({
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: res2,
-            });
-
-        });
-    }
-});
 
 
 
@@ -420,7 +361,7 @@ $(document).on('bs.marketplace-account.save', function () {
     var marketplace_account_name = $('#marketplace_account_name').val();
     var slug = $('#slug').val();
     var useRange = $('#useRange').val();
-    var shopId = $('#shopId').val();
+    var aggregatorHasShopId = $('#aggregatorHasShopId').val();
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
@@ -453,8 +394,6 @@ $(document).on('bs.marketplace-account.save', function () {
     var valueexcept3 =$('#valueexcept3').val();
     var valueexcept4 =$('#valueexcept4').val();
     var valueexcept5 =$('#valueexcept5').val();
-    var typeInsertion = $('#typeInsertion').val();
-    var marketplaceName = $('#marketplaceName').val();
     var campaignName=$('#campaignName').val();
     var typeInsertionCampaign=$('#typeInsertionCampaign').val();
     var productCategoryIdEx1 = $('#productCategoryIdEx1').val();
@@ -563,12 +502,10 @@ $(document).on('bs.marketplace-account.save', function () {
          productCategoryId5: $('#productCategoryId5').val()*/
 
     var config = '?nameAggregator=' + marketplace_account_name + '&' +
-        'typeInsertion=' + typeInsertion + '&' +
-        'marketplaceName=' + marketplaceName + '&' +
         'typeInsertionCampaign=' + typeInsertionCampaign + '&' +
         'campaignName=' + campaignName + '&' +
         'lang=' + lang + '&' +
-        'shopId=' + shopId + '&' +
+        'aggregatorHasShopId=' + aggregatorHasShopId + '&' +
         'slug=' + slug + '&' +
         'logoFile=' + logoFile + '&' +
         'activeAutomatic=' + useRange + '&' +

@@ -80,7 +80,7 @@ class CEbayNewReviseProductJob extends ACronJob
         foreach ($marketplaceAccounts as $marketplaceAccount) {
             $goods = $productInMarketplaceRepo->findBy(['isPublished' => 1,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
 
-            $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shop']]);
+            $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shopId']]);
             $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
             foreach ($goods as $good) {
                 if(is_null($good->refMarketplaceId)){
@@ -114,7 +114,7 @@ class CEbayNewReviseProductJob extends ACronJob
                     $productEanSelect->productSizeId=0;
                     $productEanSelect->usedForParent=1;
                     $productEanSelect->brandAssociate=$product->productBrandId;
-                    $productEanSelect->shopId=$marketplaceAccount->config['shop'];
+                    $productEanSelect->shopId=$marketplaceAccount->config['shopId'];
                     $productEanSelect->update();
                 }
                 $brands = explode(',',$marketplaceAccount->config['brands']);
@@ -184,7 +184,7 @@ class CEbayNewReviseProductJob extends ACronJob
                             $productSkuEanSelect->usedForParent=0;
                             $productSkuEanSelect->used=1;
                             $productSkuEanSelect->brandAssociate=$product->productBrandId;
-                            $productSkuEanSelect->shopId=$marketplaceAccount->config['shop'];
+                            $productSkuEanSelect->shopId=$marketplaceAccount->config['shopId'];
                             $productSkuEanSelect->update();
                         }
 

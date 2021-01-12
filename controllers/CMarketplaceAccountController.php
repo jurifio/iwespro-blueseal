@@ -47,13 +47,13 @@ class CMarketplaceAccountController extends ARestrictedAccessRootController
         $productCategoryEx5Option = '';
         $productCategoryEx6Option = '';
         $productCategoryIdEx1 = $marketplaceAccount->config['productCategoryIdEx1'];
-        $shops=\Monkey::app()->repoFactory->create('Shop')->findAll();
-        $optionShop='';
-        foreach($shops as $shop){
-            if($shop->id == $marketplaceAccount->config['shop']){
-                $optionShop.='<option selected="selected" value="'.$shop->id.'">'.$shop->name.'</option>';
+        $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findAll();
+        $optionAggregator='';
+        foreach($aggregatorHasShop as $shop){
+            if($shop->id == $marketplaceAccount->config['aggregatorHasShopId']){
+                $optionAggregator.='<option selected="selected" value="'.$shop->id.'">'.$shop->name.'</option>';
             }else{
-                $optionShop.='<option  value="'.$shop->id.'">'.$shop->name.'</option>';
+                $optionAggregator.='<option  value="'.$shop->id.'">'.$shop->name.'</option>';
             }
 
         }
@@ -293,7 +293,7 @@ FROM ProductCategory  t0   GROUP BY t0.slug';
         $productSizeGroupId5 = $marketplaceAccount->config['productSizeGroup5'];
         $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $productSizeGroupId5]);
         $productSizeGroupId5Text = $productSizeGroup->name;
-        $shopId =$marketplaceAccount->config['shop'];
+        $shopId =$marketplaceAccount->config['shopId'];
         $res = $this -> app -> dbAdapter -> query('(SELECT pb.id as id,
         pb.name as brandName, s.name as shopName, s.id as shopIdOrigin, s.id AS shopIdDestination from ProductBrand pb
                                                       join Product p on pb.id=p.productBrandId
@@ -334,7 +334,7 @@ foreach($campaigns as $campaign) {
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'marketplaceAccountGet' => $marketplaceAccountGet,
-            'optionShop'=>$optionShop,
+            'optionShop'=>$optionAggregator,
             'marketplaceAccount' => $marketplaceAccount,
             'marketplaceConfig' => $marketplaceConfig,
             'marketplaceCode' => $marketplaceCode,

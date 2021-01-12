@@ -44,10 +44,10 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $lang = $_GET['lang'];
         }
-        if ($_GET['shopId'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Shop non valorizzato</i>';
+        if ($_GET['aggregatorHasShopId'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Account Aggregatore non valorizzato</i>';
         } else {
-            $shopId = $_GET['shopId'];
+            $aggregatorHasShopId = $_GET['aggregatorHasShopId'];
         }
         if ($_GET['isActive'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato aggregatore </i>';
@@ -155,11 +155,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $budget12 = $_GET['budget12'];
         }
-        if ($_GET['typeInsertion'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Aggregatore non eseguita</i>';
-        } else {
-            $typeInsertion = $_GET['typeInsertion'];
-        }
+
         if ($_GET['typeInsertionCampaign'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Campagna non eseguita</i>';
         } else {
@@ -370,24 +366,9 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $ruleOption = $_GET['ruleOption'];
         }
-
-        if ($typeInsertion == 1) {
-            $marketplace = $marketplaceRepo->findOneBy(['name' => $marketplaceName]);
-            if ($marketplace == null) {
-                $marketplaceInsert = $marketplaceRepo->getEmptyEntity();
-                $marketplaceInsert->name = $marketplaceName;
-                $marketplaceInsert->type = 'cpc';
-                $marketplaceInsert->insert();
-                $marketplaceFindLastId = $marketplaceRepo->findOneBy(['name' => $marketplaceName]);
-                $marketplaceId = $marketplaceFindLastId->id;
-            } else {
-                return;
-            }
-
-
-        } else {
-            $marketplaceId = $marketplaceName;
-        }
+    $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$aggregatorHasShopId]);
+        $marketplaceId=$aggregatorHasShop->marketplaceId;
+        $shopId=$aggregatorHasShop->shopId;
 
         $maxCos1 = 0.1;
         $maxCos2 = 0.1;
@@ -407,7 +388,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $ruleOption = str_replace('on,','',$ruleOption);
 
 
-        $collectUpdate = '{"nameAggregator":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":' . $shopId . ',"isActive":"' . $isActive . '","filePath":"' . $filePath . '","feedUrl":"' . $feedUrl . '","logoFile":"' . $logoFile . '",';
+        $collectUpdate = '{"nameAggregator":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shopId":' . $shopId . ',"aggregatorHasShopId":' . $aggregatorHasShopId . ',"isActive":"' . $isActive . '","filePath":"' . $filePath . '","feedUrl":"' . $feedUrl . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "activeAutomatic":"' . $activeAutomatic . '","defaultCpc":' . $defaultCpc . ',"defaultCpcM":' . $defaultCpcM . ',"defaultCpcF":' . $defaultCpcF . ',"defaultCpcFM":' . $defaultCpcFM . ',';
         $collectUpdate .= '"timeRange":"' . $timeRange . '","multiplierDefault":"' . $multiplierDefault . '","priceModifier":' . $priceModifier . ',';
         $collectUpdate .= '"budget01":' . $budget01 . ',"budget02":' . $budget02 . ' ,"budget03":' . $budget03 . ' ,"budget04":' . $budget04 . ' ,"budget05":' . $budget05 . ' ,"budget06":' . $budget06 . ' ,';
@@ -535,10 +516,10 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $lang = $_GET['lang'];
         }
-        if ($_GET['shopId'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Shop non valorizzato</i>';
+        if ($_GET['aggregatorHasShopId'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Aggregatore Account non valorizzato</i>';
         } else {
-            $shopId = $_GET['shopId'];
+            $aggregatorHasShopId = $_GET['aggregatorHasShopId'];
         }
         if ($_GET['isActive'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato aggregatore </i>';
@@ -646,21 +627,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $budget12 = $_GET['budget12'];
         }
-        if ($_GET['typeInsertion'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Aggregatore non eseguita</i>';
-        } else {
-            $typeInsertion = $_GET['typeInsertion'];
-        }
-        if ($_GET['typeInsertionCampaign'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Campagna non eseguita</i>';
-        } else {
-            $typeInsertionCampaign = $_GET['typeInsertionCampaign'];
-        }
-        if ($_GET['marketplaceName'] == '') {
-            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Aggregatore non valorizzato</i>';
-        } else {
-            $marketplaceName = $_GET['marketplaceName'];
-        }
+
         if ($_GET['campaignName'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Campagna non valorizzato</i>';
         } else {
@@ -922,6 +889,10 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $timeRange = $_GET['timeRange'];
         }
+        $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$aggregatorHasShopId]);
+        $marketplaceId=$aggregatorHasShop->marketplaceId;
+        $shopId=$aggregatorHasShop->shopId;
+
 
 
         $filePath = '/export/' . ucfirst($slug) . 'BetterFeedTemp.' . $lang . '.xml';
@@ -930,7 +901,8 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $ruleOption = str_replace('on,','',$ruleOption);
 
 
-        $collectUpdate = '{"nameAggregator":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shop":' . $shopId . ',"isActive":"' . $isActive . '","filePath":"' . $filePath . '","feedUrl":"' . $feedUrl . '","logoFile":"' . $logoFile . '",';
+
+        $collectUpdate = '{"nameAggregator":"' . $marketplace_account_name . '","lang":"' . $lang . '","slug":"' . $slug . '","shopId":' . $shopId . ',"aggregatorHasShopId":' . $aggregatorHasShopId . ',"isActive":"' . $isActive . '","filePath":"' . $filePath . '","feedUrl":"' . $feedUrl . '","logoFile":"' . $logoFile . '",';
         $collectUpdate .= ' "activeAutomatic":"' . $activeAutomatic . '","defaultCpc":' . $defaultCpc . ',"defaultCpcM":' . $defaultCpcM . ',"defaultCpcF":' . $defaultCpcF . ',"defaultCpcFM":' . $defaultCpcFM . ',';
         $collectUpdate .= '"timeRange":"' . $timeRange . '","multiplierDefault":"' . $multiplierDefault . '","priceModifier":' . $priceModifier . ',';
         $collectUpdate .= '"budget01":' . $budget01 . ',"budget02":' . $budget02 . ' ,"budget03":' . $budget03 . ' ,"budget04":' . $budget04 . ' ,"budget05":' . $budget05 . ' ,"budget06":' . $budget06 . ' ,';

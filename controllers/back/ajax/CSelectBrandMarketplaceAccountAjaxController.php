@@ -23,7 +23,9 @@ class CSelectBrandMarketplaceAccountAjaxController extends AAjaxController
     public function get()
     {
         $selectBrands=[];
-        $shopId = $this -> app -> router -> request() -> getRequestData('shop');
+        $aggregatorHasShopId = $this -> app -> router -> request() -> getRequestData('aggregatorShopId');
+        $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$aggregatorHasShopId]);
+        $shopId=$aggregatorHasShop->shopId;
         $res = $this -> app -> dbAdapter -> query('(SELECT pb.id as id,
         pb.name as brandName, s.name as shopName, s.id as shopIdOrigin, s.id AS shopIdDestination from ProductBrand pb
                                                       join Product p on pb.id=p.productBrandId

@@ -289,7 +289,7 @@ class CEbayAddProductJob extends ACronJob
                                         $productSkuEanSelect->usedForParent=0;
                                         $productSkuEanSelect->used=1;
                                         $productSkuEanSelect->brandAssociate=$product->productBrandId;
-                                        $productSkuEanSelect->shopId=$marketplaceAccount->config['shop'];
+                                        $productSkuEanSelect->shopId=$marketplaceAccount->config['shopId'];
                                         $productSkuEanSelect->update();
                                     }
 
