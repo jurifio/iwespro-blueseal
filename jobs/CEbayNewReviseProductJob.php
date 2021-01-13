@@ -160,7 +160,7 @@ class CEbayNewReviseProductJob extends ACronJob
                 /** @var CProductSku $productSku */
                 $productSku = $productSkuRepo->findBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
                 foreach ($productSku as $sku) {
-                    if ($sku->stockQty > 0) {
+                   // if ($sku->stockQty > 0) {
                         $xml .= '<Variation>';
                         // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                         $xml .= '<SKU>' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . '</SKU>';
@@ -204,7 +204,7 @@ class CEbayNewReviseProductJob extends ACronJob
                         $xml .= '</NameValueList>';
                         $xml .= '</VariationSpecifics>';
                         $xml .= '</Variation>';
-                    }
+                   // }
                 }
                 $xml .= '</Variations>';
                 $xml .= '<PictureDetails>';
