@@ -36,7 +36,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
               p.externalId AS externalId,
                    
 
-              group_concat(concat(mahp.marketplaceProductId,' | ',s.name, ' | ', m.name, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastReponse=null, concat('Eseguito ',mahp.lastReponse),concat('Fallito ',mahp.lastReponse))  )) AS marketplaceAssociation,
+              group_concat(concat(mahp.marketplaceProductId,' | ',s.name, ' | ', m.name, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastResponse=null, concat('Eseguito ',mahp.lastResponse),concat('Fallito ',mahp.lastResponse))  )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,     
@@ -102,7 +102,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
             /** @var CMarketplaceAccountHasProduct $pHPHmHs */
             foreach ($php->marketplaceAccountHasProduct as $pHPHmHs) {
 
-                $associations .= $pHPHmHs->marketplaceProductId . ' | ' . $pHPHmHs->aggregatorHasShop->shop->name . ' | ' . $pHPHmHs->aggregatorHasShop->marketplace->name . ' |<br> Fee Cost: ' . $pHPHmHs->fee . ' ( ' . $pHPHmHs->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $pHPHmHs->feeCustomer . ' ( ' . $pHPHmHs->feeCustomerMobile . ' ) | Price Modifier: ' . $pHPHmHs->priceModifier . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$pHPHmHs->lastUpdate.' ' . ($pHPHmHs->lastReponse == null ? 'Eseguita '  : 'Fallito ') . '<br><hr>';
+                $associations .= $pHPHmHs->marketplaceProductId . ' | ' . $pHPHmHs->aggregatorHasShop->shop->name . ' | ' . $pHPHmHs->aggregatorHasShop->marketplace->name . ' |<br> Fee Cost: ' . $pHPHmHs->fee . ' ( ' . $pHPHmHs->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $pHPHmHs->feeCustomer . ' ( ' . $pHPHmHs->feeCustomerMobile . ' ) | Price Modifier: ' . $pHPHmHs->priceModifier . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$pHPHmHs->lastUpdate.' ' . ($pHPHmHs->lastResponse == null ? 'Eseguita '  : 'Fallito ') . '<br><hr>';
 
 
             }
