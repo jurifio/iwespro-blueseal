@@ -48,7 +48,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                 $mhss = $mhsRepo->findBy(['shopId' => $shop->id]);
                 foreach ($mhss as $mhs) {
                     $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
-                                shp.shopId as shopId,shp.isPublished as isPublished from Product p join ShopHasProduct shp on p.id=shp.productId
+                                shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where p.qty > 0 shp.shopId =' . $shop->id . ' ) UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopId as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
