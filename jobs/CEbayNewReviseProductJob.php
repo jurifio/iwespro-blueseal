@@ -1015,12 +1015,19 @@ footer {
 
 
                         $good->lastUpdate = $product->lastUpdate;
-                        $good->result=1;
-                        $good->lastTypeOperation=1;
+                        $good->result = 1;
+                        $good->lastTypeOperation = 1;
                         $good->update();
                         $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
                         sleep(1);
-                    }else{
+                    }elseif($responseNewProduct->Ack=='Warning') {
+                        $good->lastUpdate = $product->lastUpdate;
+                        $good->result = 1;
+                        $good->lastTypeOperation = 1;
+                        $good->update();
+                        $this->report('CEbayReviseProductJob','Report  Revise ' . $good->refMarketplaceId,$xml);
+                        sleep(1);
+                    } else{
                         $good->result=0;
                         $good->update();
                         $this->report('CEbayReviseProductJob','Error api call  Revise ' . $good->refMarketplaceId,$xml);

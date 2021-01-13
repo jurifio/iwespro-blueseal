@@ -981,14 +981,13 @@ footer {
                         $now = $today->format('Y-m-d H:i:s');
                         sleep(1);
                         $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
-
-                        $good->refMarketplaceId = $refMarketplaceId;
-                        $good->lastUpdate = $product->lastUpdate;
-                        $good->result = 1;
-                        $good->lastTypeOperation=2;
-                        $good->isPublished=1;
-                        $good->update();
-                        $this->report('CEbayNewAddProductJob','Report ' . $refMarketplaceId,$xml);
+                    }elseif ($responseNewProduct->Ack=='Warning') {
+                        $this->report('CEbayNewAddProductJob','Report ',$xml);
+                        $refMarketplaceId = $responseNewProduct->ItemID;
+                        $today = new \DateTime();
+                        $now = $today->format('Y-m-d H:i:s');
+                        sleep(1);
+                        $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
                     }else{
 
                         $good->result = 0;

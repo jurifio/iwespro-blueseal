@@ -107,12 +107,23 @@ class CEbayCloseProductJob extends ACronJob
 // Send the Request
                                 $response = curl_exec($connection);
                                 $xmlResult = new \SimpleXMLElement($response);
-                                 if($xmlResult->Ack=='Success') {
+                                 if($xmlResult->Ack=='Success' ) {
 
                                      $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
                                      if ($phs) {
                                          $phs->productStatusMarketplaceId = 5;
-                                         $phs->status=0;
+                                         $phs->status = 0;
+                                         $phs->update();
+                                         $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
+                                     }
+                                     $productInMarketplace->delete();
+                                     $this->report('CEbayCloseProductJob','Report Close for quantity 0 ',$response);
+                                     sleep(2);
+                                 }elseif($xmlResult->Ack=='Warning' ){
+                                     $phs = $phsRepo->findOneBy(['productId' => $productInMarketplace->productId,'productVariantId' => $productInMarketplace->productVariantId,'marketplaceHasShopId' => $productInMarketplace->marketplaceHasShopId]);
+                                     if ($phs) {
+                                         $phs->productStatusMarketplaceId = 5;
+                                         $phs->status = 0;
                                          $phs->update();
                                          $this->report('CEbayCloseProductJob','set product Cancellato','Depublish ' . $productInMarketplace->productId . '-' . $productInMarketplace->productVariantId . '-' . $productInMarketplace->refMarketplaceId);
                                      }
