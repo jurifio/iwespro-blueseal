@@ -58,7 +58,7 @@ class CPrestashopAddNewProduct extends ACronJob
                 $products->add($php->product);
             }
             try {
-                if ($prestashopProduct->addNewProducts($products,$mhs,$reservedId['modifyType'],$reservedId['variantValue'])) {
+               // if ($prestashopProduct->addNewProducts($products,$mhs,$reservedId['modifyType'],$reservedId['variantValue'])) {
                     \Monkey::app()->dbAdapter->query('UPDATE PrestashopHasProduct 
                                                         SET 
                                                           marketplaceHasShopId = NULL, 
@@ -69,7 +69,7 @@ class CPrestashopAddNewProduct extends ACronJob
                                                           AND modifyType = ?
                                                           AND variantValue = ?',
                         [$reservedId['marketplaceHasShopId'],$reservedId['modifyType'],$reservedId['variantValue']]);
-                }
+                //}
             }catch(\Throwable $e){
                 $this->report('Export product','CPrestashopAddNewProduct', $e->getMessage.' '.$e->getLine());
             }
