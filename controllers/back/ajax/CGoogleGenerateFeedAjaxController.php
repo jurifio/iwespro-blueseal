@@ -93,7 +93,7 @@ class CGoogleGenerateFeedAjaxController extends AAjaxController
 
         \Monkey::app()->applicationLog('CGoogleGenerateFeedAjaxController','Log','End build','','');
         \Monkey::app()->applicationLog('CGoogleGenerateFeedAjaxController','Log','End build','End build, errors: ' . $contoErrori);
-        return 'PorcoDio';
+        return 'Bestemmia Errore';
     }
     /**
      * @param $uri

@@ -64,13 +64,13 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Associazioni<br>Marketplace
+                                    data-default-order="desc">Associazioni<br>Aggregatore
                                 </th>
                                 <th data-slug="status"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato Pubblicazione<br>Marketplace
+                                    data-default-order="desc">Stato Pubblicazione<br>Aggregatgore
                                 </th>
 
                                 <th data-slug="productStatusAggregatorId"
