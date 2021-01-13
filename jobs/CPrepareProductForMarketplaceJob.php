@@ -62,7 +62,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                               if($phphmhs){
                                   $phphmhs->isPublished=3;
                                   $phphmhs->update();
-                                  $this->report('CPrepareProductForMarketplaceJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id);
+                                  $this->report('CPrepareProductForMarketplaceJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
                               }
                           }
                         }else{
@@ -71,7 +71,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                             $phs->productVariantId=$product['productVariantId'];
                             $phs->marketplaceHasShopId=$mhs->id;
                             $phs->insert();
-                            $this->report('CPrepareProductForMarketplaceJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id);
+                            $this->report('CPrepareProductForMarketplaceJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
 
                         }
 
@@ -79,7 +79,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                 }
             }
         } catch (\Throwable $e) {
-            $this->report('CPrepareProductForMarketplaceJob','Error'. $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,$e->getMessage().'-'.$e->getLine());
+            $this->report('CPrepareProductForMarketplaceJob','Error',$e->getMessage().'-'.$e->getLine());
         }
 
 
