@@ -226,7 +226,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "modifier": "0",';
         }
         $collectUpdate .= '"dateUpdate":"2011-01-01 00:00:00",';
-        $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
+        $collectUpdate .= '"marketplaceHasShopId":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
@@ -457,7 +457,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
     "modifier": "0",';
         }
         $collectUpdate .= '"dateUpdate":"' . $dateUpdate . '",';
-        $collectUpdate .= '"marketplaceHasShop":"' . $marketplaceHasShopId . '",';
+        $collectUpdate .= '"marketplaceHasShopId":"' . $marketplaceHasShopId . '",';
         $collectUpdate .= '"brandSaleExclusion":"' . $brandSale . '",';
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
