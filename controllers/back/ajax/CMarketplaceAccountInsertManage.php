@@ -436,6 +436,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $collectUpdate .= '"productSizeGroup5":' . $productSizeGroup5 . ',';
         $collectUpdate .= '"productCategoryId5":' . $productCategoryId5 . ',';
         $collectUpdate .= '"nameRule":"' . $nameRule . '",';
+        $collectUpdate .= '"dateUpdate":"2011-01-01 00:00:00",';
         $collectUpdate .= '"ruleOption":"' . $ruleOption . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
         $findUrlSite = $shopRepo->findOneBy(['id' => $shopId]);
@@ -498,6 +499,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $campaignRepo = \Monkey::app()->repoFactory->create('Campaign');
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $data = $this->app->router->request()->getRequestData();
+        $dateUpdate = (new \DateTime())->format('Y-m-d H:i:s');
         $marketplaceAccountId = $data['marketplaceAccountId'];
         $marketplaceId = $data['marketplaceId'];
         if ($_GET['nameAggregator'] == '') {
@@ -949,6 +951,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $collectUpdate .= '"range5CpcM":' . $range5CpcM . ',';
         $collectUpdate .= '"productSizeGroup5":' . $productSizeGroup5 . ',';
         $collectUpdate .= '"productCategoryId5":' . $productCategoryId5 . ',';
+        $collectUpdate .= '"dateUpdate":"' . $dateUpdate . '",';
         $collectUpdate .= '"nameRule":"' . $nameRule . '",';
         $collectUpdate .= '"ruleOption":"' . $ruleOption . '"}';
         $collectUpdate = trim($collectUpdate,"\t\n\r\0\x0B");

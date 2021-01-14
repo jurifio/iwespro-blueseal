@@ -82,7 +82,7 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Pubblica Prodotto">
         <bs-toolbar-button
-            data-remote="bs.product.marketplace.publish"
+            data-remote="bs.product.aggregator.publish"
         ></bs-toolbar-button>
 
         <bs-toolbar-button

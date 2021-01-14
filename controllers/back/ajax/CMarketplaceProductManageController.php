@@ -21,15 +21,17 @@ class CMarketplaceProductManageController extends AAjaxController
     public function get()
     {
         $response = [];
-        foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findAll() as $account) {
-                $activeAutomatic=isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
+        foreach (\Monkey::app()->repoFactory->create('Marketplace')->findBy(['type' => 'cpc']) as $mp) {
+            foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]) as $account) {
+                $activeAutomatic = isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
                 $modifier = isset($account->config['priceModifier']) ? $account->config['priceModifier'] : 0;
                 $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
                 if ($account->marketplace->type == 'cpc') {
-                    $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' => $cpc,'activeAutomatic'=>$activeAutomatic];
-                }else{
-                    $response[] = ['id' => $account->printId(), 'name' => $account->name, 'marketplace' => $account->marketplace->name, 'modifier' => $modifier, 'cpc' =>0,'activeAutomatic'=>0];
+                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $account->marketplace->name,'modifier' => $modifier,'cpc' => $cpc,'activeAutomatic' => $activeAutomatic];
+                } else {
+                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $account->marketplace->name,'modifier' => $modifier,'cpc' => 0,'activeAutomatic' => 0];
                 }
+            }
         }
 
         return json_encode($response);
@@ -40,6 +42,7 @@ class CMarketplaceProductManageController extends AAjaxController
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
         $modifier = $this->app->router->request()->getRequestData('modifier');
         $cpc = $this->app->router->request()->getRequestData('cpc');
+        $cpcM = $this->app->router->request()->getRequestData('cpcM');
         $activeAutomatic = $this->app->router->request()->getRequestData('activeAutomatic');
         $i = 0;
         $rows = $this->app->router->request()->getRequestData('rows');
@@ -64,7 +67,7 @@ class CMarketplaceProductManageController extends AAjaxController
                 /** @var  $product CProduct */
                 $product = $productRepo->findOneByStringId($row);
                 if($product->productBrand->hasAggregator==1) {
-                    $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product,$marketplaceAccount,$cpc,$modifier,$activeAutomatic);
+                    $marketplaceAccountHasProduct = $marketplaceAccountHasProductRepo->addProductToMarketplaceAccount($product,$marketplaceAccount,$cpc,$cpcM,$modifier,$activeAutomatic);
                 }
                 $i++;
                 \Monkey::app()->repoFactory->commit();

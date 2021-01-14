@@ -26,6 +26,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
 
         $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $data = $this->app->router->request()->getRequestData();
+
         if ($_GET['nameMarketPlace'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Nome Marketplace non inserito</i>';
         } else {
