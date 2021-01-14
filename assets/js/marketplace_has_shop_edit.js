@@ -263,11 +263,7 @@ $(document).on('bs.marketplacehasshop-account.save', function () {
     });
 
     var val = '';
-    $(':checkbox:checked').each(function (i) {
-        if ($(this) != $('#checkedAll')) {
-            val = val + $(this).val() + ',';
-        }
-    });
+
     var lang = $('#lang').val();
     var marketplaceAccountId = $('#marketplaceAccountId').val();
     var marketplace_account_name = $('#marketplace_account_name').val();
