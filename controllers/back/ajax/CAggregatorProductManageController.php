@@ -84,7 +84,7 @@ class CAggregatorProductManageController extends AAjaxController
                     $ahpInsert = $aggregatorHasProductRepo->getEmptyEntity();
                     $ahpInsert->productId = $productId;
                     $ahpInsert->productVariantId = $productVariantId;
-                    $ahpInsert->status = 2;
+                    $ahpInsert->status = 0;
                     $ahpInsert->aggregatorHasShopId = $aggregatorHasShopId;
                     $ahpInsert->fee = $cpc;
                     $ahpInsert->feeMobile = $cpcM;

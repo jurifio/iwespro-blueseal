@@ -35,7 +35,9 @@ class CAggregatorHasProductJob extends ACronJob
     {
         $marketplaceRepo = \Monkey::app()->repoFactory->create('Marketplace');
         $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
+        $productRepo = \Monkey::app()->repoFactory->create('Product');
         $phphmhsRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        /** @var CRepo phsRepo */
         $phsRepo = \Monkey::app()->repoFactory->create('AggregatorHasProduct');
 
 
@@ -68,544 +70,354 @@ class CAggregatorHasProductJob extends ACronJob
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
                             if ($product['qty'] > 0) {
+                                /** @var $pshsd CAggregatorHasProduct */
                                 $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                                 if ($pshsd) {
 
                                     if ($pshsd->dateUpdate != $marketplaceAccount->config['dateUpdate']) {
                                         $pshsd->status = 2;
-                                        $pshsd->fee=$marketp
+                                        if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
+
+                                            $pshsd->priceModifier = $marketplaceAccount->config['priceModifier'];
+
+                                            if (isset($marketplaceAccount->config['defaultCpcF'])) {
+                                                $pshsd->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                            } else {
+                                                $pshsd->feeCustomer = 0;
+                                            }
+                                            if (isset($marketplaceAccount->config['defaultCpcFM'])) {
+                                                $pshsd->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                            } else {
+                                                $pshsd->feeCustomerMobile = 0.25;
+                                            }
+                                            if (isset($marketplaceAccount->config['defaultCpc'])) {
+                                                $pshsd->fee = $marketplaceAccount->config['defaultCpc'];
+                                            } else {
+                                                $pshsd->fee = 0.25;
+                                            }
+                                            if (isset($marketplaceAccount->config['defaultCpcM'])) {
+                                                $pshsd->feeMobile = $marketplaceAccount->config['defaultCpcM'];
+                                            } else {
+                                                $pshsd->feeMobile = 0.25;
+                                            }
+                                            $pshsd->status = 2;
+                                            $pshsd->productStatusAggregatorId = 2;
+                                            $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
+                                            $pshsd->update();
+
+
+                                        } else {
+                                            $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
+                                            $isOnSale = $prod->isOnSale();
+                                            $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId]);
+                                            $price = $productSku->price;
+                                            $salePrice = $productSku->salePrice;
+                                            if ($isOnSale == 1) {
+                                                $activePrice = $salePrice;
+                                            } else {
+                                                $activePrice = $price;
+                                            }
+
+                                            $priceRange1 = explode('-',$marketplaceAccount->config['priceModifierRange1']);
+                                            $priceRange2 = explode('-',$marketplaceAccount->config['priceModifierRange2']);
+                                            $priceRange3 = explode('-',$marketplaceAccount->config['priceModifierRange3']);
+                                            $priceRange4 = explode('-',$marketplaceAccount->config['priceModifierRange4']);
+                                            $priceRange5 = explode('-',$marketplaceAccount->config['priceModifierRange5']);
+
+                                            switch (true) {
+                                                case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
+                                                    $fee = $marketplaceAccount->config['range1Cpc'];
+                                                    $feeMobile = $marketplaceAccount->config['range1CpcM'];
+                                                    $priceModifier = $marketplaceAccount->config['valueexcept1'];
+
+                                                    break;
+                                                case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
+                                                    $fee = $marketplaceAccount->config['range2Cpc'];
+                                                    $feeMobile = $marketplaceAccount->config['range2CpcM'];
+                                                    $priceModifier = $marketplaceAccount->config['valueexcept2'];
+                                                    break;
+                                                case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
+                                                    $fee = $marketplaceAccount->config['range3Cpc'];
+                                                    $feeMobile = $marketplaceAccount->config['range3CpcM'];
+                                                    $priceModifier = $marketplaceAccount->config['valueexcept3'];
+                                                    break;
+                                                case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
+                                                    $fee = $marketplaceAccount->config['range4Cpc'];
+                                                    $feeMobile = $marketplaceAccount->config['range4CpcM'];
+                                                    $priceModifier = $marketplaceAccount->config['valueexcept4'];
+                                                    break;
+                                                case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
+                                                    $fee = $marketplaceAccount->config['range5Cpc'];
+                                                    $feeMobile = $marketplaceAccount->config['range5CpcM'];
+                                                    $priceModifier = $marketplaceAccount->config['valueexcept5'];
+                                                    break;
+                                            }
+                                            $pshsd->priceModifier = $priceModifier;
+                                            $pshsd->fee = $fee;
+                                            $pshsd->feeMobile = $feeMobile;
+                                            if (isset($marketplaceAccount->config['defaultCpcF'])) {
+                                                $pshsd->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                            } else {
+                                                $pshsd->feeCustomer = 0;
+                                            }
+                                            if (isset($marketplaceAccount->config['defaultCpcFM'])) {
+                                                $pshsd->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                            } else {
+                                                $pshsd->feeCustomerMobile = 0.25;
+                                            }
+                                            $pshsd->productStatusAggregatorId = 2;
+                                            $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
+                                            $pshsd->status = 2;
+                                            $pshsd->update();
+                                        }
 
 
                                     } else {
                                         $pshsd->status = 1;
+                                        $pshsd->productStatusAggregatorId = 2;
+                                        $pshsd->update();
                                     }
-                                    $pshsd->productStatusMarkeplaceId=2;
-                                    $pshsd->update();
                                 } else {
                                     $pshsdInsert = $phsRepo->getEmptyEntity();
                                     $pshsdInsert->productId = $product['productId'];
                                     $pshsdInsert->productVariantId = $product['productVariantId'];
-                                    $pshsdInsert->marketplaceHasShopId = $marketplaceAccount->config['marketplaceHasShopId'];
-                                    if ($marketplaceAccount->config['activeFullPrice'] == "1") {
-                                        $pshsd->modifyType = 'nf';
+                                    $pshsdInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
+                                    if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
+
+                                        $pshsdInsert->priceModifier = $marketplaceAccount->config['priceModifier'];
+
+                                        if (isset($marketplaceAccount->config['defaultCpcF'])) {
+                                            $pshsdInsert->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                        } else {
+                                            $pshsdInsert->feeCustomer = 0;
+                                        }
+                                        if (isset($marketplaceAccount->config['defaultCpcFM'])) {
+                                            $pshsdInsert->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                        } else {
+                                            $pshsdInsert->feeCustomerMobile = 0.25;
+                                        }
+                                        if (isset($marketplaceAccount->config['defaultCpc'])) {
+                                            $pshsdInsert->fee = $marketplaceAccount->config['defaultCpc'];
+                                        } else {
+                                            $pshsdInsert->fee = 0.25;
+                                        }
+                                        if (isset($marketplaceAccount->config['defaultCpcM'])) {
+                                            $pshsdInsert->feeMobile = $marketplaceAccount->config['defaultCpcM'];
+                                        } else {
+                                            $pshsdInsert->feeMobile = 0.25;
+                                        }
 
                                     } else {
-                                        if ($marketplaceAccount->config['signFullPrice'] == "1") {
-                                            $pshsd->modifyType = '-p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentFullPrice'];
+                                        $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
+                                        $isOnSale = $prod->isOnSale();
+                                        $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId]);
+                                        $price = $productSku->price;
+                                        $salePrice = $productSku->salePrice;
+                                        if ($isOnSale == 1) {
+                                            $activePrice = $salePrice;
                                         } else {
-                                            $pshsd->modifyType = '+p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentFullPrice'];
+                                            $activePrice = $price;
                                         }
-                                    }
-                                    if ($marketplaceAccount->config['activeSalePrice'] == "1") {
-                                        $pshsd->modifyTypeSale = 'nf';
 
-                                    } else {
-                                        if ($marketplaceAccount->config['signSale'] == "1") {
-                                            $pshsd->modifyTypeSale = '-p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentSalePrice'];
-                                        } else {
-                                            $pshsd->modifyTypeSale = '+p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentSalePrice'];
+                                        $priceRange1 = explode('-',$marketplaceAccount->config['priceModifierRange1']);
+                                        $priceRange2 = explode('-',$marketplaceAccount->config['priceModifierRange2']);
+                                        $priceRange3 = explode('-',$marketplaceAccount->config['priceModifierRange3']);
+                                        $priceRange4 = explode('-',$marketplaceAccount->config['priceModifierRange4']);
+                                        $priceRange5 = explode('-',$marketplaceAccount->config['priceModifierRange5']);
+
+                                        switch (true) {
+                                            case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
+                                                $fee = $marketplaceAccount->config['range1Cpc'];
+                                                $feeMobile = $marketplaceAccount->config['range1CpcM'];
+                                                $priceModifier = $marketplaceAccount->config['valueexcept1'];
+
+                                                break;
+                                            case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
+                                                $fee = $marketplaceAccount->config['range2Cpc'];
+                                                $feeMobile = $marketplaceAccount->config['range2CpcM'];
+                                                $priceModifier = $marketplaceAccount->config['valueexcept2'];
+                                                break;
+                                            case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
+                                                $fee = $marketplaceAccount->config['range3Cpc'];
+                                                $feeMobile = $marketplaceAccount->config['range3CpcM'];
+                                                $priceModifier = $marketplaceAccount->config['valueexcept3'];
+                                                break;
+                                            case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
+                                                $fee = $marketplaceAccount->config['range4Cpc'];
+                                                $feeMobile = $marketplaceAccount->config['range4CpcM'];
+                                                $priceModifier = $marketplaceAccount->config['valueexcept4'];
+                                                break;
+                                            case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
+                                                $fee = $marketplaceAccount->config['range5Cpc'];
+                                                $feeMobile = $marketplaceAccount->config['range5CpcM'];
+                                                $priceModifier = $marketplaceAccount->config['valueexcept5'];
+                                                break;
                                         }
+                                        $pshsdInsert->priceModifier = $priceModifier;
+                                        $pshsdInsert->fee = $fee;
+                                        $pshsdInsert->feeMobile = $feeMobile;
+                                        if (isset($marketplaceAccount->config['defaultCpcF'])) {
+                                            $pshsdInsert->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                        } else {
+                                            $pshsdInsert->feeCustomer = 0.25;
+                                        }
+                                        if (isset($marketplaceAccount->config['defaultCpcFM'])) {
+                                            $pshsdInsert->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                        } else {
+                                            $pshsdInsert->feeCustomerMobile = 0.25;
+                                        }
+
                                     }
-                                    $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
-                                    $pshsd->status = 2;
-                                    $pshsd->lastUpdate = '2011-01-01 00:00:00';
-                                    $pshsd->productStatusMarkeplaceId=2;
+                                    $pshsdInsert->status = 0;
+                                    $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
+                                    $pshsdInsert->productStatusAggregatorId = 2;
                                     $pshsdInsert->insert();
 
                                 }
 
                             }
                         }
-                        $this->report('CMarketplaceHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
+                        $this->report('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
                     }
                 }
             }
 
-            $this->report('CMarketplaceHasProductJob','End Work publishing','');
+            $this->report('CAggregatorHasProductJob','End Work publishing','');
         } catch (\Throwable $e) {
-            $this->report('CMarketplaceHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
+            $this->report('CAggregatorHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
 
         }
         try {
-            $this->report('CMarketplaceHasProductJob','startPublish','');
+            $this->report('CAggregatorHasProductJob','startPublish','');
 
-            $marketplaces = $marketplaceRepo->findBy(['type' => 'marketplace']);
+            $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
                     if ($marketplaceAccount->config['isActivePublish'] == 1) {
-                        $now = strtotime(date("Y-m-d"));
-                        $dateStartPeriod1 = strtotime($marketplaceAccount->config['dateStartPeriod1'] . ' 00:00:00');
-                        $dateEndPeriod1 = strtotime($marketplaceAccount->config['dateEndPeriod1'] . ' 23:59:59');
-                        $dateStartPeriod2 = strtotime($marketplaceAccount->config['dateStartPeriod2'] . ' 00:00:00');
-                        $dateEndPeriod2 = strtotime($marketplaceAccount->config['dateEndPeriod2'] . ' 23:59:59');
-                        $dateStartPeriod3 = strtotime($marketplaceAccount->config['dateStartPeriod3'] . ' 00:00:00');
-                        $dateEndPeriod3 = strtotime($marketplaceAccount->config['dateEndPeriod3'] . ' 23:59:59');
-                        $dateStartPeriod4 = strtotime($marketplaceAccount->config['dateStartPeriod4'] . ' 00:00:00');
-                        $dateEndPeriod4 = strtotime($marketplaceAccount->config['dateEndPeriod4'] . ' 23:59:59');
 
-                        $isOnSale = 0;
-                        switch (true) {
-                            case ($now >= $dateStartPeriod1 && $now <= $dateEndPeriod1):
-                                $isOnSale = 1;
-                                break;
-                            case ($now >= $dateStartPeriod2 && $now <= $dateEndPeriod2):
-                                $isOnSale = 1;
-                                break;
-                            case ($now >= $dateStartPeriod3 && $now <= $dateEndPeriod3):
-                                $isOnSale = 1;
-                                break;
-                            case ($now >= $dateStartPeriod4 && $now <= $dateEndPeriod4):
-                                $isOnSale = 1;
-                                break;
-
-                        }
-
-
-                        $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);
-                        $this->report('CMarketplaceHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
+                        $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                         $sql = 'select p.id as productId,
                                     p.productVariantId as productVariantId,
                                     p.productBrandId as productBrandId,
                                     p.qty as qty,
-                                    shp.marketplaceHasShopId as marketplaceHasShopId,
+                                    p.isOnSale as isOnSale,
+                                    shp.aggregatorHasShopId as aggregatorHasShopId,
                                     `shp`.`status` as `status`,
-                                    shp.modifyType as modifyType,
-                                    shp.variantValue as variantValue,
-                                    shp.modifyTypeSale as modifyTypeSale,
-                                    shp.variantValueSale as variantValueSale,
-                                    shp.maxPercentSalePrice as maxPercentSalePrice,
+                                    shp.fee as fee,
+                                    shp.feeCustomer as feeCustomer,
+                                    shp.feeMobile as feeMobile,
+                                    shp.feeCustomerMobile as feeCustomerMobile,
                                     sp.price as price,
                                     sp.salePrice as salePrice,
-                                    shp.typePublish as typePublish
-                        from Product p join PrestashopHasProduct shp on p.id=shp.productId  
+                                    shp.productStatusAggregatorId as productStatusAggregatorId
+                        from Product p join AggregatorHasProduct shp on p.id=shp.productId  
                                                                             
  and p.productVariantId=shp.productVariantId
-join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where shp.typePublish=2 and shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
+join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId
+where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
-                            $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+                            $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                             if ($marketProduct) {
                                 if ($product['status'] == 2) {
-                                    if ($isOnSale == 1) {
-                                        if (in_array($product['productBrandId'],$brandSaleExclusion)) {
-                                            switch (true) {
-                                                case $product['modifyType'] = 'p+':
-                                                    $newPrice = $product['price'] + ($product['price'] / 100 * $product['variantValue']);
-                                                    break;
-                                                case $product['modifyType'] = 'p-':
-                                                    $newPrice = $product['price'] - ($product['price'] / 100 * $product['variantValue']);
-                                                    break;
-                                                default:
-                                                    $newPrice = $product['price'];
-                                                    break;
-
-                                            }
-                                            switch ($marketplaceAccount->config['optradio']) {
-                                                case  '-0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);;
-
-                                            }
-                                            switch (true) {
-                                                case $product['modifyTypeSale'] = 'p+':
-                                                    $newSalePrice = $product['salePrice'] + ($product['salePrice'] / 100 * $product['variantValueSale']);
-                                                    break;
-                                                case $product['modifyType'] = 'p-':
-                                                    if ($product['variantValueSale'] > 30) {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * $product['variantValueSale']);
-                                                    } else {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * 30);
-                                                    }
-                                                    break;
-                                                case $product['modifyTypeSale'] = 'nf':
-                                                default:
-                                                    $newSalePrice = $product['salePrice'];
-                                                    break;
-
-
-                                            }
-                                            switch ($marketplaceAccount->config['optradioSalePrice']) {
-                                                case  '-0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                            }
-                                            $marketProduct->isOnSale = 0;
-                                            $marketProduct->titleModified = 0;
-                                            $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                            $marketProduct->isPublished = 1;
-                                            $marketProduct->update();
-                                        } else {
-                                            switch ($product['modifyType']) {
-                                                case  'p+':
-                                                    $newPrice = $product['price'] + ($product['price'] / 100 * $product['variantValue']);
-                                                    break;
-                                                case  'p-':
-                                                    $newPrice = $product['price'] - ($product['price'] / 100 * $product['variantValue']);
-                                                    break;
-                                                default:
-                                                    $newPrice = $product['price'];
-                                                    break;
-                                            }
-                                            switch ($marketplaceAccount->config['optradio']) {
-                                                case  '-0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-
-                                            }
-                                            switch ($product['modifyTypeSale']) {
-                                                case  'p+':
-                                                    $newSalePrice = $product['salePrice'] + ($product['salePrice'] / 100 * $product['variantValueSale']);
-                                                    break;
-                                                case 'p-':
-                                                    if ($product['variantValueSale'] > 30) {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * $product['variantValueSale']);
-                                                    } else {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * 30);
-                                                    }
-                                                    break;
-                                                default:
-                                                    $newSalePrice = $product['salePrice'];
-                                                    break;
-                                            }
-                                            switch ($marketplaceAccount->config['optradioSalePrice']) {
-                                                case  '-0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                            }
-
-                                            $marketProduct->isOnSale = 1;
-                                            if ($marketplaceAccount->config['marketplaceHasShopId'] == "2") {
-                                                $marketProduct->titleModified = 1;
-                                            } else {
-                                                $marketProduct->titleModified = 0;
-                                            }
-                                            $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                            $marketProduct->isPublished = 1;
-                                            $marketProduct->update();
-                                        }
+                                    $marketProduct->priceModifier = $product['priceModifier'];
+                                    $marketProduct->fee = $product['fee'];
+                                    $marketProduct->feeCustomer = $product['feeCustomer'];
+                                    $marketProduct->feeCustomerMobile = $product['feeCustomerMobile'];
+                                    $marketProduct->feeMobile = $product['feeMobile'];
+                                    $marketProduct->istoWork = 1;
+                                    $marketProduct->isRevised = 1;
+                                    $marketProduct->isDeleted = 0;
+                                    $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
+                                    if ($product['isOnSale'] == 1) {
+                                        $marketProduct->titleModified = 1;
                                     } else {
-                                        switch ($product['modifyType']) {
-                                            case  'nf':
-                                                $newPrice = $product['price'];
-                                                break;
-                                            case  'p+':
-                                                $newPrice = $product['price'] + ($product['price'] / 100 * $product['variantValue']);
-                                                break;
-                                            case  'p-':
-                                                $newPrice = $product['price'] - ($product['price'] / 100 * $product['variantValue']);
-                                                break;
-                                            default :
-                                                $newPrice = $product['price'];
-                                                break;
-                                        }
-                                        switch ($marketplaceAccount->config['optradio']) {
-                                            case  '-0.5':
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-                                                break;
-                                            case  '+0.5':
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            case  '-1':
-                                                $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
-                                                break;
-                                            case  '+1':
-                                                $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            default:
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);;
-
-                                        }
-                                        switch ($product['modifyTypeSale']) {
-                                            case  'p+':
-                                                $newSalePrice = $product['salePrice'] + ($product['salePrice'] / 100 * $product['variantValueSale']);
-                                                break;
-                                            case 'p-':
-                                                if ($product['variantValueSale'] > 30) {
-                                                    $newSalePrice = $product['price'] - ($product['price'] / 100 * $product['variantValueSale']);
-                                                } else {
-                                                    $newSalePrice = $product['price'] - ($product['price'] / 100 * 30);
-                                                }
-                                                break;
-                                            default:
-                                                $newSalePrice = $product['salePrice'];
-                                                break;
-                                        }
-                                        switch ($marketplaceAccount->config['optradioSalePrice']) {
-                                            case  '-0.5':
-                                                $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
-                                                break;
-                                            case  '+0.5':
-                                                $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            case  '-1':
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
-                                                break;
-                                            case  '+1':
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            default:
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
-                                                break;
-                                        }
-                                        $marketProduct->isOnSale = 0;
                                         $marketProduct->titleModified = 0;
-                                        $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                        $marketProduct->isPublished = 1;
-                                        $marketProduct->update();
-
-
                                     }
+                                    $marketProduct->update();
 
 
                                 } elseif ($product['status'] == 0) {
                                     $marketProductInsert = $phphmhsRepo->getEmptyEntity();
-                                    if ($isOnSale == 1) {
-                                        if (in_array($product['productBrandId'],$brandSaleExclusion)) {
-                                            switch ($product['modifyType']) {
-                                                case  'p+':
-                                                    $newPrice = $product['price'] + ($product['price'] / 100 * $product['variantValue']);
-                                                    break;
-                                                case  'p-':
-                                                    $newPrice = $product['price'] - ($product['price'] / 100 * $product['variantValue']);
-                                                    break;
-                                                default:
-                                                    $newPrice = $product['price'];
-                                                    break;
-                                            }
-                                            switch ($marketplaceAccount->config['optradio']) {
-                                                case  '-0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-
-                                            }
-                                            switch ($product['modifyTypeSale']) {
-                                                case  'p+':
-                                                    $newSalePrice = $product['salePrice'] + ($product['salePrice'] / 100 * $product['variantValueSale']);
-                                                    break;
-                                                case 'p-':
-                                                    if ($product['variantValueSale'] > 30) {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * $product['variantValueSale']);
-                                                    } else {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * 30);
-                                                    }
-                                                    break;
-                                                default:
-                                                    $newSalePrice = $product['salePrice'];
-                                                    break;
-                                            }
-                                            switch ($marketplaceAccount->config['optradioSalePrice']) {
-                                                case  '-0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                            }
-
-                                            $marketProductInsert->isOnSale = 0;
-                                            $marketProductInsert->titleModified = 0;
-                                            $marketProductInsert->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                            $marketProductInsert->isPublished = 2;
-                                            $marketProductInsert->insert();
-                                        } else {
-                                            switch ($product['modifyTypeSale']) {
-                                                case  'p+':
-                                                    $newSalePrice = $product['salePrice'] + ($product['salePrice'] / 100 * $product['variantValueSale']);
-                                                    break;
-                                                case 'p-':
-                                                    if ($product['variantValueSale'] > 30) {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * $product['variantValueSale']);
-                                                    } else {
-                                                        $newSalePrice = $product['price'] - ($product['price'] / 100 * 30);
-                                                    }
-                                                    break;
-                                                default:
-                                                    $newSalePrice = $product['salePrice'];
-                                                    break;
-                                            }
-                                            switch ($marketplaceAccount->config['optradioSalePrice']) {
-                                                case  '-0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                                case  '+0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                case  '-1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
-                                                    break;
-                                                case  '+1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
-                                                    break;
-                                                default:
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
-                                                    break;
-                                            }
-                                            $marketProductInsert->isOnSale = 1;
-                                            if ($marketplaceAccount->config['marketplaceHasShopId'] == "2") {
-                                                $marketProductInsert->titleModified = 1;
-                                            } else {
-                                                $marketProductInsert->titleModified = 0;
-                                            }
-                                            $marketProductInsert->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                            $marketProductInsert->isPublished = 2;
-                                            $marketProductInsert->insert();
-                                        }
+                                    $marketProductInsert->productId = $product['productId'];
+                                    $marketProductInsert->productVariantId = $product['productVariantId'];
+                                    $marketProductInsert->priceModifier = $product['priceModifier'];
+                                    $marketProductInsert->fee = $product['fee'];
+                                    $marketProductInsert->feeCustomer = $product['feeCustomer'];
+                                    $marketProductInsert->feeCustomerMobile = $product['feeCustomerMobile'];
+                                    $marketProductInsert->feeMobile = $product['feeMobile'];
+                                    $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
+                                    $marketProductInsert->istoWork = 1;
+                                    $marketProductInsert->isRevised = 0;
+                                    $marketProductInsert->isDeleted = 0;
+                                    $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
+                                    $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
+                                    $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
+                                    if ($product['isOnSale'] == 1) {
+                                        $marketProductINseet->titleModified = 1;
                                     } else {
-                                        switch ($product['modifyType']) {
-                                            case  'p+':
-                                                $newPrice = $product['price'] + ($product['price'] / 100 * $product['variantValue']);
-                                                break;
-                                            case  'p-':
-                                                $newPrice = $product['price'] - ($product['price'] / 100 * $product['variantValue']);
-                                                break;
-                                            default:
-                                                $newPrice = $product['price'];
-                                                break;
-                                        }
-                                        switch ($marketplaceAccount->config['optradio']) {
-                                            case  '-0.5':
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-                                                break;
-                                            case  '+0.5':
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            case  '-1':
-                                                $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
-                                                break;
-                                            case  '+1':
-                                                $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            default:
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
-                                        }
-                                        switch ($product['modifyTypeSale']) {
-                                            case  'p+':
-                                                $newSalePrice = $product['salePrice'] + ($product['salePrice'] / 100 * $product['variantValueSale']);
-                                                break;
-                                            case 'p-':
-                                                if ($product['variantValueSale'] > 30) {
-                                                    $newSalePrice = $product['price'] - ($product['price'] / 100 * $product['variantValueSale']);
-                                                } else {
-                                                    $newSalePrice = $product['price'] - ($product['price'] / 100 * 30);
-                                                }
-                                                break;
-                                            default:
-                                                $newSalePrice = $product['salePrice'];
-                                                break;
-                                        }
-                                        switch ($marketplaceAccount->config['optradioSalePrice']) {
-                                            case  '-0.5':
-                                                $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
-                                                break;
-                                            case  '+0.5':
-                                                $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            case  '-1':
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
-                                                break;
-                                            case  '+1':
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
-                                                break;
-                                            default:
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
-                                                break;
-                                        }
-
-                                        $marketProductInsert->isOnSale = 0;
-                                        $marketProductInsert->titleModified = 0;
-                                        $marketProductInsert->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                        $marketProductInsert->isPublished = 2;
-                                        $marketProductInsert->insert();
-
+                                        $marketProduct->titleModified = 0;
                                     }
-
+                                    $marketProductInsert->insert();
                                 } else {
+                                    $marketProduct->priceModifier = $product['priceModifier'];
+                                    $marketProduct->fee = $product['fee'];
+                                    $marketProduct->feeCustomer = $product['feeCustomer'];
+                                    $marketProduct->feeCustomerMobile = $product['feeCustomerMobile'];
+                                    $marketProduct->feeMobile = $product['feeMobile'];
+                                    $marketProduct->istoWork = 0;
+                                    $marketProduct->isRevised = 1;
+                                    $marketProduct->isDeleted = 0;
+                                    $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
 
+                                    if ($product['isOnSale'] == 1) {
+                                        $marketProduct->titleModified = 1;
+                                    } else {
+                                        $marketProduct->titleModified = 0;
+                                    }
+                                    $marketProduct->update();
                                 }
-                                $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShop' => $marketplaceAccount->config['marketplaceHasShopId']]);
-                                $phpUpdate->status = 1;
-                                $phpUpdate->update();
+                            } else {
+                                $marketProductInsert = $phphmhsRepo->getEmptyEntity();
+                                $marketProductInsert->productId = $product['productId'];
+                                $marketProductInsert->productVariantId = $product['productVariantId'];
+                                $marketProductInsert->priceModifier = $product['priceModifier'];
+                                $marketProductInsert->fee = $product['fee'];
+                                $marketProductInsert->feeCustomer = $product['feeCustomer'];
+                                $marketProductInsert->feeCustomerMobile = $product['feeCustomerMobile'];
+                                $marketProductInsert->feeMobile = $product['feeMobile'];
+                                $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
+                                $marketProductInsert->istoWork = 1;
+                                $marketProductInsert->isRevised = 0;
+                                $marketProductInsert->isDeleted = 0;
+                                $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
+                                $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
+                                $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
+                                if ($product['isOnSale'] == 1) {
+                                    $marketProductINseet->titleModified = 1;
+                                } else {
+                                    $marketProduct->titleModified = 0;
+                                }
+                                $marketProductInsert->insert();
+
                             }
-                            $this->report('CMarketplaceHasProductJob','End Work Publish for  ' . $marketplace->name,'');
+                            $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
+                            $phpUpdate->status = 1;
+                            $phpUpdate->update();
+                            $this->report('CAggregatorHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
                         }
                     }
                 }
+
+                $this->report('CAggregatorHasProductJob','End Work Publish for  ' . $marketplace->name,'');
+
+
             }
-            $this->report('CMarketplaceHasProductJob','End Work Publishing Eligible Products to marketplace','');
+            $this->report('CAggregatorHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
         } catch
         (\Throwable $e) {
-            $this->report('CMarketplaceHasProductJob','ERROR Work Publishing Eligible Products to marketplace',$e->getMessage() . '-' . $e->getLine());
+            $this->report('CMarketplaceHasProductJob','ERROR Work Publishing Eligible Products to Aggregator',$e->getMessage() . '-' . $e->getLine());
 
         }
 
