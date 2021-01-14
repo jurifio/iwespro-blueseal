@@ -462,7 +462,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id' => $marketplaceAccountId]);
-        $marketplaceAccount->name = $marketplace_account_name;
+       // $marketplaceAccount->name = $marketplace_account_name;
         $marketplaceAccount->config = $collectUpdate;
         $marketplaceAccount->urlSite = $urlSite;
         $marketplaceAccount->isActive = $isActive;
