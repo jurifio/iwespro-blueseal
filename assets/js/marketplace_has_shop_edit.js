@@ -257,7 +257,7 @@ $('#BrandIdParallel').change(function () {
 
 
 
-$(document).on('bs.marketplace-account.save', function () {
+$(document).on('bs.marketplacehasshop-account.save', function () {
     let bsModal = new $.bsModal('Modifica Regola Marketplace', {
         body: '<p>Confermare?</p>'
     });

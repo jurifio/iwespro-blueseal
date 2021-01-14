@@ -73,32 +73,9 @@ class CAggregatorHasProductJob extends ACronJob
 
                                     if ($pshsd->dateUpdate != $marketplaceAccount->config['dateUpdate']) {
                                         $pshsd->status = 2;
-                                        if ($marketplaceAccount->config['activeFullPrice'] == "1") {
-                                            $pshsd->modifyType = 'nf';
+                                        $pshsd->fee=$marketp
 
-                                        } else {
-                                            if ($marketplaceAccount->config['signFullPrice'] == "1") {
-                                                $pshsd->modifyType = '-p';
-                                                $pshsd->variantValue = $marketplaceAccount->config['percentFullPrice'];
-                                            } else {
-                                                $pshsd->modifyType = '+p';
-                                                $pshsd->variantValue = $marketplaceAccount->config['percentFullPrice'];
-                                            }
-                                        }
-                                        if ($marketplaceAccount->config['activeSalePrice'] == "1") {
-                                            $pshsd->modifyTypeSale = 'nf';
 
-                                        } else {
-                                            if ($marketplaceAccount->config['signSale'] == "1") {
-                                                $pshsd->modifyTypeSale = '-p';
-                                                $pshsd->variantValue = $marketplaceAccount->config['percentSalePrice'];
-                                            } else {
-                                                $pshsd->modifyTypeSale = '+p';
-                                                $pshsd->variantValue = $marketplaceAccount->config['percentSalePrice'];
-                                            }
-                                        }
-                                        $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
-                                        $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
                                     } else {
                                         $pshsd->status = 1;
                                     }
