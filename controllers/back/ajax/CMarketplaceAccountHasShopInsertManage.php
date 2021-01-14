@@ -375,7 +375,7 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
             $checkNameCatalog = $_GET['checkNameCatalog'];
         }
         $optradioName = $_GET['optradioName'];
-        if ($_GET['marketplaceAccountId'] = '') {
+        if ($_GET['marketplaceAccountId'] =='') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;">Prego Seleziona un Regola Valida torna alla lista </i>';
         } else {
             $marketplaceAccountId = $_GET['marketplaceAccountId'];
@@ -462,7 +462,8 @@ class CMarketplaceAccountHasShopInsertManage extends AAjaxController
         $collectUpdate .= '"brands":"' . $brand . '"}';
         $collectUpdate = trim($collectUpdate," \t\n\r\0\x0B");
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id' => $marketplaceAccountId]);
-       // $marketplaceAccount->name = $marketplace_account_name;
+        $marketplaceAccount->name = $marketplace_account_name;
+        $marketplaceAccount->marketplaceId=$marketplaceId;
         $marketplaceAccount->config = $collectUpdate;
         $marketplaceAccount->urlSite = $urlSite;
         $marketplaceAccount->isActive = $isActive;
