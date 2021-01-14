@@ -50,22 +50,13 @@ class CAggregatorHasProductJob extends ACronJob
                 if ($marketplaceAccount) {
                     if ($marketplaceAccount->config['isActive'] == 1) {
                         $this->report('CAggregatorHasProductJob','Working ' . $marketplace->name,'');
-                        if ($marketplaceAccount->config['brands'] == 0 || $marketplaceAccount->config['brands'] == '') {
-                            $sqlBrandFilter = 'and 1=1';
-                        } else {
-                            $sqlBrandFilter = 'and p.productBrandId not in (' . $marketplaceAccount->config['brands'] . ')';
-                        }
-                        if ($marketplaceAccount->config['brandParallel'] == 0 || $marketplaceAccount->config['brandParallel'] == '') {
-                            $sqlBrandParallelFilter = 'and 1=1';
-                        } else {
-                            $sqlBrandParallelFilter = 'and p2.productBrandId not in (' . $marketplaceAccount->config['brandParallel'] . ')';
-                        }
+
                         $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId,shp.isPublished as isPublished from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where shp.shopId =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandFilter . ' ) UNION
+ and p.productVariantId=shp.productVariantId where shp.shopId =' . $marketplaceAccount->config['shopId']. ' ) UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandParallelFilter . ')';
+ and p2.productVariantId=shp2.productVariantId where shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] .  ')';
 
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
@@ -294,7 +285,7 @@ class CAggregatorHasProductJob extends ACronJob
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActivePublish'] == 1) {
+                    if ($marketplaceAccount->config['isActive'] == 1) {
 
                         $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                         $sql = 'select p.id as productId,
