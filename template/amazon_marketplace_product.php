@@ -140,7 +140,7 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestisci Prodotto">
+    <bs-toolbar-group data-group-label="Gestione Prodotti">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-exchange"
@@ -153,6 +153,9 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.product.marketplace.unpublish"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-space-shuttle"
                 data-permission="/admin/product/edit"
@@ -160,79 +163,6 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Pubblica Tutti Prodotti su marketPlace con stato pubblicato"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-recycle"
-                data-permission="/admin/product/edit"
-                data-event="bs.update.presta.product.feature"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Aggiorna caratteristiche da PickyShop a Prestashop"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-close"
-                data-permission="/admin/product/edit"
-                data-event="bs.delete.product"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Elimina il prodotto dal marketplace"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.job.start"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestisci saldo">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-dollar"
-                data-permission="/admin/product/edit"
-                data-event="bs.marketplace.product.sale"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Metti in saldo i prodotti"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-window-close"
-                data-permission="/admin/product/edit"
-                data-event="bs.marketplace.remove.sale"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Togli i prodotti dal saldo sul Marketplace"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Operazione su Quantità">
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-check"
-                data-permission="/admin/product/edit"
-                data-event="bs.prestashop.align.quantity"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Aggiorna le quantità in prestashop"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-edge"
-                data-permission="/admin/product/edit"
-                data-event="bs.ebay.align.product"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Aggiorna i Prodotti su Ebay"
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>

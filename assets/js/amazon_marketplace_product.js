@@ -30,19 +30,22 @@
                     <select id="modifyPrice">
                         <option value="nf">Non modificare</option>
                         <option value="p+">Percentuale +</option>
-                        <option value="p-">Percentuale -</option>
-                        <option value="f+">Fisso +</option>
-                        <option value="f-">Fisso -</option>
+                        <option value="p-">Percentuale -</option> 
                     </select>
                     
                     <p>Inserisci l'importo con cui variare il prezzo</p>
-                    <input type="number" step="0.01" min="1" id="variantValue">
+                    <input type="number" step="0.01" min="1" id="variantValueSale">
+                     <select id="modifyPriceSale">
+                        <option value="nf">Non modificare</option>
+                        <option value="p+">Percentuale +</option>
+                        <option value="p-">Percentuale -</option> 
+                    </select>
+                    
+                    <p>Inserisci l'importo con cui variare il prezzo</p>
+                    <input type="numberSale" step="0.01" min="1" id="variantValue">
                 </div>
                 
-                <div>
-                    <p>Utilizza cronjob</p>
-                    <input type="checkbox" id="useCron">
-                </div>
+               
             `
         });
 
@@ -64,20 +67,22 @@
         bsModal.showCancelBtn();
         bsModal.setOkEvent(function () {
 
-            let cron = $('#useCron').is(':checked') ? 'PrestashopHasProductManageWithCron' : 'PrestashopHasProductManage';
+
 
             const data = {
                 products: products,
                 marketplaceHasShopId: $('#selectMarketplace').val(),
                 modifyType: $('#modifyPrice').val(),
-                variantValue: $('#variantValue').val()
+                variantValue: $('#variantValue').val(),
+                modifyTypeSale: $('#modifyPriceSale').val(),
+                variantValueSale: $('#variantValueSale').val()
             };
 
             bsModal.writeBody(loaderHtml);
             bsModal.okButton.attr("disabled", "disabled");
             $.ajax({
                 method: 'post',
-                url: '/blueseal/xhr/' + cron,
+                url: '/blueseal/xhr/PrestashopHasProductManage',
                 data: data
             }).done(function (res) {
                 bsModal.writeBody(res);
@@ -254,7 +259,7 @@
     $(document).on('bs.update.presta.product.feature', function () {
 
 
-    products='';
+        products='';
 
 
         let bsModal = new $.bsModal('Allineamento Dettagli', {
