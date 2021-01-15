@@ -58,7 +58,8 @@ class CPrestashopHasProductManage extends AAjaxController
 
         /** @var CProductRepo $productRepo */
         $productRepo = \Monkey::app()->repoFactory->create('Product');
-
+        $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
+        $phsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
         $products = new CObjectCollection();
         foreach ($this->data['products'] as $productCode) {
             $productIds = explode('-',$productCode);
@@ -78,13 +79,47 @@ class CPrestashopHasProductManage extends AAjaxController
             }else{
                 $res.='Prodotto' .$productIds[0].'-'.$productIds[1].' inserito Non inserito pechè non presente neanche nello shop di Destinazione</br>';
             }
+
+
+
+            $phs=$phsRepo->findOneBy(['productId'=>$productIds['productId'],'productVariantId'=>$productIds['productVariantId'],'marketplaceHasShopId'=>$this->data['marketplaceHasShopId']]);
+            if($phs){
+                if($phs->productStatusMarketplaceId==4){
+                    $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$this->data['marketplaceHasShopId']]);
+                    if($phphmhs){
+                        $phphmhs->isPublished=3;
+                        $phphmhs->update();
+                        \Monkey::app()->applicationLog('CPrepareProductForMarketplaceJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $this->data['marketplaceHasShopId'],'');
+                    }
+                }
+            }else{
+                $phs=$phsRepo->getEmptyEntity();
+                $phs->productId=$product['productId'];
+                $phs->productVariantId=$product['productVariantId'];
+                $phs->marketplaceHasShopId=$this->data['marketplaceHasShopId'];
+                $php->productStatusMarketplaceId=3;
+                $php->status=2;
+               $php->modifyType=$this->data['modifyType'];
+               if($this->data['modifyType']!='nf'){
+                   $php->variantValue=$this->data['variantValue'];
+               }
+                $php->modifyTypeSale=$this->data['modifyTypeSale'];
+                if($this->data['modifyTypeSale']!='nf'){
+                    $php->variantValueSale=$this->data['variantValueSale'];
+                }
+
+                $phs->insert();
+              return 'insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id;
+
+            }
         }
 
-        $prestashopProduct = new CPrestashopProduct();
 
+
+/*
         if ($prestashopProduct->addNewProducts($products, $mhs, $this->data['modifyType'], $this->data['variantValue'])) {
             return $res;
-        }
+        }*/
 
         return 'Errore durante l\'inserimento dei prodotti';
     }

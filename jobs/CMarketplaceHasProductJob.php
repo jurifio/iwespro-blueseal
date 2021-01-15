@@ -208,7 +208,7 @@ class CMarketplaceHasProductJob extends ACronJob
                         from Product p join PrestashopHasProduct shp on p.id=shp.productId  
                                                                             
  and p.productVariantId=shp.productVariantId
-join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where shp.productStatusMarketplaceId=2 and shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
+join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where shp.productStatusMarketplaceId in (2,3) and shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
                             $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
