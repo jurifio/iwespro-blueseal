@@ -157,7 +157,7 @@ class CAggregatorHasProductJob extends ACronJob
                                                 $pshsd->feeCustomerMobile = 0.25;
                                             }
                                             $pshsd->productStatusAggregatorId = 2;
-                                            $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
+                                            $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
                                             $pshsd->status = 2;
                                             $pshsd->update();
                                         }

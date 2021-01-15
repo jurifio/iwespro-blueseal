@@ -98,7 +98,7 @@ class CMarketplaceHasProductJob extends ACronJob
                                             }
                                         }
                                         $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
-                                        $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
+                                        $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
                                     } else {
                                         $pshsd->status = 1;
                                     }
