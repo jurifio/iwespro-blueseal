@@ -51,8 +51,8 @@ class CAggregatorProductListAjaxController extends AAjaxController
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock
             FROM AggregatorHasProduct ahp
-                join ProductStatusAggregator psm on ahp.productStatusAggregatorId=psm.id
-            JOIN ProductPublicSku pps ON pps.productId = ahp.productId AND pps.productVariantId = ahp.productVariantId
+            left JOIN ProductStatusAggregator psm on ahp.productStatusAggregatorId=psm.id
+            left JOIN ProductPublicSku pps ON pps.productId = ahp.productId AND pps.productVariantId = ahp.productVariantId
             left JOIN Product p ON ahp.productId = p.id AND ahp.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
