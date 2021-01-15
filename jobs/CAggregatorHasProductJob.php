@@ -100,7 +100,7 @@ class CAggregatorHasProductJob extends ACronJob
                                         } else {
                                             $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                             $isOnSale = $prod->isOnSale();
-                                            $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId]);
+                                            $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                             $price = $productSku->price;
                                             $salePrice = $productSku->salePrice;
                                             if ($isOnSale == 1) {
@@ -201,7 +201,7 @@ class CAggregatorHasProductJob extends ACronJob
                                     } else {
                                         $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                         $isOnSale = $prod->isOnSale();
-                                        $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product->id,'productVariantId' => $product->productVariantId]);
+                                        $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                         $price = $productSku->price;
                                         $salePrice = $productSku->salePrice;
                                         if ($isOnSale == 1) {
