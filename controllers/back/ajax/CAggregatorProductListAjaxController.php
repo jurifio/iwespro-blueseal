@@ -105,7 +105,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
                 $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$pHPHmHs->aggregatorHasShopId]);
                 if($aggregatorHasShop) {
                     $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$aggregatorHasShop->shopId]);
-                    $marketplace = $marketplaceRepo->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
+                    $marketplace = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
 
                     $associations .= $pHPHmHs->marketplaceProductId . ' | ' . $shop->name . ' | ' . $marketplace->name . ' |<br> Fee Cost: ' . $pHPHmHs->fee . ' ( ' . $pHPHmHs->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $pHPHmHs->feeCustomer . ' ( ' . $pHPHmHs->feeCustomerMobile . ' ) | Price Modifier: ' . $pHPHmHs->priceModifier . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$pHPHmHs->lastUpdate.' ' . ($pHPHmHs->lastResponse == null ? 'Eseguita '  : 'Fallito ') . '<br><hr>';
                 }else{
