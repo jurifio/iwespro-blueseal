@@ -107,16 +107,24 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="operazione su  Prodotto">
+        <bs-toolbar-button
+                data-remote="bs.product.aggregator.publish"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.aggregator.unpublish"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 
     <bs-toolbar-group data-group-label="Emulatori Jobs">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-flag"
                 data-permission="/admin/product/edit"
-                data-event="bs.marketplace.prepare.product"
+                data-event="bs.aggregator.prepare.product"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Prepara prodotti per marketplace"
+                data-title="Prepara prodotti per Aggregatore"
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>
@@ -124,10 +132,10 @@
                 data-tag="a"
                 data-icon="fa-flag-checkered"
                 data-permission="/admin/product/edit"
-                data-event="bs.marketplaceaccountrule.publish.product"
+                data-event="bs.aggregatoraccountrule.publish.product"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Pubblica prodotti per Account asssociato a Marketplace"
+                data-title="Pubblica prodotti per Account asssociato a Aggregatore"
                 data-placement="bottom"
                 data-toggle="modal"
         ></bs-toolbar-button>

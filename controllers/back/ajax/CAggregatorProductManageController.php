@@ -48,7 +48,7 @@ class CAggregatorProductManageController extends AAjaxController
     {
         try {
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneByStringId($this->app->router->request()->getRequestData('account'));
-        $aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopid'];
+        $aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
         $modifier = $this->app->router->request()->getRequestData('modifier');
         $cpc = $this->app->router->request()->getRequestData('cpc');
         $cpcF = $this->app->router->request()->getRequestData('cpcF');
@@ -136,6 +136,7 @@ class CAggregatorProductManageController extends AAjaxController
         $marketplaceAccountId = $marketplaceAccount[0];
         $marketplaceId = $marketplaceAccount[1];
         $marketplaceAccountHasProductRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        $aggregatorHasProductRepo = \Monkey::app()->repoFactory->create('AggregatorHasProduct');
 
 
         foreach ($this->app->router->request()->getRequestData('rows') as $mId) {
@@ -146,9 +147,26 @@ class CAggregatorProductManageController extends AAjaxController
                 'productVariantId' => $productVariantId,
                 'marketplaceId' => $marketplaceId,
                 'marketplaceAccountId' => $marketplaceAccountId]);
+
             if ($marketplaceAccountHasProduct != null) {
+                $aggregatorHasShopId=$marketplaceAccountHasProduct->aggregatorHasShopId;
+                 if($aggregatorHasShopId){
+                     $aggregatorHasProduct=$aggregatorHasProductRepo->findOneBy(['productId' => $productId,
+                         'productVariantId' => $productVariantId,
+                         'aggregatorHasShopId' => $aggregatorHasShopId]);
+                     if($aggregatorHasProduct){
+                         $aggregatorHasProduct->aggregatorHasShopId=null;
+                         $aggregatorHasProduct->productStatusAggregatorId=5;
+                         $aggregatorHasProduct->marketplaceProductId=null;
+                         $aggregatorHasProduct->update();
+
+
+                     }
+                 }
                 $marketplaceAccountHasProduct->delete();
+
             }
+
         }
         return $count;
     }
