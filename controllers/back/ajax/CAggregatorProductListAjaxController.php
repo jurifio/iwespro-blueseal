@@ -101,8 +101,16 @@ class CAggregatorProductListAjaxController extends AAjaxController
 
             /** @var CMarketplaceAccountHasProduct $pHPHmHs */
             foreach ($php->marketplaceAccountHasProduct as $pHPHmHs) {
+                $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$phPHmHHs->aggregatorHasShopId]);
+                if($aggregatorHasShop) {
+                    $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$aggregatorHasShop->shopId]);
+                    $marketplace = $marketplaceRepo->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
 
-                $associations .= $pHPHmHs->marketplaceProductId . ' | ' . $pHPHmHs->aggregatorHasShop->shop->name . ' | ' . $pHPHmHs->aggregatorHasShop->marketplace->name . ' |<br> Fee Cost: ' . $pHPHmHs->fee . ' ( ' . $pHPHmHs->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $pHPHmHs->feeCustomer . ' ( ' . $pHPHmHs->feeCustomerMobile . ' ) | Price Modifier: ' . $pHPHmHs->priceModifier . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$pHPHmHs->lastUpdate.' ' . ($pHPHmHs->lastResponse == null ? 'Eseguita '  : 'Fallito ') . '<br><hr>';
+                    $associations .= $pHPHmHs->marketplaceProductId . ' | ' . $shop->name . ' | ' . $marketplace->name . ' |<br> Fee Cost: ' . $pHPHmHs->fee . ' ( ' . $pHPHmHs->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $pHPHmHs->feeCustomer . ' ( ' . $pHPHmHs->feeCustomerMobile . ' ) | Price Modifier: ' . $pHPHmHs->priceModifier . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$pHPHmHs->lastUpdate.' ' . ($pHPHmHs->lastResponse == null ? 'Eseguita '  : 'Fallito ') . '<br><hr>';
+                }else{
+                    $associations .= '<br><hr>';
+                }
+
 
 
             }
