@@ -347,9 +347,9 @@ where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketpl
                                     $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
                                     $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
                                     if ($product['isOnSale'] == 1) {
-                                        $marketProductINseet->titleModified = 1;
+                                        $marketProductInsert->titleModified = 1;
                                     } else {
-                                        $marketProduct->titleModified = 0;
+                                        $marketProductInsert->titleModified = 0;
                                     }
                                     $marketProductInsert->insert();
                                 } else {
@@ -387,9 +387,9 @@ where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketpl
                                 $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
                                 $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
                                 if ($product['isOnSale'] == 1) {
-                                    $marketProductINseet->titleModified = 1;
+                                    $marketProductInsert->titleModified = 1;
                                 } else {
-                                    $marketProduct->titleModified = 0;
+                                    $marketProductInsert->titleModified = 0;
                                 }
                                 $marketProductInsert->insert();
 
