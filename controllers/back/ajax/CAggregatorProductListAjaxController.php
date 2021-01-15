@@ -102,7 +102,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
             /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct*/
             $marketplaceAccountHasProduct=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
             foreach ($marketplaceAccountHasProduct as $pHPHmHs) {
-                $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$phPHmHHs->aggregatorHasShopId]);
+                $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$pHPHmHs->aggregatorHasShopId]);
                 if($aggregatorHasShop) {
                     $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$aggregatorHasShop->shopId]);
                     $marketplace = $marketplaceRepo->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
