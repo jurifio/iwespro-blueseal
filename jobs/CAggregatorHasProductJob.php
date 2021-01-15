@@ -296,6 +296,7 @@ class CAggregatorHasProductJob extends ACronJob
                                     shp.aggregatorHasShopId as aggregatorHasShopId,
                                     `shp`.`status` as `status`,
                                     shp.fee as fee,
+                                    shp.priceModifier as priceModifier,
                                     shp.feeCustomer as feeCustomer,
                                     shp.feeMobile as feeMobile,
                                     shp.feeCustomerMobile as feeCustomerMobile,
