@@ -97,26 +97,27 @@ class CMarketplaceProductManageController extends AAjaxController
     public function delete()
     {
         $count = 0;
-        /** @var CMarketplaceAccountHasProductRepo $repo */
-        $repo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+
+        $repo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
         $marketplaceAccount=explode('-', $this->app->router->request()->getRequestData('account'));
         $marketplaceAccountId=$marketplaceAccount[0];
         $marketplaceId = $marketplaceAccount[1];
-        $marketplaceAccountHasProductRepo=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        $marketplaceAccountFind=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId,'marketplaceId'=>$marketplaceId]);
+        $marketplaceHasShopId=$marketplaceAccountFind->config['marketplaceHasShopId'];
 
 
         foreach ($this->app->router->request()->getRequestData('rows') as $mId) {
             $product=explode('-',$mId);
             $productId=$product[0];
             $productVariantId=$product[1];
-            $marketplaceAccountHasProduct=$marketplaceAccountHasProductRepo->findOneBy(['productId'=>$productId,
+            $php=\Monkey::app()->repoFactory->create('PrestashopHasProduct')->findOneBy(['productId'=>$productId,
                                                                                         'productVariantId'=>$productVariantId,
-                                                                                        'marketplaceId'=>$marketplaceId,
-                                                                                        'marketplaceAccountId'=>$marketplaceAccountId]);
-            if($marketplaceAccountHasProduct!=null){
-                $marketplaceAccountHasProduct->delete();
+                                                                                        'marketplaceHasShopId'=>$marketplaceHasShopId]);
+            if($php!=null){
+                $php->productStatusMarketplaceId=4;
+                $php->update();
             }
         }
-        return $count;
+        return 'Prodotti Prenotati per la cancellazione dal marketplace ';
     }
 }

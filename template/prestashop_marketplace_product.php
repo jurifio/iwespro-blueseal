@@ -124,17 +124,6 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-exchange"
-                data-permission="/admin/product/edit"
-                data-event="bs.adding.presta"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-title="Pubblica Prodotti su marketPlace"
-                data-placement="bottom"
-                data-toggle="modal"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
                 data-icon="fa-space-shuttle"
                 data-permission="/admin/product/edit"
                 data-event="bs.add.presta.product.all"
