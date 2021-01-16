@@ -23,7 +23,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <div class="row" align="center" style="padding-top: 130px;">
+                        <div class="row" align="center" style="padding-top: 10px;">
                             <div class="col-md-12">
                                 <div class="tab">
                                     <a href="/blueseal/ordini" class="btn btn-light" role="button"><i class="fa fa-diamond" aria-hidden="true"></i> Tutti gli Ordini </a>
