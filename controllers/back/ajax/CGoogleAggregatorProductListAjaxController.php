@@ -49,12 +49,14 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
               ahp.marketplaceProductId,
               psm.`name` as productStatusAggregatorId,     
               mahp.marketplaceProductId as markeplaceProductId,
+              ma.name as marketplaceAccount,
               
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
                concat(shop.id, '-', shop.name)                                                                     AS shop,
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock
             FROM MarketplaceAccountHasProduct mahp 
+            join MarketpalceAccount  ma on mahp.marketplaceId=ma.marketplaceId and mahp.marketplaceAccountId=ma.marketplaceAccountId 
             JOIN AggregatorHasProduct ahp   ON mahp.productId = ahp.productId AND mahp.productVariantId = ahp.productVariantId
             left JOIN ProductStatusAggregator psm on ahp.productStatusAggregatorId=psm.id
             left JOIN ProductPublicSku pps ON pps.productId = mahp.productId AND pps.productVariantId = mahp.productVariantId
@@ -145,6 +147,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
         } else {
             $row['productStatusAggregatorId'] = '';
         }
+        $row['marketplaceAccount']=$marketplaceAccount->name;
         $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
         $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
         $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
