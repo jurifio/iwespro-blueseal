@@ -56,7 +56,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock
             FROM MarketplaceAccountHasProduct mahp 
-            join MarketplaceAccount  ma on mahp.marketplaceId=ma.marketplaceId and mahp.marketplaceAccountId=ma.marketplaceAccountId 
+            join MarketplaceAccount  ma on mahp.marketplaceId=ma.marketplaceId and mahp.marketplaceAccountId=ma.id 
             JOIN AggregatorHasProduct ahp   ON mahp.productId = ahp.productId AND mahp.productVariantId = ahp.productVariantId
             left JOIN ProductStatusAggregator psm on ahp.productStatusAggregatorId=psm.id
             left JOIN ProductPublicSku pps ON pps.productId = mahp.productId AND pps.productVariantId = mahp.productVariantId
