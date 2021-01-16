@@ -72,7 +72,7 @@ class CStileoAggregatorProductListAjaxController extends AAjaxController
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
             where p.qty>0 and mahp.marketplaceId=6
-            GROUP BY ahp.productId, ahp.productVariantId 
+            GROUP BY mahp.productId, mahp.productVariantId,mahp.aggregatorHasShopId 
         ";
 
 
