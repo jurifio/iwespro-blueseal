@@ -21,12 +21,12 @@ use bamboo\ecommerce\views\VBase;
 class CGoogleAggregatorProductListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "aggregator_product_list";
+    protected $pageSlug = "googleaggregator_product_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/aggregator_product_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/googleaggregator_product_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
