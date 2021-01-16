@@ -61,7 +61,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
             left JOIN Product p ON mahp.productId = p.id AND mahp.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
-          
+        
             LEFT JOIN AggregatorHasShop ahs ON ahs.id = mahp.aggregatorHasShopId
             LEFT JOIN Shop s ON ahs.shopId = s.id
             LEFT JOIN Marketplace m ON ahs.marketplaceId = m.id
@@ -78,6 +78,8 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
             where p.qty>0  and   mahp.marketplaceId=2  and mahp.isDeleted=0
             GROUP BY mahp.productId, mahp.productVariantId,mahp.marketplaceId,mahp.marketplaceAccountId 
+            order by pse.seasonId desc
+
         ";
 
 
@@ -110,8 +112,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                 $marketplace = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
 
                 $associations .= $php->marketplaceProductId . ' | ' . $shop->name . ' | ' . $marketplace->name . ' |<br> Fee Cost: ' . $php->fee . ' ( ' . $php->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $php->feeCustomer . ' ( ' . $php->feeCustomerMobile . ' ) | Price Modifier: ' . $php->priceModifier . ' |<br> Titolo modificato: ' . ($php->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: ' . $php->lastUpdate . ' ' . ($php->lastResponse == null ? 'Eseguita ' : 'Fallito ') . '<br><hr>';
-            } else {
-                $associations .= '<br><hr>';
+
             }
             $marketplaceAccount=$marepo->findOneBy(['id'=>$php->marketplaceAccountId,'marketplaceId'=>$php->marketplaceId]);
 
