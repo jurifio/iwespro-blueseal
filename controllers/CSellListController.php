@@ -31,6 +31,7 @@ class CSellListController extends ARestrictedAccessRootController
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $pageURL = $blueseal."orders";
+        $shopsList=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
 
         $opera = $blueseal."order";
         $aggiungi = $blueseal."order";
@@ -41,6 +42,7 @@ class CSellListController extends ARestrictedAccessRootController
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
+            'shopsList'=>$shopsList,
             'sidebar' => $this->sidebar->build()
         ]);
     }

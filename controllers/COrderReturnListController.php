@@ -28,7 +28,7 @@ class COrderReturnListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/order_returnlist.php');
-
+        $shopsList=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
         /** LOGICA */
         $blueseal = $this->app->baseUrl(false).'/blueseal/';
         $pageURL = $blueseal."orders";
@@ -42,6 +42,7 @@ class COrderReturnListController extends ARestrictedAccessRootController
             'operaURL' =>$opera,
             'aggiungiURL' =>$aggiungi,
             'page' => $this->page,
+            'shopsList'=>$shopsList,
             'sidebar' => $this->sidebar->build()
         ]);
     }
