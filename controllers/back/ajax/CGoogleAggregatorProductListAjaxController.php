@@ -76,7 +76,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0  and   mahp.marketplaceId=2  and mahp.isDeleted=0;
+            where p.qty>0  and   mahp.marketplaceId=2  and mahp.isDeleted=0
             GROUP BY mahp.productId, mahp.productVariantId,mahp.marketplaceId,mahp.marketplaceAccountId 
         ";
 
