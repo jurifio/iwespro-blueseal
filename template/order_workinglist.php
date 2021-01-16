@@ -40,14 +40,12 @@
                                 <div><?php foreach ($shopsList as $shopList ){
                                         echo '<b>Sezionali</b>  :'.$shopList->name. ' <b>fatture intracee:</b> '.$shopList->invoiceUe.' <b>ricevute:</b> '.$shopList->receipt.' <b>fatture extracee:</b> '.$shopList->invoiceExtraUe.'<br>';
                                     }?>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-            </div
+            </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">

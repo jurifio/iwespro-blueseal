@@ -44,10 +44,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-            </div
+            </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
