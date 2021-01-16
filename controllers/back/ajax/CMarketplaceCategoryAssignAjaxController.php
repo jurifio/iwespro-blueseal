@@ -40,7 +40,8 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
                     left join (`ProductCategoryHasMarketplaceAccountCategory` `pchmac` 
                                 join `ProductCategory` `pc` on `pc`.`id` = `pchmac`.`productCategoryId`)
                               on (`mac`.`marketplaceId`,`mac`.`marketplaceAccountId`, `mac`.`marketplaceCategoryId` ) = 
-                                  (`pchmac`.`marketplaceId`,`pchmac`.`marketplaceAccountId`, `pchmac`.`marketplaceAccountCategoryId`)";
+                                  (`pchmac`.`marketplaceId`,`pchmac`.`marketplaceAccountId`, `pchmac`.`marketplaceAccountCategoryId`)
+                                  where m.type='marketplace'";
 
         $datatable = new CDataTables($sql,$marketplaceAccountCategoryRepo->getEmptyEntity()->getPrimaryKeys(),$_GET,true);
 		$datatable->addCondition('isRelevant',[1]);

@@ -6,7 +6,7 @@ use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CProductCategory;
 
 /**
- * Class CMarketplaceCategoryAssignInvertedAjaxController
+ * Class CAggregatorCategoryAssignInvertedAjaxController
  * @package bamboo\blueseal\controllers\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,7 +18,7 @@ use bamboo\domain\entities\CProductCategory;
  * @date $date
  * @since 1.0
  */
-class CMarketplaceCategoryAssignInvertedAjaxController extends AAjaxController
+class CAggregatorCategoryAssignInvertedAjaxController extends AAjaxController
 {
     protected $urls = [];
     protected $authorizedShops = [];
@@ -40,7 +40,8 @@ from ((((`ProductCategory` `pc`
     left join `Marketplace` `m` on((`m`.`id` = `ma`.`marketplaceId`))) 
     left join `ProductCategoryHasMarketplaceAccountCategory` `pchmac` on(((`pc`.`id` = `pchmac`.`productCategoryId`) and (`ma`.`id` = `pchmac`.`marketplaceAccountId`) and (`ma`.`marketplaceId` = `pchmac`.`marketplaceId`))))
      left join `MarketplaceAccountCategory` `mac` on(((`mac`.`marketplaceAccountId` = `pchmac`.`marketplaceAccountId`) and (`mac`.`marketplaceId` = `pchmac`.`marketplaceId`) and (`mac`.`marketplaceCategoryId` = `pchmac`.`marketplaceAccountCategoryId`))))
-where (`pc`.`id` <> 1) and (m.type='marketplace') group by `pc`.`id`,`ma`.`id`,`m`.`id`";
+where (`pc`.`id` <> 1) and (m.type='cpc') group by `pc`.`id`,`ma`.`id`,`m`.`id`";
+        $datatable = new CDataTables($sql,['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET,true);
         $datatable = new CDataTables($sql,['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET,true);
 
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
