@@ -5,7 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\domain\entities\CMarketplaceHasShop;
-use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CAggregatorHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\repositories\CPrestashopHasProductRepo;
 
@@ -28,9 +28,9 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     {
         $sql = "
             SELECT
-              concat(ahp.productId, '-', ahp.productVariantId) AS productCode,
-              ahp.productId,
-              ahp.productVariantId,
+              concat(mahp.productId, '-', mahp.productVariantId) AS productCode,
+              mahp.productId,
+              mahp.productVariantId,
               pps.price,
               pb.name  as `brand`, 
               p.externalId AS externalId,
@@ -54,13 +54,14 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                concat(shop.id, '-', shop.name)                                                                     AS shop,
                concat(pse.name, ' ', pse.year)                                                               AS season,
                psiz.name                                                                                             AS stock
-            FROM AggregatorHasProduct ahp
+            FROM MarketplaceAccountHasProduct mahp 
+            JOIN AggregatorHasProduct ahp   ON mahp.productId = ahp.productId AND mahp.productVariantId = ahp.productVariantId
             left JOIN ProductStatusAggregator psm on ahp.productStatusAggregatorId=psm.id
-            left JOIN ProductPublicSku pps ON pps.productId = ahp.productId AND pps.productVariantId = ahp.productVariantId
-            left JOIN Product p ON ahp.productId = p.id AND ahp.productVariantId = p.productVariantId    
+            left JOIN ProductPublicSku pps ON pps.productId = mahp.productId AND pps.productVariantId = mahp.productVariantId
+            left JOIN Product p ON mahp.productId = p.id AND mahp.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
-             JOIN MarketplaceAccountHasProduct mahp ON ahp.productId = mahp.productId AND ahp.productVariantId = mahp.productVariantId
+          
             LEFT JOIN AggregatorHasShop ahs ON ahs.id = mahp.aggregatorHasShopId
             LEFT JOIN Shop s ON ahs.shopId = s.id
             LEFT JOIN Marketplace m ON ahs.marketplaceId = m.id
@@ -75,95 +76,95 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and   mahp.marketplaceId=2
-            GROUP BY mahp.productId, mahp.productVariantId,mahp.aggregatorHasShopId 
+            where p.qty>0  and   mahp.marketplaceId=2 
+            GROUP BY mahp.productId, mahp.productVariantId,mahp.marketplaceId,mahp.marketplaceAccountId 
         ";
 
 
-        $datatable = new CDataTables($sql,['productId','productVariantId'],$_GET,true);
+        $datatable = new CDataTables($sql,['productId','productVariantId','marketplaceId','marketplaceAccountId'],$_GET,true);
 
         $datatable->doAllTheThings();
 
-        /** @var CAggregatorHasShop $phpRepo */
+        /** @var CAggregatorHasProduct $phpRepo */
         $phpRepo = \Monkey::app()->repoFactory->create('AggregatorHasProduct');
 
         /** @var CRepo $mhsRepo */
         $mhsRepo = \Monkey::app()->repoFactory->create('AggregatorHasShop');
         $productStatusAggregatorRepo = \Monkey::app()->repoFactory->create('ProductStatusAggregator');
+        $mahpRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
+        $marepo=\Monkey::app()->repoFactory->create('MarketplaceAccount');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
-            /** @var CAggregatorHasProduct $php */
-            $php = $phpRepo->findOneBy($row);
 
+            /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct */
+            $php = $mahpRepo->findOneBy($row);
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
-
             $associations = '';
             $onSale = '';
             $salePrice = '';
             $refMarketplaceId = '';
 
+            $aggregatorHasShop = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id' => $php->aggregatorHasShopId]);
+            if ($aggregatorHasShop) {
+                $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $aggregatorHasShop->shopId]);
+                $marketplace = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
 
-            /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct*/
-            $marketplaceAccountHasProduct=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId, 'aggregatorHasShopId'=>$php->aggregatorHasShopId]);
-            foreach ($marketplaceAccountHasProduct as $pHPHmHs) {
-                $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$pHPHmHs->aggregatorHasShopId]);
-                if($aggregatorHasShop) {
-                    $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$aggregatorHasShop->shopId]);
-                    $marketplace = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
-
-                    $associations .= $pHPHmHs->marketplaceProductId . ' | ' . $shop->name . ' | ' . $marketplace->name . ' |<br> Fee Cost: ' . $pHPHmHs->fee . ' ( ' . $pHPHmHs->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $pHPHmHs->feeCustomer . ' ( ' . $pHPHmHs->feeCustomerMobile . ' ) | Price Modifier: ' . $pHPHmHs->priceModifier . ' |<br> Titolo modificato: ' . ($pHPHmHs->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: '.$pHPHmHs->lastUpdate.' ' . ($pHPHmHs->lastResponse == null ? 'Eseguita '  : 'Fallito ') . '<br><hr>';
-                }else{
-                    $associations .= '<br><hr>';
-                }
-
-
-
-            }
-            $row['marketplaceAssociation'] = $associations;
-
-
-            switch ($php->status) {
-                case 1:
-                    $row['status'] = CPrestashopHasProduct::UPDATED;
-                    break;
-                case 2:
-                    $row['status'] = CPrestashopHasProduct::TOUPDATE;
-                    break;
-                default:
-                    $row['status'] = '';
-                    break;
-            }
-            $row['brand'] = $php->product->productBrand->name;
-            $row['productStatus'] = $php->product->productStatus->name;
-            $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
-            $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
-            $row['marketplaceProductId'] = $php->marketplaceProductId;
-            $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $php->productStatusAggregatorId]);
-            if ($productStatusAggregator) {
-                $row['productStatusAggregatorId'] = $productStatusAggregator->name;
+                $associations .= $php->marketplaceProductId . ' | ' . $shop->name . ' | ' . $marketplace->name . ' |<br> Fee Cost: ' . $php->fee . ' ( ' . $php->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $php->feeCustomer . ' ( ' . $php->feeCustomerMobile . ' ) | Price Modifier: ' . $php->priceModifier . ' |<br> Titolo modificato: ' . ($php->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: ' . $php->lastUpdate . ' ' . ($php->lastResponse == null ? 'Eseguita ' : 'Fallito ') . '<br><hr>';
             } else {
-                $row['productStatusAggregatorId'] = '';
+                $associations .= '<br><hr>';
             }
-            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
-            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
-            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
-            $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
-            $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
+            $marketplaceAccount=$marepo->findOneBy(['id'=>$php->marketplaceAccountId,'marketplaceId'=>$php->marketplaceId]);
 
 
-            /** @var CAggregatorHasShop $mhsCron */
-            $mhsCron = $mhsRepo->findOneBy(['id' => $php->aggregatorHasShopId]);
+        $row['marketplaceAssociation'] = $associations;
+        /** @var CAggregatorHasProduct $ahp */
+        $ahp = $phpRepo->findOneBy(['productId' => $php->productId,'productVariantId' => $php->productVariantId,'aggregatorHasShopId' => $php->aggregatorHasShopId]);
 
-            $row['cronjobOperation'] = '';
-            $row['cronjobReservation'] = '';
-
-
-
-            $datatable->setResponseDataSetRow($key,$row);
+        switch ($ahp->status) {
+            case 1:
+                $row['status'] = CAggregatorHasProduct::UPDATED;
+                break;
+            case 2:
+                $row['status'] = CAggregatorHasProduct::TOUPDATE;
+                break;
+            default:
+                $row['status'] = '';
+                break;
         }
 
-        return $datatable->responseOut();
+
+        $row['brand'] = $php->product->productBrand->name;
+        $row['productStatus'] = $php->product->productStatus->name;
+        $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
+        $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
+        $row['marketplaceProductId'] = $php->marketplaceProductId;
+        $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $php->productStatusAggregatorId]);
+        if ($productStatusAggregator) {
+            $row['productStatusAggregatorId'] = $productStatusAggregator->name;
+        } else {
+            $row['productStatusAggregatorId'] = '';
+        }
+        $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
+        $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
+        $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
+        $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
+        $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
+        $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
+
+
+        /** @var CAggregatorHasShop $mhsCron */
+        $mhsCron = $mhsRepo->findOneBy(['id' => $php->aggregatorHasShopId]);
+
+        $row['cronjobOperation'] = '';
+        $row['cronjobReservation'] = '';
+
+
+
+
+        $datatable->setResponseDataSetRow($key,$row);
     }
+
+return $datatable->responseOut();
+}
 
 }
