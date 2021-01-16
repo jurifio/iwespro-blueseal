@@ -139,7 +139,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
         $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
         $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
         $row['marketplaceProductId'] = $php->marketplaceProductId;
-        $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $php->productStatusAggregatorId]);
+        $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $ahp->productStatusAggregatorId]);
         if ($productStatusAggregator) {
             $row['productStatusAggregatorId'] = $productStatusAggregator->name;
         } else {
