@@ -34,13 +34,17 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
               pps.price,
               pb.name  as `brand`, 
               p.externalId AS externalId,
-                   
-
-              group_concat(concat(mahp.marketplaceProductId,' | ',s.name, ' | ', m.name, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastResponse=null, concat('Eseguito ',mahp.lastResponse),concat('Fallito ',mahp.lastResponse))  )) AS marketplaceAssociation,
+              mahp.marketplaceId as marketplaceId,
+              mahp.marketplaceAccountId as marketplaceAccountId,     
+              if(mahp.titleModified='1','si','no') as titleModified,  
+             concat(mahp.marketplaceProductId,' | ',s.name, ' | ', m.name, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastResponse=null, concat('Eseguito ',mahp.lastResponse),concat('Fallito ',mahp.lastResponse))  ) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
-              PS.name as productStatus,     
-        
+              PS.name as productStatus,    
+              mahp.lastRevised as lastRevised,
+              if(mahp.hasError='1','si','no') as hasError,     
+              ahs.name as aggregatorName,  
+              mahp.aggregatorHasShopId as aggregatorHasShopId,
               ahp.status,
               ahp.marketplaceProductId,
               psm.`name` as productStatusAggregatorId,     
@@ -100,7 +104,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 
 
             /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct*/
-            $marketplaceAccountHasProduct=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
+            $marketplaceAccountHasProduct=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId, 'aggregatorHasShopId'=>$php->aggregatorHasShopId]);
             foreach ($marketplaceAccountHasProduct as $pHPHmHs) {
                 $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$pHPHmHs->aggregatorHasShopId]);
                 if($aggregatorHasShop) {
