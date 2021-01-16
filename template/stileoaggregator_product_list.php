@@ -60,6 +60,18 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Prezzi Shop<br>pr.Pieno(pr.Saldo)-stato Saldo
                                 </th>
+                                <th data-slug="marketplaceAccount"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Regola
+                                </th>
+                                <th data-slug="marketplaceAccount"
+                                    data-required="true"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Regola
+                                </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
                                     data-searchable="true"
