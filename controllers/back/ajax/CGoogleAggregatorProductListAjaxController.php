@@ -78,7 +78,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
             where p.qty>0  and   mahp.marketplaceId=2  and mahp.isDeleted=0
             GROUP BY mahp.productId, mahp.productVariantId,mahp.marketplaceId,mahp.marketplaceAccountId 
-            order by pse.seasonId desc
+            order by pse.id desc
 
         ";
 
