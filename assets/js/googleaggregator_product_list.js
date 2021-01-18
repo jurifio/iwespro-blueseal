@@ -4,7 +4,7 @@ $('#btnsearchplus').click(function() {
 		accountid = '&accountid='+$('#accountid').val();
 	}
 
-	var url='/blueseal/aggregatori/prodotti/lista/stylight?'+accountid;
+	var url='/blueseal/aggregatori/prodotti/lista/google?'+accountid;
 
 	window.location.href=url;
 });
