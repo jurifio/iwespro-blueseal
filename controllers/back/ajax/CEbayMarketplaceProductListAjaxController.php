@@ -59,6 +59,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
               php.prestaId,
               '' as tableSaldi,     
               psm.`name` as productStatusMarketplaceId,     
+              mhs.imgMarketPlace as img,     
               phphmhs.refMarketplaceId as refMarketplaceId,      
               phphmhs.marketplaceHasShopId as marketplaceHasShopId,     
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
@@ -149,6 +150,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                     $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
             }
             $row['title'] = $name;
+            $row['img']='<img width="50" src="' .$php->marketplaceHasShop->imgMarketPlace. '" />';
 
 
 

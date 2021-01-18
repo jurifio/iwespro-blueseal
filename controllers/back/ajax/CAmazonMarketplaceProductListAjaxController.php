@@ -57,11 +57,13 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
               if(phphmhs.isOnSale=1,phphmhs.salePrice,phphmhs.price) as activePrice,    
               php.status,
               php.prestaId,
-              '' as tableSaldi,     
+              '' as tableSaldi,   
+                     mhs.imgMarketPlace as img,     
               psm.`name` as productStatusMarketplaceId,     
               phphmhs.refMarketplaceId as refMarketplaceId,      
               phphmhs.marketplaceHasShopId as marketplaceHasShopId,     
               concat(s2.name, ' | ', m2.name) AS cronjobReservation,
+              mhs.imgMarketPlace as img,           
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
                concat(shop.id, '-', shop.name)                                                                     AS shop,
@@ -138,7 +140,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
                     $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
             }
             $row['title'] = $name;
-
+            $row['img']='<img width="50" src="' .$php->marketplaceHasShop->imgMarketPlace. '" />';
 
 
             $row['brand'] = $php->product->productBrand->name;
