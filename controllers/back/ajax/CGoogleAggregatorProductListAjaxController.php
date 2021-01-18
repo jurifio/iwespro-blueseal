@@ -26,6 +26,11 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 {
     public function get()
     {
+        if (isset($_REQUEST['accountid'])) {
+            $accountid = $_REQUEST['accountid'];
+        } else {
+            $accountid = '';
+        }
         if ($accountid == 0) {
             $sqlFilterAccount = '';
         } else {
