@@ -57,6 +57,7 @@ class CTradeTrackerAggregatorProductListAjaxController extends AAjaxController
               ahs.name as aggregatorName,  
               mahp.aggregatorHasShopId as aggregatorHasShopId,
               ahp.status,
+             ahs.imgAggregator as img,   
               ahp.marketplaceProductId,
               psm.`name` as productStatusAggregatorId,     
               mahp.marketplaceProductId as markeplaceProductId,
@@ -115,19 +116,17 @@ class CTradeTrackerAggregatorProductListAjaxController extends AAjaxController
             $php = $mahpRepo->findOneBy($row);
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
             $associations = '';
-            $onSale = '';
-            $salePrice = '';
-            $refMarketplaceId = '';
-
+            $img='';
             $aggregatorHasShop = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id' => $php->aggregatorHasShopId]);
             if ($aggregatorHasShop) {
                 $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $aggregatorHasShop->shopId]);
                 $marketplace = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorHasShop->marketplaceId]);
 
                 $associations .= $php->marketplaceProductId . ' | ' . $shop->name . ' | ' . $marketplace->name . ' |<br> Fee Cost: ' . $php->fee . ' ( ' . $php->feeMobile . ' ) | ' . ' |<br> FeeCustomer: ' . $php->feeCustomer . ' ( ' . $php->feeCustomerMobile . ' ) | Price Modifier: ' . $php->priceModifier . ' |<br> Titolo modificato: ' . ($php->titleModified == 0 ? 'No' : 'Yes') . '<br>' . ' |<br> Operazione: ' . $php->lastUpdate . ' ' . ($php->lastResponse == null ? 'Eseguita ' : 'Fallito ') . '<br><hr>';
-
+                $img='<img width="50" src="' .$aggregatorHasShop->imgAggregator. '" />';
             }
             $marketplaceAccount=$marepo->findOneBy(['id'=>$php->marketplaceAccountId,'marketplaceId'=>$php->marketplaceId]);
+            $row['img']=$img;
 
 
             $row['marketplaceAssociation'] = $associations;

@@ -97,17 +97,17 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Regola
                                 </th>
-                                <th data-slug="marketplaceAccount"
-                                    data-required="true"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center"
-                                    data-default-order="desc">Regola
-                                </th>
                                 <th data-slug="marketplaceAssociation"
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Associazioni<br>Aggregatore
+                                </th>
+                                <th data-slug="img"
+                                    data-required="true"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Immagine
                                 </th>
                                 <th data-slug="status"
                                     data-required="true"

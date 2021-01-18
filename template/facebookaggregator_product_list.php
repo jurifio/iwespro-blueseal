@@ -103,6 +103,12 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Associazioni<br>Aggregatore
                                 </th>
+                                <th data-slug="img"
+                                    data-required="true"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Immagine
+                                </th>
                                 <th data-slug="status"
                                     data-required="true"
                                     data-searchable="true"
