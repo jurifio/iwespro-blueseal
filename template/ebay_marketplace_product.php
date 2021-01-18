@@ -108,7 +108,18 @@
                                     data-orderable="true" class="center"
                                     data-default-order="desc">Titolo
                                 </th>
-
+                                <th data-slug="marketplaceShopName"
+                                    data-required="true"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Account
+                                </th>
+                                <th data-slug="img"
+                                    data-required="true"
+                                    data-searchable="false"
+                                    data-orderable="true" class="center"
+                                    data-default-order="desc">Immagine
+                                </th>
                                 <th data-slug="marketplacePrice"
                                     data-required="true"
                                     data-visible="false"
