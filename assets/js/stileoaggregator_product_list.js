@@ -1,3 +1,13 @@
+$('#btnsearchplus').click(function() {
+	var  accountid='&accountid=0';
+	if($('#accountid').val()!=0) {
+		accountid = '&accountid='+$('#accountid').val();
+	}
+
+	var url='/blueseal/aggregatori/prodotti/lista/stileo?'+accountid;
+
+	window.location.href=url;
+});
 $(document).on('bs.marketplace.filter',function() {
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');

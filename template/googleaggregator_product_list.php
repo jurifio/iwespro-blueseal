@@ -16,7 +16,7 @@
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
-                        <div class="row" align="center" style="padding-top: 130px;">
+                        <div class="row" align="center" style="padding-top: 0px;">
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
                                     <label for="accountid">Seleziona l'account</label>

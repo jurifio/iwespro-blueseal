@@ -27,10 +27,17 @@ class CCriteoAggregatorProductListController extends ARestrictedAccessRootContro
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/criteoaggregator_product_list.php');
-
+        $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId'=>7,'isActive'=>1]);
+        if(isset($_GET['accountid'])){
+            $accountid=$_GET['accountid'];
+        } else{
+            $accountid=0;
+        }
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'marketplaceAccount'=>$marketplaceAccount,
+            'accountid'=>$accountid,
             'sidebar' => $this->sidebar->build()
         ]);
     }

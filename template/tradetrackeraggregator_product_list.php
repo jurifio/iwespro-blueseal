@@ -13,6 +13,36 @@
 
     <div class="page-content-wrapper">
         <div class="content sm-gutter">
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row" align="center" style="padding-top: 0px;">
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="accountid">Seleziona l'account</label>
+                                    <select id="accountid" name="accountid"
+                                            class="full-width selectpicker"
+                                            placeholder="Seleziona la Lista"
+                                            data-init-plugin="selectize">
+                                        <?php  echo '<option   value="">Seleziona</option>';
+                                        foreach ($marketplaceAccount as $account) {
+                                            if ($account->id == $accountid) {
+                                                echo '<option  selected="selected" value="' . $account->id . '">' . $account->name . '</option>';
+                                            } else {
+                                                echo '<option value="' . $account->id . '">' . $account->name . '</option>';
+                                            }
+                                        }; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
@@ -21,6 +51,7 @@
                                data-datatable-name="tradetrackeraggregator_product_list"
                                data-controller="TradeTrackerAggregatorProductListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
+                               data-accountid="<?php echo $accountid?>"
                                data-inner-setup="true"
                                data-length-menu-setup="25,100, 200, 500">
                             <thead>
