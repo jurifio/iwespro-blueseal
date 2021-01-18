@@ -21,16 +21,23 @@ use bamboo\ecommerce\views\VBase;
 class CAmazonMarketplaceProductListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "ebay_marketplace_product";
+    protected $pageSlug = "amazon_marketplace_product";
 
     public function get()
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/amazon_marketplace_product.php');
-
+        $marketplaceAccount=\Monkey::app()->repoFactory->create('MarketplaceHasShop')->findBy(['marketplaceId'=>4,'isActive'=>1]);
+        if(isset($_GET['accountid'])){
+            $accountid=$_GET['accountid'];
+        } else{
+            $accountid=0;
+        }
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
+            'marketplaceAccount'=>$marketplaceAccount,
+            'accountid'=>$accountid,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -26,6 +26,16 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
 {
     public function get()
     {
+        if (isset($_REQUEST['accountid'])) {
+            $accountid = $_REQUEST['accountid'];
+        } else {
+            $accountid = '';
+        }
+        if ($accountid == 0) {
+            $sqlFilterAccount = '';
+        } else {
+            $sqlFilterAccount = 'and phphmhs.marketplaceHasShopId=' . $accountid;
+        }
         $sql = "
              SELECT
               concat(php.productId, '-', php.productVariantId) AS productCode,
@@ -80,7 +90,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and m.id=4 and phphmhs.isPublished=1 and phphmhs.refMarketplaceId is not null
+            where p.qty>0 and m.id=4 and phphmhs.isPublished=1 and phphmhs.refMarketplaceId is not null ".$sqlFilterAccount."
             GROUP BY phphmhs.productId, phphmhs.productVariantId,phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
         ";
 

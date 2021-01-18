@@ -26,6 +26,16 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
 {
     public function get()
     {
+        if (isset($_REQUEST['accountid'])) {
+            $accountid = $_REQUEST['accountid'];
+        } else {
+            $accountid = '';
+        }
+        if ($accountid == 0) {
+            $sqlFilterAccount = '';
+        } else {
+            $sqlFilterAccount = 'and phphmhs.marketplaceHasShopId=' . $accountid;
+        }
         $sql = "
             SELECT
               concat(php.productId, '-', php.productVariantId) AS productCode,
@@ -65,10 +75,9 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             left JOIN Product p ON phphmhs.productId = p.id AND phphmhs.productVariantId = p.productVariantId    
             LEFT JOIN ProductStatus PS on p.productStatusId=PS.id       
             LEFT JOIN ProductBrand pb on p.productBrandId=pb.id
-    
             LEFT JOIN MarketplaceHasShop mhs ON mhs.id = phphmhs.marketplaceHasShopId
             LEFT JOIN Shop s ON mhs.shopId = s.id
-            LEFT JOIN Marketplace m ON mhs.marketplaceId = m.id
+            LEFT JOIN Marketplace m ON mhs.marketplaceId = m.id 
             LEFT JOIN MarketplaceHasShop mhs2 ON phphmhs.marketplaceHasShopId = mhs2.id
             LEFT JOIN Shop s2 ON mhs2.shopId = s2.id
             LEFT JOIN Marketplace m2 ON mhs2.marketplaceId = m2.id
@@ -80,7 +89,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and m.id=3 and phphmhs.isPublished=1 and phphmhs.refMarketplaceId is not null
+            where p.qty>0 and m.id=3 and phphmhs.isPublished=1 and phphmhs.refMarketplaceId is not null  ".$sqlFilterAccount."
             GROUP BY phphmhs.productId, phphmhs.productVariantId,phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
         ";
 

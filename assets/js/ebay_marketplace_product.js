@@ -1,4 +1,15 @@
+
 (function ($) {
+    $('#btnsearchplus').click(function() {
+        var  accountid='&accountid=0';
+        if($('#accountid').val()!=0) {
+            accountid = '&accountid='+$('#accountid').val();
+        }
+
+        var url='/blueseal/prodotti/marketplace/ebay/prodotti-lista?'+accountid;
+
+        window.location.href=url;
+    });
     $(document).on('bs.adding.presta', function () {
 
         let loaderHtml = '<img src="/assets/img/ajax-loader.gif" />';
