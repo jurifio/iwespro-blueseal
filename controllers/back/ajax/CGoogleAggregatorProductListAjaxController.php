@@ -26,6 +26,12 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 {
     public function get()
     {
+        if ($accountid == 0) {
+            $sqlFilterAccount = '';
+        } else {
+            $sqlFilterAccount = 'and ma.id=' . $accountid;
+        }
+
         $sql = "
             SELECT
               concat(mahp.productId, '-', mahp.productVariantId) AS productCode,
@@ -78,7 +84,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0  and   mahp.marketplaceId=2  and mahp.isDeleted=0
+            where p.qty>0  and   mahp.marketplaceId=2  and mahp.isDeleted=0 ".$sqlFilterAccount."
             GROUP BY mahp.productId, mahp.productVariantId,mahp.marketplaceId,mahp.marketplaceAccountId 
             order by pse.id desc
 
