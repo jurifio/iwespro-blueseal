@@ -4280,7 +4280,7 @@
         },{
             "pattern": "/blueseal/aggregatori/prodotti/lista/stylight(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CStilightAggregatorProductListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CStylightAggregatorProductListController"
             },
             "filters": {},
             "translations": {},
