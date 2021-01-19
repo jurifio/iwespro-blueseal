@@ -134,17 +134,73 @@ class CShopALikeAggregatorProductListAjaxController extends AAjaxController
             /** @var CAggregatorHasProduct $ahp */
             $ahp = $phpRepo->findOneBy(['productId' => $php->productId,'productVariantId' => $php->productVariantId,'aggregatorHasShopId' => $php->aggregatorHasShopId]);
 
+            $stat='';
             switch ($ahp->status) {
                 case 1:
-                    $row['status'] = CAggregatorHasProduct::UPDATED;
+                    $stat = '<i style="color: green;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.CAggregatorHasProduct::UPDATED. '</b></i>';
                     break;
                 case 2:
-                    $row['status'] = CAggregatorHasProduct::TOUPDATE;
+                    $stat = '<i style="color: orange;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.CAggregatorHasProduct::TOUPDATE. '</b></i>';
+                    break;
+                case 3:
+                    $stat = '<i style="color: blue;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.CAggregatorHasProduct::MANUAL. '</b></i>';
+                    break;
+                case 4:
+                    $stat = '<i style="color: fuchsia;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.CAggregatorHasProduct::TOBOOKINGDELETE. '</b></i>';
+                    break;
+                case 5:
+                    $stat = '<i style="color: red;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.CAggregatorHasProduct::DELETED. '</b></i>';
                     break;
                 default:
                     $row['status'] = '';
                     break;
             }
+            $row['status'] =$stat;
 
 
             $row['brand'] = $php->product->productBrand->name;

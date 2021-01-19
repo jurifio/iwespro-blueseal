@@ -112,7 +112,7 @@
                                     data-required="true"
                                     data-searchable="true"
                                     data-orderable="true" class="center"
-                                    data-default-order="desc">Stato Pubblicazione<br>Aggregatgore
+                                    data-default-order="desc">Stato Pubblicazione<br>Aggregatore
                                 </th>
 
                                 <th data-slug="productStatusAggregatorId"
