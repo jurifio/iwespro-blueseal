@@ -131,7 +131,7 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
             $row['marketplaceAssociation'] = $associations;
             /** @var CAggregatorHasProduct $ahp */
             $ahp = $phpRepo->findOneBy(['productId' => $php->productId,'productVariantId' => $php->productVariantId,'aggregatorHasShopId' => $php->aggregatorHasShopId]);
-        $stat='';
+            $stat='';
             switch ($ahp->status) {
                 case 1:
                     $stat = '<i style="color: green;
@@ -194,7 +194,16 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     padding-left: 4px;"><b>'.CAggregatorHasProduct::DELETED. '</b></i>';
                     break;
                 default:
-                    $row['status'] = '';
+                    $stat = '<i style="color: red;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>NON PRESENTE</b></i>';
                     break;
             }
             $row['status'] =$stat;
