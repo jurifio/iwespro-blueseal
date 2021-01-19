@@ -90,7 +90,7 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0  and   mahp.marketplaceId=14  and mahp.isDeleted=0 ".$sqlFilterAccount."
+            where p.qty>0  and   mahp.marketplaceId=13  and mahp.isDeleted=0 ".$sqlFilterAccount."
             GROUP BY mahp.productId, mahp.productVariantId,mahp.marketplaceId,mahp.marketplaceAccountId 
             order by pse.id desc
 
