@@ -116,17 +116,44 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
             $row['marketplacePrice'] = $php->price;
             $row['marketplaceSalePrice'] = $php->salePrice;
             switch (true) {
-                case $php->lastTypeOperation = 0;
-                    $lastTypeOperation = 'da inserire';
+                case $php->lastTypeOperation = 0:
+                    $lastTypeOperation = '<i style="color: black;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.'da inserire '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s'). '</b></i>';
                     break;
-                case $php->lastTypeOperation = 2;
-                    $lastTypeOperation = 'ADD';
+                case $php->lastTypeOperation = 2:
+                    $lastTypeOperation =  '<i style="color: orange;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.'ADD '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s'). '</b></i>';
                     break;
-                case $php->lastTypeOperation = 1;
-                    $lastTypeOperation = 'REVISE';
+                case $php->lastTypeOperation = 1:
+                    $lastTypeOperation = '<i style="color: green;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>'.'REVISE '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s'). '</b></i>';
                     break;
             }
-            $row['lastTypeOperation'] =$lastTypeOperation. ' '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s');
+            $row['lastTypeOperation'] =$lastTypeOperation;
             if ($php->isOnSale == 1) {
                 $row['activePrice'] = $php->salePrice;
             } else {
