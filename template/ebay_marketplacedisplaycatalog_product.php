@@ -202,7 +202,7 @@ $productUrl = $app->productUrl($product);
                                                             $currentUserId = $currentUser->id;
                                                             ?>
                                                         </div>
-                                                        <span class="product-message-hidden"><?php echo tp($data->availableSizes) . implode(' | ', $sizes); ?></span>
+                                                        <span class="product-message-hidden"><?php echo tp('taglie') . implode(' | ', $sizes); ?></span>
                                                     </div>
                                                 </div>
                                             </div>
