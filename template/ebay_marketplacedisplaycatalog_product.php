@@ -219,7 +219,7 @@ $productUrl = $app->productUrl($product);
                                                             endforeach;
                                                         endif; ?>
 
-                                                        <span class="product-message-hidden"><?php echo tp('taglie disponibili') . implode(' | ', $sizes); ?></span>
+
                                                     </div>
                                                 </div>
                                             </div>
