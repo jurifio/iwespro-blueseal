@@ -72,7 +72,7 @@
  * @var $data ->multi CObjectCollection
  */
 
-$product = \Monkey::app()->repoFactory->create('Product')->findOne($productFind);
+$product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$productFind['productId'],'productVariantId'=>$productFind['productVariantId']]);
 
 
 $prices = [];
@@ -132,11 +132,11 @@ $productUrl = $app->productUrl($product);
                                                 <div class="product-thumb-info-content">
                                                     <div class="product-thumb-info-image">
                                                         <figure class="animation animated fadeInUp img-holder" style="position: relative">
-                                                            <a href="<?php echo $productUrl; ?>">
+
                                                                 <img alt="<?php echo $product->productBrand->name . ' - ' . $verboseCategory ?>"
                                                                      class="img-responsive xhttp-loading-icon"
                                                                      src="/assets/xhttp-loader-icon.gif"
-                                                                     data-src="<?php echo $app->image($product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB), 'amazon') ?>"></a>
+                                                                     data-src="<?php echo $app->image($product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB), 'amazon') ?>">
                                                             <?php
                                                             if (!empty($sTags)):
                                                                 foreach ($sTags as $pht):
@@ -166,11 +166,10 @@ $productUrl = $app->productUrl($product);
                                                     </div>
                                                     <div class="product-thumb-writing">
                                                         <h4>
-                                                            <a href="<?php echo $app->hrefToCatalogBrand($product->productBrand); ?>"
-                                                               style="font-weight:bold;"><span
-                                                                        itemprop="brand"><?php echo($product->productBrand->name); ?></span></a></h4>
-                                                        <span class="item-cat"><small><a
-                                                                        href="<?php echo $productUrl; ?>"><?php echo strtoupper($productName) ?></a></small></span>
+
+                                                           <span
+                                                                        itemprop="brand"><?php echo($product->productBrand->name); ?></span></h4>
+                                                        <span class="item-cat"><small><?php echo strtoupper($productName) ?></small></span>
                                                         <div itemprop="offers">
                                                             <link itemprop="availability" href="http://schema.org/InStock"/>
                                                             <meta itemprop="priceCurrency" content="EUR"/>
