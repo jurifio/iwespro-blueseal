@@ -86,7 +86,8 @@ foreach ($product->productPublicSku as $sku) {
     if ($sku->price == 0) continue;
     $prices[] = $sku->price;
     $salePrices[] = $sku->salePrice;
-    $sizes[] = $sku->getPublicSize()->name;
+    $nameSize=\Monkey::app()->repoFactory->create('ProductSize')->findOneBy(['id'=>$sku->productSizeId]);
+    $sizes[] = $nameSize->name;
 
 }
 
