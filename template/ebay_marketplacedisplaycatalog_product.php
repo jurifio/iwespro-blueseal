@@ -180,7 +180,7 @@
                                                     </h4>
                                                     <span class="item-cat"><small>
                                                                 <?php
-                                                                if($ProductFind['titleModified']==1 && $ProductFind['isOnSale']==1){
+                                                                if($productFind['titleModified']==1 && $productFind['isOnSale']==1){
                                                                 $percSc = number_format(100 * ($prices[0] - $salePrices[0]) / $prices[0],0);
                     $name = $product->productBrand->name
                         . ' Sconto del ' . $percSc . '% da ' . number_format($prices[0],'2','.','') . ' € a ' . number_format($salePrices[0],'2','.','')
