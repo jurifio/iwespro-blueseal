@@ -202,24 +202,7 @@ $productUrl = $app->productUrl($product);
                                                             $currentUserId = $currentUser->id;
                                                             ?>
                                                         </div>
-                                                        <?php if ($pricesAreOnARange == true): ?>
-                                                            <span class="price-notice"><?php tpe('Il prezzo varia con la taglia dell\'oggetto'); ?></span>
-                                                        <?php endif; ?>
-                                                        <?php if ($product->tag->findOneByKey('slug', 'new-arrival')): ?>
-                                                            <span class="product-message"><?php tpe('nuovi arrivi'); ?></span>
-                                                        <?php endif; ?>
-                                                        <?php
-                                                        if (!empty($sTags)):
-                                                            /** @var \bamboo\domain\entities\CTag $tag */
-                                                            foreach ($sTags as $pht):
-                                                                if($pht->position == 1){
-                                                                    ?>
-                                                                    <span class="product-message-gold"><?php echo $pht->tag->tagTranslation->getFirst()->name; ?></span>
-                                                                <?php }
-                                                            endforeach;
-                                                        endif; ?>
-
-
+                                                        <span class="product-message-hidden"><?php echo tp($data->availableSizes) . implode(' | ', $sizes); ?></span>
                                                     </div>
                                                 </div>
                                             </div>
