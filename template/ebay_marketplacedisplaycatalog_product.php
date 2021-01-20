@@ -136,7 +136,7 @@ $productUrl = $app->productUrl($product);
 
                                                                 <img alt="<?php echo $product->productBrand->name . ' - ' . $verboseCategory ?>"
                                                                      class="img-responsive xhttp-loading-icon"
-                                                                     src="/assets/xhttp-loader-icon.gif"
+                                                                     src="<?php echo $app->image($product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB), 'amazon') ?>"
                                                                      data-src="<?php echo $app->image($product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB), 'amazon') ?>">
                                                             <?php
                                                             if (!empty($sTags)):
