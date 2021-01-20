@@ -135,7 +135,7 @@ $productUrl = $app->productUrl($product);
                                                         <figure class="animation animated fadeInUp img-holder" style="position: relative">
 
                                                                 <img alt="<?php echo $product->productBrand->name . ' - ' . $verboseCategory ?>"
-                                                                     class="img-responsive xhttp-loading-icon"
+                                                                     class="img-responsive"
                                                                      src="<?php echo $app->image($product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB), 'amazon') ?>"
                                                                      data-src="<?php echo $app->image($product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB), 'amazon') ?>">
                                                             <?php
