@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="https://www.pickyshop.com/it/assets/common.css">
+    <!--<link rel="stylesheet" type="text/css" href="https://www.pickyshop.com/it/assets/common.css">-->
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
