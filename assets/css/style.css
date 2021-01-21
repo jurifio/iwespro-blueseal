@@ -1673,6 +1673,9 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 }
 
 /***********inserimento modifica  da common.css****/
+.row.product-grid-container:last-child {
+    margin-bottom: 30px;
+}
 
 @media (max-width: 4096px) {
     .product-thumb-info-image {
