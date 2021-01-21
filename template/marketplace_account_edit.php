@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="tab">
                         <div class="col-md-12">
-                            <button class="tablinks" onclick="openTab(event, 'insertAggregator')">Inserisci
+                            <button class="tablinks" onclick="openTab(event, 'insertAggregator')">Parametri Pubblicazione
                                 aggregatore
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'insertRules')">Inserisci Regole</button>
@@ -108,7 +108,6 @@
                                                         echo '<option  selected="selected" value="0">No</option>';
                                                     } ?>
                                                 </select>
-
                                             </div>
                                         </div>
                                     </div>
@@ -334,6 +333,27 @@
                                                        class="form-control" name="budget12" value="<?php echo $marketplaceAccount->config['budget12']?>"
                                                        required="required"/>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isActiveDepublisher">Seleziona se Attiva la Depubblicazione (Eliseo)
+                                                </label>
+                                                <select id="isActiveDepublisher"
+                                                        name="isActiveDepublisher"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione se attivo"
+                                                        data-init-plugin="selectize">
+                                                    <?php if ($marketplaceAccount->config['isActiveDepublisher'] == "1") {
+                                                        echo '<option  selected="selected" value="1">Si</option>';
+                                                        echo '<option value="0">No</option>';
+                                                    } else {
+                                                        echo '<option  value="1">Si</option>';
+                                                        echo '<option  selected="selected" value="0">No</option>';
+                                                    } ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

@@ -302,6 +302,24 @@
                                         </div>
                                     </div>
                                     <div class="row" id="divmarketplace"></div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isActiveDepublisher">Seleziona se Attivo il Job di depubblicazione(Eliseo)
+                                                </label>
+                                                <select id="isActiveDepublisher"
+                                                        name="isActiveDepublisher"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione se attivo"
+                                                        data-init-plugin="selectize">
+                                                    <option value=""></option>
+                                                    <option value="1">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row" id="source_label_productCategoryGroup">
                                         <div class="col-md-12">Esclusione Categorie
                                         </div>

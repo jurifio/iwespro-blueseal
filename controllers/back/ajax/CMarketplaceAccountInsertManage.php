@@ -54,6 +54,11 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $isActive = $_GET['isActive'];
         }
+        if ($_GET['isActiveDepublisher'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato Se attivare  o meno la Depubblicazione </i>';
+        } else {
+            $isActiveDepublisher = $_GET['isActiveDepublisher'];
+        }
         if ($_GET['nameAdminister'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> intestazione Email Destinatario non valorizzato</i>';
         } else {
@@ -394,6 +399,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $collectUpdate .= '"budget01":' . $budget01 . ',"budget02":' . $budget02 . ' ,"budget03":' . $budget03 . ' ,"budget04":' . $budget04 . ' ,"budget05":' . $budget05 . ' ,"budget06":' . $budget06 . ' ,';
         $collectUpdate .= '"budget07":' . $budget07 . ' ,"budget08":' . $budget08 . ' ,"budget09":' . $budget09 . ' ,"budget10":' . $budget10 . ' ,"budget11":' . $budget11 . ' ,"budget12":' . $budget12 . ' ,';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify . '","productSizeGroupEx1":' . $productSizeGroupEx1 . ',"productSizeGroupEx2":' . $productSizeGroupEx2 . ',"productSizeGroupEx3":' . $productSizeGroupEx3 . ',"productSizeGroupEx4":' . $productSizeGroupEx4 . ',"productSizeGroupEx5":' . $productSizeGroupEx5 . ',"productSizeGroupEx6":' . $productSizeGroupEx6 . ',';
+        $collectUpdate .= '"isActiveDepublisher":"' . $isActiveDepublisher . '",';
         $collectUpdate .= '"productCategoryIdEx1":' . $productCategoryIdEx1 . ',';
         $collectUpdate .= '"productCategoryIdEx2":' . $productCategoryIdEx2 . ',';
         $collectUpdate .= '"productCategoryIdEx3":' . $productCategoryIdEx3 . ',';
@@ -527,6 +533,11 @@ class CMarketplaceAccountInsertManage extends AAjaxController
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato lo stato aggregatore </i>';
         } else {
             $isActive = $_GET['isActive'];
+        }
+        if ($_GET['isActiveDepublisher'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Non hai selezionato Se attivare  o meno la Depubblicazione </i>';
+        } else {
+            $isActiveDepublisher = $_GET['isActiveDepublisher'];
         }
         if ($_GET['nameAdminister'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> intestazione Email Destinatario non valorizzato</i>';
@@ -910,6 +921,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $collectUpdate .= '"budget01":' . $budget01 . ',"budget02":' . $budget02 . ' ,"budget03":' . $budget03 . ' ,"budget04":' . $budget04 . ' ,"budget05":' . $budget05 . ' ,"budget06":' . $budget06 . ' ,';
         $collectUpdate .= '"budget07":' . $budget07 . ' ,"budget08":' . $budget08 . ' ,"budget09":' . $budget09 . ' ,"budget10":' . $budget10 . ' ,"budget11":' . $budget11 . ' ,"budget12":' . $budget12 . ' ,';
         $collectUpdate .= '"nameAdminister":"' . $nameAdminister . '","emailNotify":"' . $emailNotify . '","productSizeGroupEx1":' . $productSizeGroupEx1 . ',"productSizeGroupEx2":' . $productSizeGroupEx2 . ',"productSizeGroupEx3":' . $productSizeGroupEx3 . ',"productSizeGroupEx4":' . $productSizeGroupEx4 . ',"productSizeGroupEx5":' . $productSizeGroupEx5 . ',"productSizeGroupEx6":' . $productSizeGroupEx6 . ',';
+        $collectUpdate .= '"isActiveDepublisher":"' . $isActiveDepublisher . '",';
         $collectUpdate .= '"productCategoryIdEx1":' . $productCategoryIdEx1 . ',';
         $collectUpdate .= '"productCategoryIdEx2":' . $productCategoryIdEx2 . ',';
         $collectUpdate .= '"productCategoryIdEx3":' . $productCategoryIdEx3 . ',';
