@@ -74,11 +74,12 @@ class CPrepareProductForAggregatorJob extends ACronJob
                             $phs->productVariantId=$product['productVariantId'];
                             $phs->aggregatorHasShopId=$mhs->id;
                             $phs->insert();
-                            $this->report('CPrepareProductForAggregatorJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id);
+                            $this->report('CPrepareProductForAggregatorJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to aggregator' . $mhs->id);
 
                         }
 
                     }
+                    $this->report('CPrepareProductForAggregatorJob','Report End ', $mhs->id);
                 }
             }
         } catch (\Throwable $e) {
