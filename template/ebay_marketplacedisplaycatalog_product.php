@@ -248,15 +248,15 @@
 
                                         <?php if ($p == $pageId) {
                                             if ($marketplaceHasShopId != 0 || $marketplaceHasShopId != '') {
-                                                echo '<li class="active"><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?marketplacehashopid='.$marketplaceHasShopId.'&=pageid='.$pageId.'">' . $pageId . '<span class="sr-only">(current)</span></a></li>';
+                                                echo '<li class="active"><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?marketplacehashopid='.$marketplaceHasShopId.'&=pageid='.$p.'">' . $p . '<span class="sr-only">(current)</span></a></li>';
                                             } else {
-                                                echo '<li class="active"><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$pageId.'">' . $pageId . '<span class="sr-only">(current)</span></a></li>';
+                                                echo '<li class="active"><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$p.'">' . $p . '<span class="sr-only">(current)</span></a></li>';
                                             }
                                         } else {
                                             if ($marketplaceHasShopId != 0 || $marketplaceHasShopId != '') {
-                                                echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$pageId.'">'  . $pageId . '</a></li>';
+                                                echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$p.'">'  . $p . '</a></li>';
                                             } else {
-                                                echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$pageId.'">'. $pageId . '</a></li>';
+                                                echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$p.'">'. $p . '</a></li>';
                                             }
                                         } ?>
                                     <?php endfor; ?>
