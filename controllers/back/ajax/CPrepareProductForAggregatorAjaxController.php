@@ -52,10 +52,10 @@ class CPrepareProductForAggregatorAjaxController extends AAjaxController
                 foreach ($mhss as $mhs) {
                     $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0  and shp.shopId =' . $shop->id . ') UNION
+ and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId=6 and shp.shopId =' . $shop->id . ') UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where p2.qty > 0  and shp2.shopIdDestination =' . $shop->id . ')';
+ and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and p2.productStatusId=6 and shp2.shopIdDestination =' . $shop->id . ')';
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
@@ -67,16 +67,19 @@ class CPrepareProductForAggregatorAjaxController extends AAjaxController
                                     $phphmhs->isRevised=0;
                                     $phphmhs->isToWork=0;
                                     $phphmhs->update();
-                                     \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
+                                     \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
                                 }
                             }
                         }else{
-                            $phs=$phsRepo->getEmptyEntity();
-                            $phs->productId=$product['productId'];
-                            $phs->productVariantId=$product['productVariantId'];
-                            $phs->aggregatorHasShopId=$mhs->id;
-                            $phs->insert();
-                             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id);
+                            $phsInsert=$phsRepo->getEmptyEntity();
+                            $phsInsert->productId=$product['productId'];
+                            $phsInsert->productVariantId=$product['productVariantId'];
+                            $phsInsert->aggregatorHasShopId=$mhs->id;
+                            $phsInsert->status = 0;
+                            $phsInsert->lastUpdate = '2011-01-01 00:00:00';
+                            $phsInsert->productStatusAggregatorId = 1;
+                            $phsInsert->insert();
+                             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,'');
 
                         }
 
@@ -84,7 +87,7 @@ class CPrepareProductForAggregatorAjaxController extends AAjaxController
                 }
             }
         } catch (\Throwable $e) {
-             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Error',$e->getMessage().'-'.$e->getLine());
+             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Error','Aggregator Prepare',$e->getMessage().'-'.$e->getLine());
         }
 
 
