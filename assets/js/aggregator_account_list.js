@@ -18,7 +18,7 @@ $(document).on('bs.marketplace.category.href', function(a,b,c){
     $.each(selectedRows, function (k, v) {
         row = v.DT_RowId;
     });
-    window.open('/blueseal/marketplace/account/aggregator/' + row ,'_blank');
+    window.open('/blueseal/marketplace/account/aggregato/' + row ,'_blank');
 });
 
 $(document).on('bs.marketplace-account.config.href', function(a,b,c){
