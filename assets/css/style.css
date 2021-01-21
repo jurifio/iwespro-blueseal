@@ -1671,3 +1671,61 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     /* Add a grey background color to the table header and on hover */
     background-color: #f1f1f1;
 }
+
+/***********inserimento modifica  da common.css****/
+
+@media (max-width: 4096px) {
+    .product-thumb-info-image {
+        display: table-cell;
+        height: 320px;
+        vertical-align: bottom;
+    }
+
+    .product-thumb-info-image-mini {
+        height: auto;
+    }
+
+    .product.product-display-box {
+        height: 497px;
+        margin-bottom: 5px;
+    }
+}
+@media (max-width: 4096px) {
+    .product-thumb-info-image {
+        display: table-cell;
+        height: 320px;
+        vertical-align: bottom;
+    }
+
+    .product-thumb-info-image-mini {
+        height: auto;
+    }
+
+    .product.product-display-box {
+        height: 497px;
+        margin-bottom: 5px;
+    }
+}
+.product-thumb-info-content .item-cat a:hover, .product-thumb-info-content .item-cat a:focus {
+    color: #505050;
+}
+.product-thumb-writing {
+    height: 115px;
+}
+.product-message {
+    color: black;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+.item-cat {
+    display: block;
+    font-size: 0.8em;
+    line-height: 1.2em;
+}

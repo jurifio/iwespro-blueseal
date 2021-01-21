@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="https://www.pickyshop.com/it/assets/common.css">
+   <!-- <link rel="stylesheet" type="text/css" href="https://www.pickyshop.com/it/assets/common.css">-->
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
@@ -20,8 +20,8 @@
                         <div class="row" align="center" style="padding-top: 0px;">
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
-                                    <label for="accountid">Seleziona l'account</label>
-                                    <select id="accountid" name="accountid"
+                                    <label for="marketplacehasshopid">Seleziona l'account</label>
+                                    <select id="marketplacehasshopid" name="marketplacehasshopid"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
                                             data-init-plugin="selectize">
@@ -238,6 +238,11 @@
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                            </div>
+                            <div class="row">
+
+
+
                             </div>
                         </div>
                     </div>
