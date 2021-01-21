@@ -339,8 +339,9 @@ $('#aggregatorHasShopId').change(function () {
 
 
 });
+
 $('#isActiveDepublisher').change(function () {
-    if ($('#accountAsParallel').val() == 1) {
+    if ($('#isActiveDepublisher').val() == 1) {
 
         $("#rawDepublish").removeClass("hide");
         $("#rawDepublish").addClass("show");
