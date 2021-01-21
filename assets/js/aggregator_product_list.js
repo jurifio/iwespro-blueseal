@@ -193,8 +193,8 @@ $(document).on('bs.aggregator.prepare.product', function () {
 	products='';
 
 
-	let bsModal = new $.bsModal('Selezione Prodotti per Shop associato al Marketplace ', {
-		body: `Emulatore Job popolamento tabella Prodotti per Marketplace `
+	let bsModal = new $.bsModal('Selezione Prodotti per Shop associato al aggregatore ', {
+		body: `Emulatore Job popolamento tabella Prodotti per Aggregatore `
 	});
 
 
@@ -208,7 +208,7 @@ $(document).on('bs.aggregator.prepare.product', function () {
 
 		$.ajax({
 			method: 'post',
-			url: '/blueseal/xhr/PrepareProductForMarketplaceAjaxController',
+			url: '/blueseal/xhr/PrepareProductForAggregatorAjaxController',
 			data: data
 		}).done(function (res) {
 			bsModal.writeBody(res);

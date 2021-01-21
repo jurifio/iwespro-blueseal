@@ -43,11 +43,12 @@ class CPrepareProductForAggregatorJob extends ACronJob
 
 
         try {
-            $this->report('CPrepareProductForAggregatorJob','start Preparing','');
+
                 $shops = $shopRepo->findBy(['hasMarketplace' => 1]);
             foreach ($shops as $shop) {
                 $mhss = $mhsRepo->findBy(['shopId' => $shop->id]);
                 foreach ($mhss as $mhs) {
+                    $this->report('CPrepareProductForAggregatorJob','start Preparing',$mhs->id);
                     $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId=6 and shp.shopId =' . $shop->id . ') UNION
@@ -57,22 +58,27 @@ class CPrepareProductForAggregatorJob extends ACronJob
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
-                        if($phs){
-                          if($phs->productStatusAggregatorId==4){
-                              $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
-                              if($phphmhs){
-                                  $phphmhs->isDeleted=1;
-                                  $phphmhs->isRevised=0;
-                                  $phphmhs->isToWork=0;
-                                  $phphmhs->update();
-                                  $this->report('CPrepareProductForAggregatorJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
-                              }
-                          }
+                        if(!is_null($phs)){
+                            if($phs->productStatusAggregatorId =='4'){
+                                $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
+                                if(!is_null($phphmhs)){
+                                    $phphmhs->isDeleted=1;
+                                    $phphmhs->isRevised=0;
+                                    $phphmhs->isToWork=0;
+                                    $phphmhs->update();
+                                    \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
+                                }
+                            }else{
+                                continue;
+                            }
                         }else{
                             $phsInsert=$phsRepo->getEmptyEntity();
                             $phsInsert->productId=$product['productId'];
                             $phsInsert->productVariantId=$product['productVariantId'];
                             $phsInsert->aggregatorHasShopId=$mhs->id;
+                            $phsInsert->status = 0;
+                            $phsInsert->dateUpdate = '2011-01-01 00:00:00';
+                            $phsInsert->productStatusAggregatorId = 1;
                             $phsInsert->insert();
                             $this->report('CPrepareProductForAggregatorJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to aggregator' . $mhs->id);
 

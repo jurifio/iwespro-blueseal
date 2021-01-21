@@ -45,11 +45,13 @@ class CPrepareProductForAggregatorAjaxController extends AAjaxController
 
 
         try {
-             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','start Preparing','');
-            $shops = $shopRepo->findBy(['hasMarketplace' => 1]);
+
+
+            $shops = $shopRepo->findBy(['hasMarketplace'=>1,'hasEcommerce'=>1]);
             foreach ($shops as $shop) {
-                $mhss = $mhsRepo->findBy(['shopId' => $shop->id]);
+                $mhss = $mhsRepo->findBy(['shopId'=>$shop->id]);
                 foreach ($mhss as $mhs) {
+                    \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','Start preparing',$mhs->id);
                     $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId=6 and shp.shopId =' . $shop->id . ') UNION
@@ -59,16 +61,18 @@ class CPrepareProductForAggregatorAjaxController extends AAjaxController
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
-                        if($phs){
-                            if($phs->productStatusAggregatorId==4){
+                        if(!is_null($phs)){
+                            if($phs->productStatusAggregatorId =='4'){
                                 $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
-                                if($phphmhs){
+                                if(!is_null($phphmhs)){
                                     $phphmhs->isDeleted=1;
                                     $phphmhs->isRevised=0;
                                     $phphmhs->isToWork=0;
                                     $phphmhs->update();
                                      \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
                                 }
+                            }else{
+                                continue;
                             }
                         }else{
                             $phsInsert=$phsRepo->getEmptyEntity();
@@ -76,18 +80,20 @@ class CPrepareProductForAggregatorAjaxController extends AAjaxController
                             $phsInsert->productVariantId=$product['productVariantId'];
                             $phsInsert->aggregatorHasShopId=$mhs->id;
                             $phsInsert->status = 0;
-                            $phsInsert->lastUpdate = '2011-01-01 00:00:00';
+                            $phsInsert->dateUpdate = '2011-01-01 00:00:00';
                             $phsInsert->productStatusAggregatorId = 1;
                             $phsInsert->insert();
-                             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,'');
+                             \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
 
                         }
 
                     }
                 }
             }
+            return 'finish';
         } catch (\Throwable $e) {
              \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Error','Aggregator Prepare',$e->getMessage().'-'.$e->getLine());
+            return 'error'.$e->getMessage().$e->getLine();
         }
 
 
