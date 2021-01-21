@@ -23,8 +23,8 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="aggregator_account_list"
-                               data-controller="AggregatorAccountListAjaxController"
+                               data-datatable-name="marketplace_ruleaccount_list"
+                               data-controller="RuleMarketplaceAccountListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-length-menu-setup="50, 100, 200, 500, 1000">
@@ -33,11 +33,11 @@
                                 <th data-slug="marketplaceType"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Tipo Aggregatore</th>
+                                    class="center">Tipo Marketplace</th>
                                 <th data-slug="marketplace"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Aggregatore</th>
+                                    class="center">Marketplace</th>
                                 <th data-slug="marketplaceAccount"
                                     data-searchable="true"
                                     data-orderable="true"
