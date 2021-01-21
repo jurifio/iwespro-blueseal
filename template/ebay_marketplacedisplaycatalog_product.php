@@ -65,7 +65,7 @@
                                       href="<?php echo \Monkey::app()->baseUrl(false) . \Monkey::app()->router->request()->getUrlPath() ?>"/>
                                 <?php $i = 0;
                                 foreach ($productsFind as $productFind): ?>
-                                <div class="itemListElement col-md-3 col-sm-6 col-xs-6">
+                                <div class="itemListElement col-md-3">
                                     <meta itemprop="position" content="<?php echo $i ?>"/>
                                     <?php
                                     /**
