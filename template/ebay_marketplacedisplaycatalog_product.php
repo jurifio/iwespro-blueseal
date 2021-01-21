@@ -254,7 +254,7 @@
                                             }
                                         } else {
                                             if ($marketplaceHasShopId != 0 || $marketplaceHasShopId != '') {
-                                                echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$p.'">'  . $p . '</a></li>';
+                                                echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?marketplacehashopid='.$marketplaceHasShopId.'&=pageid='.$p.'">'  . $p . '</a></li>';
                                             } else {
                                                 echo '<li><a href="/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?pageid='.$p.'">'. $p . '</a></li>';
                                             }
