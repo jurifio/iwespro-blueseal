@@ -69,11 +69,11 @@ class CPrepareProductForAggregatorJob extends ACronJob
                               }
                           }
                         }else{
-                            $phs=$phsRepo->getEmptyEntity();
-                            $phs->productId=$product['productId'];
-                            $phs->productVariantId=$product['productVariantId'];
-                            $phs->aggregatorHasShopId=$mhs->id;
-                            $phs->insert();
+                            $phsInsert=$phsRepo->getEmptyEntity();
+                            $phsInsert->productId=$product['productId'];
+                            $phsInsert->productVariantId=$product['productVariantId'];
+                            $phsInsert->aggregatorHasShopId=$mhs->id;
+                            $phsInsert->insert();
                             $this->report('CPrepareProductForAggregatorJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to aggregator' . $mhs->id);
 
                         }
