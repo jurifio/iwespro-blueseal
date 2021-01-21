@@ -243,7 +243,7 @@
                             <div class="row">
                                 <ul class="pagination">
 
-                                    <?php for ($p = 0; $p < $pageCount; $p++): ?>
+                                    <?php for ($p = 1; $p < $pageCount; $p++): ?>
 
 
                                         <?php if ($p == $pageId) {
