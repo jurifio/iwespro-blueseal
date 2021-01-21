@@ -440,6 +440,7 @@ $(document).on('bs.marketplace-account.save', function () {
     var nameAdminister = $('#nameAdminister').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
+    var isActiveDepublisher=$('#isActiveDepublisher').val();
     var defaultCpcF = $('#defaultCpcF').val();
     var defaultCpcFM = $('#defaultCpcFM').val();
     var logoFile = $('#logoFile').val();
@@ -570,6 +571,7 @@ $(document).on('bs.marketplace-account.save', function () {
         'logoFile=' + logoFile + '&' +
         'activeAutomatic=' + useRange + '&' +
         'isActive=' + isActive + '&' +
+        'isActiveDepublisher=' + isActiveDepublisher + '&' +
         'defaultCpc=' + defaultCpc + '&' +
         'defaultCpcM=' + defaultCpcM + '&' +
         'defaultCpcF=' + defaultCpcF + '&' +

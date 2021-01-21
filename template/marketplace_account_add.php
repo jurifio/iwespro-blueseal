@@ -24,11 +24,13 @@
                 <div class="row">
                     <div class="tab">
                         <div class="col-md-12">
-                            <button class="tablinks" onclick="openTab(event, 'insertAggregator')">Inserisci
+                            <button class="tablinks" onclick="openTab(event, 'insertAggregator')">Parametri Pubblicazione
                                 aggregatore
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'insertRules')">Inserisci Regole</button>
-                            <button class="tablinks" onclick="openTab(event, 'insertCampaign')">Inserisci Campagne</button>
+                            <button class="tablinks" onclick="openTab(event, 'insertDepublishAggregator')">Parametri Depubblicazione
+                            </button>
+                            <button class="tablinks" onclick="openTab(event, 'insertRules')">Brand</button>
+                            <button class="tablinks" onclick="openTab(event, 'insertCampaign')">Campagna</button>
                         </div>
                     </div>
                 </div>
@@ -93,7 +95,6 @@
                                                     <option value="1">Si</option>
                                                     <option value="0">No</option>
                                                 </select>
-
                                             </div>
                                         </div>
                                     </div>
@@ -185,358 +186,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-1">Budget Mensile
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget01">Gennaio</label>
-                                                <input id="budget01" autocomplete="off" type="text"
-                                                       class="form-control" name="budget01" value=""
-                                                       required="required"/>
 
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget02">Febbraio</label>
-                                                <input id="budget02" autocomplete="off" type="text"
-                                                       class="form-control" name="budget02" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget03">Marzo</label>
-                                                <input id="budget03" autocomplete="off" type="text"
-                                                       class="form-control" name="budget03" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget04">Aprile</label>
-                                                <input id="budget04" autocomplete="off" type="text"
-                                                       class="form-control" name="budget04" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget05">Maggio</label>
-                                                <input id="budget05" autocomplete="off" type="text"
-                                                       class="form-control" name="budget05" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget06">Giugno</label>
-                                                <input id="budget06" autocomplete="off" type="text"
-                                                       class="form-control" name="budget06" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget07">Luglio</label>
-                                                <input id="budget07" autocomplete="off" type="text"
-                                                       class="form-control" name="budget07" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget08">Agosto</label>
-                                                <input id="budget08" autocomplete="off" type="text"
-                                                       class="form-control" name="budget08" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget09">Settembre</label>
-                                                <input id="budget09" autocomplete="off" type="text"
-                                                       class="form-control" name="budget09" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget10">Ottobre</label>
-                                                <input id="budget10" autocomplete="off" type="text"
-                                                       class="form-control" name="budget10" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget11">Novembre</label>
-                                                <input id="budget11" autocomplete="off" type="text"
-                                                       class="form-control" name="budget11" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <label for="budget12">Dicembre</label>
-                                                <input id="budget12" autocomplete="off" type="text"
-                                                       class="form-control" name="budget12" value=""
-                                                       required="required"/>
-
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="row" id="divmarketplace"></div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="isActiveDepublisher">Seleziona se Attivo il Job di depubblicazione(Eliseo)
-                                                </label>
-                                                <select id="isActiveDepublisher"
-                                                        name="isActiveDepublisher"
-                                                        class="full-width selectpicker"
-                                                        placeholder="Selezione se attivo"
-                                                        data-init-plugin="selectize">
-                                                    <option value=""></option>
-                                                    <option value="1">Si</option>
-                                                    <option value="0">No</option>
-                                                </select>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row" id="source_label_productCategoryGroup">
-                                        <div class="col-md-12">Esclusione Categorie
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productCategoryIdEx1">Selettore
-                                                        Categoria 1 da Escludere
-                                                    </label>
-                                                    <select id="productCategoryIdEx1"
-                                                            name="productCategoryIdEx1"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione la Categoria 1 da Escludere "
-                                                            data-init-plugin="selectize">
-                                                        <?php echo $productCategoryEx1Option ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productCategoryIdEx2">Selettore
-                                                        Categoria 2 da Escludere
-                                                    </label>
-                                                    <select id="productCategoryIdEx2"
-                                                            name="productCategoryIdEx2"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione la Categoria 2 da Escludere "
-                                                            data-init-plugin="selectize">
-                                                        <?php echo $productCategoryEx2Option ?>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productCategoryIdEx3">Selettore
-                                                        Categoria 3 da Escludere
-                                                    </label>
-                                                    <select id="productCategoryIdEx3"
-                                                            name="productCategoryIdEx3"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione la Categoria 3 da Escludere "
-                                                            data-init-plugin="selectize">
-                                                        <?php echo $productCategoryEx3Option ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productCategoryIdEx4">Selettore
-                                                        Categoria 4 da Escludere
-                                                    </label>
-                                                    <select id="productCategoryIdEx4"
-                                                            name="productCategoryIdEx4"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione la Categoria 4 da Escludere "
-                                                            data-init-plugin="selectize">
-                                                        <?php echo $productCategoryEx4Option ?>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productCategoryIdEx5">Selettore
-                                                        Categoria 5 da Escludere
-                                                    </label>
-                                                    <select id="productCategoryIdEx5"
-                                                            name="productCategoryIdEx5"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione la Categoria 5 da Escludere "
-                                                            data-init-plugin="selectize">
-                                                        <?php echo $productCategoryEx5Option ?>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group form-group-default required">
-                                                    <div class="form-group form-group-default selectize-enabled">
-                                                        <label for="productCategoryIdEx6">Selettore
-                                                            Categoria 6 da Escludere
-                                                        </label>
-                                                        <select id="productCategoryIdEx6"
-                                                                name="productCategoryIdEx6"
-                                                                class="full-width selectpicker"
-                                                                placeholder="Selezione la Categoria 6 da Escludere "
-                                                                data-init-plugin="selectize">
-                                                            <?php echo $productCategoryEx6Option ?>
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--gruppo taglie inizio -->
-                                    <div class="row" id="source_label_productSizeGroup">
-                                        <div class="col-md-12">Esclusione Gruppi Taglia
-                                        </div>
-                                    </div>
-                                    <div class="row" id="source_group_productSizeGroup">
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productSizeGroupEx1">Selettore
-                                                        Gruppo Taglia 1 da Escludere
-                                                    </label>
-                                                    <select id="productSizeGroupEx1"
-                                                            name="productSizeGroupEx1"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione il Gruppo Taglia da Escludere"
-                                                            data-init-plugin="selectize">
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productSizeGroupEx2">Selettore Gruppo
-                                                        Taglia
-                                                        2 da Escludere</label>
-                                                    <select id="productSizeGroupEx2"
-                                                            name="productSizeGroupEx2"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione il Gruppo Taglia"
-                                                            data-init-plugin="selectize">
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productSizeGroupEx3">Selettore Gruppo
-                                                        Taglia
-                                                        3 da Escludere</label>
-                                                    <select id="productSizeGroupEx3"
-                                                            name="productSizeGroupEx3"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione il Gruppo Taglia"
-                                                            data-init-plugin="selectize">
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productSizeGroupEx4">Selettore Gruppo
-                                                        Taglia
-                                                        4 da Escludere</label>
-                                                    <select id="productSizeGroupEx4"
-                                                            name="productSizeGroupEx4"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione il Gruppo Taglia"
-                                                            data-init-plugin="selectize">
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productSizeGroupEx5">Selettore Gruppo
-                                                        Taglia
-                                                        5 da Escludere</label>
-                                                    <select id="productSizeGroupEx5"
-                                                            name="productSizeGroupEx5"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione il Gruppo Taglia"
-                                                            data-init-plugin="selectize">
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default required">
-                                                <div class="form-group form-group-default selectize-enabled">
-                                                    <label for="productSizeGroupEx6">Selettore Gruppo
-                                                        Taglia
-                                                        6 da Escludere</label>
-                                                    <select id="productSizeGroupEx6"
-                                                            name="productSizeGroupEx6"
-                                                            class="full-width selectpicker"
-                                                            placeholder="Selezione il Gruppo Taglia"
-                                                            data-init-plugin="selectize">
-
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">Fascia 1
                                         </div>
@@ -852,6 +503,369 @@
                                                             data-init-plugin="selectize">
                                                         <?php echo $productCategory5Option ?>
                                                     </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="insertDepublishAggregator" class="tabcontent">
+                    <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post"
+                          autocomplete="off">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default clearfix">
+                                    <div class="panel-heading clearfix">
+                                        <h5 class="m-t-12">informazioni di base</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="isActiveDepublisher">Seleziona se Attivo il Job di depubblicazione(Eliseo)
+                                                </label>
+                                                <select id="isActiveDepublisher"
+                                                        name="isActiveDepublisher"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione se attivo"
+                                                        data-init-plugin="selectize">
+                                                    <option value=""></option>
+                                                    <option value="1">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="rawDepublish">
+                                        <div class="row">
+                                            <div class="col-md-1">Budget Mensile
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget01">Gennaio</label>
+                                                    <input id="budget01" autocomplete="off" type="text"
+                                                           class="form-control" name="budget01" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget02">Febbraio</label>
+                                                    <input id="budget02" autocomplete="off" type="text"
+                                                           class="form-control" name="budget02" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget03">Marzo</label>
+                                                    <input id="budget03" autocomplete="off" type="text"
+                                                           class="form-control" name="budget03" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget04">Aprile</label>
+                                                    <input id="budget04" autocomplete="off" type="text"
+                                                           class="form-control" name="budget04" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget05">Maggio</label>
+                                                    <input id="budget05" autocomplete="off" type="text"
+                                                           class="form-control" name="budget05" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget06">Giugno</label>
+                                                    <input id="budget06" autocomplete="off" type="text"
+                                                           class="form-control" name="budget06" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget07">Luglio</label>
+                                                    <input id="budget07" autocomplete="off" type="text"
+                                                           class="form-control" name="budget07" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget08">Agosto</label>
+                                                    <input id="budget08" autocomplete="off" type="text"
+                                                           class="form-control" name="budget08" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget09">Settembre</label>
+                                                    <input id="budget09" autocomplete="off" type="text"
+                                                           class="form-control" name="budget09" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget10">Ottobre</label>
+                                                    <input id="budget10" autocomplete="off" type="text"
+                                                           class="form-control" name="budget10" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget11">Novembre</label>
+                                                    <input id="budget11" autocomplete="off" type="text"
+                                                           class="form-control" name="budget11" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <label for="budget12">Dicembre</label>
+                                                    <input id="budget12" autocomplete="off" type="text"
+                                                           class="form-control" name="budget12" value=""
+                                                           required="required"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="source_label_productCategoryGroup">
+                                            <div class="col-md-12">Esclusione Categorie
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productCategoryIdEx1">Selettore
+                                                            Categoria 1 da Escludere
+                                                        </label>
+                                                        <select id="productCategoryIdEx1"
+                                                                name="productCategoryIdEx1"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione la Categoria 1 da Escludere "
+                                                                data-init-plugin="selectize">
+                                                            <?php echo $productCategoryEx1Option ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productCategoryIdEx2">Selettore
+                                                            Categoria 2 da Escludere
+                                                        </label>
+                                                        <select id="productCategoryIdEx2"
+                                                                name="productCategoryIdEx2"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione la Categoria 2 da Escludere "
+                                                                data-init-plugin="selectize">
+                                                            <?php echo $productCategoryEx2Option ?>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productCategoryIdEx3">Selettore
+                                                            Categoria 3 da Escludere
+                                                        </label>
+                                                        <select id="productCategoryIdEx3"
+                                                                name="productCategoryIdEx3"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione la Categoria 3 da Escludere "
+                                                                data-init-plugin="selectize">
+                                                            <?php echo $productCategoryEx3Option ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productCategoryIdEx4">Selettore
+                                                            Categoria 4 da Escludere
+                                                        </label>
+                                                        <select id="productCategoryIdEx4"
+                                                                name="productCategoryIdEx4"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione la Categoria 4 da Escludere "
+                                                                data-init-plugin="selectize">
+                                                            <?php echo $productCategoryEx4Option ?>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productCategoryIdEx5">Selettore
+                                                            Categoria 5 da Escludere
+                                                        </label>
+                                                        <select id="productCategoryIdEx5"
+                                                                name="productCategoryIdEx5"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione la Categoria 5 da Escludere "
+                                                                data-init-plugin="selectize">
+                                                            <?php echo $productCategoryEx5Option ?>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="form-group form-group-default required">
+                                                        <div class="form-group form-group-default selectize-enabled">
+                                                            <label for="productCategoryIdEx6">Selettore
+                                                                Categoria 6 da Escludere
+                                                            </label>
+                                                            <select id="productCategoryIdEx6"
+                                                                    name="productCategoryIdEx6"
+                                                                    class="full-width selectpicker"
+                                                                    placeholder="Selezione la Categoria 6 da Escludere "
+                                                                    data-init-plugin="selectize">
+                                                                <?php echo $productCategoryEx6Option ?>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--gruppo taglie inizio -->
+                                        <div class="row" id="source_label_productSizeGroup">
+                                            <div class="col-md-12">Esclusione Gruppi Taglia
+                                            </div>
+                                        </div>
+                                        <div class="row" id="source_group_productSizeGroup">
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productSizeGroupEx1">Selettore
+                                                            Gruppo Taglia 1 da Escludere
+                                                        </label>
+                                                        <select id="productSizeGroupEx1"
+                                                                name="productSizeGroupEx1"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione il Gruppo Taglia da Escludere"
+                                                                data-init-plugin="selectize">
+
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productSizeGroupEx2">Selettore Gruppo
+                                                            Taglia
+                                                            2 da Escludere</label>
+                                                        <select id="productSizeGroupEx2"
+                                                                name="productSizeGroupEx2"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione il Gruppo Taglia"
+                                                                data-init-plugin="selectize">
+
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productSizeGroupEx3">Selettore Gruppo
+                                                            Taglia
+                                                            3 da Escludere</label>
+                                                        <select id="productSizeGroupEx3"
+                                                                name="productSizeGroupEx3"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione il Gruppo Taglia"
+                                                                data-init-plugin="selectize">
+
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productSizeGroupEx4">Selettore Gruppo
+                                                            Taglia
+                                                            4 da Escludere</label>
+                                                        <select id="productSizeGroupEx4"
+                                                                name="productSizeGroupEx4"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione il Gruppo Taglia"
+                                                                data-init-plugin="selectize">
+
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productSizeGroupEx5">Selettore Gruppo
+                                                            Taglia
+                                                            5 da Escludere</label>
+                                                        <select id="productSizeGroupEx5"
+                                                                name="productSizeGroupEx5"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione il Gruppo Taglia"
+                                                                data-init-plugin="selectize">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default required">
+                                                    <div class="form-group form-group-default selectize-enabled">
+                                                        <label for="productSizeGroupEx6">Selettore Gruppo
+                                                            Taglia
+                                                            6 da Escludere</label>
+                                                        <select id="productSizeGroupEx6"
+                                                                name="productSizeGroupEx6"
+                                                                class="full-width selectpicker"
+                                                                placeholder="Selezione il Gruppo Taglia"
+                                                                data-init-plugin="selectize">
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
