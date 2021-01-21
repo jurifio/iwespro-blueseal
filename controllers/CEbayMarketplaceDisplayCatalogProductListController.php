@@ -61,7 +61,8 @@ class CEbayMarketplaceDisplayCatalogProductListController extends ARestrictedAcc
         }
         if(isset($_GET['pageid'])){
 
-
+            $pageId=$_GET['pageid'];
+            $offset=$_GET['pageid']*100;
             $sqlpagination="SELECT ceil(COUNT(*)/100) as countItem 
             from PrestashopHasProductHasMarketplaceHasShop phphmhs
             join Product p on phphmhs.productId=p.id and phphmhs.productVariantId=p.productVariantId
@@ -74,10 +75,10 @@ class CEbayMarketplaceDisplayCatalogProductListController extends ARestrictedAcc
             foreach($countPages as $countPage) {
                 $pageCount=$countPage['countItem'];
             }
-            $pageId=$_GET['pageid'];
-            $offset=$_GET['pageid']*100;
-        } else{
 
+        } else{
+            $pageId=1;
+            $offset=0;
             $sqlpagination="SELECT ceil(COUNT(*)/100) as countItem 
             from PrestashopHasProductHasMarketplaceHasShop phphmhs
             join Product p on phphmhs.productId=p.id and phphmhs.productVariantId=p.productVariantId
@@ -90,8 +91,7 @@ class CEbayMarketplaceDisplayCatalogProductListController extends ARestrictedAcc
             foreach($countPages as $countPage) {
                 $pageCount=$countPage['countItem'];
             }
-            $pageId=1;
-            $offset=0;
+
 
         }
 
