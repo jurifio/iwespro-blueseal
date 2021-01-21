@@ -45,11 +45,12 @@ class CPrepareProductForMarketplaceAjaxController extends AAjaxController
 
 
         try {
-            \Monkey::app()->applicationLog('CPrepareProductForMarketplaceAjaxController','log','start Preparing','');
+
             $shops = $shopRepo->findBy(['hasMarketplace' => 1]);
             foreach ($shops as $shop) {
                 $mhss = $mhsRepo->findBy(['shopId' => $shop->id]);
                 foreach ($mhss as $mhs) {
+                    \Monkey::app()->applicationLog('CPrepareProductForMarketplaceAjaxController','log','start Preparing',$mhs->id);
                     $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId,shp.isPublished as isPublished from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where p.qty > 0 shp.shopId =' . $shop->id . ' ) UNION
@@ -59,21 +60,26 @@ class CPrepareProductForMarketplaceAjaxController extends AAjaxController
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
-                        if($phs){
+                        if(!is_null($phs)){
                             if($phs->productStatusMarketplaceId==4){
                                 $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
-                                if($phphmhs){
+                                if(!is_null($phphmhs)){
                                     $phphmhs->isPublished=3;
                                     $phphmhs->update();
                                    \Monkey::app()->applicationLog('CPrepareProductForMarketplaceAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,'');
                                    return 'Report booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id;
                                 }
+                            }else{
+                                continue;
                             }
                         }else{
-                            $phs=$phsRepo->getEmptyEntity();
-                            $phs->productId=$product['productId'];
-                            $phs->productVariantId=$product['productVariantId'];
-                            $phs->marketplaceHasShopId=$mhs->id;
+                            $phsInsert=$phsRepo->getEmptyEntity();
+                            $phsInsert->productId=$product['productId'];
+                            $phsInsert->productVariantId=$product['productVariantId'];
+                            $phsInsert->marketplaceHasShopId=$mhs->id;
+                            $phsInsert->status = 0;
+                            $phsInsert->dateUpdate = '2011-01-01 00:00:00';
+                            $phsInsert->productStatusMarketplaceId = 1;
                             $phs->insert();
                             \Monkey::app()->applicationLog('CPrepareProductForMarketplaceAjaxController','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,'');
                             return 'Report booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id;
@@ -82,9 +88,10 @@ class CPrepareProductForMarketplaceAjaxController extends AAjaxController
                     }
                 }
             }
+            return 'finish';
         } catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CPrepareProductForMarketplaceJob','Error'. $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id,$e->getMessage().'-'.$e->getLine(),'');
-       return 'Error'. $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id . 'see ApplicationLog';
+       return 'Error'. $product['productId'] . '-' . $product['productVariantId'] . ' to marrketplace' . $mhs->id . 'see ApplicationLog'.$e->getMessage().'-'.$e->getLine();
         }
 
 

@@ -42,34 +42,40 @@ class CPrepareProductForMarketplaceJob extends ACronJob
 
 
         try {
-            $this->report('CPrepareProductForMarketplaceJob','start Preparing','');
+
             $shops = $shopRepo->findBy(['hasMarketplace' => 1]);
             foreach ($shops as $shop) {
                 $mhss = $mhsRepo->findBy(['shopId' => $shop->id]);
                 foreach ($mhss as $mhs) {
+                    $this->report('CPrepareProductForMarketplaceJob','start Preparing','');
                     $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0 and  shp.shopId ='.$shop->id.') UNION
+ and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId=6 and   shp.shopId ='.$shop->id.') UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and  shp2.shopIdDestination ='.$shop->id.')';
+ and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and p2.productStatusId=6 and  shp2.shopIdDestination ='.$shop->id.')';
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
-                        if($phs){
+                        if(!is_null($phs)){
                           if($phs->productStatusMarketplaceId==4){
                               $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
-                              if($phphmhs){
+                              if(!is_null($phphmhs)){
                                   $phphmhs->isPublished=3;
                                   $phphmhs->update();
                                   $this->report('CPrepareProductForMarketplaceJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
                               }
+                          }else{
+                              continue;
                           }
                         }else{
-                            $phs=$phsRepo->getEmptyEntity();
-                            $phs->productId=$product['productId'];
-                            $phs->productVariantId=$product['productVariantId'];
-                            $phs->marketplaceHasShopId=$mhs->id;
+                            $phsInsert=$phsRepo->getEmptyEntity();
+                            $phsInsert->productId=$product['productId'];
+                            $phsInsert->productVariantId=$product['productVariantId'];
+                            $phsInsert->marketplaceHasShopId=$mhs->id;
+                            $phsInsert->status = 0;
+                            $phsInsert->dateUpdate = '2011-01-01 00:00:00';
+                            $phsInsert->productStatusMarketplaceId = 1;
                             $phs->insert();
                             $this->report('CPrepareProductForMarketplaceJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
 
