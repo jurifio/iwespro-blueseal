@@ -39,6 +39,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
             $slug = $_GET['slug'];
         }
 
+
         if ($_GET['lang'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> linguaggio non selezionato</i>';
         } else {
@@ -160,6 +161,17 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         } else {
             $budget12 = $_GET['budget12'];
         }
+        if ($_GET['timeRange'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Giorni di depubblicazione non valorizzati</i>';
+        } else {
+            $timeRange = $_GET['timeRange'];
+        }
+        if ($_GET['multiplierDefault'] == '') {
+            return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> moltiplicatore di Default non valorizzati</i>';
+        } else {
+            $multiplierDefault = $_GET['multiplierDefault'];
+        }
+
 
         if ($_GET['typeInsertionCampaign'] == '') {
             return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Selezione Campagna non eseguita</i>';
@@ -387,8 +399,6 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         $valueexcept5 = 0.1;
         $filePath = '/export/' . ucfirst($slug) . 'BetterFeedTemp.' . $lang . '.xml';
         $feedUrl = '/services/feed/' . $lang . '/' . $slug;
-        $timeRange = 7;
-        $multiplierDefault = 0.1;
         $priceModifier = 0;
         $ruleOption = str_replace('on,','',$ruleOption);
 

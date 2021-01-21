@@ -149,37 +149,53 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="timeRange">Calcolo giorni</label>
+                                                <input id="timeRange" autocomplete="off" type="text"
+                                                       class="form-control" name="timeRange" value="7"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default required">
+                                                <label for="multiplierDefault"> Moltiplicatore di Default </label>
+                                                <input id="multiplierDefault" autocomplete="off" type="text"
+                                                       class="form-control" name="multiplierDefault" value="0.1"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpcF">Cpc Fornitore Desktop</label>
                                                 <input id="defaultCpcF" autocomplete="off" type="text"
-                                                       class="form-control" name="defaultCpcF" value=""
+                                                       class="form-control" name="defaultCpcF" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpcFM">Cpc Fornitore Mobile </label>
                                                 <input id="defaultCpcFM" autocomplete="off" type="text"
-                                                       class="form-control" name="defaultCpcFM" value=""
+                                                       class="form-control" name="defaultCpcFM" value="0.19"
                                                        required="required"/>
 
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpc">Default Cpc Desktop</label>
                                                 <input id="defaultCpc" autocomplete="off" type="text"
-                                                       class="form-control" name="defaultCpc" value=""
+                                                       class="form-control" name="defaultCpc" value="0.19"
                                                        required="required"/>
 
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group form-group-default required">
                                                 <label for="defaultCpcM">Default Cpc Mobile </label>
                                                 <input id="defaultCpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="defaultCpcM" value=""
+                                                       class="form-control" name="defaultCpcM" value="0.19"
                                                        required="required"/>
 
                                             </div>
@@ -197,7 +213,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange1">Range 1 Retail Price </label>
                                                 <input id="priceModifierRange1" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange1" value=""
+                                                       class="form-control" name="priceModifierRange1" value="0-200"
                                                        required="required"/>
 
                                             </div>
@@ -206,7 +222,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range1Cpc">Cpc 1 Dedicato Desktop</label>
                                                 <input id="range1Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range1Cpc" value=""
+                                                       class="form-control" name="range1Cpc" value="0.19"
                                                        required="required"/>
 
                                             </div>
@@ -215,7 +231,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range1CpcM">Cpc 1 Dedicato Mobile</label>
                                                 <input id="range1CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range1CpcM" value=""
+                                                       class="form-control" name="range1CpcM" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -262,7 +278,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="priceModifierRange2">Range 2 Retail Price </label>
                                                     <input id="priceModifierRange2" autocomplete="off" type="text"
-                                                           class="form-control" name="priceModifierRange2" value=""
+                                                           class="form-control" name="priceModifierRange2" value="201-500"
                                                            required="required"/>
 
                                                 </div>
@@ -271,7 +287,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="range2Cpc">Cpc 2 Dedicato Desktop</label>
                                                     <input id="range2Cpc" autocomplete="off" type="text"
-                                                           class="form-control" name="range2Cpc" value=""
+                                                           class="form-control" name="range2Cpc" value="0.19"
                                                            required="required"/>
 
                                                 </div>
@@ -280,7 +296,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="range2CpcM">Cpc 2 Dedicato Mobile</label>
                                                     <input id="range2CpcM" autocomplete="off" type="text"
-                                                           class="form-control" name="range2CpcM" value=""
+                                                           class="form-control" name="range2CpcM" value="0.19"
                                                            required="required"/>
                                                 </div>
                                             </div>
@@ -329,7 +345,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange3">Range 3 Retail Price </label>
                                                 <input id="priceModifierRange3" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange3" value=""
+                                                       class="form-control" name="priceModifierRange3" value="501-1000"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -337,7 +353,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range3Cpc">Cpc 3 Dedicato Desktop</label>
                                                 <input id="range3Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range3Cpc" value=""
+                                                       class="form-control" name="range3Cpc" value="0.19"
                                                        required="required"/>
 
                                             </div>
@@ -346,7 +362,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range3CpcM">Cpc 3 Dedicato Mobile</label>
                                                 <input id="range3CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range3CpcM" value=""
+                                                       class="form-control" name="range3CpcM" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -392,7 +408,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange4">Range 4 Retail Price </label>
                                                 <input id="priceModifierRange4" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange4" value=""
+                                                       class="form-control" name="priceModifierRange4" value="1001-5000"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -400,7 +416,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range4Cpc">Cpc 4 Dedicato Desktop</label>
                                                 <input id="range4Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range4Cpc" value=""
+                                                       class="form-control" name="range4Cpc" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -408,7 +424,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range4CpcM">Cpc 4 Dedicato Mobile</label>
                                                 <input id="range4CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range4CpcM" value=""
+                                                       class="form-control" name="range4CpcM" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -454,7 +470,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="priceModifierRange5">Range 5 Retail Price </label>
                                                 <input id="priceModifierRange5" autocomplete="off" type="text"
-                                                       class="form-control" name="priceModifierRange5" value=""
+                                                       class="form-control" name="priceModifierRange5" value="10001-1000000"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -462,7 +478,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range5Cpc">Cpc 5 Dedicato Desktop</label>
                                                 <input id="range5Cpc" autocomplete="off" type="text"
-                                                       class="form-control" name="range5Cpc" value=""
+                                                       class="form-control" name="range5Cpc" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -470,7 +486,7 @@
                                             <div class="form-group form-group-default required">
                                                 <label for="range5CpcM">Cpc 5 Dedicato Mobile</label>
                                                 <input id="range5CpcM" autocomplete="off" type="text"
-                                                       class="form-control" name="range5CpcM" value=""
+                                                       class="form-control" name="range5CpcM" value="0.19"
                                                        required="required"/>
                                             </div>
                                         </div>
@@ -535,7 +551,6 @@
                                                     <option value="1">Si</option>
                                                     <option value="0">No</option>
                                                 </select>
-
                                             </div>
                                         </div>
                                     </div>
@@ -549,7 +564,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget01">Gennaio</label>
                                                     <input id="budget01" autocomplete="off" type="text"
-                                                           class="form-control" name="budget01" value=""
+                                                           class="form-control" name="budget01" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -558,7 +573,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget02">Febbraio</label>
                                                     <input id="budget02" autocomplete="off" type="text"
-                                                           class="form-control" name="budget02" value=""
+                                                           class="form-control" name="budget02" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -567,7 +582,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget03">Marzo</label>
                                                     <input id="budget03" autocomplete="off" type="text"
-                                                           class="form-control" name="budget03" value=""
+                                                           class="form-control" name="budget03" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -576,7 +591,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget04">Aprile</label>
                                                     <input id="budget04" autocomplete="off" type="text"
-                                                           class="form-control" name="budget04" value=""
+                                                           class="form-control" name="budget04" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -585,7 +600,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget05">Maggio</label>
                                                     <input id="budget05" autocomplete="off" type="text"
-                                                           class="form-control" name="budget05" value=""
+                                                           class="form-control" name="budget05" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -594,7 +609,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget06">Giugno</label>
                                                     <input id="budget06" autocomplete="off" type="text"
-                                                           class="form-control" name="budget06" value=""
+                                                           class="form-control" name="budget06" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -605,7 +620,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget07">Luglio</label>
                                                     <input id="budget07" autocomplete="off" type="text"
-                                                           class="form-control" name="budget07" value=""
+                                                           class="form-control" name="budget07" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -614,7 +629,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget08">Agosto</label>
                                                     <input id="budget08" autocomplete="off" type="text"
-                                                           class="form-control" name="budget08" value=""
+                                                           class="form-control" name="budget08" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -623,7 +638,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget09">Settembre</label>
                                                     <input id="budget09" autocomplete="off" type="text"
-                                                           class="form-control" name="budget09" value=""
+                                                           class="form-control" name="budget09" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -632,7 +647,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget10">Ottobre</label>
                                                     <input id="budget10" autocomplete="off" type="text"
-                                                           class="form-control" name="budget10" value=""
+                                                           class="form-control" name="budget10" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -641,7 +656,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget11">Novembre</label>
                                                     <input id="budget11" autocomplete="off" type="text"
-                                                           class="form-control" name="budget11" value=""
+                                                           class="form-control" name="budget11" value="100"
                                                            required="required"/>
 
                                                 </div>
@@ -650,7 +665,7 @@
                                                 <div class="form-group form-group-default required">
                                                     <label for="budget12">Dicembre</label>
                                                     <input id="budget12" autocomplete="off" type="text"
-                                                           class="form-control" name="budget12" value=""
+                                                           class="form-control" name="budget12" value="100"
                                                            required="required"/>
 
                                                 </div>

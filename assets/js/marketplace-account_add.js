@@ -322,7 +322,18 @@ $(document).ready(function () {
 
 });
 
+$('#isActiveDepublisher').change(function () {
+    if ($('#accountAsParallel').val() == 1) {
 
+        $("#rawDepublish").removeClass("hide");
+        $("#rawDepublish").addClass("show");
+
+    } else {
+        $("#rawDepublish").removeClass("show");
+        $("#rawDepublish").addClass("hide");
+    }
+
+})
 
 
 
@@ -441,6 +452,8 @@ $(document).on('bs.marketplace-account.save', function () {
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
     var isActiveDepublisher=$('#isActiveDepublisher').val();
+    var timeRange=$('#timeRange').val();
+    var multiplierDefault=$('#multiplierDefault').val();
     var defaultCpcF = $('#defaultCpcF').val();
     var defaultCpcFM = $('#defaultCpcFM').val();
     var logoFile = $('#logoFile').val();
@@ -565,6 +578,8 @@ $(document).on('bs.marketplace-account.save', function () {
         'marketplaceName=' + marketplaceName + '&' +
         'typeInsertionCampaign=' + typeInsertionCampaign + '&' +
         'campaignName=' + campaignName + '&' +
+        'timeRange=' + timeRange + '&' +
+        'multiplierDefault='+ multiplierDefault + '&' +
         'lang=' + lang + '&' +
         'aggregatorHasShopId=' + aggregatorHasShopId + '&' +
         'slug=' + slug + '&' +

@@ -659,7 +659,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="rawDepublish">
+                                    <?php if ($marketplaceAccount->config['isActiveDepublisher'] == "1") {
+                                      $classDepublish=' class="show"';
+                                    }else{
+                                        $classDepublish=' class="hide">';
+                                    }
+                                    ?>
+                                    <div id="rawDepublish" <?php echo $classDepublish; ?>
                                         <div class="row">
                                             <div class="col-md-1">Budget Mensile
                                             </div>
