@@ -20,12 +20,12 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 class CRuleMarketplaceAccountListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "marketpace_ruleaccount_list";
+    protected $pageSlug = "marketplace_ruleaccount_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/marketpace_ruleaccount_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/marketplace_ruleaccount_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
