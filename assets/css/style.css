@@ -1693,6 +1693,7 @@ table.mini-traffic-display th, table.mini-traffic-display td {
         margin-bottom: 5px;
     }
 }
+
 @media (max-width: 4096px) {
     .product-thumb-info-image {
         display: table-cell;
@@ -1729,6 +1730,46 @@ table.mini-traffic-display th, table.mini-traffic-display td {
 }
 .item-cat {
     display: block;
-    font-size: 0.8em;
-    line-height: 1.2em;
+    font-size: 12px;
+    line-height: 20px;
 }
+.windows h4 {
+    font-size: 23px;
+    line-height: 32px;
+}
+.product-thumb-info-content h4 {
+    font-family: Raleway, sans-serif;
+    font-size: 0.85em;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+.saleprice {
+    color: #ff0000;
+    font-family: Raleway, sans-serif;
+    font-weight: 500;
+    display: block;
+    font-size: 11px;
+}
+.percentage {
+    font-weight: 600;
+    font-size: 11px;
+}
+.price {
+    color: #505050;
+    font-size: 11px;
+}
+.price {
+    color: #cbac59;
+    font-family: Raleway, sans-serif;
+    display: block;
+    font-size: 11px;
+}
+.product-thumb-info-image img {
+    max-height: 375px;
+}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
