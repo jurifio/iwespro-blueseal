@@ -35,7 +35,7 @@ class CEbayMarketplaceDisplayCatalogProductListController extends ARestrictedAcc
             $marketplaceHasShopId='0';
         }
         if($marketplaceHasShopId!='0'){
-            $marketplaceHasShopIdFind=' and phphmhs.marketplaceHasShpId='.$_GET['marketplacehasshopid'];
+            $marketplaceHasShopIdFind=' and phphmhs.marketplaceHasShpoId='.$_GET['marketplacehasshopid'];
         } else{
             $marketplaceHasShopIdFind=' ';
         }
