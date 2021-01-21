@@ -46,6 +46,7 @@ class CRuleMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxC
 
 
             $marketplaceAccount = $mapRepo->findOneBy($row);
+                $row["marketplaceAccountId"] = $marketplaceAccount->id;
                 $row["DT_RowId"] = $marketplaceAccount->printId();
                 $row['code'] = $marketplaceAccount->printId();
                 $row['marketplace'] = $marketplaceAccount->marketplace->name;

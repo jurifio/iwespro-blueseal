@@ -37,7 +37,7 @@ $(document).on('bs.marketplace-account.config.href', function(a,b,c){
     }
     let row = '';
     $.each(selectedRows, function (k, v) {
-        row = v.DT_RowId;
+        row = v.marketplaceAccountId;
     });
-    window.open('/blueseal/marketplace/account?id=' + row ,'_blank');
+    window.open('/blueseal/marketplace/marketplace-shop/modifica/' + row ,'_blank');
 });
