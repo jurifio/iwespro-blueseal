@@ -214,6 +214,19 @@
                 data-toggle="modal"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Visualizzazione Catalogo">
+        <bs-toolbar-button
+        data-tag="a"
+        data-icon="fa-eye"
+        data-permission="/admin/product/edit"
+        data-event="bs.view.catalogue"
+        data-class="btn btn-default"
+        data-rel="tooltip"
+        data-title="Visualizza  Prodotti su marketPlace come Catalogo"
+        data-placement="bottom"
+        data-toggle="modal"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Emulatori Jobs">
         <bs-toolbar-button
                 data-tag="a"

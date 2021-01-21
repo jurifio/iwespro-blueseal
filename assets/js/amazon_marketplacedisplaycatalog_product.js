@@ -1,12 +1,12 @@
 
 (function ($) {
     $('#btnsearchplus').click(function() {
-        var  accountid='&accountid=0';
+        var  marketplacehasshopid='marketplacehasshopid=0&pageid=1';
         if($('#accountid').val()!=0) {
-            accountid = '&accountid='+$('#accountid').val();
+            marketplacehasshopid = 'marketplacehasshopid='+$('#marketplacehasshopid').val()+'&pageid=1';
         }
 
-        var url='/blueseal/prodotti/marketplace/ebay/prodotti-lista?'+accountid;
+        var url='/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo?'+marketplacehasshopid;
 
         window.location.href=url;
     });
