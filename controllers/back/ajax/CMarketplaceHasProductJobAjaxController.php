@@ -63,10 +63,10 @@ class CMarketplaceHasProductJobAjaxController extends AAjaxController
                         }
                         $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId,shp.isPublished as isPublished from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where shp.shopId =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandFilter . ' ) UNION
+ and p.productVariantId=shp.productVariantId where  p.qty>0 and p.productStatusId in (6,15) and shp.shopId =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandFilter . ' ) UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopId as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandParallelFilter . ')';
+ and p2.productVariantId=shp2.productVariantId where p2.qty>0 and p2.productStatusId in (6,15) and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandParallelFilter . ')';
 
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
