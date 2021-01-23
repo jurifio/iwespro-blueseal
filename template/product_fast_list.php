@@ -498,7 +498,7 @@
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Prezzi e Stato su Shop Paralleli">
         <bs-toolbar-button
-                data-remote="bs.productstratusprice.external"
+                data-remote="bs.productstatusprice.external"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

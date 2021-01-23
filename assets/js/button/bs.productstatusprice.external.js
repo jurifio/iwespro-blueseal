@@ -1,8 +1,8 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-sun-o",
+    icon:"fa-list-o",
     permission:"/admin/product/edit&&allShops",
-    event:"bs-productstratusprice-external",
+    event:"bs.productstatusprice.external",
     class:"btn btn-default",
     rel:"tooltip",
     title:"Associa massivamente il tag 'New Season'",
@@ -10,13 +10,13 @@ window.buttonSetup = {
     toggle:"modal"
 };
 
-$(document).on('bs.productstratusprice.external', function () {
+$(document).on('bs.productstatusprice.external', function () {
     let selectedRows = dataTable.rows('.selected').data();
 
     if (selectedRows.length != 1) {
         new Alert({
             type: "warning",
-            message: "Devi selezionare un riga alla Volta per registrare  il pagamento"
+            message: "Devi selezionare un prodotto alla Volta"
         }).open();
         return false;
     }
