@@ -20,9 +20,9 @@ $(document).on('bs.productstatusprice.external', function () {
         }).open();
         return false;
     }
-
+     let body='';
     let modal = new $.bsModal(
-        'Aggiorna i prodotti da Modello',
+        'Visualizza Stato e  Prezzi sui front',
         {
             body: body,
             isCancelButton: true
