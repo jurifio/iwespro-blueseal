@@ -34,7 +34,7 @@ class CShopHasProductPriceAjaxController extends AAjaxController
         $prices=[];
        $productId = $this -> app -> router -> request() -> getRequestData('productId');
         $productVariantId = $this -> app -> router -> request() -> getRequestData('productVariantId');
-        $res = $this -> app -> dbAdapter -> query('SELECT `s`.`name` as nameShop, `sh`.`price` as price, `sh`.`salePrice` as salePrice,`sh`.`value` as value,`ps`.`name` as produtStatus,
+        $res = $this -> app -> dbAdapter -> query('SELECT `s`.`name` as nameShop, `sh`.`price` as price, `sh`.`salePrice` as salePrice,`sh`.`value` as value,`ps`.`name` as productStatus,
  if(sh.isOnSale=1,"si","no") as isOnSale
  from ShopHasProductPrice sh join ProductPublicStatus pp on sh.productId=pp.productId and sh.productVariantId=pp.productVariantId and sh.shopIdDestination=pp.shopIdDestination
      
