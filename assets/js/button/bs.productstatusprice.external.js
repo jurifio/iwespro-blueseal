@@ -56,7 +56,7 @@ $(document).on('bs.productstatusprice.external', function () {
     }).done(function (res) {
 let result='<div class="row"><div class="col-md-2">Shop</div><div class="col-md-2">Stato</div><div class="col-md-2">prezzo di Vendita</div><div class="col-md-2">prezzo in Sconto</div><div class="col-md-2">prezzo di Costo</div><div class="col-md-2">in Saldo</div></div>';
         $.each(res, function (k, v) {
-           result=result+'<div class="row"><div class="col-md-2">'+v.nameShop+'</div><div class="col-md-2">'+v.productStatus+'</div><div class="col-md-2">'+v.price+'</div><div class="col-md-2">+v.salePrice+</div><div class="col-md-2">v.value</div><div class="col-md-2">v.isOnSale</div></div>';
+           result=result+'<div class="row"><div class="col-md-2">'+v.nameShop+'</div><div class="col-md-2">'+v.productStatus+'</div><div class="col-md-2">'+v.price+'</div><div class="col-md-2">'+v.salePrice+'</div><div class="col-md-2">'+v.value+'</div><div class="col-md-2">'+v.isOnSale+'</div></div>';
         });
         modal.writeBody(result);
     }).fail(function () {
