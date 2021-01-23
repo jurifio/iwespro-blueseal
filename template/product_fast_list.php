@@ -496,6 +496,11 @@
                 data-remote="bs.product.storehouse.quantity"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Prezzi e Stato su Shop Paralleli">
+        <bs-toolbar-button
+                data-remote="bs.productstratusprice.external"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
 </bs-toolbar>
 </body>
 </html>
