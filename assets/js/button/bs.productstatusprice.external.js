@@ -1,6 +1,6 @@
 window.buttonSetup = {
     tag:"a",
-    icon:"fa-list-o",
+    icon:"fa-list",
     permission:"/admin/product/edit&&allShops",
     event:"bs.productstatusprice.external",
     class:"btn btn-default",
@@ -11,7 +11,7 @@ window.buttonSetup = {
 };
 
 $(document).on('bs.productstatusprice.external', function () {
-    let selectedRows = dataTable.rows('.selected').data();
+    let selectedRows = $('.table').DataTable().rows('.selected').data();
 
     if (selectedRows.length != 1) {
         new Alert({
