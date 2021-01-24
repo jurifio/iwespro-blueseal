@@ -4003,9 +4003,9 @@
                 "PUT"
             ]
         },{
-            "pattern": "/blueseal/ticket(/)?",
+            "pattern": "/blueseal/planning/lista(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CTicketListController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkListController"
             },
             "filters": {},
             "translations": {},

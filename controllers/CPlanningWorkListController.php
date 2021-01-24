@@ -6,7 +6,7 @@ use bamboo\ecommerce\views\VBase;
 
 
 /**
- * Class CTicketListController
+ * Class CPlanningWorkListController
  * @package bamboo\blueseal\controllers
  *
  * @author Iwes Team <it@iwes.it>
@@ -18,15 +18,15 @@ use bamboo\ecommerce\views\VBase;
  * @date $date
  * @since 1.0
  */
-class CTicketListController extends ARestrictedAccessRootController
+class CPlanningWorkListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "ticket_list";
+    protected $pageSlug = "planning_work_list";
 
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/ticket_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths', 'blueseal') . '/template/planning_work_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
