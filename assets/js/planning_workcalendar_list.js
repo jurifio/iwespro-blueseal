@@ -538,7 +538,6 @@
                             planningWorkStatusId: $('#planningWorkStatusId').val(),
                             billRegistryClientId: $('#billRegistryClientId').val(),
                             planningWorkTypeId: $('#planningWorkTypeId').val(),
-                            planningWorkStatusId: $('#planningWorkStatusId').val(),
                             request: $('#request').val(),
                             solution: $('#solution').val(),
                             hour: $('#hour').val(),
