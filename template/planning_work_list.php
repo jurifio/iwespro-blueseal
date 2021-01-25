@@ -39,11 +39,17 @@
                                     data-orderable="true"
                                     class="center">Cliente
                                 </th>
-                                <th data-slug="dateWork"
+                                <th data-slug="startDateWork"
                                       data-searchable="true"
                                       data-orderable="true"
                                       data-default-order="desc"
-                                      class="center dataFilterType">Data<br>Piano
+                                      class="center dataFilterType">Inizio<br>Data lavoro
+                                </th>
+                                <th data-slug="EndDateWork"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="desc"
+                                    class="center dataFilterType">Fine<br>Data lavoro
                                 </th>
                                 <th data-slug="status"
                                     data-searchable="false"

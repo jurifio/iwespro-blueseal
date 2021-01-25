@@ -28,7 +28,8 @@ class CPlanningWorkListAjaxController extends AAjaxController
     {
         $sql = 'SELECT
                       t1.id as id,
-                       DATE_FORMAT(t1.dateWork, "%d-%m-%Y %k:%i:%s") as dateWork,
+                       DATE_FORMAT(t1.startDateWork, "%d-%m-%Y %k:%i:%s") as startDateWork,
+                       DATE_FORMAT(t1.endDateWork, "%d-%m-%Y %k:%i:%s") as endDateWork,
                       t1.billRegistryClientId as clientId,
        t1.shopId as ShopId,
        t1.request as title,
@@ -71,7 +72,8 @@ class CPlanningWorkListAjaxController extends AAjaxController
             $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id'=>$planningWork->planningWorkStatusId]);
             $row['status']=$planningWorkStatus->name;
 
-            $row['dateWork'] =(new \DateTime($planningWork->dateWork))->format('d-m-Y H:i:s');
+            $row['startDateWork'] =(new \DateTime($planningWork->startDateWork))->format('d-m-Y H:i:s');
+            $row['endDateWork'] =(new \DateTime($planningWork->endDateWork))->format('d-m-Y H:i:s');
             $shop=$shopRepo->findOneBy(['id'=>$planningWork->shopId]);
             $row['shopName']=$shop->name;
             $brc=$brcRepo->findOneBy(['id'=>$planningWork->billRegistryClientId]);

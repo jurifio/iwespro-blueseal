@@ -4017,6 +4017,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/planning/calendario(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkCalendarListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/menu(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMenuListController"

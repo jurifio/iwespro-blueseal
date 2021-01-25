@@ -3916,10 +3916,25 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/planning/lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
+            "pattern": "/blueseal/planning/calendario(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkCalendarListController"
             },
             "filters": {},
             "translations": {},
@@ -4017,13 +4032,13 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/marketplace-shop/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasShopAddController"
             },
-            "filters": {}
-        ,
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",
@@ -4031,13 +4046,13 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/applicazioni/lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPageListController"
             },
-            "filters": {}
-        ,
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",
@@ -4045,13 +4060,13 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/marketplace-shop/lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasNewShopListController"
             },
-            "filters": {}
-        ,
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",
@@ -4059,7 +4074,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/marketplace-shop/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceHasShopEditController"
@@ -4074,13 +4090,13 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/shop-paralleli/lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductShareHasShopDestinationListController"
             },
-            "filters": {}
-        ,
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",
@@ -4088,7 +4104,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/shop-paralleli/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductShareHasShopDestinationEditController"
@@ -4103,13 +4120,13 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/shop-paralleli/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CProductShareHasShopDestinationAddController"
             },
-            "filters": {}
-        ,
+            "filters": {},
             "translations": {},
             "methods": [
                 "GET",
@@ -4117,7 +4134,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/marketplace/ebay/prodotti-lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEbayMarketplaceProductListController"
@@ -4130,7 +4148,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/marketplace/amazon/prodotti-lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAmazonMarketplaceProductListController"
@@ -4143,7 +4162,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/account-shop/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountShopAddController"
@@ -4156,7 +4176,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/account-shop/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceAccountShopEditController"
@@ -4171,7 +4192,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/account-shop/lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorHasShopListController"
@@ -4184,7 +4206,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/account-shop/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorHasShopAddController"
@@ -4197,7 +4220,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/account-shop/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorHasShopEditController"
@@ -4212,7 +4236,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorProductListController"
@@ -4225,7 +4250,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/google(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CGoogleAggregatorProductListController"
@@ -4238,7 +4264,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/shopalike(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CShopALikeAggregatorProductListController"
@@ -4251,7 +4278,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/stileo(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStileoAggregatorProductListController"
@@ -4264,7 +4292,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/criteo(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCriteoAggregatorProductListController"
@@ -4277,7 +4306,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/stylight(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CStylightAggregatorProductListController"
@@ -4290,7 +4320,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/tradetracker(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CTradeTrackerAggregatorProductListController"
@@ -4303,7 +4334,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/prodotti/lista/facebook(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CFacebookAggregatorProductListController"
@@ -4316,7 +4348,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/categorie(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorCategoryAssignController"
@@ -4329,7 +4362,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/categorie/invertite(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorCategoryAssignInvertedController"
@@ -4342,7 +4376,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/prodotti/marketplace/ebay/prodotti-lista-catalogo(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CEbayMarketplaceDisplayCatalogProductListController"
@@ -4355,7 +4390,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/aggregatori/regole-lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorAccountListController"
@@ -4368,7 +4404,8 @@
                 "DELETE",
                 "PUT"
             ]
-        },{
+        },
+        {
             "pattern": "/blueseal/marketplace/regole-lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CRuleMarketplaceAccountListController"
