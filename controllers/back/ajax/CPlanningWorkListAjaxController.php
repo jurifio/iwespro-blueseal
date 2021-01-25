@@ -68,6 +68,8 @@ class CPlanningWorkListAjaxController extends AAjaxController
             $row['id'] = '<a href="'.$planningworkedit.$planningWork->id.'">'.$planningWork->id.'</a>';
             $row['request'] = $planningWork->request;
             $row['title'] = $planningWork->title;
+            $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id'=>$planningWork->planningWorkStatusId]);
+            $row['status']=$planningWorkStatus->name;
 
             $row['dateWork'] =(new \DateTime($planningWork->dateWork))->format('d-m-Y H:i:s');
             $shop=$shopRepo->findOneBy(['id'=>$planningWork->shopId]);
