@@ -378,15 +378,15 @@
                                             <label for="endWorkDate">Data Fine Attività </label>
                                             <input type="datetime-local" id="endWorkDate" class="form-control"
                                                    placeholder="Inserisci la Data della Fine"
-                                                   name="endWorkDate" value=""
+                                                   name="endWorkDate" value="`+end+`"
                                                    required="required">
                                         </div>
                                     </div>
                                 <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="planningStatusId">Seleziona lo Stato</label>
-                                            <select id="planningStatusId"
-                                                    name="planningStatusId" class="full-width selectpicker"
+                                            <label for="planningWorkStatusId">Seleziona lo Stato</label>
+                                            <select id="planningWorkStatusId"
+                                                    name="planningWorkStatusId" class="full-width selectpicker"
                                                     required="required"
                                                     placeholder="Seleziona lo Stato"
                                                     data-init-plugin="selectize"></select>
@@ -436,7 +436,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="total">Costo</label>
+                                            <label for="total">Totale</label>
                                             <input id="total" class="form-control" type="text" value="0"
                                                   name="total" placeholder="totale" />
                                         </div>
@@ -533,8 +533,8 @@
 
                         const data = {
                             title: $('#title').val(),
-                            start: start,
-                            end: end,
+                            start: $('#startWorkDate').val(),
+                            end:$('#endWorkDate').val(),
                             planningWorkStatusId: $('#planningWorkStatusId').val(),
                             billRegistryClientId: $('#billRegistryClientId').val(),
                             planningWorkTypeId: $('#planningWorkTypeId').val(),
@@ -545,65 +545,13 @@
                             cost: $('#cost').val(),
                             percentageStatus: $('#percentageStatus').val(),
                             notifyEmail: $('#notifyEmail').val(),
-                            linkDestination: $('#linkDestination').val(),
-                            isEventVisible: isEvVisible,
-                            isVisibleEditorialPlanArgument: isVisEdPlanArg,
-                            isVisiblePhotoUrl: isVisPhoto,
-                            isVisibleDescription: isVisDesc,
-                            bodyEvent: $('#bodyEvent').val(),
-                            isVisibleBodyEvent: isVisBody,
-                            facebookCampaignId: facebookCampaignId,
-                            campaignId: campaignName,
-                            groupAdsName: groupAdsName,
-                            isNewAdSet: isNewAdSet,
-                            selecterCampaign: $('#selecterCampaign').val(),
-                            lifetime_budget: $('#lifetime_budget').val(),
-                            buying_type: $('#buying_type').val(),
-                            objective: $('#objective').val(),
-                            imageTitle1:$('#imageTitle1').val(),
-                            imageTitle2:$('#imageTitle2').val(),
-                            imageTitle3:$('#imageTitle3').val(),
-                            imageTitle4:$('#imageTitle4').val(),
-                            imageTitle5:$('#imageTitle5').val(),
-                            imageTitle6:$('#imageTitle6').val(),
-                            imageTitle7:$('#imageTitle7').val(),
-                            imageTitle8:$('#imageTitle8').val(),
-                            imageTitle9:$('#imageTitle9').val(),
-                            imageTitle10:$('#imageTitle10').val(),
-                            imageUrl1:$('#imageUrl1').val(),
-                            imageUrl2:$('#imageUrl2').val(),
-                            imageUrl3:$('#imageUrl3').val(),
-                            imageUrl4:$('#imageUrl4').val(),
-                            imageUrl5:$('#imageUrl5').val(),
-                            imageUrl6:$('#imageUrl6').val(),
-                            imageUrl7:$('#imageUrl7').val(),
-                            imageUrl8:$('#imageUrl8').val(),
-                            imageUrl9:$('#imageUrl9').val(),
-                            imageUrl10:$('#imageUrl10').val(),
-                            descriptionImage1:$('#descriptionImage1').val(),
-                            descriptionImage2:$('#descriptionImage2').val(),
-                            descriptionImage3:$('#descriptionImage3').val(),
-                            descriptionImage4:$('#descriptionImage4').val(),
-                            descriptionImage5:$('#descriptionImage5').val(),
-                            descriptionImage6:$('#descriptionImage6').val(),
-                            descriptionImage7:$('#descriptionImage7').val(),
-                            descriptionImage8:$('#descriptionImage8').val(),
-                            descriptionImage9:$('#descriptionImage9').val(),
-                            descriptionImage10:$('#descriptionImage10').val(),
-                            postImageTitle:$('#postImageTitle').val(),
-                            postImageDescription:$('#postImageDescription').val(),
-                            postVideoTitle:$('#postVideoTitle').val(),
-                            postDescriptionVideo:$('#postDescriptionVideo').val(),
-                            postVideoCallToAction: $('#postVideoCallToAction').val(),
-                            foisonId:$('#foisonId').val(),
-                            video1:$('#video1').val(),
                             type:'formCalendar',
 
 
                         };
                         $.ajax({
                             type: 'POST',
-                            url: "/blueseal/xhr/EditorialPlanDetailAddAjaxController",
+                            url: "/blueseal/xhr/PlanningWorkAddAjaxController",
                             data: data,
                         }).done(function (res) {
                             bsModal1.writeBody(res);
@@ -624,7 +572,7 @@
                 },
                 editable: true,
                 eventClick: function (event) {
-                    let urlDestination= '/blueseal/planning/modifica-calendario/' + event.id;
+                    let urlDestination= '/blueseal/planning/modifica/' + event.id;
 
                     window.open(
                         urlDestination,
@@ -660,7 +608,7 @@
                                 end: newend,
                                 request: request,
                                 solution: solution,
-                                billRegistryClientId:billRegistryClientId
+                                billRegistryClientId:billRegistryClientId,
                                 planningWorkId: planningWorkId,
                                 cost:cost,
                                 hour:hour,
