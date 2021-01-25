@@ -171,7 +171,7 @@
         data: {id: id},
         success: function (data) {
             obj = JSON.parse(data);
-            var TypePermission = obj[0].allShops;
+            var TypePermission = 1;
             createcalendar(obj, TypePermission);
 
         },
@@ -322,45 +322,30 @@
                             `<div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="socialPlanId">Seleziona il media da Associare </label>
-                                            <select id="socialPlanId"
+                                            <label for="billRegistryClientId">Seleziona il Cliente </label>
+                                            <select id="billRegistryClientId"
                                                     required="required"
-                                                    name="socialPlanId"
+                                                    name="billRegistryClientId"
                                                     class="full-width selectpicker"
-                                                    placeholder="Selezione il media da associare"
+                                                    placeholder="Selezione il Cliente"
                                                     data-init-plugin="selectize"></select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="status">Seleziona lo Stato</label>
-                                            <select id="status" name="status" required="required"
+                                            <label for="planningWorkTypeId">Seleziona il tipo di attività </label>
+                                            <select id="planningWorkTypeId" name="planningWorkTypeId" required="required"
                                                     class="full-width selectpicker"
-                                                    placeholder="Seleziona lo stato"
+                                                    placeholder="Seleziona lo il tipo di attività"
                                                     data-init-plugin="selectize">
-                                                <option value="new">Stato</option>
-                                                <option value="Draft">Bozza</option>
-                                                <option value="Approved">Approvata</option>
-                                                <option value="Rejected">Rifiutata</option>
-                                                <option value="Published">Pubblicata</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="startEventDate">Data Inizio Evento</label>
-                                            <input type="datetime-local" id="startEventDate" class="form-control"
-                                                   placeholder="Inserisci la Data di Inizio del Dettaglio"
-                                                   name="startEventDate" value=""
-                                                   required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="endEventDate">Data Fine Evento </label>
-                                            <input type="datetime-local" id="endEventDate" class="form-control"
-                                                   placeholder="Inserisci la Data della Fine del Dettaglio "
-                                                   name="endEventDate" value=""
+                                            <label for="title">Titolo</label>
+                                            <input id="title" class="form-control" type="text"
+                                                   placeholder="Inserisci il titolo" name="titleEvent"
                                                    required="required">
                                         </div>
                                     </div>
@@ -371,596 +356,133 @@
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona"
                                                     data-init-plugin="selectize">
-                                                <option value="notNotify">Non Inviare la Notifica</option>
-                                                <option value="yesNotify">Invia la Notifica</option>
+                                                <option value="0">Non Inviare la Notifica</option>
+                                                <option value="1">Invia la Notifica</option>
 
                                             </select>
                                         </div>
-                                    </div>
+                                    </div>   
                                 </div>
                                 <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="editorialPlanArgumentId">Tipo Di Creatività</label>
-                                            <select id="editorialPlanArgumentId"
-                                                    name="editorialPlanArgumentId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione argomento da utilizzare"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                  
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="editorialPlanId">Seleziona Piano Editoriale</label>
-                                            <select id="editorialPlanId"
-                                                    name="editorialPlanId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Selezione il piano editoriale da utilizzare"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="foisonId">Seleziona Operatore</label>
-                                            <select id="foisonId"
-                                                    name="foisonId" class="full-width selectpicker"
-                                                    placeholder="Selezione Operatore"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleEditorialPlanArgument">Tipo di Creatività Visibile</label>
-                                            <input type="checkbox" id="isVisibleEditorialPlanArgument"
-                                                   class="form-control"
-                                                   placeholder="Visible" checked="true"
-                                                   name="isVisibleEditorialPlanArgument" ">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div id="divSelecterCampaign" class="hide">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="selecterCampaign">Seleziona Operazione su </label>
-                                                <select id="selecterCampaign"
-                                                        name="selecterCampaign" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione operazioni su campagna da utilizzare"
-                                                        data-init-plugin="selectize">
-                                                    <option value="">seleziona</option>
-                                                    <option value="0">Crea Nuova</option>
-                                                    <option value="1">Seleziona Esistente</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="divCampaign" class="hide">
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="titleEvent">Titolo Azione Evento</label>
-                                            <input id="titleEvent" class="form-control"
-                                                   placeholder="Inserisci il titolo" name="titleEvent"
+                                            <label for="startWorkDate">Data Inizio Attività</label>
+                                            <input type="datetime-local" id="startWorkDate" class="form-control"
+                                                   placeholder="Inserisci la Data di Inizio "
+                                                   name="startWorkDate" value="`+start+`"
                                                    required="required">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isEventVisible">Titolo Evento Visibile</label>
-                                            <input type="checkbox" id="isEventVisible" class="form-control"
-                                                   placeholder="Visible" checked="true" name="isEventVisible"/>
-                                        </div>
-                                    </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="description">Descrizione Evento</label>
-                                            <textarea id="description" cols="60" rows="10"
-                                                      placeholder="Inserisci la descrizione dell'evento"
+                                            <label for="endWorkDate">Data Fine Attività </label>
+                                            <input type="datetime-local" id="endWorkDate" class="form-control"
+                                                   placeholder="Inserisci la Data della Fine"
+                                                   name="endWorkDate" value=""
+                                                   required="required">
+                                        </div>
+                                    </div>
+                                <div class="col-md-4">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="planningStatusId">Seleziona lo Stato</label>
+                                            <select id="planningStatusId"
+                                                    name="planningStatusId" class="full-width selectpicker"
+                                                    required="required"
+                                                    placeholder="Seleziona lo Stato"
+                                                    data-init-plugin="selectize"></select>
+                                        </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="request">Richiesta</label>
+                                            <textarea id="request" cols="60" rows="10"
+                                                      placeholder="Inserisci la richiesta"
                                                       name="description"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                             
+                                    <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleDescription">Descrizione Evento Visibile</label>
-                                            <input type="checkbox" id="isVisibleDescription" class="form-control"
-                                                   placeholder="Visible" checked="true" name="isVisibleDescription">
+                                            <label for="solution">Soluzione</label>
+                                            <textarea id="solution" cols="60" rows="10"
+                                                      placeholder="Inserisci la soluzione"
+                                                      name="description"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-10">
+                                <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="bodyEvent">Testo Evento</label>
-                                            <textarea id="bodyEvent" cols="100" rows="10" name="bodyEvent"
-                                                      placeholder="Inserisci il testo dell'evento "></textarea>
+                                            <label for="percentageStatus">Percentuale. di Completamento</label>
+                                            <input id="percentageStatus" class="form-control" type="text"
+                                                  name="cost" placeholder="Inserisci il prezzo" />
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-10">
+                                   <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="linkDestination">Link Destinazione</label>
-                                            <textarea id="linkDestination" cols="100" rows="1"
-                                                      placeholder="Inserisci  i link di destinazione"
-                                                      name="linkDestination"></textarea>
+                                            <label for="hour">Ore lavorate</label>
+                                            <input id="hour" class="form-control" type="number"
+                                                  name="hour" step="0.01" min="0"/>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleBodyEvent">Link Destinazione Visibile</label>
-                                            <input type="checkbox" id="isVisibleBodyEvent" class="form-control"
-                                                   placeholder="Visible" checked="true" name="isVisibleBodyEvent"/>
+                                            <label for="cost">Costo</label>
+                                            <input id="cost" class="form-control" type="text" value="0.00"
+                                                  name="cost" placeholder="Inserisci il prezzo" />
                                         </div>
                                     </div>
-                                </div>
-                                <div id="divPostUploadImage" class="hide">` +
-                            bodyContent + `</div>` +
-                            `<div id="divPostImage" class="hide">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageTitle">Creatività:Titolo Post</label>
-                                                <textarea id="postImageTitle" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine "
-                                                          name="postImageTitle"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageDescription">Creatività:Descrizione Post</label>
-                                                <textarea id="postImageDescription" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="postImageDescription"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postImageUrl">Creatività:link Immagine</label>
-                                                <textarea id="postImageUrl" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 1"
-                                                          name="postImageUrl"
-                                                ></textarea>
-                                            </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="total">Costo</label>
+                                            <input id="total" class="form-control" type="text" value="0"
+                                                  name="total" placeholder="totale" />
                                         </div>
                                     </div>
                                 </div>
-                                <div id="divPostCarousel" class="hide">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle1">Creatività:Titolo Post Immagine1</label>
-                                                <textarea id="imageTitle1" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 1"
-                                                          name="imageTitle1"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage1">Creatività:Descrizione Immagine1</label>
-                                                <textarea id="descriptionImage1" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="descriptionImage1"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl1">Creatività:link Immagine1</label>
-                                                <textarea id="imageUrl1" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 1"
-                                                          name="imageUrl1"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle2">Creatività:Titolo Post Immagine2</label>
-                                                <textarea id="imageTitle2" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 1"
-                                                          name="imageTitle2"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage2">Creatività:Descrizione Immagine2</label>
-                                                <textarea id="descriptionImage2" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 2"
-                                                          name="descriptionImage1"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl2">Creatività:link Immagine2</label>
-                                                <textarea id="imageUrl2" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 2"
-                                                          name="imageUrl2"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle3">Creatività:Titolo Post Immagine3</label>
-                                                <textarea id="imageTitle3" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 3"
-                                                          name="imageTitle3"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage3">Creatività:Descrizione Immagine3</label>
-                                                <textarea id="descriptionImage3" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 3"
-                                                          name="descriptionImage3"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl3">Creatività:link Immagine3</label>
-                                                <textarea id="imageUrl3" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 3"
-                                                          name="imageUrl3"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle4">Creatività:Titolo Post Immagine4</label>
-                                                <textarea id="imageTitle4" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 4"
-                                                          name="imageTitle4"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage4">Creatività:Descrizione Immagine4</label>
-                                                <textarea id="descriptionImage4" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 4"
-                                                          name="descriptionImage4"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl4">Creatività:link Immagine4</label>
-                                                <textarea id="imageUrl4" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 4"
-                                                          name="imageUrl4"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle5">Creatività:Titolo Post  Immagine5</label>
-                                                <textarea id="imageTitle5" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 5"
-                                                          name="imageTitle5"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage5">Creatività:Descrizione Immagine5</label>
-                                                <textarea id="descriptionImage5" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 5"
-                                                          name="descriptionImage5"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl5">Creatività:link Immagine5</label>
-                                                <textarea id="imageUrl5" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 5"
-                                                          name="imageUrl5"></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle6">Creatività:Titolo Post Immagine6</label>
-                                                <textarea id="imageTitle6" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 6"
-                                                          name="imageTitle6"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage6">Creatività:Descrizione Immagine6</label>
-                                                <textarea id="descriptionImage6" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 6"
-                                                          name="descriptionImage6"
-                                                          required="required"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl6">Creatività:link Immagine6</label>
-                                                <textarea id="imageUrl6" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 6"
-                                                          name="imageUrl6"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle7">Creatività:Titolo Post Immagine7</label>
-                                                <textarea id="imageTitle7" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 7"
-                                                          name="imageTitle7"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage7">Creatività:Descrizione Immagine7</label>
-                                                <textarea id="descriptionImage7" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 7"
-                                                          name="descriptionImage7"
-                                                          required="required"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl7">Creatività:link Immagine7</label>
-                                                <textarea id="imageUrl7" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 7"
-                                                          name="imageUrl7"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle8">Creatività:Titolo Post Immagine8</label>
-                                                <textarea id="imageTitle8" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 8"
-                                                          name="imageTitle8"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage8">Creatività:Descrizione Immagine8</label>
-                                                <textarea id="descriptionImage8" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 8"
-                                                          name="descriptionImage8"
-                                                          required="required"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl8">Creatività:link Immagine8</label>
-                                                <textarea id="imageUrl8" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 8"
-                                                          name="imageUrl8"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle9">Creatività:Titolo Post Immagine9</label>
-                                                <textarea id="imageTitle9" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 9"
-                                                          name="imageTitle9"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage9">Creatività:Descrizione Immagine9</label>
-                                                <textarea id="descriptionImage9" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 9"
-                                                          name="descriptionImage9"
-                                                          required="required"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl9">Creatività:link Immagine6</label>
-                                                <textarea id="imageUrl9" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 9"
-                                                          name="imageUrl9"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageTitle10">Creatività:Titolo Post Immagine10</label>
-                                                <textarea id="imageTitle10" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine 10"
-                                                          name="imageTitle6"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="descriptionImage10">Creatività:Descrizione Immagine10</label>
-                                                <textarea id="descriptionImage10" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 10"
-                                                          name="descriptionImage10"
-                                                          required="required"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="imageUrl10">Creatività:link Immagine10</label>
-                                                <textarea id="imageUrl10" class="form-control"
-                                                          placeholder="Inserisci il link per l'immagine 10"
-                                                          name="imageUrl10"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="postVideo" class="hide">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postVideoTitle">Creatività:Titolo Video</label>
-                                                <textarea id="postVideoTitle" class="form-control"
-                                                          placeholder="Inserisci il titolo per l'immagine "
-                                                          name="postVideoTitle"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postDescriptionVideo">Creatività:Descrizione Video</label>
-                                                <textarea id="postDescriptionVideo" class="form-control"
-                                                          placeholder="Inserisci la descrizione per l'immagine 1"
-                                                          name="postDescriptionVideo"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="video1">Creatività:link Video</label>
-                                                <textarea id="video1" class="form-control"
-                                                          placeholder="Inserisci il link per il video " name="video"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="postVideoCallToAction">Creatività:Seleziona la Call To Action</label>
-                                                <select id="postVideoCallToAction"
-                                                        name="postVideoCallToAction" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione il piano editoriale da utilizzare"
-                                                        data-init-plugin="selectize">
-                                                    <option value="OPEN_LINK">APRI LINK</option>
-                                                    <option value="LIKE_PAGE">MI PIACE SU PAGINA</option>
-                                                    <option value="SHOP_NOW">SHOP NOW</option>
-                                                    <option value="CALL">CALL_ME</option>
-                                                    <option value="APPLY_NOW">APPLY NOW</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="note">Note Evento</label>
-                                            <textarea id="note" cols="100" rows="10" name="note"
-                                                      placeholder="Inserisci le note"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="isVisibleNote">Note Evento Visibili</label>
-                                            <input type="checkbox" id="isVisibleNote" class="form-control"
-                                                   placeholder="Visible" checked="true" name="isVisibleNote"/>
-                                        </div>
-                                    </div>
-                                </div>` +
-
-                            '<div class="form-group form-group-default required">' +
-                            '<label for="okSend">Invio</label>' +
-                            '<div><p>Premere ok per  inserire il dettaglio</p></div>' +
-                            '</div>' +
-                            '<input type="hidden" id="editorialPlanId" name="editorialPlanId" value=\"' + id + '\"/>'
+                             <div class="row">   
+                            <div class="form-group form-group-default required">
+                            <label for="okSend">Invio</label>
+                            <div><p>Premere ok per  inserire il dettaglio</p></div>
+                            </div>
+                            </div>`
                     });
-                    var photoUrl = [];
+
 
                     bsModal1.addClass('modal-wide');
                     bsModal1.addClass('modal-high');
 
-                    $('#isEventVisible').prop('checked', true);
-                    $('#isVisibleEditorialPlanArgument').prop('checked', true);
-                    $('#isVisibleDescription').prop('checked', true);
-                    $('#isVisibleNote').prop('checked', true);
-                    $('#isVisibleBodyEvent').prop('checked', true);
-                    $('#isVisiblePhotoUrl').prop('checked', true);
-                    let dropzone = new Dropzone("#dropzoneModal", {
-                        url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
-                        maxFilesize: 5,
-                        maxFiles: 100,
-                        parallelUploads: 10,
-                        acceptedFiles: "image/jpeg,video/*",
-                        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
-                        uploadMultiple: true,
-                        sending: function (file, xhr, formData) {
-
-                        }
-                    });
-
-                    dropzone.on('addedfile', function (file) {
-                        okButton.attr("disabled", "disabled");
-                        let urlimage = "https://iwes-editorial.s3-eu-west-1.amazonaws.com/plandetail-images/";
-                        let filename = file.name;
-                        let image = urlimage + filename;
-                        photoUrl.push(image);
-                    });
-                    dropzone.on('queuecomplete', function () {
-                        okButton.removeAttr("disabled");
-                        $(document).trigger('bs.load.photo');
-                    });
                     $.ajax({
                         method: 'GET',
                         url: '/blueseal/xhr/GetTableContent',
                         data: {
-                            table: 'EditorialPlan'
+                            table: 'billRegistryClient'
                         },
                         dataType: 'json'
                     }).done(function (res2) {
-                        var select = $('#editorialPlanId');
+                        var select = $('#billRegistryClientId');
                         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                         select.selectize({
                             valueField: 'id',
-                            labelField: 'name',
-                            searchField: 'name',
+                            labelField: 'companyName',
+                            searchField: 'companyName',
                             options: res2,
                             render: {
                                 item: function (item, escape) {
                                     return '<div>' +
-                                        '<span class="label">' + escape(item.name) + '</span> - ' +
-                                        '<span class="caption">' + escape(item.startDate) + ' | ' + escape(item.endDate) + '</span>' +
+                                        '<span class="label">' + escape(item.companyName) + '</span> - ' +
+                                        '<span class="caption">contatto:' + escape(item.contactName) + ' tel: ' + escape(item.phoneAdmin) +  ' email' + escape(item.emailAdmin) + '</span>' +
                                         '</div>'
                                 },
                                 option: function (item, escape) {
                                     return '<div>' +
-                                        '<span class="label">' + escape(item.name) + '</span> - ' +
-                                        '<span class="caption">' + escape(item.startDate) + ' | ' + escape(item.endDate) + '</span>' +
+                                        '<span class="label">' + escape(item.companyName) + '</span> - ' +
+                                        '<span class="caption">contatto:' + escape(item.contactName) + ' tel: ' + escape(item.phoneAdmin) +  ' email' + escape(item.emailAdmin) + '</span>' +
                                         '</div>'
                                 }
-                            },
-                            onInitialize: function () {
-                                var selectize = this;
-                                selectize.setValue($('#editorialPlanSelectId').val());
                             }
                         });
                     });
@@ -969,12 +491,30 @@
                         method: 'GET',
                         url: '/blueseal/xhr/GetTableContent',
                         data: {
-                            table: 'EditorialPlanSocial',
+                            table: 'PlanningWorkStatus',
 
                         },
                         dataType: 'json'
                     }).done(function (res2) {
-                        var select = $('#socialPlanId');
+                        var select = $('#planningWorkStatusId');
+                        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                        select.selectize({
+                            valueField: 'id',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: res2
+                        });
+                    });
+                    $.ajax({
+                        method: 'GET',
+                        url: '/blueseal/xhr/GetTableContent',
+                        data: {
+                            table: 'PlanningWorkType',
+
+                        },
+                        dataType: 'json'
+                    }).done(function (res2) {
+                        var select = $('#planningWorkTypeId');
                         if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
                         select.selectize({
                             valueField: 'id',
@@ -985,409 +525,25 @@
                     });
 
 
-                    var editorialPlanSocialSelected = '';
-                    $('#socialPlanId').on('change', function () {
-                        editorialPlanSocialSelected = $(this).val();
-                        $.ajax({
-                            method: 'GET',
-                            url: '/blueseal/xhr/GetTableContent',
-                            data: {
-                                table: 'EditorialPlanArgument',
-                                condition: {editorialPlanSocialId: editorialPlanSocialSelected}
-                            },
-                            dataType: 'json'
-                        }).done(function (res2) {
-                            var select = $('#editorialPlanArgumentId');
-                            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                            select.selectize({
-                                valueField: 'id',
-                                labelField: 'titleArgument',
-                                searchField: 'titleArgument',
-                                options: res2,
-                            });
-                        });
 
-                    });
-                    $('#selecterCampaign').change(function () {
-                        var selecterTypeOperation = $(this).val();
-                        if (selecterTypeOperation == '0') {
-                            var bodyForm = `               <div class="row">
-                                         <div class="col-md-2">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="campaignName">Nome Della Campagna</label>
-                                                <input id="campaignName" class="form-control"
-                                                       placeholder="Inserisci il nome Campagna" name="campaignName"
-                                                       required="required">
-                                            </div>
-                                        </div>
-                                         <div class="col-md-2">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="groupAdsName">Nome del Gruppo inserzioni</label>
-                                                <input id="groupAdsName" class="form-control"
-                                                       placeholder="Inserisci il Nome del gruppo Inserzioni" name="groupAdsName"
-                                                       required="required">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="buying_type">Tipo di Acquisto</label>
-                                                <select id="buying_type"
-                                                        name="buying_type" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize">
-                                                        <option value="AUCTION">Asta</option>
-                                                        <option value="RESERVED">Copertura e Frequenza</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="objective">Obiettivo della Campagna</label>
-                                                <select id="objective"
-                                                        name="objective" class="full-width selectpicker"
-                                                        required="required"
-                                                        placeholder="Selezione campagna da utilizzare"
-                                                        data-init-plugin="selectize">
-                                                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
-                                                       <option value="REACH">Copertura</option>
-                                                       <option value="LOCAL_AWARENESS">Traffico</option>
-                                                       <option value="APP_INSTALLS">installazioni dell\'App</option>
-                                                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
-                                                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
-                                                       <option value="POST_ENGAGEMENT">interazione con i post</option>
-                                                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
-                                                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
-                                                       <option value="MESSAGES">Messaggi</option>
-                                                       <option value="CONVERSIONS">Conversioni</option>
-                                                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
-                                                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                       
-                                        <div class="col-md-2">
-                                            <div class="form-group form-group-default selectize-enabled">
-                                                <label for="lifetime_budget">Importo Budget Totale</label>
-                                                <input id="lifetime_budget" class="form-control"
-                                                       placeholder="Inserisci il Budget" name="lifetime_budget"
-                                                       required="required">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                           <div class="form-group form-group-default selectize-enabled">
-                                        <button class="btn btn-primary" id="addCampaign" name="addCampaign" onclick="addCampaign()" <span
-                                                class="fa fa-save">Salva Campagna</span></button>
-                                            <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/> 
-                                            <input type="hidden" id="isNewAdset" name="isNewAdset" value="1"/>
-                                            </div>
-                                        </div>
-                                    </div>`;
-                            $('#divCampaign').removeClass('hide');
-                            $('#divCampaign').empty();
-                            $('#divCampaign').append(bodyForm);
-
-
-                        } else {
-
-                            var bodyForm = `<div class="row">
-           <div class="col-md-2">
-               <div class="form-group form-group-default selectize-enabled">
-                <label for="campaignName">Seleziona Campagna</label>
-                    <select id="campaignName"
-                           name="campaignName" class="full-width selectpicker"
-                           required="required"
-                           placeholder="Selezione campagna da utilizzare"
-                           data-init-plugin="selectize">
-                   </select>
-               </div>
-           </div>
-            <div class="col-md-2">
-            <div id="divgroupAdsName">
-            
-            </div>
-            </div>
-           <div class="col-md-2">
-               <div class="form-group form-group-default selectize-enabled">
-                   <label for="buying_type">Tipo di Acquisto</label>
-                   <select id="buying_type"
-                           name="buying_type" class="full-width selectpicker"
-                           required="required"
-                           placeholder="Selezione campagna da utilizzare"
-                           data-init-plugin="selectize">
-                       <option value="AUCTION">Asta</option>
-                       <option value="RESERVED">Copertura e Frequenza</option>
-                   </select>
-               </div>
-           </div>
-           <div class="col-md-2">
-               <div class="form-group form-group-default selectize-enabled">
-                   <label for="objective">Obiettivo della Campagna</label>
-                   <select id="objective"
-                           name="objective" class="full-width selectpicker"
-                           required="required"
-                           placeholder="Selezione campagna da utilizzare"
-                           data-init-plugin="selectize">
-                       <option value="BRAND_AWARENESS">Notorietà del Brand</option>
-                       <option value="REACH">Copertura</option>
-                       <option value="LOCAL_AWARENESS">Traffico</option>
-                       <option value="APP_INSTALLS">installazioni dell\'App</option>
-                       <option value="VIDEO_VIEWS">Visualizzazioni del Video</option>
-                       <option value="LEAD_GENERATION">Generazione di Contatti</option>
-                       <option value="POST_ENGAGEMENT">interazione con i post</option>
-                       <option value="PAGE_LIKES">Mi Piace sulla Pagina</option>
-                       <option value="EVENT_RESPONSES">Risposte a un evento</option>
-                       <option value="MESSAGES">Messaggi</option>
-                       <option value="CONVERSIONS">Conversioni</option>
-                       <option value="PRODUCT_CATALOG_SALES">Vendita dei prodotti del catalogo</option>
-                       <option value="STORE_VISITS">Traffico nel punto Vendita</option>
-                   </select>
-               </div>
-           </div>
-
-           <div class="col-md-2">
-               <div class="form-group form-group-default selectize-enabled">
-                   <label for="lifetime_budget">Importo Budget Totale</label>
-                   <input id="lifetime_budget" class="form-control"
-                          placeholder="Inserisci il Budget" name="lifetime_budget"
-                          required="required">
-               </div>
-           </div>
-           <div class="col-md-2">
-               <div class="form-group form-group-default selectize-enabled">
-                   <button class="btn btn-primary" id="updateCampaign" onclick="updateCampaign()"  type="button"><span
-                       class="fa fa-save">Aggiorna Campagna</span></button>
-                   <input type="hidden" id="facebookCampaignId" name="facebookCampaignId" value=""/>
-                    <input type="hidden" id="isNewAdset" name="isNewAdset" value="2"/>
-               </div>
-           </div>
-       </div>`;
-                            $('#divCampaign').removeClass('hide');
-                            $('#divCampaign').empty();
-                            $('#divCampaign').append(bodyForm);
-
-                            $.ajax({
-                                url: '/blueseal/xhr/SelectFacebookCampaignAjaxController',
-                                method: 'get',
-                                data: {
-                                    editorialPlanId: $('#editorialPlanId').val()
-                                },
-                                dataType: 'json'
-                            }).done(function (res) {
-                                console.log(res);
-                                let campaignName = $('#campaignName');
-                                //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
-                                campaignName.selectize({
-                                    valueField: 'idCampaign',
-                                    labelField: 'nameCampaign',
-                                    searchField: ['nameCampaign'],
-                                    options: res,
-                                    render: {
-                                        item: function (item, escape) {
-                                            return '<div>' +
-                                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
-                                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
-                                                '</div>'
-                                        },
-                                        option: function (item, escape) {
-                                            return '<div>' +
-                                                '<span class="label">' + escape(item.nameCampaign) + ' | ' + escape(item.objective) + '</span> - ' +
-                                                '<span class="caption">' + escape(item.buying_type) + ' | ' + escape(item.effective_status) + '</span>' +
-                                                '</div>'
-                                        }
-                                    }
-                                });
-                            });
-                            $('#campaignName').change(function () {
-                                var bodyGroupAdsName = `<div class="form-group form-group-default selectize-enabled">
-                <label for="groupAdsName">Seleziona il Gruppo Inserzioni</label>
-                    <select id="groupAdsName"
-                           name="groupAdsName" class="full-width selectpicker"
-                           required="required"
-                           placeholder="Selezione il Gruppo inserzioni"
-                           data-init-plugin="selectize">
-                   </select>
-               </div>`;
-                                $('#divgroupAdsName').empty();
-                                $('#divgroupAdsName').append(bodyGroupAdsName);
-                                $.ajax({
-                                    url: '/blueseal/xhr/SelectFacebookAdSetAjaxController',
-                                    method: 'get',
-                                    data: {
-                                        campaignId: $('#campaignName').val(),
-                                        editorialPlanId: $('#editorialPlanId').val()
-                                    },
-                                    dataType: 'json'
-                                }).done(function (res) {
-                                    console.log(res);
-                                    let groupAdsName = $('#groupAdsName');
-                                    //   if (typeof (select1typePaymentId[0].selectize) != 'undefined') select1typePaymentId[0].selectize.destroy();
-                                    groupAdsName.selectize({
-                                        valueField: 'idAdSet',
-                                        labelField: 'nameAdSet',
-                                        searchField: ['nameAdSet'],
-                                        options: res,
-                                        render: {
-                                            item: function (item, escape) {
-                                                return '<div>' +
-                                                    '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
-                                                    '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
-                                                    '</div>'
-                                            },
-                                            option: function (item, escape) {
-                                                return '<div>' +
-                                                    '<span class="label">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span> - ' +
-                                                    '<span class="caption">' + escape(item.nameAdSet) + ' | ' + escape(item.status) + '</span>' +
-                                                    '</div>'
-                                            }
-                                        }
-                                    });
-                                });
-
-
-                            });
-
-                        }
-
-                    });
-
-
-                    $('#editorialPlanArgumentId').change(function () {
-                        $.ajax({
-                            method: 'GET',
-                            url: '/blueseal/xhr/SelectFoisonAjaxController',
-                            data: {
-                                table: 'Foison',
-                                editorialPlanArgumentId: $('#editorialPlanArgumentId').val()
-                            },
-                            dataType: 'json'
-                        }).done(function (res3) {
-                            var select = $('#foisonId');
-                            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                            select.selectize({
-                                valueField: 'id',
-                                labelField: 'name',
-                                searchField: 'name',
-                                options: res3,
-                                render: {
-                                    item: function (item, escape) {
-                                        return '<div>' +
-                                            '<span class="label">' + escape(item.name) + '</span> - ' +
-                                            '<span class="caption">' + escape(item.rank) + '</span>' +
-                                            '</div>'
-                                    },
-                                    option: function (item, escape) {
-                                        return '<div>' +
-                                            '<span class="label">' + escape(item.name) + '</span> - ' +
-                                            '<span class="caption">' + escape(item.rank) + '</span>' +
-                                            '</div>'
-                                    }
-                                },
-                                onInitialize: function () {
-                                    var selectize = this;
-                                    selectize.setValue($('#foisonSelectId').val());
-                                }
-                            });
-                        });
-                        if ($('#socialPlanId').val() == 1) {
-                            $('#divSelecterCampaign').removeClass('hide');
-                            $('#divSelecterCampaign').addClass('show');
-                        } else {
-                            $('#divSelecterCampaign').removeClass('show');
-                            $('#divSelecterCampaign').addClass('hide');
-                        }
-                        var isFacebook=$(this).val();
-                        switch(isFacebook){
-                            case "5":
-                                $('#divSelecterCampaign').removeClass('show');
-                                $('#divSelecterCampaign').addClass('hide');
-                                $('#divCampaign').removeClass('show');
-                                $('#divCampaign').addClass('hide');
-                                $('#divPostUploadImage').removeClass('hide');
-                                $('#divPostUploadImage').addClass('show');
-                                $('#divPostImage').removeClass('hide');
-                                $('#divPostImage').addClass('show');
-                                $('#divPostCarousel').removeClass('show');
-                                $('#divPostCarousel').addClass('hide');
-                                $('#postVideo').removeClass('show');
-                                $('#postVideo').addClass('hide');
-                                break;
-                            case "8":
-                                $('#divPostUploadImage').removeClass('hide');
-                                $('#divPostUploadImage').addClass('show');
-                                $('#divPostImage').removeClass('hide');
-                                $('#divPostImage').addClass('show');
-                                $('#divPostCarousel').removeClass('show');
-                                $('#divPostCarousel').addClass('hide');
-                                $('#postVideo').removeClass('show');
-                                $('#postVideo').addClass('hide');
-                                break;
-                            case "9":
-                                $('#divPostUploadImage').removeClass('hide');
-                                $('#divPostUploadImage').addClass('show');
-                                $('#divPostImage').removeClass('show');
-                                $('#divPostImage').addClass('hide');
-                                $('#divPostCarousel').removeClass('hide');
-                                $('#divPostCarousel').addClass('show');
-                                $('#postVideo').removeClass('show');
-                                $('#postVideo').addClass('hide');
-                                break;
-                            case "10":
-                                $('#divPostUploadImage').removeClass('show');
-                                $('#divPostUploadImage').addClass('hide');
-                                $('#divPostImage').removeClass('show');
-                                $('#divPostImage').addClass('hide');
-                                $('#divPostCarousel').removeClass('show');
-                                $('#divPostCarousel').addClass('hide');
-                                $('#postVideo').removeClass('hide');
-                                $('#postVideo').addClass('show');
-                                break;
-                        }
-
-                    });
 
 
                     bsModal1.showCancelBtn();
                     bsModal1.setOkEvent(function () {
-                        var isEvVisible = ($('#isEventVisible').is(":checked") ? "1" : "0");
-                        var isVisEdPlanArg = ($('#isVisibleEditorialPlanArgument').is(":checked") ? "1" : "0");
-                        var isVisDesc = ($('#isVisibleDescription').is(":checked") ? "1" : "0");
-                        var isVisNote = ($('#isVisibleNote').is(":checked") ? "1" : "0");
-                        var isVisBody = ($('#isVisibleBodyEvent').is(":checked") ? "1" : "0");
-                        var isVisPhoto = ($('#isVisiblePhotoUrl').is(":checked") ? "1" : "0");
-                        start = $('#startEventDate').val();
-                        end = $('#endEventDate').val();
-                        if ($('#facebookCampaignId').length) {
-                            facebookCampaignId = $('#facebookCampaignId').val();
-                        } else {
-                            facebookCampaignId = 'notExist';
-                        }
-                        if ($('#campaignName').length) {
-                            campaignName = $('#campaignName').val();
-                        } else {
-                            campaignName = 'notExist';
-                        }
-                        var groupAdsName = '';
-                        if ($('#groupAdsName').length) {
-                            groupAdsName = $('#groupAdsName').val();
-                        }
-                        var isNewAdSet = 0;
-                        if ($('#isNewAdset').length) {
-                            isNewAdSet = $('#isNewAdset').val();
-                        }
 
                         const data = {
-                            title: $('#titleEvent').val(),
+                            title: $('#title').val(),
                             start: start,
                             end: end,
-                            argument: $('#editorialPlanArgumentId').val(),
-                            description: $('#description').val(),
-                            note: $('#note').val(),
-                            isVisibleNote: isVisNote,
-                            photoUrl: photoUrl,
-                            status: $('#status').val(),
-                            socialId: $('#socialPlanId').val(),
-                            editorialPlanId: $('#editorialPlanId').val(),
+                            planningWorkStatusId: $('#planningWorkStatusId').val(),
+                            billRegistryClientId: $('#billRegistryClientId').val(),
+                            planningWorkTypeId: $('#planningWorkTypeId').val(),
+                            planningWorkStatusId: $('#planningWorkStatusId').val(),
+                            request: $('#request').val(),
+                            solution: $('#solution').val(),
+                            hour: $('#hour').val(),
+                            cost: $('#cost').val(),
+                            percentageStatus: $('#percentageStatus').val(),
                             notifyEmail: $('#notifyEmail').val(),
                             linkDestination: $('#linkDestination').val(),
                             isEventVisible: isEvVisible,
@@ -1468,7 +624,7 @@
                 },
                 editable: true,
                 eventClick: function (event) {
-                    let urlDestination= '/blueseal/editorial/modifica-post/' + event.id;
+                    let urlDestination= '/blueseal/planning/modifica-calendario/' + event.id;
 
                     window.open(
                         urlDestination,
@@ -1484,69 +640,38 @@
                         var newend = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
 
                         var title = event.title;
-                        var isEventVisible = event.isEventVisible;
-                        var editorialPlanDetailId = event.id;
-                        var argument = event.argument;
-                        var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
-                        var description = event.description;
-                        var isVisibleDescription = event.isVisibleDescription;
-                        var photoUrl = event.photoUrl;
-                        var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
-                        var status = event.status;
-                        switch (status) {
-                            case "Bozza":
-                                status = "Draft";
-                                break;
-                            case "Approvata":
-                                status = "Approved";
-                                break;
-                            case "Rifiutata":
-                                status = "Rejected";
-                                break;
-                            case "Pubblicata":
-                                status = "Published";
-                                break;
-                        }
-                        var note = event.note;
-                        var isVisibleNote = event.isVisibleNote;
-                        var bodyEvent = event.bodyEvent;
-                        var isVisibleBodyEvent = event.isVisibleBodyEvent;
-                        var socialId = event.socialId;
-                        var notifyEmail = "yesNotify";
+                        var planningWorkId = event.id;
+                        var request = event.request;
+                        var solution = event.solution;
+                        var cost = event.cost
+                        var hour = event.hour;
+                        var billRegistryClientId=event.billRegistryClientId;
+                        var planningWorkStatusId=event.planningWorkStatusId;
+                        var planningWorkTypeId=event.planningWorkTypeId;
+                        var percentageStatus = event.percentageStatus;
+                        var notifyEmail = event.notifyEmail;
 
-                        let url1 = window.location.href;
-                        let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
                         $.ajax({
-                            url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+                            url: '/blueseal/xhr/WorkingPlanCalendarEditAjaxController',
                             type: 'POST',
                             data: {
                                 title: title,
-                                isEventVisible: isEventVisible,
                                 start: newstart,
                                 end: newend,
-                                note: note,
-                                isVisibleNote: isVisibleNote,
-                                editorialPlanId: editorialPlanId,
-                                editorialPlanDetailId: editorialPlanDetailId,
-                                argument: argument,
-                                isVisibleEditorialPlanArgument: isVisibleEditorialPlanArgument,
-                                isVisiblePhotoUrl: isVisiblePhotoUrl,
-                                description: description,
-                                isVisibleDescription: isVisibleDescription,
-                                photoUrl: photoUrl,
-                                status: status,
-                                bodyEvent: bodyEvent,
-                                isVisibleBodyEvent: isVisibleBodyEvent,
-                                socialId: socialId,
+                                request: request,
+                                solution: solution,
+                                billRegistryClientId:billRegistryClientId
+                                planningWorkId: planningWorkId,
+                                cost:cost,
+                                hour:hour,
                                 notifyEmail: notifyEmail,
-                                buying_type: $('#buying_type').val(),
-                                objective: $('#objective').val(),
-                                typeBudget: $('#typeBudget').val(),
-                                lifetime_budget: $('#lifetime_budget').val(),
+                                planningWorkStatusId: planningWorkStatusId,
+                                planningWorkTypeId:planningWorkTypeId,
+                                percentageStatus:percentageStatus
                             },
                             success: function () {
                                 calendar.fullCalendar('refetchEvents');
-                                alert("Dettaglio Piano Editoriale Aggiornato");
+                                alert("Attivita Aggiornata");
 
                             }
                         });
@@ -1556,73 +681,39 @@
                 eventResize: function (event) {
                     let newstart = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                     let newend = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-
                     var title = event.title;
-                    var isEventVisible = event.isEventVisible;
-                    var editorialPlanDetailId = event.id;
-                    var argument = event.argument;
-                    var isVisibleEditorialPlanArgument = event.isVisibleEditorialPlanArgument;
-                    var description = event.description;
-                    var isVisibleDescription = event.isVisibleDescription;
-                    var photoUrl = event.photoUrl;
-                    var isVisiblePhotoUrl = event.isVisiblePhotoUrl;
-                    var status = event.status;
-                    switch (status) {
-                        case "Bozza":
-                            status = "Draft";
-                            break;
-                        case "Approvata":
-                            status = "Approved";
-                            break;
-                        case "Rifiutata":
-                            status = "Rejected";
-                            break;
-                        case "Pubblicata":
-                            status = "Published";
-                            break;
-                    }
-                    var note = event.note;
-                    var isVisibleNote = event.isVisibleNote;
-                    var bodyEvent = event.bodyEvent;
-                    var isVisibleBodyEvent = event.isVisibleBodyEvent;
-                    var socialId = event.socialId;
-                    var notifyEmail = "yesNotify";
+                    var planningWorkId = event.id;
+                    var request = event.request;
+                    var solution = event.solution;
+                    var cost = event.cost
+                    var hour = event.hour;
+                    var billRegistryClientId=event.billRegistryClientId;
+                    var planningWorkStatusId=event.planningWorkStatusId;
+                    var planningWorkTypeId=event.planningWorkTypeId;
+                    var percentageStatus = event.percentageStatus;
+                    var notifyEmail = event.notifyEmail;
 
-                    let url1 = window.location.href;
-                    let editorialPlanId = url1.substring(url1.lastIndexOf('/') + 1);
                     $.ajax({
-                        url: '/blueseal/xhr/EditorialPlanDetailEditAjaxController',
+                        url: '/blueseal/xhr/WorkingPlanCalendarEditAjaxController',
                         type: 'POST',
                         data: {
                             title: title,
-                            isEventVisible: isEventVisible,
                             start: newstart,
                             end: newend,
-                            note: note,
-                            isVisibleNote: isVisibleNote,
-                            editorialPlanId: editorialPlanId,
-                            editorialPlanDetailId: editorialPlanDetailId,
-                            argument: argument,
-                            isVisibleEditorialPlanArgument: isVisibleEditorialPlanArgument,
-                            isVisiblePhotoUrl: isVisiblePhotoUrl,
-                            description: description,
-                            isVisibleDescription: isVisibleDescription,
-                            photoUrl: photoUrl,
-                            status: status,
-                            bodyEvent: bodyEvent,
-                            isVisibleBodyEvent: isVisibleBodyEvent,
-                            socialId: socialId,
+                            request: request,
+                            solution: solution,
+                            billRegistryClientId:billRegistryClientId,
+                            planningWorkId: planningWorkId,
+                            cost:cost,
+                            hour:hour,
                             notifyEmail: notifyEmail,
-                            linkDestination: $('#linkDestination').val(),
-                            campaignName: $('#campaignName').val(),
-                            groupAdsName: $('#groupAdsName').val(),
-                            lifetime_budget: $('#lifetime_budget').val(),
-                            buying_type: $('#buying_type').val(),
-                            objective: $('#objective').val(),
+                            planningWorkStatusId: planningWorkStatusId,
+                            planningWorkTypeId:planningWorkTypeId,
+                            percentageStatus:percentageStatus
                         },
                         success: function () {
                             calendar.fullCalendar('refetchEvents');
-                            alert("Dettaglio Piano Editoriale Aggiornato");
+                            alert("Attivita Aggiornata");
 
                         }
                     });
@@ -1768,51 +859,4 @@
 })
 (jQuery);
 
-function addCampaign() {
-    const data = {
-        campaignName: $('#campaignName').val(),
-        buying_type: $('#buying_type').val(),
-        objective: $('#objective').val(),
-        typeBudget: $('#typeBudget').val(),
-        lifetime_budget: $('#lifetime_budget').val(),
-        editorialPlanId: $('#editorialPlanId').val(),
-        groupAdsName: $('#groupAdsName').val()
-    }
-    $.ajax({
-        method: 'post',
-        url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
-        data: data,
-        dataType: 'json'
-    }).done(function (res) {
-        $('#facebookCampaignId').val(res);
-    }).fail(function (res) {
-
-    }).always(function (res) {
-
-    });
-
-}
-
-function updateCampaign() {
-    const data = {
-        campaignId: $('#campaignName').val(),
-        buying_type: $('#buying_type').val(),
-        objective: $('#objective').val(),
-        typeBudget: $('#typeBudget').val(),
-        lifetime_budget: $('#lifetime_budget').val(),
-        editorialPlanId: $('#editorialPlanId').val()
-    }
-    $.ajax({
-        method: 'put',
-        url: '/blueseal/xhr/CreateFacebookCampaignAjaxController',
-        data: data,
-        dataType: 'json'
-    }).done(function (res) {
-        $('#facebookCampaignId').val(res);
-    }).fail(function (res) {
-    }).always(function (res) {
-
-    });
-
-}
 

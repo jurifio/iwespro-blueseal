@@ -50,7 +50,7 @@ class CPlanningWorkListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings();
 
-        $planningworkedit = $this->app->baseUrl(false) . "/blueseal/planningwork/modifica?id=";
+        $planningworkedit = $this->app->baseUrl(false) . "/blueseal/planning/modifica/";
         /** @var CRepo $planningWorkRepo */
         $planningWorkRepo = \Monkey::app()->repoFactory->create('PlanningWork');
         /** @var  CShop $shopRepo */

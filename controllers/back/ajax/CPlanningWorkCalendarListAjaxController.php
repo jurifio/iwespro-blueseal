@@ -48,9 +48,11 @@ class CPlanningWorkCalendarListAjaxController extends AAjaxController
                 }
                 $data[$i]["status"] = $status;
                 $data[$i]["planningWorkStatusId"] = $singleDetail->planningWorkStatusId;
+                $data[$i]["planningWorkTypeId"] = $singleDetail->planningWorkTypeId;
                 $data[$i]["request"] = $singleDetail->request;
                 $data[$i]["solution"] = $singleDetail->solution;
                 $data[$i]["billRegistryClientId"] = $singleDetail->billRegistryClientId;
+                $ata[$i]["notifyEmail"]=$singleDetail->notifyEmail;
                 $brc=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$singleDetail->billRegistryClientId]);
                 if($brc) {
                     $client = $brc->companyName;
