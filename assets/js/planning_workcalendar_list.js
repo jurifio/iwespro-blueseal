@@ -99,7 +99,7 @@
         };
         $.ajax({
             method: 'POST',
-            url: '/blueseal/xhr/EditorialPlanDetailListFullAjaxController',
+            url: '/blueseal/xhr/PlanningWorkCalendarListAjaxController',
             data: data
         }).success(function (data) {
 
@@ -142,7 +142,7 @@
         };
         $.ajax({
             method: 'POST',
-            url: '/blueseal/xhr/EditorialPlanDetailListFullAjaxController',
+            url: '/blueseal/xhr/PlanningWorkCalendarListAjaxController',
             data: data
         }).success(function (data) {
 
@@ -165,7 +165,7 @@
     let url = window.location.href;
     let id = url.substring(url.lastIndexOf('/') + 1);
     $.ajax({
-        url: '/blueseal/xhr/EditorialPlanDetailListAjaxController',
+        url: '/blueseal/xhr/PlanningWorkCalendarListAjaxController',
         type: 'POST',
         async: false,
         data: {id: id},
@@ -232,19 +232,19 @@
                     eventColor = "";
                     bgTitle = '<div style="background-color:' + event.color + ';color:black;">';
                     switch (event.status) {
-                        case "Bozza":
+                        case "chiamata":
                             bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
 
                             break;
-                        case "Approvata":
+                        case "In Programmazione":
                             bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
 
                             break;
-                        case "Rifiutata":
+                        case "Completato":
                             bgRender = '<div style="background-color:#f22823 ;color:black;"">';
 
                             break;
-                        case "Pubblicata":
+                        case "Fatturato":
                             bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
 
                             break;
@@ -252,27 +252,23 @@
                     }
 
 
-                    var linkimg = "";
-                    var link = event.photoUrl.split(",");
-                    link.forEach(function (element) {
-                        linkimg = linkimg + ' <img width="80px" src="' + element + '">';
 
-                    });
                     if (typeView == 1) {
                         element.find('.fc-title').append(bgTitle +
-                            '<b>' + event.argumentName +
-                            ' | ' + event.titleEditorialPlan +
-                            ' | ' + event.socialName +
+                            '<b>' + event.title +
+                            ' | ' + event.companyName +
+                            ' | ' + event.request +
                             ' | ' + event.status + '</b></div>' + bgRender +
-                            '<br><b>' + event.note + '</b><br>' + linkimg +
+                            '<br>' +
                             '</div>');
                     } else {
                         element.find('.fc-title').append(bgTitle +
-                            '<b>' + event.argumentName +
-                            ' | ' + event.titleEditorialPlan +
-                            ' | ' + event.socialName +
-                            ' | ' + event.status + '</b><br>' + bgRender +
-                            '<br></div>');
+                            '<b>' + event.title +
+                            ' | ' + event.companyName +
+                            ' | ' + event.request +
+                            ' | ' + event.status + '</b></div>' + bgRender +
+                            '<br>' +
+                            '</div>');
                     }
 
 
@@ -322,7 +318,7 @@
                     var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY HH:mm:ss");
                     var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY HH:mm:ss");
                     let bsModal1 = new $.bsModal('Invio', {
-                        body: '<p>Inserisci un Evento per il Piano Editoriale</p>' +
+                        body: '<p>Inserisci  Attività</p>' +
                             `<div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
@@ -1649,23 +1645,9 @@
                 },
 
                 eventMouseover: function (event) {
-                    var linkimg1 = "";
-                    var link = event.photoUrl.split(",");
-                    link.forEach(function (element) {
-
-                        var view = $('#calendar').fullCalendar('getView');
-                        if (view.name == 'month') {
-                            linkimg1 = linkimg1 + ' <img width="100px" src="' + element + '">';
-                        } else if (view.name == 'day') {
-                            linkimg1 = linkimg1 + ' <img width="450px" src="' + element + '">';
-                        } else {
-                            linkimg1 = linkimg1 + ' <img width="450px" src="' + element + '">';
-                        }
 
 
-                    });
-
-                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + ': ' + event.title + '</br>' + 'testo: ' + ': ' + event.bodyEvent + '</br>' + linkimg1 + '</div>';
+                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + event.title + '</br>' + 'richiesta: '  + event.request + '</br>' + 'soluzione: ' +  event.solution + '</br></div>';
 
 
                     $("body").append(tooltip);

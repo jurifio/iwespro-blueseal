@@ -45,7 +45,7 @@ class CPlanningWorkListAjaxController extends AAjaxController
                     FROM `PlanningWork` t1 join Shop s on t1.shopId=s.id 
                     left join BillRegistryClient brc on t1.billRegistryClientId=brc.id
                     left join BillRegistryInvoice bri on t1.billRegistryInvoiceId=bri.id    
-                    join PlanningWorkStatus st on t1.planningWorkStatusId=st.id order by t1.dateWork DESC';
+                    join PlanningWorkStatus st on t1.planningWorkStatusId=st.id order by t1.startDateWork DESC';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings();
