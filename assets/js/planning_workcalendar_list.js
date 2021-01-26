@@ -1,60 +1,102 @@
-(function ($) {
-
-    var eventColor;
-    var obj = null;
-    var typeView = 1;
-    var facebookCampaignId = '';
-    var groupInsertionId = '';
-    $(document).ready(function () {
-        $(this).trigger('bs.load.photo');
-        createcalendar(obj, 1);
-        $.ajax({
-            method: 'GET',
-            url: '/blueseal/xhr/EditorialPlanSocialFilterAjaxController',
-        }).done(function (res) {
-            let ret = JSON.parse(res);
-
-
-            $.each(ret.social, function (k, v,) {
-                $('#filterMedia').append('<div style ="background-color:' + ret.socialcolor[k] + ';"><i class="' + ret.socialicon[k] + '"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</i></div>');
-            });
+var eventColor;
+var obj = null;
+var typeView = 1;
+var facebookCampaignId = '';
+var groupInsertionId = '';
+var start='';
+var end='';
+$(document).ready(function () {
+    $(this).trigger('bs.load.photo');
+    createcalendar(obj, 1);
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/EditorialPlanSocialFilterAjaxController',
+    }).done(function (res) {
+        let ret = JSON.parse(res);
 
 
-        });
-
-    });
-    $('#selectAllSocial').click(function () {
-        $('#filterMedia input:checkbox').each(function () {
-            if ($(this).is(':checked')) {
-                $(this).prop('checked', false);
-            } else {
-                $(this).prop('checked', true);
-            }
-
-        })
-    });
-    $('#reload').on('click', function () {
-        location.reload();
-    });
-    $('#search').on('click', function () {
-        $('#calendar').fullCalendar('destroy');
-
-
-        let checkedSocial = [];
-        let checkedSocialName = [];
-        $('#filterMedia input:checked').each(function (i) {
-            checkedSocial[i] = $(this).val();
-            checkedSocialName[i] = $(this).attr('name');
+        $.each(ret.social, function (k, v,) {
+            $('#filterMedia').append('<div style ="background-color:' + ret.socialcolor[k] + ';"><i class="' + ret.socialicon[k] + '"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</i></div>');
         });
 
 
-        let url = window.location.href;
-        let id = url.substring(url.lastIndexOf('/') + 1);
+    });
 
-        const data = {
-            socialId: checkedSocial,
-            id: id
-        };
+});
+$('#selectAllSocial').click(function () {
+    $('#filterMedia input:checkbox').each(function () {
+        if ($(this).is(':checked')) {
+            $(this).prop('checked', false);
+        } else {
+            $(this).prop('checked', true);
+        }
+
+    })
+});
+$('#reload').on('click', function () {
+    location.reload();
+});
+$('#search').on('click', function () {
+    $('#calendar').fullCalendar('destroy');
+
+
+    let checkedSocial = [];
+    let checkedSocialName = [];
+    $('#filterMedia input:checked').each(function (i) {
+        checkedSocial[i] = $(this).val();
+        checkedSocialName[i] = $(this).attr('name');
+    });
+
+
+    let url = window.location.href;
+    let id = url.substring(url.lastIndexOf('/') + 1);
+
+    const data = {
+        socialId: checkedSocial,
+        id: id
+    };
+    $.ajax({
+        method: 'POST',
+        url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
+        data: data
+    }).success(function (data) {
+
+        obj = JSON.parse(data);
+
+        var TypePermission = obj[0].allShops;
+        createcalendar(obj, TypePermission);
+
+
+    }).fail(function (data) {
+        alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+        alert("responseText: " + xhr.responseText);
+    }).always(function (data) {
+
+    });
+
+});
+$('#detailed').on('click', function () {
+    $('#calendar').fullCalendar('destroy');
+    $('#appendDetailedChekbox').empty();
+    $('#appendSinteticChekbox').empty();
+    $('#appendDetailedChekbox').append('<i class="fa fa-check"></i>');
+    typeView = 1;
+
+    let checkedSocial = [];
+    let checkedSocialName = [];
+    $('#filterMedia input:checked').each(function (i) {
+        checkedSocial[i] = $(this).val();
+        checkedSocialName[i] = $(this).attr('name');
+    });
+
+
+    let url = window.location.href;
+    let id = url.substring(url.lastIndexOf('/') + 1);
+
+    const data = {
+        socialId: checkedSocial,
+        id: id
+    };
         $.ajax({
             method: 'POST',
             url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
@@ -202,11 +244,12 @@
 
         /* initialize the calendar
         -----------------------------------------------------------------*/
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-        if (TypePermission == "1") {
+
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var startDay = now.getFullYear() + "-" + (month) + "-" + (day)+'\T'+("0" + (now.getHours())).slice(-2)+':'+("0" + (now.getMinutes())).slice(-2);
+        var endDay = now.getFullYear() + "-" + (month) + "-" + (day)+'\T'+("0" + (now.getHours()+1)).slice(-2)+':'+("0" + (now.getMinutes())).slice(-2);
 
 
             var calendar = $('#calendar').fullCalendar({
@@ -232,7 +275,7 @@
                     eventColor = "";
                     bgTitle = '<div style="background-color:' + event.color + ';color:black;">';
                     switch (event.status) {
-                        case "chiamata":
+                        case "Richiesta":
                             bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
 
                             break;
@@ -240,11 +283,15 @@
                             bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
 
                             break;
-                        case "Completato":
+                        case "In Avanzamento":
                             bgRender = '<div style="background-color:#f22823 ;color:black;"">';
 
                             break;
-                        case "Fatturato":
+                        case "Completato":
+                            bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
+
+                            break;
+                        case "Completato das Modulo":
                             bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
 
                             break;
@@ -314,8 +361,8 @@
                     });
                     body.html(bodyContent);
 
-                    var start = $.fullCalendar.formatDate(start, "DD-MM-YYYY HH:mm:ss");
-                    var end = $.fullCalendar.formatDate(end, "DD-MM-YYYY HH:mm:ss");
+                    var start = $.fullCalendar.formatDate(start, "YYYY-MM-DD HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(end, "YYYY-MM-DD HH:mm:ss");
                     let bsModal1 = new $.bsModal('Invio', {
                         body: '<p>Inserisci  Attività</p>' +
                             `<div class="row">
@@ -337,6 +384,15 @@
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona lo il tipo di attività"
                                                     data-init-plugin="selectize">
+                                                    <option value="10">Realizzazione Post Social</option>
+                                                    <option value="11">Eseguita PostProduzione Prodotti</option>
+                                                    <option value="12">Creazione Home</option>
+                                                    <option value="13">Modifica dettagli prodotti</option>
+                                                    <option value="14">Creazione/Modifica saldi</option>
+                                                    <option value="15">Prenotazione manuale spedizione</option>
+                                                    <option value="16">Statistiche social</option> 
+                                                    <option value="17">Statistiche sito</option>
+                                                   
                                             </select>
                                         </div>
                                     </div>
@@ -368,8 +424,8 @@
                                             <label for="startDateWork">Data Inizio Attività</label>
                                             <input type="datetime-local" id="startDateWork" class="form-control"
                                                    placeholder="Inserisci la Data di Inizio "
-                                                   name="startDateWork" value="` + start + `"
-                                                   required="required">
+                                                   name="startDateWork" value="` + startDay + `"
+                                                   required="required"/>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -377,8 +433,8 @@
                                             <label for="endDateWork">Data Fine Attività </label>
                                             <input type="datetime-local" id="endDateWork" class="form-control"
                                                    placeholder="Inserisci la Data della Fine"
-                                                   name="endDateWork" value="` + end + `"
-                                                   required="required">
+                                                   name="endDateWork" value="` + endDay + `"
+                                                   required="required"/>
                                         </div>
                                     </div>
                                 <div class="col-md-4">
@@ -388,7 +444,10 @@
                                                     name="planningWorkStatusId" class="full-width selectpicker"
                                                     required="required"
                                                     placeholder="Seleziona lo Stato"
-                                                    data-init-plugin="selectize"></select>
+                                                    data-init-plugin="selectize">
+                                                    <option value="2"></option>
+                                                    <option value="5"></option>
+</select>
                                         </div>
                                 </div>
                                 </div>
@@ -592,12 +651,11 @@
                 },
 
 
-                eventDrop:
+                eventDrop:function (event) {
 
-                    function (event) {
-                        var newstart = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-                        var newend = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
 
+                        let newstart = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                        let newend = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
                         var title = event.title;
                         var planningWorkId = event.id;
                         var request = event.request;
@@ -611,7 +669,7 @@
                         var notifyEmail = event.notifyEmail;
 
                         $.ajax({
-                            url: '/blueseal/xhr/WorkingPlanCalendarEditAjaxController',
+                            url: '/blueseal/xhr/PLanningWorkEditAjaxController',
                             type: 'POST',
                             data: {
                                 title: title,
@@ -653,7 +711,7 @@
                     var notifyEmail = event.notifyEmail;
 
                     $.ajax({
-                        url: '/blueseal/xhr/WorkingPlanCalendarEditAjaxController',
+                        url: '/blueseal/xhr/PlanningWorkEditAjaxController',
                         type: 'POST',
                         data: {
                             title: title,
@@ -720,102 +778,10 @@
                 },
 
             });
-        } else {
-            var calendar = $('#calendar').fullCalendar({
-                lang: 'it',
-                //isRTL: true,
-                buttonHtml: {
-                    prev: '<i class="ace-icon fa fa-chevron-left"></i>',
-                    next: '<i class="ace-icon fa fa-chevron-right"></i>'
-                },
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                },
-                //obj that we get json result from ajax
-                events: obj,
-                textColor: 'black',
-                eventRender: function (event, element) {
-                    let visibleArgument;
-                    let visibleDescription;
-                    let visiblePhotoUrl;
-                    let visibleBodyEvent;
-                    let visibleNote;
-                    if (event.isVisibleDescription === "1") {
-                        visibleDescription = "<br/><b>Descrizione:</b>" + event.description;
-                    } else {
-                        visibleDescription = "";
-
-                    }
-                    if (event.isVisibleEditorialPlanArgument === "1") {
-                        visibleArgument = "<br/><b>Argomento:</b>" + event.argumentName;
-                    } else {
-                        visibleArgument = "";
-
-                    }
-                    if (event.isVisiblePhotoUrl === "1") {
-                        visiblePhotoUrl = "<br/><b>Immagine:</b>" + event.photoUrl;
-                    } else {
-                        visiblePhotoUrl = "";
-
-                    }
-                    if (event.isVisibleNote === "1") {
-                        visibleNote = "<br/><b>Argomento:</b>\"Note:</b>" + event.note;
-                    } else {
-                        visibleNote = "";
-
-                    }
-                    let bgRender = "#ffffff";
-                    switch (event.status) {
-                        case "Bozza":
-                            bgRender = '<div style="background-color:darkblue>';
-                            break;
-                        case "Approvata":
-                            bgRender = '<div style="background-color:darkorange">';
-                            break;
-                        case "Rifiutata":
-                            bgRender = '<div style="background-color:red">';
-                            break;
-                        case "Pubblicata":
-                            bgRender = '<div style="background-color:green">';
-                            break;
-
-                    }
 
 
-                    if (event.isEventVisible === "1") {
 
-                        element.find('.fc-title').append(bgRender + visibleDescription + visibleArgument +
-                            '"<br/><b>Piano Editoriale:</b>"' + event.titleEditorialPlan +
-                            '"<br/><b>Media utilizzato:</b>"' + event.socialName +
-                            '"<br/><b>Stato:</b>' + event.status + visibleNote + visiblePhotoUrl + "</div>");
-                    } else {
-                        element.find('.fc-content').hide();
-                        element.find('.fc-title').hide();
-
-
-                    }
-                },
-                editable: true,
-                selectable: true,
-                selectable: true,
-                selectHelper: true,
-                editable: true,
-                eventClick: function (event) {
-                    var editorialPlanDetailId = event.id;
-                    window.location.href = '/blueseal/editorial/modifica-post/' + editorialPlanDetailId;
-                }
-
-
-            });
-
-
-        }
     }
-
-
-});
 $('#cost').change(function () {
     let cost=parseFloat($('#cost').val());
     let hour=parseFloat($('#hour').val());
@@ -838,6 +804,7 @@ $('#hour').change(function () {
     $('#total').val(netTotalRow.toFixed(2));
 
 });
+
 (jQuery);
 
 

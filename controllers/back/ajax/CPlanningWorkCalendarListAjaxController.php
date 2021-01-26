@@ -34,16 +34,19 @@ class CPlanningWorkCalendarListAjaxController extends AAjaxController
                 $data[$i]["end"] = $singleDetail->endDateWork;
                 switch ($singleDetail->planningWorkStatusId) {
                     case "1":
-                        $status = "chiamata";
+                        $status = "Richiesta";
                         break;
                     case "2":
                         $status = "in Programmazione";
                         break;
                     case "3":
-                        $status = "Completato";
+                        $status = "in Avanzamento";
                         break;
                     case "4":
-                        $status = "Fatturato";
+                        $status = "Completato";
+                        break;
+                    case "5":
+                        $status = "Completato da Modulo";
                         break;
                 }
                 $data[$i]["status"] = $status;

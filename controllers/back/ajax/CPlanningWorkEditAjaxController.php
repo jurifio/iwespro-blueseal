@@ -59,12 +59,13 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             if ($endDateWork == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data fine Lavoro non selezionata</i>';
             }
-            $notifyEmail = $data['notifyEmail'];
+            $notifyEmail = (isset($data['notifyEmail'])?$data['notifyEmail']:'0');
             $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
             $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
 
 
             $planningWork = \Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id'=>$planningWorkId]);
+            $planningType=$planningWork->planningType;
             $planningWork->title = $data['title'];
             $planningWork->startDateWork = $newStartDate;
             $planningWork->endDateWork = $newEndDate;
@@ -77,39 +78,69 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWork->title = $data['title'];
             $planningWork->request = $data['request'];
             $planningWork->solution = $data['solution'];
-            $planningWork->hour = (is_null($data['hour']))?'0.00':$data['hour'];
-            $planningWork->cost = (is_null($data['cost']))?'0.00':$data['cost'];
+            $planningWork->hour = (isset($data['hour']))?$data['hour']:'0.00';
+            $planningWork->cost = (isset($data['cost']))?$data['cost']:'0.00';
             $planningWork->percentageStatus = $data['percentageStatus'];
+            if($data['planningWorkStatusId']=='5' || $data['planningWorkStatusId']=='4'){
+                $planningWork->close=1;
+            }
             $planningWork->update();
-            $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id'=>$data['planningWorkStatusId']]);
-            $message=$planningWorkStatus->text;
-            $subject=$planningWorkStatus->subject;
-            $newStartMailDate=(new \DateTime($startDateWork))->format('d-m-Y');
-            $newEndMailDate=(new \DateTime($endDateWork))->format('d-m-Y');
-            str_replace('{planningWorkId}',$planningWorkId,$subject);
-            str_replace('{planningWorkId}',$planningWorkId,$message);
-            str_replace('{startDateWork}',$newStartMailDate,$message);
-            str_replace('{endDateWork}',$newEndMailDate,$message);
-            str_replace('{percentageStatus}',$data['percentageStatus'],$message);
+            if($planningType!=2) {
+                $planningWorkStatus = \Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id' => $data['planningWorkStatusId']]);
+                $message = $planningWorkStatus->text;
+                $subject = $planningWorkStatus->subject;
+                $newStartMailDate = (new \DateTime($startDateWork))->format('d-m-Y');
+                $newEndMailDate = (new \DateTime($endDateWork))->format('d-m-Y');
+                str_replace('{planningWorkId}',$planningWorkId,$subject);
+                str_replace('{planningWorkId}',$planningWorkId,$message);
+                str_replace('{startDateWork}',$newStartMailDate,$message);
+                str_replace('{endDateWork}',$newEndMailDate,$message);
+                str_replace('{percentageStatus}',$data['percentageStatus'],$message);
+                str_replace('{request}',$data['request'],$message);
+                str_replace('{solution}',$data['solution'],$message);
 
-            $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
-            $planningWorkEvent->planningWorkId = $planningWorkId;
-            $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
-            $planningWorkEvent->mail=$message;
-            $planningWorkEvent->notifyEmail=$notifyEmail;
-            $planingWorkEvent->percentageStatus = $data['percentageStatus'];
-            $planningWorkEvent->insert();
-            if ($notifyEmail == "1") {
+                $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
+                $planningWorkEvent->planningWorkId = $planningWorkId;
+                $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
+                $planningWorkEvent->planningWorkTypeId=$data['planningWorkTypeId'];
+                $planningWorkEvent->mail = $message;
+                $planningWorkEvent->notifyEmail = $notifyEmail;
+                $planingWorkEvent->percentageStatus = $data['percentageStatus'];
+                $planningWorkEvent->insert();
+            }else{
+                $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id' => $data['planningWorkTypeId']]);
+                $message = $planningWorkType->text;
+                $subject = $planningWorkType->subject;
+                $newStartMailDate = (new \DateTime($startDateWork))->format('d-m-Y');
+                $newEndMailDate = (new \DateTime($endDateWork))->format('d-m-Y');
+                str_replace('{planningWorkId}',$planningWorkId,$subject);
+                str_replace('{planningWorkId}',$planningWorkId,$message);
+                str_replace('{startDateWork}',$newStartMailDate,$message);
+                str_replace('{endDateWork}',$newEndMailDate,$message);
+                str_replace('{percentageStatus}',$data['percentageStatus'],$message);
+                str_replace('{request}',$data['request'],$message);
+                str_replace('{solution}',$data['solution'],$message);
 
-                if (ENV != 'dev') {
-                    /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
-                    $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
+                $planningWorkEvent->planningWorkId = $planningWorkId;
+                $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
+                $planningWorkEvent->planningWorkTypeId=$data['planningWorkTypeId'];
+                $planningWorkEvent->mail = $message;
+                $planningWorkEvent->notifyEmail = $notifyEmail;
+                $planingWorkEvent->percentageStatus = $data['percentageStatus'];
+                $planningWorkEvent->insert();
+            }
+            /*     if ($notifyEmail == "1") {
+
+               if (ENV != 'dev') {
+                      /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
+                   /* $emailRepo = \Monkey::app()->repoFactory->create('Email');
                     if (!is_array($to)) {
                         $to = [$emailAdmin];
                     }
                     $emailRepo->newMail('Iwes IT Department <services@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                 }
-            }
+            }*/
             return 'inserimento eseguito';
         }catch(\Throwable $e){
             return 'Errore:'.$e;
