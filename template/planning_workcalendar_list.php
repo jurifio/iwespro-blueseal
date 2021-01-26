@@ -63,17 +63,6 @@
                 data-placement="bottom"
                 data-href="/blueseal/planning/aggiungi"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-plus"
-                data-permission="allShops||worker"
-                data-class="btn btn-default"
-                data-rel="noopener"
-                data-target="_blank"
-                data-title="Aggiungi Attività"
-                data-placement="bottom"
-                data-href="/blueseal/planning/aggiungi"
-        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
