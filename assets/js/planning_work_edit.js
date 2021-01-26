@@ -75,7 +75,7 @@
                 },
                 onInitialize: function () {
                     var selectize = this;
-                    selectize.setValue(planningWorkTypeId);
+                    selectize.setValue($('#planningWorkTypeIdSelected').val());
                 }
             });
 
