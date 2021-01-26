@@ -4017,6 +4017,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/planning/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/planning/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkEditController"

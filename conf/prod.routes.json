@@ -3948,6 +3948,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/planning/aggiungi(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkAddController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/planning/calendario(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkCalendarListController"
