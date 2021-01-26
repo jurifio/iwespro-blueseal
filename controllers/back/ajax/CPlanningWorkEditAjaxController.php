@@ -81,11 +81,27 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWork->cost = (is_null($data['cost']))?'0.00':$data['cost'];
             $planningWork->percentageStatus = $data['percentageStatus'];
             $planningWork->update();
+            $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id'=>$data['planningWorkStatusId']]);
+            $message=$planningWorkStatus->text;
+            $subject=$planningWorkStatus->subject;
+            $newStartMailDate=(new \DateTime($startDateWork))->format('d-m-Y');
+            $newEndMailDate=(new \DateTime($endDateWork))->format('d-m-Y');
+            str_replace('{planningWorkId}',$planningWorkId,$subject);
+            str_replace('{planningWorkId}',$planningWorkId,$message);
+            str_replace('{startDateWork}',$newStartMailDate,$message);
+            str_replace('{endDateWork}',$newEndMailDate,$message);
+            str_replace('{percentageStatus}',$data['percentageStatus'],$message);
+
+            $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
+            $planningWorkEvent->planningWorkId = $planningWorkId;
+            $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
+            $planningWorkEvent->mail=$message;
+            $planningWorkEvent->notifyEmail=$notifyEmail;
+            $planingWorkEvent->percentageStatus = $data['percentageStatus'];
+            $planningWorkEvent->insert();
             if ($notifyEmail == "1") {
 
                 if (ENV != 'dev') {
-                    $subject='Modifica Attivita per il cliente '.$companyName;
-                        $message='Richiesta:<br>'.$data['request'];
                     /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
                     if (!is_array($to)) {

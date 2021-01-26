@@ -81,11 +81,25 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             $planningWork->dateCreate = $dateNow;
             $planningWork->percentageStatus = $data['percentageStatus'];
             $planningWork->insert();
+            $res = \Monkey::app()->dbAdapter->query('select max(id) as planningWorkId from PlanningWork ',[])->fetchAll();
+            foreach ($res as $result) {
+                $planningWorkId = $result['planningWorkId'];
+            }
+            $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id'=>$data['planningWorkStatusId']]);
+            $message=$planningWorkStatus->text;
+            $subject=$planningWorkStatus->subject;
+            str_replace('{planningWorkId}',$planningWorkId,$subject);
+            str_replace('{planningWorkId}',$planningWorkId,$message);
+            $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
+            $planningWorkEvent->planningWorkId = $planningWorkId;
+            $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
+            $planningWorkEvent->mail=$message;
+            $planningWorkEvent->notifyEmail=$notifyEmail;
+            $planingWorkEvent->percentageStatus = $data['percentageStatus'];
+            $planningWorkEvent->insert();
             if ($notifyEmail == "1") {
 
                 if (ENV != 'dev') {
-                    $subject='Inserimento Attivita per il cliente '.$companyName;
-                        $message='Richiesta:<br>'.$data['request'];
                     /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
                     if (!is_array($to)) {
