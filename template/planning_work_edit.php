@@ -138,17 +138,169 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="percentageStatus">Percentuale. di Completamento</label>
-                                            <input id="percentageStatus" class="form-control" type="text"
-                                                   name="percentageStatus" value="<?php echo $pWork->percentageStatus ?>"
-                                                   placeholder="Inserisci il prezzo"/>
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="percentageStatus">% di Completamento</label>
+                                                <select id="percentageStatus" name="percentageStatus"
+                                                        required="required"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona lo il tipo di attività"
+                                                        data-init-plugin="selectize">
+                                                    <?php switch ($pWork->percentageStatus) {
+                                                        case '0':
+                                                            echo '<option selected="selected" value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '10':
+                                                            echo '<option  value="0">0%</option>';
+                                                            echo '<option  selected="selected" value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '20':
+                                                            echo '<option  value="0">0%</option>';
+                                                            echo '<option  value="10">10%</option>';
+                                                            echo '<option  selected="selected"  value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '30':
+                                                            echo '<option  value="0">0%</option>';
+                                                            echo '<option  value="10">10%</option>';
+                                                            echo '<option   value="20">20%</option>';
+                                                            echo '<option selected="selected"  value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '40':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option selected="selected" value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '50':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option selected="selected" value="50">50%</option>';
+                                                            echo '<option value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '60':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option selected="selected" value="60">60%</option>';
+                                                            echo '<option value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '70':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option  value="60">60%</option>';
+                                                            echo '<option selected="selected" value="70">70%</option>';
+                                                            echo '<option value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '80':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option  value="60">60%</option>';
+                                                            echo '<option  value="70">70%</option>';
+                                                            echo '<option  selected="selected" value="80">80%</option>';
+                                                            echo '<option value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '90':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option  value="60">60%</option>';
+                                                            echo '<option  value="70">70%</option>';
+                                                            echo '<option  value="80">80%</option>';
+                                                            echo '<option   selected="selected" value="90">90%</option>';
+                                                            echo '<option value="100">100%</option>';
+                                                            break;
+                                                        case '100':
+                                                            echo '<option value="0">0%</option>';
+                                                            echo '<option value="10">10%</option>';
+                                                            echo '<option value="20">20%</option>';
+                                                            echo '<option value="30">30%</option>';
+                                                            echo '<option value="40">40%</option>';
+                                                            echo '<option value="50">50%</option>';
+                                                            echo '<option  value="60">60%</option>';
+                                                            echo '<option  value="70">70%</option>';
+                                                            echo '<option  value="80">80%</option>';
+                                                            echo '<option   value="90">90%</option>';
+                                                            echo '<option selected="selected" value="100">100%</option>';
+                                                            break;
+
+                                                    } ?>
+
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="hour">Ore lavorate</label>
                                             <input id="hour" class="form-control" type="text"
-                                                   name="hour" value="<?php echo $pWork->hour;?>"/>
+                                                   name="hour" value="<?php echo $pWork->hour; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">

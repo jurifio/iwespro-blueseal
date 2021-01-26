@@ -52,26 +52,28 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione">
-        <?php  $p = \Monkey::app()->getUser()->hasPermission('allShops');
-        if ($p == true) {?>
         <bs-toolbar-button
-                data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-
-        <bs-toolbar-button
-                data-remote="bs.lists.create.editorialplan"
-        ></bs-toolbar-button>
-
-        <bs-toolbar-button
-                data-remote="bs.lists.modify.editorialplan"
-
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="allShops||worker"
+                data-class="btn btn-default"
+                data-rel="noopener"
+                data-target="_blank"
+                data-title="Aggiungi Attività"
+                data-placement="bottom"
+                data-href="/blueseal/planning/aggiungi"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.lists.delete.editorialplan"
-
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="allShops||worker"
+                data-class="btn btn-default"
+                data-rel="noopener"
+                data-target="_blank"
+                data-title="Aggiungi Attività"
+                data-placement="bottom"
+                data-href="/blueseal/planning/aggiungi"
         ></bs-toolbar-button>
-
-        <?php }?>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

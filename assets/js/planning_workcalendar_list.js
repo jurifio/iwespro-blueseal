@@ -252,7 +252,6 @@
                     }
 
 
-
                     if (typeView == 1) {
                         element.find('.fc-title').append(bgTitle +
                             '<b>' + event.title +
@@ -369,7 +368,7 @@
                                             <label for="startDateWork">Data Inizio Attività</label>
                                             <input type="datetime-local" id="startDateWork" class="form-control"
                                                    placeholder="Inserisci la Data di Inizio "
-                                                   name="startDateWork" value="`+start+`"
+                                                   name="startDateWork" value="` + start + `"
                                                    required="required">
                                         </div>
                                     </div>
@@ -378,7 +377,7 @@
                                             <label for="endDateWork">Data Fine Attività </label>
                                             <input type="datetime-local" id="endDateWork" class="form-control"
                                                    placeholder="Inserisci la Data della Fine"
-                                                   name="endDateWork" value="`+end+`"
+                                                   name="endDateWork" value="` + end + `"
                                                    required="required">
                                         </div>
                                     </div>
@@ -415,9 +414,25 @@
                                 <div class="row">
                                 <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="percentageStatus">Percentuale. di Completamento</label>
-                                            <input id="percentageStatus" class="form-control" type="text"
-                                                  name="cost" placeholder="Inserisci il prezzo" />
+                                           <div class="form-group form-group-default selectize-enabled">
+                                            <label for="percentageStatus">% di Completamento</label>
+                                            <select id="percentageStatus" name="percentageStatus"
+                                                    required="required"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Seleziona lo il tipo di attività"
+                                                    data-init-plugin="selectize">
+                                                <option value="10">10%</option>
+                                                <option value="20">20%</option>
+                                                <option value="30">30%</option>
+                                                <option value="40">40%</option>
+                                                <option value="50">50%</option>
+                                                <option value="60">60%</option>
+                                                <option value="70">70%</option>
+                                                <option value="80">80%</option>
+                                                <option value="90">90%</option>
+                                                <option value="100">100%</option>
+                                            </select>
+                                        </div>
                                         </div>
                                     </div>
                                    <div class="col-md-3">
@@ -474,13 +489,13 @@
                                 item: function (item, escape) {
                                     return '<div>' +
                                         '<span class="label">' + escape(item.companyName) + '</span> - ' +
-                                        '<span class="caption">contatto:' + escape(item.contactName) + ' tel: ' + escape(item.phoneAdmin) +  ' email' + escape(item.emailAdmin) + '</span>' +
+                                        '<span class="caption">contatto:' + escape(item.contactName) + ' tel: ' + escape(item.phoneAdmin) + ' email' + escape(item.emailAdmin) + '</span>' +
                                         '</div>'
                                 },
                                 option: function (item, escape) {
                                     return '<div>' +
                                         '<span class="label">' + escape(item.companyName) + '</span> - ' +
-                                        '<span class="caption">contatto:' + escape(item.contactName) + ' tel: ' + escape(item.phoneAdmin) +  ' email' + escape(item.emailAdmin) + '</span>' +
+                                        '<span class="caption">contatto:' + escape(item.contactName) + ' tel: ' + escape(item.phoneAdmin) + ' email' + escape(item.emailAdmin) + '</span>' +
                                         '</div>'
                                 }
                             }
@@ -525,16 +540,13 @@
                     });
 
 
-
-
-
                     bsModal1.showCancelBtn();
                     bsModal1.setOkEvent(function () {
 
                         const data = {
                             title: $('#title').val(),
                             start: $('#startDateWork').val(),
-                            end:$('#endDateWork').val(),
+                            end: $('#endDateWork').val(),
                             planningWorkStatusId: $('#planningWorkStatusId').val(),
                             billRegistryClientId: $('#billRegistryClientId').val(),
                             planningWorkTypeId: $('#planningWorkTypeId').val(),
@@ -544,7 +556,7 @@
                             cost: $('#cost').val(),
                             percentageStatus: $('#percentageStatus').val(),
                             notifyEmail: $('#notifyEmail').val(),
-                            type:'formCalendar',
+                            type: 'formCalendar',
 
 
                         };
@@ -571,7 +583,7 @@
                 },
                 editable: true,
                 eventClick: function (event) {
-                    let urlDestination= '/blueseal/planning/modifica/' + event.id;
+                    let urlDestination = '/blueseal/planning/modifica/' + event.id;
 
                     window.open(
                         urlDestination,
@@ -592,9 +604,9 @@
                         var solution = event.solution;
                         var cost = event.cost
                         var hour = event.hour;
-                        var billRegistryClientId=event.billRegistryClientId;
-                        var planningWorkStatusId=event.planningWorkStatusId;
-                        var planningWorkTypeId=event.planningWorkTypeId;
+                        var billRegistryClientId = event.billRegistryClientId;
+                        var planningWorkStatusId = event.planningWorkStatusId;
+                        var planningWorkTypeId = event.planningWorkTypeId;
                         var percentageStatus = event.percentageStatus;
                         var notifyEmail = event.notifyEmail;
 
@@ -607,14 +619,14 @@
                                 end: newend,
                                 request: request,
                                 solution: solution,
-                                billRegistryClientId:billRegistryClientId,
+                                billRegistryClientId: billRegistryClientId,
                                 planningWorkId: planningWorkId,
-                                cost:cost,
-                                hour:hour,
+                                cost: cost,
+                                hour: hour,
                                 notifyEmail: notifyEmail,
                                 planningWorkStatusId: planningWorkStatusId,
-                                planningWorkTypeId:planningWorkTypeId,
-                                percentageStatus:percentageStatus
+                                planningWorkTypeId: planningWorkTypeId,
+                                percentageStatus: percentageStatus
                             },
                             success: function () {
                                 calendar.fullCalendar('refetchEvents');
@@ -634,9 +646,9 @@
                     var solution = event.solution;
                     var cost = event.cost
                     var hour = event.hour;
-                    var billRegistryClientId=event.billRegistryClientId;
-                    var planningWorkStatusId=event.planningWorkStatusId;
-                    var planningWorkTypeId=event.planningWorkTypeId;
+                    var billRegistryClientId = event.billRegistryClientId;
+                    var planningWorkStatusId = event.planningWorkStatusId;
+                    var planningWorkTypeId = event.planningWorkTypeId;
                     var percentageStatus = event.percentageStatus;
                     var notifyEmail = event.notifyEmail;
 
@@ -649,14 +661,14 @@
                             end: newend,
                             request: request,
                             solution: solution,
-                            billRegistryClientId:billRegistryClientId,
+                            billRegistryClientId: billRegistryClientId,
                             planningWorkId: planningWorkId,
-                            cost:cost,
-                            hour:hour,
+                            cost: cost,
+                            hour: hour,
                             notifyEmail: notifyEmail,
                             planningWorkStatusId: planningWorkStatusId,
-                            planningWorkTypeId:planningWorkTypeId,
-                            percentageStatus:percentageStatus
+                            planningWorkTypeId: planningWorkTypeId,
+                            percentageStatus: percentageStatus
                         },
                         success: function () {
                             calendar.fullCalendar('refetchEvents');
@@ -685,7 +697,7 @@
                 eventMouseover: function (event) {
 
 
-                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + event.title + '</br>' + 'richiesta: '  + event.request + '</br>' + 'soluzione: ' +  event.solution + '</br></div>';
+                    tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:#ffffff;position:absolute;z-index:10001;padding:10px 10px 10px 10px ;  line-height: 200%;">' + 'titolo: ' + event.title + '</br>' + 'richiesta: ' + event.request + '</br>' + 'soluzione: ' + event.solution + '</br></div>';
 
 
                     $("body").append(tooltip);
