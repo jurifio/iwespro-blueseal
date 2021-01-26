@@ -366,19 +366,19 @@
                                 <div class="row">
                                 <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="startWorkDate">Data Inizio Attività</label>
-                                            <input type="datetime-local" id="startWorkDate" class="form-control"
+                                            <label for="startDateWork">Data Inizio Attività</label>
+                                            <input type="datetime-local" id="startDateWork" class="form-control"
                                                    placeholder="Inserisci la Data di Inizio "
-                                                   name="startWorkDate" value="`+start+`"
+                                                   name="startDateWork" value="`+start+`"
                                                    required="required">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="endWorkDate">Data Fine Attività </label>
-                                            <input type="datetime-local" id="endWorkDate" class="form-control"
+                                            <label for="endDateWork">Data Fine Attività </label>
+                                            <input type="datetime-local" id="endDateWork" class="form-control"
                                                    placeholder="Inserisci la Data della Fine"
-                                                   name="endWorkDate" value="`+end+`"
+                                                   name="endDateWork" value="`+end+`"
                                                    required="required">
                                         </div>
                                     </div>
@@ -533,8 +533,8 @@
 
                         const data = {
                             title: $('#title').val(),
-                            start: $('#startWorkDate').val(),
-                            end:$('#endWorkDate').val(),
+                            start: $('#startDateWork').val(),
+                            end:$('#endDateWork').val(),
                             planningWorkStatusId: $('#planningWorkStatusId').val(),
                             billRegistryClientId: $('#billRegistryClientId').val(),
                             planningWorkTypeId: $('#planningWorkTypeId').val(),

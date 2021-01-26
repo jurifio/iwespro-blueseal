@@ -32,8 +32,6 @@ class CPlanningWorkEditController extends ARestrictedAccessRootController
     {
         /** @var ARepo $pWorkRepo */
         $pWorkRepo = \Monkey::app()->repoFactory->create('PlanningWork');
-        /** @var ARepo $editorialPlanDetailRepo */
-        $editorialPlanDetailRepo=\Monkey::app()->repoFactory->create('EditorialPlanDetail');
         $planningWorkId =  \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $pWork=$pWorkRepo->findOneBy(['id'=>$planningWorkId]);
 

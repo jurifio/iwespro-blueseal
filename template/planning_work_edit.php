@@ -79,19 +79,20 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="startWorkDate">Data Inizio Attività</label>
-                                            <input type="datetime-local" id="startWorkDate" class="form-control"
+                                            <label for="startDateWork">Data Inizio Attività</label>
+                                            <input type="datetime-local" id="startDateWork" class="form-control"
                                                    placeholder="Inserisci la Data di Inizio "
-                                                   name="startWorkDate" value="<?php echo $pWork->startWorkDate?>"
+                                                   name="startDateWork" value="<?php echo (new \DateTime($pWork->startDateWork))->format('Y-m-d\TH:i');?>"
                                                    required="required">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="endWorkDate">Data Fine Attività </label>
-                                            <input type="datetime-local" id="endWorkDate" class="form-control"
+                                            <label for="endDateWork">Data Fine Attività </label>
+                                            <input type="datetime-local" id="endDateWork" class="form-control"
                                                    placeholder="Inserisci la Data della Fine"
-                                                   name="endWorkDate" value="<?php echo $pWork->endWorkDate?>"
+                                            <?php echo (new \DateTime($pWork->endDateWork))->format('Y-m-d\TH:i');?>
+                                                   name="endDateWork" value="<?php echo (new \DateTime($pWork->endDateWork))->format('Y-m-d\TH:i');?>"
                                                    required="required">
                                         </div>
                                     </div>

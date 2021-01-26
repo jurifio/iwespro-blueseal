@@ -49,12 +49,12 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             if ($planningWorkTypeId == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Tipo attività  non Selezionato</i>';
             }
-            $startWorkDate = $data['start'];
-            if ($startWorkDate == '') {
+            $startDateWork = $data['start'];
+            if ($startDateWork == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data inizio Lavoro non selezionata</i>';
             }
-            $endWorkDate = $data['end'];
-            if ($endWorkDate == '') {
+            $endDateWork = $data['end'];
+            if ($endDateWork == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data fine Lavoro non selezionata</i>';
             }
             $notifyEmail = $data['notifyEmail'];
