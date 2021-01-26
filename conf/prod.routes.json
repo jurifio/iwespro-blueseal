@@ -3932,6 +3932,22 @@
             ]
         },
         {
+            "pattern": "/blueseal/planning/modifica/:id(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkEditController"
+            },
+            "filters": {
+                "id": "[0-9]+"
+            },
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/planning/calendario(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkCalendarListController"
