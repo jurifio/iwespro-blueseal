@@ -35,6 +35,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $data = \Monkey::app()->router->request()->getRequestData();
 
             $planningWorkId = $data['planningWorkStatusId'];
+            $title=$data['title'];
             if ($title == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> titolo non compilato</i>';
             }
@@ -59,13 +60,14 @@ class CPlanningWorkEditAjaxController extends AAjaxController
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data fine Lavoro non selezionata</i>';
             }
             $notifyEmail = $data['notifyEmail'];
-
+            $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
+            $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
 
 
             $planningWork = \Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id'=>$planningWorkId]);
             $planningWork->title = $data['title'];
-            $planningWork->startDateWork = $data['startDateWork'];
-            $planningWork->endDateWork = $data['endDateWork'];
+            $planningWork->startDateWork = $newStartDate;
+            $planningWork->endDateWork = $newEndDate;
             $planningWork->billRegistryClientId = $data['billRegistryClientId'];
             $bri=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$data['billRegistryClientId']]);
             $companyName = $bri->companyName;
@@ -75,8 +77,8 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWork->title = $data['title'];
             $planningWork->request = $data['request'];
             $planningWork->solution = $data['solution'];
-            $planningWork->hour = $data['hour'];
-            $planningWork->cost = $data['cost'];
+            $planningWork->hour = (is_null($data['hour']))?'0.00':$data['hour'];
+            $planningWork->cost = (is_null($data['cost']))?'0.00':$data['cost'];
             $planningWork->percentageStatus = $data['percentageStatus'];
             $planningWork->update();
             if ($notifyEmail == "1") {

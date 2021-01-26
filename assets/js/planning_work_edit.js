@@ -123,8 +123,8 @@
 })(jQuery);
 
     $(document).on('bs.post.update', function () {
-        let bsModal = new $.bsModal('Salva Post', {
-            body: '<div><p>Premere ok per Salvare il Piano Editoriale' +
+        let bsModal = new $.bsModal('Salva Attvità', {
+            body: '<div><p>Premere ok per Salvare' +
                 '</div>'
         });
 

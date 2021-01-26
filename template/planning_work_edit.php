@@ -140,21 +140,21 @@
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="percentageStatus">Percentuale. di Completamento</label>
                                             <input id="percentageStatus" class="form-control" type="text"
-                                                   name="cost" value="<?php echo $pWork->percentageStatus ?>"
+                                                   name="percentageStatus" value="<?php echo $pWork->percentageStatus ?>"
                                                    placeholder="Inserisci il prezzo"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="hour">Ore lavorate</label>
-                                            <input id="hour" class="form-control" type="number"
-                                                   name="hour" step="0.01" value="<?php echo $pWork->hour ?>" min="0"/>
+                                            <input id="hour" class="form-control" type="text"
+                                                   name="hour" value="<?php echo $pWork->hour;?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="cost">Costo</label>
-                                            <input id="cost" class="form-control" type="text" value="0.00"
+                                            <input id="cost" class="form-control" type="text"
                                                    name="cost" value="<?php echo $pWork->cost ?>"
                                                    placeholder="Inserisci il prezzo"/>
                                         </div>
