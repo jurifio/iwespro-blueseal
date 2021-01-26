@@ -84,7 +84,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             if ($notifyEmail == "1") {
 
                 if (ENV != 'dev') {
-                    $subject='Inserimento Attivita per il cliente '.$companyName;
+                    $subject='Modifica Attivita per il cliente '.$companyName;
                         $message='Richiesta:<br>'.$data['request'];
                     /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
