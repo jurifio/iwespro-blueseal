@@ -143,7 +143,7 @@
                                                 <select id="percentageStatus" name="percentageStatus"
                                                         required="required"
                                                         class="full-width selectpicker"
-                                                        placeholder="Seleziona lo il tipo di attività"
+                                                        placeholder="Seleziona la percentuale"
                                                         data-init-plugin="selectize">
                                                     <?php switch ($pWork->percentageStatus) {
                                                         case '0':

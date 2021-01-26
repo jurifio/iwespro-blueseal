@@ -108,6 +108,28 @@
     });
 
 })(jQuery);
+$('#cost').change(function () {
+    let cost=parseFloat($('#cost').val());
+    let hour=parseFloat($('#hour').val());
+
+    let netTotalRow=0;
+
+        netTotalRow=cost*hour;
+
+    $('#total').val(netTotalRow.toFixed(2));
+
+});
+$('#hour').change(function () {
+    let cost=parseFloat($('#cost').val());
+    let hour=parseFloat($('#hour').val());
+
+    let netTotalRow=0;
+
+    netTotalRow=cost*hour;
+
+    $('#total').val(netTotalRow.toFixed(2));
+
+});
 
     $(document).on('bs.post.insert', function () {
         let bsModal = new $.bsModal('Salva Attvità', {
