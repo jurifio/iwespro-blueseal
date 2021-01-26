@@ -47,7 +47,8 @@
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="planningWorkTypeId">Seleziona il tipo di attività </label>
-                                            <select id="planningWorkTypeId" name="planningWorkTypeId" required="required"
+                                            <select id="planningWorkTypeId" name="planningWorkTypeId"
+                                                    required="required"
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona lo il tipo di attività"
                                                     data-init-plugin="selectize">
@@ -58,7 +59,8 @@
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="title">Titolo</label>
                                             <input id="title" class="form-control" type="text"
-                                                   placeholder="Inserisci il titolo" name="titleEvent" value="<?php echo $pWork->title?>"
+                                                   placeholder="Inserisci il titolo" name="titleEvent"
+                                                   value="<?php echo $pWork->title ?>"
                                                    required="required">
                                         </div>
                                     </div>
@@ -69,8 +71,13 @@
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona"
                                                     data-init-plugin="selectize">
-                                                <option value="0">Non Inviare la Notifica</option>
-                                                <option value="1">Invia la Notifica</option>
+                                                <?php if ($pWork->notifyEmail == 1) {
+                                                    echo '<option value="0" >Non Inviare la Notifica</option>';
+                                                    echo '<option value="1" selected="selected">Invia la Notifica</option>';
+                                                } else {
+                                                    echo '<option value="0" selected="selected">Non Inviare la Notifica</option>';
+                                                    echo '<option value="1" >Invia la Notifica</option>';
+                                                } ?>
 
                                             </select>
                                         </div>
@@ -82,7 +89,8 @@
                                             <label for="startDateWork">Data Inizio Attività</label>
                                             <input type="datetime-local" id="startDateWork" class="form-control"
                                                    placeholder="Inserisci la Data di Inizio "
-                                                   name="startDateWork" value="<?php echo (new \DateTime($pWork->startDateWork))->format('Y-m-d\TH:i');?>"
+                                                   name="startDateWork"
+                                                   value="<?php echo (new \DateTime($pWork->startDateWork))->format('Y-m-d\TH:i'); ?>"
                                                    required="required">
                                         </div>
                                     </div>
@@ -91,8 +99,9 @@
                                             <label for="endDateWork">Data Fine Attività </label>
                                             <input type="datetime-local" id="endDateWork" class="form-control"
                                                    placeholder="Inserisci la Data della Fine"
-                                            <?php echo (new \DateTime($pWork->endDateWork))->format('Y-m-d\TH:i');?>
-                                                   name="endDateWork" value="<?php echo (new \DateTime($pWork->endDateWork))->format('Y-m-d\TH:i');?>"
+                                                <?php echo (new \DateTime($pWork->endDateWork))->format('Y-m-d\TH:i'); ?>
+                                                   name="endDateWork"
+                                                   value="<?php echo (new \DateTime($pWork->endDateWork))->format('Y-m-d\TH:i'); ?>"
                                                    required="required">
                                         </div>
                                     </div>
@@ -113,7 +122,7 @@
                                             <label for="request">Richiesta</label>
                                             <textarea id="request" cols="60" rows="10"
                                                       placeholder="Inserisci la richiesta"
-                                                      name="description"><?php echo $pWork->request?></textarea>
+                                                      name="description"><?php echo $pWork->request ?></textarea>
                                         </div>
                                     </div>
 
@@ -122,7 +131,7 @@
                                             <label for="solution">Soluzione</label>
                                             <textarea id="solution" cols="60" rows="10"
                                                       placeholder="Inserisci la soluzione"
-                                                      name="description"><?php echo $pWork->solution?></textarea>
+                                                      name="description"><?php echo $pWork->solution ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -131,28 +140,31 @@
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="percentageStatus">Percentuale. di Completamento</label>
                                             <input id="percentageStatus" class="form-control" type="text"
-                                                   name="cost" value="<?php echo $pWork->percentageStatus?>" placeholder="Inserisci il prezzo" />
+                                                   name="cost" value="<?php echo $pWork->percentageStatus ?>"
+                                                   placeholder="Inserisci il prezzo"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="hour">Ore lavorate</label>
                                             <input id="hour" class="form-control" type="number"
-                                                   name="hour" step="0.01" value="<?php echo $pWork->hour?>" min="0"/>
+                                                   name="hour" step="0.01" value="<?php echo $pWork->hour ?>" min="0"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="cost">Costo</label>
                                             <input id="cost" class="form-control" type="text" value="0.00"
-                                                   name="cost" value="<?php echo $pWork->cost?>" placeholder="Inserisci il prezzo" />
+                                                   name="cost" value="<?php echo $pWork->cost ?>"
+                                                   placeholder="Inserisci il prezzo"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="total">Totale</label>
-                                            <input id="total" class="form-control" type="text" value="<?php echo number_format(($pWork->hour*$pWork->cost),'2','.','')?>"
-                                                   name="total" placeholder="totale" />
+                                            <input id="total" class="form-control" type="text"
+                                                   value="<?php echo number_format(($pWork->hour * $pWork->cost),'2','.','') ?>"
+                                                   name="total" placeholder="totale"/>
                                         </div>
                                     </div>
                                 </div>
