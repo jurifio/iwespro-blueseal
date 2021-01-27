@@ -37,6 +37,8 @@ class CPlanningWorkListAjaxController extends AAjaxController
        t1.dateUpdate as dateUpdate,
        t1.hour as hour,
        t1.cost as cost,
+       pt.name as planningWorkType,
+       if(t1.planningType=1,"da Ticket","da Modulo") as planningType,
        t1.percentageStatus as percentageStatus,
        format((t1.cost*t1.hour),2) as total,
        `st`.`name` as status,
@@ -45,7 +47,8 @@ class CPlanningWorkListAjaxController extends AAjaxController
                     FROM `PlanningWork` t1 join Shop s on t1.shopId=s.id 
                     left join BillRegistryClient brc on t1.billRegistryClientId=brc.id
                     left join BillRegistryInvoice bri on t1.billRegistryInvoiceId=bri.id    
-                    join PlanningWorkStatus st on t1.planningWorkStatusId=st.id order by t1.startDateWork DESC';
+                    join PlanningWorkStatus st on t1.planningWorkStatusId=st.id
+                    join PlanningWorkType pt on t1.planingWorkTypeId=pt.id order by t1.startDateWork DESC';
         $datatable = new CDataTables($sql, ['id'], $_GET, true);
 
         $datatable->doAllTheThings();
@@ -71,7 +74,9 @@ class CPlanningWorkListAjaxController extends AAjaxController
             $row['title'] = $planningWork->title;
             $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findOneBy(['id'=>$planningWork->planningWorkStatusId]);
             $row['status']=$planningWorkStatus->name;
-
+            $row['planningType']=($planningWork->planningType==1) ? 'da Ticket' : 'da Modulo' ;
+            $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$planningWork->planningWorkTypeId]);
+            $row['planningWorkType']=$planningWorkType->name;
             $row['startDateWork'] =(new \DateTime($planningWork->startDateWork))->format('d-m-Y H:i:s');
             $row['endDateWork'] =(new \DateTime($planningWork->endDateWork))->format('d-m-Y H:i:s');
             $shop=$shopRepo->findOneBy(['id'=>$planningWork->shopId]);

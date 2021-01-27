@@ -34,6 +34,17 @@
                                     data-orderable="true"
                                     class="center">Titolo
                                 </th>
+                                <th data-slug="planningType"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">provenienza
+                                </th>
+                                <th data-slug="planningWorkType"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Argomento
+                                </th>
+
                                 <th data-slug="companyName"
                                     data-searchable="true"
                                     data-orderable="true"
