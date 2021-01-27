@@ -227,7 +227,11 @@ $(document).on('bs.post.view', function () {
                                 </div>
              </div>  
              
-</div>   
+             
+             
+</div>  
+<div class="row" id="appendSend">
+             </div>
     `
 
     });
@@ -273,6 +277,8 @@ $(document).on('bs.post.view', function () {
                     $('#subject').val(v.subject);
                     $('#mail').val(v.text);
             });
+            $('#appendSend').append(`<div class="col-md-12"><button class="success" id="modifyRowInvoiceButton' + counterRowView + '" onclick="sendMail()" type="button"><span class="fa fa-envelope">Invia</span></button></div>`);
+
         }).fail(function (res) {
             bsModal.writeBody(res);
         }).always(function (res) {
@@ -284,6 +290,59 @@ $(document).on('bs.post.view', function () {
         });
     });
 });
+function sendMail(){
+
+    var planningWorkId= $('#planningWorkId').val();
+        var title= $('#title').val();
+        var start= $('#startDateWork').val();
+       var  end= $('#endDateWork').val();
+       var  planningWorkStatusId= $('#planningWorkStatusId').val();
+       var  billRegistryClientId= $('#billRegistryClientId').val();
+      var  planningWorkTypeId= $('#planningWorkTypeId').val();
+      var  request= $('#request').val();
+      var  solution= $('#solution').val();
+      var  hour= $('#hour').val();
+      var  cost= $('#cost').val();
+      var  percentageStatus= $('#percentageStatus').val();
+        var notifyEmail= $('#notifyEmail').val();
+        var toMail=$('#toMail').val();
+        var subject=$('#subject').val();
+        var mail=$('#mail').val();
+    const data = {
+        planningWorkId: $('#planningWorkId').val(),
+        title: $('#title').val(),
+        start: $('#startDateWork').val(),
+        end: $('#endDateWork').val(),
+        planningWorkStatusId: $('#planningWorkStatusId').val(),
+        billRegistryClientId: $('#billRegistryClientId').val(),
+        planningWorkTypeId: $('#planningWorkTypeId').val(),
+        request: $('#request').val(),
+        solution: $('#solution').val(),
+        hour: $('#hour').val(),
+        cost: $('#cost').val(),
+        percentageStatus: $('#percentageStatus').val(),
+        notifyEmail: $('#notifyEmail').val(),
+        toMail:$('#toMail').val(),
+        subject:$('#subject').val(),
+        mail:$('#mail').val(),
+    };
+    $.ajax({
+        method: 'post',
+        url: '/blueseal/xhr/PlanningWorkComposeAndSendEmailAjaxController',
+        data: data,
+        dataType: 'json'
+    }).done(function (res) {
+        $('#appendSend').empty();
+        $('#appendSend').append('<div class="col-md-12">'+res+'</div>');
+
+    }).fail(function (res) {
+        $('#appendSend').empty();
+        $('#appendSend').append('<div class="col-md-12">errore: '+res+'</div>');
+    }).always(function (res) {
+
+    });
+
+}
 
 
 
