@@ -37,6 +37,7 @@ class CPlanningWorkComposeAndSendEmailAjaxController extends AAjaxController
         $planningWorkTypeId = $this->app->router->request()->getRequestData('planningWorkTypeId');
         $billRegistryClientId=$this->app->router->request()->getRequestData('billRegistryClientId');
         $bri=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$billRegistryClientId]);
+        $companyName=$bri->companyName;
         $emailAdmin=$bri->emailAdmin;
         $title = $this->app->router->request()->getRequestData('title');
         $request = $this->app->router->request()->getRequestData('request');
@@ -48,13 +49,14 @@ class CPlanningWorkComposeAndSendEmailAjaxController extends AAjaxController
         $percentageStatus = $this->app->router->request()->getRequestData('percentageStatus');
         $notifyEmail = $this->app->router->request()->getRequestData('notifyEmail');
         $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$planningWorkTypeId]);
+        $subject=str_replace('{planningWorkId}',$planningWorkId,$planningWorkType->subject);
         $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId'=>$planningWorkId,'planningWorkStatusId'=>$planningWorkStatusId,'planningWorkTypeId'=>$planningWorkTypeId]);
 if($planningWorkEvent) {
 
 
         $textEmail[] = ['result' => '1',
             'toMail' => $emailAdmin,
-            'subject' => $planningWorkType->subject,
+            'subject' => $subject,
             'text' => $planningWorkEvent->mail
         ];
 
