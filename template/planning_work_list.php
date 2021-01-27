@@ -43,13 +43,13 @@
                                       data-searchable="true"
                                       data-orderable="true"
                                       data-default-order="desc"
-                                      class="center dataFilterType">Inizio<br>Data lavoro
+                                      class="center dataFilterType">Inizio<br>Data Attività
                                 </th>
-                                <th data-slug="EndDateWork"
+                                <th data-slug="endDateWork"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="desc"
-                                    class="center dataFilterType">Fine<br>Data lavoro
+                                    class="center dataFilterType">Fine<br>Data Attività
                                 </th>
                                 <th data-slug="status"
                                     data-searchable="false"

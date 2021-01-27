@@ -156,6 +156,7 @@ $('#hour').change(function () {
                 cost: $('#cost').val(),
                 percentageStatus: $('#percentageStatus').val(),
                 notifyEmail: $('#notifyEmail').val(),
+                type: 'formAdd',
 
 
             };

@@ -346,6 +346,17 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eye"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.post.view"
+                data-title="Visualizza Mail"
+                data-placement="bottom"
+                data-href="#"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
