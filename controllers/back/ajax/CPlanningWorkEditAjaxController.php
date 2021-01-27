@@ -34,7 +34,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
         try {
             $data = \Monkey::app()->router->request()->getRequestData();
 
-            $planningWorkId = $data['planningWorkStatusId'];
+            $planningWorkId = $data['planningWorkId'];
             $title=$data['title'];
             if ($title == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> titolo non compilato</i>';
@@ -59,13 +59,16 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             if ($endDateWork == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data fine Lavoro non selezionata</i>';
             }
+            $percentageStatus = $data['percentageStatus'];
+            if($percentageStatus==''){
+                $percentageStatus='0';
+            }
             $notifyEmail = (isset($data['notifyEmail'])?$data['notifyEmail']:'0');
             $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
             $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
 
 
             $planningWork = \Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id'=>$planningWorkId]);
-            $planningType=$planningWork->planningType;
             $planningWork->title = $data['title'];
             $planningWork->startDateWork = $newStartDate;
             $planningWork->endDateWork = $newEndDate;
@@ -80,12 +83,15 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWork->solution = $data['solution'];
             $planningWork->hour = (isset($data['hour']))?$data['hour']:'0.00';
             $planningWork->cost = (isset($data['cost']))?$data['cost']:'0.00';
-            $planningWork->percentageStatus = $data['percentageStatus'];
+            $planningWork->percentageStatus = $percentageStatus;
             if($data['planningWorkStatusId']=='5' || $data['planningWorkStatusId']=='4'){
                 $planningWork->close=1;
             }
             $planningWork->update();
-            $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$data['planningWorkTypeId']]);
+            $newStartMailDate = (new \DateTime($startDateWork))->format('d-m-Y');
+            $newEndMailDate = (new \DateTime($endDateWork))->format('d-m-Y');
+            $today = (new \DateTime())->format('d-m-Y');
+            $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$planningWorkTypeId]);
 
             switch($data['planningWorkStatusId']){
                 case '1':
@@ -106,16 +112,16 @@ class CPlanningWorkEditAjaxController extends AAjaxController
 
             }
             $subject=$planningWorkType->subject;
-            str_replace('{planningWorkId}',$planningWorkId,$subject);
-            str_replace('{planningWorkId}',$planningWorkId,$message);
-            str_replace('{companyName}',$companyName,$message);
-            str_replace('{title}',$data['title'],$message);
-            str_replace('{today}',$today,$message);
-            str_replace('{startDateWork}',$newStartMailDate,$message);
-            str_replace('{endDateWork}',$newEndMailDate,$message);
-            str_replace('{percentageStatus}',$data['percentageStatus'],$message);
-            str_replace('{request}',$data['request'],$message);
-            str_replace('{solution}',$data['solution'],$message);
+            $subject=str_replace('{planningWorkId}',$planningWorkId,$subject);
+            $message=str_replace('{planningWorkId}',$planningWorkId,$message);
+            $message=str_replace('{companyName}',$companyName,$message);
+            $message=str_replace('{title}',$data['title'],$message);
+            $message=str_replace('{today}',$today,$message);
+            $message=str_replace('{startDateWork}',$newStartMailDate,$message);
+            $message=str_replace('{endDateWork}',$newEndMailDate,$message);
+            $message=str_replace('{percentageStatus}',$data['percentageStatus'],$message);
+            $message=str_replace('{request}',$data['request'],$message);
+            $message=str_replace('{solution}',$data['solution'],$message);
             $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
             $planningWorkEvent->planningWorkId = $planningWorkId;
             $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
@@ -123,9 +129,9 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWorkEvent->mail=$message;
             $planningWorkEvent->planningType=2;
             $planningWorkEvent->notifyEmail=$notifyEmail;
-            $planingWorkEvent->percentageStatus = $data['percentageStatus'];
+            $planningWorkEvent->percentageStatus = $percentageStatus;
             if ($notifyEmail == "1") {
-                if ($data['planningWorkStatusId'] == '1') {
+                if ($planningWorkStatusId == '1') {
                     $planningWorkEvent->isSent=1;
                     $planningWorkEvent->dateSent=$today;
                     if (ENV != 'dev') {

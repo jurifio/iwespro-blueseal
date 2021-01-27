@@ -57,6 +57,10 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             if ($endDateWork == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> Data fine Lavoro non selezionata</i>';
             }
+            $percentageStatus = $data['percentageStatus'];
+            if($percentageStatus==''){
+                $percentageStatus='0';
+            }
             $notifyEmail = (isset($data['notifyEmail']) ? $data['notifyEmail'] : '0' );
             $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
             $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
@@ -80,7 +84,7 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             $planningWork->cost = $data['cost'];
             $dateNow = (new \DateTime())->format('Y-m-d H:i:s');
             $planningWork->dateCreate = $dateNow;
-            $planningWork->percentageStatus = $data['percentageStatus'];
+            $planningWork->percentageStatus = $percentageStatus;
             $planningWork->insert();
             $res = \Monkey::app()->dbAdapter->query('select max(id) as planningWorkId from PlanningWork ',[])->fetchAll();
             foreach ($res as $result) {
@@ -110,16 +114,16 @@ class CPlanningWorkAddAjaxController extends AAjaxController
 
             }
             $subject=$planningWorkType->subject;
-            str_replace('{planningWorkId}',$planningWorkId,$subject);
-            str_replace('{planningWorkId}',$planningWorkId,$message);
-            str_replace('{companyName}',$companyName,$message);
-            str_replace('{title}',$data['title'],$message);
-            str_replace('{today}',$today,$message);
-            str_replace('{startDateWork}',$newStartMailDate,$message);
-            str_replace('{endDateWork}',$newEndMailDate,$message);
-            str_replace('{percentageStatus}',$data['percentageStatus'],$message);
-            str_replace('{request}',$data['request'],$message);
-            str_replace('{solution}',$data['solution'],$message);
+            $subject=str_replace('{planningWorkId}',$planningWorkId,$subject);
+            $message=str_replace('{planningWorkId}',$planningWorkId,$message);
+            $message=str_replace('{companyName}',$companyName,$message);
+            $message=str_replace('{title}',$data['title'],$message);
+            $message=str_replace('{today}',$today,$message);
+            $message=str_replace('{startDateWork}',$newStartMailDate,$message);
+            $message=str_replace('{endDateWork}',$newEndMailDate,$message);
+            $message=str_replace('{percentageStatus}',$data['percentageStatus'],$message);
+            $message=str_replace('{request}',$data['request'],$message);
+            $message=str_replace('{solution}',$data['solution'],$message);
             $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->getEmptyEntity();
             $planningWorkEvent->planningWorkId = $planningWorkId;
             $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
@@ -127,9 +131,9 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             $planningWorkEvent->mail=$message;
             $planningWorkEvent->planningType=2;
             $planningWorkEvent->notifyEmail=$notifyEmail;
-            $planingWorkEvent->percentageStatus = $data['percentageStatus'];
+            $planningWorkEvent->percentageStatus = $percentageStatus;
             if ($notifyEmail == "1") {
-                if ($data['planningWorkStatusId'] == '1') {
+                if ($planningWorkStatusId== '1') {
                       $planningWorkEvent->isSent=1;
                       $planningWorkEvent->dateSent=$today;
                     if (ENV != 'dev') {
