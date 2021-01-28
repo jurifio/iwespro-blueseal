@@ -34,10 +34,26 @@ class CPlanningWorkCustomerAddController extends ARestrictedAccessRootController
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/planning_workcustomer_add.php');
+        $user=$this->app->getUser()->getId();
+        $userHasShop=\Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId'=>$user]);
+        $billRegistryClientIdSelected='';
+        $shopId='';
+        if($userHasShop){
+
+            $brca=\Monkey::app()->repoFactory->create('BillRegistryClientAccount')->findOneBy(['shopId'=>$userHasShop->shopId]);
+            if($brca){
+                $shopId=$userHasShop->shopId;
+                $billRegistryClientIdSelected=$brca->billRegistryClientId;
+            }
+        }
+
+
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
+            'billRegistryClientIdSelected' => $billRegistryClientIdSelected,
+            'shopId'=>$shopId,
             'sidebar' => $this->sidebar->build(),
         ]);
     }

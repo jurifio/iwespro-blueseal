@@ -20,7 +20,7 @@ use bamboo\domain\entities\CEditorialPlanSocial;
 use \bamboo\utils\time\STimeToolbox;
 
 
-class CPlanningWorkEditAjaxController extends AAjaxController
+class CPlanningWorkCustomerAddAjaxController extends AAjaxController
 {
 
     /**
@@ -33,8 +33,6 @@ class CPlanningWorkEditAjaxController extends AAjaxController
     {
         try {
             $data = \Monkey::app()->router->request()->getRequestData();
-
-            $planningWorkId = $data['planningWorkId'];
             $title=$data['title'];
             if ($title == '') {
                 return '<i style="color:red" class="fa fa-exclamation-triangle"></i><i style="color:red; font-family: \'Raleway\', sans-serif;line-height: 1.6;"> titolo non compilato</i>';
@@ -63,12 +61,12 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             if($percentageStatus==''){
                 $percentageStatus='0';
             }
-            $notifyEmail = (isset($data['notifyEmail'])?$data['notifyEmail']:'0');
+            $notifyEmail = (isset($data['notifyEmail']) ? $data['notifyEmail'] : '0' );
             $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
             $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
 
 
-            $planningWork = \Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id'=>$planningWorkId]);
+            $planningWork = \Monkey::app()->repoFactory->create('PlanningWork')->getEmptyEntity();
             $planningWork->title = $data['title'];
             $planningWork->startDateWork = $newStartDate;
             $planningWork->endDateWork = $newEndDate;
@@ -84,20 +82,23 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWork->planningWorkStatusId = $data['planningWorkStatusId'];
             $planningWork->title = $data['title'];
             $planningWork->request = $data['request'];
-            $planningWork->notifyEmail = $notifyEmail;
             $planningWork->solution = $data['solution'];
-            $planningWork->hour = (isset($data['hour']))?$data['hour']:'0.00';
-            $planningWork->cost = (isset($data['cost']))?$data['cost']:'0.00';
+            $planningWork->planningType=1;
+            $planningWork->hour = $data['hour'];
+            $planningWork->cost = $data['cost'];
+            $dateNow = (new \DateTime())->format('Y-m-d H:i:s');
+            $planningWork->dateCreate = $dateNow;
             $planningWork->percentageStatus = $percentageStatus;
-            if($data['planningWorkStatusId']=='5' || $data['planningWorkStatusId']=='4'){
-                $planningWork->close=1;
+            $planningWork->insert();
+            $res = \Monkey::app()->dbAdapter->query('select max(id) as planningWorkId from PlanningWork ',[])->fetchAll();
+            foreach ($res as $result) {
+                $planningWorkId = $result['planningWorkId'];
             }
-            $planningWork->update();
             $newStartMailDate = (new \DateTime($startDateWork))->format('d-m-Y');
             $newEndMailDate = (new \DateTime($endDateWork))->format('d-m-Y');
             $today = (new \DateTime())->format('d-m-Y');
-            $todaSent = (new \DateTime())->format('Y-m-d H:i:s');
-            $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$planningWorkTypeId]);
+            $todaySent = (new \DateTime())->format('Y-m-d H:i:s');
+            $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$data['planningWorkTypeId']]);
 
             switch($data['planningWorkStatusId']){
                 case '1':
@@ -133,26 +134,25 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
             $planningWorkEvent->planningWorkTypeId=$data['planningWorkTypeId'];
             $planningWorkEvent->mail=$message;
-            $planningWorkEvent->planningType=2;
+            $planningWorkEvent->planningType=1;
             $planningWorkEvent->notifyEmail=$notifyEmail;
             $planningWorkEvent->percentageStatus = $percentageStatus;
             if ($notifyEmail == "1") {
-                if ($planningWorkStatusId == '1') {
-                    $planningWorkEvent->isSent=1;
-                    $planningWorkEvent->dateSent=$todaySent;
+                if ($planningWorkStatusId== '1') {
+                      $planningWorkEvent->isSent=1;
+                      $planningWorkEvent->dateSent=$todaySent;
                     if (ENV != 'dev') {
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-
-                            $to[] = [$emailAdmin];
-
                         $emailRepo->newMail('services@iwes.it',[$emailAdmin],[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                        $emailRepo->newMail('services@iwes.it',['gianluca@iwes.it'],['juri@iwes.it'],[],$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
             $planningWorkEvent->insert();
 
-            return 'inserimento eseguito';
+            return 'Richiesta Inviata';
         }catch(\Throwable $e){
             return 'Errore:'.$e;
         }

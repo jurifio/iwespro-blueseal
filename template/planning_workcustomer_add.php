@@ -21,150 +21,88 @@
                                 <h5 class="m-t-10">Inserisci Attività</h5>
                             </div>
                             <div class="panel-body clearfix">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="billRegistryClientId">Seleziona il Cliente </label>
-                                            <select id="billRegistryClientId"
-                                                    required="required"
-                                                    name="billRegistryClientId"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Selezione il Cliente"
-                                                    data-init-plugin="selectize"></select>
+                                <?php if($billRegistryClientIdSelected!='') : ?>
+                                <input type="hidden" id="billRegistryClientIdSelected" name="billRegistryClientIdSelected" value="<?php echo $billRegistryClientIdSelected?>"/>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="billRegistryClientId">Cliente</label>
+                                                <select id="billRegistryClientId"
+                                                        required="required"
+                                                        name="billRegistryClientId"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione il Cliente"
+                                                        data-init-plugin="selectize"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="planningWorkTypeId">Seleziona il tipo di attività </label>
+                                                <select id="planningWorkTypeId" name="planningWorkTypeId"
+                                                        required="required"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Seleziona lo il tipo di attività"
+                                                        data-init-plugin="selectize">
+                                                    <option value="">Seleziona il Tipo di Attività</option>
+                                                    <option value="1">Richiesta Post Social</option>
+                                                    <option value="2">Segnalazione Anomalia Tecnica</option>
+                                                    <option value="3">Richiesta Inserimento saldi</option>
+                                                    <option value="4">Richiesta variazione prodotto</option>
+                                                    <option value="5">Richiesta modifica Home</option>
+                                                    <option value="6">Richiesta Postproduzione immagini</option>
+                                                    <option value="7">Richiesta Modifica dettagli</option>
+                                                    <option value="8">Richiesta Spedizione manuale</option>
+                                                    <option value="9">Altro</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="title">Titolo</label>
+                                                <input id="title" class="form-control" type="text" disable
+                                                       placeholder="Inserisci il titolo" name="titleEvent"
+                                                       value=""
+                                                       required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="startDateWork">Data Inizio Attività</label>
+                                                <input type="datetime-local" id="startDateWork" class="form-control"
+                                                       placeholder="Data Richiesta"
+                                                       name="startDateWork"
+                                                       value="<?php echo (new \DateTime())->format('Y-m-d\TH:i'); ?>"
+                                                       required="required" disabled>
+                                                <input type="hidden" id="endDateWork" name="endDateWork"
+                                                       value="<?php echo (new \DateTime())->format('Y-m-d\TH:i'); ?>"/>
+                                                <input type="hidden" id="planningWorkStatusId" name="planningWorkStatusId"
+                                                       value="1"/>
+                                                <input type="hidden" id="solution" name="solution"/>
+                                                <input type="hidden" id="percentageStatus" name="percentageStatus"/>
+                                                <input type="hidden" id="cost" name="cost" value="0.00" />
+                                                <input type="hidden" id="hour" name="hour" value="0.00"/>
+                                                <input type="hidden" id="notifyEmail" name="notifyEmail" value="1" />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="planningWorkTypeId">Seleziona il tipo di attività </label>
-                                            <select id="planningWorkTypeId" name="planningWorkTypeId"
-                                                    required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona lo il tipo di attività"
-                                                    data-init-plugin="selectize">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="title">Titolo</label>
-                                            <input id="title" class="form-control" type="text"
-                                                   placeholder="Inserisci il titolo" name="titleEvent"
-                                                   value=""
-                                                   required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="notifyEmail">Notificare al Cliente</label>
-                                            <select id="notifyEmail" name="notifyEmail" required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona"
-                                                    data-init-plugin="selectize">
-                                                <option value="0">Non Inviare la Notifica</option>
-                                                <option value="1" selected="selected">Invia la Notifica</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="startDateWork">Data Inizio Attività</label>
-                                            <input type="datetime-local" id="startDateWork" class="form-control"
-                                                   placeholder="Inserisci la Data di Inizio "
-                                                   name="startDateWork"
-                                                   value="<?php echo (new \DateTime())->format('Y-m-d\TH:i'); ?>"
-                                                   required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="endDateWork">Data Fine Attività </label>
-                                            <input type="datetime-local" id="endDateWork" class="form-control"
-                                                   placeholder="Inserisci la Data della Fine"
-                                                   name="endDateWork"
-                                                   value="<?php echo (new \DateTime())->format('Y-m-d\TH:i'); ?>"
-                                                   required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="planningWorkStatusId">Seleziona lo Stato</label>
-                                            <select id="planningWorkStatusId"
-                                                    name="planningWorkStatusId" class="full-width selectpicker"
-                                                    required="required"
-                                                    placeholder="Seleziona lo Stato"
-                                                    data-init-plugin="selectize"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="request">Richiesta</label>
-                                            <textarea id="request" cols="60" rows="10"
-                                                      placeholder="Inserisci la richiesta"
-                                                      name="description"></textarea>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="request">Richiesta</label>
+                                                <textarea id="request" cols="60" rows="10"
+                                                          placeholder="Inserisci la richiesta"
+                                                          name="description"></textarea>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="solution">Soluzione</label>
-                                            <textarea id="solution" cols="60" rows="10"
-                                                      placeholder="Inserisci la soluzione"
-                                                      name="description"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php else :?>
                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="percentageStatus">% di Completamento</label>
-                                            <select id="percentageStatus" name="percentageStatus"
-                                                    required="required"
-                                                    class="full-width selectpicker"
-                                                    placeholder="Seleziona lo il tipo di attività"
-                                                    data-init-plugin="selectize">
-                                                <option value="0">0%</option>
-                                                <option value="10">10%</option>
-                                                <option value="20">20%</option>
-                                                <option value="30">30%</option>
-                                                <option value="40">40%</option>
-                                                <option value="50">50%</option>
-                                                <option value="60">60%</option>
-                                                <option value="70">70%</option>
-                                                <option value="80">80%</option>
-                                                <option value="90">90%</option>
-                                                <option value="100">100%</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="hour">Ore lavorate</label>
-                                            <input id="hour" class="form-control" type="text"
-                                                   name="hour" value="0"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="cost">Costo</label>
-                                            <input id="cost" class="form-control" type="text"
-                                                   name="cost" value="0"
-                                                   placeholder="Inserisci il prezzo"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group form-group-default selectize-enabled">
-                                            <label for="total">Totale</label>
-                                            <input id="total" class="form-control" type="text"
-                                                   value=""
-                                                   name="total" placeholder="totale"/>
-                                        </div>
+                                    <div class="col-md-12">
+                                        non hai i diritti per caricare una richiesta
                                     </div>
                                 </div>
-
+                            <?php endif ?>
 
                             </div>
                         </div>

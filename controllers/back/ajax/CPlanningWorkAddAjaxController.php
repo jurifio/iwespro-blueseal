@@ -74,6 +74,10 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             $bri=\Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id'=>$data['billRegistryClientId']]);
             $companyName = $bri->companyName;
             $emailAdmin=$bri->emailAdmin;
+            $brca=\Monkey::app()->repoFactory->create('BillRegistryClientAccount')->findOneBy(['billRegistryClientId'=>$data['billRegistryClientId']]);
+            if($brca){
+                $planningWork->shopId=$brca->shopId;
+            }
             $planningWork->planningWorkTypeId = $data['planningWorkTypeId'];
             $planningWork->planningWorkStatusId = $data['planningWorkStatusId'];
             $planningWork->title = $data['title'];
@@ -93,6 +97,7 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             $newStartMailDate = (new \DateTime($startDateWork))->format('d-m-Y');
             $newEndMailDate = (new \DateTime($endDateWork))->format('d-m-Y');
             $today = (new \DateTime())->format('d-m-Y');
+            $todaySent = (new \DateTime())->format('Y-m-d H:i:s');
             $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$data['planningWorkTypeId']]);
 
             switch($data['planningWorkStatusId']){
@@ -135,7 +140,7 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             if ($notifyEmail == "1") {
                 if ($planningWorkStatusId== '1') {
                       $planningWorkEvent->isSent=1;
-                      $planningWorkEvent->dateSent=$today;
+                      $planningWorkEvent->dateSent=$todaySent;
                     if (ENV != 'dev') {
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
