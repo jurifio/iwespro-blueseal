@@ -71,7 +71,7 @@
                                                     class="full-width selectpicker"
                                                     placeholder="Seleziona"
                                                     data-init-plugin="selectize">
-                                                <?php if ($pWork->notifyEmail == 1) {
+                                                <?php if ($pWork->notifyEmail == "1") {
                                                     echo '<option value="0" >Non Inviare la Notifica</option>';
                                                     echo '<option value="1" selected="selected">Invia la Notifica</option>';
                                                 } else {
