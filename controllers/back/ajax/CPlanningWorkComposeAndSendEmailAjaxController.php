@@ -103,9 +103,7 @@ if($planningWorkEvent) {
                     if (ENV != 'dev') {
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        if (!is_array($to)) {
-                            $to = [$toMail];
-                        }
+                        $to[] = [$emailAdmin];
                         $emailRepo->newMail('services@iwes.pro',$to,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     }
                 }
