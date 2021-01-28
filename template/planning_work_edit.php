@@ -348,7 +348,7 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
-                data-icon="fa-eye"
+                data-icon="fa-envelope"
                 data-permission="allShops"
                 data-class="btn btn-default"
                 data-rel="tooltip"

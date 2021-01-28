@@ -200,9 +200,9 @@ $(document).on('bs.post.view', function () {
             <div class="row">
             <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
-                                            <label for="toMail">Titolo</label>
+                                            <label for="toMail">Destinatario</label>
                                             <input id="toMail" class="form-control" type="text"
-                                                   placeholder="Email" name="toMail"
+                                                   placeholder="Destinatario" name="toMail"
                                                    value=""
                                                    required="required">
                                         </div>
