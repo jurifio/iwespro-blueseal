@@ -63,7 +63,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             if($percentageStatus==''){
                 $percentageStatus='0';
             }
-            $notifyEmail = $data['notifyEmail'];
+            $notifyEmail = (isset($data['notifyEmail'])?$data['notifyEmail']:'0');
             $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
             $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
 
@@ -80,6 +80,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWork->planningWorkStatusId = $data['planningWorkStatusId'];
             $planningWork->title = $data['title'];
             $planningWork->request = $data['request'];
+            $planningWork->notifyEmail = $notifyEmail;
             $planningWork->solution = $data['solution'];
             $planningWork->hour = (isset($data['hour']))?$data['hour']:'0.00';
             $planningWork->cost = (isset($data['cost']))?$data['cost']:'0.00';
