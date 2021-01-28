@@ -279,19 +279,19 @@ $('#detailed').on('click', function () {
                             bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
 
                             break;
-                        case "2":
+                        case 1:
                             bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
 
                             break;
-                        case "3":
+                        case 3:
                             bgRender = '<div style="background-color:#f22823 ;color:black;"">';
 
                             break;
-                        case "4":
+                        case 4:
                             bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
 
                             break;
-                        case "5":
+                        case 5:
                             bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
 
                             break;
