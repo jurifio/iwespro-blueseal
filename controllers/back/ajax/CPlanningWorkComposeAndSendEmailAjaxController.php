@@ -105,7 +105,7 @@ if($planningWorkEvent) {
                         if (!is_array($to)) {
                             $to = [$toMail];
                         }
-                        $emailRepo->newMail('Iwes IT Department <services@iwes.it>',$to,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('Iwes IT Department <services@iwes.pro>',$to,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     }
                 }
             }
