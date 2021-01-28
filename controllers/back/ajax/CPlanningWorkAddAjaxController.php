@@ -139,8 +139,7 @@ class CPlanningWorkAddAjaxController extends AAjaxController
                     if (ENV != 'dev') {
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $to[] = [$emailAdmin];
-                        $emailRepo->newMail('services@iwes.pro',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.pro',[$emailAdmin],[],[],$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
