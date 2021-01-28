@@ -51,7 +51,7 @@ class CPlanningWorkComposeAndSendEmailAjaxController extends AAjaxController
         $notifyEmail = $this->app->router->request()->getRequestData('notifyEmail');
         $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$planningWorkTypeId]);
         $subject=str_replace('{planningWorkId}',$planningWorkId,$planningWorkType->subject);
-        $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId'=>$planningWorkId,'planningWorkStatusId'=>$planningWorkStatusId,'planningWorkTypeId'=>$planningWorkTypeId]);
+        $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId'=>$planningWorkId,'planningWorkStatusId'=>$planningWorkStatusId,'planningWorkTypeId'=>$planningWorkTypeId,'isSent'=>'0']);
 if($planningWorkEvent) {
 
 
@@ -95,7 +95,7 @@ if($planningWorkEvent) {
             $subject = $this->app->router->request()->getRequestData('subject');
             $planningWorkType = \Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id' => $planningWorkTypeId]);
             $today = (new DateTime())->format('Y-m-d H:i:s');
-            $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId' => $planningWorkId,'planningWorkStatusId' => $planningWorkStatusId,'planningWorkTypeId' => $planningWorkTypeId]);
+            $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId' => $planningWorkId,'planningWorkStatusId' => $planningWorkStatusId,'planningWorkTypeId' => $planningWorkTypeId,'isSent'=>'0']);
             $planningWorkEvent->mail=$mail;
             if ($notifyEmail == "1") {
 
