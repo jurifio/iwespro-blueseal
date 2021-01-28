@@ -151,7 +151,7 @@ class CPlanningWorkAddAjaxController extends AAjaxController
             }
             $planningWorkEvent->insert();
 
-            return 'inserimento eseguito';
+            return $planningWorkId;
         }catch(\Throwable $e){
             return 'Errore:'.$e;
         }

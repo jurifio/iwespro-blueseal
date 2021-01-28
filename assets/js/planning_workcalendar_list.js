@@ -274,24 +274,24 @@ $('#detailed').on('click', function () {
 
                     eventColor = "";
                     bgTitle = '<div style="background-color:' + event.color + ';color:black;">';
-                    switch (event.status) {
-                        case "Richiesta":
+                    switch (event.planningWorkStatusId) {
+                        case "1":
                             bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
 
                             break;
-                        case "In Programmazione":
+                        case "2":
                             bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
 
                             break;
-                        case "In Avanzamento":
+                        case "3":
                             bgRender = '<div style="background-color:#f22823 ;color:black;"">';
 
                             break;
-                        case "Completato":
+                        case "4":
                             bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
 
                             break;
-                        case "Completato das Modulo":
+                        case "5":
                             bgRender = '<div style="background-color:#3e8f3e ;color:black;">';
 
                             break;
@@ -624,7 +624,8 @@ $('#detailed').on('click', function () {
                             url: "/blueseal/xhr/PlanningWorkAddAjaxController",
                             data: data,
                         }).done(function (res) {
-                            bsModal1.writeBody(res);
+                            bsModal1.writeBody('Inserimento eseguito');
+                            window.open('/blueseal/planning/modifica/'+res);
                         }).fail(function (res) {
                             bsModal1.writeBody(res);
                         }).always(function (res) {

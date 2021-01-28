@@ -166,7 +166,8 @@ $('#hour').change(function () {
                 url: '/blueseal/xhr/PlanningWorkAddAjaxController',
                 data: data
             }).done(function (res) {
-                bsModal.writeBody(res);
+                bsModal.writeBody('Inserimento eseguito');
+                window.open('/blueseal/planning/modifica/'+res);
             }).fail(function (res) {
                 bsModal.writeBody(res);
             }).always(function (res) {

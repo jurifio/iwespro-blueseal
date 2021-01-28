@@ -358,6 +358,86 @@ $(document).on('bs.workevent.view', function () {
         });
     });
 });
+$(document).on('bs.create.invoice', function () {
+    if($('#planningWorkStatusId').val()==4 || $('#planningWorkStatusId').val()==5) {
+        let bsModal = new $.bsModal('Visualizza Email Storico Attività', {
+            body: `<div><p>Premere ok per Visualizzare lo storico
+            </div>
+            <div
+<div id="appendList">
+             </div>
+    `
+
+        });
+        var planningWorkStatusId = $('#planningWorkStatusId').val();
+        var planningWorkTypeId = $('#planningWorkTypeId').val();
+        var planningWorkId = $('#planningId').val();
+        bsModal.addClass('modal-wide');
+        bsModal.addClass('modal-high');
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+
+
+            start = $('#startDateWork').val();
+            end = $('#endDateWork').val();
+            const data = {
+                planningWorkId: $('#planningWorkId').val(),
+                title: $('#title').val(),
+                start: $('#startDateWork').val(),
+                end: $('#endDateWork').val(),
+                planningWorkStatusId: $('#planningWorkStatusId').val(),
+                billRegistryClientId: $('#billRegistryClientId').val(),
+                planningWorkTypeId: $('#planningWorkTypeId').val(),
+                request: $('#request').val(),
+                solution: $('#solution').val(),
+                hour: $('#hour').val(),
+                cost: $('#cost').val(),
+                percentageStatus: $('#percentageStatus').val(),
+                notifyEmail: $('#notifyEmail').val(),
+
+
+            };
+
+            $.ajax({
+                method: 'post',
+                url: '/blueseal/xhr/PlanningWorkComposeInvoiceAjaxController',
+                data: data,
+                dataType: 'json',
+            }).done(function (res) {
+                console.log(res);
+                let rawData = res;
+                let rowAppend = '<div class="row"><div class="col-md-2">Stato in Data</div><div class="col-md-1">% Completamento</div><div class="col-md-7">Soluzione</div><div class="col-md-2">Invio Mail</div></div><hr>';
+                $.each(rawData, function (k, v) {
+                    rowAppend = rowAppend + '<div class="row"><div class="col-md-2">' + v.planningWorkStatusName + ' ' + v.dateCreate + '</div><div class="col-md-1">' + v.percentageStatus + '</div><div class="col-md-7">' + v.solution + '</div><div class="col-md-2">' + v.isSent + '</div></div><hr>';
+                    $('#toMail').val(v.toMail);
+                    $('#subject').val(v.subject);
+                    $('#mail').val(v.text);
+                });
+                $('#appendList').empty();
+                $('#appendList').append(rowAppend);
+
+            }).fail(function (res) {
+                bsModal.writeBody(res);
+            }).always(function (res) {
+                bsModal.setOkEvent(function () {
+
+                    // window.location.reload();
+                });
+                bsModal.showOkBtn();
+            });
+        });
+    }else {
+        let bsModal = new $.bsModal('Generazione Fattura', {
+            body: `<div><p>Impossibile Generare la fattura per generarla bisogna aver completato l'attività`
+
+        });
+
+        bsModal.showCancelBtn();
+        bsModal.setOkEvent(function () {
+            bsModal.close();
+        });
+    }
+});
 
 
 function sendMail(){
