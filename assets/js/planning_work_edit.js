@@ -339,7 +339,7 @@ $(document).on('bs.workevent.view', function () {
             let rawData = res;
             let rowAppend='<div class="row"><div class="col-md-2">Stato in Data</div><div class="col-md-1">% Completamento</div><div class="col-md-7">Soluzione</div><div class="col-md-2">Invio Mail</div></div>';
             $.each(rawData, function (k, v) {
-                rowAppend=rowAppend+'<div class="row"><div class="col-md-2">'+v.planningWorkStatusName+ ' '+v.DateCreate+'</div><div class="col-md-1">'+v.percentageStatus+'</div><div class="col-md-7">'+v.solution+'</div><div class="col-md-2">'+v.isSent+'</div></div>';
+                rowAppend=rowAppend+'<div class="row"><div class="col-md-2">'+v.planningWorkStatusName+ ' '+v.dateCreate+'</div><div class="col-md-1">'+v.percentageStatus+'</div><div class="col-md-7">'+v.solution+'</div><div class="col-md-2">'+v.isSent+'</div></div>';
                 $('#toMail').val(v.toMail);
                 $('#subject').val(v.subject);
                 $('#mail').val(v.text);
