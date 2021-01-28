@@ -133,6 +133,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $planningWorkEvent->planningWorkStatusId = $data['planningWorkStatusId'];
             $planningWorkEvent->planningWorkTypeId=$data['planningWorkTypeId'];
             $planningWorkEvent->mail=$message;
+            $planningWorkEvent->solution=$data['solution'];
             $planningWorkEvent->planningType=2;
             $planningWorkEvent->notifyEmail=$notifyEmail;
             $planningWorkEvent->percentageStatus = $percentageStatus;

@@ -357,6 +357,17 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-history"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-event="bs.workevent.view"
+                data-title="Visualizza lo Storico dell'Attività"
+                data-placement="bottom"
+                data-href="#"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
