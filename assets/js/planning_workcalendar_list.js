@@ -626,12 +626,16 @@ $('#detailed').on('click', function () {
                         }).done(function (res) {
                             bsModal1.writeBody('Inserimento eseguito');
                             window.open('/blueseal/planning/modifica/'+res);
+                            bsModal1.hide();
+                            calendar.fullCalendar('refetchEvents');
+
                         }).fail(function (res) {
                             bsModal1.writeBody(res);
                         }).always(function (res) {
                             bsModal1.setOkEvent(function () {
-                                window.location.reload();
                                 bsModal1.hide();
+                                window.location.reload();
+
                                 // window.location.reload();
                             });
                             bsModal1.showOkBtn();
