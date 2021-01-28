@@ -117,30 +117,30 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="request">Richiesta</label>
-                                            <textarea id="request" cols="60" rows="10"
+                                            <textarea class="summer" id="request" cols="60" rows="10"
                                                       placeholder="Inserisci la richiesta"
-                                                      name="description"><?php echo $pWork->request ?></textarea>
+                                                      name="request"><?php echo $pWork->request ?></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="solution">Soluzione</label>
-                                            <textarea id="solution" cols="60" rows="10"
+                                            <textarea class="summer" id="solution" cols="60" rows="10"
                                                       placeholder="Inserisci la soluzione"
                                                       name="description"><?php echo $pWork->solution ?></textarea>
                                         </div>
                                     </div>
-                                    <? if($pWork->notifyEmail==1){
-                                        $class='show';
+                                    <?php if($pWork->notifyEmail==1){
+                                        $classdiv='show';
                                     }else{
-                                        $class='hide';
+                                        $classdiv='hide';
                                     }?>
 
-                                    <div class="col-md-2 <?php echo $class;?>"  id="divprevSend">
+                                    <div class="col-md-1 <?php echo $classdiv;?>"  id="divprevSend">
                                         <button class="success" id="btnPreview" onclick="previewMail()" type="button"><span  class="fa fa-envelope"> Invia Mail</span></button>
                                     </div>
                                 </div>

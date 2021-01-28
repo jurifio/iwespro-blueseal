@@ -1,3 +1,45 @@
+var summer = $('textarea.summer');
+summer.summernote({
+    lang: "it-IT",
+    height: 300,
+    fontNames: [
+        'Arial',
+        'Arial Black',
+        'Comic Sans MS',
+        'Courier',
+        'Courier New',
+        'Helvetica',
+        'Impact',
+        'Lucida Grande',
+        'Raleway',
+        'Serif',
+        'Sans',
+        'Sacramento',
+        'Tahoma',
+        'Times New Roman',
+        'Verdana'
+    ],
+    onImageUpload: function(files, editor, welEditable) {
+        sendFile(files[0], editor, welEditable);
+    },
+    fontNamesIgnoreCheck: ['Raleway']
+});
+function sendFile(file, editor, welEditable) {
+    data = new FormData();
+    data.append("file", file);
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: '/blueseal/xhr/BlogPostPhotoUploadAjaxController',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(url) {
+            //summer.summernote.editor.insertImage(welEditable, url);
+            summer.summernote('pasteHTML', '<p><img src="'+url+'"></p>');
+        }
+    });
+}
 (function ($) {
     var planningWorkStatusId = $('#planningWorkStatusIdSelected').val();
     var planningWorkTypeId = $('#planningWorkTypeIdSelected').val();
