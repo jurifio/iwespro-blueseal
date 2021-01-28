@@ -497,8 +497,8 @@ $('#detailed').on('click', function () {
                                    <div class="col-md-3">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="hour">Ore lavorate</label>
-                                            <input id="hour" class="form-control" type="number"
-                                                  name="hour" step="0.01" min="0"/>
+                                            <input id="hour" class="form-control" type="text"
+                                                  name="hour" value="0.00"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
