@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="request">Richiesta</label>
                                             <textarea id="request" cols="60" rows="10"
@@ -133,6 +133,15 @@
                                                       placeholder="Inserisci la soluzione"
                                                       name="description"><?php echo $pWork->solution ?></textarea>
                                         </div>
+                                    </div>
+                                    <? if($pWork->notifyEmail==1){
+                                        $class='show';
+                                    }else{
+                                        $class='hide';
+                                    }?>
+
+                                    <div class="col-md-2 <?php echo $class;?>"  id="divprevSend">
+                                        <button class="success" id="btnPreview" onclick="previewMail()" type="button"><span  class="fa fa-envelope"> Invia Mail</span></button>
                                     </div>
                                 </div>
                                 <div class="row">

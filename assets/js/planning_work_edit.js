@@ -358,6 +358,15 @@ $(document).on('bs.workevent.view', function () {
         });
     });
 });
+$('#notifyEmail').change(function(){
+if($('#notifyEmail').val()==1){
+    $('#divprevSend').removeClass('hide');
+    $('#divprevSend').addClass('show');
+}else{
+    $('#divprevSend').removeClass('show');
+    $('#divprevSend').addClass('hide');
+}
+});
 $(document).on('bs.create.invoice', function () {
     if($('#planningWorkStatusId').val()==4 || $('#planningWorkStatusId').val()==5) {
         let bsModal = new $.bsModal('Visualizza Email Storico Attività', {
@@ -490,6 +499,105 @@ function sendMail(){
     }).always(function (res) {
 
     });
+
+}
+function previewMail(){
+    let bsModal = new $.bsModal('Visualizza Email Attività', {
+        body: `<div><p>Premere ok per Visualizzare l email allineata allo stato<br>ricordati che per generare la mail deve essere salvata prima con lo stato che interessa
+            </div>
+            <div class="row">
+            <div class="col-md-3">
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="toMail">Destinatario</label>
+                                            <input id="toMail" class="form-control" type="text"
+                                                   placeholder="Destinatario" name="toMail"
+                                                   value=""
+                                                   required="required">
+                                        </div>
+                                    </div>
+</div>
+            <div class="row">
+            <div class="col-md-12">
+                                    <div class="form-group form-group-default">
+                                        <label for="subject">Oggetto</label>
+                                        <textarea class="form-control" name="subject" id="subject"
+                                                  value=""></textarea>
+                                    </div>
+                                </div>
+             </div>  
+             <div clas="row">
+             <div class="col-md-12">
+                                    <div class="form-group form-group-default">
+                                        <label for="mail">Testo Mail</label>
+                                        <textarea class="form-control" name="mail" id="mail"
+                                                  value=""></textarea>
+                                    </div>
+                                </div>
+             </div>  
+             
+             
+             
+</div>  
+<div class="row" id="appendSend">
+             </div>
+    `
+
+    });
+    var planningWorkStatusId= $('#planningWorkStatusId').val();
+    var planningWorkTypeId=$('#planningWorkTypeId').val();
+    var planningWorkId=$('#planningId').val();
+    bsModal.addClass('modal-wide');
+    bsModal.addClass('modal-high');
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
+
+
+        start = $('#startDateWork').val();
+        end = $('#endDateWork').val();
+        const data = {
+            planningWorkId: $('#planningWorkId').val(),
+            title: $('#title').val(),
+            start: $('#startDateWork').val(),
+            end: $('#endDateWork').val(),
+            planningWorkStatusId: $('#planningWorkStatusId').val(),
+            billRegistryClientId: $('#billRegistryClientId').val(),
+            planningWorkTypeId: $('#planningWorkTypeId').val(),
+            request: $('#request').val(),
+            solution: $('#solution').val(),
+            hour: $('#hour').val(),
+            cost: $('#cost').val(),
+            percentageStatus: $('#percentageStatus').val(),
+            notifyEmail: $('#notifyEmail').val(),
+
+
+        };
+
+        $.ajax({
+            method: 'get',
+            url: '/blueseal/xhr/PlanningWorkComposeAndSendEmailAjaxController',
+            data: data,
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            let rawData = res;
+            $.each(rawData, function (k, v) {
+                $('#toMail').val(v.toMail);
+                $('#subject').val(v.subject);
+                $('#mail').val(v.text);
+            });
+            $('#appendSend').append(`<div class="col-md-12"><button class="success" id="modifyRowInvoiceButton' + counterRowView + '" onclick="sendMail()" type="button"><span class="fa fa-envelope">Invia</span></button></div>`);
+
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+
+                // window.location.reload();
+            });
+            bsModal.showOkBtn();
+        });
+    });
+
 
 }
 
