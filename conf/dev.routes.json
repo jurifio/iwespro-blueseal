@@ -4045,6 +4045,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/planning/lista-ticket(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkCustomerListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/planning/modifica/:id(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPlanningWorkEditController"
