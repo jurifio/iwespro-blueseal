@@ -142,7 +142,7 @@ class CPlanningWorkAddAjaxController extends AAjaxController
                         if (!is_array($to)) {
                             $to = [$emailAdmin];
                         }
-                        $emailRepo->newMail('Iwes IT Department <services@iwes.pro>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.pro',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
