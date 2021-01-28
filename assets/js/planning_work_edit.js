@@ -211,7 +211,7 @@ $(document).on('bs.post.view', function () {
             <div class="row">
             <div class="col-md-12">
                                     <div class="form-group form-group-default">
-                                        <label for="subject"> Note</label>
+                                        <label for="subject">Oggetto</label>
                                         <textarea class="form-control" name="subject" id="subject"
                                                   value=""></textarea>
                                     </div>
@@ -220,7 +220,7 @@ $(document).on('bs.post.view', function () {
              <div clas="row">
              <div class="col-md-12">
                                     <div class="form-group form-group-default">
-                                        <label for="mail"> Note</label>
+                                        <label for="mail">Testo Mail</label>
                                         <textarea class="form-control" name="mail" id="mail"
                                                   value=""></textarea>
                                     </div>
@@ -329,8 +329,7 @@ function sendMail(){
     $.ajax({
         method: 'post',
         url: '/blueseal/xhr/PlanningWorkComposeAndSendEmailAjaxController',
-        data: data,
-        dataType: 'json'
+        data: data
     }).done(function (res) {
         $('#appendSend').empty();
         $('#appendSend').append('<div class="col-md-12">'+res+'</div>');
