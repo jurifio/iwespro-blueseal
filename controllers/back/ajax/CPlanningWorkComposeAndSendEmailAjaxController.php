@@ -79,6 +79,7 @@ if($planningWorkEvent) {
             $bri = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $billRegistryClientId]);
             $companyName = $bri->companyName;
             $emailAdmin = $bri->emailAdmin;
+
             $title = $this->app->router->request()->getRequestData('title');
             $request = $this->app->router->request()->getRequestData('request');
             $startDateWork = $this->app->router->request()->getRequestData('start');
@@ -92,7 +93,7 @@ if($planningWorkEvent) {
             $mail=$this->app->router->request()->getRequestData('mail');
             $subject = $this->app->router->request()->getRequestData('subject');
             $planningWorkType = \Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id' => $planningWorkTypeId]);
-
+            $today = (new DateTime())->format('Y-m-d H:i:s');
             $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId' => $planningWorkId,'planningWorkStatusId' => $planningWorkStatusId,'planningWorkTypeId' => $planningWorkTypeId]);
             $planningWorkEvent->mail=$mail;
             if ($notifyEmail == "1") {
