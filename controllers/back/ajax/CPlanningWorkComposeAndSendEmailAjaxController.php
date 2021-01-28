@@ -10,6 +10,7 @@ use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
+use bamboo\domain\repositories\CEmailRepo;
 use DateTime;
 use PDO;
 use PDOException;
@@ -97,16 +98,16 @@ if($planningWorkEvent) {
             $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId' => $planningWorkId,'planningWorkStatusId' => $planningWorkStatusId,'planningWorkTypeId' => $planningWorkTypeId]);
             $planningWorkEvent->mail=$mail;
             if ($notifyEmail == "1") {
-                if ($planningWorkStatusId == '1') {
+
                     $planningWorkEvent->isSent=1;
                     $planningWorkEvent->dateSent=$today;
-                    if (ENV != 'dev') {
+                   if (ENV != 'dev') {
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
                         $to[] = [$emailAdmin];
-                        $emailRepo->newMail('services@iwes.pro',[$emailAdmin],[],[],$subject,$mail,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     }
-                }
+
             }
             $planningWorkEvent->update();
             return 'invio eseguito';
