@@ -138,6 +138,10 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
              $billRegistryInvoiceRowInsert->grossTotalRow = $grossTotal;
              $billRegistryInvoiceRowInsert->billRegistryTypeTaxesId = $billRegistryTypeTaxesId;
              $billRegistryInvoiceRowInsert->insert();
+             $res = \Monkey::app()->dbAdapter->query('select id as id from BillRegistryInvoiceRow where billRegistryInvoiceId='.$lastBillRegistryInvoiceId,[])->fetchAll();
+             foreach ($res as $result) {
+                 $lastBillRegistryInvoiceRowId = $result['id'];
+             }
 
 
              $rowInvoiceDetail[] = [
@@ -860,7 +864,12 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
                  $shopHasCounter->invoiceextraUeCounter = $invoiceNumber;
              }
              $shopHasCounter->update();
-
+             $planningWork=\Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id' => $planningWorkId]);
+             $planningWork->billRegistryInvoiceId=$lastBillRegistryInvoiceId;
+             $planningWork->billRegistryInvoiceRowId=$lastBillRegistryInvoiceRowId;
+             $planningWork->close=1;
+             $planingWork->isBill=1;
+             $planingWork->update();
 
              return $lastBillRegistryInvoiceId;
          }catch(\Throwable $e){
