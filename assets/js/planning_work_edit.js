@@ -19,11 +19,12 @@ summer.summernote({
         'Times New Roman',
         'Verdana'
     ],
-    onImageUpload: function(files, editor, welEditable) {
+    onImageUpload: function (files, editor, welEditable) {
         sendFile(files[0], editor, welEditable);
     },
     fontNamesIgnoreCheck: ['Raleway']
 });
+
 function sendFile(file, editor, welEditable) {
     data = new FormData();
     data.append("file", file);
@@ -34,12 +35,13 @@ function sendFile(file, editor, welEditable) {
         cache: false,
         contentType: false,
         processData: false,
-        success: function(url) {
+        success: function (url) {
             //summer.summernote.editor.insertImage(welEditable, url);
-            summer.summernote('pasteHTML', '<p><img src="'+url+'"></p>');
+            summer.summernote('pasteHTML', '<p><img src="' + url + '"></p>');
         }
     });
 }
+
 (function ($) {
     var planningWorkStatusId = $('#planningWorkStatusIdSelected').val();
     var planningWorkTypeId = $('#planningWorkTypeIdSelected').val();
@@ -162,23 +164,23 @@ function sendFile(file, editor, welEditable) {
 
     });
     $('#cost').change(function () {
-        let cost=parseFloat($('#cost').val());
-        let hour=parseFloat($('#hour').val());
+        let cost = parseFloat($('#cost').val());
+        let hour = parseFloat($('#hour').val());
 
-        let netTotalRow=0;
+        let netTotalRow = 0;
 
-        netTotalRow=cost*hour;
+        netTotalRow = cost * hour;
 
         $('#total').val(netTotalRow.toFixed(2));
 
     });
     $('#hour').change(function () {
-        let cost=parseFloat($('#cost').val());
-        let hour=parseFloat($('#hour').val());
+        let cost = parseFloat($('#cost').val());
+        let hour = parseFloat($('#hour').val());
 
-        let netTotalRow=0;
+        let netTotalRow = 0;
 
-        netTotalRow=cost*hour;
+        netTotalRow = cost * hour;
 
         $('#total').val(netTotalRow.toFixed(2));
 
@@ -186,54 +188,54 @@ function sendFile(file, editor, welEditable) {
 
 })(jQuery);
 
-    $(document).on('bs.post.update', function () {
-        let bsModal = new $.bsModal('Salva Attività', {
-            body: '<div><p>Premere ok per Salvare' +
-                '</div>'
-        });
+$(document).on('bs.post.update', function () {
+    let bsModal = new $.bsModal('Salva Attività', {
+        body: '<div><p>Premere ok per Salvare' +
+            '</div>'
+    });
 
-        bsModal.showCancelBtn();
-        bsModal.setOkEvent(function () {
-
-
-            start = $('#startDateWork').val();
-            end = $('#endDateWork').val();
-            const data = {
-                planningWorkId: $('#planningWorkId').val(),
-                title: $('#title').val(),
-                start: $('#startDateWork').val(),
-                end: $('#endDateWork').val(),
-                planningWorkStatusId: $('#planningWorkStatusId').val(),
-                billRegistryClientId: $('#billRegistryClientId').val(),
-                planningWorkTypeId: $('#planningWorkTypeId').val(),
-                request: $('#request').val(),
-                solution: $('#solution').val(),
-                hour: $('#hour').val(),
-                cost: $('#cost').val(),
-                percentageStatus: $('#percentageStatus').val(),
-                notifyEmail: $('#notifyEmail').val(),
+    bsModal.showCancelBtn();
+    bsModal.setOkEvent(function () {
 
 
-            };
+        start = $('#startDateWork').val();
+        end = $('#endDateWork').val();
+        const data = {
+            planningWorkId: $('#planningWorkId').val(),
+            title: $('#title').val(),
+            start: $('#startDateWork').val(),
+            end: $('#endDateWork').val(),
+            planningWorkStatusId: $('#planningWorkStatusId').val(),
+            billRegistryClientId: $('#billRegistryClientId').val(),
+            planningWorkTypeId: $('#planningWorkTypeId').val(),
+            request: $('#request').val(),
+            solution: $('#solution').val(),
+            hour: $('#hour').val(),
+            cost: $('#cost').val(),
+            percentageStatus: $('#percentageStatus').val(),
+            notifyEmail: $('#notifyEmail').val(),
 
-            $.ajax({
-                method: 'post',
-                url: '/blueseal/xhr/PlanningWorkEditAjaxController',
-                data: data
-            }).done(function (res) {
-                bsModal.writeBody(res);
-            }).fail(function (res) {
-                bsModal.writeBody(res);
-            }).always(function (res) {
-                bsModal.setOkEvent(function () {
-                    window.location.reload();
-                    bsModal.hide();
-                    // window.location.reload();
-                });
-                bsModal.showOkBtn();
+
+        };
+
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/PlanningWorkEditAjaxController',
+            data: data
+        }).done(function (res) {
+            bsModal.writeBody(res);
+        }).fail(function (res) {
+            bsModal.writeBody(res);
+        }).always(function (res) {
+            bsModal.setOkEvent(function () {
+                window.location.reload();
+                bsModal.hide();
+                // window.location.reload();
             });
+            bsModal.showOkBtn();
         });
     });
+});
 
 $(document).on('bs.post.view', function () {
     let bsModal = new $.bsModal('Visualizza Email Attività', {
@@ -251,35 +253,34 @@ $(document).on('bs.post.view', function () {
                                     </div>
 </div>
             <div class="row">
-            <div class="col-md-12">
+             <div class="col-md-12">
                                     <div class="form-group form-group-default">
                                         <label for="subject">Oggetto</label>
-                                        <textarea class="form-control" name="subject" id="subject"
+                                        <textarea class="form-control" cols="600" rows="3" name="subject" id="subject"
                                                   value=""></textarea>
                                     </div>
                                 </div>
              </div>  
-             <div clas="row">
+             <div class="row">
              <div class="col-md-12">
                                     <div class="form-group form-group-default">
                                         <label for="mail">Testo Mail</label>
-                                        <textarea class="form-control" name="mail" id="mail"
+                                        <textarea class="form-control" cols="600" rows="30" name="mail" id="mail"
                                                   value=""></textarea>
                                     </div>
-                                </div>
+             </div>
              </div>  
              
              
              
-</div>  
 <div class="row" id="appendSend">
              </div>
     `
 
     });
-    var planningWorkStatusId= $('#planningWorkStatusId').val();
-    var planningWorkTypeId=$('#planningWorkTypeId').val();
-    var planningWorkId=$('#planningId').val();
+    var planningWorkStatusId = $('#planningWorkStatusId').val();
+    var planningWorkTypeId = $('#planningWorkTypeId').val();
+    var planningWorkId = $('#planningId').val();
     bsModal.addClass('modal-wide');
     bsModal.addClass('modal-high');
     bsModal.showCancelBtn();
@@ -315,9 +316,9 @@ $(document).on('bs.post.view', function () {
             console.log(res);
             let rawData = res;
             $.each(rawData, function (k, v) {
-                    $('#toMail').val(v.toMail);
-                    $('#subject').val(v.subject);
-                    $('#mail').val(v.text);
+                $('#toMail').val(v.toMail);
+                $('#subject').val(v.subject);
+                $('#mail').val(v.text);
             });
             $('#appendSend').append(`<div class="col-md-12"><button class="success" id="modifyRowInvoiceButton' + counterRowView + '" onclick="sendMail()" type="button"><span class="fa fa-envelope">Invia</span></button></div>`);
 
@@ -342,9 +343,9 @@ $(document).on('bs.workevent.view', function () {
     `
 
     });
-    var planningWorkStatusId= $('#planningWorkStatusId').val();
-    var planningWorkTypeId=$('#planningWorkTypeId').val();
-    var planningWorkId=$('#planningId').val();
+    var planningWorkStatusId = $('#planningWorkStatusId').val();
+    var planningWorkTypeId = $('#planningWorkTypeId').val();
+    var planningWorkId = $('#planningId').val();
     bsModal.addClass('modal-wide');
     bsModal.addClass('modal-high');
     bsModal.showCancelBtn();
@@ -379,9 +380,9 @@ $(document).on('bs.workevent.view', function () {
         }).done(function (res) {
             console.log(res);
             let rawData = res;
-            let rowAppend='<div class="row"><div class="col-md-2">Stato in Data</div><div class="col-md-1">% Completamento</div><div class="col-md-7">Soluzione</div><div class="col-md-2">Invio Mail</div></div><hr>';
+            let rowAppend = '<div class="row"><div class="col-md-2">Stato in Data</div><div class="col-md-1">% Completamento</div><div class="col-md-7">Soluzione</div><div class="col-md-2">Invio Mail</div></div><hr>';
             $.each(rawData, function (k, v) {
-                rowAppend=rowAppend+'<div class="row"><div class="col-md-2">'+v.planningWorkStatusName+ ' '+v.dateCreate+'</div><div class="col-md-1">'+v.percentageStatus+'</div><div class="col-md-7">'+v.solution+'</div><div class="col-md-2">'+v.isSent+'</div></div><hr>';
+                rowAppend = rowAppend + '<div class="row"><div class="col-md-2">' + v.planningWorkStatusName + ' ' + v.dateCreate + '</div><div class="col-md-1">' + v.percentageStatus + '</div><div class="col-md-7">' + v.solution + '</div><div class="col-md-2">' + v.isSent + '</div></div><hr>';
                 $('#toMail').val(v.toMail);
                 $('#subject').val(v.subject);
                 $('#mail').val(v.text);
@@ -400,17 +401,17 @@ $(document).on('bs.workevent.view', function () {
         });
     });
 });
-$('#notifyEmail').change(function(){
-if($('#notifyEmail').val()==1){
-    $('#divprevSend').removeClass('hide');
-    $('#divprevSend').addClass('show');
-}else{
-    $('#divprevSend').removeClass('show');
-    $('#divprevSend').addClass('hide');
-}
+$('#notifyEmail').change(function () {
+    if ($('#notifyEmail').val() == 1) {
+        $('#divprevSend').removeClass('hide');
+        $('#divprevSend').addClass('show');
+    } else {
+        $('#divprevSend').removeClass('show');
+        $('#divprevSend').addClass('hide');
+    }
 });
 $(document).on('bs.create.invoice', function () {
-    if($('#planningWorkStatusId').val()==4 || $('#planningWorkStatusId').val()==5) {
+    if ($('#planningWorkStatusId').val() == 4 || $('#planningWorkStatusId').val() == 5) {
         let bsModal = new $.bsModal('Visualizza Email Storico Attività', {
             body: `<div><p>Premere ok per Visualizzare lo storico
             </div>
@@ -477,7 +478,7 @@ $(document).on('bs.create.invoice', function () {
                 bsModal.showOkBtn();
             });
         });
-    }else {
+    } else {
         let bsModal = new $.bsModal('Generazione Fattura', {
             body: `<div><p>Impossibile Generare la fattura per generarla bisogna aver completato l'attività`
 
@@ -491,24 +492,24 @@ $(document).on('bs.create.invoice', function () {
 });
 
 
-function sendMail(){
+function sendMail() {
 
-    var planningWorkId= $('#planningWorkId').val();
-        var title= $('#title').val();
-        var start= $('#startDateWork').val();
-       var  end= $('#endDateWork').val();
-       var  planningWorkStatusId= $('#planningWorkStatusId').val();
-       var  billRegistryClientId= $('#billRegistryClientId').val();
-      var  planningWorkTypeId= $('#planningWorkTypeId').val();
-      var  request= $('#request').val();
-      var  solution= $('#solution').val();
-      var  hour= $('#hour').val();
-      var  cost= $('#cost').val();
-      var  percentageStatus= $('#percentageStatus').val();
-        var notifyEmail= $('#notifyEmail').val();
-        var toMail=$('#toMail').val();
-        var subject=$('#subject').val();
-        var mail=$('#mail').val();
+    var planningWorkId = $('#planningWorkId').val();
+    var title = $('#title').val();
+    var start = $('#startDateWork').val();
+    var end = $('#endDateWork').val();
+    var planningWorkStatusId = $('#planningWorkStatusId').val();
+    var billRegistryClientId = $('#billRegistryClientId').val();
+    var planningWorkTypeId = $('#planningWorkTypeId').val();
+    var request = $('#request').val();
+    var solution = $('#solution').val();
+    var hour = $('#hour').val();
+    var cost = $('#cost').val();
+    var percentageStatus = $('#percentageStatus').val();
+    var notifyEmail = $('#notifyEmail').val();
+    var toMail = $('#toMail').val();
+    var subject = $('#subject').val();
+    var mail = $('#mail').val();
     const data = {
         planningWorkId: $('#planningWorkId').val(),
         title: $('#title').val(),
@@ -523,9 +524,9 @@ function sendMail(){
         cost: $('#cost').val(),
         percentageStatus: $('#percentageStatus').val(),
         notifyEmail: $('#notifyEmail').val(),
-        toMail:$('#toMail').val(),
-        subject:$('#subject').val(),
-        mail:$('#mail').val(),
+        toMail: $('#toMail').val(),
+        subject: $('#subject').val(),
+        mail: $('#mail').val(),
     };
     $.ajax({
         method: 'post',
@@ -533,17 +534,18 @@ function sendMail(){
         data: data
     }).done(function (res) {
         $('#appendSend').empty();
-        $('#appendSend').append('<div class="col-md-12">'+res+'</div>');
+        $('#appendSend').append('<div class="col-md-12">' + res + '</div>');
 
     }).fail(function (res) {
         $('#appendSend').empty();
-        $('#appendSend').append('<div class="col-md-12">errore: '+res+'</div>');
+        $('#appendSend').append('<div class="col-md-12">errore: ' + res + '</div>');
     }).always(function (res) {
 
     });
 
 }
-function previewMail(){
+
+function previewMail() {
     let bsModal = new $.bsModal('Visualizza Email Attività', {
         body: `<div><p>Premere ok per Visualizzare l email allineata allo stato<br>ricordati che per generare la mail deve essere salvata prima con lo stato che interessa
             </div>
@@ -562,16 +564,16 @@ function previewMail(){
             <div class="col-md-12">
                                     <div class="form-group form-group-default">
                                         <label for="subject">Oggetto</label>
-                                        <textarea class="form-control" name="subject" id="subject"
+                                        <textarea class="form-control" cols="600" rows="3" name="subject" id="subject"
                                                   value=""></textarea>
                                     </div>
-                                </div>
+            </div>
              </div>  
-             <div clas="row">
+             <div class="row">
              <div class="col-md-12">
                                     <div class="form-group form-group-default">
                                         <label for="mail">Testo Mail</label>
-                                        <textarea class="form-control" name="mail" id="mail"
+                                        <textarea class="form-control"cols="600" rows="30" name="mail" id="mail"
                                                   value=""></textarea>
                                     </div>
                                 </div>
@@ -579,15 +581,15 @@ function previewMail(){
              
              
              
-</div>  
+  
 <div class="row" id="appendSend">
              </div>
     `
 
     });
-    var planningWorkStatusId= $('#planningWorkStatusId').val();
-    var planningWorkTypeId=$('#planningWorkTypeId').val();
-    var planningWorkId=$('#planningId').val();
+    var planningWorkStatusId = $('#planningWorkStatusId').val();
+    var planningWorkTypeId = $('#planningWorkTypeId').val();
+    var planningWorkId = $('#planningId').val();
     bsModal.addClass('modal-wide');
     bsModal.addClass('modal-high');
     bsModal.showCancelBtn();
