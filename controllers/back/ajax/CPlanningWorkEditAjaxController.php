@@ -63,7 +63,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             if($percentageStatus==''){
                 $percentageStatus='0';
             }
-            $notifyEmail = (isset($data['notifyEmail'])?$data['notifyEmail']:'0');
+            $notifyEmail = $data['notifyEmail'];
             $newStartDate=(new \DateTime($startDateWork))->format('Y-m-d H:i:s');
             $newEndDate=(new \DateTime($endDateWork))->format('Y-m-d H:i:s');
 
