@@ -377,7 +377,8 @@
                 data-placement="bottom"
                 data-href="#"
         ></bs-toolbar-button>
-        <bs-toolbar-button
+        <?php if($pWork->planningWorkTypeId<10 && $pWork->planningWorkStatusId==4){
+        echo '<bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-money"
                 data-permission="allShops"
@@ -387,7 +388,8 @@
                 data-title="Genera Fattura"
                 data-placement="bottom"
                 data-href="#"
-        ></bs-toolbar-button>
+        ></bs-toolbar-button>';
+        }?>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
