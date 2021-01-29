@@ -868,8 +868,8 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
              $planningWork->billRegistryInvoiceId=$lastBillRegistryInvoiceId;
              $planningWork->billRegistryInvoiceRowId=$lastBillRegistryInvoiceRowId;
              $planningWork->close=1;
-             $planingWork->isBill=1;
-             $planingWork->update();
+             $planningWork->isBill=1;
+             $planwingWork->update();
 
              return $lastBillRegistryInvoiceId;
          }catch(\Throwable $e){
