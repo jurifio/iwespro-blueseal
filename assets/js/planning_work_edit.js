@@ -457,7 +457,8 @@ $(document).on('bs.create.invoice', function () {
                 dataType: 'json',
             }).done(function (res) {
                 bsModal.writeBody('Inserimento eseguito');
-                window.open('/blueseal/anagrafica/fatture-modifica?id='+res);
+                let url='/blueseal/anagrafica/fatture-modifica?id='+res
+                window.location.href=url;
                 bsModal.hide();
 
 

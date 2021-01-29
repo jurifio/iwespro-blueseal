@@ -66,7 +66,7 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
              $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->findOneBy(['planningWorkId' => $planningWorkId,'planningWorkStatusId' => $planningWorkStatusId,'planningWorkTypeId' => $planningWorkTypeId,'isSent' => '0']);
 
 
-             $billRegistryClient = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $_GET['billRegistryClientId']]);
+             $billRegistryClient = \Monkey::app()->repoFactory->create('BillRegistryClient')->findOneBy(['id' => $billRegistryClientId]);
              $billRegistryClientId = $billRegistryClient->id;
              $billRegistryClientBillingInfo = $billRegistryClientBillingInfoRepo->findOneBy(['billRegistryClientId' => $billRegistryClientId]);
              $billRegistryClientBillingInfoId = $billRegistryClientBillingInfo->id;
@@ -86,15 +86,14 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
                  $netTotal = $total;
                  $grossTotal = $netTotal + $vat;
              }
+            $discountTotal=0;
 
-
-             $dateNow = new \DateTime();
-             $dateInvoice = strtotime($dateNow);
-             $invoiceDate = date('Y-m-d H:i:s',$dateInvoice);
-             $invoiceYear = date('Y',$dateInvoice);
-             $todayInvoice = date('d-m-Y',$dateInvoice);
-
-             $invoiceNumber = $em->query("SELECT (shc.invoiceCounter+1) as `new` from ShopHasCounter  where shc.shopId=?  and shc.invoiceYear=?",[57,$invoiceYear])->fetchAll()[0]['new'];
+             $dateInvoice = new \DateTime();
+             $invoiceDate = $dateInvoice->format('Y-m-d H:i:s');
+             $invoiceYear = $dateInvoice->format('Y');
+             $todayInvoice = $dateInvoice->format('d-m-Y');
+             $em = $this->app->entityManagerFactory->create('ShopHasCounter');
+             $invoiceNumber = $em->query("SELECT (shc.invoiceCounter+1) as `new` from ShopHasCounter shc where shc.shopId=?  and shc.invoiceYear=?",[57,$invoiceYear])->fetchAll()[0]['new'];
 
 
              $billRegistryInvoiceInsert = $billRegistryInvoiceRepo->getEmptyEntity();
@@ -170,6 +169,7 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
                  $billRegistryTimeTable = $billRegistryTimeTableRepo->getEmptyEntity();
                  $billRegistryTimeTable->typeDocument = '7';
                  $billRegistryTimeTable->billRegistryTypePaymentId = $billRegistryTypePaymentId;
+                 $billRegistryTimeTable->billRegistryPaymentContractRowPaymentBillId=0;
 
                  $billRegistryTimeTable->billRegistryInvoiceId = $lastBillRegistryInvoiceId;
                  $amountRate = $grossTotal / 100 * $rowsPayment->prc;
@@ -791,7 +791,7 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
              }
              $invoiceText .= '</strong></td>';
              if ($isExtraUe != 1) {
-                 $invoiceText .= '<td style="border: 0px" class="text-center">' . number_format($vatTotal,2,',','.') . ' &euro;' . '</td></tr>';
+                 $invoiceText .= '<td style="border: 0px" class="text-center">' . number_format($vat,2,',','.') . ' &euro;' . '</td></tr>';
              } else {
                  $invoiceText .= '<td style="border: 0px" class="text-center">' . '0,00  &euro;' . '</td></tr>';
              }
@@ -869,7 +869,7 @@ class CPlanningWorkComposeInvoiceAjaxController extends AAjaxController
              $planningWork->billRegistryInvoiceRowId=$lastBillRegistryInvoiceRowId;
              $planningWork->close=1;
              $planningWork->isBill=1;
-             $planwingWork->update();
+             $planningWork->update();
 
              return $lastBillRegistryInvoiceId;
          }catch(\Throwable $e){
