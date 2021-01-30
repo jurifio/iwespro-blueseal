@@ -147,7 +147,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
 
                             $to[] = [$emailAdmin];
 
-                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],['gianluca@iwes.it'],[],$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }

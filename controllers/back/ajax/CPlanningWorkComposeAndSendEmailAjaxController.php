@@ -105,7 +105,7 @@ if($planningWorkEvent) {
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
                         $to[] = [$emailAdmin];
-                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],[],[],$subject,$mail,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],['gianluca@iwes.it'],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     }
 
             }
