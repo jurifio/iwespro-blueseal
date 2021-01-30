@@ -45,6 +45,20 @@
                 "secret": "3xwP2IXyck9GL04OpAsXOVRMyyvk9Ew+5lvIAiTB"
             }
         },
+        "amazonMarketplace": {
+            "sellerId": "sellerId",
+            "AWSAccessKeyId:": "QUtJQUlCV0I3VUFHRDdIN0pJQVE=",
+            "MWSAuthToken":"mzn.mws.68b36aa5-e100-ebfb-5bdd-41481f59a43d",
+            "AWSSecretkey":"enhJRk10b3liU3YxWVlhUTBZWXhKb0doazIrTEcyYzBZVHFFVnUwVg",
+            "marketplace": {
+                "Italy":"APJ6JRA9NG5V4",
+                "France":"A13V1IB3VIYZZH",
+                "Spain":"A1RKKUPIHCS9HS",
+                "Netherlands":"A1805IZSGTT6HS",
+                "Germany":"A1PA6795UKMFR9",
+                "GreatBritain":"A1F83G8C2ARO7P"
+            }
+        },
         "ebayConfig": {
             "version": "947",
             "isProduction": false,
