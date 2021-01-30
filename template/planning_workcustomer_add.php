@@ -121,7 +121,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-save"
-                data-permission="allShops||worker"
+                data-permission="allShops||worker||/admin/product/list"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.post.insert"
