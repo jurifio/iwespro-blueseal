@@ -64,7 +64,7 @@ class CPlanningWorkDeleteAjaxController extends AAjaxController
                             }
 
                         }
-                        $planningWork=\Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['planningWorkId'=>$planningWorkId]);
+                        $planningWork=\Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id'=>$planningWorkId]);
                         $planningWork->delete();
 
             return 'Attivita #'.$planningWorkId. '  cancellata';
