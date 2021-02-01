@@ -146,8 +146,12 @@ class CPlanningWorkEditAjaxController extends AAjaxController
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
 
                             $to[] = [$emailAdmin];
+                        $tocc=[];
+                        $toccb=[];
+                        $tocc[]=['gianluca@iwes.it'];
+                        $toccb[]=['juri@iwes.it'];
 
-                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],['gianluca@iwes.it'],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],[$tocc],[$toccb],$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
