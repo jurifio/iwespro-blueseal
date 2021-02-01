@@ -59,7 +59,10 @@ class CPlanningWorkDeleteAjaxController extends AAjaxController
                         $emailRepo->newMail('services@iwes.it',$to,$tocc,[],'Cancellazione Attività #'.$planningWorkId,'L\'attivià è stata cancellata',null,null,null,'mailGun',false,null);
                         $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->findBy(['planningWorkId'=>$planningWorkId]);
                         if($planningWorkEvent){
-                            $planningWorkEvent->delete();
+                            foreach ($planningWorkEvent as $event) {
+                                $event->delete();
+                            }
+
                         }
                         $planningWork=\Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['planningWorkId'=>$planningWorkId]);
                         $planningWork->delete();
