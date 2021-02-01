@@ -110,11 +110,11 @@ class CPlanningWorkComposeAndSendEmailAjaxController extends AAjaxController
                     $tocc = ['gianluca@cartechinishop.com'];
                     $toccb = ['jurif@hotmail.com'];
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                    $emailRepo->newMail('services@iwes.it',$to,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
+                    $emailRepo->newMail('Iwes Services Department <services@iwes.it>',$to,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                    $emailRepo->newMail('services@iwes.it',$tocc,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
+                    $emailRepo->newMail('Iwes Services Department <services@iwes.it>',$tocc,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                    $emailRepo->newMail('services@iwes.it',$toccb,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
+                    $emailRepo->newMail('Iwes Services Department <services@iwes.it>',$toccb,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                 }
 
             }

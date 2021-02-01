@@ -148,10 +148,10 @@ class CPlanningWorkAddAjaxController extends AAjaxController
                         $toccb=['jurif@hotmail.com'];
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('Iwes Services Department <services@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$tocc,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('Iwes Services Department <services@iwes.it>',$tocc,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
                         $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$toccb,[],[],$subject,$message,null,null,null,'mailGun',false,null);
