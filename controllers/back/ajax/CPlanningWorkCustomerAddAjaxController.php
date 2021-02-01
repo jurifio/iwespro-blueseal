@@ -146,9 +146,16 @@ class CPlanningWorkCustomerAddAjaxController extends AAjaxController
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
                         $emailRepo->newMail('services@iwes.it',[$emailAdmin],[],[],$subject,$message,null,null,null,'mailGun',false,null);
+
+                        sleep(1);
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('services@iwes.it',['gianluca@iwes.it'],['juri@iwes.it'],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',['gianluca@iwes.it'],[],[],$subject,$message,null,null,null,'mailGun',false,null);
+
+                        sleep(1);
+                        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                        $emailRepo->newMail('services@iwes.it',['juri@iwes.it'],[],[],$subject,$message,null,null,null,'mailGun',false,null);
                     }
+
                 }
             }
             $planningWorkEvent->insert();
