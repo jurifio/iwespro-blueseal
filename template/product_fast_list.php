@@ -331,7 +331,10 @@
                 data-remote="bs.product.marketplace.publish"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.marketplace.unpublish"
+                data-remote="bs.product.marketplace.publish"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.publish.amazon"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Shooting">

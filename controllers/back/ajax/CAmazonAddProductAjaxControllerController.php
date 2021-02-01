@@ -36,7 +36,7 @@ class CAmazonAddProductAjaxControllerController extends AAjaxController
 				FROM 	MarketplaceAccountHasProduct mahp, 
 						Marketplace m 
 				WHERE 	m.id = mahp.marketplaceId 
-					AND m.name = 'Amazon' and mahp.isToWork = 1
+					AND m.name = 'Amazon' and mahp.isToWork = 1 AND mahp.marketplaceAccountId=42
 					GROUP BY marketplaceId,
 					marketplaceAccountId";
 
@@ -51,7 +51,7 @@ class CAmazonAddProductAjaxControllerController extends AAjaxController
 				FROM 	MarketplaceAccountHasProduct mahp, 
 						Marketplace m 
 				WHERE 	m.id = mahp.marketplaceId 
-					AND m.name = 'Amazon' and mahp.isToWork = 1 and mahp.marketplaceAccountId = ?";
+					AND m.name = 'Amazon' and mahp.isToWork = 1 and mahp.marketplaceAccountId = 42";
                 $res = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->em()->findBySql($sql,[$marketplaceAccount->id]);
 
                 foreach ($res as $re) {

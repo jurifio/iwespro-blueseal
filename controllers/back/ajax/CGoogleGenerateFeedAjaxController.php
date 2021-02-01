@@ -11,10 +11,10 @@ use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\CMarketplaceAccount;
 
 use bamboo\core\theming\CWidgetHelper;
-use const bamboo\ecommerce\offline\feed\AExpertFeedBuilder;
+
 
 /**
- * Class CAmazonAddProductAjaxControllerController
+ * Class CGoogleGenerateFeedAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>

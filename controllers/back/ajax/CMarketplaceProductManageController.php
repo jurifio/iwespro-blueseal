@@ -21,7 +21,7 @@ class CMarketplaceProductManageController extends AAjaxController
     public function get()
     {
         $response = [];
-        foreach (\Monkey::app()->repoFactory->create('Marketplace')->findBy(['type' => 'cpc']) as $mp) {
+        foreach (\Monkey::app()->repoFactory->create('Marketplace')->findBy(['type' => 'marketplace']) as $mp) {
             foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]) as $account) {
                 $activeAutomatic = isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
                 $modifier = isset($account->config['priceModifier']) ? $account->config['priceModifier'] : 0;
