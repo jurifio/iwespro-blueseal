@@ -120,6 +120,9 @@
                 data-placement="bottom"
                 data-href="/blueseal/planning/aggiungi"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.lists.delete.planningwork"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
