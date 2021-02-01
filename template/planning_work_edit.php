@@ -120,7 +120,7 @@
                                     <div class="col-md-5">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="request">Richiesta</label>
-                                            <textarea  id="request" cols="60" rows="10"
+                                            <textarea  id="request" cols="180" rows="50"
                                                       placeholder="Inserisci la richiesta"
                                                       name="request"><?php echo $pWork->request ?></textarea>
                                         </div>
@@ -129,7 +129,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="solution">Soluzione</label>
-                                            <textarea  id="solution" cols="60" rows="10"
+                                            <textarea  id="solution" cols="180" rows="50"
                                                       placeholder="Inserisci la soluzione"
                                                       name="description"><?php echo $pWork->solution ?></textarea>
                                         </div>

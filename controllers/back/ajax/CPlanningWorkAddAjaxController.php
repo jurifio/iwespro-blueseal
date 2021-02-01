@@ -143,13 +143,12 @@ class CPlanningWorkAddAjaxController extends AAjaxController
                       $planningWorkEvent->isSent=1;
                       $planningWorkEvent->dateSent=$todaySent;
                     if (ENV != 'dev') {
-                        $tocc=[];
-                        $toccb=[];
-                        $tocc[]=['gianluca@iwes.it'];
-                        $toccb[]=['juri@iwes.it'];
+                        $to=[$emailAdmin];
+                        $tocc=['gianluca@iwes.it'];
+                        $toccb=['juri@iwes.it'];
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('services@iwes.it',$emailAdmin,$tocc,$toccb,$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',$to,$tocc,$toccb,$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }

@@ -89,7 +89,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="request">Richiesta</label>
-                                                <textarea id="request" cols="60" rows="10"
+                                                <textarea id="request" cols="180" rows="50"
                                                           placeholder="Inserisci la richiesta"
                                                           name="description"></textarea>
                                             </div>
@@ -121,7 +121,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-save"
-                data-permission="allShops||worker||/admin/product/list"
+                data-permission="allShops||worker"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-event="bs.post.insert"
@@ -132,4 +132,4 @@
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
-</html>
+</html>                     

@@ -102,7 +102,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="request">Richiesta</label>
-                                            <textarea   id="request" cols="60" rows="10"
+                                            <textarea  class="summer" id="request" cols="180" rows="50"
                                                       placeholder="Inserisci la richiesta"
                                                       name="description"></textarea>
                                         </div>
@@ -111,9 +111,9 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="solution">Soluzione</label>
-                                            <textarea  id="solution" cols="60" rows="10"
+                                            <textarea class="summer" id="solution" cols="180" rows="50"
                                                       placeholder="Inserisci la soluzione"
-                                                      name="description"></textarea>
+                                                      name="solution"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -193,5 +193,3 @@
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
-</body>
-</html>

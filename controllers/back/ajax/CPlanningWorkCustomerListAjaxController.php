@@ -22,7 +22,7 @@ use DateTime;
  * @date 10/02/2020
  * @since 1.0
  */
-class CPlanningWorkListAjaxController extends AAjaxController
+class CPlanningWorkCustomerListAjaxController extends AAjaxController
 {
     public function get()
     {
