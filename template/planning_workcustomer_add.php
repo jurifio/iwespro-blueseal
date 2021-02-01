@@ -91,7 +91,7 @@
                                                 <label for="request">Richiesta</label>
                                                 <textarea id="request" cols="180" rows="50"
                                                           placeholder="Inserisci la richiesta"
-                                                          name="description"></textarea>
+                                                          name="request"></textarea>
                                             </div>
                                         </div>
                                     </div>

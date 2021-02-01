@@ -131,7 +131,7 @@
                                             <label for="solution">Soluzione</label>
                                             <textarea  id="solution" cols="180" rows="50"
                                                       placeholder="Inserisci la soluzione"
-                                                      name="description"><?php echo $pWork->solution ?></textarea>
+                                                      name="solution"><?php echo $pWork->solution ?></textarea>
                                         </div>
                                     </div>
                                     <?php if($pWork->notifyEmail==1){

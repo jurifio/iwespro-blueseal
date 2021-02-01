@@ -102,16 +102,16 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="request">Richiesta</label>
-                                            <textarea  class="summer" id="request" cols="180" rows="50"
+                                            <textarea id="request" cols="180" rows="50"
                                                       placeholder="Inserisci la richiesta"
-                                                      name="description"></textarea>
+                                                      name="request"></textarea>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default selectize-enabled">
                                             <label for="solution">Soluzione</label>
-                                            <textarea class="summer" id="solution" cols="180" rows="50"
+                                            <textarea  id="solution" cols="180" rows="50"
                                                       placeholder="Inserisci la soluzione"
                                                       name="solution"></textarea>
                                         </div>
