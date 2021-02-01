@@ -42,7 +42,7 @@ class CPlanningWorkDeleteAjaxController extends AAjaxController
      * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
      * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
      */
-    public function delete()
+    public function post()
     {
         try {
             $data = \Monkey::app()->router->request()->getRequestData();

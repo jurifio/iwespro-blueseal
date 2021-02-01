@@ -26,7 +26,7 @@ $(document).on('bs-lists-delete-planningwork', function (e, element, button) {
 
   let newsletterId = selectedRows[0].DT_RowId;
   let bsModal = new $.bsModal('Cancellazione', {
-    body: '<p>Cancella il Template selezionato</p>'
+    body: '<p>Cancella Attivita selezionata</p>'
   });
 
 
@@ -36,7 +36,7 @@ $(document).on('bs-lists-delete-planningwork', function (e, element, button) {
 
 
     $.ajax({
-      method: "delete",
+      method: "post",
       url: "/blueseal/xhr/PlanningWorkDeleteAjaxController",
       data: {
         id: id
