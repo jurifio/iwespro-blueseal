@@ -107,8 +107,8 @@ class CPlanningWorkComposeAndSendEmailAjaxController extends AAjaxController
                     /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                     $to= [$emailAdmin];
 
-                    $tocc = ['gianluca@iwes.it'];
-                    $toccb = ['juri@iwes.it'];
+                    $tocc = ['gianluca@cartechinishop.com'];
+                    $toccb = ['jurif@hotmail.com'];
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
                     $emailRepo->newMail('services@iwes.it',$to,[],[],$subject,$mail,null,null,null,'mailGun',false,null);
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');

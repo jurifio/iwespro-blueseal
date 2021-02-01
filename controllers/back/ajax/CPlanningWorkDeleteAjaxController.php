@@ -47,13 +47,13 @@ class CPlanningWorkDeleteAjaxController extends AAjaxController
             $data = \Monkey::app()->router->request()->getRequestData();
             $planningWorkId = $data['id'];
 
-            
+
 
 
             /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
 
-            $to = ['gianluca@iwes.it'];
-            $tocc = ['juri@iwes.it'];
+            $to = ['gianluca@cartechinishop.com'];
+            $tocc = ['jurif@hotmail.com'];
             $emailRepo = \Monkey::app()->repoFactory->create('Email');
             $emailRepo->newMail('services@iwes.it',$to,[],[],'Cancellazione Attività #' . $planningWorkId,'L\'attivià è stata cancellata',null,null,null,'mailGun',false,null);
             $emailRepo = \Monkey::app()->repoFactory->create('Email');

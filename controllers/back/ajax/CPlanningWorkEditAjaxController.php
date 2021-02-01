@@ -145,13 +145,12 @@ class CPlanningWorkEditAjaxController extends AAjaxController
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
 
-                            $to[] = [$emailAdmin];
-                        $tocc=[];
-                        $toccb=[];
-                        $tocc[]=['gianluca@iwes.it'];
-                        $toccb[]=['juri@iwes.it'];
+                            $to = [$emailAdmin];
 
-                        $emailRepo->newMail('services@iwes.it',$emailAdmin,$tocc,$toccb,$subject,$message,null,null,null,'mailGun',false,null);
+                        $tocc=['gianluca@cartechinishop.com'];
+                        $toccb=['jurif@hotmail.com'];
+
+                        $emailRepo->newMail('services@iwes.it',$to,$tocc,$toccb,$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
