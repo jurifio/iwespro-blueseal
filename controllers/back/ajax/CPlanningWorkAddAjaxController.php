@@ -148,13 +148,13 @@ class CPlanningWorkAddAjaxController extends AAjaxController
                         $toccb=['juri@iwes.it'];
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('services@iwes.it',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$to,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('services@iwes.it',$tocc,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$tocc,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                         /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('services@iwes.it',$toccb,[],[],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('Iwes IT Department <it@iwes.it>',$toccb,[],[],$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
