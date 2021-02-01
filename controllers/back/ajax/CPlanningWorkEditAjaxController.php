@@ -151,7 +151,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
                         $tocc[]=['gianluca@iwes.it'];
                         $toccb[]=['juri@iwes.it'];
 
-                        $emailRepo->newMail('services@iwes.it',[$emailAdmin],[$tocc],[$toccb],$subject,$message,null,null,null,'mailGun',false,null);
+                        $emailRepo->newMail('services@iwes.it',$emailAdmin,$tocc,$toccb,$subject,$message,null,null,null,'mailGun',false,null);
                     }
                 }
             }
