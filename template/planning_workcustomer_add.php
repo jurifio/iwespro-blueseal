@@ -89,7 +89,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="request">Richiesta</label>
-                                                <textarea id="request" cols="180" rows="50"
+                                                <textarea id="request" cols="120" rows="30"
                                                           placeholder="Inserisci la richiesta"
                                                           name="request"></textarea>
                                             </div>
