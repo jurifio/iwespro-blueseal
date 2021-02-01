@@ -37,7 +37,7 @@ $(document).on('bs-lists-delete-planningwork', function (e, element, button) {
 
     $.ajax({
       method: "delete",
-      url: "/blueseal/xhr/CPlanningWorkDeleteAjaxController",
+      url: "/blueseal/xhr/PlanningWorkDeleteAjaxController",
       data: {
         id: id
       }
