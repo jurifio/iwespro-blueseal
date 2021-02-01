@@ -32,7 +32,6 @@ use \bamboo\utils\time\STimeToolbox;
  * @date 01/02/2021
  * @since 1.0
  */
-
 class CPlanningWorkDeleteAjaxController extends AAjaxController
 {
 
@@ -46,30 +45,32 @@ class CPlanningWorkDeleteAjaxController extends AAjaxController
     {
         try {
             $data = \Monkey::app()->router->request()->getRequestData();
-            $planningWorkId=$data['id'];
+            $planningWorkId = $data['id'];
 
-                        $to=[];
-                        $tocc=[];
+            
 
 
-                        /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
-                        $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $to[]=['gianluca@iwes.it'];
-                        $tocc[]=['juri@iwes.it'];
-                        $emailRepo->newMail('services@iwes.it',$to,$tocc,[],'Cancellazione Attività #'.$planningWorkId,'L\'attivià è stata cancellata',null,null,null,'mailGun',false,null);
-                        $planningWorkEvent=\Monkey::app()->repoFactory->create('PlanningWorkEvent')->findBy(['planningWorkId'=>$planningWorkId]);
-                        if($planningWorkEvent){
-                            foreach ($planningWorkEvent as $event) {
-                                $event->delete();
-                            }
+            /** @var \bamboo\domain\repositories\CEmailRepo $emailRepo */
 
-                        }
-                        $planningWork=\Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id'=>$planningWorkId]);
-                        $planningWork->delete();
+            $to = ['gianluca@iwes.it'];
+            $tocc = ['juri@iwes.it'];
+            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            $emailRepo->newMail('services@iwes.it',$to,[],[],'Cancellazione Attività #' . $planningWorkId,'L\'attivià è stata cancellata',null,null,null,'mailGun',false,null);
+            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+            $emailRepo->newMail('services@iwes.it',$tocc,[],[],'Cancellazione Attività #' . $planningWorkId,'L\'attivià è stata cancellata',null,null,null,'mailGun',false,null);
+            $planningWorkEvent = \Monkey::app()->repoFactory->create('PlanningWorkEvent')->findBy(['planningWorkId' => $planningWorkId]);
+            if ($planningWorkEvent) {
+                foreach ($planningWorkEvent as $event) {
+                    $event->delete();
+                }
 
-            return 'Attivita #'.$planningWorkId. '  cancellata';
-        }catch(\Throwable $e){
-            return 'Errore:'.$e;
+            }
+            $planningWork = \Monkey::app()->repoFactory->create('PlanningWork')->findOneBy(['id' => $planningWorkId]);
+            $planningWork->delete();
+
+            return 'Attivita #' . $planningWorkId . '  cancellata';
+        } catch (\Throwable $e) {
+            return 'Errore:' . $e;
         }
 
 
