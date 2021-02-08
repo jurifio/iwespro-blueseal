@@ -42,7 +42,7 @@
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center">Visibilità</th>
-                                <th data-slug="storeHouseId"
+                                <th data-slug="storeHouse"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="asc"

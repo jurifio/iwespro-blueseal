@@ -45,10 +45,10 @@ class CTagExclusiveListAjaxController extends AAjaxController
                 $row['shopId'] = 'non selezionato';
             }
             if($val->storeHouseId!=null){
-                $storeHouse=\Monkey::app()->repoFactory->create('StoreHouse')->findOneBy(['id'=>$val->storeHouseId]);
-                $row['storeHouseId']=$storeHouse->name;
+                $storeHouse=\Monkey::app()->repoFactory->create('StoreHouse')->findOneBy(['id'=>$val->storeHouseId,'shopId'=>$val->shopId]);
+                $row['storeHouse']=$storeHouse->name;
             }else{
-                $row['storeHouseId']='Non Selezionato';
+                $row['storeHouse']='Non Selezionato';
             }
             $translations = [];
             foreach (\Monkey::app()->repoFactory->create('TagExclusiveTranslation')->findBy(['tagExclusiveId'=>$val->id]) as $translation) $translations[] = $translation->name;
