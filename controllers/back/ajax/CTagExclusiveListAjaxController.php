@@ -46,7 +46,7 @@ class CTagExclusiveListAjaxController extends AAjaxController
             }
             if($val->storeHouseId!=null){
                 $storeHouse=\Monkey::app()->repoFactory->create('StoreHouse')->findOneBy(['id'=>$val->storeHouseId,'shopId'=>$val->shopId]);
-                $row['storeHouseId']=$storeHouse->name;
+                $row['storeHouseId']=$storeHouse->id;
             }else{
                 $row['storeHouseId']='Non Selezionato';
             }
