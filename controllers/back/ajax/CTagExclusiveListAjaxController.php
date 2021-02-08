@@ -46,9 +46,9 @@ class CTagExclusiveListAjaxController extends AAjaxController
             }
             if($val->storeHouseId!=null){
                 $storeHouse=\Monkey::app()->repoFactory->create('StoreHouse')->findOneBy(['id'=>$val->storeHouseId,'shopId'=>$val->shopId]);
-                $row['storeHouse']=$storeHouse->name;
+                $row['storeHouseId']=$storeHouse->name;
             }else{
-                $row['storeHouse']='Non Selezionato';
+                $row['storeHouseId']='Non Selezionato';
             }
             $translations = [];
             foreach (\Monkey::app()->repoFactory->create('TagExclusiveTranslation')->findBy(['tagExclusiveId'=>$val->id]) as $translation) $translations[] = $translation->name;
