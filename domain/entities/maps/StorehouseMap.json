@@ -10,6 +10,13 @@
                 "parentKeys": ["id","shopId"],
                 "childKeys": ["shopId","storehouseId"],
                 "type": "OneToMany"
+            },
+            {
+                "name": "tagExclusive",
+                "entity": "tagExclusive",
+                "parentKeys": ["id","shopId"],
+                "childKeys": ["storeHouseId","shopId"],
+                "type": "OneToMany"
             }
         ]
     }
