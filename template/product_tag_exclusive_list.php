@@ -47,11 +47,6 @@
                                         data-searchable="true"
                                         data-orderable="true"
                                         class="center">Brand</th>
-                                    <th data-slug="priority"
-                                        data-searchable="true"
-                                        data-orderable="true"
-                                        data-default-order="desc"
-                                        class="center">Priorità</th>
                                     <th data-slug="tag"
                                         data-searchable="true"
                                         data-orderable="true"
