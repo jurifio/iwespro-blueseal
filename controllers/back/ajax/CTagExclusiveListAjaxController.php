@@ -45,8 +45,8 @@ class CTagExclusiveListAjaxController extends AAjaxController
                 $row['shopId'] = 'non selezionato';
             }
             if($val->storeHouseId!=null){
-                $storeHouse=\Monkey::app()->repoFactory->create('StoreHouse')->findOneBy(['id'=>$val->storeHouseId,'shopId'=>$val->shopId]);
-                $row['storeHouseId']=$storeHouse->id;
+                $storeHouse=\Monkey::app()->repoFactory->create('Storehouse')->findOneBy(['id'=>$val->storeHouseId,'shopId'=>$val->shopId]);
+                $row['storeHouseId']=$storeHouse->name;
             }else{
                 $row['storeHouseId']='Non Selezionato';
             }
