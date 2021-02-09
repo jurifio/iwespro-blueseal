@@ -152,6 +152,11 @@ class CProductFastListAjaxController extends AAjaxController
                    FROM ProductHasTag pht
                      JOIN TagTranslation t ON pht.tagId = t.tagId
                    WHERE langId = 1 AND pht.productId = p.id AND pht.productVariantId = p.productVariantId)   AS tags,
+       (SELECT group_concat(DISTINCT te.name)
+                   FROM ProductHasTagExclusive phte
+                     JOIN TagExclusiveTranslation te ON phte.tagExclusiveId = te.tagExclusiveId
+                   WHERE langId = 1 AND phte.productId = p.id AND phte.productVariantId = p.productVariantId)   AS tagExclusiveId,
+       
                   (SELECT min(if(ProductSku.stockQty > 0, if(p.isOnSale = 0, ProductSku.price, ProductSku.salePrice), NULL))
                    FROM ProductSku
                    WHERE ProductSku.productId = p.id AND ProductSku.productVariantId = p.productVariantId)              AS activePrice,
@@ -258,6 +263,7 @@ class CProductFastListAjaxController extends AAjaxController
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
             $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
+            $row['tagExclusiveId'] = '<span class="small">' . $val->getLocalizedTagsExclusive('<br>', false) . '</span>';
             $onlyCatalogue = '';
             if ($val->onlyCatalogue == 1) {
                 $onlyCatalogue = 'solo catalogo';

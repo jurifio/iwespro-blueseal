@@ -213,6 +213,11 @@
                                     data-orderable="true"
                                     data-visible="false" class="center">Tags
                                 </th>
+                                <th data-slug="tagExclusiveId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-visible="false" class="center">Sezioni Esclusive
+                                </th>
                                 <th data-slug="status"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -285,10 +290,6 @@
                                     data-orderable="false">Prodotto
                                 </th>
 
-                                <th data-slug="inPrestashop"
-                                    data-searchable="true"
-                                    data-orderable="true">Prestashop
-                                </th>
 
                             </tr>
                             </thead>
@@ -458,7 +459,11 @@
         <bs-toolbar-button
                 data-remote="bs.product.special.tag.custom"
         ></bs-toolbar-button>
-
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Sezioni Esclusive personalizzate">
+        <bs-toolbar-button
+                data-remote="bs.product.tagexclusive.change"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Lista Prestashop">
         <bs-toolbar-button
