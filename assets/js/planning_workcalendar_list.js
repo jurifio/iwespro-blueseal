@@ -10,13 +10,13 @@ $(document).ready(function () {
     createcalendar(obj, 1);
     $.ajax({
         method: 'GET',
-        url: '/blueseal/xhr/EditorialPlanSocialFilterAjaxController',
+        url: '/blueseal/xhr/PlanningWorkCalendarFilterAjaxController',
     }).done(function (res) {
         let ret = JSON.parse(res);
 
 
-        $.each(ret.social, function (k, v,) {
-            $('#filterMedia').append('<div style ="background-color:' + ret.socialcolor[k] + ';"><i class="' + ret.socialicon[k] + '"><input type="checkbox" name="' + v + '" value="' + k + '" /> ' + v + '</i></div>');
+        $.each(ret, function (k, v) {
+            $('#filterMedia').append('<div style ="background-color:' + v.color + ';"><input type="checkbox" name="' + v.id + '" value="' +v.id + '" /> ' + v.name + '</div>');
         });
 
 
@@ -52,18 +52,18 @@ $('#search').on('click', function () {
     let id = url.substring(url.lastIndexOf('/') + 1);
 
     const data = {
-        socialId: checkedSocial,
+        planningWorkStatusId: checkedSocial,
         id: id
     };
     $.ajax({
         method: 'POST',
-        url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
+        url: '/blueseal/xhr/PlanningWorkCalendarFilterAjaxController',
         data: data
     }).success(function (data) {
 
         obj = JSON.parse(data);
 
-        var TypePermission = obj[0].allShops;
+        var TypePermission = 1;
         createcalendar(obj, TypePermission);
 
 
@@ -94,18 +94,18 @@ $('#detailed').on('click', function () {
     let id = url.substring(url.lastIndexOf('/') + 1);
 
     const data = {
-        socialId: checkedSocial,
+        planningWorkStatusId: checkedSocial,
         id: id
     };
         $.ajax({
             method: 'POST',
-            url: '/blueseal/xhr/EditorialPlanDetailListFilteredAjaxController',
+            url: '/blueseal/xhr/PlanningWorkCalendarFilterAjaxController',
             data: data
         }).success(function (data) {
 
             obj = JSON.parse(data);
 
-            var TypePermission = obj[0].allShops;
+            var TypePermission = 1;
             createcalendar(obj, TypePermission);
 
 
@@ -136,7 +136,7 @@ $('#detailed').on('click', function () {
         let id = url.substring(url.lastIndexOf('/') + 1);
 
         const data = {
-            socialId: checkedSocial,
+            planningWorkStatusId: checkedSocial,
             id: id
         };
         $.ajax({
@@ -147,7 +147,7 @@ $('#detailed').on('click', function () {
 
             obj = JSON.parse(data);
 
-            var TypePermission = obj[0].allShops;
+            var TypePermission = 1;
             createcalendar(obj, TypePermission);
 
 
@@ -279,12 +279,12 @@ $('#detailed').on('click', function () {
                             bgRender = '<div style="background-color:#f8bb00 ;color:black;">';
 
                             break;
-                        case 1:
-                            bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
+                        case 2:
+                            bgRender = '<div style="background-color:#f22823 ;color:black;"">';
 
                             break;
                         case 3:
-                            bgRender = '<div style="background-color:#f22823 ;color:black;"">';
+                            bgRender = '<div style="background-color:#fa6801 ;color:black;"">';
 
                             break;
                         case 4:

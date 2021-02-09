@@ -33,10 +33,12 @@ class CPlanningWorkCalendarListController extends ARestrictedAccessRootControlle
 
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/planning_workcalendar_list.php');
+        $planningWorkStatus=\Monkey::app()->repoFactory->create('PlanningWorkStatus')->findAll();
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
+            'planningWorkStatus' => $planningWorkStatus,
             'sidebar' => $this->sidebar->build(),
         ]);
     }

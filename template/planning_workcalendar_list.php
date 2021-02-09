@@ -36,10 +36,29 @@
             </div>
 
             <div class="container-fluid container-fixed-lg bg-white">
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="col-md-12" style="border: 1px solid #a7a7a752; margin: 7px">
+                            <div class="row">
+                                <div id='TypeCalendar'><b>Tipo Lista: </b><br>
+                                    <button class="btn btn-success" id="detailed">Dettagliata<span id="appendDetailedChekbox"></span></button>
+                                    <button class="btn btn-primary" id="sintetic">Sintetica<span id="appendSinteticChekbox"></span></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id='filterMedia'><b>Stati: </b></div>
+                                <div class="row">
+                                    <button class="btn btn-info" id="selectAllSocial">Seleziona Tutto</button>
+                                    <button class="btn btn-success" id="search">Ricerca</button>
+                                    <button class="btn btn-warning" id="reload">Pulisci</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </div>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">

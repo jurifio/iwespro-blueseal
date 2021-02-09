@@ -43,7 +43,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
         }
 
         foreach ($editorialDetails as $singleDetail) {
-            if($p==1) {
+            if ($p == 1) {
                 $data[$i]["allShops"] = $p;
                 $data[$i]["id"] = $singleDetail->id;
                 $data[$i]["title"] = $singleDetail->title;
@@ -55,6 +55,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
                 $data[$i]["argument"] = $singleDetail->editorialPlanArgumentId;
                 $data[$i]["linkDestination"] = $singleDetail->linkDestination;
                 $data[$i]["argumentName"] = $singleDetail->editorialPlanArgument->titleArgument;
+
                 $data[$i]["isVisibleEditorialPlanArgument"] = $singleDetail->isVisibleEditorialPlanArgument;
                 $data[$i]["photoUrl"] = $singleDetail->photoUrl;
                 $data[$i]["isVisiblePhotoUrl"] = $singleDetail->isVisiblePhotoUrl;
@@ -93,7 +94,7 @@ class CEditorialPlanDetailListAjaxController extends AAjaxController
 
 
                 $i++;
-            }else{
+            } else {
                 if ($singleDetail->userId == $this->app->getUser()->getId()) {
                     $data[$i]["allShops"] = '1';
                     $data[$i]["id"] = $singleDetail->id;
