@@ -47,7 +47,7 @@
                         <div class="row" align="center">
                             <div class="col-md-4" id="textColumnData">
                                <div class="row">
-                                   <div class="col-md-3" id="divLabelQtyOrder">
+                                   <div class="col-md-3 panel-title text-black" id="divLabelQtyOrder">
                                        totale Numero Ordini
                                    </div>
                                    <div class="col-md-3" id="divQtyValueOrder">
