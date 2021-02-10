@@ -51,7 +51,7 @@
                                        etichetta totale Numero Ordini
                                    </div>
                                    <div class="col-md-3" id="divQtyValueOrder">
-                                       <?php $stats[0]['totalOrder'];?>
+                                       <?php $stats['totalOrder'];?>
                                    </div>
                                     <div class="col-md-3" id="divLabelValueTotalOrder">
                                         etichetta totale Valore Ordini
