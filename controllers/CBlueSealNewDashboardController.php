@@ -58,11 +58,12 @@ WHERE `o`.`status` LIKE \'ORD_SHIPPED\' OR `o`.`status` LIKE \'ORD_DELIVERED\' O
 
 
         $cartTotalValue = 0;
-        $carts = \Monkey::app()->repoFactory->create('UserSessionHasCart')->findAll();
-        foreach ($carts as $cart) {
-            $cartLines = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $cart->cartId]);
-            $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['cartId' => $cart->cartId]);
-            if ($order) {
+        $carts = 'select cartId AS cartId from UserSessionHasCart us join  `Cart` c on  `us`.cartId=c.id';
+        $resCarts=\Monkey::app()->dbAdapter->query($carts,[])->fetchAll();
+        foreach ($resCarts as $cart) {
+            $cartLines = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $cart['cartId']]);
+            $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['cartId' => $cart['cartId']]);
+            if (!$order) {
                 foreach ($cartLines as $cartLine) {
                     $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId,'productSizeId' => $cartLine->productSizeId]);
                     $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId]);
@@ -92,7 +93,7 @@ WHERE `o`.`status` LIKE \'ORD_SHIPPED\' OR `o`.`status` LIKE \'ORD_DELIVERED\' O
         foreach ($resCartAbandonedValue as $cart) {
             $cartLines = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $cart['cartId']]);
             $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['cartId' => $cart['cartId']]);
-            if ($order) {
+            if (!$order) {
                 foreach ($cartLines as $cartLine) {
                     $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId,'productSizeId' => $cartLine->productSizeId]);
                     $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId]);
@@ -117,7 +118,7 @@ WHERE `o`.`status` LIKE \'ORD_SHIPPED\' OR `o`.`status` LIKE \'ORD_DELIVERED\' O
         foreach ($resCountUser as $countUser) {
             $totalUser = $countUser['countUser'];
         }
-        $sqlTotalUserOnline = "select count(*) as countUser from `UserSession`  where creationDate between >='" . $today . "' and '" . $yesterday . "'";
+        $sqlTotalUserOnline = "select count(*) as countUser from `UserSession`  where creationDate between >='" . $today . "' and <='" . $yesterday . "'";
         $resCountUser = \Monkey::app()->dbAdapter->query($sqlTotalUserOnline,[])->fetchAll();
         foreach ($resCountUser as $countUser) {
             $totalUserOnline = $countUser['countUser'];
