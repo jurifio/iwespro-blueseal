@@ -81,25 +81,11 @@
                                     <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueQtyCart">
                                         <?php echo $stats[0]['cartTotalNumber'];?>
                                     </div>
-                                    <div class="col-md-4 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelValueCart">
-                                       Tot. € Carrelli Attivi
-                                    </div>
-                                    <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueCart">
-                                        <?php echo number_format($stats[0]['cartTotalValue'],2,',');?>
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-4 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelQtyCartAbbandoned">
                                         Tot. N.Carrelli Abb.
                                     </div>
                                     <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueQtyCartAbbandoned">
                                         <?php echo $stats[0]['cartAbandonedTotal'];?>
-                                    </div>
-                                    <div class="col-md-4 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelValueCartAbbandoned">
-                                        Tot. € Carrelli Abb.
-                                    </div>
-                                    <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueCartAbbandoned">
-                                        <?php echo number_format($stats[0]['cartAbandonedTotalValue'],2,',');?>
                                     </div>
                                 </div>
                                 <div class="row">

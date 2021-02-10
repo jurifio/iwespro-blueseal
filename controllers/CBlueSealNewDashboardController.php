@@ -25,6 +25,49 @@ class CBlueSealNewDashboardController extends ARestrictedAccessRootController
 
     public function get()
     {
+        if(isset($_GET['typePeriod'])){
+            $typePeriod = $_GET['typePeriod'];
+        }else{
+            $typePeriod='month';
+        }
+        switch ($typePeriod){
+            case "year":
+                $title = "Anno";
+                $timeStartMask = (new \DateTime("first day of this year midnight"))->format('Y-m-d H:i:s');
+                $timeEndMasks = (new \DateTime("last day of this year midnight"))->format('Y-m-d H:i:s');
+                $timeStartMaskCompare=(new \DateTime("first day of last year midnight"))->format('Y-m-d H:i:s');
+                $timeEndMaskCompare=(new \DateTime("last day of last year midnight"))->format('Y-m-d H:i:s');
+                break;
+            case "month":
+                $title = "Mese";
+                $timeStartMask = strtotime("first day of this month midnight");
+                $timeEndMasks = strtotime("last day of this month midnight");
+                $timeStartMaskCompare=(new \DateTime("first day of this month last  year midnight"))->format('Y-m-d H:i:s');
+                $timeEndMaskCompare=(new \DateTime("last day of this month last year midnight"))->format('Y-m-d H:i:s');
+
+                break;
+            case "week":
+                $title = "Settimana";
+                $timeStartMask = strtotime("last monday midnight");
+                $timeEndMasks = strtotime("next monday midnight");
+                $timeStartMaskCompare=(new \DateTime("last monday of this month last  year midnight"))->format('Y-m-d H:i:s');
+                $timeEndMaskCompare=(new \DateTime("next monday of this month last year midnight"))->format('Y-m-d H:i:s');
+
+                break;
+            case "day":
+                $title = "Giorno";
+                $timeStartMask = strtotime("midnight");
+                $timeEndMasks = strtotime("tomorrow midnight");
+                $timeStartMaskCompare=(new \DateTime("this day of this month last  year midnight"))->format('Y-m-d H:i:s');
+                $timeEndMaskCompare=(new \DateTime("next day of this month last year midnight"))->format('Y-m-d H:i:s');
+
+                break;
+            case "hour":
+                $title = "Ora";
+                $timeStartMask = strToTime("Y-m-d H:00:00");
+                $timeEndMasks = strToTime("Y-m-d H:00:00");
+                break;
+        }
 
         $data = \Monkey::app()->router->request()->getRequestData();
         $today = (new \DateTime())->format('Y-m-d H:i:s');
@@ -58,60 +101,10 @@ WHERE `o`.`status` LIKE \'ORD_SHIPPED\' OR `o`.`status` LIKE \'ORD_DELIVERED\' O
         }
 
 
-        $cartTotalValue = 0;
-        $carts = 'select cartId AS cartId from UserSessionHasCart us join  `Cart` c on  `us`.cartId=c.id';
-        $resCarts=\Monkey::app()->dbAdapter->query($carts,[])->fetchAll();
-        foreach ($resCarts as $cart) {
-            $cartLines = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $cart['cartId']]);
-            $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['cartId' => $cart['cartId']]);
-            if (!$order) {
-                foreach ($cartLines as $cartLine) {
-                    $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId,'productSizeId' => $cartLine->productSizeId]);
-                    $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId]);
-                    if($productSku) {
-                        if ($product->isOnSale == 1) {
-                            $cartTotalValue += $productSku->salePrice;
-                        } else {
-                            $cartTotalValue += $productSku->price;
-                        }
-                    }else{
-                        $cartTotalValue=$cartTotalValue;
-                    }
-
-                }
-            } else {
-                continue;
-            }
-        }
         $cartAbandonedTotalNumber = 'select count(c.id) AS totalCart from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null';
         $resCartAbandonedTotalNumber = \Monkey::app()->dbAdapter->query($cartAbandonedTotalNumber,[])->fetchAll();
         foreach ($resCartAbandonedTotalNumber as $resCartAbandoned) {
             $cartAbandonedTotal = $resCartAbandoned['totalCart'];
-        }
-        $cartAbandonedTotalValue = 0;
-        $cartAbandonedValue = 'select c.id AS cartId from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null';
-        $resCartAbandonedValue = \Monkey::app()->dbAdapter->query($cartAbandonedValue,[])->fetchAll();
-        foreach ($resCartAbandonedValue as $cart) {
-            $cartLines = \Monkey::app()->repoFactory->create('CartLine')->findBy(['cartId' => $cart['cartId']]);
-            $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['cartId' => $cart['cartId']]);
-            if (!$order) {
-                foreach ($cartLines as $cartLine) {
-                    $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId,'productSizeId' => $cartLine->productSizeId]);
-                    $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $cartLine->productId,'productVariantId' => $cartLine->productVariantId]);
-                   if($productSku) {
-                       if ($product->isOnSale == 1) {
-                           $cartAbandonedTotalValue += $productSku->salePrice;
-                       } else {
-                           $cartAbandonedTotalValue += $productSku->price;
-                       }
-                   }else{
-                       $cartAbandonedTotalValue=$cartAbandonedTotalValue;
-                   }
-
-                }
-            } else {
-                continue;
-            }
         }
 
         $sqlTotalUser = 'select count(*) as countUser from `User` where isActive=1';
@@ -135,9 +128,7 @@ WHERE `o`.`status` LIKE \'ORD_SHIPPED\' OR `o`.`status` LIKE \'ORD_DELIVERED\' O
             'totalOrderReturn' => $totalOrderReturn,
             'quantityOrderReturn' => $quantityOrderReturn,
             'cartTotalNumber' => $cartTotalNumber,
-            'cartTotalValue' => $cartTotalValue,
             'cartAbandonedTotal'=>$cartAbandonedTotal,
-            'cartAbandonedTotalValue'=>$cartAbandonedTotalValue,
             'totalUser'=>$totalUser,
             'totalUserOnline'=>$totalUserOnline,
             'totalProduct'=>$totalProduct
