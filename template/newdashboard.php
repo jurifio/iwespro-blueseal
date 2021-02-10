@@ -48,86 +48,80 @@
                             <div class="col-md-4" id="textColumnData">
                                <div class="row">
                                    <div class="col-md-3" id="divLabelQtyOrder">
-                                       etichetta totale Numero Ordini
+                                       totale Numero Ordini
                                    </div>
                                    <div class="col-md-3" id="divQtyValueOrder">
-                                       <?php var_dump($stats);?>
+                                       <?php echo $stats[0]['quantityOrder'];?>
                                    </div>
                                     <div class="col-md-3" id="divLabelValueTotalOrder">
-                                        etichetta totale Valore Ordini
+                                        Totale Valore Ordini
                                     </div>
                                     <div class="col-md-3" id="divValueValueTotalOrder">
-                                        valore totale Ordini
+                                        <?php echo $stats[0]['totalOrder'];?>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3" id="divLabelQtyOrderReturn">
-                                        etichetta totale numero Resi
+                                       Totale numero Resi
                                     </div>
                                     <div class="col-md-3" id="divValueQtyOrderReturn">
-                                        valore Totale numero Resi
+                                        <?php echo $stats[0]['quantityOrderReturn'];?>
                                     </div>
                                     <div class="col-md-3" id="divLabelValueOrderReturn">
-                                        etichetta totale importo Resi
+                                        Totale importo Resi
                                     </div>
                                     <div class="col-md-3" id="divValueValueOrderReturn">
-                                        valore Totale import Resi
+                                        <?php echo $stats[0]['totalOrderReturn'];?>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3" id="divLabelQtyCart">
-                                        etichetta totale numero  Carrelli
+                                        Totale Carrelli Attivi
                                     </div>
                                     <div class="col-md-3" id="divValueQtyCart">
-                                        valora Totale numero  Carrelli
+                                        <?php echo $stats[0]['cartTotalNumber'];?>
                                     </div>
                                     <div class="col-md-3" id="divLabelValueCart">
-                                       etichetta totale valore Carrelli
+                                       Totale Valore Carrelli Attivi
                                     </div>
                                     <div class="col-md-3" id="divValueValueCart">
-                                        valore Totale valore Carrelli
+                                        <?php echo $stats[0]['cartTotalValue'];?>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3" id="divLabelQtyCartAbbandoned">
-                                        etichetta totale numero  Carrelli Abbandonati
+                                        Totale numero  Carrelli Abbandonati
                                     </div>
                                     <div class="col-md-3" id="divValueQtyCartAbbandoned">
-                                        valora Totale numero  Carrelli Abbandonati
+                                        <?php echo $stats[0]['cartAbandonedTotal'];?>
                                     </div>
                                     <div class="col-md-3" id="divLabelValueCartAbbandoned">
-                                        etichetta totale valore Carrelli Abbandonati
+                                        Totale valore Carrelli Abbandonati
                                     </div>
                                     <div class="col-md-3" id="divValueValueCartAbbandoned">
-                                        valore Totale valore Carrelli Abbandonati
+                                        <?php echo $stats[0]['cartAbandonedTotalValue'];?>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3" id="divLabelQtyUser">
-                                        etichetta totale numero  Utenti
+                                        Totale numero  Utenti iscritti
                                     </div>
                                     <div class="col-md-3" id="divValueQtyUser">
-                                        valora Totale numero Utenti
+                                        <?php echo $stats[0]['totalUser'];?>
                                     </div>
                                     <div class="col-md-3" id="divLabelQtyUserOnline">
-                                        etichetta totale numero  Utenti Online
+                                        Totale numero  Utenti Online
                                     </div>
                                     <div class="col-md-3" id="divValueQtyUserOnLine">
-                                        valora Totale numero Utenti Online
+                                        <?php echo $stats[0]['totalUserOnline'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3" id="divLabelQtyProduct">
-                                        etichetta totale numero Prodotti
+                                    <div class="col-md-6" id="divLabelQtyProduct">
+                                       Totale numero Prodotti
                                     </div>
-                                    <div class="col-md-3" id="divValueQtyProduct">
-                                        valora Totale numero Prodotti
-                                    </div>
-                                    <div class="col-md-3" id="divLabelQtyUserOnline">
-                                        etichetta totale giacenza media
-                                    </div>
-                                    <div class="col-md-3" id="divValueQtyUserOnLine">
-                                        valora Totale giacenza media
+                                    <div class="col-md-6" id="divValueQtyProduct">
+                                        <?php echo $stats[0]['totalProduct'];?>
                                     </div>
                                 </div>
 
