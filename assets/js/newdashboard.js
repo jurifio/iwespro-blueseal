@@ -53,13 +53,13 @@
 
 
 
-    let ctxSent = document.getElementById("ChartSent").getContext('2d');
+    let ctxSent = document.getElementById("ChartQtyOrder").getContext('2d');
     let ChartSent = new Chart(ctxSent, {
         type: 'bar',
         data: {
             labels: [Name, Name2],
             datasets: [{
-                label: 'Elaborate',
+            label: 'Numero Ordini',
                 data: [eAC, eAC2],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
