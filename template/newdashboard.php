@@ -47,21 +47,21 @@
                         <div class="row" align="center">
                             <div class="col-md-4" id="textColumnData">
                                <div class="row">
-                                   <div class="col-md-3 panel-title text-black" id="divLabelQtyOrder">
+                                   <div class="col-md-3 divGrey panel-title text-black" id="divLabelQtyOrder">
                                        totale Numero Ordini
                                    </div>
-                                   <div class="col-md-3" id="divQtyValueOrder">
+                                   <div class="col-md-3 divGrey panel-title text-black" id="divQtyValueOrder">
                                        <?php echo $stats[0]['quantityOrder'];?>
                                    </div>
-                                    <div class="col-md-3" id="divLabelValueTotalOrder">
+                                    <div class="col-md-3 divGrey panel-title text-black" id="divLabelValueTotalOrder">
                                         Totale Valore Ordini
                                     </div>
-                                    <div class="col-md-3" id="divValueValueTotalOrder">
+                                    <div class="col-md-3 divGrey panel-title text-black" id="divValueValueTotalOrder">
                                         <?php echo $stats[0]['totalOrder'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3" id="divLabelQtyOrderReturn">
+                                    <div class="col-md-3 divGrey panel-title text-black" id="divLabelQtyOrderReturn">
                                        Totale numero Resi
                                     </div>
                                     <div class="col-md-3" id="divValueQtyOrderReturn">

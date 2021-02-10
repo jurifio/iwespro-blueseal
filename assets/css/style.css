@@ -946,6 +946,7 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     padding-left: 3px;
 }
 
+
 .print-list a:visited {
     color: grey;
 }
@@ -1771,5 +1772,9 @@ table.mini-traffic-display th, table.mini-traffic-display td {
     display: block;
     max-width: 100%;
     height: auto;
+}
+.divGrey{
+    border-style: solid;
+    border-color: grey;
 }
 
