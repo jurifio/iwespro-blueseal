@@ -47,80 +47,80 @@
                         <div class="row" align="center">
                             <div class="col-md-4" id="textColumnData">
                                <div class="row">
-                                   <div class="col-md-3 divGrey panel-title text-black" id="divLabelQtyOrder">
+                                   <div class="col-md-3  panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelQtyOrder">
                                        totale Numero Ordini
                                    </div>
-                                   <div class="col-md-3 divGrey panel-title text-black" id="divQtyValueOrder">
+                                   <div class="col-md-3  panel-title text-black" style="border-style: solid;  border-color: grey;" id="divQtyValueOrder">
                                        <?php echo $stats[0]['quantityOrder'];?>
                                    </div>
-                                    <div class="col-md-3 divGrey panel-title text-black" id="divLabelValueTotalOrder">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelValueTotalOrder">
                                         Totale Valore Ordini
                                     </div>
-                                    <div class="col-md-3 divGrey panel-title text-black" id="divValueValueTotalOrder">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueTotalOrder">
                                         <?php echo $stats[0]['totalOrder'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3 divGrey panel-title text-black" id="divLabelQtyOrderReturn">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelQtyOrderReturn">
                                        Totale numero Resi
                                     </div>
-                                    <div class="col-md-3" id="divValueQtyOrderReturn">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueQtyOrderReturn">
                                         <?php echo $stats[0]['quantityOrderReturn'];?>
                                     </div>
-                                    <div class="col-md-3" id="divLabelValueOrderReturn">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelValueOrderReturn">
                                         Totale importo Resi
                                     </div>
-                                    <div class="col-md-3" id="divValueValueOrderReturn">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueOrderReturn">
                                         <?php echo $stats[0]['totalOrderReturn'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3" id="divLabelQtyCart">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelQtyCart">
                                         Totale Carrelli Attivi
                                     </div>
-                                    <div class="col-md-3" id="divValueQtyCart">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueQtyCart">
                                         <?php echo $stats[0]['cartTotalNumber'];?>
                                     </div>
-                                    <div class="col-md-3" id="divLabelValueCart">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelValueCart">
                                        Totale Valore Carrelli Attivi
                                     </div>
-                                    <div class="col-md-3" id="divValueValueCart">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueCart">
                                         <?php echo $stats[0]['cartTotalValue'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3" id="divLabelQtyCartAbbandoned">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelQtyCartAbbandoned">
                                         Totale numero  Carrelli Abbandonati
                                     </div>
-                                    <div class="col-md-3" id="divValueQtyCartAbbandoned">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueQtyCartAbbandoned">
                                         <?php echo $stats[0]['cartAbandonedTotal'];?>
                                     </div>
-                                    <div class="col-md-3" id="divLabelValueCartAbbandoned">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelValueCartAbbandoned">
                                         Totale valore Carrelli Abbandonati
                                     </div>
-                                    <div class="col-md-3" id="divValueValueCartAbbandoned">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueCartAbbandoned">
                                         <?php echo $stats[0]['cartAbandonedTotalValue'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3" id="divLabelQtyUser">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;"" id="divLabelQtyUser">
                                         Totale numero  Utenti iscritti
                                     </div>
-                                    <div class="col-md-3" id="divValueQtyUser">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;"" id="divValueQtyUser">
                                         <?php echo $stats[0]['totalUser'];?>
                                     </div>
-                                    <div class="col-md-3" id="divLabelQtyUserOnline">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;"" id="divLabelQtyUserOnline">
                                         Totale numero  Utenti Online
                                     </div>
-                                    <div class="col-md-3" id="divValueQtyUserOnLine">
+                                    <div class="col-md-3 panel-title text-black" style="border-style: solid;  border-color: grey;"" id="divValueQtyUserOnLine">
                                         <?php echo $stats[0]['totalUserOnline'];?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6" id="divLabelQtyProduct">
+                                    <div class="col-md-6 panel-title text-black" style="border-style: solid;  border-color: grey;"" id="divLabelQtyProduct">
                                        Totale numero Prodotti
                                     </div>
-                                    <div class="col-md-6" id="divValueQtyProduct">
+                                    <div class="col-md-6 panel-title text-black" style="border-style: solid;  border-color: grey;"" id="divValueQtyProduct">
                                         <?php echo $stats[0]['totalProduct'];?>
                                     </div>
                                 </div>
