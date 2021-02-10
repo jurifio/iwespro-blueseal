@@ -57,7 +57,7 @@
                                         Tot. € Ordini
                                     </div>
                                     <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueTotalOrder">
-                                        <?php echo number_format($stats[0]['totalOrder'],2,',');?>
+                                        <?php echo number_format($stats[0]['totalOrder'],2,',','');?>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -71,7 +71,7 @@
                                         Tot. € Resi
                                     </div>
                                     <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueValueOrderReturn">
-                                        <?php echo number_format($stats[0]['totalOrderReturn'],2,',');?>
+                                        <?php echo number_format($stats[0]['totalOrderReturn'],2,',','');?>
                                     </div>
                                 </div>
                                 <div class="row">
