@@ -36,6 +36,17 @@
             ]
         },
         {
+            "pattern": "/blueseal/newdashboard/?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBlueSealNewDashboardController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET"
+            ]
+        },
+        {
             "pattern": "/blueseal/ordini(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\COrderListController"

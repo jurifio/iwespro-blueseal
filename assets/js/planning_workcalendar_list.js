@@ -301,7 +301,8 @@ $('#detailed').on('click', function () {
 
                     if (typeView == 1) {
                         element.find('.fc-title').append(bgTitle +
-                            '<b>' + event.title +
+                            '<b>#' + event.id +
+                            ' | ' + event.title +
                             ' | ' + event.companyName +
                             ' | ' + event.request +
                             ' | ' + event.status + '</b></div>' + bgRender +
@@ -309,7 +310,8 @@ $('#detailed').on('click', function () {
                             '</div>');
                     } else {
                         element.find('.fc-title').append(bgTitle +
-                            '<b>' + event.title +
+                            '<b>#' + event.id +
+                            ' | ' + event.title +
                             ' | ' + event.companyName +
                             ' | ' + event.request +
                             ' | ' + event.status + '</b></div>' + bgRender +
