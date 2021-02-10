@@ -115,7 +115,7 @@
 
                             </div>
                             <div class="col-md-8" id="chartColumnData">
-                                <div class="row" id="orderRow">K
+                                <div class="row" id="orderRow">
                                     <div class="col-md-6" id="s-ordernumber">
                                         <h5 class="m-t-10">Numero Ordini</h5>
                                         <canvas id="ChartQtyOrder"></canvas>
