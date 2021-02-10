@@ -118,7 +118,7 @@ WHERE `o`.`status` LIKE \'ORD_SHIPPED\' OR `o`.`status` LIKE \'ORD_DELIVERED\' O
         foreach ($resCountUser as $countUser) {
             $totalUser = $countUser['countUser'];
         }
-        $sqlTotalUserOnline = "select count(*) as countUser from `UserSession`  where creationDate between >='" . $today . "' and <='" . $yesterday . "'";
+        $sqlTotalUserOnline = "select count(*) as countUser from `UserSession`  where creationDate between '" . $today . "' and '" . $yesterday . "'";
         $resCountUser = \Monkey::app()->dbAdapter->query($sqlTotalUserOnline,[])->fetchAll();
         foreach ($resCountUser as $countUser) {
             $totalUserOnline = $countUser['countUser'];
