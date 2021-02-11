@@ -25,12 +25,15 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row" align="center">
-                            <div class="col-md-12">
-                                <h5 class="m-t-10">Tipo di Visualizzazione</h5>
+                            <div class="col-md-6">
+                                <h5 class="m-t-6">Filtri</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="m-t-6">Filtro personalizzato</h5>
                             </div>
                         </div>
                         <div class="row" align="center">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <button class="openstatelaborate btn-primary" id="currentDay">Giorno Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentWeek">Settimana Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentMonth">Mese Corrente</button>
@@ -38,6 +41,34 @@
                                 <button class="openstatconsegnate btn-primary" id="lastDay">Ieri</button>
                                 <button class="openstataperte btn-primary" id="lastMonth">Mese Passato</button>
                                 <button class="openstatcliccate btn-primary" id="lastYear">Anno Passato</button>
+                                <?php echo $arrayOrder; ?>
+                            </div>
+
+                            <input type="hidden" id="arrayOrder" name="arrayOrder" value="<?php echo $arrayOrder ?>"
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="startDateWork">Applica Dalla Data</label>
+                                    <input type="datetime-local" id="startDateWork" class="form-control"
+                                           placeholder="filtro da data "
+                                           name="startDateWork"
+                                           value=""
+                                           required="required">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="endDateWork">alla Data</label>
+                                    <input type="datetime-local" id="endDateWork" class="form-control"
+                                           placeholder="Inserisci la Data di Inizio "
+                                           name="endDateWork"
+                                           value=""
+                                           required="required">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -81,7 +112,7 @@
                                         Tot. Carrelli Attivi
                                     </div>
                                     <div class="col-md-2 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divValueQtyCart">
-                                        <?php echo $stats[0]['cartTotalNumber'];?>
+                                        <?php echo $stats[0]['cartTotal'];?>
                                     </div>
                                     <div class="col-md-4 panel-title text-black" style="border-style: solid;  border-color: grey;" id="divLabelQtyCartAbbandoned">
                                         Tot. N.Carrelli Abb.
@@ -125,7 +156,7 @@
                                         <canvas id="ChartValueOrder"></canvas>
                                     </div>
                                 </div>
-                                <div class="row" id="orderRow">
+                                <div class="row" id="orderRowReturn">
                                     <div class="col-md-6" id="s-orderreturnnumber">
                                         <h5 class="m-t-10">Numero Resi</h5>
                                         <canvas id="ChartQtyOrderReturn"></canvas>
@@ -140,19 +171,9 @@
                                         <h5 class="m-t-10">Carrelli </h5>
                                         <canvas id="ChartQtyCart"></canvas>
                                     </div>
-                                    <div class="col-md-6" id="s-cartvalue">
-                                        <h5 class="m-t-10">Valore Carreli</h5>
-                                        <canvas id="ChartValueOrderReturn"></canvas>
-                                    </div>
-                                </div>
-                                <div class="row" id="cartRowAbandoned">
                                     <div class="col-md-6" id="s-cartnumberAbandoned">
                                         <h5 class="m-t-10">Carrelli Abbandonati</h5>
                                         <canvas id="ChartQtyCartAbandoned"></canvas>
-                                    </div>
-                                    <div class="col-md-6" id="s-cartvalueAbandoned">
-                                        <h5 class="m-t-10">Valore Carreli Abbandonati</h5>
-                                        <canvas id="ChartValueCartAbandoned"></canvas>
                                     </div>
                                 </div>
                                 <div class="row" id="userRow">
@@ -163,16 +184,6 @@
                                     <div class="col-md-6" id="s-usernumberonline">
                                         <h5 class="m-t-10">totale Utenti Online</h5>
                                         <canvas id="ChartQtyUserOnLine"></canvas>
-                                    </div>
-                                </div>
-                                <div class="row" id="productRow">
-                                    <div class="col-md-6" id="s-productnumber">
-                                        <h5 class="m-t-10">totale Prodotti</h5>
-                                        <canvas id="ChartQtyProduct"></canvas>
-                                    </div>
-                                    <div class="col-md-6" id="s-productaverage">
-                                        <h5 class="m-t-10">Giacenza Media</h5>
-                                        <canvas id="ChartAverageProduct"></canvas>
                                     </div>
                                 </div>
                             </div>
