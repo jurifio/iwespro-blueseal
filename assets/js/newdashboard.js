@@ -294,8 +294,8 @@
                 label: 'Valori Ordini Resi',
                 data: arrayOrderReturn,
                 backgroundColor: [
-                    'rgba(52,255,33, 0.2)',
                     'rgba(255,52,41, 0.2)',
+                    'rgba(52,255,33, 0.2)',
                     'rgba(237,255,43, 0.2)',
                     'rgba(130,255,153, 0.2)',
                     'rgba(36,120,255, 0.2)',
@@ -328,8 +328,8 @@
 
                 ],
                 borderColor: [
-                    'rgba(52,255,33, 1)',
                     'rgba(255,52,41, 1)',
+                    'rgba(52,255,33, 1)',
                     'rgba(237,255,43, 1)',
                     'rgba(130,255,153, 1)',
                     'rgba(36,120,255, 1)',
@@ -472,7 +472,7 @@
                 label: 'Quantita Carrelli Abbandonati',
                 data: arrayCartAbandonedTotalNumber,
                 backgroundColor: [
-                    'rgba(52,255,33, 0.2)',
+                    'rgba(36,120,255, 1)',
                     'rgba(255,52,41, 0.2)',
                     'rgba(237,255,43, 0.2)',
                     'rgba(130,255,153, 0.2)',
@@ -506,7 +506,7 @@
 
                 ],
                 borderColor: [
-                    'rgba(52,255,33, 1)',
+                    'rgba(36,120,255, 1)',
                     'rgba(255,52,41, 1)',
                     'rgba(237,255,43, 1)',
                     'rgba(130,255,153, 1)',
@@ -561,7 +561,7 @@
                 label: 'Totale Utenti  Registrati',
                 data: arrayTotalUser,
                 backgroundColor: [
-                    'rgba(52,255,33, 0.2)',
+                    'rgba(158,23,255, 1)',
                     'rgba(255,52,41, 0.2)',
                     'rgba(237,255,43, 0.2)',
                     'rgba(130,255,153, 0.2)',
@@ -595,7 +595,7 @@
 
                 ],
                 borderColor: [
-                    'rgba(52,255,33, 1)',
+                    'rgba(158,23,255, 1)',
                     'rgba(255,52,41, 1)',
                     'rgba(237,255,43, 1)',
                     'rgba(130,255,153, 1)',
@@ -649,7 +649,7 @@
                 label: 'Totale Utenti  Registrati',
                 data: arrayTotalUserOnLine,
                 backgroundColor: [
-                    'rgba(52,255,33, 0.2)',
+                    'rgba(254,199,255, 0.2)',
                     'rgba(255,52,41, 0.2)',
                     'rgba(237,255,43, 0.2)',
                     'rgba(130,255,153, 0.2)',
@@ -683,7 +683,7 @@
 
                 ],
                 borderColor: [
-                    'rgba(52,255,33, 1)',
+                    'rgba(254,199,255, 0.2)',
                     'rgba(255,52,41, 1)',
                     'rgba(237,255,43, 1)',
                     'rgba(130,255,153, 1)',
