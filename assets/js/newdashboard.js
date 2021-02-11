@@ -9,7 +9,7 @@
     let ChartQtyOrder = new Chart(ctxQtyOrder, {
         type: 'line',
         data: {
-            labels: ['116.60','154.00','209.30','40.10'],
+            labels: [arrayLabelOrder],
             datasets: [{
             label: 'Numero Ordini',
                 data: [arrayOrder],
