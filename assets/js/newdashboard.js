@@ -646,7 +646,7 @@
         data: {
             labels: arrayLabelTotalUserOnLine,
             datasets: [{
-                label: 'Totale Utenti  Registrati',
+                label: 'Totale Utenti  Online',
                 data: arrayTotalUserOnLine,
                 backgroundColor: [
                     'rgba(254,199,255, 0.2)',
