@@ -108,7 +108,7 @@
     });
     let ctxValueOrder = document.getElementById("ChartValueOrder").getContext('2d');
     let ChartValueOrder = new Chart(ctxValueOrder, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: arrayLabelOrder,
             datasets: [{
