@@ -12,7 +12,7 @@
             labels: [arrayLabelOrder],
             datasets: [{
             label: 'Numero Ordini',
-                data: [arrayOrder],
+                data: ['116.40','150.40','180.40','150.60'],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
