@@ -9,10 +9,10 @@
     let ChartQtyOrder = new Chart(ctxQtyOrder, {
         type: 'bar',
         data: {
-            labels: [arrayLabelOrder],
+            labels: arrayLabelOrder,
             datasets: [{
             label: 'Numero Ordini',
-                data: [arrayOrder],
+                data: arrayOrder,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
