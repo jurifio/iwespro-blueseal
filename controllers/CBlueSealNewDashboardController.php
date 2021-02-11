@@ -189,9 +189,9 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             foreach ($resOrder as $orderData) {
                 $totalOrder += $orderData['totalOrder'];
                 $quantityOrder += $orderData['countOrder'];
-                $arrayOrder .= "'".number_format($orderData['totalOrder'],2,'.','')."'".",";
-                $arrayLabelOrder.= "'".$orderData['creationDate']."'".",";
-                $arrayCountOrder.= "'".$orderData['countOrder']."'".",";
+                $arrayOrder .= number_format($orderData['totalOrder'],2,'.','').',';
+                $arrayLabelOrder.= $orderData['creationDate'].',';
+                $arrayCountOrder.= $orderData['countOrder'].',';
 
 
             }
@@ -212,8 +212,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
                 $totalOrderReturn += $orderDataReturn['totalOrder'];
                 $quantityOrderReturn += $orderDataReturn['countOrder'];
                 $arrayOrderReturn .= number_format($orderDataReturn['totalOrder'],2,'.','').',';
-                $arrayLabelOrderReturn.= "'".$orderDataReturn['creationDate']."'".",";
-                $arrayCountOrderReturn.= "'".$orderDataReturn['countOrder']."'".',';
+                $arrayLabelOrderReturn.= $orderDataReturn['creationDate'].',';
+                $arrayCountOrderReturn.= $orderDataReturn['countOrder'].',';
             }
         }else{
             $totalOrderReturn = '0.00';
@@ -229,8 +229,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         if(count($resCartTotalNumber) > 0) {
             foreach ($resCartTotalNumber as $cartTotalNumber) {
                 $cartTotal += $cartTotalNumber['totalCart'];
-                $arrayCartTotalNumber .= "'".$cartTotalNumber['totalCart']."'".",";
-                $arrayLabelCartTotalNumber.="'".$cartTotalNumber['creationDate']."'".",";
+                $arrayCartTotalNumber .= $cartTotalNumber['totalCart'].',';
+                $arrayLabelCartTotalNumber.=$cartTotalNumber['creationDate'].',';
             }
         }else{
             $cartTotal='0';
@@ -246,8 +246,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         if(count($resCartAbandonedTotalNumber) > 0) {
             foreach ($resCartAbandonedTotalNumber as $resCartAbandoned) {
                 $cartAbandonedTotal += $resCartAbandoned['totalCart'];
-                $arrayLabelCartAbandonedTotalNumber.="'".$resCartAbandoned['creationDate']."'".",";
-                $arrayCartAbandonedTotalNumber .= "'".$resCartAbandoned['totalCart']."'".",";
+                $arrayLabelCartAbandonedTotalNumber.=$resCartAbandoned['creationDate'].',';
+                $arrayCartAbandonedTotalNumber .= $resCartAbandoned['totalCart'].',';
             }
         }else{
             $cartAbandonedTotal=0;
@@ -262,8 +262,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         if(count($resCartAbandonedTotalNumber) > 0) {
             foreach ($resCountUser as $countUser) {
                 $totalUser += $countUser['countUser'];
-                $arrayTotalUser.= "'".$countUser['countUser']."'".",";
-                $arrayLabelTotalUser.="'".$countUser['creationDate']."'".",";
+                $arrayTotalUser.= $countUser['countUser'].',';
+                $arrayLabelTotalUser.=$countUser['creationDate'].',';
             }
         }else{
             $totalUser="0";
@@ -278,8 +278,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         if(count($resCountUser) > 0) {
             foreach ($resCountUser as $countUser) {
                 $totalUserOnline += $countUser['countUser'];
-                $arrayTotalUserOnLine.="'".$countUser['countUser']."'".",";
-                $arrayLabelTotalUserOnLine.="'".$countUser['creationDate']."'".",";
+                $arrayTotalUserOnLine.=$countUser['countUser'].',';
+                $arrayLabelTotalUserOnLine.=$countUser['creationDate'].',';
             }
         }else{
             $totalUserOnline='0';

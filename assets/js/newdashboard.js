@@ -1,7 +1,7 @@
 (function ($) {
 
-    var arrayLabelOrder=$('#arrayLabelOrder').val();
-    var arrayOrder=$('#arrayOrder').val();
+    var arrayLabelOrder=$('#arrayLabelOrder').val().split(",");
+    var arrayOrder=$('#arrayOrder').val().split(",");
 
 
 
