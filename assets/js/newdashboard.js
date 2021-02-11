@@ -7,7 +7,7 @@
 
     let ctxQtyOrder = document.getElementById("ChartQtyOrder").getContext('2d');
     let ChartQtyOrder = new Chart(ctxQtyOrder, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: [arrayLabelOrder],
             datasets: [{
