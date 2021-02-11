@@ -189,7 +189,7 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             foreach ($resOrder as $orderData) {
                 $totalOrder += $orderData['totalOrder'];
                 $quantityOrder += $orderData['countOrder'];
-                $arrayOrder .= number_format($orderData['totalOrder'],2,'.','').',';
+                $arrayOrder .= "'".number_format($orderData['totalOrder'],2,'.','')."'".',';
                 $arrayLabelOrder.= $orderData['creationDate'].',';
                 $arrayCountOrder.= $orderData['countOrder'].',';
 
