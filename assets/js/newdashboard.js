@@ -748,6 +748,13 @@
         window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
 
     });
+    $('#btnsearchplus').click(function () {
+        var typePeriod='custom';
+        var startDateWork=$('#startDateWork').val()
+        var endDateWork=$('#endDateWork').val()
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&startDateWork='+startDateWork+'&endDateWork='+endDateWork;
+
+    });
 
 })(jQuery);
 
