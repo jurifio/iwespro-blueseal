@@ -44,32 +44,6 @@ class CBlueSealNewDashboardController extends ARestrictedAccessRootController
                 $timeEndMasks = (new \DateTime("last day of this year midnight"))->format('Y-m-d H:i:s');
                 $timeStartMaskCompare=(new \DateTime("first day of last year midnight"))->format('Y-m-d H:i:s');
                 $timeEndMaskCompare=(new \DateTime("last day of last year midnight"))->format('Y-m-d H:i:s');
-                $sqlGroupOrder='select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, YEAR(o.creationDate) as creationDate from `Order` `o` 
-WHERE YEAR(o.creationDate)=\''.$year.'\' and   `o`.`status` IN (\'ORD_SHIPPED\',\'ORD_DELIVERED\',\'ORD_CLOSED\',\'ORD_WORK\')    and o.paymentDate is not null group by Year(o.creationDate) ORDER BY year(o.creationDate) asc';
-                $sqlGroupOrderCompare='select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, YEAR(o.creationDate) as creationDate from `Order` `o` 
-WHERE YEAR(o.creationDate)=\''.$lastYear.'\' and   `o`.`status` IN (\'ORD_SHIPPED\',\'ORD_DELIVERED\',\'ORD_CLOSED\',\'ORD_WORK\')    and o.paymentDate is not null group by Year(o.creationDate) ORDER BY year(o.creationDate) asc';
-                $sqlGroupOrderReturn='select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, YEAR(o.creationDate) as creationDate from `Order` `o` 
-WHERE YEAR(creationDate)=\''.$year.'\' and  `o`.`status` LIKE \'ORD_RETURNED\' group by Year(creationDate) ORDER BY year(o.creationDate) asc';
-                $sqlGroupOrderReturnCompare='select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, YEAR(o.creationDate) as creationDate from `Order` `o` 
-WHERE YEAR(creationDate)=\''.$lastYear.'\' and  `o`.`status` LIKE \'ORD_RETURNED\' group by Year(o.creationDate) ORDER BY year(o.creationDate) asc';
-                $cartTotalNumber = 'select count(us.cartId) AS totalCart, YEAR(c.creationDate) as creationDate from UserSessionHasCart us join  `Cart` c on  `us`.cartId=c.id 
-WHERE YEAR(c.creationDate)=\''.$year.'\' group by Year(c.creationDate) ORDER BY year(c.creationDate) asc';
-                $cartTotalNumberCompare = 'select count(us.cartId) AS totalCart, YEAR(c.creationDate) as creationDate from UserSessionHasCart us join  `Cart` c on  `us`.cartId=c.id 
-WHERE YEAR(c.creationDate)=\''.$lastYear.'\' group by Year(c.creationDate) ORDER BY year(c.creationDate) asc';
-                $cartAbandonedTotalNumber = 'select count(c.id) AS totalCart, YEAR(c.creationDate) as creationDate from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null and YEAR(c.creationDate)=\''.$year.'\' group by Year(c.creationDate) ORDER BY year(c.creationDate) asc';
-                $cartAbandonedTotalNumberCompare = 'select count(c.id) AS totalCart, YEAR(c.creationDate) as creationDate from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null and YEAR(c.creationDate)=\''.$lastYear.'\' group by Year(c.creationDate) ORDER BY year(c.creationDate) asc';
-                $sqlTotalUser = 'select count(*) as countUser, year(creationdDate) as creationDate from `User` where isActive=1  and YEAR(creationDate)=\''.$year.'\' group by Year(creationDate) ORDER BY year(creationDate) asc';
-                $sqlTotalUserCompare = 'select count(*) as countUser, year(creationdDate) as creationDate from `User` where isActive=1  and YEAR(creationDate)=\''.$lastYear.'\' group by Year(creationDate) ORDER BY year(creationDate) asc';
-                $sqlTotalUserOnline = "select count(*) as countUser,  year(creationdDate) as creationDate  from `UserSession`  where creationDate YEAR(creationDate)='".$year."' group by Year(creationDate) ORDER BY year(creationDate) asc";
-                $sqlTotalUserOnlineCompare = "select count(*) as countUser,  year(creationdDate) as creationDate  from `UserSession`  where creationDate YEAR(creationDate)='".$lastYear."' group by Year(creationDate) ORDER BY year(creationDate) asc";
-                break;
-
-            case "month":
-                $title = "Mese Corrente";
-                $timeStartMask = (new \DateTime("first day of this month midnight"))->format('Y-m-d H:i:s');
-                $timeEndMasks = (new \DateTime("last day of this month midnight"))->format('Y-m-d H:i:s');
-                $timeStartMaskCompare=(new \DateTime("first day of this month last  year midnight"))->format('Y-m-d H:i:s');
-                $timeEndMaskCompare=(new \DateTime("last day of this month last year midnight"))->format('Y-m-d H:i:s');
                 $sqlgraphOrder="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, concat(date_format(o.creationDate,'%M'),'/',YEAR(o.creationDate)) as creationDate from `Order` `o`
 WHERE creationDate between '".$timeStartMask."' and '".$timeEndMasks."' and   `o`.`status` IN ('ORD_SHIPPED','ORD_DELIVERED','ORD_CLOSED','ORD_WORK')    and o.paymentDate is not null group by concat(date_format(o.creationDate,'%M'),'/',YEAR(o.creationDate)) ORDER BY concat(date_format(o.creationDate,'%M'),'/',YEAR(o.creationDate)) asc";
                 $sqlGroupOrderCompare="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, concat(date_format(o.creationDate,'%M'),'/',YEAR(o.creationDate)) as creationDate from `Order` `o`
@@ -88,6 +62,32 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
                 $sqlTotalUserCompare = "select count(*) as countUser, concat(date_format(creationDate,'%M') as creationDate from `User`  WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' and isActive=1 group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
                 $sqlTotalUserOnline = "select count(*) as countUser,  concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) as creationDate  from `UserSession`  where creationDate  between '".$timeStartMask."' and '".$timeEndMasks."' group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
                 $sqlTotalUserOnlineCompare = "select count(*) as countUser,  concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) as creationDate  from `UserSession`  where creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
+                break;
+
+            case "month":
+                $title = "Mese Corrente";
+                $timeStartMask = (new \DateTime("first day of this month midnight"))->format('Y-m-d H:i:s');
+                $timeEndMasks = (new \DateTime("last day of this month midnight"))->format('Y-m-d H:i:s');
+                $timeStartMaskCompare=(new \DateTime("first day of this month last  year midnight"))->format('Y-m-d H:i:s');
+                $timeEndMaskCompare=(new \DateTime("last day of this month last year midnight"))->format('Y-m-d H:i:s');
+                $sqlgraphOrder="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d') as creationDate from `Order` `o`
+WHERE creationDate between '".$timeStartMask."' and '".$timeEndMasks."'  and   `o`.`status` IN ('ORD_SHIPPED','ORD_DELIVERED','ORD_CLOSED','ORD_WORK')   and o.paymentDate is not null group by date_format(o.creationDate,'%d') ORDER BY date_format(o.creationDate,'%d') asc";
+                $sqlGroupOrderCompare="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(creationDate,'%d') as creationDate from `Order` `o`
+WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."'  and   `o`.`status` IN ('ORD_SHIPPED','ORD_DELIVERED','ORD_CLOSED','ORD_WORK')   and o.paymentDate is not null group by date_format(o.creationDate,'%d') ORDER BY date_format(o.creationDate,'%d') asc";
+                $sqlgraphOrderReturn="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d') as creationDate from `Order` `o`
+WHERE creationDate between '".$timeStartMask."' and '".$timeEndMasks."' and   `o`.`status` LIKE 'ORD_RETURNED' group by date_format(o.creationDate,'%d') ORDER BY date_format(o.creationDate,'%d') asc";
+                $sqlGroupOrderReturnCompare="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d') as creationDate from `Order` `o`
+WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' and   `o`.`status` LIKE 'ORD_RETURNED' group by date_format(o.creationDate,'%d') ORDER BY date_format(o.creationDate,'%d') asc";
+                $cartTotalNumber = 'select count(us.cartId) AS totalCart, date_format(c.creationDate,\'%d\') as creationDate from UserSessionHasCart us join  `Cart` c on  `us`.cartId=c.id 
+WHERE c.creationDate between \''.$timeStartMask.'\' and \''.$timeEndMasks.'\' group by date_format(c.creationDate,\'%d\') ORDER BY date_format(c.creationDate,\'%d\') asc';
+                $cartTotalNumberCompare = 'select count(us.cartId) AS totalCart, date_format(c.creationDate,\'%d\') as creationDate from UserSessionHasCart us join  `Cart` c on  `us`.cartId=c.id 
+WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskCompare.'\' group by date_format(c.creationDate,\'%d\') ORDER BY date_format(c.creationDate,\'%d\') asc';
+                $cartAbandonedTotalNumber = 'select count(c.id) AS totalCart,  date_format(c.creationDate,\'%d\') as creationDate from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null and  creationDate between \''.$timeStartMask.'\' and \''.$timeEndMasks.'\' group by  date_format(c.creationDate,\'%d\') ORDER BY  date_format(c.creationDate,\'%d\') asc';
+                $cartAbandonedTotalNumberCompare = 'select count(c.id) AS totalCart,  date_format(c.creationDate,\'%d\') as creationDate from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null and  creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskCompare.'\'group by  date_format(c.creationDate,\'%d\') ORDER BY  date_format(c.creationDate,\'%d\') asc';
+                $sqlTotalUser = "select count(*) as countUser, date_format(creationDate,'%d')  as creationDate from `User` where creationDate between '".$timeStartMask."' and '".$timeEndMasks."' and isActive=1 group by date_format(creationDate,'%d') ORDER BY date_format(creationDate,'%d') asc";
+                $sqlTotalUserCompare = "select count(*) as countUser, date_format(creationDate,'%d') as creationDate from `User`  WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' and isActive=1 group by date_format(creationDate,'%d') ORDER BY date_format(creationDate,'%d') asc";
+                $sqlTotalUserOnline = "select count(*) as countUser,  date_format(creationDate,'%d') as creationDate  from `UserSession`  where creationDate  between '".$timeStartMask."' and '".$timeEndMasks."' group by date_format(creationDate,'%d') ORDER BY date_format(creationDate,'%d') asc";
+                $sqlTotalUserOnlineCompare = "select count(*) as countUser,  date_format(creationDate,'%d') as creationDate  from `UserSession`  where creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' group by date_format(creationDate,'%d') ORDER BY date_format(creationDate,'%d') asc";
                 break;
             case "week":
                 $title = "Settimana Corrente";
