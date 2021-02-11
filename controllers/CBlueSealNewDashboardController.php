@@ -315,7 +315,7 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             'data' => $this->request->getUrlPath(),
             'page' => $this->page,
             'stats' => $stats,
-            'arrayOrder'=>substr($arrayOrder,-1),
+            'arrayOrder'=>substr($arrayOrder,0,-1),
             'arrayLabelOrder'=>substr($arrayLabelOrder,0,-1),
             'arrayOrderReturn'=>substr($arrayOrderReturn,0,-1),
             'arrayLabelOrderReturn'=>substr($arrayLabelOrderReturn,0,-1),
