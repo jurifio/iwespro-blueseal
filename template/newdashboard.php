@@ -37,7 +37,7 @@
                                 <button class="openstatelaborate btn-primary" id="currentDay">Giorno Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentWeek">Settimana Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentMonth">Mese Corrente</button>
-                                <button class="openstataccettate btn-primary" id="currentYear">Anno Corrrente</button>
+                                <button class="openstataccettate btn-primary" id="currentYear">Anno Corrente</button>
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group form-group-default required">
