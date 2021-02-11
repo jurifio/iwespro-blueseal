@@ -729,30 +729,35 @@
         }
     });
     $('#currentDay').click(function () {
-        var typePeriod='day';
-        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+        let typePeriod='day';
+        let isCompare=$('#isCompare').val();
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&isCompare='+isCompare;
 
     });
     $('#currentWeek').click(function () {
-        var typePeriod='week';
-        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+        let typePeriod='week';
+        let isCompare=$('#isCompare').val();
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&isCompare='+isCompare;
 
     });
     $('#currentMonth').click(function () {
-        var typePeriod='month';
-        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+        let typePeriod='month';
+        let isCompare=$('#isCompare').val();
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&isCompare='+isCompare;
 
     });
     $('#currentYear').click(function () {
-        var typePeriod='year';
-        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+        let typePeriod='year';
+        let isCompare=$('#isCompare').val();
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&isCompare='+isCompare;
 
     });
     $('#btnsearchplus').click(function () {
         var typePeriod='custom';
+        let isCompare=$('#isCompare').val();
         var startDateWork=$('#startDateWork').val()
         var endDateWork=$('#endDateWork').val()
-        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&startDateWork='+startDateWork+'&endDateWork='+endDateWork;
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod+'&startDateWork='+startDateWork+'&endDateWork='+endDateWork+'&isCompare='+isCompare;
 
     });
 
