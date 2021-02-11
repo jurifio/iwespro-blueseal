@@ -33,14 +33,21 @@
                             </div>
                         </div>
                         <div class="row" align="center">
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <button class="openstatelaborate btn-primary" id="currentDay">Giorno Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentWeek">Settimana Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentMonth">Mese Corrente</button>
                                 <button class="openstataccettate btn-primary" id="currentYear">Anno Corrrente</button>
-                                <button class="openstatconsegnate btn-primary" id="lastDay">Compara Giorno Annno precedente</button>
-                                <button class="openstataperte btn-primary" id="lastMonth">Compara Mese  Anno precedente</button>
-                                <button class="openstatcliccate btn-primary" id="lastYear">Compara Anno Passato</button>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group form-group-default required">
+                                    <label for="isCompare">Compara</label>
+                                    <?php if($isCompare==1){
+                                        echo'<input id="isCompare" autocomplete="off" type="checkbox" class="form-control" name="isCompare" checked="checked" value="1" />';
+                                    }else{
+                                        echo'<input id="isCompare" autocomplete="off" type="checkbox" class="form-control" name="isCompare"  value="0" />';
+                                    }?>
+                                </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">

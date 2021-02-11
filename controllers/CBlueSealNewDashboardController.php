@@ -37,6 +37,11 @@ class CBlueSealNewDashboardController extends ARestrictedAccessRootController
         }else{
             $typePeriod='month';
         }
+        if(isset($_GET['isCompare'])){
+            $isCompare = $_GET['isCompare'];
+        }else{
+            $isCompare='0';
+        }
         switch ($typePeriod){
             case "year":
                 $title = "Anno Corrente";
@@ -315,6 +320,7 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             'data' => $this->request->getUrlPath(),
             'page' => $this->page,
             'stats' => $stats,
+            'isCompare'=>$isCompare,
             'arrayOrder'=>substr($arrayOrder,0,-1),
             'arrayLabelOrder'=>substr($arrayLabelOrder,0,-1),
             'arrayOrderReturn'=>substr($arrayOrderReturn,0,-1),
