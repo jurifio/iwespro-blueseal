@@ -728,6 +728,26 @@
             }
         }
     });
+    $('#currentDay').click(function () {
+        var typePeriod='day';
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+
+    });
+    $('#currentWeek').click(function () {
+        var typePeriod='week';
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+
+    });
+    $('#currentMonth').click(function () {
+        var typePeriod='month';
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+
+    });
+    $('#currentYear').click(function () {
+        var typePeriod='year';
+        window.location.href = "/blueseal/newdashboard?typePeriod="+typePeriod;
+
+    });
 
 })(jQuery);
 

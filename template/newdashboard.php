@@ -38,9 +38,9 @@
                                 <button class="openstatpending btn-primary" id="currentWeek">Settimana Corrente</button>
                                 <button class="openstatpending btn-primary" id="currentMonth">Mese Corrente</button>
                                 <button class="openstataccettate btn-primary" id="currentYear">Anno Corrrente</button>
-                                <button class="openstatconsegnate btn-primary" id="lastDay">Ieri</button>
-                                <button class="openstataperte btn-primary" id="lastMonth">Mese Passato</button>
-                                <button class="openstatcliccate btn-primary" id="lastYear">Anno Passato</button>
+                                <button class="openstatconsegnate btn-primary" id="lastDay">Compara Giorno Annno precedente</button>
+                                <button class="openstataperte btn-primary" id="lastMonth">Compara Mese  Anno precedente</button>
+                                <button class="openstatcliccate btn-primary" id="lastYear">Compara Anno Passato</button>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
