@@ -1,5 +1,7 @@
 (function ($) {
 
+    var arrayLabelOrder=$('#arrayLabelOrder').val();
+    var arrayOrder=$('#arrayOrder').val();
 
 
 
@@ -7,10 +9,10 @@
     let ChartQtyOrder = new Chart(ctxQtyOrder, {
         type: 'line',
         data: {
-            labels: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+            labels: [arrayLabelOrder],
             datasets: [{
             label: 'Numero Ordini',
-                data: ['150.00', 160.00,15.00,100.00,10.00,150.00,180.00,15.00,10.00,150.00, 160.00,15.00],
+                data: [arrayOrder],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
