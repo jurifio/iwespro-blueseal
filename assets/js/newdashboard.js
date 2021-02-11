@@ -2,17 +2,30 @@
 
     var arrayLabelOrder=$('#arrayLabelOrder').val().split(",");
     var arrayOrder=$('#arrayOrder').val().split(",");
+    var arrayCountOrder=$('#arrayCountOrder').val().split(",");
+    var arrayOrderReturn=$('#arrayOrderReturn').val().split(",");
+        var arrayLabelOrderReturn=$('#arrayLabelOrderReturn').val().split(",");
+        var arrayCountOrderReturn=$('#arrayCountOrderReturn').val().split(",");
+
+        var arrayTotalUser =$('#arrayTotalUser').val().split(",");
+        var arrayLabelTotalUser=$('#arrayLabelTotalUser').val().split(",");
+        var arrayTotalUserOnLine=$('#arrayTotalUserOnLine').val().split(",");
+        var arrayLabelTotalUserOnLine=$('#arrayLabelTotalUserOnLine').val().split(",");
+        var arrayLabelCartTotalNumber=$('#arrayCountOrderReturn').val().split(",");
+        var arrayLabelCartAbandonedTotalNumber=$('#arrayLabelCartAbandonedTotalNumber').val().split(",");
+        var arrayCartTotalNumber=$('#arrayCartTotalNumber').val().split(",");
+        var arrayCartAbandonedTotalNumber=$('#arrayCartAbandonedTotalNumber').val().split(",");
 
 
 
     let ctxQtyOrder = document.getElementById("ChartQtyOrder").getContext('2d');
     let ChartQtyOrder = new Chart(ctxQtyOrder, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: arrayLabelOrder,
             datasets: [{
             label: 'Numero Ordini',
-                data: arrayOrder,
+                data: arrayCountOrder,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -25,7 +38,26 @@
                     'rgba(50, 159, 64, 0.2)',
                     'rgba(70, 159, 64, 0.2)',
                     'rgba(80, 159, 64, 0.2)',
-                    'rgba(10, 159, 64, 0.2)'
+                    'rgba(10, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
+                    'rgba(11, 159, 64, 0.2)',
 
                 ],
                 borderColor: [
