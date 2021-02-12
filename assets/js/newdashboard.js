@@ -1,5 +1,5 @@
 (function ($) {
-
+    var isCompare=0;
     var arrayLabelOrder = $('#arrayLabelOrder').val().split(",");
     var arrayOrder = $('#arrayOrder').val().split(",");
     var arrayCountOrder = $('#arrayCountOrder').val().split(",");
@@ -2032,31 +2032,52 @@
     }
     $('#currentDay').click(function () {
         let typePeriod = 'day';
-        let isCompare = $('#isCompare').val();
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
         window.location.href = "/blueseal/newdashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
 
     });
     $('#currentWeek').click(function () {
         let typePeriod = 'week';
-        let isCompare = $('#isCompare').val();
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
         window.location.href = "/blueseal/newdashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
 
     });
     $('#currentMonth').click(function () {
         let typePeriod = 'month';
-        let isCompare = $('#isCompare').val();
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
         window.location.href = "/blueseal/newdashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
 
     });
     $('#currentYear').click(function () {
         let typePeriod = 'year';
-        let isCompare = $('#isCompare').val();
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
         window.location.href = "/blueseal/newdashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
 
     });
     $('#btnsearchplus').click(function () {
         var typePeriod = 'custom';
-        let isCompare = $('#isCompare').val();
+
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
         var startDateWork = $('#startDateWork').val()
         var endDateWork = $('#endDateWork').val()
         window.location.href = "/blueseal/newdashboard?typePeriod=" + typePeriod + '&startDateWork=' + startDateWork + '&endDateWork=' + endDateWork + '&isCompare=' + isCompare;
