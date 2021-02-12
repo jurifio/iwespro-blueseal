@@ -102,6 +102,29 @@
                    value="<?php echo $arrayCartTotalNumber ?>"/>
             <input type="hidden" id="arrayCartAbandonedTotalNumber" name="arrayCartAbandonedTotalNumber"
                    value="<?php echo $arrayCartAbandonedTotalNumber ?>"/>
+            <input type="hidden" id="arrayOrderCompare" name="arrayOrderCompare" value="<?php echo $arrayOrderCompare ?>"/>
+            <input type="hidden" id="arrayLabelOrderCompare" name="arrayLabelOrderCompare" value="<?php echo $arrayLabelOrderCompare ?>"/>
+            <input type="hidden" id="arrayOrderReturnCompare" name="arrayOrderReturnCompare" value="<?php echo $arrayOrderReturnCompare ?>"/>
+            <input type="hidden" id="arrayLabelOrderReturnCompare" name="arrayLabelOrderReturnCompare"
+                   value="<?php echo $arrayLabelOrderReturnCompare ?>"/>
+            <input type="hidden" id="arrayCountOrderReturnCompare" name="arrayCountOrderReturnCompare"
+                   value="<?php echo $arrayCountOrderReturnCompare ?>"/>
+            <input type="hidden" id="arrayCountOrderCompare" name="arrayCountOrderCompare" value="<?php echo $arrayCountOrderCompare ?>"/>
+            <input type="hidden" id="arrayTotalUserCompare" name="arrayTotalUserCompare" value="<?php echo $arrayTotalUserCompare ?>"/>
+            <input type="hidden" id="arrayLabelTotalUserCompare" name="arrayLabelTotalUserCompare"
+                   value="<?php echo $arrayLabelTotalUserCompare ?>"/>
+            <input type="hidden" id="arrayTotalUserOnLineCompare" name="arrayTotalUserOnLineCompare"
+                   value="<?php echo $arrayTotalUserOnLineCompare ?>"/>
+            <input type="hidden" id="arrayLabelTotalUserOnLineCompare" name="arrayLabelTotalUserOnLineCompare"
+                   value="<?php echo $arrayLabelTotalUserOnLineCompare ?>"/>
+            <input type="hidden" id="arrayLabelCartTotalNumberCompare" name="arrayLabelCartTotalNumberCompare"
+                   value="<?php echo $arrayLabelCartTotalNumberCompare ?>"/>
+            <input type="hidden" id="arrayLabelCartAbandonedTotalNumberCompare" name="arrayLabelCartAbandonedTotalNumberCompare"
+                   value="<?php echo $arrayLabelCartAbandonedTotalNumberCompare ?>"/>
+            <input type="hidden" id="arrayCartTotalNumberCompare" name="arrayCartTotalNumberCompare"
+                   value="<?php echo $arrayCartTotalNumberCompare ?>"/>
+            <input type="hidden" id="arrayCartAbandonedTotalNumberCompare" name="arrayCartAbandonedTotalNumberCompare"
+                   value="<?php echo $arrayCartAbandonedTotalNumberCompare ?>"/>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">

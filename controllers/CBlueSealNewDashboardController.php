@@ -264,7 +264,7 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         $arrayLabelTotalUser='';
         //$sqlTotalUser = 'select count(*) as countUser from `User` where isActive=1';
         $resCountUser = \Monkey::app()->dbAdapter->query($sqlTotalUser,[])->fetchAll();
-        if(count($resCartAbandonedTotalNumber) > 0) {
+        if(count($resCountUser) > 0) {
             foreach ($resCountUser as $countUser) {
                 $totalUser += $countUser['countUser'];
                 $arrayTotalUser.= $countUser['countUser'].',';
@@ -279,8 +279,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         $arrayTotalUserOnLine='';
         $arrayLabelTotalUserOnLine='';
        // $sqlTotalUserOnline = "select count(*) as countUser from `UserSession`  where creationDate between '" . $today . "' and '" . $yesterday . "'";
-        $resCountUser = \Monkey::app()->dbAdapter->query($sqlTotalUserOnline,[])->fetchAll();
-        if(count($resCountUser) > 0) {
+        $resCountUserOnline = \Monkey::app()->dbAdapter->query($sqlTotalUserOnline,[])->fetchAll();
+        if(count($resCountUserOnline) > 0) {
             foreach ($resCountUser as $countUser) {
                 $totalUserOnline += $countUser['countUser'];
                 $arrayTotalUserOnLine.=$countUser['countUser'].',';
@@ -296,6 +296,122 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             foreach ($resTotalProduct as $product) {
                 $totalProduct = $product['totalProduct'];
             }
+//inizio comparazione
+        $totalOrderCompare=0;
+        $quantityOrderCompare=0;
+        $arrayOrderCompare='';
+        $arrayLabelOrderCompare='';
+        $arrayCountOrderCompare='';
+        $resOrderCompare = \Monkey::app()->dbAdapter->query($sqlGroupOrderCompare,[])->fetchAll();
+        if(count($resOrderCompare) > 0) {
+            foreach ($resOrderCompare as $orderDataCompare) {
+                $totalOrderCompare += $orderDataCompare['totalOrder'];
+                $quantityOrderCompare += $orderDataCompare['countOrder'];
+                $arrayOrderCompare .= number_format($orderDataCompare['totalOrder'],2,'.','').',';
+                $arrayLabelOrderCompare.= $orderDataCompare['creationDate'].',';
+                $arrayCountOrderCompare.= $orderDataCompare['countOrder'].',';
+
+
+            }
+        }else{
+            $totalOrderCompare='0.00';
+            $quantityOrderCompare='';
+            $arrayLabelOrderCompare='0';
+            $arrayCountOrderCompare='0';
+            $arrayOrderCompare='0.00';
+        }
+        $arrayOrderReturnCompare='';
+        $arrayCountOrderReturnCompare='';
+        $arrayLabelOrderReturnCompare='';
+        $totalOrderReturnCompare='0';
+        $quantityOrderReturnCompare = 0;
+
+        $resOrderReturnCompare = \Monkey::app()->dbAdapter->query($sqlGroupOrderReturnCompare,[])->fetchAll();
+        if(count($resOrderReturnCompare) > 0) {
+            foreach ($resOrderReturnCompare as $orderDataReturnCompare) {
+                $totalOrderReturnCompare += $orderDataReturnCompare['totalOrder'];
+                $quantityOrderReturnCompare += $orderDataReturnCompare['countOrder'];
+                $arrayOrderReturnCompare .= number_format($orderDataReturnCompare['totalOrder'],2,'.','').',';
+                $arrayLabelOrderReturnCompare.= $orderDataReturnCompare['creationDate'].',';
+                $arrayCountOrderReturnCompare.= $orderDataReturnCompare['countOrder'].',';
+            }
+        }else{
+            $totalOrderReturnCompare = '0.00';
+            $quantityOrderReturnCompare = '0';
+            $arrayOrderReturnCompare='0.00';
+            $arrayCountOrderReturnCompare='0';
+            $arrayLabelOrderReturnCompare='0';
+        }
+        $cartTotalCompare=0;
+        $arrayCartTotalNumberCompare='';
+        $arrayLabelCartTotalNumberCompare='';
+        $resCartTotalNumberCompare = \Monkey::app()->dbAdapter->query($cartTotalNumberCompare,[])->fetchAll();
+        if(count($resCartTotalNumberCompare) > 0) {
+            foreach ($resCartTotalNumberCompare as $cartTotalNumberComp) {
+                $cartTotalCompare += $cartTotalNumberComp['totalCart'];
+                $arrayCartTotalNumberCompare .= $cartTotalNumberComp['totalCart'].',';
+                $arrayLabelCartTotalNumberCompare.=$cartTotalNumberComp['creationDate'].',';
+            }
+        }else{
+            $cartTotalCompare='0';
+            $arrayCartTotalNumberCompare ='0';
+            $arrayLabelCartTotalNumberCompare='0';
+        }
+        $cartAbandonedTotalCompare=0;
+        $arrayCartAbandonedTotalNumberCompare='';
+        $arrayLabelCartAbandonedTotalNumberCompare='';
+
+
+        $resCartAbandonedTotalNumberCompare = \Monkey::app()->dbAdapter->query($cartAbandonedTotalNumberCompare,[])->fetchAll();
+        if(count($resCartAbandonedTotalNumberCompare) > 0) {
+            foreach ($resCartAbandonedTotalNumberCompare as $resCartAbandonedCompare) {
+                $cartAbandonedTotalCompare += $resCartAbandonedCompare['totalCart'];
+                $arrayLabelCartAbandonedTotalNumberCompare.=$resCartAbandonedCompare['creationDate'].',';
+                $arrayCartAbandonedTotalNumberCompare .= $resCartAbandonedCompare['totalCart'].',';
+            }
+        }else{
+            $cartAbandonedTotalCompare=0;
+            $arrayLabelCartAbandonedTotalNumberCompare='0';
+            $arrayCartAbandonedTotalNumberCompare = '0';
+        }
+        $totalUserCompare=0;
+        $arrayTotalUserCompare='';
+        $arrayLabelTotalUserCompare='';
+        //$sqlTotalUser = 'select count(*) as countUser from `User` where isActive=1';
+        $resCountUserCompare = \Monkey::app()->dbAdapter->query($sqlTotalUserCompare,[])->fetchAll();
+        if(count($resCountUserCompare) > 0) {
+            foreach ($resCountUserCompare as $countUserCompare) {
+                $totalUserCompare += $countUserCompare['countUser'];
+                $arrayTotalUserCompare.= $countUserCompare['countUser'].',';
+                $arrayLabelTotalUserCompare.=$countUserCompare['creationDate'].',';
+            }
+        }else{
+            $totalUserCompare="0";
+            $arrayTotalUserCompare= '0';
+            $arrayLabelTotalUserCompare='0';
+        }
+        $totalUserOnlineCompare=0;
+        $arrayTotalUserOnLineCompare='';
+        $arrayLabelTotalUserOnLineCompare='';
+        // $sqlTotalUserOnline = "select count(*) as countUser from `UserSession`  where creationDate between '" . $today . "' and '" . $yesterday . "'";
+        $resCountUserOnlineCompare = \Monkey::app()->dbAdapter->query($sqlTotalUserOnlineCompare,[])->fetchAll();
+        if(count($resCountUserOnlineCompare) > 0) {
+            foreach ($resCountUserOnlineCompare as $countUserCompare) {
+                $totalUserOnlineCompare += $countUserCompare['countUser'];
+                $arrayTotalUserOnLineCompare.=$countUserCompare['countUser'].',';
+                $arrayLabelTotalUserOnLineCompare.=$countUserCompare['creationDate'].',';
+            }
+        }else{
+            $totalUserOnlineCompare='0';
+            $arrayTotalUserOnLineCompare='0';
+            $arrayLabelTotalUserOnLineCompare='0';
+        }
+
+
+
+
+
+
 
 
         $stats[] = ['totalOrder' => $totalOrder,
@@ -306,7 +422,17 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             'cartAbandonedTotal'=>$cartAbandonedTotal,
             'totalUser'=>$totalUser,
             'totalUserOnline'=>$totalUserOnline,
-            'totalProduct'=>$totalProduct
+            'totalProduct'=>$totalProduct,
+            'totalOrderCompare' => $totalOrderCompare,
+            'quantityOrderCompare' => $quantityOrderCompare,
+            'totalOrderReturnCompare' => $totalOrderReturnCompare,
+            'quantityOrderReturnCompare' => $quantityOrderReturnCompare,
+            'cartTotalCompare' => $cartTotalCompare,
+            'cartAbandonedTotalCompare'=>$cartAbandonedTotalCompare,
+            'totalUserCompare'=>$totalUserCompare,
+            'totalUserOnlineCompare'=>$totalUserOnlineCompare,
+
+
         ];
 
 
@@ -335,6 +461,20 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             'arrayLabelCartAbandonedTotalNumber'=>substr($arrayLabelCartAbandonedTotalNumber,0,-1),
             'arrayCartTotalNumber'=>substr($arrayCartTotalNumber,0,-1),
             'arrayCartAbandonedTotalNumber'=>substr($arrayCartAbandonedTotalNumber,0,-1),
+            'arrayOrderCompare'=>substr($arrayOrderCompare,0,-1),
+            'arrayLabelOrderCompare'=>substr($arrayLabelOrderCompare,0,-1),
+            'arrayOrderReturnCompare'=>substr($arrayOrderReturnCompare,0,-1),
+            'arrayLabelOrderReturnCompare'=>substr($arrayLabelOrderReturnCompare,0,-1),
+            'arrayCountOrderReturnCompare'=>substr($arrayCountOrderReturnCompare,0,-1),
+            'arrayCountOrderCompare'=>substr($arrayCountOrderCompare,0,-1),
+            'arrayTotalUserCompare'=>substr($arrayTotalUserCompare,0,-1),
+            'arrayLabelTotalUserCompare'=>substr($arrayLabelTotalUserCompare,0,-1),
+            'arrayTotalUserOnLineCompare'=>substr($arrayTotalUserOnLineCompare,0,-1),
+            'arrayLabelTotalUserOnLineCompare'=>substr($arrayLabelTotalUserOnLineCompare,0,-1),
+            'arrayLabelCartTotalNumberCompare'=>substr($arrayLabelCartTotalNumberCompare,0,-1),
+            'arrayLabelCartAbandonedTotalNumberCompare'=>substr($arrayLabelCartAbandonedTotalNumberCompare,0,-1),
+            'arrayCartTotalNumberCompare'=>substr($arrayCartTotalNumberCompare,0,-1),
+            'arrayCartAbandonedTotalNumberCompare'=>substr($arrayCartAbandonedTotalNumberCompare,0,-1),
             'title'=>$title,
             'sidebar' => $this->sidebar->build()
         ]);
