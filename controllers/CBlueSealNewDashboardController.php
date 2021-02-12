@@ -202,7 +202,7 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             }
         }else{
             $totalOrder='0.00';
-            $quantityOrder='';
+            $quantityOrder='0';
             $arrayLabelOrder='0';
             $arrayCountOrder='0';
             $arrayOrder='0.00';
