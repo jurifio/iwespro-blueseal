@@ -150,17 +150,21 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
                     $timeStartMaskCompare=(new \DateTime($_GET['startDateWork'] .' -1 year'))->format('Y-m-d 00:00:00');
                 }else{
                     $timeStartMask = (new \DateTime("midnight"))->format('Y-m-d 00:00:00');
+                    $timeStartMaskCompare=(new \DateTime("midnight"))->format('Y-m-d 00:00:00');
                 }
                 if(isset($_GET['endDateWork'])) {
                     $timeEndMasks = (new \DateTime($_GET['endDateWork']))->format('Y-m-d H:i:s');
                     $timeEndMaskCompare=(new \DateTime($_GET['endDateWork'] .' -1 year'))->format('Y-m-d H:i:s');
                 }else{
+                    $timeEndMasks = (new \DateTime("tomorrow midnight"))->format('Y-m-d H:i:s');
                     $timeEndMaskCompare=(new \DateTime("this month last year midnight + 1 day"))->format('Y-m-d H:i:s');
                 }
                 $sqlgraphOrder="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d-%m-%Y') as creationDate from `Order` `o`
 WHERE creationDate between '".$timeStartMask."' and '".$timeEndMasks."'  and   `o`.`status` IN ('ORD_SHIPPED','ORD_DELIVERED','ORD_CLOSED','ORD_WORK')   and o.paymentDate is not null group by date_format(o.creationDate,'%d-%m-%Y') ORDER BY date_format(o.creationDate,'%d-%m-%Y') asc";
+
                 $sqlGroupOrderCompare="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d-%m-%Y') as creationDate from `Order` `o`
 WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."'  and   `o`.`status` IN ('ORD_SHIPPED','ORD_DELIVERED','ORD_CLOSED','ORD_WORK')   and o.paymentDate is not null group by date_format(o.creationDate,'%d-%m-%Y') ORDER BY date_format(o.creationDate,'%d-%m-%Y') asc";
+
                 $sqlgraphOrderReturn="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d-%m-%Y') as creationDate from `Order` `o`
 WHERE creationDate between '".$timeStartMask."' and '".$timeEndMasks."' and   `o`.`status` LIKE 'ORD_RETURNED' group by date_format(o.creationDate,'%d-%m-%Y') ORDER BY date_format(o.creationDate,'%d-%m-%Y') asc";
                 $sqlGroupOrderReturnCompare="select sum(o.netTotal) as totalOrder,count(o.id) as countOrder, date_format(o.creationDate,'%d-%m-%Y') as creationDate from `Order` `o`
@@ -209,6 +213,8 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
         $arrayOrderReturn='';
         $arrayCountOrderReturn='';
         $arrayLabelOrderReturn='';
+        $totalOrderReturn='0';
+        $quantityOrderReturn='0';
 
         $resOrderReturn = \Monkey::app()->dbAdapter->query($sqlgraphOrderReturn,[])->fetchAll();
         if(count($resOrderReturn) > 0) {
