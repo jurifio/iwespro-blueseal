@@ -12,7 +12,7 @@ use bamboo\domain\repositories\COrderLineRepo;
  * Class CChangeLineShop
  * @package bamboo\app\controllers
  */
-class CChangeFriendRevenue extends AAjaxController
+class CChangeCostLine extends AAjaxController
 {
     /**
      * @return bool
@@ -23,7 +23,6 @@ class CChangeFriendRevenue extends AAjaxController
         /** @var COrderLineRepo $orderLineRepo */
         $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
         $orderLine = $orderLineRepo->findOne(['id'=>$datas['orderLineId'],'orderId'=>$datas['orderId']]);
-        $orderLineRepo->changeFriendRevenue($orderLine,$datas['change_revenue']);
         $orderLineRepo->changeCost($orderLine,$datas['change_cost']);
         return true;
     }
