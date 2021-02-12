@@ -2,209 +2,247 @@
 <html>
 <head>
     <?php include "parts/head.php"; ?>
-    <?php echo $app->getAssets(['ui','forms','charts'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms','charts'],$page); ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
-    <?php include "parts/sidebar.php";?>
-    <div class="page-container">
-        <?php include "parts/header.php"; ?>
-        <?php include "parts/operations.php" ?>
+<?php include "parts/sidebar.php"; ?>
+<div class="page-container">
+    <?php include "parts/header.php"; ?>
+    <?php include "parts/operations.php" ?>
 
-        <div class="page-content-wrapper">
-            <div class="content sm-gutter">
+    <div class="page-content-wrapper">
+        <div class="content sm-gutter">
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 alert-container closed">
 
-                <div class="container-fluid container-fixed-lg bg-white">
-                    <div class="row">
-                        <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
                     </div>
                 </div>
-                <?php if($app->user()->hasPermission('allShops')): ?>
-                <div class="container-fluid padding-25 sm-padding-10">
-                    <div class="row">
-                        <div class="col-md-4 col-lg-3 col-xlg-2 ">
-                            <div class="row">
-                                <bs-portlet data-controller="UserSalesRecapController"
-                                            data-params="period=day"
-                                            data-url="<?php echo $app->urlForBluesealXhr() ?>">
-                                </bs-portlet>
+            </div>
+            <?php if($app->user()->hasPermission('allShops')): ?>
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body">
+                            <div class="row" align="center">
+                                <div class="col-md-6">
+                                    <h5 class="m-t-6">Filtri</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="m-t-6">Filtro personalizzato</h5>
+                                </div>
                             </div>
-                            <div class="row">
-                                <bs-portlet data-controller="UserSalesRecapController"
-                                            data-params="period=week"
-                                            data-url="<?php echo $app->urlForBluesealXhr() ?>">
-                                </bs-portlet>
-                            </div>
-                            <div class="row">
-                                <bs-portlet data-controller="UserSalesRecapController"
-                                            data-params="period=month"
-                                            data-url="<?php echo $app->urlForBluesealXhr() ?>">
-                                </bs-portlet>
+                            <div class="row" align="center">
+                                <div class="col-md-5">
+                                    <button class="openstatelaborate btn-primary" id="currentDay">Giorno Corrente</button>
+                                    <button class="openstatpending btn-primary" id="currentWeek">Settimana Corrente</button>
+                                    <button class="openstatpending btn-primary" id="currentMonth">Mese Corrente</button>
+                                    <button class="openstataccettate btn-primary" id="currentYear">Anno Corrente</button>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group form-group-default required">
+                                        <label for="isCompare">Compara</label>
+                                        <?php if ($isCompare == 1) {
+                                            echo '<input id="isCompare" autocomplete="off" type="checkbox" class="form-control" name="isCompare" checked="checked" value="1" />';
+                                        } else {
+                                            echo '<input id="isCompare" autocomplete="off" type="checkbox" class="form-control" name="isCompare"  value="0" />';
+                                        } ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="startDateWork">Applica Dalla Data</label>
+                                        <input type="datetime-local" id="startDateWork" class="form-control"
+                                               placeholder="filtro da data "
+                                               name="startDateWork"
+                                               value=""
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="endDateWork">alla Data</label>
+                                        <input type="datetime-local" id="endDateWork" class="form-control"
+                                               placeholder="Inserisci la Data di Inizio "
+                                               name="endDateWork"
+                                               value=""
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <button class="success" id="btnsearchplus" name='btnsearchplus' type="button"><span
+                                                    class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-8 col-lg-5 col-xlg-6 m-b-10">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="widget-12 panel no-border widget-loader-circle no-margin">
-                                        <div class="row">
-                                            <div class="col-xlg-8 ">
-                                                <div class="panel-heading pull-up top-right ">
-                                                    <div class="panel-controls">
-                                                        <ul>
-                                                            <li class="hidden-xlg">
-                                                                <div class="dropdown">
-                                                                    <a data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
-                                                                        <i class="portlet-icon portlet-icon-settings"></i>
-                                                                    </a>
-                                                                    <ul class="dropdown-menu pull-right" role="menu">
-                                                                        <li><a href="#">Vendite</a>
-                                                                        </li>
-                                                                        <li><a href="#">Utenti</a>
-                                                                        </li>
-                                                                        <li><a href="#">Resi</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <a data-toggle="refresh" class="portlet-refresh text-black" href="#"><i class="portlet-icon portlet-icon-refresh"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
+                    </div>
+                </div>
+                <input type="hidden" id="arrayOrder" name="arrayOrder" value="<?php echo $arrayOrder ?>"/>
+                <input type="hidden" id="arrayLabelOrder" name="arrayLabelOrder" value="<?php echo $arrayLabelOrder ?>"/>
+                <input type="hidden" id="arrayOrderReturn" name="arrayOrderReturn" value="<?php echo $arrayOrderReturn ?>"/>
+                <input type="hidden" id="arrayLabelOrderReturn" name="arrayLabelOrderReturn"
+                       value="<?php echo $arrayLabelOrderReturn ?>"/>
+                <input type="hidden" id="arrayCountOrderReturn" name="arrayCountOrderReturn"
+                       value="<?php echo $arrayCountOrderReturn ?>"/>
+                <input type="hidden" id="arrayCountOrder" name="arrayCountOrder" value="<?php echo $arrayCountOrder ?>"/>
+                <input type="hidden" id="arrayTotalUser" name="arrayTotalUser" value="<?php echo $arrayTotalUser ?>"/>
+                <input type="hidden" id="arrayLabelTotalUser" name="arrayLabelTotalUser"
+                       value="<?php echo $arrayLabelTotalUser ?>"/>
+                <input type="hidden" id="arrayTotalUserOnLine" name="arrayTotalUserOnLine"
+                       value="<?php echo $arrayTotalUserOnLine ?>"/>
+                <input type="hidden" id="arrayLabelTotalUserOnLine" name="arrayLabelTotalUserOnLine"
+                       value="<?php echo $arrayLabelTotalUserOnLine ?>"/>
+                <input type="hidden" id="arrayLabelCartTotalNumber" name="arrayLabelCartTotalNumber"
+                       value="<?php echo $arrayLabelCartTotalNumber ?>"/>
+                <input type="hidden" id="arrayLabelCartAbandonedTotalNumber" name="arrayLabelCartAbandonedTotalNumber"
+                       value="<?php echo $arrayLabelCartAbandonedTotalNumber ?>"/>
+                <input type="hidden" id="arrayCartTotalNumber" name="arrayCartTotalNumber"
+                       value="<?php echo $arrayCartTotalNumber ?>"/>
+                <input type="hidden" id="arrayCartAbandonedTotalNumber" name="arrayCartAbandonedTotalNumber"
+                       value="<?php echo $arrayCartAbandonedTotalNumber ?>"/>
+                <input type="hidden" id="arrayOrderCompare" name="arrayOrderCompare"
+                       value="<?php echo $arrayOrderCompare ?>"/>
+                <input type="hidden" id="arrayLabelOrderCompare" name="arrayLabelOrderCompare"
+                       value="<?php echo $arrayLabelOrderCompare ?>"/>
+                <input type="hidden" id="arrayOrderReturnCompare" name="arrayOrderReturnCompare"
+                       value="<?php echo $arrayOrderReturnCompare ?>"/>
+                <input type="hidden" id="arrayLabelOrderReturnCompare" name="arrayLabelOrderReturnCompare"
+                       value="<?php echo $arrayLabelOrderReturnCompare ?>"/>
+                <input type="hidden" id="arrayCountOrderReturnCompare" name="arrayCountOrderReturnCompare"
+                       value="<?php echo $arrayCountOrderReturnCompare ?>"/>
+                <input type="hidden" id="arrayCountOrderCompare" name="arrayCountOrderCompare"
+                       value="<?php echo $arrayCountOrderCompare ?>"/>
+                <input type="hidden" id="arrayTotalUserCompare" name="arrayTotalUserCompare"
+                       value="<?php echo $arrayTotalUserCompare ?>"/>
+                <input type="hidden" id="arrayLabelTotalUserCompare" name="arrayLabelTotalUserCompare"
+                       value="<?php echo $arrayLabelTotalUserCompare ?>"/>
+                <input type="hidden" id="arrayTotalUserOnLineCompare" name="arrayTotalUserOnLineCompare"
+                       value="<?php echo $arrayTotalUserOnLineCompare ?>"/>
+                <input type="hidden" id="arrayLabelTotalUserOnLineCompare" name="arrayLabelTotalUserOnLineCompare"
+                       value="<?php echo $arrayLabelTotalUserOnLineCompare ?>"/>
+                <input type="hidden" id="arrayLabelCartTotalNumberCompare" name="arrayLabelCartTotalNumberCompare"
+                       value="<?php echo $arrayLabelCartTotalNumberCompare ?>"/>
+                <input type="hidden" id="arrayLabelCartAbandonedTotalNumberCompare"
+                       name="arrayLabelCartAbandonedTotalNumberCompare"
+                       value="<?php echo $arrayLabelCartAbandonedTotalNumberCompare ?>"/>
+                <input type="hidden" id="arrayCartTotalNumberCompare" name="arrayCartTotalNumberCompare"
+                       value="<?php echo $arrayCartTotalNumberCompare ?>"/>
+                <input type="hidden" id="arrayCartAbandonedTotalNumberCompare" name="arrayCartAbandonedTotalNumberCompare"
+                       value="<?php echo $arrayCartAbandonedTotalNumberCompare ?>"/>
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body">
+                            <div class="row" align="center">
+                                <div class="col-md-5" id="textColumnData">
+                                    <table id="myTable1"  style="font-size:18px" cellspacing="10px" cellpadding="10px" border="1" align="center">
+                                        <tr class="header1">
+                                            <td colspan="4" align="center"><h5><i class="fa fa-bar-chart"></i> Report per <?php echo $title; ?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" ><h5>Tot N. Ordini</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo $stats[0]['quantityOrder']; ?></h5></td>
+                                            <td width="30%"><h5>Tot. € Ordini</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo number_format($stats[0]['totalOrder'],2,',',''); ?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%"><h5>Tot. N. Resi</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo $stats[0]['quantityOrderReturn']; ?></h5></td>
+                                            <td width="30%"><h5>Tot. € Resi</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo number_format($stats[0]['totalOrderReturn'],2,',',''); ?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%"><h5>Tot. Carrelli Attivi</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo $stats[0]['cartTotal']; ?></h5></td>
+                                            <td width="30%"><h5>Tot. N.Carrelli Abb.</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo $stats[0]['cartAbandonedTotal']; ?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%"><h5>Tot. N.Utenti iscritti</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo $stats[0]['totalUser']; ?></h5></td>
+                                            <td width="30%"><h5>Tot. N. Utenti Online</h5></td>
+                                            <td width="20%" align="center"><h5><?php echo $stats[0]['totalUserOnline']; ?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%" align="center" colspan="2"><h5>Tot N. Prodotti</h5></td>
+                                            <td width="50%" align="center" colspan="2"><h5><?php echo $stats[0]['totalProduct']; ?></h5></td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <div class="col-md-7" id="chartColumnData">
+                                    <div class="row" id="orderRow">
+                                        <div class="col-md-6" id="s-ordernumber">
+                                            <h5 class="m-t-10">Numero Ordini</h5>
+                                            <canvas id="ChartQtyOrder"></canvas>
                                         </div>
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-xlg-8 ">
-                                                    <div class="p-l-10">
-                                                        <h2 class="pull-left">Vendite (Demo)</h2>
-                                                        <h2 class="pull-left m-l-50 text-success">
-                                                            <span class="bold">448</span>
-                                                            <span class="text-success fs-12">+121</span>
-                                                        </h2>
-                                                        <div class="clearfix"></div>
-                                                        <div class="full-width">
-                                                            <ul class="list-inline">
-                                                                <li><a href="#" class="font-montserrat text-master">1D</a>
-                                                                </li>
-                                                                <li class="active"><a href="#" class="font-montserrat bg-master-light text-master">5D</a>
-                                                                </li>
-                                                                <li><a href="#" class="font-montserrat text-master">1M</a>
-                                                                </li>
-                                                                <li><a href="#" class="font-montserrat text-master">1Y</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="nvd3-line line-chart text-center" data-x-grid="false">
-                                                            <svg></svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xlg-4 visible-xlg">
-                                                    <div class="widget-12-search">
-                                                        <p class="pull-left">KPI
-                                                            <span class="bold">monitorati</span>
-                                                        </p>
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                    <div class="company-stat-boxes m-t-50">
-                                                        <div data-index="0" class="company-stat-box m-t-15 active padding-20 bg-master-lightest">
-                                                            <div>
-                                                                <button type="button" class="close" data-dismiss="modal">
-                                                                    <i class="pg-close fs-12"></i>
-                                                                </button>
-                                                                <p class="company-name pull-left text-uppercase bold no-margin">
-                                                                    <span class="fa fa-circle text-success fs-11"></span> Vendite
-                                                                </p>
-                                                                <small class="hint-text m-l-10">al netto dei resi</small>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                            <div class="m-t-10">
-                                                                <p class="pull-left small hint-text no-margin p-t-5">9:42 CET</p>
-                                                                <div class="pull-right">
-                                                                    <p class="small hint-text no-margin inline">37</p>
-                                                                    <span class=" label label-success p-t-5 m-l-5 p-b-5 inline fs-12">+ 4</span>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div data-index="1" class="company-stat-box m-t-15  padding-20 bg-master-lightest">
-                                                            <div>
-                                                                <button type="button" class="close" data-dismiss="modal">
-                                                                    <i class="pg-close fs-12"></i>
-                                                                </button>
-                                                                <p class="company-name pull-left text-uppercase bold no-margin">
-                                                                    <span class="fa fa-circle text-complete fs-11"></span> Resi
-                                                                </p>
-                                                                <small class="hint-text m-l-10">rimborsati</small>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                            <div class="m-t-10">
-                                                                <p class="pull-left small hint-text no-margin p-t-5">9:42 CET</p>
-                                                                <div class="pull-right">
-                                                                    <p class="small hint-text no-margin inline">8</p>
-                                                                    <span class=" label label-warning p-t-5 m-l-5 p-b-5 inline fs-12">+ 1</span>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div data-index="2" class="company-stat-box m-t-15  padding-20 bg-master-lightest">
-                                                            <div>
-                                                                <button type="button" class="close" data-dismiss="modal">
-                                                                    <i class="pg-close fs-12"></i>
-                                                                </button>
-                                                                <p class="company-name pull-left text-uppercase bold no-margin">
-                                                                    <span class="fa fa-circle text-primary fs-11"></span> Clienti
-                                                                </p>
-                                                                <small class="hint-text m-l-10">acquisizioni</small>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                            <div class="m-t-10">
-                                                                <p class="pull-left small hint-text no-margin p-t-5">9:42 CET</p>
-                                                                <div class="pull-right">
-                                                                    <p class="small hint-text no-margin inline">14</p>
-                                                                    <span class=" label label-success p-t-5 m-l-5 p-b-5 inline fs-12">+ 3</span>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6" id="s-ordervalue">
+                                            <h5 class="m-t-10">Valore Ordini</h5>
+                                            <canvas id="ChartValueOrder"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="orderRowReturn">
+                                        <div class="col-md-6" id="s-orderreturnnumber">
+                                            <h5 class="m-t-10">Numero Resi</h5>
+                                            <canvas id="ChartQtyOrderReturn"></canvas>
+                                        </div>
+                                        <div class="col-md-6" id="s-orderreturnvalue">
+                                            <h5 class="m-t-10">Valore Resi</h5>
+                                            <canvas id="ChartValueOrderReturn"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="cartRow">
+                                        <div class="col-md-6" id="s-cartnumber">
+                                            <h5 class="m-t-10">Carrelli </h5>
+                                            <canvas id="ChartQtyCart"></canvas>
+                                        </div>
+                                        <div class="col-md-6" id="s-cartnumberAbandoned">
+                                            <h5 class="m-t-10">Carrelli Abbandonati</h5>
+                                            <canvas id="ChartQtyCartAbandoned"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="userRow">
+                                        <div class="col-md-6" id="s-usernumber">
+                                            <h5 class="m-t-10">totale Utenti Registrati</h5>
+                                            <canvas id="ChartQtyUser"></canvas>
+                                        </div>
+                                        <div class="col-md-6" id="s-usernumberonline">
+                                            <h5 class="m-t-10">totale Utenti Online</h5>
+                                            <canvas id="ChartQtyUserOnLine"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-4 m-b-10">
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body">
                             <div class="row">
-                                <bs-portlet data-controller="UserSalesGridController"
-                                            data-params=""
-                                            data-url="<?php echo $app->urlForBluesealXhr() ?>">
-                                </bs-portlet>
+                                <div class="col-lg-12">
+                                    <?php if($app->user()->hasPermission('worker')): ?>
+                                        <img style="width: 100%" src="/assets/dashboardImageWorker.png">
+                                    <?php else: ?>
+                                        <img style="width: 100%" src="/assets/dashboardImage.png">
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <?php else: ?>
-                <div class="container-fluid padding-25 sm-padding-10">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <?php if($app->user()->hasPermission('worker')): ?>
-                                <img style="width: 100%" src="/assets/dashboardImageWorker.png">
-                            <?php else: ?>
-                                <img style="width: 100%" src="/assets/dashboardImage.png">
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
-            </div>
+            <?php endif; ?>
         </div>
-        <?php include "parts/footer.php"; ?>
     </div>
-    <?php include "parts/bsmodal.php"; ?>
-    <?php include "parts/alert.php"; ?>
+</div>
+</div>
+<?php include "parts/footer.php" ?>
+</div>
+<?php include "parts/bsmodal.php"; ?>
+<?php include "parts/alert.php"; ?>
+
 </body>
 </html>

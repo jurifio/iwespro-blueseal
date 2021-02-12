@@ -21,6 +21,7 @@
                     </div>
                 </div>
             </div>
+            <?php if($app->user()->hasPermission('allShops')): ?>
             <div class="container-fluid container-fixed-lg bg-white">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
@@ -217,7 +218,23 @@
                     </div>
                 </div>
             </div>
-
+            <?php else: ?>
+            <div class="container-fluid container-fixed-lg bg-white">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <?php if($app->user()->hasPermission('worker')): ?>
+                                    <img style="width: 100%" src="/assets/dashboardImageWorker.png">
+                                <?php else: ?>
+                                    <img style="width: 100%" src="/assets/dashboardImage.png">
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

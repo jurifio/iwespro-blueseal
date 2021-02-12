@@ -1,310 +1,2088 @@
 (function ($) {
+    var isCompare=0;
+    var arrayLabelOrder = $('#arrayLabelOrder').val().split(",");
+    var arrayOrder = $('#arrayOrder').val().split(",");
+    var arrayCountOrder = $('#arrayCountOrder').val().split(",");
+    var arrayOrderReturn = $('#arrayOrderReturn').val().split(",");
+    var arrayLabelOrderReturn = $('#arrayLabelOrderReturn').val().split(",");
+    var arrayCountOrderReturn = $('#arrayCountOrderReturn').val().split(",");
+    var arrayTotalUser = $('#arrayTotalUser').val().split(",");
+    var arrayLabelTotalUser = $('#arrayLabelTotalUser').val().split(",");
+    var arrayTotalUserOnLine = $('#arrayTotalUserOnLine').val().split(",");
+    var arrayLabelTotalUserOnLine = $('#arrayLabelTotalUserOnLine').val().split(",");
+    var arrayLabelCartTotalNumber = $('#arrayCountOrderReturn').val().split(",");
+    var arrayLabelCartAbandonedTotalNumber = $('#arrayLabelCartAbandonedTotalNumber').val().split(",");
+    var arrayCartTotalNumber = $('#arrayCartTotalNumber').val().split(",");
+    var arrayCartAbandonedTotalNumber = $('#arrayCartAbandonedTotalNumber').val().split(",");
+    var arrayLabelOrderCompare = $('#arrayLabelOrderCompare').val().split(",");
+    var arrayOrderCompare = $('#arrayOrderCompare').val().split(",");
+    var arrayCountOrderCompare = $('#arrayCountOrderCompare').val().split(",");
+    var arrayOrderReturnCompare = $('#arrayOrderReturnCompare').val().split(",");
+    var arrayLabelOrderReturnCompare = $('#arrayLabelOrderReturnCompare').val().split(",");
+    var arrayCountOrderReturnCompare = $('#arrayCountOrderReturnCompare').val().split(",");
 
-    'use strict';
-    $(document).ready(function () {
-        /*
-        if($('#wk') != undefined){
-            $('.page-sidebar').css({
-               'display': 'none'
-            });
-        }*/
+    var arrayTotalUserCompare = $('#arrayTotalUserCompare').val().split(",");
+    var arrayLabelTotalUserCompare = $('#arrayLabelTotalUserCompare').val().split(",");
+    var arrayTotalUserOnLineCompare = $('#arrayTotalUserOnLineCompare').val().split(",");
+    var arrayLabelTotalUserOnLineCompare = $('#arrayLabelTotalUserOnLineCompare').val().split(",");
+    var arrayLabelCartTotalNumberCompare = $('#arrayCountOrderReturnCompare').val().split(",");
+    var arrayLabelCartAbandonedTotalNumberCompare = $('#arrayLabelCartAbandonedTotalNumberCompare').val().split(",");
+    var arrayCartTotalNumberCompare = $('#arrayCartTotalNumberCompare').val().split(",");
+    var arrayCartAbandonedTotalNumberCompare = $('#arrayCartAbandonedTotalNumberCompare').val().split(",");
 
-        var margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+    var isCompare = $('#isCompare').val();
+    if (isCompare != 1) {
 
-        var formatDate = d3.time.format("%d-%b-%y");
+        let ctxQtyOrder = document.getElementById("ChartQtyOrder").getContext('2d');
+        let ChartQtyOrder = new Chart(ctxQtyOrder, {
+            type: 'bar',
+            data: {
+                labels: arrayLabelOrder,
+                datasets: [{
+                    label: 'Numero Ordini',
+                    data: arrayCountOrder,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
 
-        var x = d3.time.scale()
-            .range([0, width]);
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        let ctxValueOrder = document.getElementById("ChartValueOrder").getContext('2d');
+        let ChartValueOrder = new Chart(ctxValueOrder, {
+            type: 'line',
+            data: {
+                labels: arrayLabelOrder,
+                datasets: [{
+                    label: 'Valore Ordini',
+                    data: arrayOrder,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
 
-        var y = d3.scale.linear()
-            .range([height, 0]);
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        //ChartQtyOrderReturn
+        let ctxChartQtyOrderReturn = document.getElementById("ChartQtyOrderReturn").getContext('2d');
+        let ChartQtyOrderReturn = new Chart(ctxChartQtyOrderReturn, {
+            type: 'line',
+            data: {
+                labels: arrayLabelOrderReturn,
+                datasets: [{
+                    label: 'Quantita Ordini Resi',
+                    data: arrayCountOrderReturn,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
 
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-
-        var line = d3.svg.line()
-            .x(function (d) {
-                return x(d.date);
-            })
-            .y(function (d) {
-                return y(d.close);
-            });
-
-        var svg = d3.select("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        d3.tsv("/blueseal/xhr/UserSalesGraphDataController", type, function (error, data) {
-            if (error) throw error;
-
-            x.domain(d3.extent(data, function (d) {
-                return d.date;
-            }));
-            y.domain(d3.extent(data, function (d) {
-                return d.close;
-            }));
-
-            svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text("Sales ($)");
-
-            svg.append("path")
-                .datum(data)
-                .attr("class", "line")
-                .attr("d", line);
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
         });
 
-        function type(d) {
-            d.date = formatDate.parse(d.date);
-            d.close = +d.close;
-            return d;
+        //ChartValueOrderReturn
+        let ctxChartValueOrderReturn = document.getElementById("ChartValueOrderReturn").getContext('2d');
+        let ChartValueOrderReturn = new Chart(ctxChartValueOrderReturn, {
+            type: 'line',
+            data: {
+                labels: arrayLabelOrderReturn,
+                datasets: [{
+                    label: 'Valori Ordini Resi',
+                    data: arrayOrderReturn,
+                    backgroundColor: [
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(255,52,41, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+//ChartQtyCart
+        let ctxChartQtyCart = document.getElementById("ChartQtyCart").getContext('2d');
+        let ChartQtyCart = new Chart(ctxChartQtyCart, {
+            type: 'line',
+            data: {
+                labels: arrayLabelCartTotalNumber,
+                datasets: [{
+                    label: 'Quantita Carrelli',
+                    data: arrayCartTotalNumber,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        //ChartQtyCartAbandoned
+        let ctxChartQtyCartAbandoned = document.getElementById("ChartQtyCartAbandoned").getContext('2d');
+        let ChartQtyCartAbandoned = new Chart(ctxChartQtyCartAbandoned, {
+            type: 'line',
+            data: {
+                labels: arrayLabelCartAbandonedTotalNumber,
+                datasets: [{
+                    label: 'Quantita Carrelli Abbandonati',
+                    data: arrayCartAbandonedTotalNumber,
+                    backgroundColor: [
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        //ChartQtyUser
+        let ctxChartQtyUser = document.getElementById("ChartQtyUser").getContext('2d');
+        let ChartQtyUser = new Chart(ctxChartQtyUser, {
+            type: 'line',
+            data: {
+                labels: arrayLabelTotalUser,
+                datasets: [{
+                    label: 'Totale Utenti  Registrati',
+                    data: arrayTotalUser,
+                    backgroundColor: [
+                        'rgba(158,23,255, 1)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(158,23,255, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        let ctxChartQtyUserOnLine = document.getElementById("ChartQtyUserOnLine").getContext('2d');
+        let ChartQtyUserOnLine = new Chart(ctxChartQtyUserOnLine, {
+            type: 'line',
+            data: {
+                labels: arrayLabelTotalUserOnLine,
+                datasets: [{
+                    label: 'Totale Utenti  Online',
+                    data: arrayTotalUserOnLine,
+                    backgroundColor: [
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    } else {
+        let ctxQtyOrder = document.getElementById("ChartQtyOrder").getContext('2d');
+        let ChartQtyOrder = new Chart(ctxQtyOrder, {
+            type: 'bar',
+            data: {
+                labels: arrayLabelOrder,
+                datasets: [{
+                    label: 'Numero Ordini Anno corrente',
+                    data: arrayCountOrder,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Numero Ordini  Anno Precedente',
+                        data: arrayCountOrderCompare,
+                        backgroundColor: [
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,52,41, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        let ctxValueOrder = document.getElementById("ChartValueOrder").getContext('2d');
+        let ChartValueOrder = new Chart(ctxValueOrder, {
+            type: 'line',
+            data: {
+                labels: arrayLabelOrder,
+                datasets: [{
+                    label: 'Valore Ordini Anno Corrente',
+                    data: arrayOrder,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Valore Ordini Anno Precedente',
+                        data: arrayOrderCompare,
+                        backgroundColor: [
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,52,41, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        //ChartQtyOrderReturn
+        let ctxChartQtyOrderReturn = document.getElementById("ChartQtyOrderReturn").getContext('2d');
+        let ChartQtyOrderReturn = new Chart(ctxChartQtyOrderReturn, {
+            type: 'line',
+            data: {
+                labels: arrayLabelOrderReturn,
+                datasets: [{
+                    label: 'Quantita Ordini Resi Anno Corrente',
+                    data: arrayCountOrderReturn,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: 'Quantita Ordini Resi Anno Precedente',
+                    data: arrayCountOrderReturnCompare,
+                    backgroundColor: [
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(255,52,41, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        //ChartValueOrderReturn
+        let ctxChartValueOrderReturn = document.getElementById("ChartValueOrderReturn").getContext('2d');
+        let ChartValueOrderReturn = new Chart(ctxChartValueOrderReturn, {
+            type: 'line',
+            data: {
+                labels: arrayLabelOrderReturn,
+                datasets: [{
+                    label: 'Valori Ordini Resi Anno Corrente',
+                    data: arrayOrderReturn,
+                    backgroundColor: [
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(255,52,41, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Valori Ordini Resi Anno Precedente',
+                        data: arrayOrderReturnCompare,
+                        backgroundColor: [
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+//ChartQtyCart
+        let ctxChartQtyCart = document.getElementById("ChartQtyCart").getContext('2d');
+        let ChartQtyCart = new Chart(ctxChartQtyCart, {
+            type: 'line',
+            data: {
+                labels: arrayLabelCartTotalNumber,
+                datasets: [{
+                    label: 'Quantita Carrelli Anno Corrente',
+                    data: arrayCartTotalNumber,
+                    backgroundColor: [
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Quantita Carrelli Anno Precedente',
+                        data: arrayCartTotalNumberCompare,
+                        backgroundColor: [
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,52,41, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        //ChartQtyCartAbandoned
+        let ctxChartQtyCartAbandoned = document.getElementById("ChartQtyCartAbandoned").getContext('2d');
+        let ChartQtyCartAbandoned = new Chart(ctxChartQtyCartAbandoned, {
+            type: 'line',
+            data: {
+                labels: arrayLabelCartAbandonedTotalNumber,
+                datasets: [{
+                    label: 'Quantita Carrelli Abbandonati Anno Corrente',
+                    data: arrayCartAbandonedTotalNumber,
+                    backgroundColor: [
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Quantita Carrelli Abbandonati Anno Precedente',
+                        data: arrayCartAbandonedTotalNumberCompare,
+                        backgroundColor: [
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,52,41, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        //ChartQtyUser
+        let ctxChartQtyUser = document.getElementById("ChartQtyUser").getContext('2d');
+        let ChartQtyUser = new Chart(ctxChartQtyUser, {
+            type: 'line',
+            data: {
+                labels: arrayLabelTotalUser,
+                datasets: [{
+                    label: 'Totale Utenti  Registrati Anno Corrente',
+                    data: arrayTotalUser,
+                    backgroundColor: [
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(158,23,255, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Totale Utenti  Registrati Anno Precedente',
+                        data: arrayTotalUserCompare,
+                        backgroundColor: [
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,52,41, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        let ctxChartQtyUserOnLine = document.getElementById("ChartQtyUserOnLine").getContext('2d');
+        let ChartQtyUserOnLine = new Chart(ctxChartQtyUserOnLine, {
+            type: 'line',
+            data: {
+                labels: arrayLabelTotalUserOnLine,
+                datasets: [{
+                    label: 'Totale Utenti  Online Anno Corrente',
+                    data: arrayTotalUserOnLine,
+                    backgroundColor: [
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)',
+                        'rgba(255,52,41, 0.2)',
+                        'rgba(237,255,43, 0.2)',
+                        'rgba(130,255,153, 0.2)',
+                        'rgba(36,120,255, 0.2)',
+                        'rgba(255,46,133, 0.2)',
+                        'rgba(255,39,28, 0.2)',
+                        'rgba(210,255,173, 0.2)',
+                        'rgba(28,255,229, 0.2)',
+                        'rgba(158,23,255, 0.2)',
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(219,255,226, 0.2)',
+                        'rgba(255,0,0, 0.2)',
+                        'rgba(249,255,128, 0.2)',
+                        'rgba(10,255,31, 0.2)',
+                        'rgba(52,255,33, 0.2)'
+
+                    ],
+                    borderColor: [
+                        'rgba(254,199,255, 0.2)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)',
+                        'rgba(255,52,41, 1)',
+                        'rgba(237,255,43, 1)',
+                        'rgba(130,255,153, 1)',
+                        'rgba(36,120,255, 1)',
+                        'rgba(255,46,133, 1)',
+                        'rgba(255,39,28, 1)',
+                        'rgba(210,255,173, 1)',
+                        'rgba(28,255,229, 1)',
+                        'rgba(158,23,255, 1)',
+                        'rgba(254,199,255, 1)',
+                        'rgba(219,255,226, 1)',
+                        'rgba(255,0,0, 1)',
+                        'rgba(249,255,128, 1)',
+                        'rgba(10,255,31, 1)',
+                        'rgba(52,255,33, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Totale Utenti  Online Anno Precedente',
+                        data: arrayTotalUserOnLineCompare,
+                        backgroundColor: [
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)',
+                            'rgba(255,52,41, 0.2)',
+                            'rgba(237,255,43, 0.2)',
+                            'rgba(130,255,153, 0.2)',
+                            'rgba(36,120,255, 0.2)',
+                            'rgba(255,46,133, 0.2)',
+                            'rgba(255,39,28, 0.2)',
+                            'rgba(210,255,173, 0.2)',
+                            'rgba(28,255,229, 0.2)',
+                            'rgba(158,23,255, 0.2)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(219,255,226, 0.2)',
+                            'rgba(255,0,0, 0.2)',
+                            'rgba(249,255,128, 0.2)',
+                            'rgba(10,255,31, 0.2)',
+                            'rgba(52,255,33, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,52,41, 1)',
+                            'rgba(254,199,255, 0.2)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)',
+                            'rgba(255,52,41, 1)',
+                            'rgba(237,255,43, 1)',
+                            'rgba(130,255,153, 1)',
+                            'rgba(36,120,255, 1)',
+                            'rgba(255,46,133, 1)',
+                            'rgba(255,39,28, 1)',
+                            'rgba(210,255,173, 1)',
+                            'rgba(28,255,229, 1)',
+                            'rgba(158,23,255, 1)',
+                            'rgba(254,199,255, 1)',
+                            'rgba(219,255,226, 1)',
+                            'rgba(255,0,0, 1)',
+                            'rgba(249,255,128, 1)',
+                            'rgba(10,255,31, 1)',
+                            'rgba(52,255,33, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    $('#currentDay').click(function () {
+        let typePeriod = 'day';
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
         }
+        window.location.href = "/blueseal/dashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
+
+    });
+    $('#currentWeek').click(function () {
+        let typePeriod = 'week';
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
+        window.location.href = "/blueseal/dashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
+
+    });
+    $('#currentMonth').click(function () {
+        let typePeriod = 'month';
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
+        window.location.href = "/blueseal/dashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
+
+    });
+    $('#currentYear').click(function () {
+        let typePeriod = 'year';
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
+        window.location.href = "/blueseal/dashboard?typePeriod=" + typePeriod + '&isCompare=' + isCompare;
+
+    });
+    $('#btnsearchplus').click(function () {
+        var typePeriod = 'custom';
+
+        if ($('#isCompare').prop("checked")) {
+            isCompare=1;
+        }else{
+            isCompare=0;
+        }
+        var startDateWork = $('#startDateWork').val()
+        var endDateWork = $('#endDateWork').val()
+        window.location.href = "/blueseal/dashboard?typePeriod=" + typePeriod + '&startDateWork=' + startDateWork + '&endDateWork=' + endDateWork + '&isCompare=' + isCompare;
+
     });
 
-    $(document).ready(function () {
-        //Get from JSON data and build
-        /*
-         d3.json('/blueseal/xhr/UserSalesGraphDataController', function(data) {
+})(jQuery);
 
-         //Widget venite giornaliere
-         nv.addGraph(function() {
-         var chart = nv.models.lineChart()
-         .x(function(d) {
-         return d[0]
-         })
-         .y(function(d) {
-         return d[1]
-         })
-         .color(['#000'])
-         .margin({
-         top: 10,
-         right: -10,
-         bottom: -13,
-         left: -10
-         })
-         .showXAxis(false)
-         .showYAxis(false)
-         .showLegend(false)
-         .interactive(false);
-
-         d3.select('.widget-8-chart svg')
-         .datum(data.siteVisits)
-         .call(chart);
-
-         nv.utils.windowResize(chart.update);
-
-         nv.utils.windowResize(function() {
-         setTimeout(function() {
-         $('.widget-8-chart .nvd3 circle.nv-point').attr("r", "3").css({
-         'stroke-width': '2px',
-         ' stroke-opacity': 0.4
-         });
-         }, 500);
-         });
-
-         return chart;
-         }, function() {
-         setTimeout(function() {
-         $('.widget-8-chart .nvd3 circle.nv-point').attr("r", "3").css({
-         'stroke-width': '2px',
-         ' stroke-opacity': 0.4
-         });
-         }, 500);
-         });
-         });
-
-         //NVD3 Charts
-         d3.json('/blueseal/xhr/UserSalesGraphDataController', function(data) {
-
-         //Grafico del widget "vendite"
-         (function() {
-         nv.addGraph(function() {
-         var chart = nv.models.lineChart()
-         .x(function(d) {
-         return d[0]
-         })
-         .y(function(d) {
-         return d[1]
-         })
-         .color([
-         $.Pages.getColor('success'), //vendite
-         $.Pages.getColor('complete'),
-         $.Pages.getColor('complete'),
-         $.Pages.getColor('primary') //clienti
-         ])
-         .showLegend(false)
-         .margin({
-         left: 30,
-         bottom: 35
-         })
-         .useInteractiveGuideline(true);
-
-         chart.xAxis
-         .tickFormat(function(d) {
-         return d3.time.format('%a')(new Date(d))
-         });
-
-         chart.yAxis.tickFormat(d3.format('d'));
-
-         d3.select('.nvd3-line svg')
-         .datum(data.nvd3.line)
-         .transition().duration(500)
-         .call(chart);
-
-         nv.utils.windowResize(chart.update);
-
-         $('.nvd3-line').data('chart', chart);
-
-         return chart;
-         });
-         })();
-
-         //Widget visitatori
-         (function() {
-         var container = '.widget-15-chart';
-
-         var seriesData = [
-         [],
-         []
-         ];
-         var random = new Rickshaw.Fixtures.RandomData(40);
-         for (var i = 0; i < 40; i++) {
-         random.addData(seriesData);
-         }
-
-         var graph = new Rickshaw.Graph({
-         renderer: 'bar',
-         element: document.querySelector(container),
-         height: 200,
-         padding: {
-         top: 0.5
-         },
-         series: [{
-         data: seriesData[0],
-         color: $.Pages.getColor('complete-light'),
-         name: "Nuovi utenti"
-         }, {
-         data: seriesData[1],
-         color: $.Pages.getColor('master-lighter'),
-         name: "Utenti di ritorno"
-         }]
-         });
-
-         var hoverDetail = new Rickshaw.Graph.HoverDetail({
-         graph: graph,
-         formatter: function(series, x, y) {
-         var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-         var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-         var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
-         return content;
-         }
-         });
-
-         graph.render();
-
-         $(window).resize(function() {
-         graph.configure({
-         width: $(container).width(),
-         height: 200
-         });
-
-         graph.render()
-         });
-
-         $(container).data('chart', graph);
-         })();
-         });
-
-         // Init portlets
-
-         var bars = $('.widget-loader-bar');
-         var circles = $('.widget-loader-circle');
-         var circlesLg = $('.widget-loader-circle-lg');
-         var circlesLgMaster = $('.widget-loader-circle-lg-master');
-
-         bars.each(function() {
-         var elem = $(this);
-         elem.portlet({
-         progress: 'bar',
-         onRefresh: function() {
-         setTimeout(function() {
-         elem.portlet({
-         refresh: false
-         });
-         }.bind(this), 2000);
-         }
-         });
-         });
-
-
-         circles.each(function() {
-         var elem = $(this);
-         elem.portlet({
-         progress: 'circle',
-         onRefresh: function() {
-         setTimeout(function() {
-         elem.portlet({
-         refresh: false
-         });
-         }.bind(this), 2000);
-         }
-         });
-         });
-
-         circlesLg.each(function() {
-         var elem = $(this);
-         elem.portlet({
-         progress: 'circle-lg',
-         progressColor: 'white',
-         overlayColor: '0,0,0',
-         overlayOpacity: 0.6,
-         onRefresh: function() {
-         setTimeout(function() {
-         elem.portlet({
-         refresh: false
-         });
-         }.bind(this), 2000);
-         }
-         });
-         });
-
-
-         circlesLgMaster.each(function() {
-         var elem = $(this);
-         elem.portlet({
-         progress: 'circle-lg',
-         progressColor: 'master',
-         overlayOpacity: 0.6,
-         onRefresh: function() {
-         setTimeout(function() {
-         elem.portlet({
-         refresh: false
-         });
-         }.bind(this), 2000);
-         }
-         });
-         });
-         */
-    });
-
-})(window.jQuery);
