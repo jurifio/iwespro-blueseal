@@ -50,7 +50,9 @@ class CFriendOrderInvoiceListAjaxController extends AAjaxController
                 ON `il`.`id` = `ilhol`.`invoiceLineId` AND `il`.`invoiceId` = `ilhol`.`invoiceLineInvoiceId`
               LEFT JOIN `OrderLine` AS `ol` ON `ilhol`.`orderLineOrderId` = `ol`.`orderId` AND `ilhol`.`orderLineId` = `ol`.`id`
               LEFT JOIN (`PaymentBillHasInvoiceNew` AS `pbhin`
-                JOIN `PaymentBill` AS `pb` ON `pb`.id = `pbhin`.`paymentBillId`) ON `i`.`id` = `pbhin`.`invoiceNewId`
+                JOIN `PaymentBill` AS `pb` ON `pb`.id = `pbhin`.`paymentBillId`) ON `i`.`id` = `pbhin`.`invoiceNewId` where 
+             i.invoiceTypeId not in(11,12,13,14,15,19)
+             
             GROUP BY `i`.`id`
               ";
 
