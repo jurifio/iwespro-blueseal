@@ -63,7 +63,7 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
                 $cartAbandonedTotalNumber = 'select count(c.id) AS totalCart, YEAR(c.creationDate) as creationDate from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null and YEAR(c.creationDate)=\''.$year.'\' group by Year(c.creationDate) ORDER BY year(c.creationDate) asc';
                 $cartAbandonedTotalNumberCompare = 'select count(c.id) AS totalCart, YEAR(c.creationDate) as creationDate from Cart c left join UserSessionHasCart us on c.id=us.cartId where us.cartId is null and YEAR(c.creationDate)=\''.$lastYear.'\' group by Year(c.creationDate) ORDER BY year(c.creationDate) asc';
                 $sqlTotalUser = "select count(*) as countUser, concat(date_format(creationDate,'%M'),'/',YEAR(creationDate))  as creationDate from `User` where creationDate between '".$timeStartMask."' and '".$timeEndMasks."' and isActive=1 group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
-                $sqlTotalUserCompare = "select count(*) as countUser, concat(date_format(creationDate,'%M') as creationDate from `User`  WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' and isActive=1 group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
+                $sqlTotalUserCompare = "select count(*) as countUser, concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) as creationDate from `User`  WHERE creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' and isActive=1 group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
                 $sqlTotalUserOnline = "select count(*) as countUser,  concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) as creationDate  from `UserSession`  where creationDate  between '".$timeStartMask."' and '".$timeEndMasks."' group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
                 $sqlTotalUserOnlineCompare = "select count(*) as countUser,  concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) as creationDate  from `UserSession`  where creationDate between '".$timeStartMaskCompare."' and '".$timeEndMaskCompare."' group by concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) ORDER BY concat(date_format(creationDate,'%M'),'/',YEAR(creationDate)) asc";
                 break;
@@ -146,14 +146,14 @@ WHERE c.creationDate between \''.$timeStartMaskCompare.'\' and \''.$timeEndMaskC
             case "custom":
                 $title = "Intervallo Personalizzato";
                 if(isset($_GET['startDateWork'])) {
-                    $timeStartMask = $_GET['startDateWork'];
-                    $timeStartMaskCompare=(new \DateTime($_GET['startDateWork'] .'-1 year'))->format('Y-m-d H:i:s');
+                    $timeStartMask = (new \DateTime($_GET['startDateWork']))->format('Y-m-d H:i:s');
+                    $timeStartMaskCompare=(new \DateTime($_GET['startDateWork'] .' -1 year'))->format('Y-m-d 00:00:00');
                 }else{
-                    $timeStartMask = (new \DateTime("midnight"))->format('Y-m-d H:i:s');
+                    $timeStartMask = (new \DateTime("midnight"))->format('Y-m-d 00:00:00');
                 }
                 if(isset($_GET['endDateWork'])) {
-                    $timeEndMasks = $_GET['endDateWork'];
-                    $timeStartMaskCompare=(new \DateTime($_GET['endDateWork'] .'-1 year'))->format('Y-m-d H:i:s');
+                    $timeEndMasks = (new \DateTime($_GET['endDateWork']))->format('Y-m-d H:i:s');
+                    $timeEndMaskCompare=(new \DateTime($_GET['endDateWork'] .' -1 year'))->format('Y-m-d H:i:s');
                 }else{
                     $timeEndMaskCompare=(new \DateTime("this month last year midnight + 1 day"))->format('Y-m-d H:i:s');
                 }
