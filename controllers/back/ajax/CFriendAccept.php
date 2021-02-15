@@ -3,10 +3,12 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\core\base\CObjectCollection;
+use bamboo\core\base\CSerialNumber;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\exceptions\BambooOrderLineException;
 use bamboo\core\exceptions\BambooShipmentException;
 use bamboo\domain\entities\COrderLine;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
@@ -115,6 +117,7 @@ class CFriendAccept extends AAjaxController
                 $remoteShopSellerId = $orderRepo -> remoteSellerId;
                 $remoteIwesOrderId = $orderRepo -> remoteIwesOrderId;
                 $isParallel = $orderRepo -> isParallel;
+
                 if ($isParallel != null) {
                     if (ENV === 'dev') {
                         $db_host = 'localhost';
@@ -879,7 +882,116 @@ class CFriendAccept extends AAjaxController
 
                 }
             } else {
+                 if($orderRepo->remoteShopSellerId==44){
+                     $shopFindSeller = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => 44]);
+                     $db_hostSeller = $shopFindSeller->dbHost;
+                     $db_nameSeller = $shopFindSeller->dbName;
+                     $db_userSeller = $shopFindSeller->dbUsername;
+                     $db_passSeller = $shopFindSeller->dbPassword;
 
+                     $logo = $shopFindSeller->logo;
+                     $nameShop = $shopFindSeller->name;
+                     $intestation = $shopFindSeller->intestation;
+                     $intestation2 = $shopFindSeller->intestation2;
+                     $address = $shopFindSeller->address;
+                     $address2 = $shopFindSeller->address2;
+                     $iva = $shopFindSeller->iva;
+                     $tel = $shopFindSeller->tel;
+                     $email = $shopFindSeller->email;
+                     $fee = $shopFindSeller->paralellFee;
+                     $emailSeller = $shopFindSeller->emailShop;
+                     /***sezionali******/
+                     $invoiceParalUe = $shopFindSeller->invoiceParalUe;
+                     $invoiceParalExtraUe = $shopFindSeller->invoiceParalExtraUe;
+                     $receipt = $shopFindSeller->receipt;
+                     $logothankYou = $shopFindSeller->logoSite;
+                     $shopSite = $shopFindSeller->urlSite;
+                     $logoSite = $shopFindSeller->logoSite;
+                     $siteInvoiceChar = $shopFindSeller->siteInvoiceChar;
+                     $hasCoupon = $shopFindSeller->hasCoupon;
+
+
+                     try {
+
+                         $db_con1 = new PDO("mysql:host={$db_hostSeller};dbname={$db_nameSeller}",$db_userSeller,$db_passSeller);
+                         $db_con1->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                         $res = ' connessione ok <br>';
+                     } catch (PDOException $e) {
+                         $res = $e->getMessage();
+                     }
+                     //instestazione cliente
+                     $stmtFindUserAddress = $db_con1->prepare('SELECT frozenBillingAddress, frozenShippingAddress,orderPaymentMethodId,paymentModifier,orderDate,hasInvoice from `Order` WHERE id=' . $remoteOrderSellerId);
+                     $stmtFindUserAddress->execute();
+                     $rowFindUserAddress = $stmtFindUserAddress->fetch(PDO::FETCH_ASSOC);
+                     $hasInvoice = $rowFindUserAddress['hasInvoice'];
+                     $userAddress[] = json_decode($rowFindUserAddress['frozenBillingAddress'],true);
+                     $shippingAddress[] = json_decode($rowFindUserAddress['frozenShippingAddress'],true);
+                     $orderPaymentMethodId = $rowFindUserAddress['orderPaymentMethodId'];
+                     $paymentMethodRepo = Monkey::app()->repoFactory->create('OrderPaymentMethodTranslation')->findOneBy(['orderPaymentMethodId' => $orderPaymentMethodId]);
+                     $paymentMethod = $paymentMethodRepo->name;
+                     $extraUe = $userAddress[0]['countryId'];
+
+                     $countryRepo = Monkey::app()->repoFactory->create('Country');
+                     $findIsExtraUe = $countryRepo->findOneBy(['id' => $extraUe]);
+                     $isExtraUe = $findIsExtraUe->extraue;
+                     if ($hasCoupon == 1) {
+                         if ($couponGenerateId == null) {
+                             $stmtFindRemoteUserId = $db_con1->prepare('select o.userId as userId, u.email as email, `us`.`name` as userName  from `Order` o join `User` u on o.userId=u.id 
+                            join UserDetails us on o.userId=us.userId where id=' . $remoteOrderSellerId);
+                             $stmtFindRemoteUserId->execute();
+                             $rowFindRemoteUserId = $stmtFindRemoteUserId->fetch(PDO::FETCH_ASSOC);
+                             $remoteUserId = $rowFindRemoteUserId['userId'];
+                             $remoteEmailId = $rowFindRemoteUserId['email'];
+                             $userName = $rowFindRemoteUserId['userName'];
+
+                             $stmtFindCouponType = $db_con1->prepare('SELECT id, amountType, amount, validity, validForCartTotal,hasFreeShipping,hasFreeReturn 
+                            from CouponType where `name` like \'%PostSelling%%\'');
+                             $stmtFindCouponType->execute();
+                             $rowFindCouponType = $stmtFindCouponType->fetch(PDO::FETCH_ASSOC);
+                             $amountTypeRemote = $rowFindCouponType['amountType'];
+                             $amountCouponRemote = $rowFindCouponType['amount'];
+                             $couponTypeIdRemote = $rowFindCouponType = ['id'];
+                             $validityRemote = $rowFindCouponType = ['validity'];
+                             $serial = new CSerialNumber();
+                             $serial->generate();
+
+                             $today = new \DateTime();
+                             $issueDate = $today->format('Y-m-d');
+
+                             $couponValidThru = STimeToolbox::DbFormattedDateTime($today->add(new \DateInterval($validityRemote)));
+                             $couponValidThruEmail = (new DateTime($couponValidThru))->format('d-m-Y');
+
+                             $code = $serial->__toString();
+
+                             $stmtInsertCoupon = $db_con1->prepare('INSERT INTO Coupon (couponTypeId, tagId, `code`, `issueDate`,`validThru`,`amount`,`amountType`,`userId`,`valid`,`couponEventId`,`sid`,`isImport`,`isExtend`) 
+                                                VALUES (\'' . $couponTypeIdRemote . '\',NULL,\'' . $code . '\',\'' . $issueDate . '\',\'' . $couponValidThru . '\',\'' . $amountCouponRemote . '\',\'' . $amountTypeRemote . '\',\'' . $amountCouponRemote . '\',\'' . $remoteUserId . '\',1,NULL,NULL,1,NULL)   ');
+                             $stmtInsertCoupon->execute();
+
+                             $stmtFindCouponGenerate = $db_con1->prepare('select id from Coupon where `code` like \'%' . $code . '%\'');
+                             $stmtFindCouponGenerate->execute();
+                             $rowFindCouponGenerate = $stmtFindCouponGenerate->fetch(PDO::FETCH_ASSOC);
+
+                             $stmtUpdateOrderRemote = $db_con1->prepare('UPDATE `Order` set couponGenerateId=' . $rowFindCouponGenerate['id'] . ' where id=' . $remoteOrderSellerId);
+                             $stmtUpdateOrderRemote->execute();
+                           $orderRepo->couponGenerateId = $rowFindCouponGenerate['id'];
+                           $orderRepo->update();
+                             $to = [$remoteEmailId];
+                             /** @var CEmailRepo $emailRepo */
+
+                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                             $res = $emailRepo->newPackagedMail('onOrderCoupon',$emailSeller,$to,[],[],
+                                 ['userName' => $userName,
+                                     'amountType' => $amountTypeRemote,
+                                     'validThru' => $couponValidThruEmail,
+                                     'couponCode' => $code,
+                                     'amount' => $amountCouponRemote,
+                                     'shopSite' => $shopSite,
+                                     'nameShop' => $nameShop,
+                                     'logoSite' => $logoSite],
+                                 'MailGun',null);
+                         }
+                     }
+                 }
                 \Monkey::app()->repoFactory->commit();
                 return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato']);
             }
