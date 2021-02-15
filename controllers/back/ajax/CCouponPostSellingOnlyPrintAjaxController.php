@@ -25,7 +25,7 @@ use DateTime;
 class CCouponPostSellingOnlyPrintAjaxController extends AAjaxController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "bill_invoice_print";
+    protected $pageSlug = "invoice_print";
 
     public function get()
     {
@@ -97,12 +97,14 @@ class CCouponPostSellingOnlyPrintAjaxController extends AAjaxController
 
 
 
-                $stmtFindCouponGenerate = $db_con1->prepare('select id, `code` ,validThru, amount,  from Couponwhere `id`='.$couponGenerateId);
-                $stmtFindCouponGenerate->execute();
-                $rowFindCouponGenerate = $stmtFindCouponGenerate->fetch(PDO::FETCH_ASSOC);
-                 $couponValidThruEmail = (new \DateTime($rowFindCouponGenerate['validThru']))->format('d-m-Y');
-                 $couponCode=$rowFindCouponGenerate['code'];
-                 $amount=$rowFindCouponGenerate['amount'];
+
+
+        $stmtFindCouponGenerate = $db_con1->prepare('select id, `code` ,validThru, amount  from Coupon where `id`='.$couponGenerateId);
+        $stmtFindCouponGenerate->execute();
+        $rowFindCouponGenerate = $stmtFindCouponGenerate->fetch(PDO::FETCH_ASSOC);
+        $couponValidThruEmail = (new \DateTime($rowFindCouponGenerate['validThru']))->format('d-m-Y');
+        $couponCode=$rowFindCouponGenerate['code'];
+        $amount=$rowFindCouponGenerate['amount'];
 
 
 
@@ -165,19 +167,19 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                                     style="padding: 30px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
                                         Ciao  '.$userName.',<br>
-                                        Abbiamo il piacere di rilasciare il seguente <b>coupong</b> del valore';
-        if ($amountType=='P') {
-         $couponText.=   'del '.$amount.' %';
-}else{
-      $couponText.=' di '.$amount.  'Euro';
-    }
-                                    $couponText.='</span>
+                                        Abbiamo il piacere di rilasciare il seguente <b>coupon </b> del valore';
+        if ($amountTypeRemote=='P') {
+            $couponText.=   'del '.$amount.' %';
+        }else{
+            $couponText.=' di '.$amount.  'Euro';
+        }
+        $couponText.='</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
+                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:green; line-height:1.2;">
                                         <h1>'.$couponCode.'</h1>
                                     </span>
                                 </td>
@@ -202,7 +204,7 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                   Grazie per aver scelto <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2; font-weight: 600">'.strtoupper($shopName).'</span>
+                                   Grazie per aver scelto <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:green; line-height:1.2; font-weight: 600">'.strtoupper($nameShop).'</span>
                                     </span>
                                 </td>
                             </tr>
@@ -221,7 +223,7 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                                     <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
                                         Hi  '.$userName.',<br>
                                         We have pleasure to release for you a  <b>coupon</b> with value of ';
-        if ($amountType=='P') {
+        if ($amountTypeRemote=='P') {
             $couponText.=   'del '.$amount.' %';
         }else{
             $couponText.=' di '.$amount.  'Euro';
@@ -258,7 +260,7 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                   Thank You For choosing <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2; font-weight: 600">'.strtoupper($shopName).'</span>
+                                   Thank You For choosing <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2; font-weight: 600">'.strtoupper($nameShop).'</span>
                                     </span>
                                 </td>
                             </tr>
@@ -283,7 +285,7 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
         return $couponText;
 
 
-        }
+    }
 
 
 }
