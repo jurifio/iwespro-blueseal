@@ -936,20 +936,21 @@ class CFriendAccept extends AAjaxController
                      $isExtraUe = $findIsExtraUe->extraue;
                      if ($hasCoupon == 1) {
                          if ($couponGenerateId == null) {
-                             $stmtFindRemoteUserId = $db_con1->prepare('select o.userId as userId, u.email as email, `us`.`name` as userName  from `Order` o join `User` u on o.userId=u.id 
+                             $stmtFindRemoteUserId = $db_con1->prepare('select o.userId as userId, u.email as email, `us`.`name` as userName, o.netTotal as netTotal  from `Order` o join `User` u on o.userId=u.id 
                             join UserDetails us on o.userId=us.userId where id=' . $remoteOrderSellerId);
                              $stmtFindRemoteUserId->execute();
                              $rowFindRemoteUserId = $stmtFindRemoteUserId->fetch(PDO::FETCH_ASSOC);
                              $remoteUserId = $rowFindRemoteUserId['userId'];
                              $remoteEmailId = $rowFindRemoteUserId['email'];
                              $userName = $rowFindRemoteUserId['userName'];
+                             $netTotal=$rowFindRemoteUserId['netTotal'];
 
                              $stmtFindCouponType = $db_con1->prepare('SELECT id, amountType, amount, validity, validForCartTotal,hasFreeShipping,hasFreeReturn 
                             from CouponType where `name` like \'%PostSelling%%\'');
                              $stmtFindCouponType->execute();
                              $rowFindCouponType = $stmtFindCouponType->fetch(PDO::FETCH_ASSOC);
                              $amountTypeRemote = $rowFindCouponType['amountType'];
-                             $amountCouponRemote = $rowFindCouponType['amount'];
+                             $amountCouponRemote = ($netTotal/100)*$rowFindCouponType['amount'];
                              $couponTypeIdRemote = $rowFindCouponType = ['id'];
                              $validityRemote = $rowFindCouponType = ['validity'];
                              $serial = new CSerialNumber();
