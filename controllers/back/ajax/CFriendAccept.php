@@ -961,13 +961,13 @@ class CFriendAccept extends AAjaxController
                              $couponValidThru = STimeToolbox::DbFormattedDateTime($today->add(new \DateInterval($validityRemote)));
                              $couponValidThruEmail = (new DateTime($couponValidThru))->format('d-m-Y');
 
-                             $code = $serial->__toString();
+                             $couponCode = $serial->__toString();
 
                              $stmtInsertCoupon = $db_con1->prepare('INSERT INTO Coupon (couponTypeId, tagId, `code`, `issueDate`,`validThru`,`amount`,`amountType`,`userId`,`valid`,`couponEventId`,`sid`,`isImport`,`isExtend`) 
-                                                VALUES (\'' . $couponTypeIdRemote . '\',NULL,\'' . $code . '\',\'' . $issueDate . '\',\'' . $couponValidThru . '\',\'' . $amountCouponRemote . '\',\'' . $amountTypeRemote . '\',\'' . $amountCouponRemote . '\',\'' . $remoteUserId . '\',1,NULL,NULL,1,NULL)   ');
+                                                VALUES (\'' . $couponTypeIdRemote . '\',NULL,\'' . $couponCode . '\',\'' . $issueDate . '\',\'' . $couponValidThru . '\',\'' . $amountCouponRemote . '\',\'' . $amountTypeRemote . '\',\'' . $amountCouponRemote . '\',\'' . $remoteUserId . '\',1,NULL,NULL,1,NULL)   ');
                              $stmtInsertCoupon->execute();
 
-                             $stmtFindCouponGenerate = $db_con1->prepare('select id from Coupon where `code` like \'%' . $code . '%\'');
+                             $stmtFindCouponGenerate = $db_con1->prepare('select id from Coupon where `code` like \'%' . $couponCode . '%\'');
                              $stmtFindCouponGenerate->execute();
                              $rowFindCouponGenerate = $stmtFindCouponGenerate->fetch(PDO::FETCH_ASSOC);
 
@@ -981,10 +981,10 @@ class CFriendAccept extends AAjaxController
                              $emailRepo = \Monkey::app()->repoFactory->create('Email');
                              $res = $emailRepo->newPackagedMail('onOrderCoupon',$emailSeller,$to,[],[],
                                  ['userName' => $userName,
-                                     'amountType' => $amountTypeRemote,
-                                     'validThru' => $couponValidThruEmail,
-                                     'couponCode' => $code,
-                                     'amount' => $amountCouponRemote,
+                                     'amountTypeRemote' => $amountTypeRemote,
+                                     'couponValidThruEmail' => $couponValidThruEmail,
+                                     'couponCode' => $couponCode,
+                                     'amountCouponRemote' => $amountCouponRemote,
                                      'shopSite' => $shopSite,
                                      'nameShop' => $nameShop,
                                      'logoSite' => $logoSite],
