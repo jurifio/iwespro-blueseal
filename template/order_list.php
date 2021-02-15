@@ -229,6 +229,9 @@
                 data-remote="bs.customer.load.document"
         ></bs-toolbar-button>
         <bs-toolbar-button
+                data-remote="bs.print.coupon"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-wheelchair-alt"
                 data-permission="allShops"

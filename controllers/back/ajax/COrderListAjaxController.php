@@ -43,6 +43,7 @@ class COrderListAjaxController extends AAjaxController
                   `u`.`email`                                            AS `email`,
                   `o`.`orderDate`                                        AS `orderDate`,
                   `o`.`lastUpdate`                                       AS `lastUpdate`,
+                  `o`.couponGenerateId                                   as CouponGenerateId,  
                   concat(`ol`.`productId`, '-', `ol`.`productVariantId`, ' ', s.title, ' ', p.itemno, ' ', `pb`.`name`, ' ', `ols`.`title`, ' ',`ol`.`remoteOrderSupplierId`) AS `product`,
                   `s`.`title`                                            AS `shop`,
                   `os`.`title`                                           AS `status`,
@@ -146,7 +147,7 @@ class COrderListAjaxController extends AAjaxController
                     continue;
                 }
             }
-
+            $row['couponGenerateId']=$val->couponGenerateId;
 
             $row['marketplaceOrderId'] = $val->marketplaceOrderId;
             if ($val->marketplaceId != null && $val->marketplaceId != 0) {
