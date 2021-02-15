@@ -28,10 +28,15 @@ $(document).on('bs-print-coupon', function () {
      var  orderId = selectedRows[0].DT_RowId;
         var couponGenerateId=selectedRows[0].couponGenerateId;
     }
+    var body='';
+    if(couponGenerateId!=null) {
+        body='Visualizza e stampa il Coupon Post Vendita';
+    }else{
+        body='non Puoi Stampare il Coupon in quanto l\'ordine non è stato ancora accettato';
+    }
     
     let bsModal = new $.bsModal('Stampa Il Coupon', {
-        body:
-        `Visualizza e stampa il Coupon Post Vendita`
+        body:body
     });
 
     bsModal.showCancelBtn();
