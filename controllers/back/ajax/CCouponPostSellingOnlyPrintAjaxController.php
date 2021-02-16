@@ -154,21 +154,12 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                             <tbody>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
-                                    style="padding: 30px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                        Italiano
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                            <tr>
-                                <td valign="top" align="left" class="lh-3"
-                                    style="padding: 30px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
+                                    style="padding: 50px 10px 0; margin: 0px; line-height: 1.0; font-size: 16px; font-family: Times New Roman, Times, serif;">
+                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:2.0;">
                                         Ciao  '.$userName.',<br>
                                         Abbiamo il piacere di rilasciare il seguente <b>coupon </b> del valore ';
 
-        $couponText.=' di '.number_format($amount,2,',','').  'Euro';
+        $couponText.=' di <b>'.number_format($amount,2,',','').  ' euro</b>';
 
         $couponText.='</span>
                                 </td>
@@ -176,7 +167,7 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                             <tr>
                                 <td valign="top" align="center" class="lh-3"
                                     style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:green; line-height:1.2;">
+                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:green; line-height:2.0;">
                                         <h1>'.$couponCode.'</h1>
                                     </span>
                                 </td>
@@ -184,43 +175,41 @@ a:active { color:#cbac59; text-decoration: none; }"></style>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
+                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.5;">
                                Potrai utilizzarlo all \'interno del sito '.$shopSite.' inserendo il codice nel carrello, oppure presentarlo in negozio.
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
-                                    style="padding: 20px 10px 0; margin: 0px; line-height: 1.5; font-size: 18px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:800;color:#3A3A3A; line-height:1.2;">
-                                    il Coupon Vale solo su articoli non in saldo e scadrà il '.$couponValidThruEmail.' 
+                                    style="padding: 20px 10px 0; margin: 0px; line-height: 1.0; font-size: 18px; font-family: Times New Roman, Times, serif;">
+                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:800;color:#3A3A3A; line-height:2.0;">
+                                    il Coupon Vale solo su articoli non in saldo e scadrà il '.$couponValidThruEmail.'. 
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                   Grazie per aver scelto <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2; font-weight: 600">'.strtoupper($nameShop).'</span>
+                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.5;">
+                                   Grazie per averci scelto</span>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
-                                    style="padding: 30px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
-                                    <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
-                                        English
+                                    style="padding: 10px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
+                                  <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.5; font-weight: 600">'.strtoupper(str_replace('https://www.','',$shopSite)).'</span>
                                     </span>
                                 </td>
                             </tr>
-                            <tr>
                             <tr>
                                 <td valign="top" align="left" class="lh-3"
                                     style="padding: 30px 10px 0; margin: 0px; line-height: 1.5; font-size: 16px; font-family: Times New Roman, Times, serif;">
                                     <span style="font-family: \'Poppins\', sans-serif; font-size:15px;font-weight:300;color:#3A3A3A; line-height:1.2;">
                                         Hi  '.$userName.',<br>
                                         We have pleasure to release for you a  <b>coupon</b> with value of ';
-        $couponText.='  '.number_format($amount,2,',','').  'Euro';
+        $couponText.='<b>'.number_format($amount,2,',','').  ' euro</b>';
         $couponText.='</span>
                                     </span>
                                 </td>
