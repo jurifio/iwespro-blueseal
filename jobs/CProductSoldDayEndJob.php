@@ -34,7 +34,7 @@ use bamboo\domain\entities\CMarketplaceAccountHasProduct;
  * @date 16/02/2021
  * @since 1.0
  */
-class CProductSoldEndStartJob extends ACronJob
+class CProductSoldDayEndJob extends ACronJob
 {
 
     /**
