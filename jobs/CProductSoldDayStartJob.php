@@ -75,7 +75,7 @@ WHERE d.productId IS NOT NULL AND d.productVariantId IS NOT NULL    GROUP by d.p
                 $productSoldDay->productId = $result['productId'];
                 $productSoldDay->productVariantId = $result['productVariantId'];
                 $productSoldDay->shopId = $result['shopId'];
-                $productSoldDay->startQty = $result['qty'];
+                $productSoldDay->startQuantity = $result['qty'];
                 $productSoldDay->dateStart = $dateStart;
                 $productSoldDay->day = $day;
                 $productSoldDay->month = $month;

@@ -88,7 +88,7 @@ WHERE d.productId IS NOT NULL AND d.productVariantId IS NOT NULL    GROUP by d.p
                     $productSoldDay->priceActive=$result['price'];
                     $productSoldDay->netTotal=$result['price'] * $soldQuantity;
                 }
-                $productSoldDay->endQty = $result['qty'];
+                $productSoldDay->endQuantity = $result['qty'];
                 $productSoldDay->soldQuantity = $soldQuantity;
                 $productSoldDay->dateEnd = $dateEnd;
                 $productSoldDay->update();
