@@ -52,7 +52,7 @@ class CProductSoldDayStartJob extends ACronJob
     private function relevationProductStart()
     {
         try {
-            $productSoldDayRepo = \Monkey::app()->repoFactory->create('ProductSolDay');
+            $productSoldDayRepo = \Monkey::app()->repoFactory->create('ProductSoldDay');
 
             $dateStart = (new DateTime())->format('Y-m-d H:i:s');
             $day = (new DateTime())->format('d');

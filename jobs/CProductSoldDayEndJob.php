@@ -43,7 +43,7 @@ class CProductSoldEndStartJob extends ACronJob
     public function run($args = null)
     {
         $this->relevationProductEnd();
-        $this->report('ProductSoldDayStartJob','end day quantity check','');
+        $this->report('ProductSoldDayEndJob','end day quantity check','');
     }
 
     /**
@@ -52,7 +52,7 @@ class CProductSoldEndStartJob extends ACronJob
     private function relevationProductEnd()
     {
         try {
-            $productSoldDayRepo = \Monkey::app()->repoFactory->create('ProductSolDay');
+            $productSoldDayRepo = \Monkey::app()->repoFactory->create('ProductSoldDay');
 
             $dateEnd = (new DateTime())->format('Y-m-d H:i:s');
             $day = (new DateTime())->format('d');
