@@ -22,7 +22,7 @@ use bamboo\core\application\AApplication;
 use bamboo\domain\entities\CMarketplaceAccountHasProduct;
 
 /**
- * Class CProductSoldEndStartJob
+ * Class CProductSoldDayEndJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
