@@ -59,11 +59,12 @@ class CProductSoldListController extends ARestrictedAccessRootController
         } else{
             $stored=0;
         }
-        if(isset($_GET['productShooting'])) {
-            $productShooting=$_GET['productShooting'];
+        if(isset($_GET['dateStart'])){
+            $dateStart=$_GET['dateStart'];
         }else{
-            $productShooting=0;
+            $dateStart= (new \DateTime())->modify("-1 day")->format('Y-m-d H:i:s');
         }
+
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
         $pageURL = $bluesealBase . "prodotti";
@@ -124,7 +125,6 @@ class CProductSoldListController extends ARestrictedAccessRootController
             'page' => $this->page,
             'productBrand'=>$productBrand,
             'productBrandId'=>$productBrandId,
-            'productShooting'=>$productShooting,
             'Shop'=>$Shop,
             'shopid'=>$shopid,
             'stored'=>$stored,

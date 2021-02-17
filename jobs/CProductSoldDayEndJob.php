@@ -80,18 +80,22 @@ WHERE d.productId IS NOT NULL AND d.productVariantId IS NOT NULL    GROUP by d.p
                       'year'=>$year
                     ]);
                 $startQuantity=$productSoldDay->startQuantity;
-                $soldQuantity=$startQuantity-$result['qty'];
-                if($result['isOnSale']==1){
-                    $productSoldDay->priceActive=$result['salePrice'];
-                    $productSoldDay->netTotal=$result['salePrice'] * $soldQuantity;
-                }else{
-                    $productSoldDay->priceActive=$result['price'];
-                    $productSoldDay->netTotal=$result['price'] * $soldQuantity;
+                if($startQuantity==$result['qty']){
+                    continue;
+                }else {
+                    $soldQuantity = $startQuantity - $result['qty'];
+                    if ($result['isOnSale'] == 1) {
+                        $productSoldDay->priceActive = $result['salePrice'];
+                        $productSoldDay->netTotal = $result['salePrice'] * $soldQuantity;
+                    } else {
+                        $productSoldDay->priceActive = $result['price'];
+                        $productSoldDay->netTotal = $result['price'] * $soldQuantity;
+                    }
+                    $productSoldDay->endQuantity = $result['qty'];
+                    $productSoldDay->soldQuantity = $soldQuantity;
+                    $productSoldDay->dateEnd = $dateEnd;
+                    $productSoldDay->update();
                 }
-                $productSoldDay->endQuantity = $result['qty'];
-                $productSoldDay->soldQuantity = $soldQuantity;
-                $productSoldDay->dateEnd = $dateEnd;
-                $productSoldDay->update();
             }
             $this->report('ProductSoldDayEndJob','end day Quantity check final Day','');
         } catch(\Throwable $e){

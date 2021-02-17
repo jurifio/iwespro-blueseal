@@ -76,7 +76,18 @@ WHERE d.productId IS NOT NULL AND d.productVariantId IS NOT NULL    GROUP by d.p
                 $productSoldDay->productVariantId = $result['productVariantId'];
                 $productSoldDay->shopId = $result['shopId'];
                 $productSoldDay->startQuantity = $result['qty'];
+                $productSoldDay->endQuantity = $result['qty'];
+                if ($result['isOnSale'] == 1) {
+                    $productSoldDay->priceActive = $result['salePrice'];
+
+                } else {
+                    $productSoldDay->priceActive = $result['price'];
+
+                }
+                $productSoldDay->soldQuantity=0;
+                $productSoldDay->netTotal=0;
                 $productSoldDay->dateStart = $dateStart;
+                $productSoldDay->dateEnd = $dateEnd;
                 $productSoldDay->day = $day;
                 $productSoldDay->month = $month;
                 $productSoldDay->year = $year;

@@ -48,17 +48,6 @@
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group form-group-default">
-                                    <label for="productShooting">escludi shooting</label>
-                                    <?php     if($productShooting==1) {
-                                        echo ' <input type="checkbox" checked="checked" id="productShooting" name="productShooting" value="0"/>';
-                                    }else{
-                                        echo ' <input type="checkbox" id="productShooting"  name="productShooting" value="0"/>';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="form-group form-group-default">
                                     <label for="productZeroQuantity">Includi Quantità 0</label>
                                     <?php     if($productZeroQuantity==1) {
                                        echo ' <input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
@@ -131,7 +120,6 @@
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-product-zero-quantity="<?php echo $productZeroQuantity?>"
-                               data-product-shooting="<?php echo $productShooting?>"
                                data-season="<?php echo $season?>"
                                data-product-status="<?php echo $productStatus?>"
                                data-product-shopid="<?php echo $shopid?>"
@@ -208,16 +196,7 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center categoryFilterType">Categorie
                                 </th>
-                                <th data-slug="tags"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-visible="false" class="center">Tags
-                                </th>
-                                <th data-slug="tagExclusiveId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-visible="false" class="center">Sezioni Esclusive
-                                </th>
+
                                 <th data-slug="status"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -240,20 +219,10 @@
                                     data-orderable="true"
                                     data-default-order="desc" class="center dataFilterType">Creazione
                                 </th>
-                                <th data-slug="productPriority"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc" class="center">Priorità Prodotto
-                                </th>
                                 <th data-slug="description"
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Descr.
-                                </th>
-                                <th data-slug="marketplaces"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Marketplaces
                                 </th>
                                 <th data-slug="stock"
                                     data-searchable="true"

@@ -76,11 +76,6 @@ class CProductSoldListAjaxController extends AAjaxController
         } else {
             $sqlFilterQuantity = 'and p.qty>0';
         }
-        if ($productShooting == 1) {
-            $sqlFilterShooting = 'and concat(phs.shootingId) is null     ';
-        } else {
-            $sqlFilterShooting = '';
-        }
         if ($productStatus == 1) {
             $sqlFilterStatus = '';
         } else {
@@ -103,6 +98,7 @@ class CProductSoldListAjaxController extends AAjaxController
         }
 
 
+
         $sql = "SELECT
                   concat(p.id, '-', pv.id)                                                                      AS code,
                   p.id                                                                                              AS id,
@@ -113,7 +109,9 @@ class CProductSoldListAjaxController extends AAjaxController
                   pv.description                                                                                    AS colorNameManufacturer,
                   concat(s.id, '-', s.name)                                                                     AS shop,
                   concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
-                  pb.name                                                                                           AS brand,
+                  pb.name                                                                                           AS brand,          
+                  psd.startQuantity as starQuantity,
+                  psd.endQuantity as endQuantity,    
                   psd.soldQuantity as qty,
                   psd.netTotal as netTotal,
                   concat(psg.locale, ' - ',
@@ -153,7 +151,7 @@ class CProductSoldListAjaxController extends AAjaxController
                    JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
                     ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
-                    where 1=1 and psd.dateEnd is not null " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand . ' ' . $sqlFilterShop . ' ' . $sqlFilterStored . ' ' . $sqlFilterShooting. '
+                    where 1=1 and psd.dateEnd is not null " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand . ' ' . $sqlFilterShop . ' ' . $sqlFilterStored . ' 
                     GROUP by psd.productId, psd.productVariantId';
 
 
@@ -178,6 +176,7 @@ class CProductSoldListAjaxController extends AAjaxController
         $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
+        $productSoldDayRepo=\Monkey::app()->repoFactory->create('ProductSoldDay');
 
         /** @var CDocumentRepo $docRepo */
         $docRepo = \Monkey::app()->repoFactory->create('Document');
@@ -222,8 +221,7 @@ class CProductSoldListAjaxController extends AAjaxController
             $row['description'] = '<span class="small">' . ($val->productDescriptionTranslation->getFirst() ? $val->productDescriptionTranslation->getFirst()->description : "") . '</span>';
 
             $row['productName'] = $val->productNameTranslation->getFirst() ? $val->productNameTranslation->getFirst()->name : "";
-            $row['tags'] = '<span class="small">' . $val->getLocalizedTags('<br>',false) . '</span>';
-            $row['tagExclusiveId'] = '<span class="small">' . $val->getLocalizedTagsExclusive('<br>', false) . '</span>';
+
             $onlyCatalogue = '';
             if ($val->onlyCatalogue == 1) {
                 $onlyCatalogue = 'solo catalogo';
@@ -231,7 +229,6 @@ class CProductSoldListAjaxController extends AAjaxController
                 $onlyCatalogue = 'in vendita';
             }
             $row['status'] = $val->productStatus->name . ' ' . $onlyCatalogue;
-            $row['productPriority'] = $val->sortingPriorityId;
 
             $qty = 0;
             $shopz = [];
@@ -260,7 +257,7 @@ class CProductSoldListAjaxController extends AAjaxController
             $row['activePrice'] = $val->getDisplayActivePrice() ? $val->getDisplayActivePrice() : 'Non Assegnato';
 
             //$row['marketplaces'] = $val->getMarketplaceAccountsName(' - ','<br>',true);
-            $row['marketplaces'] = "";
+
             $row["row_shop"] = $val->getShops('|',true);
             $row['shop'] = '<span class="small">' . $val->getShops('<br />',true) . '</span>';
             $row['shops'] = $val->shopHasProduct->count();
@@ -306,7 +303,7 @@ class CProductSoldListAjaxController extends AAjaxController
                 $row['shooting'] = 'no';
             }
             $row["doc_number"] = $ddtNumbers;
-            $row["inPrestashop"] = is_null($val->prestashopHasProduct) ? 'no' : 'si';
+
 
             $datatable->setResponseDataSetRow($key,$row);
         }
