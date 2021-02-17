@@ -206,7 +206,7 @@ $('#btnsearchplus').click(function(){
     });
     let ctxChartBrand = document.getElementById("ChartBrandMonth").getContext('2d');
     let ChartBrandMonth = new Chart(ctxChartBrand, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: arrayLabelBrand,
             datasets: [{
