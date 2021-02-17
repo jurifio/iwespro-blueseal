@@ -42,7 +42,7 @@
                                     <?php if ($season == 1) {
                                         echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
                                     } else {
-                                        echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
+                                        echo '<input type="checkbox"  id="season" name="season" value="0"/>';
                                     }
                                     ?>
                                 </div>
