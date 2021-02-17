@@ -73,19 +73,20 @@ class CProductSoldListAjaxController extends AAjaxController
         }
 
         if ($season == 1) {
-            $sqlFilterSeason = '';
-        } else {
             $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
+        } else {
+            $sqlFilterSeason = '';
         }
         if ($productZeroQuantity == 1) {
             $sqlFilterQuantity = '';
         } else {
             $sqlFilterQuantity = 'and p.qty>0';
         }
-        if ($productStatus == 1) {
-            $sqlFilterStatus = '';
-        } else {
+        if ($productStatus == '1') {
             $sqlFilterStatus = 'and p.productStatusId=6';
+
+        } else {
+            $sqlFilterStatus = '';
         }
         if ($productBrandId == 0) {
             $sqlFilterBrand = '';

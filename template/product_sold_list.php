@@ -38,11 +38,11 @@
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group form-group-default">
-                                    <label for="season">Visualizza tutte le Stagioni</label>
+                                    <label for="season">Ultima Stagione</label>
                                     <?php if ($season == 1) {
                                         echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
                                     } else {
-                                        echo '<input type="checkbox"  id="season" name="season" value="0"/>';
+                                        echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
                                     }
                                     ?>
                                 </div>
@@ -60,11 +60,11 @@
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group form-group-default">
-                                    <label for="productStatus">includi tutti gli stati prodotto</label>
+                                    <label for="productStatus">solo Pubblicati</label>
                                     <?php if ($productStatus) {
                                         echo '<input type="checkbox" checked="checked" id="productStatus"  name="productStatus" value="0"/>';
                                     } else {
-                                        echo '<input type="checkbox" id="productStatus"  name="productStatus" value="0"/>';
+                                        echo '<input type="checkbox"  id="productStatus"  name="productStatus" value="0"/>';
                                     } ?>
                                 </div>
                             </div>
