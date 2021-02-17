@@ -64,7 +64,7 @@
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="endDateWork">alla Data</label>
                                         <input type="datetime-local" id="endDateWork" class="form-control"
-                                               placeholder="Inserisci la Data di Inizio "
+                                               placeholder="filtro a data "
                                                name="endDateWork"
                                                value=""
                                                required="required">

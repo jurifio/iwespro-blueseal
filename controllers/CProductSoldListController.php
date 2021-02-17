@@ -62,8 +62,14 @@ class CProductSoldListController extends ARestrictedAccessRootController
         if(isset($_GET['dateStart'])){
             $dateStart=$_GET['dateStart'];
         }else{
-            $dateStart= (new \DateTime())->modify("-1 day")->format('Y-m-d H:i:s');
+            $dateStart= (new \DateTime())->modify("midnight")->format('Y-m-d\TH:i:s');
         }
+        if(isset($_GET['dateEnd'])){
+            $dateEnd=$_GET['dateEnd'];
+        }else{
+            $dateEnd= (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d\TH:i:s');
+        }
+
 
         /** LOGICA */
         $bluesealBase = $this->app->baseUrl(false) . '/blueseal/';
@@ -128,6 +134,8 @@ class CProductSoldListController extends ARestrictedAccessRootController
             'Shop'=>$Shop,
             'shopid'=>$shopid,
             'stored'=>$stored,
+            'dateStart'=>$dateStart,
+            'dateEnd'=>$dateEnd,
             'sidebar' => $this->sidebar->build()
         ]);
     }

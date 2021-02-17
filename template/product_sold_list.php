@@ -26,10 +26,10 @@
                         <div class="row" align="center" style="padding-top: 130px;">
                             <div class="col-md-1">
                                 <div class="form-group form-group-default">
-                                    <label for="stored">Visualizza  lo storico</label>
-                                    <?php if($stored==1) {
+                                    <label for="stored">Visualizza lo storico</label>
+                                    <?php if ($stored == 1) {
                                         echo '<input type="checkbox" checked="checked" id="stored" name="stored" value="0"/>';
-                                    }else{
+                                    } else {
                                         echo '<input type="checkbox"  id="stored" name="stored" value="0"/>';
                                     }
                                     ?>
@@ -38,9 +38,9 @@
                             <div class="col-md-1">
                                 <div class="form-group form-group-default">
                                     <label for="season">Visualizza tutte le Stagioni</label>
-                                    <?php if($season==1) {
+                                    <?php if ($season == 1) {
                                         echo '<input type="checkbox" checked="checked" id="season" name="season" value="0"/>';
-                                    }else{
+                                    } else {
                                         echo '<input type="checkbox"  id="season" name="season" value="0"/>';
                                     }
                                     ?>
@@ -49,25 +49,25 @@
                             <div class="col-md-1">
                                 <div class="form-group form-group-default">
                                     <label for="productZeroQuantity">Includi Quantità 0</label>
-                                    <?php     if($productZeroQuantity==1) {
-                                       echo ' <input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
-                                    }else{
+                                    <?php if ($productZeroQuantity == 1) {
+                                        echo ' <input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
+                                    } else {
                                         echo ' <input type="checkbox" id="productZeroQuantity"  name="productZeroQuantity" value="0"/>';
                                     }
-                                   ?>
+                                    ?>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group form-group-default">
                                     <label for="productStatus">includi tutti gli stati prodotto</label>
-                                    <?php if($productStatus){
-                                    echo '<input type="checkbox" checked="checked" id="productStatus"  name="productStatus" value="0"/>';
-                                     }else{
+                                    <?php if ($productStatus) {
+                                        echo '<input type="checkbox" checked="checked" id="productStatus"  name="productStatus" value="0"/>';
+                                    } else {
                                         echo '<input type="checkbox" id="productStatus"  name="productStatus" value="0"/>';
-                                     }?>
+                                    } ?>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group form-group-default selectize-enabled">
                                     <label for="productBrandId">Seleziona il Brand </label>
                                     <select id="productBrandId" name="countryId"
@@ -85,14 +85,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group form-group-default selectize-enabled">
                                     <label for="shopid">Seleziona lo Shop</label>
                                     <select id="shopid" name="shopid"
                                             class="full-width selectpicker"
                                             placeholder="Seleziona la Lista"
                                             data-init-plugin="selectize">
-                                        <?php  echo '<option   value="">Seleziona</option>';
+                                        <?php echo '<option   value="">Seleziona</option>';
                                         foreach ($Shop as $shop) {
                                             if ($shop->id == $shopid) {
                                                 echo '<option  selected="selected" value="' . $shop->id . '">' . $shop->name . '</option>';
@@ -104,7 +104,28 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <button class="success" id="btnsearchplus"  name ='btnsearchplus' type="button"><span  class="fa fa-search-plus"> Esegui Ricerca</span></button>
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="dateStart">Dalla Data</label>
+                                    <input type="datetime-local" id="dateStart" class="form-control"
+                                           placeholder="filtro da data "
+                                           name="dateStart"
+                                           value="<?php echo $dateStart;?>"
+                                           required="required">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-group-default selectize-enabled">
+                                    <label for="dateEnd">alla Data</label>
+                                    <input type="datetime-local" id="dateEnd" class="form-control"
+                                           placeholder="filtro a data "
+                                           name="dateEnd"
+                                           value="<?php echo $dateEnd;?>"
+                                           required="required">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="success" id="btnsearchplus" name='btnsearchplus' type="button"><span
+                                            class="fa fa-search-plus"> Esegui Ricerca</span></button>
                             </div>
                         </div>
 
@@ -115,16 +136,18 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
-                               data-datatable-name="product_fast_list"
-                               data-controller="ProductFastListAjaxController"
+                               data-datatable-name="product_sold_list"
+                               data-controller="ProductSoldListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-product-zero-quantity="<?php echo $productZeroQuantity?>"
-                               data-season="<?php echo $season?>"
-                               data-product-status="<?php echo $productStatus?>"
-                               data-product-shopid="<?php echo $shopid?>"
-                               data-product-stored="<?php echo $stored?>"
-                               data-product-BrandId="<?php echo $productBrandId?>"
+                               data-product-zero-quantity="<?php echo $productZeroQuantity ?>"
+                               data-season="<?php echo $season ?>"
+                               data-product-status="<?php echo $productStatus ?>"
+                               data-product-shopid="<?php echo $shopid ?>"
+                               data-datestart="<?php echo $dateStart ?>"
+                               data-dateend="<?php echo $dateEnd ?>"
+                               data-product-stored="<?php echo $stored ?>"
+                               data-product-BrandId="<?php echo $productBrandId ?>"
                                data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
                                data-display-length="10">
                             <thead>
