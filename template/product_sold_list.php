@@ -128,6 +128,22 @@
                                             class="fa fa-search-plus"> Esegui Ricerca</span></button>
                             </div>
                         </div>
+                        <div class="row" align="center" style="padding-top: 130px;">
+                            <input type="hidden" id="arrayLabelBrand" name="arrayLabelBrand" value="<?php echo $arrayLabelBrand ?>"/>
+                            <input type="hidden" id="arrayQtyBrand" name="arrayQtyBrand" value="<?php echo $arrayQtyBrand ?>"/>
+                            <input type="hidden" id="arrayValueBrand" name="arrayValueBrand" value="<?php echo $arrayValueBrand ?>"/>
+                            <input type="hidden" id="arrayLabelShop" name="arrayLabelShop" value="<?php echo $arrayLabelShop ?>"/>
+                            <input type="hidden" id="arrayQtyShop" name="arrayQtyShop" value="<?php echo $arrayQtyShop ?>"/>
+                            <input type="hidden" id="arrayValueShop" name="arrayValueShop" value="<?php echo $arrayValueShop ?>"/>
+                            <div class="col-md-6" id="s-chartshopmont">
+                                <h5 class="m-t-10">Performance Shop </h5>
+                                <canvas id="ChartShopMonth"></canvas>
+                            </div>
+                            <div class="col-md-6" id="s-chartbrandmonth">
+                                <h5 class="m-t-10">Performance Top 10 brand </h5>
+                                <canvas id="ChartBrandMonth"></canvas>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -144,8 +160,8 @@
                                data-season="<?php echo $season ?>"
                                data-product-status="<?php echo $productStatus ?>"
                                data-product-shopid="<?php echo $shopid ?>"
-                               data-datestart="<?php echo $dateStart ?>"
-                               data-dateend="<?php echo $dateEnd ?>"
+                               data-dateStart="<?php echo $dateStart ?>"
+                               data-dateSnd="<?php echo $dateEnd ?>"
                                data-product-stored="<?php echo $stored ?>"
                                data-product-BrandId="<?php echo $productBrandId ?>"
                                data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
@@ -297,210 +313,5 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
-<bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione prodotti">
-        <bs-toolbar-button
-                data-remote="bs.generate.indexproduct"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.lists.generate.csv"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.set.onlycatalogue"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.publish.products"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.photo.manage"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.cards.photo.manage"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.photo.download"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.marketplace.publish"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.marketplace.publish"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.publish.amazon"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Shooting">
-        <bs-toolbar-button
-                data-remote="bs.product.shooting.manage"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.video.manage"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.force.shooting"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.print.aztec"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.shooting.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.shooting.delete"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Attributi Prodotti">
-        <bs-toolbar-button
-                data-remote="bs.product.tag.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.massive.tag.change"
-        ></bs-toolbar-button>
-        <!--<bs-toolbar-button
-            data-remote="bs.product.delete"
-            ></bs-toolbar-button>-->
-        <bs-toolbar-button
-                data-remote="bs.product.status.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.season.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.category.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.namesMerge"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.sizeGroup.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.shopHasProduct.sizeGroup.change"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.model.createByProduct"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.details.merge"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-tag="a"
-                data-icon="fa-object-group"
-                data-permission="worker"
-                data-class="btn btn-default"
-                data-rel="tooltip"
-                data-event="bs-product-model-insertIntoProducts-worker"
-                data-title="Aggiorna I prodotti da un modello"
-                data-placement="bottom"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.merge"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.name.insert"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.details.new">
-        </bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.dirty.details.read">
-        </bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.editVariantDescription"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.priority.change"
-        ></bs-toolbar-button>
-
-        <bs-toolbar-button
-                data-remote="bs.product.details.replace"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.processingUpdate"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione prezzi">
-        <bs-toolbar-button
-                data-remote="bs.product.PriceEditForAllShop"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.sales.set"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.sales.price.change"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione taglie">
-        <bs-toolbar-button
-                data-remote="bs.product.viewSize"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Lotti">
-        <bs-toolbar-button
-                data-remote="bs.product.addBatch"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Etichette personalizzate">
-        <bs-toolbar-button
-                data-remote="bs.product.tag.new.season"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.tag.new.brand"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.special.tag.custom"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Sezioni Esclusive personalizzate">
-        <bs-toolbar-button
-                data-remote="bs.product.tagexclusive.change"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Lista Prestashop">
-        <bs-toolbar-button
-                data-remote="bs.insert.product.prestashop"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.sku.insert.ean"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.product.preview.video"
-        ></bs-toolbar-button>
-
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione  Correlazioni">
-        <bs-toolbar-button
-                data-remote="bs.productmanage.correlation.insert"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.correlation.modify"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.correlation.delete"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione  Look">
-        <bs-toolbar-button
-                data-remote="bs.productmanage.look.insert"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.look.modify"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.look.delete"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Gestione Magazzini">
-        <bs-toolbar-button
-                data-remote="bs.product.storehouse.quantity"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-    <bs-toolbar-group data-group-label="Prezzi e Stato su Shop Paralleli">
-        <bs-toolbar-button
-                data-remote="bs.productstatusprice.external"
-        ></bs-toolbar-button>
-    </bs-toolbar-group>
-</bs-toolbar>
 </body>
 </html>

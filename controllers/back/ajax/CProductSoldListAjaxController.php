@@ -35,6 +35,17 @@ class CProductSoldListAjaxController extends AAjaxController
         } else {
             $season = '';
         }
+        if (isset($_REQUEST['dateStart'])) {
+            $dateStart = (new \DateTime($_REQUEST['dateStart']))->format('Y-m-d H:i:s');
+        }else{
+            $dateStart = (new \DateTime())->modify("midnight")->format('Y-m-d H:i:s');
+        }
+        if (isset($_REQUEST['dateEnd'])) {
+            $dateEnd = (new \DateTime($_REQUEST['dateEnd']))->format('Y-m-d H:i:s');
+        }else{
+            $dateEnd= (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d H:i:s');
+        }
+
         if (isset($_REQUEST['stored'])) {
             $stored = $_REQUEST['stored'];
         } else {
@@ -146,8 +157,8 @@ class CProductSoldListAjaxController extends AAjaxController
                    JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
                     ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
-                    where 1=1 and psd.dateEnd is not null " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand . ' ' . $sqlFilterShop . ' ' . $sqlFilterStored . ' 
-                    GROUP by psd.productId, psd.productVariantId';
+                    where 1=1 and psd.soldQuantity > 0  and psd.dateStart >= '".$dateStart."' and  psd.dateEnd<='".$dateEnd."' ".$sqlFilterSeason . " ". $sqlFilterQuantity . " " . $sqlFilterStatus . " " . $sqlFilterBrand . " " . $sqlFilterShop . ' ' . $sqlFilterStored . " 
+                    GROUP by psd.productId, psd.productVariantId";
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
