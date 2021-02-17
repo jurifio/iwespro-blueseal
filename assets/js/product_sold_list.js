@@ -46,7 +46,7 @@ $('#btnsearchplus').click(function(){
     var arrayValueBrand = $('#arrayValueBrand').val().split(",");
     let ctxChartShop = document.getElementById("ChartShopMonth").getContext('2d');
     let ChartShopMonth = new Chart(ctxChartShop, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: arrayLabelShop,
             datasets: [{
