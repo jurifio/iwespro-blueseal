@@ -87,7 +87,7 @@ WHERE d.productId IS NOT NULL AND d.productVariantId IS NOT NULL    GROUP by d.p
                 $productSoldDay->soldQuantity=0;
                 $productSoldDay->netTotal=0;
                 $productSoldDay->dateStart = $dateStart;
-                $productSoldDay->dateEnd = $dateEnd;
+                $productSoldDay->dateEnd = $dateStart;
                 $productSoldDay->day = $day;
                 $productSoldDay->month = $month;
                 $productSoldDay->year = $year;
