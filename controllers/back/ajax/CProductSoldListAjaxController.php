@@ -40,11 +40,6 @@ class CProductSoldListAjaxController extends AAjaxController
         } else {
             $stored = '';
         }
-        if (isset($_REQUEST['productShooting'])) {
-            $productShooting = $_REQUEST['productShooting'];
-        } else {
-            $productShooting = '';
-        }
         if (isset($_REQUEST['productZeroQuantity'])) {
             $productZeroQuantity = $_REQUEST['productZeroQuantity'];
         } else {
