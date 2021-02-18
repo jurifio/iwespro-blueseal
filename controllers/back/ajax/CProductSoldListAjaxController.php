@@ -162,6 +162,7 @@ class CProductSoldListAjaxController extends AAjaxController
                     GROUP by psd.productId, psd.productVariantId";
 
 
+
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
         if ($shootingCritical) $sql .= " AND `p`.`dummyPicture` not like '%dummy%' AND `p`.`productStatusId` in (4,5,11)";
         $productDetailCritical = \Monkey::app()->router->request()->getRequestData('detailsCritical');
