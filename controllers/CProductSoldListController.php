@@ -60,16 +60,16 @@ class CProductSoldListController extends ARestrictedAccessRootController
         } else {
             $stored = 0;
         }
-        if (isset($_GET['dateStart'])) {
-            $dateStart = $_GET['dateStart'];
-            $timeStartMask = (new \DateTime($_GET['dateStart']))->format('Y-m-d H:i:s');
+        if (isset($_GET['datestart'])) {
+            $dateStart = $_GET['datestart'];
+            $timeStartMask = (new \DateTime($_GET['datestart']))->format('Y-m-d H:i:s');
         } else {
             $dateStart = (new \DateTime())->modify("midnight")->format('Y-m-d\TH:i:s');
             $timeStartMask = (new \DateTime())->modify("midnight")->format('Y-m-d H:i:s');
         }
-        if (isset($_GET['dateEnd'])) {
-            $dateEnd = $_GET['dateEnd'];
-            $timeEndMasks = (new \DateTime($_GET['dateEnd']))->format('Y-m-d H:i:s');
+        if (isset($_GET['dateend'])) {
+            $dateEnd = $_GET['dateend'];
+            $timeEndMasks = (new \DateTime($_GET['dateend']))->format('Y-m-d H:i:s');
         } else {
             $dateEnd = (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d\TH:i:s');
             $timeEndMasks = (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d H:i:s');

@@ -35,13 +35,13 @@ class CProductSoldListAjaxController extends AAjaxController
         } else {
             $season = '';
         }
-        if (isset($_REQUEST['dateStart'])) {
-            $dateStart = (new \DateTime($_REQUEST['dateStart']))->format('Y-m-d H:i:s');
+        if (isset($_REQUEST['datestart'])) {
+            $dateStart = (new \DateTime($_REQUEST['datestart']))->format('Y-m-d H:i:s');
         }else{
             $dateStart = (new \DateTime())->modify("midnight")->format('Y-m-d H:i:s');
         }
-        if (isset($_REQUEST['dateEnd'])) {
-            $dateEnd = (new \DateTime($_REQUEST['dateEnd']))->format('Y-m-d H:i:s');
+        if (isset($_REQUEST['dateend'])) {
+            $dateEnd = (new \DateTime($_REQUEST['dateend']))->format('Y-m-d H:i:s');
         }else{
             $dateEnd= (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d H:i:s');
         }
