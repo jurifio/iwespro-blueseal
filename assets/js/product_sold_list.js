@@ -2,9 +2,11 @@
 
 
 $('#btnsearchplus').click(function(){
-    var season='season=0';
+    var dateStart='dateStart='+$('#dateStart').val()+'&';
+    var dateEnd='&dateEnd='+$('#dateEnd').val()+'&';
+    var season='&season=0';
     if ($('#season').prop("checked")) {
-        season = 'season=1';
+        season = '&season=1';
     }
 
 
@@ -21,8 +23,7 @@ $('#btnsearchplus').click(function(){
         shop = '&shopid='+$('#shopid').val();
     }
 
-    var dateStart='&dateStart='+$('#dateStart').val()+'&';
-    var dateEnd='&dateEnd='+$('#dateEnd').val()+'&';
+
 
 
 
