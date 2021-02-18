@@ -46,8 +46,16 @@ class CProductSoldListAjaxController extends AAjaxController
             $dateEnd= (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d H:i:s');
         }
 
-
-
+        if (isset($_REQUEST['stored'])) {
+            $stored = $_REQUEST['stored'];
+        } else {
+            $stored = '';
+        }
+        if (isset($_REQUEST['productZeroQuantity'])) {
+            $productZeroQuantity = $_REQUEST['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = '';
+        }
         if (isset($_REQUEST['productStatus'])) {
             $productStatus = $_REQUEST['productStatus'];
         } else {
@@ -64,12 +72,16 @@ class CProductSoldListAjaxController extends AAjaxController
             $shopid = '';
         }
 
-        if ($season == 1) {
-            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
-        } else {
+        if ($season == 0) {
             $sqlFilterSeason = '';
+        } else {
+            $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
         }
-
+        if ($productZeroQuantity == 1) {
+            $sqlFilterQuantity = '';
+        } else {
+            $sqlFilterQuantity = 'and p.qty>0';
+        }
         if ($productStatus == '1') {
             $sqlFilterStatus = 'and p.productStatusId=6';
 
@@ -86,7 +98,11 @@ class CProductSoldListAjaxController extends AAjaxController
         } else {
             $sqlFilterShop = 'and s.id=' . $shopid;
         }
-
+        if ($stored == 0) {
+            $sqlFilterStored = '';
+        } else {
+            $sqlFilterStored = 'and p.stored=' . $stored;
+        }
 
 
 
@@ -142,7 +158,7 @@ class CProductSoldListAjaxController extends AAjaxController
                    JOIN (DirtyProduct dp
                               JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
                     ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
-                    where 1=1 and psd.soldQuantity > 0  and psd.dateStart >= '".$dateStart."' and  psd.dateEnd <= '".$dateEnd."' ".$sqlFilterSeason .  " " . $sqlFilterStatus . " " . $sqlFilterBrand . " " . $sqlFilterShop . ' ' . " 
+                    where   psd.soldQuantity > 0  and psd.dateStart >= '".$dateStart."' and  psd.dateEnd<='".$dateEnd."' ".$sqlFilterSeason . " ". $sqlFilterQuantity . " " . $sqlFilterStatus . " " . $sqlFilterBrand . " " . $sqlFilterShop . ' ' . $sqlFilterStored . " 
                     GROUP by psd.productId, psd.productVariantId";
 
 

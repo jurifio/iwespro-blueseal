@@ -34,6 +34,11 @@ class CProductSoldListController extends ARestrictedAccessRootController
         } else {
             $season = 0;
         }
+        if (isset($_GET['productZeroQuantity'])) {
+            $productZeroQuantity = $_GET['productZeroQuantity'];
+        } else {
+            $productZeroQuantity = 0;
+        }
 
         if (isset($_GET['productStatus'])) {
             $productStatus = $_GET['productStatus'];
@@ -50,7 +55,11 @@ class CProductSoldListController extends ARestrictedAccessRootController
         } else {
             $shopid = 0;
         }
-
+        if (isset($_GET['stored'])) {
+            $stored = $_GET['stored'];
+        } else {
+            $stored = 0;
+        }
         if (isset($_GET['dateStart'])) {
             $dateStart = $_GET['dateStart'];
             $timeStartMask = (new \DateTime($_GET['dateStart']))->format('Y-m-d H:i:s');
@@ -82,7 +91,7 @@ class CProductSoldListController extends ARestrictedAccessRootController
    Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
 JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
 JOIN ProductBrand pb ON p.productBrandId=pb.id
-JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "' and  ".$sqlShopFilter."
+JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'  ".$sqlShopFilter."
     GROUP by s.name  ORDER BY sum(psd.netTotal) desc";
         $titleBrand = "Grafico Top 10 brand";
 
@@ -95,7 +104,7 @@ JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" 
    Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
 JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
 JOIN ProductBrand pb ON p.productBrandId=pb.id
-JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'   and  ".$sqlShopFilter."  
+JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'   ".$sqlShopFilter."  
     GROUP by pb.name  ORDER BY sum(psd.netTotal) desc limit 10";
 
         $stats = [];
@@ -190,12 +199,14 @@ JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" 
             'pageURL' => $pageURL,
             'prodotti' => $prodotti,
             'season' => $season,
+            'productZeroQuantity' => $productZeroQuantity,
             'productStatus' => $productStatus,
             'page' => $this->page,
             'productBrand' => $productBrand,
             'productBrandId' => $productBrandId,
             'Shop' => $Shop,
             'shopid' => $shopid,
+            'stored' => $stored,
             'dateStart' => $dateStart,
             'dateEnd' => $dateEnd,
             'arrayLabelBrand' => substr($arrayLabelBrand,0,-1),
