@@ -2,8 +2,8 @@
 
 
 $('#btnsearchplus').click(function(){
-    var dateStart='datestart='+$('#dateStart').val()+'&';
-    var dateEnd='&dateend='+$('#dateEnd').val()+'&';
+    var dateStart='datestart='+$('#dateStart').val();
+    var dateEnd='&dateend='+$('#dateEnd').val();
     var season='&season=0';
     if ($('#season').prop("checked")) {
         season = '&season=1';
