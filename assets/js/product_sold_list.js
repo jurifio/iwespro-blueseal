@@ -26,7 +26,7 @@ $('#btnsearchplus').click(function(){
 
 
 
-    var url='/blueseal/lista-prodotti-venduti?'+dateStart+dateEnd+season+productZeroQuantity+productStatus+productBrand+shop+stored;
+    var url='/blueseal/lista-prodotti-venduti?'+dateStart+dateEnd+season+productStatus+productBrand+shop;
 
     window.location.href=url;
 });
