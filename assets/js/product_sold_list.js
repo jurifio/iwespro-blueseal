@@ -383,7 +383,7 @@ $('#btnsearchplus').click(function(){
     let ctxChartShopDay = document.getElementById("ChartShopDay").getContext('2d');
     let ChartShopDay = new Chart(ctxChartShopDay,
         {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: arrayLabelShopDay,
                 datasets: [{
@@ -544,7 +544,7 @@ $('#btnsearchplus').click(function(){
     let ctxChartShopYear = document.getElementById("ChartShopYear").getContext('2d');
     let ChartShopYear = new Chart(ctxChartShopYear,
         {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: arrayLabelShopMonth,
                 datasets: [{
