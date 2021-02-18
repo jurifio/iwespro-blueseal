@@ -68,7 +68,7 @@ class CProductSoldListController extends ARestrictedAccessRootController
 
 
         if ($shopid != 0) {
-            $sqlShopFilter = ' psd.shopId=' . $shopid.' and ';
+            $sqlShopFilter = ' and  psd.shopId=' . $shopid.'';
         } else {
             $sqlShopFilter = '';
         }
@@ -82,7 +82,7 @@ class CProductSoldListController extends ARestrictedAccessRootController
    Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
 JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
 JOIN ProductBrand pb ON p.productBrandId=pb.id
-JOIN Shop s ON psd.shopId=s.id WHERE 1=1 and ".$sqlShopFilter."   psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "' 
+JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "' and  ".$sqlShopFilter."
     GROUP by s.name  ORDER BY sum(psd.netTotal) desc";
         $titleBrand = "Grafico Top 10 brand";
 
@@ -95,7 +95,7 @@ JOIN Shop s ON psd.shopId=s.id WHERE 1=1 and ".$sqlShopFilter."   psd.soldQuanti
    Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
 JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
 JOIN ProductBrand pb ON p.productBrandId=pb.id
-JOIN Shop s ON psd.shopId=s.id WHERE 1=1 and  ".$sqlShopFilter."   psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "' 
+JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'   and  ".$sqlShopFilter."  
     GROUP by pb.name  ORDER BY sum(psd.netTotal) desc limit 10";
 
         $stats = [];
