@@ -160,7 +160,7 @@ class CProductSoldListAjaxController extends AAjaxController
                     ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
                     where   psd.soldQuantity > 0  and psd.dateStart >= '".$dateStart."' and  psd.dateEnd<='".$dateEnd."' ".$sqlFilterSeason . " ". $sqlFilterQuantity . " " . $sqlFilterStatus . " " . $sqlFilterBrand . " " . $sqlFilterShop . ' ' . $sqlFilterStored . " 
                     GROUP by psd.productId, psd.productVariantId";
-
+\Monkey::app()->applicationLog('ProductSoldListAjaxController','log','query',$sql,'-'.$sql);
 
 
         $shootingCritical = \Monkey::app()->router->request()->getRequestData('shootingCritical');
