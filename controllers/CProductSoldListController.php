@@ -73,7 +73,14 @@ class CProductSoldListController extends ARestrictedAccessRootController
             $dateEnd = (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d\TH:i:s');
             $timeEndMasks = (new \DateTime())->modify("tomorrow midnight")->format('Y-m-d H:i:s');
         }
-        $titleShop="Grafico Shop";
+
+
+        if ($shopid != 0) {
+            $sqlShop = 'and psd.shopId=' . $shopid;
+        } else {
+            $sqlShop = '';
+        }
+        $titleShop = "Grafico Shop";
         $sqlShop = "SELECT 
 		 psd.shopId AS shopId, 
 		 SUM(psd.soldQuantity) AS qty, 
@@ -83,9 +90,9 @@ class CProductSoldListController extends ARestrictedAccessRootController
    Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
 JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
 JOIN ProductBrand pb ON p.productBrandId=pb.id
-JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0 and psd.dateStart>='".$timeStartMask."' and psd.dateEnd<='".$timeEndMasks."' 
+JOIN Shop s ON psd.shopId=s.id WHERE 1=1  ".$sqlShop."  and psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "' 
     GROUP by s.name  ORDER BY sum(psd.netTotal) desc";
-        $titleBrand="Grafico Top 10 brand";
+        $titleBrand = "Grafico Top 10 brand";
 
         $sqlBrand = "SELECT 
 		 SUM(psd.soldQuantity) AS qty, 
@@ -96,45 +103,44 @@ JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0 and psd.dateStart>='".$t
    Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
 JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
 JOIN ProductBrand pb ON p.productBrandId=pb.id
-JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0 and psd.dateStart>='".$timeStartMask."' and psd.dateEnd<='".$timeEndMasks."' 
+JOIN Shop s ON psd.shopId=s.id WHERE 1=1 ".$sqlShop."  and psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "' 
     GROUP by pb.name  ORDER BY sum(psd.netTotal) desc limit 10";
 
-        $stats=[];
-        $arrayLabelShop='';
-        $arrayQtyShop='';
-        $arrayValueShop='';
+        $stats = [];
+        $arrayLabelShop = '';
+        $arrayQtyShop = '';
+        $arrayValueShop = '';
         $resShop = \Monkey::app()->dbAdapter->query($sqlShop,[])->fetchAll();
-        if(count($resShop) > 0) {
+        if (count($resShop) > 0) {
             foreach ($resShop as $shopvalues) {
-                $arrayLabelShop .= $shopvalues['shopName'].',';
-                $arrayQtyShop.= $shopvalues['qty'].',';
-                $arrayValueShop.=number_format($shopvalues['netTotal'],2,'.','').',';
+                $arrayLabelShop .= $shopvalues['shopName'] . ',';
+                $arrayQtyShop .= $shopvalues['qty'] . ',';
+                $arrayValueShop .= number_format($shopvalues['netTotal'],2,'.','') . ',';
 
 
             }
-        }else{
+        } else {
             $arrayLabelShop = '';
             $arrayQtyShop = "0";
-            $arrayValueShop="0.00";
+            $arrayValueShop = "0.00";
         }
-        $arrayLabelBrand='';
-        $arrayQtyBrand='';
-        $arrayValueBrand='';
+        $arrayLabelBrand = '';
+        $arrayQtyBrand = '';
+        $arrayValueBrand = '';
         $resBrand = \Monkey::app()->dbAdapter->query($sqlBrand,[])->fetchAll();
-        if(count($resBrand) > 0) {
+        if (count($resBrand) > 0) {
             foreach ($resBrand as $brandvalues) {
-                $arrayLabelBrand .= $brandvalues['productBrandName'].',';
-                $arrayQtyBrand.= $brandvalues['qty'].',';
-                $arrayValueBrand.=number_format($brandvalues['netTotal'],2,'.','').',';
+                $arrayLabelBrand .= $brandvalues['productBrandName'] . ',';
+                $arrayQtyBrand .= $brandvalues['qty'] . ',';
+                $arrayValueBrand .= number_format($brandvalues['netTotal'],2,'.','') . ',';
 
 
             }
-        }else{
+        } else {
             $arrayLabelBrand = '';
             $arrayQtyBrand = "0";
-            $arrayValueBrand="0.00";
+            $arrayValueBrand = "0.00";
         }
-
 
 
         /** LOGICA */
@@ -202,12 +208,12 @@ JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0 and psd.dateStart>='".$t
             'stored' => $stored,
             'dateStart' => $dateStart,
             'dateEnd' => $dateEnd,
-            'arrayLabelBrand'=>substr($arrayLabelBrand,0,-1),
-            'arrayQtyBrand'=>substr($arrayQtyBrand,0,-1),
-            'arrayValueBrand'=>substr($arrayValueBrand,0,-1),
-            'arrayLabelShop'=>substr($arrayLabelShop,0,-1),
-            'arrayQtyShop'=>substr($arrayQtyShop,0,-1),
-            'arrayValueShop'=>substr($arrayValueShop,0,-1),
+            'arrayLabelBrand' => substr($arrayLabelBrand,0,-1),
+            'arrayQtyBrand' => substr($arrayQtyBrand,0,-1),
+            'arrayValueBrand' => substr($arrayValueBrand,0,-1),
+            'arrayLabelShop' => substr($arrayLabelShop,0,-1),
+            'arrayQtyShop' => substr($arrayQtyShop,0,-1),
+            'arrayValueShop' => substr($arrayValueShop,0,-1),
             'sidebar' => $this->sidebar->build()
         ]);
     }
