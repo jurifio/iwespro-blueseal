@@ -7,11 +7,15 @@ $('#btnsearchplus').click(function(){
     var season='&season=0';
     if ($('#season').prop("checked")) {
         season = '&season=1';
+    }else{
+        season = '&season=0';
     }
 
-    var productZeroQuantity='&productZeroQuantity=0';
+   var productZeroQuantity='';
     if($('#productZeroQuantity').prop('checked')) {
         productZeroQuantity = '&productZeroQuantity=1';
+    }else{
+        productZeroQuantity = '&productZeroQuantity=0';
     }
     var productStatus='&productStatus=0';
     if($('#productStatus').prop('checked')) {
@@ -24,10 +28,14 @@ $('#btnsearchplus').click(function(){
     var  shop='&shopid=0';
     if($('#shopid').val()!=0) {
         shop = '&shopid='+$('#shopid').val();
+    }else{
+        shop='&shopid=0';
     }
     var stored='&stored=0';
     if ($('#stored').prop("checked")) {
         stored = '&stored=1';
+    }else{
+        stored = '&stored=0';
     }
 
 
