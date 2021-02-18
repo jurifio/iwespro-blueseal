@@ -34,11 +34,7 @@ class CProductSoldListController extends ARestrictedAccessRootController
         } else {
             $season = 0;
         }
-        if (isset($_GET['productZeroQuantity'])) {
-            $productZeroQuantity = $_GET['productZeroQuantity'];
-        } else {
-            $productZeroQuantity = 0;
-        }
+
         if (isset($_GET['productStatus'])) {
             $productStatus = $_GET['productStatus'];
         } else {
@@ -54,11 +50,7 @@ class CProductSoldListController extends ARestrictedAccessRootController
         } else {
             $shopid = 0;
         }
-        if (isset($_GET['stored'])) {
-            $stored = $_GET['stored'];
-        } else {
-            $stored = 0;
-        }
+
         if (isset($_GET['dateStart'])) {
             $dateStart = $_GET['dateStart'];
             $timeStartMask = (new \DateTime($_GET['dateStart']))->format('Y-m-d H:i:s');
@@ -198,14 +190,12 @@ JOIN Shop s ON psd.shopId=s.id WHERE 1=1 and  ".$sqlShopFilter."   psd.soldQuant
             'pageURL' => $pageURL,
             'prodotti' => $prodotti,
             'season' => $season,
-            'productZeroQuantity' => $productZeroQuantity,
             'productStatus' => $productStatus,
             'page' => $this->page,
             'productBrand' => $productBrand,
             'productBrandId' => $productBrandId,
             'Shop' => $Shop,
             'shopid' => $shopid,
-            'stored' => $stored,
             'dateStart' => $dateStart,
             'dateEnd' => $dateEnd,
             'arrayLabelBrand' => substr($arrayLabelBrand,0,-1),
