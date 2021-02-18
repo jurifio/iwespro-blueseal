@@ -107,6 +107,33 @@ JOIN ProductBrand pb ON p.productBrandId=pb.id
 JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'   ".$sqlShopFilter."  
     GROUP by pb.name  ORDER BY sum(psd.netTotal) desc limit 10";
 
+        $sqlShopDay = "SELECT 
+		 psd.shopId AS shopId, 
+		 SUM(psd.soldQuantity) AS qty, 
+		 SUM(psd.netTotal) AS netTotal,
+		 s.name AS shopName,
+         date_format(psd.dateStart,'%d') AS dayStat
+	
+		 FROM ProductSoldDay psd JOIN 
+   Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
+JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
+JOIN ProductBrand pb ON p.productBrandId=pb.id
+JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'  ".$sqlShopFilter."
+    GROUP by s.name,date_format(psd.dateStart,'%d')  ORDER BY sum(psd.netTotal) desc";
+        $sqlShopMonth = "SELECT 
+		 psd.shopId AS shopId, 
+		 SUM(psd.soldQuantity) AS qty, 
+		 SUM(psd.netTotal) AS netTotal,
+		 s.name AS shopName,
+         date_format(psd.dateStart,'%m-%Y') as `month`
+	
+		 FROM ProductSoldDay psd JOIN 
+   Product p ON p.id=psd.productId AND p.productVariantId=psd.productVariantId 
+JOIN ShopHasProduct shp ON psd.productId=shp.productId AND psd.productVariantId=shp.productVariantId 
+JOIN ProductBrand pb ON p.productBrandId=pb.id
+JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" . $timeStartMask . "' and psd.dateEnd<='" . $timeEndMasks . "'  ".$sqlShopFilter."
+    GROUP by s.name,date_format(psd.dateStart,'%m-%Y')  ORDER BY sum(psd.netTotal) desc";
+
         $stats = [];
         $arrayLabelShop = '';
         $arrayQtyShop = '';
@@ -124,6 +151,40 @@ JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" 
             $arrayLabelShop = '';
             $arrayQtyShop = "0";
             $arrayValueShop = "0.00";
+        }
+        $arrayLabelShopDay = '';
+        $arrayQtyShopDay = '';
+        $arrayValueShopDay = '';
+        $resShopDay = \Monkey::app()->dbAdapter->query($sqlShopDay,[])->fetchAll();
+        if (count($resShopDay) > 0) {
+            foreach ($resShopDay as $shopvaluesDay) {
+                $arrayLabelShopDay .= $shopvaluesDay['dayStat'].'-'.$shopvaluesDay['shopName'] . ',';
+                $arrayQtyShopDay .= $shopvaluesDay['qty'] . ',';
+                $arrayValueShopDay .= number_format($shopvaluesDay['netTotal'],2,'.','') . ',';
+
+
+            }
+        } else {
+            $arrayLabelShopDay = '';
+            $arrayQtyShopDay = "0";
+            $arrayValueShopDay = "0.00";
+        }
+        $arrayLabelShopMonth = '';
+        $arrayQtyShopMonth = '';
+        $arrayValueShopMonth = '';
+        $resShopMonth = \Monkey::app()->dbAdapter->query($sqlShopMonth,[])->fetchAll();
+        if (count($resShopMonth) > 0) {
+            foreach ($resShopMonth as $shopvaluesMonth) {
+                $arrayLabelShopMonth .= $shopvaluesDay['month'].'-'.$shopvaluesMonth['shopName'] . ',';
+                $arrayQtyShopMonth .= $shopvaluesMonth['qty'] . ',';
+                $arrayValueShopMonth .= number_format($shopvaluesMonth['netTotal'],2,'.','') . ',';
+
+
+            }
+        } else {
+            $arrayLabelShopMonth = '';
+            $arrayQtyShopMonth = "0";
+            $arrayValueShopMonth = "0.00";
         }
         $arrayLabelBrand = '';
         $arrayQtyBrand = '';
@@ -215,6 +276,13 @@ JOIN Shop s ON psd.shopId=s.id WHERE   psd.soldQuantity>0 and psd.dateStart>='" 
             'arrayLabelShop' => substr($arrayLabelShop,0,-1),
             'arrayQtyShop' => substr($arrayQtyShop,0,-1),
             'arrayValueShop' => substr($arrayValueShop,0,-1),
+            'arrayLabelShopDay' => substr($arrayLabelShopDay,0,-1),
+            'arrayQtyShopDay' => substr($arrayQtyShopDay,0,-1),
+            'arrayValueShopDay' => substr($arrayValueShopDay,0,-1),
+            'arrayLabelShopMonth' => substr($arrayLabelShopMonth,0,-1),
+            'arrayQtyShopMonth' => substr($arrayQtyShopMonth,0,-1),
+            'arrayValueShopMonth' => substr($arrayValueShopMonth,0,-1),
+
             'sidebar' => $this->sidebar->build()
         ]);
     }

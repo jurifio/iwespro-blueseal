@@ -136,13 +136,27 @@
                             <input type="hidden" id="arrayLabelShop" name="arrayLabelShop" value="<?php echo $arrayLabelShop ?>"/>
                             <input type="hidden" id="arrayQtyShop" name="arrayQtyShop" value="<?php echo $arrayQtyShop ?>"/>
                             <input type="hidden" id="arrayValueShop" name="arrayValueShop" value="<?php echo $arrayValueShop ?>"/>
-                            <div class="col-md-6" id="s-chartshopmont">
+                            <input type="hidden" id="arrayLabelShopDay" name="arrayLabelShopDay" value="<?php echo $arrayLabelShopDay ?>"/>
+                            <input type="hidden" id="arrayQtyShopDay" name="arrayQtyShopDay" value="<?php echo $arrayQtyShopDay ?>"/>
+                            <input type="hidden" id="arrayValueShopDay" name="arrayValueShopDay" value="<?php echo $arrayValueShopDay ?>"/>
+                            <input type="hidden" id="arrayLabelShopMonth" name="arrayLabelShopMonth" value="<?php echo $arrayLabelShopMonth ?>"/>
+                            <input type="hidden" id="arrayQtyShopMonth" name="arrayQtyShopMonth" value="<?php echo $arrayQtyShopMonth ?>"/>
+                            <input type="hidden" id="arrayValueShopMonth" name="arrayValueShopMonth" value="<?php echo $arrayValueShopMonth ?>"/>
+                            <div class="col-md-3" id="s-chartshopmont">
                                 <h5 class="m-t-10">Performance Shop </h5>
                                 <canvas id="ChartShopMonth"></canvas>
                             </div>
-                            <div class="col-md-6" id="s-chartbrandmonth">
+                            <div class="col-md-3" id="s-chartbrandmonth">
                                 <h5 class="m-t-10">Performance Top 10 brand </h5>
                                 <canvas id="ChartBrandMonth"></canvas>
+                            </div>
+                            <div class="col-md-3" id="s-chartshopday">
+                                <h5 class="m-t-10">Performance X Giorno Shop </h5>
+                                <canvas id="ChartShopDay"></canvas>
+                            </div>
+                            <div class="col-md-3" id="s-chartshopyear">
+                                <h5 class="m-t-10">Performance X Mese Shop </h5>
+                                <canvas id="ChartShopYear"></canvas>
                             </div>
                         </div>
 
