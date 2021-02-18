@@ -314,5 +314,12 @@
 </div>
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
+<bs-toolbar class="toolbar-definition">
+    <bs-toolbar-group data-group-label="Gestione prodotti">
+        <bs-toolbar-button
+                data-remote="bs.lists.generate.csv"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+</bs-toolbar>
 </body>
 </html>
