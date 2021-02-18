@@ -162,7 +162,7 @@
                                data-product-status="<?php echo $productStatus ?>"
                                data-product-shopid="<?php echo $shopid ?>"
                                data-dateStart="<?php echo $dateStart ?>"
-                               data-dateSnd="<?php echo $dateEnd ?>"
+                               data-dateEnd="<?php echo $dateEnd ?>"
                                data-product-stored="<?php echo $stored ?>"
                                data-product-BrandId="<?php echo $productBrandId ?>"
                                data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
