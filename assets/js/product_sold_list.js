@@ -53,6 +53,9 @@ $('#btnsearchplus').click(function(){
     var arrayLabelShopDay = $('#arrayLabelShopDay').val().split(",");
     var arrayQtyShopDay = $('#arrayQtyShopDay').val().split(",");
     var arrayValueShopDay = $('#arrayValueShopDay').val().split(",");
+    var arrayLabelShopMonth = $('#arrayLabelShopMonth').val().split(",");
+    var arrayQtyShopMonth = $('#arrayQtyShopMonth').val().split(",");
+    var arrayValueShopMonth = $('#arrayValueShopMonth').val().split(",");
     var arrayLabelBrand = $('#arrayLabelBrand').val().split(",");
     var arrayQtyBrand = $('#arrayQtyBrand').val().split(",");
     var arrayValueBrand = $('#arrayValueBrand').val().split(",");
@@ -546,7 +549,7 @@ $('#btnsearchplus').click(function(){
                 labels: arrayLabelShopMonth,
                 datasets: [{
                     label: 'Quantità totale mese',
-                    data: arrayQtyShopDay,
+                    data: arrayQtyShopMonth,
                     backgroundColor: [
                         'rgba(158,23,255, 0.2)',
                         'rgba(255,52,41, 0.2)',
@@ -618,7 +621,7 @@ $('#btnsearchplus').click(function(){
                 },
                     {
                         label: 'Totale Mese €',
-                        data: arrayValueShopDay,
+                        data: arrayValueShopMonth,
                         backgroundColor: [
                             'rgba(255,52,41, 0.2)',
                             'rgba(158,23,255, 0.2)',
