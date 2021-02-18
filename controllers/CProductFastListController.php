@@ -34,11 +34,7 @@ class CProductFastListController extends ARestrictedAccessRootController
         }else{
             $season=0;
         }
-        if(isset($_GET['productZeroQuantity'])) {
-            $productZeroQuantity=$_GET['productZeroQuantity'];
-        }else{
-            $productZeroQuantity=0;
-        }
+
         if(isset($_GET['productStatus'])) {
             $productStatus=$_GET['productStatus'];
         }else{
@@ -54,11 +50,7 @@ class CProductFastListController extends ARestrictedAccessRootController
         } else{
             $shopid=0;
         }
-        if(isset($_GET['stored'])){
-            $stored=$_GET['stored'];
-        } else{
-            $stored=0;
-        }
+
         if(isset($_GET['productShooting'])) {
             $productShooting=$_GET['productShooting'];
         }else{
@@ -119,7 +111,6 @@ class CProductFastListController extends ARestrictedAccessRootController
             'pageURL' => $pageURL,
             'prodotti' => $prodotti,
             'season'=>$season,
-            'productZeroQuantity'=>$productZeroQuantity,
             'productStatus'=>$productStatus,
             'page' => $this->page,
             'productBrand'=>$productBrand,
@@ -127,7 +118,6 @@ class CProductFastListController extends ARestrictedAccessRootController
             'productShooting'=>$productShooting,
             'Shop'=>$Shop,
             'shopid'=>$shopid,
-            'stored'=>$stored,
             'sidebar' => $this->sidebar->build()
         ]);
     }

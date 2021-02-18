@@ -25,18 +25,7 @@
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <div class="row" align="center" style="padding-top: 130px;">
-                            <div class="col-md-1">
-                                <div class="form-group form-group-default">
-                                    <label for="stored">Visualizza lo storico</label>
-                                    <?php if ($stored == 1) {
-                                        echo '<input type="checkbox" checked="checked" id="stored" name="stored" value="0"/>';
-                                    } else {
-                                        echo '<input type="checkbox"  id="stored" name="stored" value="0"/>';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <div class="form-group form-group-default">
                                     <label for="season">Ultima Stagione</label>
                                     <?php if ($season == 1) {
@@ -47,18 +36,7 @@
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-md-1">
-                                <div class="form-group form-group-default">
-                                    <label for="productZeroQuantity">Includi Quantità 0</label>
-                                    <?php if ($productZeroQuantity == 1) {
-                                        echo ' <input type="checkbox" checked="checked" id="productZeroQuantity" name="productZeroQuantity" value="0"/>';
-                                    } else {
-                                        echo ' <input type="checkbox" id="productZeroQuantity"  name="productZeroQuantity" value="0"/>';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <div class="form-group form-group-default">
                                     <label for="productStatus">solo Pubblicati</label>
                                     <?php if ($productStatus) {
@@ -68,7 +46,7 @@
                                     } ?>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <div class="form-group form-group-default selectize-enabled">
                                     <label for="productBrandId">Seleziona il Brand </label>
                                     <select id="productBrandId" name="countryId"
@@ -157,13 +135,11 @@
                                data-controller="ProductSoldListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-product-zero-quantity="<?php echo $productZeroQuantity ?>"
                                data-season="<?php echo $season ?>"
                                data-product-status="<?php echo $productStatus ?>"
                                data-product-shopid="<?php echo $shopid ?>"
                                data-dateStart="<?php echo $dateStart ?>"
                                data-dateSnd="<?php echo $dateEnd ?>"
-                               data-product-stored="<?php echo $stored ?>"
                                data-product-BrandId="<?php echo $productBrandId ?>"
                                data-length-menu-setup="10,20,50,100, 200, 500, 1000, 2000"
                                data-display-length="10">

@@ -7,10 +7,7 @@ $('#btnsearchplus').click(function(){
         season = 'season=1';
     }
 
-    var productZeroQuantity='&productZeroQuantity=0';
-    if($('#productZeroQuantity').prop('checked')) {
-        productZeroQuantity = '&productZeroQuantity=1';
-    }
+
     var productStatus='&productStatus=0';
     if($('#productStatus').prop('checked')) {
         productStatus = '&productStatus=1';
@@ -23,10 +20,7 @@ $('#btnsearchplus').click(function(){
     if($('#shopid').val()!=0) {
         shop = '&shopid='+$('#shopid').val();
     }
-    var stored='&stored=0';
-    if ($('#stored').prop("checked")) {
-        stored = '&stored=1';
-    }
+
     var dateStart='&dateStart='+$('#dateStart').val()+'&';
     var dateEnd='&dateEnd='+$('#dateEnd').val()+'&';
 
