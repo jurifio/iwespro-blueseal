@@ -78,9 +78,9 @@ class CProductSoldListAjaxController extends AAjaxController
             $sqlFilterSeason = ' and p.productSeasonId=' . $productSeasonId;
         }
         if ($productZeroQuantity == 1) {
-            $sqlFilterQuantity = '';
+            $sqlFilterQuantity = 'and p.qty > 0';
         } else {
-            $sqlFilterQuantity = 'and p.qty>0';
+            $sqlFilterQuantity = '';
         }
         if ($productStatus == '1') {
             $sqlFilterStatus = 'and p.productStatusId=6';
