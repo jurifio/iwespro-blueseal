@@ -175,7 +175,7 @@ JOIN Shop s ON psd.shopId=s.id WHERE psd.soldQuantity>0   and psd.dateStart>='" 
         $resShopMonth = \Monkey::app()->dbAdapter->query($sqlShopMonth,[])->fetchAll();
         if (count($resShopMonth) > 0) {
             foreach ($resShopMonth as $shopvaluesMonth) {
-                $arrayLabelShopMonth .= $shopvaluesDay['month'].'-'.$shopvaluesMonth['shopName'] . ',';
+                $arrayLabelShopMonth .= $shopvaluesMonth['month'].'-'.$shopvaluesMonth['shopName'] . ',';
                 $arrayQtyShopMonth .= $shopvaluesMonth['qty'] . ',';
                 $arrayValueShopMonth .= number_format($shopvaluesMonth['netTotal'],2,'.','') . ',';
 
