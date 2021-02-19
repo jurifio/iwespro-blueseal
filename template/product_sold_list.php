@@ -152,11 +152,11 @@
                             </div>
                         </div>
                         <div class="row" align="center">
-                            <div class="col-md-3" id="s-chartshopday">
+                            <div class="col-md-6" id="s-chartshopday">
                                 <h5 class="m-t-10">Performance X Giorno Shop </h5>
                                 <canvas id="ChartShopDay"></canvas>
                             </div>
-                            <div class="col-md-3" id="s-chartshopyear">
+                            <div class="col-md-6" id="s-chartshopyear">
                                 <h5 class="m-t-10">Performance X Mese Shop </h5>
                                 <canvas id="ChartShopYear"></canvas>
                             </div>
