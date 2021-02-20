@@ -96,7 +96,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                     if (ENV == 'dev') {
                         $finalFile = '/media/sf_sites/iwespro/temp/' . substr($fileexport,15,100) . '.csv';
                     } else {
-                        $finalFile = '/home/iwespro/public_html/temp-eancsv/' . substr($fileexport,15,100) . '.csv';
+                        $finalFile = '/home/iwespro/public_html/client/public/media/productsync/cartechini/import/done/' . substr($fileexport,15,100) . '.csv';
                     }
 
 
