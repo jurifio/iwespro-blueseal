@@ -34,7 +34,7 @@ class CShopManage extends AAjaxController
             $shopHasShippingAddressBook=\Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->findOneBy(['shopId'=>$shopId]);
             $addressBookId=$shopHasShippingAddressBook->addressBookId;
             $shippingAddressBook=\Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['id'=>$addressBookId]);
-            $shop->shippingAddressBook=$shippingAddressBook;
+            $shop->shippingAddressBooks=$shippingAddressBook;
 
 
             $shop->productStatistics = $shop->getDailyActiveProductStatistics();
