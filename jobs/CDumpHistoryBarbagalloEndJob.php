@@ -73,7 +73,7 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                 $month = substr($origingFile,4,2);
                 $day = substr($origingFile,6,2);
 
-                if (($firstFileDay == '19') && ($year > 2018)) {
+                if (($firstFileDay == '19') && ($year > 2019)) {
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
@@ -110,88 +110,35 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                         $size = $values['taglia'];
                         $barcode = $values['barcode'];
                         $price = floatval(str_replace(',','.',$values["PrListino"]));
-                        $dirtySku = $dirtySkuRepo->findOneBy(['barcode' => $barcode,'shopId' => 51]);
-                        if ($dirtySku) {
-                            if ($dirtySku->productSizeId != null) {
-                                $dirtyProductId = $dirtySku->dirtyProductId;
+                        $sql="select productId,productVariantId,productSizeId,barcode,shopId,priceActive,startQuantity from ProductSizeSoldDay where barcode='".$barcode."' and shopId=51 and 
+                `year`='".$year."' and `month`='".$month."' and `day`='".$day."' ";
+                        $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                        if(count($res)>0) {
+                            foreach ($res as $result) {
+                                $productId = $result['productId'];
+                                $productVariantId = $result['productVariantId'];
+                                $productSizeId = $result['productSizeId'];
+                                $priceActive = $result['priceActive'];
+                                $startQuantity = $result['startQuantity'];
+                            }
 
-                                $dirtyProduct = $dirtyProductRepo->findOneBy(['id' => $dirtyProductId]);
-                                if ($dirtyProduct) {
-                                    if ($dirtyProduct->productId != null) {
-                                        $productId = $dirtyProduct->productId;
-                                        $productVariantId = $dirtyProduct->productVariantId;
-                                        $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'shopId' => 51]);
-                                        $productSold = $productSoldSizeRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $dirtySku->productSizeId,'shopId' => 51,'year' => $year,'month' => $month,'day' => $day]);
-                                        if ($productSold == null) {
-                                            $productSoldInsert = $productSoldSizeRepo->getEmptyEntity();
-                                            $productSoldInsert->productId = $productId;
-                                            $productSoldInsert->productVariantId = $productVariantId;
-                                            $productSoldInsert->productSizeId = $dirtySku->productSizeId;
-                                            $productSoldInsert->shopId = 51;
-                                            $productSoldInsert->barcode = $barcode;
-                                            $productSoldInsert->dateStart = $year . '-' . $month . '-' . $day . ' 00:00:00';
-                                            $productSoldInsert->startQuantity = $quantity;
-                                            $productSoldInsert->dateEnd = $year . '-' . $month . '-' . $day . ' 00:00:00';
-                                            $productSoldInsert->endQuantity = $quantity;
-                                            if ($dateFile >= $dateStartSale1 && $dateFile <= $dateEndSale1) {
-                                                if ($shopHasProduct->salePrice == null) {
-                                                    $priceActive = $price;
-                                                } else {
-                                                    $priceActive = $shopHasProduct->salePrice;
-
-                                                }
-                                            } else {
-                                                if ($shopHasProduct->price == null) {
-                                                    $priceActive = $price;
-                                                } else {
-                                                    $priceActive = $shopHasProduct->price;
-
-                                                }
-
-                                            }
-                                            if ($dateFile >= $dateStartSale2 && $dateFile <= $dateEndSale2) {
-                                                if ($shopHasProduct->salePrice == null) {
-                                                    $priceActive = $price;
-
-                                                } else {
-                                                    $priceActive = $shopHasProduct->salePrice;
-
-                                                }
-                                            } else {
-                                                if ($shopHasProduct->price == null) {
-                                                    $priceActive = $price;
-
-                                                } else {
-                                                    $priceActive = $shopHasProduct->price;
-
-                                                }
-
-                                            }
-                                            $productSoldInsert->priceActive = $priceActive;
-                                            $productSoldInsert->soldQuantity = 0;
-                                            $productSoldInsert->netTotal = 0;
-                                            $productSoldInsert->day = $day;
-                                            $productSoldInsert->month = $month;
-                                            $productSoldInsert->year = $year;
-                                            $productSoldInsert->sourceInitial = $finalFile;
-                                            $productSoldInsert->insert();
-                                        }
-
-
-                                    } else {
-                                        continue;
-                                    }
-                                } else {
-                                    continue;
-                                }
+                            $productSold = $productSoldSizeRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $productSizeId,'shopId' => 51,'year' => $year,'month' => $month,'day' => $day]);
+                            if ($productSold) {
+                                $soldQuantity = $startQuantity - $quantity;
+                                $productSold->startQuantity = $quantity;
+                                $productSold->endQuantity = $quantity;
+                                $netTotal = $priceActive * $soldQuantity;
+                                $productSold->soldQuantity = $soldQuantity;
+                                $productSold->netTotal = $netTotal;
+                                $productSold->sourceUpgrade=$finalFile;
+                                $productSold->update();
                             }
 
                         }
                     }
+                    fclose($f);
                     unlink($finalFile);
 
-                } else {
-                    continue;
                 }
 
             }
