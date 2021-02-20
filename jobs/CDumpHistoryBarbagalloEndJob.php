@@ -73,7 +73,7 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                 $month = substr($origingFile,4,2);
                 $day = substr($origingFile,6,2);
 
-                if ($firstFileDay == '19') {
+                if (($firstFileDay == '19') && ($year > 2018)) {
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);

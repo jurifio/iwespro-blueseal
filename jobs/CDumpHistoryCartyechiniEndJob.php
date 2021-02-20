@@ -65,10 +65,13 @@ class CDumpHistoryCartyechiniEndJob extends ACronJob
         try {
             foreach ($files as $file) {
                 $origingFile = basename($file,".tar.gz") . PHP_EOL;
-
+                $year = substr($nameFile,0,4);
+                $yearEndSale = $year + 1;
+                $month = substr($nameFile,4,2);
+                $day = substr($nameFile,6,2);
                 $firstFileSku = substr($origingFile,15,4);
 
-                if (($firstFileDay == '20') && ($firstFileSku=='SKUS')) {
+                if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2018)) {
 
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
@@ -78,10 +81,7 @@ class CDumpHistoryCartyechiniEndJob extends ACronJob
                     }
                     $nameFile = basename($file,".csv") . PHP_EOL;
 
-                    $year = substr($nameFile,0,4);
-                    $yearEndSale = $year + 1;
-                    $month = substr($nameFile,4,2);
-                    $day = substr($nameFile,6,2);
+
                     $dateFile = (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
                     $dateStartSale1 = (new \DateTime($year . '-01-01'))->format('Y-m-d');
                     $dateEndSale1 = (new \DateTime($yearEndSale . '-03-15'))->format('Y-m-d');
