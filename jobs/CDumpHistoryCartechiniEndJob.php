@@ -22,7 +22,7 @@ use bamboo\core\application\AApplication;
 use bamboo\domain\entities\CMarketplaceAccountHasProduct;
 
 /**
- * Class CDumpHistoryCartyechiniEndJob
+ * Class CDumpHistoryCartechiniEndJob
  * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
@@ -43,7 +43,7 @@ class CDumpHistoryCartechiniEndJob extends ACronJob
     public function run($args = null)
     {
         $this->relevationProductStart();
-        $this->report('CDumpHistoryCartyechiniEndJob','start day quantity check','');
+        $this->report('CDumpHistoryCartechiniEndJob','start day quantity check','');
     }
 
     /**
