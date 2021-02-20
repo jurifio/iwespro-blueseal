@@ -65,10 +65,10 @@ class CDumpHistoryCartyechiniEndJob extends ACronJob
         try {
             foreach ($files as $file) {
                 $origingFile = basename($file,".tar.gz") . PHP_EOL;
-                $year = substr($nameFile,0,4);
+                $year = substr($origingFile,0,4);
                 $yearEndSale = $year + 1;
-                $month = substr($nameFile,4,2);
-                $day = substr($nameFile,6,2);
+                $month = substr($origingFile,4,2);
+                $day = substr($origingFile,6,2);
                 $firstFileSku = substr($origingFile,15,4);
 
                 if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2018)) {

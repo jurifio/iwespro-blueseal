@@ -69,10 +69,10 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
 
                 $firstFileDay = substr($origingFile,8,2);
                 $firstFileSku = substr($origingFile,15,4);
-                $year = substr($nameFile,0,4);
+                $year = substr($origingFile,0,4);
                 $yearEndSale = $year + 1;
-                $month = substr($nameFile,4,2);
-                $day = substr($nameFile,6,2);
+                $month = substr($origingFile,4,2);
+                $day = substr($origingFile,6,2);
                 if (($firstFileDay == '00') && ($firstFileSku=='SKUS') && ($year>2018)) {
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
