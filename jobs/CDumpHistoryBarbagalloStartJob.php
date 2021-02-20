@@ -75,7 +75,7 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
                     } else {
-                        $phar->extractTo('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done',null,true);
+                        $phar->extractTo('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/',null,true);
                     }
                     $nameFile = basename($file,".json") . PHP_EOL;
 
