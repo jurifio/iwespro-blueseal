@@ -107,7 +107,7 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                     $lineCount = 0;
                     foreach ($rawData as $values) {
                         $quantity = $values['esistenza'];
-                        $size = $values['size'];
+                        $size = $values['taglia'];
                         $barcode = $values['barcode'];
                         $price = floatval(str_replace(',','.',$values["PrListino"]));
                         $dirtySku = $dirtySkuRepo->findOneBy(['barcode' => $barcode,'shopId' => 51]);
