@@ -73,7 +73,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                 $yearEndSale = $year + 1;
                 $month = substr($origingFile,4,2);
                 $day = substr($origingFile,6,2);
-                if (($firstFileDay == '00') && ($firstFileSku=='SKUS') && ($year>2018)) {
+                if (($firstFileDay == '00') && ($firstFileSku=='SKUS') && ($year>2019)) {
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
@@ -180,7 +180,8 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                                                 $productSoldInsert->sourceInitial = $finalFile;
                                                 $productSoldInsert->insert();
                                             }else{
-                                                continue;
+                                                $productSold->day=$day;
+                                                $productSold->update();
                                             }
 
 
