@@ -42,15 +42,9 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
      */
     public function run($args = null)
     {
-        $this->relevationProductStart();
-        $this->report('CDumpHistoryBarbagalloStartJob','start dump history','');
-    }
 
-    /**
-     * @throws \bamboo\core\exceptions\BambooDBALException
-     */
-    private function relevationProductStart()
-    {
+        $this->report('CDumpHistoryBarbagalloStartJob','start dump history','');
+
         $dirtySkuRepo = \Monkey::app()->repoFactory->create('DirtySku');
         $dirtyProductRepo = \Monkey::app()->repoFactory->create('DirtyProduct');
         $productSoldSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeSoldDay');
@@ -73,7 +67,7 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
                 $month = substr($origingFile,4,2);
                 $day = substr($origingFile,6,2);
 
-                if (($firstFileDay == '10') && ($year>2018)) {
+                if (($firstFileDay == '10') && ($year>2019)) {
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
