@@ -109,7 +109,7 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                         $quantity = $values['esistenza'];
                         $size = $values['taglia'];
                         $barcode = $values['barcode'];
-                        $price = floatval(str_replace(',','.',$values["PrListino"]));
+                        $price =str_replace(',','.',$values["PrListino"]);
                         $sql="select productId,productVariantId,productSizeId,barcode,shopId,priceActive,startQuantity from ProductSizeSoldDay where barcode='".$barcode."' and shopId=51 and 
                 `year`='".$year."' and `month`='".$month."' and `day`='".$day."' ";
                         $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();

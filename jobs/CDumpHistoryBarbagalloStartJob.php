@@ -75,9 +75,10 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
                     } else {
-                        $phar->extractTo('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/',null,true);
+                        $phar->extractTo('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done',null,true);
                     }
                     $nameFile = basename($file,".json") . PHP_EOL;
+
 
 
                     $dateFile = (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
@@ -98,6 +99,7 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
 
 
                     $rawData = json_decode(file_get_contents($finalFile),true);
+                    $this->report('CDumpHistoryBarbagalloStartJob','nameFile',$finalFile);
 
                     $arrayProduct = [];
                     $dirtyProduct = '';
@@ -107,7 +109,7 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
                         $quantity = $values['esistenza'];
                         $size = $values['taglia'];
                         $barcode =$values['barcode'];
-                        $price =floatval(str_replace(',','.',$values["PrListino"]));
+                        $price =str_replace(',','.',$values["PrListino"]);
                         $dirtySku = $dirtySkuRepo->findOneBy(['barcode' => $barcode,'shopId' => 51]);
                         if ($dirtySku) {
                             if ($dirtySku->productSizeId != null) {
