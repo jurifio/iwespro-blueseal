@@ -115,7 +115,7 @@ $(document).on('bs.shop.save', function () {
             createGraphs(res);
 
             appendShipment(res.billingAddressBook, '#billingAddress');
-            res.shippingAddressBooks.forEach(function (addressData) {
+            res.shippingAddressBook.forEach(function (addressData) {
                 appendShipment(addressData, '#shippingAddresses');
             });
             appendShipment({}, '#shippingAddresses');
