@@ -95,7 +95,7 @@ class CDumpHistoryBarbagalloStartJob extends ACronJob
 
 
                     $rawData = json_decode(file_get_contents($finalFile),true);
-
+                    $this->report('CDumpHistoryBarbagalloStartJob','namefile',$finalFile);
                     $arrayProduct = [];
                     $dirtyProduct = '';
                     $quantity = 0;
