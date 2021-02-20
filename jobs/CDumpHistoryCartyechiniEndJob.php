@@ -71,7 +71,7 @@ class CDumpHistoryCartyechiniEndJob extends ACronJob
                 $day = substr($origingFile,6,2);
                 $firstFileSku = substr($origingFile,15,4);
 
-                if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2018)) {
+                if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2019)) {
 
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
