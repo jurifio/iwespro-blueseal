@@ -179,6 +179,8 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                                                 $productSoldInsert->year = $year;
                                                 $productSoldInsert->sourceInitial = $finalFile;
                                                 $productSoldInsert->insert();
+                                            }else{
+                                                continue;
                                             }
 
 
