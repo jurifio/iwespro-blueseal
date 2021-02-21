@@ -59,7 +59,7 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
         if (ENV == 'dev') {
             $files = glob('/media/sf_sites/iwespro/temp/*.tar.gz');
         } else {
-            $files = glob('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/.tar.gz');
+            $files = glob('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/*.tar.gz');
         }
         $dateStart = (new \DateTime())->format('Y-m-d H:i:s');
 
