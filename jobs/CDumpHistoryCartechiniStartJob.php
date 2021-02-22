@@ -137,41 +137,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                                                 $productSoldInsert->startQuantity = $quantity;
                                                 $productSoldInsert->dateEnd = $year . '-' . $month . '-' . $day . ' 00:00:00';
                                                 $productSoldInsert->endQuantity = $quantity;
-                                                if ($dateFile >= $dateStartSale1 && $dateFile <= $dateEndSale1) {
-                                                    if ($shopHasProduct->salePrice == null) {
-                                                        $priceActive = $values[5];
-                                                    } else {
-                                                        $priceActive = $shopHasProduct->salePrice;
-
-                                                    }
-                                                } else {
-                                                    if ($shopHasProduct->price == null) {
-                                                        $priceActive = $values[6];
-                                                    } else {
-                                                        $priceActive = $shopHasProduct->price;
-
-                                                    }
-
-                                                }
-                                                if ($dateFile >= $dateStartSale2 && $dateFile <= $dateEndSale2) {
-                                                    if ($shopHasProduct->salePrice == null) {
-                                                        $priceActive = $values[6];
-
-                                                    } else {
-                                                        $priceActive = $shopHasProduct->salePrice;
-
-                                                    }
-                                                } else {
-                                                    if ($shopHasProduct->price == null) {
-                                                        $priceActive = $values[5];
-
-                                                    } else {
-                                                        $priceActive = $shopHasProduct->price;
-
-                                                    }
-
-                                                }
-                                                $productSoldInsert->priceActive = $priceActive;
+                                                $productSoldInsert->priceActive = $shopHasProduct->price;
                                                 $productSoldInsert->soldQuantity = 0;
                                                 $productSoldInsert->netTotal = 0;
                                                 $productSoldInsert->day = $day;
