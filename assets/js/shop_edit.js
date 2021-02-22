@@ -245,7 +245,7 @@ function addCoupon(){
     window.open(url,'_blank');
 }
 function modifyCoupon(){
-    let couponType=$('#couponType').val();
+    let couponType=$('#shop_couponType').val();
     let url='/blueseal/tipocoupon/modifica/'+couponType
     window.open(url,'_blank');
 }
