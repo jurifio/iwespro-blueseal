@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -54,6 +54,8 @@
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="validForCartTotal">Minimo spesa</label>
@@ -77,6 +79,8 @@
                                                value="<?php echo $coupon->hasFreeReturn; ?>"/>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="amount">Valore</label>
@@ -98,14 +102,40 @@
                                         <label for="amountPercentageFull">Percentuale sul prezzo pieno</label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="tags">Tags</label>
                                         <select class="full-width selectpicker"
                                                 placeholder="Seleziona le tag di validità"
                                                 tabindex="-1" title="Tags"
-                                                data-value="<?php echo implode(',', $coupon->getValidTagIds()) ?>"
+                                                data-value="<?php echo implode(',',$coupon->getValidTagIds()) ?>"
                                                 name="tags[]" id="tags">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type='hidden' id="shopSelected" name="shopSelected"
+                                           value="<?php echo $coupon->remoteShopId ?>"/>
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="remoteShopId">Shop Di Destinazione</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona Lo Shop"
+                                                tabindex="-1" title="Seleziona la Shop"
+                                                name="remoteShopId" id="remoteShopId">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" id="divCampaign">
+                                    <input type='hidden' id="campaignSelected" name="campaignSelected"
+                                           value="<?php echo $coupon->campaignId ?>"/>
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="campaignId">Campagna Associata</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona la Campagna"
+                                                tabindex="-1" title="Seleziona la Campagna"
+                                                name="campaignId" id="campaignId">
                                         </select>
                                     </div>
                                 </div>

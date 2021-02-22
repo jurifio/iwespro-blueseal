@@ -57,6 +57,8 @@
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="validForCartTotal">Minimo spesa</label>
@@ -78,6 +80,8 @@
                                                name="hasFreeReturn"/>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="amount">Valore</label>
@@ -96,6 +100,8 @@
                                         <label for="amountPercentageFull">Percentuale sul prezzo pieno</label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="tags">Tags</label>
@@ -106,23 +112,23 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default selectize-enabled">
-                                        <label for="campaignId">Campagna Associata</label>
-                                        <select class="full-width selectpicker"
-                                                placeholder="Seleziona la Campagna"
-                                                tabindex="-1" title="Seleziona la Campagna"
-                                                name="campaignId" id="campaignId">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-3">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="remoteShopId">Shop Di Destinazione</label>
                                         <select class="full-width selectpicker"
                                                 placeholder="Seleziona Lo Shop"
                                                 tabindex="-1" title="Seleziona la Shop"
                                                 name="remoteShopId" id="remoteShopId">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 hide" id="divCampaign">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="campaignId">Campagna Associata</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona la Campagna"
+                                                tabindex="-1" title="Seleziona la Campagna"
+                                                name="campaignId" id="campaignId">
                                         </select>
                                     </div>
                                 </div>

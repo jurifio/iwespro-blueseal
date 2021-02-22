@@ -54,14 +54,31 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
 
         $couponType = \Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id'=>$couponId]);
-
+        $couponTypeRemoteId=$couponType->remoteId;
+        $remoteShopId=$couponType->remoteShopId;
         foreach ($data as $k => $v) {
             $couponType->{$k} = $v;
         }
         $couponType->update();
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopId]);
+        $db_host = $shopRepo->dbHost;
+        $db_name = $shopRepo->dbName;
+        $db_user = $shopRepo->dbUsername;
+        $db_pass = $shopRepo->dbPassword;
+        try {
+
+            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $res = ' connessione ok <br>';
+        } catch (PDOException $e) {
+            $res = $e->getMessage();
+        }
+
 
         foreach ($couponType->couponTypeHasTag as $couponTypeHasTag) {
             $couponTypeHasTag->delete();
+            /*$stmtRemoteCouponTypeHasTag=$db_con->prepare('delete from CouponTypeHasTag where couponTypeId='.$couponTypeRemoteId);
+            $stmtRemoteCouponTypeHasTag->execute();*/
         }
 
         foreach ($data['tags'] as $tag) {
@@ -70,5 +87,47 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
             $couponTypeHasTag->couponTypeId = $couponType->id;
             $couponTypeHasTag->insert();
         }
+
+
+        $resCoupon=\Monkey::app()->dbAdapter->query('select ct.id as couponTypeId, 
+                                                           `ct`.`name` as couponName, 
+                                                             ct.amount as amount,
+                                                             ct.amountType as amountType,
+                                                             ct.`validity`,
+                                                             ct.validForCartTotal,
+                                                             ct.hasFreeShipping,
+                                                              ct.hasFreeReturn,
+                                                              ct.remoteId,
+                                                              ct.remoteShopId,
+                                                              ct.campaignId as campaignId,
+                                                              ct.remoteCampaignId as remoteCampaignId      
+       from CouponType ct
+                                                              join Campaign c on ct.campaignId = c.campaignId',[])->fetchAll();
+        foreach ($resCoupon as $remoteCouponType){
+            $couponTypeId=$remoteCouponType['couponTypeId'];
+            $couponName=$remoteCouponType['couponName'];
+            $amount=$remoteCouponType['amount'];
+            $amountType=$remoteCouponType['amountType'];
+            $validity=$remoteCouponType['validity'];
+            $validForCartTotal=$remoteCouponType['validForCartTotal'];
+            $hasFreeShipping=$remoteCouponType['hasFreeShipping'];
+            $hasFreeReturn=$remoteCouponType['hasFreeReturn'];
+            $campaignId=$remoteCouponType['campaignId'];
+            $remoteCampaignId=$remoteCouponType['remoteCampaignId'];
+        }
+
+        $stmtUpdateCouponType=$db_con->prepare("Update CouponType set 
+                      `name`='".$couponName."',
+                      amount='".$amount."',
+                      amountType='".$amountType."',
+                      validity='".$validity."',
+                      validForCartTotal='".$validForCartTotal."',
+                      hasFreeShipping='".$hasFreeShipping."',
+                      hasFreeReturn='".$hasFreeReturn."',
+                      campaignId='".$remoteCampaignId."'
+                    
+                      where id=".$couponTypeId);
+        $stmtUpdateCouponType->execute();
+
     }
 }

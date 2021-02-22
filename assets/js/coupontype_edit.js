@@ -59,7 +59,11 @@ $(document).ready(function () {
         select.selectize({
             valueField: 'id',
             labelField: 'name',
-            options: res
+            options: res,
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue($('#campaignSelected').val());
+            }
         });
     });
 
@@ -68,7 +72,7 @@ $(document).ready(function () {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Shop',
-             condition :{isBankable:1}
+             condition :{hasEcommerce:1}
         },
         dataType: 'json'
     }).done(function (res2) {
@@ -79,6 +83,10 @@ $(document).ready(function () {
             labelField: 'name',
             searchField: ['name'],
             options: res2,
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue($('#shopSelected').val());
+            }
         });
     });
 });

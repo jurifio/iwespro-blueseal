@@ -72,8 +72,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
             $couponType->validForCartTotal = $data['validForCartTotal'];
             $couponType->hasFreeShipping = (isset($data['hasFreeShipping']) && $data['hasFreeShipping'] === 'on') ? 1 : 0;
             $couponType->hasFreeReturn = (isset($data['hasFreeReturn']) && $data['hasFreeReturn'] === 'on') ? 1 : 0;
-            $coupnType->campaignId=$data['campaignId'];
-          /*  $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $orderLine->shopId]);
+            $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $data['remoteShopId']]);
                 $db_host = $findShopId->dbHost;
                 $db_name = $findShopId->dbName;
                 $db_user = $findShopId->dbUsername;
@@ -86,7 +85,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                     throw new BambooException('fail to connect');
 
                 }
-             /*   $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImportt)
+                $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImport)
                 VALUES(
                                  \'' . $data['name'] . '\',
                                  \'' . $data['amount'] . '\',
@@ -98,10 +97,11 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                                   \''. $data['campaignId'].'\',
                                  1                        
                                     )');
-                $stmtCouponTypeInsert->exceute();
-                $remoteId = $db_con->lastInsertId();*/
+                $stmtCouponTypeInsert->execute();
+                $remoteId = $db_con->lastInsertId();
                 $couponType->remoteShopId=$data['remoteShopId'];
-               // $couponType->remoteId=$remoteId;
+                $couponType->remoteId=$remoteId;
+                $couponType->campaignId=$data['campaignId'];
                 $couponType->smartInsert();
 
                 foreach ($data['tags'] ?? [] as $tag) {
