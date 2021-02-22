@@ -25,154 +25,179 @@ class CShopManage extends AAjaxController
     {
         $shopId = $this->app->router->request()->getRequestData('id');
         $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-        if (in_array($shopId, $shops)) {
+        if (in_array($shopId,$shops)) {
             /** @var CShop $shop */
             $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
             $shop->user;
             $shop->billingAddressBook;
-            $shop->shippingAddressBook;
+           // $shop->shippingAddressBook;
+            //$shop->shippingAddressBook;
+            $shippingAddressBook = [];
+            $shopHasShippingAddressBook = \Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->findBy(['shopId' => $shopId]);
+            $i=0;
+            foreach ($shopHasShippingAddressBook as $shipping){
+                if($i<3) {
+                    $addressBookId = $shipping->addressBookId;
+                    $shippingAddressBooks = \Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['id' => $addressBookId]);
+                    $shippingAddressBook[] = ['id' => $shippingAddressBooks->id,
+                        'name' => $shippingAddressBooks->name,
+                        'subject' => $shippingAddressBooks->subject,
+                        'address' => $shippingAddressBooks->address,
+                        'extra' => $shippingAddressBooks->extra,
+                        'city' => $shippingAddressBooks->city,
+                        'postcode' => $shippingAddressBooks->postcode,
+                        'phone' => $shippingAddressBooks->phone,
+                        'cellphone' => $shippingAddressBooks->cellphone,
+                        'province' => $shippingAddressBooks->province,
+                        'iban' => $shippingAddressBooks->iban,
+                        'countryId' => $shippingAddressBooks->countryId
+                    ];
+                }else{
+                    break;
+                }
+        }
+        $shop->shippingAddressBook = $shippingAddressBook;
 
 
+        $shop->productStatistics = $shop->getDailyActiveProductStatistics();
+        $shop->orderStatistics = $shop->getDailyOrderFriendStatistics();
+        return json_encode($shop);
+    } else
+{
+$this->app->router->response()->raiseUnauthorized();
+return 'Bad Request';
+}
+}
 
-            $shop->productStatistics = $shop->getDailyActiveProductStatistics();
-            $shop->orderStatistics = $shop->getDailyOrderFriendStatistics();
-            return json_encode($shop);
+public
+function put()
+{
+    try {
+        $shopData = $this->app->router->request()->getRequestData('shop');
+        $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
+        if (in_array($shopData['id'],$shopsId)) {
+            $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
+            $shop->title = $shopData['title'];
+            $shop->owner = $shopData['owner'];
+            $shop->referrerEmails = $shopData['referrerEmails'];
+            $shop->eloyApiKey = $shopData['eloyApiKey'];
+            $shop->secret = $shopData['secret'];
+            $shop->dbHost = $shopData['dbHost'];
+            $shop->dbUsername = $shopData['dbUsername'];
+            $shop->dbPassword = $shopData['dbPassword'];
+            $shop->dbName = $shopData['dbName'];
+            $shop->logo = $shopData['logo'];
+            $shop->logoThankYou = $shopData['logoThankYou'];
+            $shop->paralellFee = $shopData['paralellFee'];
+            $shop->feeParallelOrder = $shopData['feeParallelOrder'];
+            $shop->billingParallelId = $shopData['billingParallelId'];
+            $shop->hasEcommerce = $shopData['hasEcommerce'];
+            $shop->hasCoupon = $shopData['hasCoupon'];
+            $shop->hasMarketplace = $shopData['hasMarketplace'];
+            $shop->receipt = $shopData['receipt'];
+            $shop->invoiceUe = $shopData['invoiceUe'];
+            $shop->invoiceExtraUe = $shopData['invoiceExtraUe'];
+            $shop->invoiceParalUe = $shopData['invoiceParalUe'];
+            $shop->invoiceParalExtraUe = $shopData['invoiceParalExtraUe'];
+            $shop->siteInvoiceChar = $shopData['siteInvoiceChar'];
+            $shop->urlSite = $shopData['urlSite'];
+            $shop->analyticsId = $shopData['analyticsId'];
+            $shop->emailShop = $shopData['emailShop'];
+            $shop->amministrativeEmails = $shopData['amministrativeEmails'];
+            $shop->billingEmails = $shopData['billingEmails'];
+            $shop->billingContact = $shopData['billingContact'];
+            $shop->importer = $shopData['importer'];
+
+
+            if ($this->app->getUser()->hasPermission('allShops')) {
+                $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
+                $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
+                $shop->saleMultiplier = $shopData['saleMultiplier'];
+                $shop->minReleasedProducts = $shopData['minReleasedProducts'];
+                $config = $shop->config;
+                $config['refusalRate'] = $shopData['config']['refusalRate'] ?? null;
+                $config['refusalRateLastMonth'] = $shopData['config']['refusalRateLastMonth'] ?? null;
+                $config['reactionRate'] = $shopData['config']['reactionRate'] ?? null;
+                $config['reactionRateLastMonth'] = $shopData['config']['reactionRateLastMonth'] ?? null;
+                $config['accountStatus'] = $shopData['config']['accountStatus'] ?? null;
+                $config['accountType'] = $shopData['config']['accountType'] ?? null;
+                $config['photoCost'] = $shopData['config']['photoCost'] ?? null;
+                $config['shootingTransportCost'] = $shopData['config']['shootingTransportCost'] ?? null;
+                $config['orderTransportCost'] = $shopData['config']['orderTransportCost'] ?? null;
+
+                $shop->config = $config;
+            }
+
+            $billingAddressBookData = $shopData['billingAddressBook'];
+            $billingAddressBook = $this->getAndFillAddressData($billingAddressBookData);
+
+            if (!is_null($billingAddressBook)) {
+                if (isset($billingAddressBook->id)) $billingAddressBook->update();
+                else $billingAddressBook->id = $billingAddressBook->insert();
+                $shop->billingAddressBookId = $billingAddressBook->id;
+            }
+
+
+            foreach ($shopData['shippingAddresses'] as $shippingAddressData) {
+                $shippingAddress = $this->getAndFillAddressData($shippingAddressData);
+                if (is_null($shippingAddress)) continue;
+                if (isset($shippingAddress->id)) $shippingAddress->update();
+                else $shippingAddress->id = $shippingAddress->insert();
+                $this->app->dbAdapter->insert('ShopHasShippingAddressBook',['shopId' => $shop->id,'addressBookId' => $shippingAddress->id],false,true);
+            }
+
+            $x = $shop->update();
+            $this->app->dbAdapter->commit();
+            return $x;
         } else {
             $this->app->router->response()->raiseUnauthorized();
             return 'Bad Request';
         }
+    } catch (\Throwable $e) {
+        $this->app->dbAdapter->rollBack();
+        throw $e;
     }
+}
 
-    public function put()
-    {
-        try {
-            $shopData = $this->app->router->request()->getRequestData('shop');
-            $shopsId = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
-            if (in_array($shopData['id'], $shopsId)) {
-                $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopData['id']);
-                $shop->title = $shopData['title'];
-                $shop->owner = $shopData['owner'];
-                $shop->referrerEmails = $shopData['referrerEmails'];
-                $shop->eloyApiKey = $shopData['eloyApiKey'];
-                $shop->secret =$shopData['secret'];
-                $shop->dbHost=$shopData['dbHost'];
-                $shop->dbUsername=$shopData['dbUsername'];
-                $shop->dbPassword=$shopData['dbPassword'];
-                $shop->dbName=$shopData['dbName'];
-                $shop->logo=$shopData['logo'];
-                $shop->logoThankYou=$shopData['logoThankYou'];
-                $shop->paralellFee=$shopData['paralellFee'];
-                $shop->feeParallelOrder=$shopData['feeParallelOrder'];
-                $shop->billingParallelId=$shopData['billingParallelId'];
-                $shop->hasEcommerce=$shopData['hasEcommerce'];
-                $shop->hasCoupon=$shopData['hasCoupon'];
-                $shop->hasMarketplace=$shopData['hasMarketplace'];
-                $shop->receipt=$shopData['receipt'];
-                $shop->invoiceUe=$shopData['invoiceUe'];
-                $shop->invoiceExtraUe=$shopData['invoiceExtraUe'];
-                $shop->invoiceParalUe=$shopData['invoiceParalUe'];
-                $shop->invoiceParalExtraUe=$shopData['invoiceParalExtraUe'];
-                $shop->siteInvoiceChar=$shopData['siteInvoiceChar'];
-                $shop->urlSite=$shopData['urlSite'];
-                $shop->analyticsId=$shopData['analyticsId'];
-                $shop->emailShop=$shopData['emailShop'];
-                $shop->amministrativeEmails=$shopData['amministrativeEmails'];
-                $shop->billingEmails=$shopData['billingEmails'];
-                $shop->billingContact=$shopData['billingContact'];
-                $shop->importer=$shopData['importer'];
-
-
-
-
-
-                if ($this->app->getUser()->hasPermission('allShops')) {
-                    $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
-                    $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
-                    $shop->saleMultiplier = $shopData['saleMultiplier'];
-                    $shop->minReleasedProducts = $shopData['minReleasedProducts'];
-                    $config = $shop->config;
-                    $config['refusalRate'] = $shopData['config']['refusalRate'] ?? null;
-                    $config['refusalRateLastMonth'] = $shopData['config']['refusalRateLastMonth'] ?? null;
-                    $config['reactionRate'] = $shopData['config']['reactionRate'] ?? null;
-                    $config['reactionRateLastMonth'] = $shopData['config']['reactionRateLastMonth'] ?? null;
-                    $config['accountStatus'] = $shopData['config']['accountStatus'] ?? null;
-                    $config['accountType'] = $shopData['config']['accountType'] ?? null;
-                    $config['photoCost'] = $shopData['config']['photoCost'] ?? null;
-                    $config['shootingTransportCost'] = $shopData['config']['shootingTransportCost'] ?? null;
-                    $config['orderTransportCost'] = $shopData['config']['orderTransportCost'] ?? null;
-
-                    $shop->config = $config;
-                }
-
-                $billingAddressBookData = $shopData['billingAddressBook'];
-                $billingAddressBook = $this->getAndFillAddressData($billingAddressBookData);
-
-                if (!is_null($billingAddressBook)) {
-                    if (isset($billingAddressBook->id)) $billingAddressBook->update();
-                    else $billingAddressBook->id = $billingAddressBook->insert();
-                    $shop->billingAddressBookId = $billingAddressBook->id;
-                }
-
-
-                foreach ($shopData['shippingAddresses'] as $shippingAddressData) {
-                    $shippingAddress = $this->getAndFillAddressData($shippingAddressData);
-                    if (is_null($shippingAddress)) continue;
-                    if (isset($shippingAddress->id)) $shippingAddress->update();
-                    else $shippingAddress->id = $shippingAddress->insert();
-                    $this->app->dbAdapter->insert('ShopHasShippingAddressBook', ['shopId' => $shop->id, 'addressBookId' => $shippingAddress->id], false, true);
-                }
-
-                $x = $shop->update();
-                $this->app->dbAdapter->commit();
-                return $x;
-            } else {
-                $this->app->router->response()->raiseUnauthorized();
-                return 'Bad Request';
-            }
-        } catch (\Throwable $e) {
-            $this->app->dbAdapter->rollBack();
-            throw $e;
+/**
+ * @param $addressBookData
+ * @return \bamboo\core\db\pandaorm\entities\AEntity|CAddressBook|null
+ */
+private
+function getAndFillAddressData($addressBookData)
+{
+    $ok = false;
+    foreach ($addressBookData as $field) {
+        if (!empty($field)) {
+            $ok = true;
+            break;
         }
     }
+    if (!$ok) return null;
+    $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
+    if (is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
+    try {
+        /** @var CAddressBook $addressBook */
+        $addressBook->name = $addressBookData['name'] ?? null;
+        $addressBook->subject = $addressBookData['subject'];
+        $addressBook->address = $addressBookData['address'];
+        $addressBook->extra = $addressBookData['extra'] ?? null;
+        $addressBook->city = $addressBookData['city'];
+        $addressBook->countryId = $addressBookData['countryId'];
+        $addressBook->postcode = $addressBookData['postcode'];
+        $addressBook->phone = $addressBookData['phone'] ?? null;
+        $addressBook->cellphone = $addressBookData['cellphone'] ?? null;
+        $addressBook->province = $addressBookData['province'] ?? null;
+        $addressBook->iban = $addressBookData['iban'] ?? null;
 
-    /**
-     * @param $addressBookData
-     * @return \bamboo\core\db\pandaorm\entities\AEntity|CAddressBook|null
-     */
-    private function getAndFillAddressData($addressBookData)
-    {
-        $ok = false;
-        foreach ($addressBookData as $field) {
-            if (!empty($field)) {
-                $ok = true;
-                break;
-            }
+        if (!isset($addressBook->id)) {
+            $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);
+            if (!is_null($addressBookC)) $addressBook->id = $addressBookC->id;
         }
-        if (!$ok) return null;
-        $addressBook = $this->app->repoFactory->create('AddressBook')->findOneByStringId($addressBookData['id']);
-        if (is_null($addressBook)) $addressBook = $this->app->repoFactory->create('AddressBook')->getEmptyEntity();
-        try {
-            /** @var CAddressBook $addressBook */
-            $addressBook->name = $addressBookData['name'] ?? null;
-            $addressBook->subject = $addressBookData['subject'];
-            $addressBook->address = $addressBookData['address'];
-            $addressBook->extra = $addressBookData['extra'] ?? null;
-            $addressBook->city = $addressBookData['city'];
-            $addressBook->countryId = $addressBookData['countryId'];
-            $addressBook->postcode = $addressBookData['postcode'];
-            $addressBook->phone = $addressBookData['phone'] ?? null;
-            $addressBook->cellphone = $addressBookData['cellphone'] ?? null;
-            $addressBook->province = $addressBookData['province'] ?? null;
-            $addressBook->iban = $addressBookData['iban'] ?? null;
-
-            if (!isset($addressBook->id)) {
-                $addressBookC = $this->app->repoFactory->create('AddressBook')->findOneBy(['checksum' => $addressBook->calculateChecksum()]);
-                if (!is_null($addressBookC)) $addressBook->id = $addressBookC->id;
-            }
-        } catch (\Throwable $e) {
-            return null;
-        }
-
-        return $addressBook;
+    } catch (\Throwable $e) {
+        return null;
     }
+
+    return $addressBook;
+}
 }
