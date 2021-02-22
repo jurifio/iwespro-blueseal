@@ -55,6 +55,36 @@ class CShopManage extends AAjaxController
                 $shop->referrerEmails = $shopData['referrerEmails'];
                 $shop->eloyApiKey = $shopData['eloyApiKey'];
                 $shop->secret =$shopData['secret'];
+                $shop->dbHost=$shopData['dbHost'];
+                $shop->dbUsername=$shopData['dbUsername'];
+                $shop->dbPassword=$shopData['dbPassword'];
+                $shop->dbName=$shopData['dbName'];
+                $shop->logo=$shopData['logo'];
+                $shop->logoThankYou=$shopData['logoThankYou'];
+                $shop->paralellFee=$shopData['paralellFee'];
+                $shop->feeParallelOrder=$shopData['feeParallelOrder'];
+                $shop->billingParallelId=$shopData['billingParallelId'];
+                $shop->hasEcommerce=$shopData['hasEcommerce'];
+                $shop->hasCoupon=$shopData['hasCoupon'];
+                $shop->hasMarketplace=$shopData['hasMarketplace'];
+                $shop->receipt=$shopData['receipt'];
+                $shop->invoiceUe=$shopData['invoiceUe'];
+                $shop->invoiceExtraUe=$shopData['invoiceExtraUe'];
+                $shop->invoiceParalUe=$shopData['invoiceParalUe'];
+                $shop->invoiceParalExtraUe=$shopData['invoiceParalExtraUe'];
+                $shop->siteInvoiceChar=$shopData['siteInvoiceChar'];
+                $shop->urlSite=$shopData['urlSite'];
+                $shop->analyticsId=$shopData['analyticsId'];
+                $shop->emailShop=$shopData['emailShop'];
+                $shop->amministrativeEmails=$shopData['amministrativeEmails'];
+                $shop->billingEmails=$shopData['billingEmails'];
+                $shop->billingContact=$shopData['billingContact'];
+                $shop->importer=$shopData['importer'];
+
+
+
+
+
                 if ($this->app->getUser()->hasPermission('allShops')) {
                     $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
                     $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
@@ -70,6 +100,7 @@ class CShopManage extends AAjaxController
                     $config['photoCost'] = $shopData['config']['photoCost'] ?? null;
                     $config['shootingTransportCost'] = $shopData['config']['shootingTransportCost'] ?? null;
                     $config['orderTransportCost'] = $shopData['config']['orderTransportCost'] ?? null;
+
                     $shop->config = $config;
                 }
 

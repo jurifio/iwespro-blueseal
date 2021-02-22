@@ -13,6 +13,31 @@ $(document).on('bs.shop.save', function () {
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
     data.minReleasedProducts = $('#shop_minReleasedProducts').val();
+    data.dbHost=$('#shop_dbHost').val();
+    data.dbUsername=$('#shop_dbUsername').val();
+    data.dbPassword=$('#shop_dbPassword').val();
+    data.dbName=$('#shop_dbName').val();
+    data.logo=$('#shop_logo').val();
+    data.logoThankYou=$('#shop_logoThankYou').val();
+    data.paralellFee=$('#shop_paralellFee').val();
+    data.feeParallelOrder=$('#shop_feeParallelOrder').val();
+    data.billingParallelId=$('#shop_BillingParallelId').val();
+    data.hasMarketplace=$('#shop_hasMarketplace').val();
+    data.hasCoupon=$('#shop_hasCoupon').val();
+    data.hasEcommerce=$('#shop_hasEcommerce').val();
+    data.receipt=$('#shop_receipt').val();
+    data.invoiceUe=$('#shop_invoiceUe').val();
+    data.invoiceExtraUe=$('#shop_invoiceExtraUe').val();
+    data.invoiceParalUe=$('#shop_invoiceParalUe').val();
+    data.invoiceParalExtraUe=$('#shop_invoiceParalExtraUe').val();
+    data.siteInvoiceChar=$('#shop_siteInvoiceChar').val();
+    data.urlSite=$('#shop_urlSite').val();
+    data.analyticsId=$('#analyticsId').val();
+    data.emailShop=$('#shop_emailShop').val();
+    data.amministrativeEmails=$('#shop_amministrativeEmails').val();
+    data.billingEmails=$('#shop_billingEmails').val();
+    data.billingContact=$('#shop_billingContact').val();
+    data.importer=$('#shop_importer').val();
     data.config = {};
     data.config.refusalRate = $('#shop_config_refusalRate').val();
     data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
@@ -87,6 +112,34 @@ $(document).on('bs.shop.save', function () {
             $('#shop_config_photoCost').val(res.config.photoCost);
             $('#shop_config_shootingTransportCost').val(res.config.shootingTransportCost);
             $('#shop_config_orderTransportCost').val(res.config.orderTransportCost);
+            $('#shop_dbHost').val(res.dbHost);
+            $('#shop_dbUsername').val(res.dbUsername);
+            $('#shop_dbPassword').val(res.dbPassword);
+            $('#shop_dbName').val(res.dbName);
+            $('#shop_logo').val(res.logo);
+            $('#shop_logoThankYou').val(res.logoThankYou);
+            $('#shop_paralellFee').val(res.paralellFee);
+            $('#shop_parallelFeeOrder').val(res.feeParallelOrder);
+            $('#shop_billingParallelId').val(res.billingParallelId);
+            $('#shop_hasMarketplace').val(res.hasMarketplace);
+            $('#shop_hasEcommerce').val(res.hasEcommerce);
+            $('#shop_hasCoupon').val(res.hasCoupon);
+            $('#shop_receipt').val(res.receipt);
+            $('#shop_invoiceUe').val(res.invoiceUe);
+            $('#shop_invoiceExtraUe').val(res.invoiceExtraUe);
+            $('#shop_invoiceParalUe').val(res.invoiceParalUe);
+            $('#shop_invoiceParalExtraUe').val(res.invoiceParalExtraUe);
+            $('#shop_siteInvoiceChar').val(res.siteInvoiceChar);
+            $('#shop_urlSite').val(res.urlSite);
+            $('#shop_analyticsId').val(res.analyticsId);
+            $('#shop_emailShop').val(res.emailShop);
+            $('#shop_amministrativeEmails').val(res.amministrativeEmails);
+            $('#shop_billingEmails').val(res.billingEmails);
+            $('#shop_billingContact').val(res.billingContact);
+            $('#shop_importer').val(res.importer);
+
+
+
 
 
             checkPermission('allShops')
@@ -337,4 +390,20 @@ function generateUUID()
     });
 
     return uuid;
+}
+
+document.getElementById('modifyClient').style.display = "block";
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
 }
