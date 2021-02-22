@@ -259,7 +259,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_paralellFee">Percentuale Fee Parallela</label>
                                                     <input id="shop_paralellFee" autocomplete="off" type="text"
@@ -268,7 +268,7 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_parallelFeeOrder">Percentuale Fee Parallela
                                                         Ordine</label>
@@ -315,6 +315,19 @@
                                                            class="form-control" name="shop_hasCoupon" value=""/>
                                                     <span class="bs red corner label"><i
                                                                 class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 hide" id="divAddCouponType">
+                                                <input type="hidden" id="shop_couponType" name="shop_couponType" value=""/>
+                                                <div class="form-group form-group-default">
+                                                    <button class="btn btn-primary" id="addCouponType" name="addCouponType" onclick="addCoupon()" type="button"><span
+                                                                class="fa fa-plus">crea tipo Coupon</span></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 hide" id="divModifyCouponType">
+                                                <div class="form-group form-group-default">
+                                                    <button class="btn btn-primary" id="modifyCouponType" name="modifyCouponType" onclick="modifyCoupon()" type="button"><span
+                                                                class="fa fa-edit">modifica tipo Coupon</span></button>
                                                 </div>
                                             </div>
                                         </div>

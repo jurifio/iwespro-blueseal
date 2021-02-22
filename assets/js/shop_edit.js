@@ -38,6 +38,7 @@ $(document).on('bs.shop.save', function () {
     data.billingEmails=$('#shop_billingEmails').val();
     data.billingContact=$('#shop_billingContact').val();
     data.importer=$('#shop_importer').val();
+    data.couponType=$('#shop_couponType').val();
     data.config = {};
     data.config.refusalRate = $('#shop_config_refusalRate').val();
     data.config.refusalRateLastMonth = $('#shop_config_refusalRate_lastMonth').val();
@@ -130,7 +131,7 @@ $(document).on('bs.shop.add.user', function () {
 
 
 (function ($) {
-
+var couponType=0;
     let params = $.decodeGetStringFromUrl(window.location.href);
     if (typeof params.id != 'undefined') {
         $.ajax({
@@ -185,7 +186,17 @@ $(document).on('bs.shop.add.user', function () {
             $('#shop_billingEmails').val(res.billingEmails);
             $('#shop_billingContact').val(res.billingContact);
             $('#shop_importer').val(res.importer);
+            $('#shop_couponType').val(res.couponType);
+            if(res.couponType>0){
+                $('#divModifyCouponType').removeClass('hide');
+                $('#divModifyCouponType').addClass('show');
 
+            }else{
+                $('#divAddCouponType').removeClass('hide');
+                $('#divAddCouponType').addClass('show');
+
+            }
+            couponType=res.couponType;
 
 
 
@@ -229,7 +240,15 @@ $(document).on('bs.shop.add.user', function () {
  * Generate new key and insert into input value
  */
 
-
+function addCoupon(){
+    let url='/blueseal/tipocoupon/aggiungi'
+    window.open(url,'_blank');
+}
+function modifyCoupon(){
+    let couponType=$('#couponType').val();
+    let url='/blueseal/tipocoupon/modifica/'+couponType
+    window.open(url,'_blank');
+}
 
 function createGraphs(shop) {
     "use strict";

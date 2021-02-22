@@ -26,10 +26,24 @@ class CShopManage extends AAjaxController
         $shopId = $this->app->router->request()->getRequestData('id');
         $shops = $this->app->repoFactory->create('Shop')->getAutorizedShopsIdForUser();
         if (in_array($shopId,$shops)) {
+            $cres=\Monkey::app()->dbAdapter->query('select id as id from CouponType where `name` like \'%PostSelling%\' and remoteShopId='.$shopId,[])->fetchAll();
+            if(count($cres)>0) {
+                foreach ($cres as $cresult) {
+                    $couponType = $cresult['id'];
+                }
+            }else{
+                $couponType='0';
+                }
+
+
+
+
             /** @var CShop $shop */
             $shop = $this->app->repoFactory->create('Shop')->findOneByStringId($shopId);
             $shop->user;
             $shop->billingAddressBook;
+            $shop->couponType=$couponType;
+
            // $shop->shippingAddressBook;
             //$shop->shippingAddressBook;
             $shippingAddressBook = [];
