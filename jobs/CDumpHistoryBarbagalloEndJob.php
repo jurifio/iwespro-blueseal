@@ -136,7 +136,6 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
 
                         }
                     }
-
                     unlink($finalFile);
 
                 }
