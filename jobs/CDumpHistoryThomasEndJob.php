@@ -66,7 +66,40 @@ class CDumpHistoryThomasEndJob extends ACronJob
             foreach ($files as $file) {
                 $origingFile = basename($file,".gz") . PHP_EOL;
                 $firstFileDay = substr($origingFile,-14,-12);
-                if ($firstFileDay == '20') {
+                $year = substr($origingFile,0,4);
+                $yearEndSale = $year + 1;
+                $month = substr($origingFile,4,2);
+                $day = substr($origingFile,6,2);
+                switch(true){
+                    case $month=='05':
+                        $montCompare='5';
+                        break;
+                    case $month=='06':
+                        $montCompare='6';
+                        break;
+                    case $month=='07':
+                        $montCompare='7';
+                        break;
+                    case $month=='08':
+                        $montCompare='8';
+                        break;
+                    case $month=='09':
+                        $montCompare='9';
+                        break;
+                    case $month=='01':
+                        $montCompare='1';
+                        break;
+                    case $month=='02':
+                        $montCompare='2';
+                        break;
+                    case $month=='03':
+                        $montCompare='3';
+                        break;
+                    case $month=='04':
+                        $montCompare='4';
+                        break;
+                }
+                if (($firstFileDay == '20') && ($year>2019) && ($montCompare>5) ) {
 
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
@@ -76,10 +109,7 @@ class CDumpHistoryThomasEndJob extends ACronJob
                     }
                     $nameFile = basename($file,".csv") . PHP_EOL;
 
-                    $year = substr($nameFile,0,4);
-                    $yearEndSale = $year + 1;
-                    $month = substr($nameFile,4,2);
-                    $day = substr($nameFile,6,2);
+
                     $dateFile = (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
                     $dateStartSale1 = (new \DateTime($year . '-01-01'))->format('Y-m-d');
                     $dateEndSale1 = (new \DateTime($yearEndSale . '-03-15'))->format('Y-m-d');
@@ -139,6 +169,8 @@ class CDumpHistoryThomasEndJob extends ACronJob
                     fclose($f);
                     unlink($finalFile);
 
+                }else{
+                    continue;
                 }
 
             }

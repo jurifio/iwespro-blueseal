@@ -72,8 +72,36 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                 $yearEndSale = $year + 1;
                 $month = substr($origingFile,4,2);
                 $day = substr($origingFile,6,2);
-
-                if (($firstFileDay == '19') && ($year > 2019)) {
+                switch(true){
+                    case $month=='05':
+                        $montCompare='5';
+                        break;
+                    case $month=='06':
+                        $montCompare='6';
+                        break;
+                    case $month=='07':
+                        $montCompare='7';
+                        break;
+                    case $month=='08':
+                        $montCompare='8';
+                        break;
+                    case $month=='09':
+                        $montCompare='9';
+                        break;
+                    case $month=='01':
+                        $montCompare='1';
+                        break;
+                    case $month=='02':
+                        $montCompare='2';
+                        break;
+                    case $month=='03':
+                        $montCompare='3';
+                        break;
+                    case $month=='04':
+                        $montCompare='4';
+                        break;
+                }
+                if (($firstFileDay == '19') && ($year>2019) && ($montCompare>2) ) {
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
                         $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
@@ -141,6 +169,8 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                     }
                     unlink($finalFile);
 
+                }else{
+                    continue;
                 }
 
             }
