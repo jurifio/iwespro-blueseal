@@ -68,10 +68,41 @@ class CDumpHistoryCartechiniEndJob extends ACronJob
                 $year = substr($origingFile,0,4);
                 $yearEndSale = $year + 1;
                 $month = substr($origingFile,4,2);
+                switch(true){
+                    case $month='05':
+                        $montCompare='5';
+                        break;
+                    case $month='06':
+                        $montCompare='6';
+                        break;
+                    case $month='07':
+                        $montCompare='7';
+                        break;
+                    case $month='08':
+                        $montCompare='8';
+                        break;
+                    case $month='09':
+                        $montCompare='9';
+                        break;
+                    case $month='01':
+                        $montCompare='1';
+                        break;
+                    case $month='02':
+                        $montCompare='2';
+                        break;
+                    case $month='03':
+                        $montCompare='3';
+                        break;
+                    case $month='04':
+                        $montCompare='4';
+                        break;
+                }
+
+
                 $day = substr($origingFile,6,2);
                 $firstFileSku = substr($origingFile,15,4);
 
-                if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2019)) {
+                if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2019) && ($montCompare>5)) {
 
                     $phar = new \PharData($file);
                     if (ENV == 'dev') {
@@ -132,10 +163,13 @@ join DirtySku ds on dp.id=ds.dirtyProductId where dp.extId='" . $extId . "' and 
                                     $productSold->startQuantity = $quantity;
                                     $productSold->endQuantity = $quantity;
                                     $netTotal = $priceActive * $soldQuantity;
+                                    $productSold->dateEnd = $year . '-' . $month . '-' . $day . ' 23:59:59';
                                     $productSold->soldQuantity = $soldQuantity;
                                     $productSold->netTotal = $netTotal;
-                                    $productSold->sourceUpgrade = $finalFile;
+                                    $productSold->sourceUpgrade=$finalFile;
                                     $productSold->update();
+                                }else{
+                                    continue;
                                 }
 
                             }

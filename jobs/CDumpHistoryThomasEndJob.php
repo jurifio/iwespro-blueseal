@@ -125,10 +125,13 @@ class CDumpHistoryThomasEndJob extends ACronJob
                                 $productSold->startQuantity = $quantity;
                                 $productSold->endQuantity = $quantity;
                                 $netTotal = $priceActive * $soldQuantity;
+                                $productSold->dateEnd = $year . '-' . $month . '-' . $day . ' 23:59:59';
                                 $productSold->soldQuantity = $soldQuantity;
                                 $productSold->netTotal = $netTotal;
                                 $productSold->sourceUpgrade=$finalFile;
                                 $productSold->update();
+                            }else{
+                                continue;
                             }
 
                         }
