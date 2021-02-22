@@ -36,9 +36,10 @@ class CShopManage extends AAjaxController
             $shopHasShippingAddressBook = \Monkey::app()->repoFactory->create('ShopHasShippingAddressBook')->findBy(['shopId' => $shopId]);
             $i=0;
             foreach ($shopHasShippingAddressBook as $shipping){
-                if($i<3) {
+
                     $addressBookId = $shipping->addressBookId;
                     $shippingAddressBooks = \Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['id' => $addressBookId]);
+                if($i<3) {
                     $shippingAddressBook[] = ['id' => $shippingAddressBooks->id,
                         'name' => $shippingAddressBooks->name,
                         'subject' => $shippingAddressBooks->subject,
@@ -55,6 +56,7 @@ class CShopManage extends AAjaxController
                 }else{
                     break;
                 }
+                $i++;
         }
         $shop->shippingAddressBooks = $shippingAddressBook;
 
