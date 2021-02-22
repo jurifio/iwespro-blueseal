@@ -56,7 +56,7 @@ class CShopManage extends AAjaxController
                     break;
                 }
         }
-        $shop->shippingAddressBook = $shippingAddressBook;
+        $shop->shippingAddressBooks = $shippingAddressBook;
 
 
         $shop->productStatistics = $shop->getDailyActiveProductStatistics();
