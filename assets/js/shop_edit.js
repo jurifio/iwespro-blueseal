@@ -52,7 +52,7 @@ $(document).on('bs.shop.save', function () {
     data.billingAddressBook = readShipment('#billingAddress');
     data.shippingAddresses = [];
     $.each($('#shippingAddresses .shippingAddress'), function (k, v) {
-        data.shippingAddresses.push(readShipment(v));
+        data.shippingAddresses.push(readShipmentNotIban(v));
     });
 
     if (data.id.length) {
@@ -80,6 +80,54 @@ $(document).on('bs.shop.save', function () {
         }).open();
     });
 });
+$(document).on('bs.shop.add.user', function () {
+    /*let shopId = selectedRows[0].shopId;
+
+    var modal = new $.bsModal('Conferma Ordine', {
+        body: '<label for="userId">Seleziona l\'indirizzo di ritiro</label><br />' +
+            '<select id="userId" name="userId" class="full-width selectize"></select><br />'
+
+    });
+
+    let addressSelect = $('select[name=\"userId\"]');
+
+
+    Pace.ignore(function () {
+        $.ajax({
+            url: '/blueseal/xhr/SelectUserAjaxController',
+            method: 'get',
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            addressSelect.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res,
+                render: {
+                    item: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.shopTitle) + '</span> - ' +
+                            '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
+                            '</div>'
+                    },
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="label">' + escape(item.shopTitle) + '</span>  - ' +
+                            '<span class="caption">' + escape(item.address + ' ' + item.city) + '</span>' +
+                            '</div>'
+                    }
+                }
+            });
+        });
+
+
+
+*/
+});
+
+
+
 
 (function ($) {
 
@@ -169,9 +217,9 @@ $(document).on('bs.shop.save', function () {
 
             appendShipment(res.billingAddressBook, '#billingAddress');
             res.shippingAddressBooks.forEach(function (addressData) {
-                appendShipment(addressData, '#shippingAddresses');
+                appendShipmentNotIban(addressData, '#shippingAddresses');
             });
-            appendShipment({}, '#shippingAddresses');
+            appendShipmentNotIban({}, '#shippingAddresses');
         });
     }
 })(jQuery);
@@ -327,6 +375,7 @@ function readShipment(containerSelector) {
     return data;
 }
 
+
 function appendShipment(data, containerSelector) {
     let container = $(containerSelector);
     $.getTemplate('addressBookFormMock').done(function (res) {
@@ -360,6 +409,62 @@ function appendShipment(data, containerSelector) {
                     element.find('#cellphone').val(data.cellphone);
                     element.find('#province').val(data.province);
                     element.find('#iban').val(data.iban);
+                }
+                container.append(element);
+            });
+        });
+    });
+}
+function readShipmentNotIban(containerSelector) {
+    "use strict";
+    let data = {};
+    let element = $(containerSelector);
+    data.id = element.find('#id').val();
+    data.name = element.find('#name').val();
+    data.subject = element.find('#subject').val();
+    data.address = element.find('#address').val();
+    data.extra = element.find('#extra').val();
+    data.city = element.find('#city').val();
+    data.countryId = element.find('#country').val();
+    data.postcode = element.find('#postcode').val();
+    data.phone = element.find('#phone').val();
+    data.cellphone = element.find('#cellphone').val();
+    data.province = element.find('#province').val();
+    //  data.iban = element.find('#iban').val();
+    return data;
+}
+function appendShipmentNotIban(data, containerSelector) {
+    let container = $(containerSelector);
+    $.getTemplate('addressBookFormMock').done(function (res) {
+        let element = $(res);
+        Pace.ignore(function () {
+            $.get({
+                url: '/blueseal/xhr/GetTableContent',
+                data: {
+                    table: 'Country'
+                },
+                dataType: 'json'
+            }).done(function (res2) {
+                let select = element.find('#country');
+                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                select.selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: ['name'],
+                    options: res2,
+                });
+                if (data != null && Object.keys(data).length > 0) {
+                    element.find('#id').val(data.id);
+                    element.find('#name').val(data.name);
+                    element.find('#subject').val(data.subject);
+                    element.find('#address').val(data.address);
+                    element.find('#extra').val(data.extra);
+                    element.find('#city').val(data.city);
+                    select[0].selectize.setValue(data.countryId);
+                    element.find('#postcode').val(data.postcode);
+                    element.find('#phone').val(data.phone);
+                    element.find('#cellphone').val(data.cellphone);
+                    element.find('#province').val(data.province);
                 }
                 container.append(element);
             });

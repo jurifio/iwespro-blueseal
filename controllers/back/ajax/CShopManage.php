@@ -50,7 +50,6 @@ class CShopManage extends AAjaxController
                         'phone' => $shippingAddressBooks->phone,
                         'cellphone' => $shippingAddressBooks->cellphone,
                         'province' => $shippingAddressBooks->province,
-                        'iban' => $shippingAddressBooks->iban,
                         'countryId' => $shippingAddressBooks->countryId
                     ];
                 }else{

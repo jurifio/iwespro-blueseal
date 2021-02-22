@@ -580,6 +580,16 @@
                 data-title="Salva"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-user"
+                data-permission="/admin/product/add"
+                data-event="bs.shop.add.user"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Salva"
+                data-placement="bottom"
+        ></bs-toolbar-button>
 </bs-toolbar>
 </body>
 </html>
