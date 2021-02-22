@@ -98,6 +98,15 @@ class CDumpHistoryThomasEndJob extends ACronJob
                     case $month=='04':
                         $montCompare='4';
                         break;
+                    case $month=='10':
+                        $montCompare='10';
+                        break;
+                    case $month=='11':
+                        $montCompare='11';
+                        break;
+                    case $month=='12':
+                        $montCompare='12';
+                        break;
                 }
                 if (($firstFileDay == '20') && ($year>2019) && ($montCompare>5) ) {
 
