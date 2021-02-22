@@ -126,7 +126,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                                             $productVariantId = $dirtyProduct->productVariantId;
                                             $shopHasProduct = $shopHasProductRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'shopId' => 1]);
                                             $productSold = $productSoldSizeRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $dirtySku->productSizeId,'shopId' => 1,'year' => $year,'month' => $month,'day' => $day]);
-                                            if ($productSold == null) {
+                                            if (!$productSold) {
                                                 $productSoldInsert = $productSoldSizeRepo->getEmptyEntity();
                                                 $productSoldInsert->productId = $productId;
                                                 $productSoldInsert->productVariantId = $productVariantId;
@@ -146,8 +146,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                                                 $productSoldInsert->sourceInitial = $finalFile;
                                                 $productSoldInsert->insert();
                                             }else{
-                                                $productSold->day=$day;
-                                                $productSold->update();
+                                               continue;
                                             }
 
 
