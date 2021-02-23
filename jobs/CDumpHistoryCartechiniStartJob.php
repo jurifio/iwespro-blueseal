@@ -113,6 +113,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                             $size = $values[2];
                             $extId = $values[9];
                             $var = $values[10];
+                            $price=str_replace(',', '.', $values[5]);
 
                             $dirtyProduct = $dirtyProductRepo->findOneBy(['extId' => $extId,'var' => $var]);
                             if ($dirtyProduct) {
@@ -137,7 +138,7 @@ class CDumpHistoryCartechiniStartJob extends ACronJob
                                                 $productSoldInsert->startQuantity = $quantity;
                                                 $productSoldInsert->dateEnd = $year . '-' . $month . '-' . $day . ' 00:00:00';
                                                 $productSoldInsert->endQuantity = $quantity;
-                                                $productSoldInsert->priceActive = $shopHasProduct->price;
+                                                $productSoldInsert->priceActive = $price;
                                                 $productSoldInsert->soldQuantity = 0;
                                                 $productSoldInsert->netTotal = 0;
                                                 $productSoldInsert->day = $day;
