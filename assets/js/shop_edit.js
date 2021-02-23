@@ -82,6 +82,8 @@ $(document).on('bs.shop.save', function () {
     });
 });
 $(document).on('bs.shop.add.user', function () {
+    let url='/blueseal/utenti/'
+    window.open(url,'_blank');
     /*let shopId = selectedRows[0].shopId;
 
     var modal = new $.bsModal('Conferma Ordine', {

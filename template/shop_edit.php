@@ -600,7 +600,7 @@
                 data-event="bs.shop.add.user"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Salva"
+                data-title="Lista Utenti"
                 data-placement="bottom"
         ></bs-toolbar-button>
 </bs-toolbar>
