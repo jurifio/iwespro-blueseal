@@ -383,6 +383,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                  co.issueDate as issueDate,
                                                  co.validThru as validThru,
                                                  co.amount as amount,
+                                                 co.amountType as amountType,
                                                  co.userId as userId,
                                                  co.valid as valid,
                                                  co.couponEventId as couponEventId,
@@ -410,9 +411,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                     $couponInsert -> issueDate = $rowCoupon['issueDate'];
                                     $couponInsert -> validThru = $rowCoupon['validThru'];
                                     $couponInsert -> amount = $rowCoupon['amount'];
-
+                                    $couponInsert -> amountType = $rowCoupon['amountType'];
                                     $couponInsert -> valid = $rowCoupon['valid'];
-
                                     $couponInsert -> remoteId = $rowCoupon['remoteId'];
                                     $couponInsert -> remoteShopId = $shop;
                                     $couponInsert -> sid=$rowCoupon['sid'];
