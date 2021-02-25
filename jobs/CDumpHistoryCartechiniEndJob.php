@@ -70,6 +70,7 @@ class CDumpHistoryCartechiniEndJob extends ACronJob
                 $month = substr($origingFile,4,2);
                 $day = substr($origingFile,6,2);
                 $firstFileSku = substr($origingFile,15,4);
+                $firstFileDay = substr($origingFile,8,2);
 
                 if (($firstFileDay == '20') && ($firstFileSku=='SKUS') && ($year>2019)) {
 
