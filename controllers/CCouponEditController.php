@@ -40,8 +40,16 @@ class CCouponEditController extends ARestrictedAccessRootController
 
         foreach ($data as $k => $v) {
             $coupon->{$k} = $v;
+            if($k=='couponTypeId'){
+                $couponType=\Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id'=>$v]);
+                $amountType=$couponType->amountType;
+                $coupon->amountType=$amountType;
+            }
         }
 
+
         $couponRepo->update($coupon);
+
+
     }
 }

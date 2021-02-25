@@ -64,6 +64,8 @@ class CCouponAddController extends ARestrictedAccessRootController
             $coupon->issueDate = STimeToolbox::DbFormattedDateTime();
             $coupon->validThru = STimeToolbox::DbFormattedDateTime($data['validThru']);
             $coupon->amount = $data['amount'];
+            $couponType=\Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id'=>$data['couponTypeId']]);
+            $coupon->amountType=$couponType->amountType;
             $coupon->userId = isset($data['userId']) && !empty($data['userId']) ? $data['userId'] : null;
             $coupon->valid = true;
 

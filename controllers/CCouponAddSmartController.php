@@ -49,6 +49,11 @@ class CCouponAddSmartController extends ARestrictedAccessRootController
             $coupon = $couponRepo->getEmptyEntity();
             foreach ($data as $k => $v) {
                 $coupon->{$k} = $v;
+                if($k=='couponTypeId'){
+                    $couponType=\Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id'=>$v]);
+                    $amountType=$couponType->amountType;
+                    $coupon->amountType=$amountType;
+                }
             }
             $date = new \DateTime();
             $coupon->issueDate = $date->format('Y-m-d H:i:s');
