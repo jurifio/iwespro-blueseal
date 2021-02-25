@@ -64,9 +64,7 @@ class CCouponEventAddController extends ARestrictedAccessRootController
             $couponEvent->startDate = STimeToolbox::DbFormattedDateTime($data['startDate']);
             $couponEvent->endDate = STimeToolbox::DbFormattedDateTime($data['endDate']);
             $couponEvent->remoteShopId=$data['remoteShopId'];
-            $couponEvent->isCatalogue=$data['isCatalogue'];
             $couponEvent->isAnnounce=$data['isAnnounce'];
-            $couponEvent->rowCataloguePosition=$data['rowCataloguePosition'];
             $couponEvent->couponText=$data['couponText'];
             $couponType=\Monkey::app()->repoFactory->create('CouponType')->findoneBy(['id'=>$couponEvent->couponTypeId,'remoteShopId'=>$data->remoteShopId]);
             $remoteCouponTypeId=$couponType->remoteId;
@@ -83,7 +81,7 @@ class CCouponEventAddController extends ARestrictedAccessRootController
                 throw new BambooException('fail to connect');
 
             }
-            $stmtCouponEventInsert = $db_con->prepare('INSERT INTO CouponEvent (couponTypeId,`name`,`description`,click,startDate,endDate,isCatalogue,isAnnounce,rowCataloguePosition,couponText,isImport)
+            $stmtCouponEventInsert = $db_con->prepare('INSERT INTO CouponEvent (couponTypeId,`name`,`description`,click,startDate,endDate,isAnnounce,couponText,isImport)
                 VALUES(
                                  \'' . $remoteCouponTypeId . '\',
                                  \'' . $data['name'] . '\',
@@ -91,9 +89,7 @@ class CCouponEventAddController extends ARestrictedAccessRootController
                                  \'' . $data['click'] . '\',
                                  \'' . $data['startDate'] . '\',
                                  \'' . $data['endDate'] . '\',
-                                 \'' . $data['isCatalogue'] . '\',
                                   \''. $data['isAnnounce'].'\',
-                                  \''. $data['rowCataloguePosition'].'\',
                                   \''. $data['couponText'].'\',
                                  1                        
                                     )');

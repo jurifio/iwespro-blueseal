@@ -69,50 +69,6 @@ $endDate = new DateTime($coupon->endDate);
                                 </div>
                             </div>
                             <div class="row clearfix">
-                                <input type='hidden' id="shopSelected" name="shopSelected"
-                                       value="<?php echo $coupon->remoteShopId ?>"/>
-                                <div class="form-group form-group-default selectize-enabled">
-                                    <label for="remoteShopId">Shop Di Destinazione</label>
-                                    <select class="full-width selectpicker"
-                                            placeholder="Seleziona Lo Shop"
-                                            tabindex="-1" title="Seleziona la Shop"
-                                            name="remoteShopId" id="remoteShopId">
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default selectize-enabled">
-                                        <label for="couponType">Tipo coupon</label>
-                                        <select class="full-width selectpicker"
-                                                placeholder="Seleziona il tipo di coupon" data-init-plugin="selectize"
-                                                tabindex="-1" title="couponTypeId" name="couponTypeId"
-                                                id="couponTypeId">
-                                            <?php foreach ($couponTypes as $couponType): ?>
-                                                <option value="<?php echo $couponType->id ?>" required
-                                                    <?php echo ($couponType->id == $coupon->couponType->id) ? 'selected="selected"' : ""; ?> >
-                                                    <?php echo $couponType->name . "" ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default">
-                                        <label for="isCatalogue">Banner Visibile sul catalogo</label>
-                                        <select class="full-width selectpicker"
-                                                placeholder="Seleziona"
-                                                tabindex="-1" title="Seleziona"
-                                                name="isCatalogue" id="isCatalogue">
-                                            <?php if($coupon->isCatalogue==1){
-                                            echo '<option value="1" selected="selected">Si</option>';
-                                            echo '<option value="0">No</option>';
-                                            }else{
-                                                echo '<option value="1">Si</option>';
-                                            echo '<option value="0" selected="selected">No</option>';
-                                            }?>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group form-group-default">
                                         <label for="isAnnounce">Banner Visibile sulla barra annunci</label>
@@ -131,9 +87,30 @@ $endDate = new DateTime($coupon->endDate);
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
-                                    <div class="form-group form-group-default required">
-                                        <label for="rowCataloguePosition">Posizione su riga Catalogo</label>
-                                        <input type="text" class="form-control" id="rowCataloguePosition" name="rowCataloguePosition" value="<?php $coupon->rowCataloguePosition;?>" required/>
+                                    <input type='hidden' id="shopSelected" name="shopSelected"
+                                           value="<?php echo $coupon->remoteShopId ?>"/>
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="remoteShopId">Shop Di Destinazione</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona Lo Shop"
+                                                tabindex="-1" title="Seleziona la Shop"
+                                                name="remoteShopId" id="remoteShopId">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="couponType">Tipo coupon</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona il tipo di coupon" data-init-plugin="selectize"
+                                                tabindex="-1" title="couponTypeId" name="couponTypeId"
+                                                id="couponTypeId">
+                                            <?php foreach ($couponTypes as $couponType): ?>
+                                                <option value="<?php echo $couponType->id ?>" required
+                                                    <?php echo ($couponType->id == $coupon->couponType->id) ? 'selected="selected"' : ""; ?> >
+                                                    <?php echo $couponType->name . "" ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -141,8 +118,9 @@ $endDate = new DateTime($coupon->endDate);
                                 <div class="col-sm-12">
                                     <div class="summernote-wrapper">
                                         <label>Contenuto del Banner</label>
-                                        <textarea id="couponText" name="couponText" class="summer" data-json="PostTranslation.content"
-                                                  rows="50"><?php $coupon->couponText;?></textarea>
+                                        <textarea id="couponText" name="couponText" class="summer"
+                                                  data-json="PostTranslation.content"
+                                                  rows="50"><?php $coupon->couponText; ?></textarea>
                                     </div>
                                 </div>
                             </div>

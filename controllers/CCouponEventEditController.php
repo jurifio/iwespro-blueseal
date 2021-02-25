@@ -67,9 +67,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
                                                             ce.couponTypeId as couponTypeId,
                                                              ce.startDate as startDate
                                                              ce.endDate as endDate,
-                                                             ce.isCatalogue,
                                                               ce.isAnnounce,
-                                                              ce.rowCataloguePosition,
                                                               ce.couponText as couponText,
                                                               ct.remoteId as remoteCouponTypeId,
                                                               ct.remoteShopId as remoteShopId,
@@ -82,9 +80,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
             $description = $remoteCouponEvent['description'];
             $startDate = $remoteCouponEvent['startDate'];
             $endDate = $remoteCouponEvent['endDate'];
-            $isCatalogue = $remoteCouponEvent['isCatalogue'];
-            $isAnnounce = $remoteCouponEvent['isAnnounuce'];
-            $rowCataloguePosition = $remoteCouponEvent['rowCataloguePosition'];
+            $isAnnounce = $remoteCouponEvent['isAnnounce'];
             $couponText = $remoteCouponEvent['couponText'];
             $remoteCouponTypeId = $remoteCouponEvent['remoteCouponTypeId'];
         }
@@ -95,9 +91,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
                       `description`='" . $description . "',
                       startDate='" . $startDate . "',
                       endDate='" . $endDate . "',
-                      isCatalogue='" . $isCatalogue . "',
                       isAnnounce='" . $isAnnounce . "',
-                      rowCataloguePosition='" . $rowCataloguePosition . "',
                       couponText='" . $couponText . "'
                     
                       where id=" . $couponEventId);
