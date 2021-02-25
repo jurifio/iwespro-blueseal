@@ -35,25 +35,10 @@
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="Description">Descrizione</label>
                                         ​<textarea id="description" rows="4" cols="90" name="description" ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default selectize-enabled">
-                                        <label for="CouponType">Tipo coupon</label>
-                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                        <select class="full-width selectpicker" placeholder="Seleziona il tipo di coupon" data-init-plugin="selectize" tabindex="-1" title="couponTypeId" name="couponTypeId" id="couponTypeId">
-                                            <?php foreach ($couponTypes as $couponType): ?>
-                                                <option value="<?php echo $couponType->id ?>" required> <?php echo $couponType->name . ""?></option>
-                                            <?php endforeach; ?>
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -65,16 +50,77 @@
                                         <input type="date" class="form-control" id="startDate" name="startDate" value="" />
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label for="endDate">Valido fino a</label>
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        <input type="date" class="form-control" id="endDate" name="endDate" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="remoteShopId">Shop Di Destinazione</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona Lo Shop"
+                                                tabindex="-1" title="Seleziona la Shop"
+                                                name="remoteShopId" id="remoteShopId">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div  id="divCouponType" class="col-sm-6 hide">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="couponTypeId">Tipo coupon</label>
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        <select class="full-width selectpicker" placeholder="Seleziona il tipo di coupon" data-init-plugin="selectize" tabindex="-1" title="couponTypeId" name="couponTypeId" id="couponTypeId">
+
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
-                                   <div class="col-sm-6">
-                                       <div class="form-group form-group-default">
-                                           <label for="endDate">Valido fino a</label>
-                                           <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
-                                           <input type="date" class="form-control" id="endDate" name="endDate" value="" />
-                                       </div>
-                                   </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label for="isCatalogue">Banner Visibile sul catalogo</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona"
+                                                tabindex="-1" title="Seleziona"
+                                                name="isCatalogue" id="isCatalogue">
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="isAnnounce">Banner Visibile sulla barra annunci</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona"
+                                                tabindex="-1" title="Seleziona"
+                                                name="isAnnounce" id="isAnnounce">
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group form-group-default required">
+                                        <label for="rowCataloguePosition">Posizione su riga Catalogo</label>
+                                        <input type="text" class="form-control" id="rowCataloguePosition" name="rowCataloguePosition" required/>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="summernote-wrapper">
+                                        <label>Contenuto del Banner</label>
+                                        <textarea id="couponText" name="couponText" class="summer" data-json="PostTranslation.content"
+                                                  rows="50"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                 </div>

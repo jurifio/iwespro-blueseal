@@ -102,7 +102,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
                                                               ct.campaignId as campaignId,
                                                               ct.remoteCampaignId as remoteCampaignId      
        from CouponType ct
-                                                              join Campaign c on ct.campaignId = c.campaignId',[])->fetchAll();
+                                                              join Campaign c on ct.campaignId = c.campaignId where ct.id='.$couponId,[])->fetchAll();
         foreach ($resCoupon as $remoteCouponType){
             $couponTypeId=$remoteCouponType['couponTypeId'];
             $couponName=$remoteCouponType['couponName'];

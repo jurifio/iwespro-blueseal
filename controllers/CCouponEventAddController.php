@@ -2,6 +2,7 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\base\CSerialNumber;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 use bamboo\utils\price\SPriceToolbox;
@@ -62,6 +63,43 @@ class CCouponEventAddController extends ARestrictedAccessRootController
             $couponEvent->description = $data['description'];
             $couponEvent->startDate = STimeToolbox::DbFormattedDateTime($data['startDate']);
             $couponEvent->endDate = STimeToolbox::DbFormattedDateTime($data['endDate']);
+            $couponEvent->remoteShopId=$data['remoteShopId'];
+            $couponEvent->isCatalogue=$data['isCatalogue'];
+            $couponEvent->isAnnounce=$data['isAnnounce'];
+            $couponEvent->rowCataloguePosition=$data['rowCataloguePosition'];
+            $couponEvent->couponText=$data['couponText'];
+            $couponType=\Monkey::app()->repoFactory->create('CouponType')->findoneBy(['id'=>$couponEvent->couponTypeId,'remoteShopId'=>$data->remoteShopId]);
+            $remoteCouponTypeId=$couponType->remoteId;
+            $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $data['remoteShopId']]);
+            $db_host = $findShopId->dbHost;
+            $db_name = $findShopId->dbName;
+            $db_user = $findShopId->dbUsername;
+            $db_pass = $findShopId->dbPassword;
+            try {
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res = " connessione ok <br>";
+            } catch (PDOException $e) {
+                throw new BambooException('fail to connect');
+
+            }
+            $stmtCouponEventInsert = $db_con->prepare('INSERT INTO CouponEvent (couponTypeId,`name`,`description`,click,startDate,endDate,isCatalogue,isAnnounce,rowCataloguePosition,couponText,isImport)
+                VALUES(
+                                 \'' . $remoteCouponTypeId . '\',
+                                 \'' . $data['name'] . '\',
+                                 \'' . $data['description'] . '\',
+                                 \'' . $data['click'] . '\',
+                                 \'' . $data['startDate'] . '\',
+                                 \'' . $data['endDate'] . '\',
+                                 \'' . $data['isCatalogue'] . '\',
+                                  \''. $data['isAnnounce'].'\',
+                                  \''. $data['rowCataloguePosition'].'\',
+                                  \''. $data['couponText'].'\',
+                                 1                        
+                                    )');
+            $stmtCouponEventInsert->execute();
+            $remoteEventId = $db_con->lastInsertId();
+            $couponEvent->remoteId=$remoteEventId;
 
             return $couponEvent->insert();
         } catch (\Throwable $e) {

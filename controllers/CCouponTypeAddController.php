@@ -85,6 +85,12 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                     throw new BambooException('fail to connect');
 
                 }
+                $stmtCampaign=$db_con->prepare('select id as campaignId from Campaign where id='.$data['campaignId']);
+                $stmtCampaign->execute();
+            while ($rowCampaign = $stmtCampaign -> fetch(PDO::FETCH_ASSOC)) {
+                $remoteCampaign=$rowCampaign['campaignId'];
+            }
+
                 $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImport)
                 VALUES(
                                  \'' . $data['name'] . '\',
@@ -94,7 +100,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                                  \'' . $data['validForCartTotal'] . '\',
                                  \'' . $data['hasFreeShipping'] . '\',
                                  \'' . $data['hasFreeReturn'] . '\',
-                                  \''. $data['campaignId'].'\',
+                                  \''. $remoteCampaign.'\',
                                  1                        
                                     )');
                 $stmtCouponTypeInsert->execute();

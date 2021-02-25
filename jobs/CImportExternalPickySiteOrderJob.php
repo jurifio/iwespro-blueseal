@@ -336,7 +336,11 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                       ce.description as description,
                                                       ce.click as click,
                                                       ce.startDate as startDate,
-                                                      ce.endDate as endDate
+                                                      ce.endDate as endDate,
+                                                      ce.isCatalogue as isCatalogue,
+                                                      ce.isAnnounce as isAnnounce,
+                                                      ce.rowCataloguePosition as rowCataloguePosition,
+                                                      ce.couponText as couponText
                                                       FROM CouponEvent ce WHERE ce.isImport IS NULL');
                 $stmtCouponEvent -> execute();
                 while ($rowCouponEvent = $stmtCouponEvent -> fetch(PDO::FETCH_ASSOC)) {
@@ -352,6 +356,10 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                             $couponEventInsert -> startDate = $rowCouponEvent['startDate'];
                             $couponEventInsert -> endDate = $rowCouponEvent['endDate'];
                             $couponEventInsert -> remoteId = $rowCouponEvent['remoteId'];
+                            $couponEventInsert -> isCatalogue = $rowCouponEvent['isCatalogue'];
+                            $couponEventInsert -> isAnnounce = $rowCouponEvent['isAnnounce'];
+                            $couponEventInsert -> rowCataloguePosition = $rowCouponEvent['rowCataloguePosition'];
+                            $couponEventInsert -> couponText = $rowCouponEvent['couponText'];
                             $couponEventInsert -> remoteShopId = $shop;
                             $couponEventInsert -> insert();
 
