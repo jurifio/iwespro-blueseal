@@ -31,6 +31,22 @@
                     <div class="panel-body">
                         <form id="form-project" enctype="multipart/form-data" role="form" action="" method="post" autocomplete="off">
                             <div class="row">
+                                <div class="col-sm-6">
+                                    <input type='hidden' id="shopSelected" name="shopSelected"
+                                           value="<?php echo (isset($coupon->remoteShopId))? $coupon->remoteShopId : ''?>"/>
+                                    <input type='hidden' id="couponTypeId" name="couponTypeId"
+                                           value="<?php echo $coupon->couponTypeId?>"/>
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="remoteShopId">Shop Di Destinazione</label>
+                                        <select class="full-width selectpicker"
+                                                placeholder="Seleziona Lo Shop"
+                                                tabindex="-1" title="Seleziona la Shop"
+                                                name="remoteShopId" id="remoteShopId">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group form-group-default">
                                         <label for="validThru">Valido fino a</label>
@@ -56,18 +72,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default selectize-enabled">
-                                        <label for="remoteShopId">Shop Di Destinazione</label>
-                                        <select class="full-width selectpicker"
-                                                placeholder="Seleziona Lo Shop"
-                                                tabindex="-1" title="Seleziona la Shop"
-                                                name="remoteShopId" id="remoteShopId">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+
                         </form>
                     </div>
                 </div>

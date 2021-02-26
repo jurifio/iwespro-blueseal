@@ -113,7 +113,7 @@ class CCouponAddController extends ARestrictedAccessRootController
                                   ' . 1 . ',
                                  null,
                                  null,
-                                 null,                        
+                                1,                        
                                  null  )');
             }else{
                 $stmtCouponInsert = $db_con->prepare('INSERT INTO Coupon (couponTypeId,`code`,`issueDate`,`validhThru`,amount,amountType,userId,valid,couponEventId,sid,isImport,isExtended)
@@ -128,7 +128,7 @@ class CCouponAddController extends ARestrictedAccessRootController
                                   ' . 1 . ',
                                  null,
                                  null,
-                                 null,                        
+                                1,                        
                                  null  )');
             }
             $stmtCouponInsert->execute();
