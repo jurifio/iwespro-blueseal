@@ -2,9 +2,11 @@
 namespace bamboo\blueseal\controllers;
 
 use bamboo\core\base\CSerialNumber;
+use bamboo\core\exceptions\BambooException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 use bamboo\utils\time\STimeToolbox;
+use PDO;
 
 /**
  * Class CCouponAddController
@@ -65,9 +67,72 @@ class CCouponAddController extends ARestrictedAccessRootController
             $coupon->validThru = STimeToolbox::DbFormattedDateTime($data['validThru']);
             $coupon->amount = $data['amount'];
             $couponType=\Monkey::app()->repoFactory->create('CouponType')->findOneBy(['id'=>$data['couponTypeId']]);
+            $remoteCouponTypeId=$couponType->remoteId;
             $coupon->amountType=$couponType->amountType;
             $coupon->userId = isset($data['userId']) && !empty($data['userId']) ? $data['userId'] : null;
+            $coupon->remoteShopId=$data['remoteShopId'];
+            $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $data['remoteShopId']]);
+            $db_host = $findShopId->dbHost;
+            $db_name = $findShopId->dbName;
+            $db_user = $findShopId->dbUsername;
+            $db_pass = $findShopId->dbPassword;
+            try {
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res = " connessione ok <br>";
+            } catch (PDOException $e) {
+                throw new BambooException('fail to connect');
+
+            }
+            if(isset($data['userId'])){
+                $user=\Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$data['userId']]);
+                $email=$user->email;
+                $stmtUser=$db_con->prepare("select id from User where `email` like '%".$email."%'");
+                $stmtUser->execute();
+                while ($rowUser = $stmtUser -> fetch(PDO::FETCH_ASSOC)) {
+                  $remoteUserId=  $rowUser['id'];
+                }
+            }else{
+                $remoteUserId='null';
+            }
+
             $coupon->valid = true;
+
+            if($data['remoteShopId']==1) {
+                $stmtCouponInsert = $db_con->prepare('INSERT INTO Coupon (couponTypeId,tagId,`code`,`issueDate`,`validhThru`,amount,amountType,userId,valid,couponEventId,sid,isImport,isExtended)
+                VALUES(
+                                 \'' . $remoteCouponTypeId . '\',
+                                 null,
+                                 \'' . $data['code'] . '\',
+                                 \'' . STimeToolbox::DbFormattedDateTime() . '\',
+                                 \'' . STimeToolbox::DbFormattedDateTime($data['validThru']) . '\',
+                                 \'' . $data['amount'] . '\',
+                                 \'' . $data['amountType'] . '\',
+                                  ' . $remoteUserId. ',
+                                  ' . 1 . ',
+                                 null,
+                                 null,
+                                 null,                        
+                                 null  )');
+            }else{
+                $stmtCouponInsert = $db_con->prepare('INSERT INTO Coupon (couponTypeId,`code`,`issueDate`,`validhThru`,amount,amountType,userId,valid,couponEventId,sid,isImport,isExtended)
+                VALUES(
+                                 \'' . $remoteCouponTypeId . '\',
+                                 \'' . $data['code'] . '\',
+                                  \'' . STimeToolbox::DbFormattedDateTime() . '\',
+                                 \'' . STimeToolbox::DbFormattedDateTime($data['validThru']) . '\',
+                                 \'' . $data['amount'] . '\',
+                                 \'' . $data['amountType'] . '\',
+                                  ' . $remoteUserId. ',
+                                  ' . 1 . ',
+                                 null,
+                                 null,
+                                 null,                        
+                                 null  )');
+            }
+            $stmtCouponInsert->execute();
+            $remoteId = $db_con->lastInsertId();
+            $coupon->remoteId=$remoteId;
 
             return $coupon->insert();
         } catch (\Throwable $e) {

@@ -7,6 +7,7 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
+use PDO;
 
 /**
  * Class CCouponEventAddController

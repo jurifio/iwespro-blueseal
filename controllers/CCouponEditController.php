@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\ecommerce\views\VBase;
+use PDO;
 
 /**
  * Class CCouponEditController
