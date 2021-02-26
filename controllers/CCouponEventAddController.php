@@ -8,6 +8,7 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\utils\price\SPriceToolbox;
 use bamboo\utils\time\STimeToolbox;
 use PDO;
+use PDOException;
 
 /**
  * Class CCouponEventAddController

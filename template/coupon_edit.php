@@ -59,17 +59,6 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
-                                        <label for="campaignId">Campagna Associata</label>
-                                        <select class="full-width selectpicker"
-                                                placeholder="Seleziona la campagna"
-                                                tabindex="-1" title="Campagna Associata"
-                                                data-value="<?php echo $coupon->campaignId ?>"
-                                                name="campaignId" id="campaignId">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group form-group-default selectize-enabled">
                                         <label for="remoteShopId">Shop Di Destinazione</label>
                                         <select class="full-width selectpicker"
                                                 placeholder="Seleziona Lo Shop"
