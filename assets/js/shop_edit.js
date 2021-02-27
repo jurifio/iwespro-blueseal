@@ -260,7 +260,7 @@ var couponType=0;
                 }else{
                     isActiveMarketplace='no';
                 }
-                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:30%;">' + n.name + '</td><td style="width:40%;"></td><td style="width:30%;">' + isActiveMarketplace + '</td></tr>';
+                bodyresi = bodyresi + '<tr><td style="width:30%;">' + n.id + '</td><td style="width:40%;">' + n.name + '</td><td style="width:30%;">' + isActiveMarketplace + '</td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresi = bodyresi + '</table>';
