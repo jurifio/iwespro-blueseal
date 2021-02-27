@@ -110,78 +110,83 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                         $montCompare='12';
                         break;
                 }
-                if (($firstFileDay == '19') && ($year>2019) && ($montCompare>2) ) {
+                $dateFile=(new \DateTime(filemtime($filename)))->format('Y-m-d H:i:s');
+                $dateCompare=(new \DateTime('2020-06-23 23:59:59'))->format('Y-m-d H:i:s');
+                if ($dateFile>$dateCompare) {
                     $phar = new \PharData($file);
-                    if (ENV == 'dev') {
-                        $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
-                    } else {
-                        $phar->extractTo('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/',null,true);
-                    }
-                    $nameFile = basename($file,".json") . PHP_EOL;
-
-
-                    $dateFile = (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
-                    $dateStartSale1 = (new \DateTime($year . '-01-01'))->format('Y-m-d');
-                    $dateEndSale1 = (new \DateTime($yearEndSale . '-03-15'))->format('Y-m-d');
-                    $dateStartSale2 = (new \DateTime($year . '-07-01'))->format('Y-m-d');
-                    $dateEndSale2 = (new \DateTime($year . '-09-15'))->format('Y-m-d');
-
-
-                    $fileexport = substr($nameFile,0,-8);
-
-
-                    if (ENV == 'dev') {
-                        $finalFile = '/media/sf_sites/iwespro/temp/' . substr($fileexport,15,100) . '.json';
-                    } else {
-                        $finalFile = '/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/' . substr($fileexport,15,100) . '.json';
-                    }
-
-                    $rawData = json_decode(file_get_contents($finalFile),true);
-
-                    $arrayProduct = [];
-                    $dirtyProduct = '';
-                    $quantity = 0;
-                    $lineCount = 0;
-                    foreach ($rawData as $values) {
-                        $quantity = $values['esistenza'];
-                        $size = $values['taglia'];
-                        $barcode = $values['barcode'];
-                        $price =str_replace(',','.',$values["PrListino"]);
-                        $sql="select productId,productVariantId,productSizeId,barcode,shopId,priceActive,startQuantity from ProductSizeSoldDay where barcode='".$barcode."' and shopId=51 and 
-                `year`='".$year."' and `month`='".$month."' and `day`='".$day."' ";
-                        $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-                        if(count($res)>0) {
-                            foreach ($res as $result) {
-                                $productId = $result['productId'];
-                                $productVariantId = $result['productVariantId'];
-                                $productSizeId = $result['productSizeId'];
-                                $priceActive = $result['priceActive'];
-                                $startQuantity = $result['startQuantity'];
-                            }
-
-                            $productSold = $productSoldSizeRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $productSizeId,'shopId' => 51,'year' => $year,'month' => $month,'day' => $day]);
-                            if ($productSold) {
-                                $soldQuantity = $startQuantity - $quantity;
-                                $productSold->startQuantity = $quantity;
-                                $productSold->endQuantity = $quantity;
-                                $netTotal = $priceActive * $soldQuantity;
-                                $productSold->dateEnd = $year . '-' . $month . '-' . $day . ' 23:59:59';
-                                $productSold->soldQuantity = $soldQuantity;
-                                $productSold->netTotal = $netTotal;
-                                $productSold->sourceUpgrade=$finalFile;
-                                $productSold->update();
-                            }else{
-                                continue;
-                            }
-
+                    if ($firstFileDay == '19') {
+                        if (ENV == 'dev') {
+                            $phar->extractTo('/media/sf_sites/iwespro/temp/',null,true);
+                        } else {
+                            $phar->extractTo('/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/',null,true);
                         }
-                    }
-                    unlink($finalFile);
+                        $nameFile = basename($file,".json") . PHP_EOL;
 
+
+                        $dateFile = (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
+                        $dateStartSale1 = (new \DateTime($year . '-01-01'))->format('Y-m-d');
+                        $dateEndSale1 = (new \DateTime($yearEndSale . '-03-15'))->format('Y-m-d');
+                        $dateStartSale2 = (new \DateTime($year . '-07-01'))->format('Y-m-d');
+                        $dateEndSale2 = (new \DateTime($year . '-09-15'))->format('Y-m-d');
+
+
+                        $fileexport = substr($nameFile,0,-8);
+
+
+                        if (ENV == 'dev') {
+                            $finalFile = '/media/sf_sites/iwespro/temp/' . substr($fileexport,15,100) . '.json';
+                        } else {
+                            $finalFile = '/home/iwespro/public_html/client/public/media/productsync/barbagallo/import/done/' . substr($fileexport,15,100) . '.json';
+                        }
+
+                        $rawData = json_decode(file_get_contents($finalFile),true);
+
+                        $arrayProduct = [];
+                        $dirtyProduct = '';
+                        $quantity = 0;
+                        $lineCount = 0;
+                        foreach ($rawData as $values) {
+                            $quantity = $values['esistenza'];
+                            $size = $values['taglia'];
+                            $barcode = $values['barcode'];
+                            $price = str_replace(',','.',$values["PrListino"]);
+                            $sql = "select productId,productVariantId,productSizeId,barcode,shopId,priceActive,startQuantity from ProductSizeSoldDay where barcode='" . $barcode . "' and shopId=51 and 
+                `year`='" . $year . "' and `month`='" . $month . "' and `day`='" . $day . "' ";
+                            $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            if (count($res) > 0) {
+                                foreach ($res as $result) {
+                                    $productId = $result['productId'];
+                                    $productVariantId = $result['productVariantId'];
+                                    $productSizeId = $result['productSizeId'];
+                                    $priceActive = $result['priceActive'];
+                                    $startQuantity = $result['startQuantity'];
+                                }
+
+                                $productSold = $productSoldSizeRepo->findOneBy(['productId' => $productId,'productVariantId' => $productVariantId,'productSizeId' => $productSizeId,'shopId' => 51,'year' => $year,'month' => $month,'day' => $day]);
+                                if ($productSold) {
+                                    $soldQuantity = $startQuantity - $quantity;
+                                    $productSold->startQuantity = $quantity;
+                                    $productSold->endQuantity = $quantity;
+                                    $netTotal = $priceActive * $soldQuantity;
+                                    $productSold->dateEnd = $year . '-' . $month . '-' . $day . ' 23:59:59';
+                                    $productSold->soldQuantity = $soldQuantity;
+                                    $productSold->netTotal = $netTotal;
+                                    $productSold->sourceUpgrade = $finalFile;
+                                    $productSold->update();
+                                } else {
+                                    continue;
+                                }
+
+                            }
+                        }
+                        unlink($finalFile);
+
+                    } else {
+                        continue;
+                    }
                 }else{
                     continue;
                 }
-
             }
         } catch (\Throwable $e) {
             $this->report('CDumpHistoryBarbagalloEndJob','Error',$e->getMessage());
