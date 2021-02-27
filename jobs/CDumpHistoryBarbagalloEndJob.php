@@ -110,7 +110,10 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                         $montCompare='12';
                         break;
                 }
-                $dateFile=(new \DateTime(filemtime($origingFile)))->format('Y-m-d H:i:s');
+                $stat = stat($origingFile);
+                $start_date = new DateTime();
+                $start_date->setTimestamp($stat['ctime']);
+                $dateFile=$start_date->format('Y-m-d H:i:s');
                 $dateCompare=(new \DateTime('2020-06-23 23:59:59'))->format('Y-m-d H:i:s');
                 if ($dateFile>$dateCompare) {
                     $phar = new \PharData($file);
