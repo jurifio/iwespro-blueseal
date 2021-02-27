@@ -265,7 +265,7 @@ var couponType=0;
             });
             bodyresi = bodyresi + '</table>';
             $('#rowMarketplace').append(bodyresi);
-            $('#rowMarketplace').empty();
+            $('#rowCampaign').empty();
             var campaign=res.campaign;
             var bodyresic;
             let isActiveCampaign;
