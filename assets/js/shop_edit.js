@@ -233,6 +233,23 @@ var couponType=0;
                 appendShipmentNotIban(addressData, '#shippingAddresses');
             });
             appendShipmentNotIban({}, '#shippingAddresses');
+            $('#rowAggregator').empty();
+            var aggregator=res.aggregatorHasShop;
+            var bodyres;
+            var isActive;
+            bodyres = bodyres + '<table id="myTable"><tr><th style="width:25%;">id</th><th style="width:25%;">name</th><th style="width:25%;">immagine</th><th style="width:25%;">Stato</th></tr>';
+            $.each(aggregator, function (k, v) {
+                if(v.isActive==1){
+                    isActive='si';
+                }else{
+                    isActive='no';
+                }
+                bodyres = bodyres + '<tr><td style="width:25%;">' + v.id + '</td><td style="width:25%;">' + v.name + '</td><td style="width:25%;"><img width="80" src="' + v.imgAggregator + '"/></td><td style="width:25%;">' + isActive + '</td></tr>';
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+            bodyres = bodyres + '</table>';
+            $('#rowAggregator').append(bodyres);
+
         });
     }
 })(jQuery);

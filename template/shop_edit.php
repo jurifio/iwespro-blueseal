@@ -40,6 +40,10 @@
                             <button class="tablinks" onclick="openTab(event, 'modifyClientPlace')">Sedi
 
                             </button>
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientCampaign')">Aggregatori e
+                                Campagne
+
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -318,15 +322,20 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-2 hide" id="divAddCouponType">
-                                                <input type="hidden" id="shop_couponType" name="shop_couponType" value=""/>
+                                                <input type="hidden" id="shop_couponType" name="shop_couponType"
+                                                       value=""/>
                                                 <div class="form-group form-group-default">
-                                                    <button class="btn btn-primary" id="addCouponType" name="addCouponType" onclick="addCoupon()" type="button"><span
+                                                    <button class="btn btn-primary" id="addCouponType"
+                                                            name="addCouponType" onclick="addCoupon()"
+                                                            type="button"><span
                                                                 class="fa fa-plus">crea tipo Coupon</span></button>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 hide" id="divModifyCouponType">
                                                 <div class="form-group form-group-default">
-                                                    <button class="btn btn-primary" id="modifyCouponType" name="modifyCouponType" onclick="modifyCoupon()" type="button"><span
+                                                    <button class="btn btn-primary" id="modifyCouponType"
+                                                            name="modifyCouponType" onclick="modifyCoupon()"
+                                                            type="button"><span
                                                                 class="fa fa-edit">modifica tipo Coupon</span></button>
                                                 </div>
                                             </div>
@@ -566,16 +575,32 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="modifyClientCampaign" class="tabcontent">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel panel-default clearfix">
+                                                    <div class="panel-heading clearfix">
+                                                        <h5 class="m-t-10">Informazioni sugli aggregatori dello Shop</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="rowAggregator">
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
             </div>
-
-
-            </form>
         </div>
     </div>
+
+
+    </form>
+</div>
+</div>
 </div>
 <?php include "parts/footer.php" ?>
 </div>
