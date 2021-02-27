@@ -78,6 +78,8 @@ class CShopManage extends AAjaxController
           $shop->marketplaceHasShop=$marketplaceHasShop;
           $campaign=\Monkey::app()->repoFactory->create('Campaign')->findBy(['remoteShopId'=>$shopId]);
             $shop->campaign=$campaign;
+         /*   $couponEvent=[];
+            $sql=''*/
 
         $shop->productStatistics = $shop->getDailyActiveProductStatistics();
         $shop->orderStatistics = $shop->getDailyOrderFriendStatistics();
