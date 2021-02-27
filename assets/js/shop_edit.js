@@ -276,7 +276,7 @@ var couponType=0;
                 }else{
                     isActiveCampaign='no';
                 }
-                bodyresic = bodyresic + '<tr><td style="width:25%;">' + p.id + '</td><td style="width:25%;">' + p.name + '</td><td style="width:25%;"><img width="80" src="' + p.code + '"/></td><td style="width:25%;">' + isActiveCampaign + '</td></tr>';
+                bodyresic = bodyresic + '<tr><td style="width:25%;">' + p.id + '</td><td style="width:25%;">' + p.name + '</td><td style="width:25%;">' + p.code + '</td><td style="width:25%;">' + isActiveCampaign + '</td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresic = bodyresic + '</table>';
