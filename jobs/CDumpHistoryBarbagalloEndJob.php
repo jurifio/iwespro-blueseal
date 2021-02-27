@@ -110,7 +110,7 @@ class CDumpHistoryBarbagalloEndJob extends ACronJob
                         $montCompare='12';
                         break;
                 }
-                $stat = stat($origingFile);
+                $stat = stat($file);
                 $start_date = new DateTime();
                 $start_date->setTimestamp($stat['ctime']);
                 $dateFile=$start_date->format('Y-m-d H:i:s');
