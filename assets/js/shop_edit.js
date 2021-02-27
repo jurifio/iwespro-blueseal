@@ -249,6 +249,38 @@ var couponType=0;
             });
             bodyres = bodyres + '</table>';
             $('#rowAggregator').append(bodyres);
+            $('#rowMarketplace').empty();
+            var marketplace=res.marketplaceHasShop;
+            var bodyresi;
+            let isActiveMarketplace;
+            bodyresi = bodyresi + '<table id="myTable"><tr><th style="width:30%;">id</th><th style="width:40%;">Marketplace</th><th style="width:30%;">Stato</th></tr>';
+            $.each(marketplace, function (m, n) {
+                if(n.isActive==1){
+                    isActiveMarketplace='si';
+                }else{
+                    isActiveMarketplace='no';
+                }
+                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:30%;">' + n.name + '</td><td style="width:40%;"></td><td style="width:30%;">' + isActiveMarketplace + '</td></tr>';
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+            bodyresi = bodyresi + '</table>';
+            $('#rowMarketplace').append(bodyresi);
+            $('#rowMarketplace').empty();
+            var campaign=res.campaign;
+            var bodyresic;
+            let isActiveCampaign;
+            bodyresic = bodyresic + '<table id="myTable"><tr><th style="width:25%;">id</th><th style="width:25%;">Campagna</th><th style="width:25%;">Codice Monitoraggio</th><th style="width:25%;">Stato</th></tr>';
+            $.each(campaign, function (o, p) {
+                if(p.isActive==1){
+                    isActiveCampaign='si';
+                }else{
+                    isActiveCampaign='no';
+                }
+                bodyresic = bodyresic + '<tr><td style="width:25%;">' + p.id + '</td><td style="width:25%;">' + p.name + '</td><td style="width:25%;"><img width="80" src="' + p.code + '"/></td><td style="width:25%;">' + isActiveCampaign + '</td></tr>';
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+            bodyresic = bodyresic + '</table>';
+            $('#rowCampaign').append(bodyresic);
 
         });
     }
