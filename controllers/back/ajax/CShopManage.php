@@ -81,7 +81,7 @@ class CShopManage extends AAjaxController
            $couponEvent=[];
 
             $sql='select id, `name`, `description`,DATE_FORMAT(startDate, "%d-%m-%Y") as startDate,DATE_FORMAT(endDate, "%Y") as endDate from CouponEvent where remoteShopId='.$shopId;
-            $res=\Monkey::app()->repoFactory->db->query($sql,[])->fetchAll();
+            $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach($res as $result){
                 $couponEvent[]=['id'=>$result['id'],'name'=>$result['name'],'description'=>$result['description'],'startDate'=>$result['startDate'],'endDate'=>$result['endDate']];
             }
