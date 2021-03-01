@@ -54,24 +54,24 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             $logoFile = $_GET['logoFile'];
         }
 
-        $AggregatorFind = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId'=>$marketplaceId]);
-        if($AggregatorFind){
+        $AggregatorFind = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId' => $marketplaceId]);
+        if ($AggregatorFind) {
             return 'Esiste gia un aggregatore Account per lo shop selezionato';
-        }else{
-            $aggregatorInsert=\Monkey::app()->repoFactory->create('AggregatorHasShop')->getEmptyEntity();
-            $aggregatorInsert->name=$marketplace_account_name;
-            $aggregatorInsert->marketplaceId=$marketplaceId;
-            $aggregatorInsert->shopId=$shopId;
-            $aggregatorInsert->typeSync=1;
-            $aggregatorInsert->imgAggregator=$logoFile;
-            $aggregatorInsert->isPriceHub=1;
-            $aggregatorInsert->isActive=$isActive;
+        } else {
+            $aggregatorInsert = \Monkey::app()->repoFactory->create('AggregatorHasShop')->getEmptyEntity();
+            $aggregatorInsert->name = $marketplace_account_name;
+            $aggregatorInsert->marketplaceId = $marketplaceId;
+            $aggregatorInsert->shopId = $shopId;
+            $aggregatorInsert->typeSync = 1;
+            $aggregatorInsert->imgAggregator = $logoFile;
+            $aggregatorInsert->isPriceHub = 1;
+            $aggregatorInsert->isActive = $isActive;
             $aggregatorInsert->insert();
-            $aggregatorUpdate=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId'=>$marketplaceId]);
-            $marketplaceId= $aggregatorUpdate->id;
+            $aggregatorUpdate = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['shopId' => $shopId,'marketplaceId' => $marketplaceId]);
+            $marketplaceId = $aggregatorUpdate->id;
             $aggregatorUpdate->update();
             \Monkey::app()->applicationLog('CAggregatorAccountShopInsertManage','Report','Insert','Insert Aggregator Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
-            return 'Creazione aggregatore Account '.$marketplace_account_name.' con '.$marketplaceId;
+            return 'Creazione aggregatore Account ' . $marketplace_account_name . ' con ' . $marketplaceId;
 
         }
 
@@ -112,6 +112,20 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
         }
 
         $aggregatorFind = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id' => $marketplaceHasShopId]);
+        $mp = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorFind->marketplaceId]);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]);
+        foreach ($marketplaceAccount as $mpa) {
+            if ($mpa->config['aggregatorHasShopId'] == $marketplaceHasShopId) {
+
+                $marketplaceAccountId = $mpa->id;
+                $slugJob = $marketplaceAccountId . '-' . $marketplaceHasShopId;
+                $marketplaceId = $mpa->marketplaceId;
+                break;
+            } else {
+                continue;
+            }
+        }
+
         if ($aggregatorFind) {
 
             $aggregatorFind->name = $marketplace_account_name;
@@ -119,6 +133,35 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             $aggregatorFind->shopId = $shopId;
             $aggregatorFind->imgAggregator = $logoFile;
             $aggregatorFind->isActive = $isActive;
+            if ($isActive == '1') {
+                $jobs = \Monkey::app()->repoFactory->create('Job')->findBy(['scope' => 'feedAggregator']);
+                foreach ($jobs as $job) {
+                    if ($job->defaultArgs['marketplaceAccountId'] == $slugJob) {
+                        $job->isActive = 1;
+                        $job->update();
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+                $markeplaceAccountFind=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId,'marketplaceId'=>$marketplaceId]);
+                $markeplaceAccountFind->isActive=1;
+                $markeplaceAccountFind->update();
+            } else {
+                $jobs = \Monkey::app()->repoFactory->create('Job')->findBy(['scope' => 'feedAggregator']);
+                foreach ($jobs as $job) {
+                    if ($job->defaultArgs['marketplaceAccountId'] == $slugJob) {
+                        $job->isActive = 0;
+                        $job->update();
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+                $markeplaceAccountFind=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId,'marketplaceId'=>$marketplaceId]);
+                $markeplaceAccountFind->isActive=0;
+                $markeplaceAccountFind->update();
+            }
             $aggregatorFind->update();
 
             \Monkey::app()->applicationLog('CAggregatorAccountShopInsertManage','Report','update','update Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);

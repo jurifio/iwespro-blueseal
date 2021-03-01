@@ -237,14 +237,14 @@ var couponType=0;
             var aggregator=res.aggregatorHasShop;
             var bodyres;
             var isActive;
-            bodyres = bodyres + '<table id="myTable"><tr><th style="width:25%;">id</th><th style="width:25%;">name</th><th style="width:25%;">immagine</th><th style="width:25%;">Stato</th></tr>';
+            bodyres = bodyres + '<table id="myTable"><tr><th style="width:20%;">id</th><th style="width:20%;">name</th><th style="width:20%;">immagine</th><th style="width:20%;">Stato</th><th style="width:20%;">Operazioni</th></tr>';
             $.each(aggregator, function (k, v) {
                 if(v.isActive==1){
                     isActive='si';
                 }else{
                     isActive='no';
                 }
-                bodyres = bodyres + '<tr><td style="width:25%;">' + v.id + '</td><td style="width:25%;">' + v.name + '</td><td style="width:25%;"><img width="80" src="' + v.imgAggregator + '"/></td><td style="width:25%;">' + isActive + '</td></tr>';
+                bodyres = bodyres + '<tr><td style="width:20%;">' + v.id + '</td><td style="width:20%;">' + v.name + '</td><td style="width:20%;"><img width="80" src="' + v.imgAggregator + '"/></td><td style="width:20%;">' + isActive + '</td><td><button class="success" id="modifyRowAggregatorButton' + v.id + '" onclick="modifyRowAggregatorEdit(' + v.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyres = bodyres + '</table>';
@@ -581,4 +581,9 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
+}
+function modifyRowAggregatorEdit(aggregatorId){
+    let url='/blueseal/aggregatori/account-shop/modifica/'+aggregatorId
+    window.open(url,'_blank');
+
 }

@@ -4383,7 +4383,7 @@
         },{
             "pattern": "/blueseal/aggregatori/account-shop/modifica/:id(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorHasShopEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CAggregatorAccountShopEditController"
             },
             "filters": {
                 "id": "[0-9]+"
