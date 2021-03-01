@@ -136,7 +136,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             if ($isActive == '1') {
                 $jobs = \Monkey::app()->repoFactory->create('Job')->findBy(['scope' => 'feedAggregator']);
                 foreach ($jobs as $job) {
-                    if ($job->defaultArgs['marketplaceAccountId'] == $slugJob) {
+                    if (isset($job->defaultArgs['marketplaceAccountId']) == $slugJob) {
                         $job->isActive = 1;
                         $job->update();
                         break;
@@ -150,7 +150,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             } else {
                 $jobs = \Monkey::app()->repoFactory->create('Job')->findBy(['scope' => 'feedAggregator']);
                 foreach ($jobs as $job) {
-                    if ($job->defaultArgs['marketplaceAccountId'] == $slugJob) {
+                    if (isset($job->defaultArgs['marketplaceAccountId']) == $slugJob) {
                         $job->isActive = 0;
                         $job->update();
                         break;
