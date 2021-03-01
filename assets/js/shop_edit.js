@@ -253,14 +253,14 @@ var couponType=0;
             var marketplace=res.marketplaceHasShop;
             var bodyresi;
             let isActiveMarketplace;
-            bodyresi = bodyresi + '<table id="myTable"><tr><th style="width:30%;">id</th><th style="width:40%;">Marketplace</th><th style="width:30%;">Stato</th></tr>';
+            bodyresi = bodyresi + '<table id="myTable"><tr><th style="width:25%;">id</th><th style="width:25%;">Marketplace</th><th style="width:25%;">Stato</th><th style="width:25%;">Operazioni</th></tr>';
             $.each(marketplace, function (m, n) {
                 if(n.isActive==1){
                     isActiveMarketplace='si';
                 }else{
                     isActiveMarketplace='no';
                 }
-                bodyresi = bodyresi + '<tr><td style="width:30%;">' + n.id + '</td><td style="width:40%;">' + n.name + '</td><td style="width:30%;">' + isActiveMarketplace + '</td></tr>';
+                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:25%;">' + n.name + '</td><td style="width:25%;">' + isActiveMarketplace + '</td><td style="width:25%;">' + isActive + '</td><td><button class="success" id="modifyRowMarketplaceButton' + n.id + '" onclick="modifyRowMarketplaceEdit(' + n.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresi = bodyresi + '</table>';
@@ -584,6 +584,11 @@ function openTab(evt, tabName) {
 }
 function modifyRowAggregatorEdit(aggregatorId){
     let url='/blueseal/aggregatori/account-shop/modifica/'+aggregatorId
+    window.open(url,'_blank');
+
+}
+function modifyRowMarketplaceEdit(marketplaceId){
+    let url='/blueseal/marketplace/account-shop/modifica/'+marketplaceId
     window.open(url,'_blank');
 
 }

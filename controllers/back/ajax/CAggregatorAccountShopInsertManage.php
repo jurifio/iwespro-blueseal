@@ -115,7 +115,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
         $mp = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $aggregatorFind->marketplaceId]);
         $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]);
         foreach ($marketplaceAccount as $mpa) {
-            if ($mpa->config['aggregatorHasShopId'] == $marketplaceHasShopId) {
+            if (isset($mpa->config['aggregatorHasShopId']) == $marketplaceHasShopId) {
 
                 $marketplaceAccountId = $mpa->id;
                 $slugJob = $marketplaceAccountId . '-' . $marketplaceHasShopId;
@@ -166,6 +166,8 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
 
             \Monkey::app()->applicationLog('CAggregatorAccountShopInsertManage','Report','update','update Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
             return 'Creazione MarketplaceAccount ' . $marketplace_account_name . ' con ' . $marketplaceId;
+        }else{
+            return 'problemi con la modifica dell\' Account Aggergatore ';
         }
     }
 

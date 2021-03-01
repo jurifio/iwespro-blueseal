@@ -113,17 +113,42 @@ class CMarketplaceAccountShopInsertManage extends AAjaxController
         }
 
         $marketplaceFind = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findOneBy(['id' => $marketplaceHasShopId]);
+        $mp = \Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id' => $marketplaceFind->marketplaceId]);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]);
+        foreach ($marketplaceAccount as $mpa) {
+            if (isset($mpa->config['marketplaceHasShopId']) == $marketplaceHasShopId) {
+
+                $marketplaceAccountId = $mpa->id;
+                $marketplaceId = $mpa->marketplaceId;
+                $slugJob = $marketplaceAccountId . '-' . $marketplaceId;
+
+                break;
+            } else {
+                continue;
+            }
+        }
         if ($marketplaceFind) {
 
             $marketplaceFind->name = $marketplace_account_name;
             $marketplaceFind->marketplaceId = $marketplaceId;
             $marketplaceFind->shopId = $shopId;
             $marketplaceFind->imgMarketplace = $logoFile;
+            if ($isActive == '1') {
+                $markeplaceAccountFind=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId,'marketplaceId'=>$marketplaceId]);
+                $markeplaceAccountFind->isActive=1;
+                $markeplaceAccountFind->update();
+            } else {
+                $markeplaceAccountFind=\Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id'=>$marketplaceAccountId,'marketplaceId'=>$marketplaceId]);
+                $markeplaceAccountFind->isActive=0;
+                $markeplaceAccountFind->update();
+            }
             $marketplaceFind->isActive = $isActive;
             $marketplaceFind->update();
 
             \Monkey::app()->applicationLog('MarketPlaceAccountShopInsert','Report','update','update Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
             return 'Creazione MarketplaceAccount ' . $marketplace_account_name . ' con ' . $marketplaceId;
+        }else{
+            return 'problemi con la modifica del marketplace Account';
         }
     }
 
