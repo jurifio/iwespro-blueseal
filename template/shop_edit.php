@@ -49,6 +49,9 @@
                             <button class="tablinks" onclick="openTab(event, 'modifyClientCampaign')">Campagne
 
                             </button>
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientCouponEvent')">Coupon
+
+                            </button>
 
                         </div>
                     </div>
@@ -620,6 +623,20 @@
                                             </div>
                                         </div>
                                         <div class="row" id="rowCampaign">
+
+                                        </div>
+                                    </div>
+                                    <div id="modifyClientCouponEvent" class="tabcontent">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel panel-default clearfix">
+                                                    <div class="panel-heading clearfix">
+                                                        <h5 class="m-t-10">Informazioni sui Coupon dello Shop</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="rowCouponEvent">
 
                                         </div>
                                     </div>
