@@ -105,7 +105,11 @@ $(document).ready(function () {
         select.selectize({
             valueField: 'id',
             labelField: 'name',
-            options: res
+            options: res,
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue($('#couponTypeSelectedId').val());
+            }
         });
     });
 

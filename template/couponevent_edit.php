@@ -100,16 +100,13 @@ $endDate = new DateTime($coupon->endDate);
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default selectize-enabled">
+                                        <input type='hidden' id="couponTypeSelectedId" name="couponTypeSelectedId"
+                                               value="<?php echo $coupon->couponTypeId ?>"/>
                                         <label for="couponType">Tipo coupon</label>
                                         <select class="full-width selectpicker"
                                                 placeholder="Seleziona il tipo di coupon" data-init-plugin="selectize"
                                                 tabindex="-1" title="couponTypeId" name="couponTypeId"
                                                 id="couponTypeId">
-                                            <?php foreach ($couponTypes as $couponType): ?>
-                                                <option value="<?php echo $couponType->id ?>" required
-                                                    <?php echo ($couponType->id == $coupon->couponType->id) ? 'selected="selected"' : ""; ?> >
-                                                    <?php echo $couponType->name . "" ?></option>
-                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>

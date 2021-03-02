@@ -83,12 +83,13 @@ class CShopManage extends AAjaxController
             $sql='select ce.id, ce.`name`, ce.`description`,DATE_FORMAT(ce.startDate, "%d-%m-%Y") as startDate,DATE_FORMAT(ce.endDate, "%d-%m-%Y") as endDate,
              if(c.isActive=1,"Attiva","Non Attiva") as isActive,
             if(c.name is null,"nessuna campagna","c.name") as campaignName from CouponEvent ce
+              ct.name as couponTypeName,   
              join CouponType ct on ce.couponTypeId=ct.id
             left join Campaign c on ct.campaignId=c.id
              where ce.remoteShopId='.$shopId;
             $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach($res as $result){
-                $couponEvent[]=['id'=>$result['id'],'name'=>$result['name'],'description'=>$result['description'],'startDate'=>$result['startDate'],'endDate'=>$result['endDate'],'campaignName'=>$result['campaignName'],'isActive'=>$result['isActive']];
+                $couponEvent[]=['id'=>$result['id'],'name'=>$result['name'],'description'=>$result['description'],'startDate'=>$result['startDate'],'endDate'=>$result['endDate'],'couponTypeName'=>$result['couponTypeName'],'campaignName'=>$result['campaignName'],'isActive'=>$result['isActive']];
             }
         $shop->couponEvent=$couponEvent;
         $shop->productStatistics = $shop->getDailyActiveProductStatistics();
