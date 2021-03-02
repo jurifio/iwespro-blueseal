@@ -81,6 +81,7 @@ $(document).ready(function () {
         select.selectize({
             valueField: 'id',
             labelField: 'name',
+            searchField: ['name'],
             options: res,
             onInitialize: function () {
                 var selectize = this;
