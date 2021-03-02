@@ -50,8 +50,8 @@ class CBannerListAjaxController extends AAjaxController
             $banner = $repo->findOneBy($row);
             $row["DT_RowId"] = 'row__'.$banner->id;
             $row["DT_RowClass"] = 'colore';
-            $row['name'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editBannerEventLink.'/'.$banner->id.'" >'.$banner->name.'</a>';
-            $row['textHtml'] = $banner->textHtml;
+            $row['name'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="'.$editBannerLink.'/'.$banner->id.'" >'.$banner->name.'</a>';
+            $row['textHtml'] = '<img width="150px" src="'.$banner->textHtml.'"/>';
             $campaign=$campaignRepo->findOneBy(['id'=>$banner->campaignId]);
             $row['campaignName']=$campaign->name;
             $row['click']=$banner->click;

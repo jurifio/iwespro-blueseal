@@ -24,15 +24,20 @@
                                data-inner-setup="true">
                             <thead>
                             <tr>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    data-default-order="asc"
+                                    class="center">id</th>
                                 <th data-slug="name"
                                     data-searchable="true"
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center">Nome</th>
-                                <th data-slug="description"
+                                <th data-slug="textHtml"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center">Descrizione</th>
+                                    class="center">Banner</th>
                                 <th data-slug="couponType"
                                     data-searchable="false"
                                     data-orderable="false"
