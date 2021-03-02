@@ -82,8 +82,9 @@ class CShopManage extends AAjaxController
 
             $sql='select ce.id, ce.`name`, ce.`description`,DATE_FORMAT(ce.startDate, "%d-%m-%Y") as startDate,DATE_FORMAT(ce.endDate, "%d-%m-%Y") as endDate,
              if(c.isActive=1,"Attiva","Non Attiva") as isActive,
+       ct.name as couponTypeName, 
             if(c.name is null,"nessuna campagna","c.name") as campaignName from CouponEvent ce
-              ct.name as couponTypeName,   
+                
              join CouponType ct on ce.couponTypeId=ct.id
             left join Campaign c on ct.campaignId=c.id
              where ce.remoteShopId='.$shopId;
