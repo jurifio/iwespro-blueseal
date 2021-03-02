@@ -69,25 +69,38 @@ $(document).on('bs.couponevent.edit', function() {
 });
 $(document).ready(function () {
     $.ajax({
-        method:'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'CouponType'
-        },
+        url: '/blueseal/xhr/SelectCouponTypeAjaxController',
+        method: 'get',
         dataType: 'json'
     }).done(function (res) {
-        var select = $('#couponTypeId');
+        console.log(res);
+        let select = $('#couponTypeId');
         if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
             labelField: 'name',
-            searchField: ['name'],
+            searchField: ['name','campaignName'],
             options: res,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.id) + '</span> - ' +
+                        '<span class="caption">' + escape(item.name + ' ' + item.campaignName) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.id) + '</span> - ' +
+                        '<span class="caption">' + escape(item.name + ' ' + item.campaignName) + '</span>' +
+                        '</div>'
+                }
+            },
             onInitialize: function () {
                 var selectize = this;
                 selectize.setValue($('#couponTypeSelectedId').val());
             }
         });
+
     });
 
     $.ajax({
@@ -99,7 +112,7 @@ $(document).ready(function () {
         },
         dataType: 'json'
     }).done(function (res2) {
-        var select = $('#remoteShopId');
+        let select = $('#remoteShopId');
         if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',

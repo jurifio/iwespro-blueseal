@@ -34,26 +34,30 @@
                                     data-orderable="true"
                                     data-default-order="asc"
                                     class="center">Nome</th>
+                                <th data-slug="campaignName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Campagna</th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">ShopName</th>
                                 <th data-slug="textHtml"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Banner</th>
-                                <th data-slug="couponType"
+                                <th data-slug="link"
                                     data-searchable="false"
                                     data-orderable="false"
-                                    class="center">Tipo coupon</th>
+                                    class="center">Link</th>
                                 <th data-slug="click"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Click</th>
-                                <th data-slug="startDate"
+                                <th data-slug="isActive"
                                     data-searchable="true"
                                     data-orderable="true"
-                                    class="center dataFilterType">Valido da</th>
-                                <th data-slug="endDate"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center dataFilterType">Valido fino a</th>
+                                    class="center">Attivo</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,24 +73,24 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione evento coupon">
+    <bs-toolbar-group data-group-label="Gestione Banner">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
             data-permission="/admin/marketing"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Aggiungi un nuovo evento coupon"
+            data-title="Aggiungi un nuovo banner"
             data-placement="bottom"
-            data-href="/blueseal/eventocoupon/aggiungi"></bs-toolbar-button>
+            data-href="/blueseal/banner/aggiungi"></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
             data-permission="/admin/marketing"
-            data-event="bs.couponevent.del"
+            data-event="bs.banner.del"
             data-class="btn btn-default"
             data-rel="tooltip"
-            data-title="Elimina evento coupon"
+            data-title="Elimina Banner"
             data-placement="bottom"
             data-toggle="modal"></bs-toolbar-button>
     </bs-toolbar-group>
