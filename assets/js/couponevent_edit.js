@@ -115,7 +115,7 @@ $(document).ready(function () {
 
 
 });
-$('#remoteShopId').change(function(){
+/*$('#remoteShopId').change(function(){
     $('#divCouponType').removeClass('hide');
     $('#divCouponType').addClass('show');
     var remoteShopId=$(this).val();
@@ -136,4 +136,4 @@ $('#remoteShopId').change(function(){
             options: res
         });
     });
-});
+});*/
