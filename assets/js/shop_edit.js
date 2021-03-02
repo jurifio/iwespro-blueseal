@@ -290,8 +290,8 @@ var couponType=0;
                 bodyresicoupon = bodyresicoupon + '<tr><td style="width:20%;">' + s.id + '</td><td style="width:20%;">' + s.name + '</td><td style="width:20%;">' + s.description + '</td><td style="width:20%;">valido da ' + s.startDate + ' a ' + s.endDate + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponEvenEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
-            bodyresic = bodyresic + '</table>';
-            $('#rowCampaign').append(bodyresic);
+            bodyresicoupon = bodyresicoupon + '</table>';
+            $('#rowCouponEvent').append(bodyresicoupon);
 
         });
     }
