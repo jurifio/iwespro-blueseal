@@ -68,6 +68,26 @@ $(document).on('bs.couponevent.edit', function() {
     });
 });
 $(document).ready(function () {
+    $.ajax({
+        method:'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'CouponType'
+        },
+        dataType: 'json'
+    }).done(function (res) {
+        var select = $('#couponTypeId');
+        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            options: res,
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue($('#couponTypeSelectedId').val());
+            }
+        });
+    });
 
     $.ajax({
         method:'GET',
@@ -92,26 +112,7 @@ $(document).ready(function () {
         });
     });
 
-    $.ajax({
-        method:'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'CouponType'
-        },
-        dataType: 'json'
-    }).done(function (res) {
-        var select = $('#couponTypeId');
-        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            options: res,
-            onInitialize: function () {
-                var selectize = this;
-                selectize.setValue($('#couponTypeSelectedId').val());
-            }
-        });
-    });
+
 
 
 });
