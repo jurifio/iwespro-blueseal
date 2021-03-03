@@ -52,6 +52,9 @@
                             <button class="tablinks" onclick="openTab(event, 'modifyClientCouponEvent')">Coupon
 
                             </button>
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientBanner')">Banner
+
+                            </button>
 
                         </div>
                     </div>
@@ -637,6 +640,20 @@
                                             </div>
                                         </div>
                                         <div class="row" id="rowCouponEvent">
+
+                                        </div>
+                                    </div>
+                                    <div id="modifyClientBanner" class="tabcontent">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel panel-default clearfix">
+                                                    <div class="panel-heading clearfix">
+                                                        <h5 class="m-t-10">Informazioni sui Banner Shop</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="rowBanner">
 
                                         </div>
                                     </div>

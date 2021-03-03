@@ -287,7 +287,22 @@ var couponType=0;
             bodyresicoupon = bodyresicoupon + '<table id="myTable"><tr><th style="width:5%;">id</th><th style="width:20%;">Coupon</th><th style="width:15%;">Descrizione</th><th style="width:15%;">Validità</th><th style="width:15%;">tipo Coupon</th><th style="width:15%;">Campagna</th><th style="width:15%;">Attiva</th><th style="width:15%;">Operazioni</th></tr>';
             $.each(couponEvent, function (r, s) {
 
-                bodyresicoupon = bodyresicoupon + '<tr><td style="width:20%;">' + s.id + '</td><td style="width:20%;">' + s.name + '</td><td style="width:15%;">' + s.description + '</td><td style="width:15%;">valido da ' + s.startDate + ' a ' + s.endDate + '</td><td style="width:15%;">' + s.couponTypeName + '</td><td style="width:15%;">' + s.campaignName + '</td><td style="width:15%;">' + s.isActive + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponEvenEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                bodyresicoupon = bodyresicoupon + '<tr><td style="width:5%;">' + s.id + '</td><td style="width:20%;">' + s.name + '</td><td style="width:15%;">' + s.description + '</td><td style="width:15%;">valido da ' + s.startDate + ' a ' + s.endDate + '</td><td style="width:15%;">' + s.couponTypeName + '</td><td style="width:15%;">' + s.campaignName + '</td><td style="width:15%;">' + s.isActive + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponEvenEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+            bodyresicoupon = bodyresicoupon + '</table>';
+
+            $('#rowBanner').empty();
+            var banner=res.banner;
+            var bodyresibanner;
+            bodyresibanner = bodyresibanner + '<table id="myTable"><tr><th style="width:10%;">id</th><th style="width:15%;">Banner</th><th style="width:15%;">link</th><th style="width:15%;">Position</th><th style="width:15%;">immagine</th><th style="width:15%;">Attiva</th><th style="width:15%;">Operazioni</th></tr>';
+            $.each(banner, function (y, z) {
+                if(z.isActive==1){
+                    isActiveBanner='si';
+                }else{
+                    isActiveBanner='no';
+                }
+                bodyresibanner = bodyresibanner + '<tr><td style="width:10%;">' + z.id + '</td><td style="width:15%;">' + z.name + '</td><td style="width:15%;">' + z.link + '</td><td style="width:15%;">' + z.position + '</td><td style="width:15%;"><img width="250px" src="' + z.textHtml + '"/></td><td style="width:15%;">' + z.isActiveBanner + '</td><td><button class="success" id="modifyRowBannerButton' + z.id + '" onclick="modifyRowBannerEdit(' + z.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresicoupon = bodyresicoupon + '</table>';
@@ -605,6 +620,11 @@ function modifyRowMarketplaceEdit(marketplaceId){
 }
 function modifyRowCouponEvenEdit(couponEventId){
     let url='/blueseal/eventocoupon/modifica/'+couponEventId
+    window.open(url,'_blank');
+
+}
+function modifyRowBannerEdit(bannerId){
+    let url='/blueseal/marketing/banner-modifica/'+bannerId
     window.open(url,'_blank');
 
 }
