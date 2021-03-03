@@ -41,6 +41,7 @@ class CCouponEventEditController extends ARestrictedAccessRootController
     {
         $data = $this->app->router->request()->getRequestData();
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
+        $remoteShopId=$this->app->router->getMatchedRoute()->getComputedFilter('remoteShopId');
 
         $couponRepo = \Monkey::app()->repoFactory->create('CouponEvent');
         $coupon = $couponRepo->findOneBy(['id' => $couponId]);
