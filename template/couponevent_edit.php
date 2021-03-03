@@ -68,7 +68,7 @@ $endDate = new DateTime($coupon->endDate);
                                     <h2>Stato del Coupon Evento:<?php echo $active;?></h2>
                                 </div>
                             </div>
-                            <?php if (\Monkey::app()->getUser()->getId()==11017):?>
+                            <?php if (\Monkey::app()->getUser()->getId()==11017 || \Monkey::app()->getUser()->getId()==17370):?>
                             <div clas="row clearfix">
                                 <div class="col-sm-12">
                                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeVOVLKYZf34ij4KzLC0OBsY6c25mvJewm8w&usqp=CAU"/>
