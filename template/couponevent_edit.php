@@ -51,11 +51,23 @@ $endDate = new DateTime($coupon->endDate);
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <h1>Per disattivare il Coupon Evento basta modificare la data di fine Coupon Evento
-                                        con una data passata</h1>
+                                    <h2>Per disattivare il Coupon Evento basta modificare la data di fine Coupon
+                                        con una data passata</h2>
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-sm-12">
+                                    <?php $now=(new \DateTime())->format('Y-m-d H:i:s');
+                                    if ($endDate>$now){
+                                        $active='<span style="color:green">Attivo</span>';
+                                    }else{
+                                        $active='<span style="color:red">Non Attivo</span>';
+                                    }
+                                    ?>
+                                    <h2>Stato del Coupon Evento:<?php echo $active;?></h2>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="startDate">Valido da</label>
