@@ -55,7 +55,7 @@ $endDate = new DateTime($coupon->endDate);
                                         con una data passata</h2>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row clearfix">
                                 <div class="col-sm-12">
                                     <?php $now=(new \DateTime())->format('Y-m-d H:i:s');
                                     if ($endDate>$now){
@@ -67,6 +67,13 @@ $endDate = new DateTime($coupon->endDate);
                                     <h2>Stato del Coupon Evento:<?php echo $active;?></h2>
                                 </div>
                             </div>
+                            <?php if ($this->app->getUser()->getId()==11017):?>
+                            <div clas="row clearfix">
+                                <div class="col-sm-12">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeVOVLKYZf34ij4KzLC0OBsY6c25mvJewm8w&usqp=CAU"/>
+                                </div>
+                            </div>
+                            <?php endif ?>
                             <div class="row clearfix">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">

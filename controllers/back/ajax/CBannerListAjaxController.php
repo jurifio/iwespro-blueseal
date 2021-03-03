@@ -22,7 +22,7 @@ class CBannerListAjaxController extends AAjaxController
 
     public function get()
     {
-        $editBannerLink = "/blueseal/banner/modifica";
+        $editBannerLink = "/blueseal/marketing/banner-modifica";
         $sql = "SELECT
                   `Banner`.`id`          AS `id`,
                   `Banner`.`name`        AS `name`,
