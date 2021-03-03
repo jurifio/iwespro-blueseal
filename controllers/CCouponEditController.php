@@ -47,6 +47,9 @@ class CCouponEditController extends ARestrictedAccessRootController
                 $amountType=$couponType->amountType;
                 $coupon->amountType=$amountType;
             }
+            if($k=='remoteShopId'){
+                $remoteShopId=$v;
+            }
         }
 
 

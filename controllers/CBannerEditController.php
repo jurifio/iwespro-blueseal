@@ -45,6 +45,7 @@ class CBannerEditController extends ARestrictedAccessRootController
     {
         $data = $this->app->router->request()->getRequestData();
         $bannerId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
+        $remoteShopId=$data['remoteShopId'];
 
         $bannerRepo = \Monkey::app()->repoFactory->create('Banner');
         $banner = $bannerRepo->findOneBy(['id'=>$bannerId]);
@@ -76,8 +77,8 @@ class CBannerEditController extends ARestrictedAccessRootController
 
         }
 
-        $coupon->position=$position;
-        $couponRepo->update($coupon);
+        $banner->position=$position;
+        $bannerRepo->update($banner);
         $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopId]);
         $db_host = $shopRepo->dbHost;
         $db_name = $shopRepo->dbName;
@@ -95,7 +96,7 @@ class CBannerEditController extends ARestrictedAccessRootController
                                                            `b`.`name` as `bannerName`, 
                                                              b.textHtml as textHtml,
                                                             b.position as position,
-                                                             b.link as link
+                                                             b.link as link,
                                                              b.click as click,
                                                               b.remoteId as remoteId,
                                                               b.remoteShopId as remoteShopId,
@@ -121,8 +122,7 @@ class CBannerEditController extends ARestrictedAccessRootController
                       `textHtml`='" . $textHtml . "',
                       `position`='" . $position . "',
                       `link`='" . $link . "',
-                      isActive='" . $isActive . "',
-                      valid='" . $valid . "' 
+                      isActive='" . $isActive . "'
                       where id=" . $remoteId);
         $stmtUpdateBanner->execute();
 
