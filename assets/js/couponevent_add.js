@@ -19,11 +19,12 @@ summer.summernote({
         'Times New Roman',
         'Verdana'
     ],
-    onImageUpload: function(files, editor, welEditable) {
+    onImageUpload: function (files, editor, welEditable) {
         sendFile(files[0], editor, welEditable);
     },
     fontNamesIgnoreCheck: ['Raleway']
 });
+
 function sendFile(file, editor, welEditable) {
     data = new FormData();
     data.append("file", file);
@@ -34,13 +35,14 @@ function sendFile(file, editor, welEditable) {
         cache: false,
         contentType: false,
         processData: false,
-        success: function(url) {
+        success: function (url) {
             //summer.summernote.editor.insertImage(welEditable, url);
-            summer.summernote('pasteHTML', '<p><img src="'+url+'"></p>');
+            summer.summernote('pasteHTML', '<p><img src="' + url + '"></p>');
         }
     });
 }
-$(document).on('bs.couponevent.add', function() {
+
+$(document).on('bs.couponevent.add', function () {
 
     var bsModal = $('#bsModal');
     var header = $('.modal-header h4');
@@ -59,15 +61,15 @@ $(document).on('bs.couponevent.add', function() {
         type: "POST",
         url: "#",
         data: $('form').serialize()
-    }).done(function (content){
+    }).done(function (content) {
         body.html("Salvataggio riuscito");
         bsModal.modal();
-        okButton.off().on('click', function() {
+        okButton.off().on('click', function () {
             bsModal.modal('hide');
             okButton.off();
-            window.location.href = '/blueseal/eventocoupon/modifica/'+content;
+            window.location.href = '/blueseal/eventocoupon/modifica/' + content;
         });
-    }).fail(function(){
+    }).fail(function () {
         body.html('Errore grave');
         bsModal.modal();
     });
@@ -76,7 +78,7 @@ $(document).on('bs.couponevent.add', function() {
 $(document).ready(function () {
 
     $.ajax({
-        method:'GET',
+        method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Shop'
@@ -84,7 +86,7 @@ $(document).ready(function () {
         dataType: 'json'
     }).done(function (res2) {
         var select = $('#remoteShopId');
-        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
             labelField: 'name',
@@ -94,7 +96,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        method:'GET',
+        method: 'GET',
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'CouponType'
@@ -102,7 +104,7 @@ $(document).ready(function () {
         dataType: 'json'
     }).done(function (res) {
         var select = $('#couponTypeId');
-        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
             labelField: 'name',
@@ -112,25 +114,38 @@ $(document).ready(function () {
 
 
 });
-$('#remoteShopId').change(function(){
+$('#remoteShopId').change(function () {
     $('#divCouponType').removeClass('hide');
     $('#divCouponType').addClass('show');
-    var remoteShopId=$(this).val();
+    var remoteShopId = $(this).val();
     $.ajax({
-        method:'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'CouponType',
-            condition :{remoteShopId:remoteShopId}
-        },
-        dataType: 'json'
+        url: '/blueseal/xhr/SelectCouponTypeAjaxController',
+        method: 'get',
+        dataType: 'json',
+        data: {remoteShopId: remoteShopId}
     }).done(function (res) {
-        var select = $('#couponTypeId');
-        if(typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        console.log(res);
+        let select = $('#couponTypeId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
         select.selectize({
             valueField: 'id',
             labelField: 'name',
-            options: res
+            searchField: ['name', 'campaignName'],
+            options: res,
+            render: {
+                item: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.id + ' ' + item.name) + '</span> - ' +
+                        '<span class="caption">' + escape(item.campaignName + ' ' + item.isActive) + '</span>' +
+                        '</div>'
+                },
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="label">' + escape(item.id + ' ' + item.name) + '</span> - ' +
+                        '<span class="caption">' + escape(item.campaignName + ' ' + item.isActive) + '</span>' +
+                        '</div>'
+                }
+            }
         });
     });
 });

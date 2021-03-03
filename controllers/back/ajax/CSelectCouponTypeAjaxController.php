@@ -32,13 +32,29 @@ class CSelectCouponTypeAjaxController extends AAjaxController
     public function get()
     {
         $collectCouponType = [];
-        $sql='select ct.id, ct.`name`,
-            if(c.name is null,"nessuna campagna","c.name") as campaignName from  CouponType ct 
+
+        $remoteShopId = \Monkey::app()->router->request()->getRequestData('remoteShopId');
+        if ($remoteShopId != null) {
+            $sql = 'select ct.id, ct.`name`,
+            if(c.name is null,"nessuna campagna","c.name") as campaignName,
+           if(c.isActive=1,"Attiva","Non Attiva") as isActive
+       from  CouponType ct 
+         
+            left join Campaign c on ct.campaignId=c.id
+  where ct.remoteShopId='.$remoteShopId.'
+           ';
+        } else {
+            $sql = 'select ct.id, ct.`name`,
+            if(c.name is null,"nessuna campagna","c.name") as campaignName,
+           if(c.isActive=1,"Attiva","Non Attiva") as isActive
+       from  CouponType ct 
+           
             left join Campaign c on ct.campaignId=c.id
            ';
-        $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-        foreach($res as $result){
-            $collectCouponType[]=['id'=>$result['id'],'name'=>$result['name'],'campaignName'=>$result['campaignName']];
+        }
+        $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+        foreach ($res as $result) {
+            $collectCouponType[] = ['id' => $result['id'],'name' => $result['name'],'campaignName' => $result['campaignName'],'isActive' => $result['isActive']];
         }
 
         return json_encode($collectCouponType);

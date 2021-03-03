@@ -50,6 +50,11 @@ $endDate = new DateTime($coupon->endDate);
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-sm-12">
+                                <h1>Per disattivare il Coupon Evento basta modificare la data di fine Coupon Evento con una data passata</h1>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="startDate">Valido da</label>
@@ -102,7 +107,7 @@ $endDate = new DateTime($coupon->endDate);
                                     <div class="form-group form-group-default selectize-enabled">
                                         <input type='hidden' id="couponTypeSelectedId" name="couponTypeSelectedId"
                                                value="<?php echo $coupon->couponTypeId ?>"/>
-                                        <label for="couponTypeId">Tipo coupon</label>
+                                        <label for="couponTypeId">Tipo Coupon Campagna</label>
                                         <select class="full-width selectpicker"
                                                 placeholder="Seleziona il tipo di coupon" data-init-plugin="selectize"
                                                 tabindex="-1" title="couponTypeId" name="couponTypeId"
