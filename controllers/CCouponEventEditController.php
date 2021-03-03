@@ -41,13 +41,19 @@ class CCouponEventEditController extends ARestrictedAccessRootController
     {
         $data = $this->app->router->request()->getRequestData();
         $couponId = $this->app->router->getMatchedRoute()->getComputedFilter('id');
-        $remoteShopId=$this->app->router->getMatchedRoute()->getComputedFilter('remoteShopId');
+        $remoteShopId=$this->app->router->request()->getRequestData('remoteShopId');
 
         $couponRepo = \Monkey::app()->repoFactory->create('CouponEvent');
         $coupon = $couponRepo->findOneBy(['id' => $couponId]);
 
         foreach ($data as $k => $v) {
             $coupon->{$k} = $v;
+            if($k=='startDate'){
+                $coupon->startDate=str_replace('T',' ',$v);
+            }
+            if($k=='endDate'){
+                $coupon->endDate=str_replace('T',' ',$v);
+            }
         }
 
         $couponRepo->update($coupon);
@@ -68,15 +74,15 @@ class CCouponEventEditController extends ARestrictedAccessRootController
                                                            `ce`.`name` as couponEventName, 
                                                              ce.description as description,
                                                             ce.couponTypeId as couponTypeId,
-                                                             ce.startDate as startDate
+                                                             ce.startDate as startDate,
                                                              ce.endDate as endDate,
                                                               ce.isAnnounce,
                                                               ce.couponText as couponText,
                                                               ct.remoteId as remoteCouponTypeId,
-                                                              ct.remoteShopId as remoteShopId,
+                                                              ct.remoteShopId as remoteShopId
                                                                 
        from CouponEvent ce
-                                                              join CouponTypeId ct on ce.couponTypeId = ct.id where ce.id=' . $couponId,[])->fetchAll();
+                                                              join CouponType ct on ce.couponTypeId = ct.id where ce.id=' . $couponId,[])->fetchAll();
         foreach ($resCouponEvent as $remoteCouponEvent) {
             $couponEventId = $remoteCouponEvent['couponEventId'];
             $couponEventName = $remoteCouponEvent['couponEventName'];
