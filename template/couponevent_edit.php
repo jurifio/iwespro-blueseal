@@ -58,8 +58,8 @@ $endDate = new DateTime($coupon->endDate);
                             <div class="row clearfix">
                                 <div class="col-sm-12">
                                     <?php $now=(new \DateTime())->format('Y-m-d H:i:s');
-                                    $dateComparison=(new \DateTime($endDate))->format('Y-m-d H:i:s');
-                                    if ($dateComparison>$now){
+                                    $dateComparison=$endDate;
+                                    if ($dateComparison<$now){
                                         $active='<span style="color:green">Attivo</span>';
                                     }else{
                                         $active='<span style="color:red">Non Attivo</span>';
@@ -68,7 +68,7 @@ $endDate = new DateTime($coupon->endDate);
                                     <h2>Stato del Coupon Evento:<?php echo $active;?></h2>
                                 </div>
                             </div>
-                            <?php if ($this->app->getUser()->getId()==11017):?>
+                            <?php if (\Monkey::app()->getUser()->getId()==11017):?>
                             <div clas="row clearfix">
                                 <div class="col-sm-12">
                                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeVOVLKYZf34ij4KzLC0OBsY6c25mvJewm8w&usqp=CAU"/>
