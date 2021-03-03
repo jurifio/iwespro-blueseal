@@ -51,7 +51,8 @@ $endDate = new DateTime($coupon->endDate);
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                <h1>Per disattivare il Coupon Evento basta modificare la data di fine Coupon Evento con una data passata</h1>
+                                    <h1>Per disattivare il Coupon Evento basta modificare la data di fine Coupon Evento
+                                        con una data passata</h1>
                                 </div>
                             </div>
                             <div class="row">
@@ -63,8 +64,6 @@ $endDate = new DateTime($coupon->endDate);
                                                value="<?php echo $startDate->format('Y-m-d\TH:i:s'); ?>"/>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <label for="endDate">Valido fino a</label>
@@ -81,13 +80,13 @@ $endDate = new DateTime($coupon->endDate);
                                                 placeholder="Seleziona"
                                                 tabindex="-1" title="Seleziona"
                                                 name="isAnnounce" id="isAnnounce">
-                                            <?php if($coupon->isAnnounce==1){
+                                            <?php if ($coupon->isAnnounce == 1) {
                                                 echo '<option value="1" selected="selected">Si</option>';
                                                 echo '<option value="0">No</option>';
-                                            }else{
+                                            } else {
                                                 echo '<option value="1">Si</option>';
                                                 echo '<option value="0" selected="selected">No</option>';
-                                            }?>
+                                            } ?>
                                         </select>
                                     </div>
                                 </div>
