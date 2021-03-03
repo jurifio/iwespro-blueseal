@@ -4611,7 +4611,7 @@
         {
             "pattern": "/blueseal/marketing/banner-aggiungi(/)?",
             "behaviour": {
-                "ctrl": "\\bamboo\\blueseal\\controllers\\CBannerEditController"
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CBannerAddController"
             },
             "filters": {},
             "translations": {},

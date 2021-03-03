@@ -68,12 +68,12 @@ class CCouponEditController extends ARestrictedAccessRootController
                                                            `c`.`code` as codeCoupon, 
                                                              c.issueDate as issueDate,
                                                             c.validThru as validThru,
-                                                             c.amountType as amountType
+                                                             c.amountType as amountType,
                                                              c.amount as amount,
                                                               c.valid as valid,
                                                               c.remoteId as remoteId,
                                                               ct.remoteId as remoteCouponTypeId,
-                                                              ct.remoteShopId as remoteShopId,
+                                                              ct.remoteShopId as remoteShopId
                                                                 
        from CouponEvent ce
                                                               join Coupon c on c.couponTypeId = ct.id where c.id=' . $couponId,[])->fetchAll();

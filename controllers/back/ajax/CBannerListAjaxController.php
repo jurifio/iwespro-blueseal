@@ -32,7 +32,7 @@ class CBannerListAjaxController extends AAjaxController
                   if(`Banner`.`isActive`,'Si','No') as isActive,  
                   `Banner`.`click`       AS `click`,
                   `Campaign`.`name`   AS `campaignName`,
-                  `shop`.`name`     AS `shopName`
+                  `Shop`.`name`     AS `shopName`
                   
                 FROM `Banner`
                   JOIN `Shop` ON `Banner`.`remoteShopId` = `Shop`.`id`

@@ -27,16 +27,20 @@ use PDOException;
  * @date 07/01/2020
  * @since 1.0
  */
-class CSelectCampaignAjaxController extends AAjaxController
+class CSelectCampaignFilterAjaxController extends AAjaxController
 {
     public function get()
     {
         $collectCampaigns = [];
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
-        $campaigns=\Monkey::app()->repoFactory->create('Campaign')->findBy(['isActive'=>1]);
+        $remoteShopId = \Monkey::app()->router->request()->getRequestData('remoteShopId');
+        $campaigns=\Monkey::app()->repoFactory->create('Campaign')->findBy(['remoteShopId'=>$remoteShopId]);
             foreach ($campaigns as $campaign) {
-                $shop=$shopRepo->findOneBy(['id'=>$campaign->remoteShopId]);
-                array_push($collectCampaigns,['id'=>$campaign->id,'name'=>$campaign->name,'shop'=>$shop->name,'isActive'=>$campaign->isActive]);
+                if($campaign->isActive==1){
+                    $isActive='Attiva';
+                }else{
+                    $isActive='Non Attiva';
+                }
+                array_push($collectCampaigns,['id'=>$campaign->id,'campaignName'=>$campaign->name,'shop'=>$campaign->remoteShopId,'isActive'=>$isActive]);
             }
 
         return json_encode($collectCampaigns);

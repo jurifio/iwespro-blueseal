@@ -82,7 +82,7 @@
             data-rel="tooltip"
             data-title="Aggiungi un nuovo banner"
             data-placement="bottom"
-            data-href="/blueseal/banner/aggiungi"></bs-toolbar-button>
+            data-href="/blueseal/marketing/banner-aggiungi"></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-trash"
