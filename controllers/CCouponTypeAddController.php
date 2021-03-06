@@ -87,15 +87,24 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                     throw new BambooException('fail to connect');
 
                 }
-                $stmtCampaign=$db_con->prepare('select id as campaignId from Campaign where id='.$data['campaignId']);
-                $stmtCampaign->execute();
-            while ($rowCampaign = $stmtCampaign -> fetch(PDO::FETCH_ASSOC)) {
-                $remoteCampaign=$rowCampaign['campaignId'];
-            }
-            if($remoteCampaign==null) {
-                $remoteCampaign = 'null';
-            }
+                if(isset($data['campaign'])) {
+                    $campaign = \Monkey::app()->repoFactory->create('Campaign')->findOneBy(['id' => $data['campaignId']]);
+                    if ($campaign->remoteCampaignId != null) {
 
+                        $stmtCampaign = $db_con->prepare('select id as campaignId from Campaign where id=' . $campaign->remoteCampaignId);
+                        $stmtCampaign->execute();
+                        while ($rowCampaign = $stmtCampaign->fetch(PDO::FETCH_ASSOC)) {
+                            $remoteCampaign = $rowCampaign['campaignId'];
+                        }
+                        if ($remoteCampaign == null) {
+                            $remoteCampaign = 'null';
+                        }
+                    }else{
+                        $remoteCampaign = 'null';
+                    }
+                }else{
+                    $remoteCampaign = 'null';
+                }
                 $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImport)
                 VALUES(
                                  \'' . $data['name'] . '\',
