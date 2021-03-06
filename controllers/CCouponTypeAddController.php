@@ -70,8 +70,10 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
             $couponType->amountType = $data['amountType'];
             $couponType->validity = $data['validity'];
             $couponType->validForCartTotal = $data['validForCartTotal'];
-            $couponType->hasFreeShipping = (isset($data['hasFreeShipping']) && $data['hasFreeShipping'] === 'on') ? 1 : 0;
-            $couponType->hasFreeReturn = (isset($data['hasFreeReturn']) && $data['hasFreeReturn'] === 'on') ? 1 : 0;
+            $hasFreeShipping=(isset($data['hasFreeShipping']) && $data['hasFreeShipping'] === 'on') ? 1 : 0;
+            $hasFreeReturn=(isset($data['hasFreeReturn']) && $data['hasFreeReturn'] === 'on') ? 1 : 0;
+            $couponType->hasFreeShipping = $hasFreeShipping;
+            $couponType->hasFreeReturn = $hasFreeReturn;
             $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $data['remoteShopId']]);
                 $db_host = $findShopId->dbHost;
                 $db_name = $findShopId->dbName;
@@ -98,8 +100,8 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                                  \'' . $data['amountType'] . '\',
                                  \'' . $data['validity'] . '\',
                                  \'' . $data['validForCartTotal'] . '\',
-                                 \'' . $data['hasFreeShipping'] . '\',
-                                 \'' . $data['hasFreeReturn'] . '\',
+                                 \'' . $hasFreeShipping . '\',
+                                 \'' . $hasFreeReturn . '\',
                                   \''. $remoteCampaign.'\',
                                  1                        
                                     )');
