@@ -92,6 +92,9 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
             while ($rowCampaign = $stmtCampaign -> fetch(PDO::FETCH_ASSOC)) {
                 $remoteCampaign=$rowCampaign['campaignId'];
             }
+            if($remoteCampaign==null) {
+                $remoteCampaign = 'null';
+            }
 
                 $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImport)
                 VALUES(
@@ -102,7 +105,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                                  \'' . $data['validForCartTotal'] . '\',
                                  \'' . $hasFreeShipping . '\',
                                  \'' . $hasFreeReturn . '\',
-                                  \''. $remoteCampaign.'\',
+                                  '. $remoteCampaign.',
                                  1                        
                                     )');
                 $stmtCouponTypeInsert->execute();
