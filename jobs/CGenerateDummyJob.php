@@ -67,7 +67,7 @@ class CGenerateDummyJob extends ACronJob
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 'sì', 'no') ='sì' and
-                   p.dummyPicture LIKE '%bs-dummy-16-9.png%' and p.dummyPicture like '%assets/assets/bs-dummy-16-%' 
+                   p.dummyPicture LIKE '%bs-dummy-16-9.png%' and p.dummyPicture like '%//assets//assets/bs-dummy-16-%' 
            
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
             $res = $this->app->dbAdapter->query($query,[])->fetchAll();
