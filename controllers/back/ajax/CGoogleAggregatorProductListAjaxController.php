@@ -131,10 +131,11 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 
 
         $row['marketplaceAssociation'] = $associations;
+            $stat='';
         /** @var CAggregatorHasProduct $ahp */
         $ahp = $phpRepo->findOneBy(['productId' => $php->productId,'productVariantId' => $php->productVariantId,'aggregatorHasShopId' => $php->aggregatorHasShopId]);
+        if($ahp) {
 
-            $stat='';
             switch ($ahp->status) {
                 case 1:
                     $stat = '<i style="color: green;
@@ -146,7 +147,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::UPDATED. '</b></i>';
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::UPDATED . '</b></i>';
                     break;
                 case 2:
                     $stat = '<i style="color: orange;
@@ -158,7 +159,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::TOUPDATE. '</b></i>';
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::TOUPDATE . '</b></i>';
                     break;
                 case 3:
                     $stat = '<i style="color: blue;
@@ -170,7 +171,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::MANUAL. '</b></i>';
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::MANUAL . '</b></i>';
                     break;
                 case 4:
                     $stat = '<i style="color: fuchsia;
@@ -182,7 +183,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::TOBOOKINGDELETE. '</b></i>';
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::TOBOOKINGDELETE . '</b></i>';
                     break;
                 case 5:
                     $stat = '<i style="color: red;
@@ -194,7 +195,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::DELETED. '</b></i>';
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::DELETED . '</b></i>';
                     break;
                 case null:
                     $stat = '<i style="color: red;
@@ -221,6 +222,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding-left: 4px;"><b>NON PRESENTE</b></i>';
                     break;
             }
+        }
             $row['status'] =$stat;
 
         $row['brand'] = $php->product->productBrand->name;
