@@ -231,7 +231,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 
         }
             $row['status'] =$stat;
-            $row['productStatusAggregatorId']=
+            $row['productStatusAggregatorId']=$productStatusAggregatorName;
         $row['brand'] = $php->product->productBrand->name;
         $row['productStatus'] = $php->product->productStatus->name;
         $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
