@@ -134,6 +134,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
             $stat='';
         /** @var CAggregatorHasProduct $ahp */
         $ahp = $phpRepo->findOneBy(['productId' => $php->productId,'productVariantId' => $php->productVariantId,'aggregatorHasShopId' => $php->aggregatorHasShopId]);
+            $productStatusAggregatorName = '';
         if($ahp) {
 
             switch ($ahp->status) {
@@ -222,20 +223,21 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
     padding-left: 4px;"><b>NON PRESENTE</b></i>';
                     break;
             }
+            $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $ahp->productStatusAggregatorId]);
+            if ($productStatusAggregator) {
+                $productStatusAggregatorName = $productStatusAggregator->name;
+            }
+
+
         }
             $row['status'] =$stat;
-
+            $row['productStatusAggregatorId']=
         $row['brand'] = $php->product->productBrand->name;
         $row['productStatus'] = $php->product->productStatus->name;
         $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
         $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
         $row['marketplaceProductId'] = $php->marketplaceProductId;
-        $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $ahp->productStatusAggregatorId]);
-        if ($productStatusAggregator) {
-            $row['productStatusAggregatorId'] = $productStatusAggregator->name;
-        } else {
-            $row['productStatusAggregatorId'] = '';
-        }
+
         $row['marketplaceAccount']=$marketplaceAccount->name;
         $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
         $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
