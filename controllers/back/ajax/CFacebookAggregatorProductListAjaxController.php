@@ -116,6 +116,8 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
             $php = $mahpRepo->findOneBy($row);
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
             $associations = '';
+            $img='';
+
             $aggregatorHasShop = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id' => $php->aggregatorHasShopId]);
             if ($aggregatorHasShop) {
                 $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $aggregatorHasShop->shopId]);
@@ -129,12 +131,15 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
 
 
             $row['marketplaceAssociation'] = $associations;
+            $stat='';
             /** @var CAggregatorHasProduct $ahp */
             $ahp = $phpRepo->findOneBy(['productId' => $php->productId,'productVariantId' => $php->productVariantId,'aggregatorHasShopId' => $php->aggregatorHasShopId]);
-            $stat='';
-            switch ($ahp->status) {
-                case 1:
-                    $stat = '<i style="color: green;
+            $productStatusAggregatorName = '';
+            if($ahp) {
+
+                switch ($ahp->status) {
+                    case 1:
+                        $stat = '<i style="color: green;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -143,10 +148,10 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::UPDATED. '</b></i>';
-                    break;
-                case 2:
-                    $stat = '<i style="color: orange;
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::UPDATED . '</b></i>';
+                        break;
+                    case 2:
+                        $stat = '<i style="color: orange;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -155,10 +160,10 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::TOUPDATE. '</b></i>';
-                    break;
-                case 3:
-                    $stat = '<i style="color: blue;
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::TOUPDATE . '</b></i>';
+                        break;
+                    case 3:
+                        $stat = '<i style="color: blue;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -167,10 +172,10 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::MANUAL. '</b></i>';
-                    break;
-                case 4:
-                    $stat = '<i style="color: fuchsia;
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::MANUAL . '</b></i>';
+                        break;
+                    case 4:
+                        $stat = '<i style="color: fuchsia;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -179,10 +184,10 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::TOBOOKINGDELETE. '</b></i>';
-                    break;
-                case 5:
-                    $stat = '<i style="color: red;
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::TOBOOKINGDELETE . '</b></i>';
+                        break;
+                    case 5:
+                        $stat = '<i style="color: red;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -191,10 +196,10 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.CAggregatorHasProduct::DELETED. '</b></i>';
-                    break;
-                default:
-                    $stat = '<i style="color: red;
+    padding-left: 4px;"><b>' . CAggregatorHasProduct::DELETED . '</b></i>';
+                        break;
+                    case null:
+                        $stat = '<i style="color: red;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -204,21 +209,35 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
     margin-top: 0.5em;
     padding-right: 4px;
     padding-left: 4px;"><b>NON PRESENTE</b></i>';
-                    break;
+                        break;
+                    default:
+                        $stat = '<i style="color: red;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>NON PRESENTE</b></i>';
+                        break;
+                }
+                $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $ahp->productStatusAggregatorId]);
+                if ($productStatusAggregator) {
+                    $productStatusAggregatorName = $productStatusAggregator->name;
+                }
+
+
             }
             $row['status'] =$stat;
-
+            $row['productStatusAggregatorId']=$productStatusAggregatorName;
             $row['brand'] = $php->product->productBrand->name;
             $row['productStatus'] = $php->product->productStatus->name;
             $isOnSale = $php->product->isOnSale == 0 ? ' Saldo No' : ' Saldo Si';
             $row['price'] = $php->product->getDisplayPrice() . ' (' . $php->product->getDisplaySalePrice() . ')<br>' . $isOnSale;
             $row['marketplaceProductId'] = $php->marketplaceProductId;
-            $productStatusAggregator = $productStatusAggregatorRepo->findOneBy(['id' => $ahp->productStatusAggregatorId]);
-            if ($productStatusAggregator) {
-                $row['productStatusAggregatorId'] = $productStatusAggregator->name;
-            } else {
-                $row['productStatusAggregatorId'] = '';
-            }
+
             $row['marketplaceAccount']=$marketplaceAccount->name;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
             $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
@@ -239,8 +258,6 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
 
             $datatable->setResponseDataSetRow($key,$row);
         }
-
-        return $datatable->responseOut();
     }
 
 }
