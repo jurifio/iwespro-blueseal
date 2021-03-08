@@ -98,7 +98,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 
 
 
-        return $datatable->responseOut();
+
         $datatable = new CDataTables($sql,['productId','productVariantId','marketplaceId','marketplaceAccountId'],$_GET,true);
 
         $datatable->doAllTheThings();
@@ -260,6 +260,7 @@ class CGoogleAggregatorProductListAjaxController extends AAjaxController
 
             $datatable->setResponseDataSetRow($key,$row);
         }
+        return $datatable->responseOut();
     }
 
 }

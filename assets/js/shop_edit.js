@@ -260,7 +260,7 @@ var couponType=0;
                 }else{
                     isActiveMarketplace='no';
                 }
-                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:25%;">' + n.name + '</td><td style="width:25%;">' + isActiveMarketplace + '</td><td style="width:25%;">' + isActive + '</td><td><button class="success" id="modifyRowMarketplaceButton' + n.id + '" onclick="modifyRowMarketplaceEdit(' + n.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:25%;">' + n.name + '</td><td style="width:25%;">' + isActiveMarketplace + '</td><td><button class="success" id="modifyRowMarketplaceButton' + n.id + '" onclick="modifyRowMarketplaceEdit(' + n.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresi = bodyresi + '</table>';

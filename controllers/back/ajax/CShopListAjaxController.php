@@ -1,4 +1,5 @@
 <?php
+
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
@@ -27,18 +28,18 @@ class CShopListAjaxController extends AAjaxController
         $datatable->addCondition('id',\Monkey::app()->repoFactory->create('Shop')->getAutorizedShopsIdForUser());
 
         $shops = \Monkey::app()->repoFactory->create('Shop')->findBySql($datatable->getQuery(),$datatable->getParams());
-        $count = \Monkey::app()->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = \Monkey::app()->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery(true),$datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('Shop')->em()->findCountBySql($datatable->getQuery('full'),$datatable->getParams());
 
         $response = [];
         $response ['draw'] = $_GET['draw'];
         $response ['recordsTotal'] = $totalCount;
         $response ['recordsFiltered'] = $count;
         $response ['data'] = [];
-        $addressBookRepo=\Monkey::app()->repoFactory->create('AddressBook');
+        $addressBookRepo = \Monkey::app()->repoFactory->create('AddressBook');
         /** @var CShop $shop */
-        foreach($shops as $shop){
-            if($shop->isVisible==1) {
+        foreach ($shops as $shop) {
+            if ($shop->isVisible == 1) {
                 $row = [];
                 $row['DT_RowId'] = $shop->printId();
                 $row['id'] = '<a href="/blueseal/shop?id=' . $shop->printId() . '">' . $shop->printId() . '</a>';
@@ -46,11 +47,11 @@ class CShopListAjaxController extends AAjaxController
                 $row['owner'] = $shop->owner;
                 $row['currentSeasonMultiplier'] = $shop->currentSeasonMultiplier;
                 $addressbook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
-                $row['vatNumber'] = $shop->billingAddressBook ? substr($shop->billingAddressBook->vatNumber, 6, 13) : null;
+                $row['vatNumber'] = $shop->billingAddressBook ? substr($shop->billingAddressBook->vatNumber,6,13) : null;
                 $row['pastSeasonMultiplier'] = $shop->pastSeasonMultiplier;
-                $row['referrerEmails'] = implode('<br />', explode(';', $shop->referrerEmails));
-                $row['billingEmails'] = implode('<br />', explode(';', $shop->billingEmails));
-                $row['billingContact']=$shop->billingContact;
+                $row['referrerEmails'] = implode('<br />',explode(';',$shop->referrerEmails));
+                $row['billingEmails'] = implode('<br />',explode(';',$shop->billingEmails));
+                $row['billingContact'] = $shop->billingContact;
                 $row['saleMultiplier'] = $shop->saleMultiplier;
                 $row['minReleasedProducts'] = $shop->minReleasedProducts;
                 $row['releasedProducts'] = $shop->getActiveProductCount();
@@ -60,20 +61,27 @@ class CShopListAjaxController extends AAjaxController
                 foreach ($shop->user as $user) {
                     $users[] = $user->email;
                 }
-               if ($shop->hasEcommerce){
-                   $shopHasCounter=\Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId'=>$shop->id]);
-                   $numberReceipt=$shop->receipt.'-'.$shopHasCounter->receiptCounter;
-                   $row['numberReceipt']=$numberReceipt;
-                   $numberInvoiceUe =$shop->invoiceUe.'-'.$shopHasCounter->invoiceCounter;
-                   $row['numberInvoiceUe']=$numberInvoiceUe;
-                   $numberInvoiceExtraUe =$shop->invoiceExtraUe.'-'.$shopHasCounter->invoiceExtraUeCounter;
-                   $row['numberInvoiceExtraUe']=$numberInvoiceExtraUe;
-               }else{
-                   $row['numberReceipt']='';
-                   $row['numberInvoiceUe']='';
-                   $row['numberInvoiceExtraUe']='';
-               }
-                $row['users'] = implode('<br />', $users);
+                if ($shop->hasEcommerce) {
+                    $shopHasCounter = \Monkey::app()->repoFactory->create('ShopHasCounter')->findOneBy(['shopId' => $shop->id]);
+                    if ($shopHasCounter) {
+                        $numberReceipt = $shop->receipt . '-' . $shopHasCounter->receiptCounter;
+                        $row['numberReceipt'] = $numberReceipt;
+                        $numberInvoiceUe = $shop->invoiceUe . '-' . $shopHasCounter->invoiceCounter;
+                        $row['numberInvoiceUe'] = $numberInvoiceUe;
+                        $numberInvoiceExtraUe = $shop->invoiceExtraUe . '-' . $shopHasCounter->invoiceExtraUeCounter;
+                        $row['numberInvoiceExtraUe'] = $numberInvoiceExtraUe;
+                    } else{
+                        $row['numberReceipt'] = '';
+                        $row['numberInvoiceUe'] = '';
+                        $row['numberInvoiceExtraUe'] = '';
+                        }
+
+                } else {
+                    $row['numberReceipt'] = '';
+                    $row['numberInvoiceUe'] = '';
+                    $row['numberInvoiceExtraUe'] = '';
+                }
+                $row['users'] = implode('<br />',$users);
                 $row['iban'] = $shop->billingAddressBook ? $shop->billingAddressBook->iban : null;
 
                 $response['data'][] = $row;

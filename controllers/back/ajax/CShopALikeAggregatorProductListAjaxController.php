@@ -258,6 +258,7 @@ class CShopALikeAggregatorProductListAjaxController extends AAjaxController
 
             $datatable->setResponseDataSetRow($key,$row);
         }
+        return $datatable->responseOut();
     }
 
 }

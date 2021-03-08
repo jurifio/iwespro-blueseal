@@ -258,6 +258,7 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
 
             $datatable->setResponseDataSetRow($key,$row);
         }
+        return $datatable->responseOut();
     }
 
 }

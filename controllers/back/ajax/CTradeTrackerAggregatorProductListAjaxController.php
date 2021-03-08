@@ -258,6 +258,7 @@ class CTradeTrackerAggregatorProductListAjaxController extends AAjaxController
 
             $datatable->setResponseDataSetRow($key,$row);
         }
+        return $datatable->responseOut();
     }
 
 }

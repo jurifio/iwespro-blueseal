@@ -258,6 +258,7 @@ class CStylightAggregatorProductListAjaxController extends AAjaxController
 
             $datatable->setResponseDataSetRow($key,$row);
         }
+        return $datatable->responseOut();
     }
 
 }
