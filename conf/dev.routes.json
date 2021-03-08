@@ -4565,6 +4565,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/aggregatori/regole-lista-social(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CSocialAccountListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/marketplace/regole-lista(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CRuleMarketplaceAccountListController"
