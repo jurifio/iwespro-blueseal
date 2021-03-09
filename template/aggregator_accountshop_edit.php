@@ -42,6 +42,8 @@
                                                value="<?php echo $marketplaceHasShop->marketplaceId ?>"/>
                                         <input type="hidden" id="shopSelectId" id="shopSelectId"
                                                value="<?php echo $marketplaceHasShop->shopId ?>"/>
+                                        <input type="hidden" id="marketplaceTypeId" id="marketplaceTypeId"
+                                               value="<?php echo $marketplace->type ?>"/>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
@@ -68,7 +70,28 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
-                                                <label for="marketplaceId">Seleziona il MarketPlace
+                                                <label for="typeAggregator">Tipo Aggregatore
+                                                </label>
+                                                <select id="typeAggregator"
+                                                        name="typeAggregator"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione il marketplace"
+                                                        data-init-plugin="selectize">
+                                                    <?php if ($marketplace->type=='cpc'){
+                                                        echo '<option  selected="selected" value="cpc">Cpc</option>';
+                                                        echo '<option  value="social">Social</option>';
+                                                    }else{
+                                                        echo '<option  value="cpc">Cpc</option>';
+                                                        echo '<option  selected="selected" value="social">Social</option>';
+                                                    }
+                                                        ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group form-group-default selectize-enabled">
+                                                <label for="marketplaceId">Seleziona l'Aggregatore
                                                 </label>
                                                 <select id="marketplaceId"
                                                         name="marketplaceId"

@@ -60,6 +60,20 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group form-group-default selectize-enabled">
+                                                <label for="typeAggregator">Seleziona Il tipo di Aggregatore
+                                                </label>
+                                                <select id="typeAggregator"
+                                                        name="typeAggregator"
+                                                        class="full-width selectpicker"
+                                                        placeholder="Selezione il tipo Aggregatore"
+                                                        data-init-plugin="selectize">
+                                                    <option value="cpc">Cpc</option>
+                                                    <option value="social">Social</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="aggregatorDiv" class="col-md-2 hide">
+                                            <div class="form-group form-group-default selectize-enabled">
                                                 <label for="marketplaceId">Seleziona Aggregatore
                                                 </label>
                                                 <select id="marketplaceId"

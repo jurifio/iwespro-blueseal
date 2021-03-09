@@ -56,7 +56,7 @@ $(document).ready(function () {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Marketplace',
-            condition:{type:'cpc'}
+            condition:{type:$('#marketplaceTypeId').val()}
 
         },
         dataType: 'json'
@@ -92,6 +92,28 @@ $(document).ready(function () {
         });
         select[0].selectize.setValue($('#shopSelectId').val());
     });
+    $('#typeAggregator').change(function () {
+        var typeAggregator=$('#typeAggregator').val();
+
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Marketplace',
+                condition:{type:typeAggregator}
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#marketplaceId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
+
+        });
 
 
     $(document).on('bs.marketplaceaccountshop-account.save', function () {

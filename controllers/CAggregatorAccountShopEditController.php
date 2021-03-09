@@ -28,6 +28,8 @@ class CAggregatorAccountShopEditController extends ARestrictedAccessRootControll
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/aggregator_accountshop_edit.php');
         $marketplaceHasShopId =  \Monkey::app()->router->getMatchedRoute()->getComputedFilter('id');
         $marketplaceHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$marketplaceHasShopId]);
+        $marketplace=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$marketplaceHasShop->marketplaceId]);
+
 
 
 
@@ -35,6 +37,7 @@ class CAggregatorAccountShopEditController extends ARestrictedAccessRootControll
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'marketplaceHasShop'=>$marketplaceHasShop,
             'page' => $this->page,
+            'marketplace'=>$marketplace,
             'sidebar' => $this->sidebar->build()
         ]);
     }

@@ -69,27 +69,32 @@ $(document).ready(function () {
         });
 
     });
-    $.ajax({
-        method: 'GET',
-        url: '/blueseal/xhr/GetTableContent',
-        data: {
-            table: 'Marketplace',
-            condition:{type:'cpc'}
-        },
-        dataType: 'json'
-    }).done(function (res2) {
-        var select = $('#marketplaceId');
-        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-        select.selectize({
-            valueField: 'id',
-            labelField: 'name',
-            searchField: 'name',
-            options: res2,
-        });
+
 
     });
+    $('#typeAggregator').change(function () {
+        $('#aggregatorDiv').removeClass('hide');
+        var typeAggregator=$('#typeAggregator').val();
 
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Marketplace',
+                condition:{type:typeAggregator}
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var select = $('#marketplaceId');
+            if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+            select.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                options: res2,
+            });
 
+    });
     $(document).on('bs.aggregatoraccountshop-account.save', function () {
         let bsModal = new $.bsModal('Inserimento Aggregator', {
             body: '<p>Confermare?</p>'
