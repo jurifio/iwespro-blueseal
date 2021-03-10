@@ -76,7 +76,7 @@
             data-placement="bottom"
             data-class="btn btn-default"
             data-title="statistiche categorie"
-            data-event="bs.marketplace.category.href"
+            data-event="bs.aggregator.category.href"
         ></bs-toolbar-button>
         <bs-toolbar-button
             data-tag="a"
@@ -87,7 +87,7 @@
             data-placement="bottom"
             data-class="btn btn-default"
             data-title="Configurazioni"
-            data-event="bs.marketplace-account.config.href"
+            data-event="bs.aggregator-account.config.href"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
@@ -97,7 +97,7 @@
                 data-rel="tooltip"
                 data-title="Aggiungi un nuovo aggregatore"
                 data-placement="bottom"
-                data-href="/blueseal/marketplace/account-inserisci"
+                data-href="/blueseal/aggregator/account-social-aggiungi"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

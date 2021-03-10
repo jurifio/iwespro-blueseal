@@ -325,7 +325,7 @@ foreach($campaigns as $campaign) {
     if($campaign->marketplaceId==$marketplaceAccount->marketplaceId && $campaign->marketplaceAccountId==$marketplaceAccount->id) {
         $campaignOption .= '<option selected="selected" value"' . $campaign->id . '">' . $campaign->name . '</option>';
     }else{
-        $campaignOption .= '<option value"' . $campaign->id . '">' . $campaign->name . '</option>';
+        $campaignOption .= '<option value="' . $campaign->id . '">' . $campaign->name . '</option>';
     }
 }
 

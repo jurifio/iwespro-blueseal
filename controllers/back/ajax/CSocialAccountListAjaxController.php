@@ -49,7 +49,7 @@ class CSocialAccountListAjaxController extends AMarketplaceAccountAjaxController
                 $row["DT_RowId"] = $marketplaceAccount->printId();
                 $row['code'] = $marketplaceAccount->printId();
                 $row['marketplace'] = $marketplaceAccount->marketplace->name;
-                $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/social/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
+                $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
                 $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
                $row['isActive'] = ($marketplaceAccount->isActive==1)?'si':'no';
 
