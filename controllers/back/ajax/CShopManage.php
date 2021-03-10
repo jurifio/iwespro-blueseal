@@ -70,10 +70,41 @@ class CShopManage extends AAjaxController
                 $i++;
             }
             $shop->shippingAddressBooks = $shippingAddressBook;
-            $aggregatorHasShop = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findBy(['shopId' => $shopId]);
+            $aggregatorHasShopFind = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findBy(['shopId' => $shopId]);
+
+
+            $aggregatorHasShop=[];
+            $sql='select ahs.id as id,`ahs`.`name` as `name`, ahs.imgAggregator as imgAggregator,`m`.`type` as typeAggregator, m.marketplaceId as marketplaceId,ma.id as marketplaceAccountId, ma.config as config, ma.isActive as isActive  from MarketplaceAccount ma join
+            Marketplace m on ma.marketplaceId=m.id join AggregatorHasShop ahs on m.id=ahs.marketplaceId where m.type !="marketplace" and ahs.shopId='.$shopId;
+            $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+            foreach ($res as $result) {
+                $aggregatorHasShop[]=['id'=>$result['id'],
+                                      'name'=>$result['name'],
+                                      'imgAggregator'=>$result['imgAggregator'],
+                                      'marketplaceAccountId'=>$result['marketplaceAccountId'],
+                                      'marketplaceId'=>$result['marketplaceId'],
+                                      'isActive'=>$result['isActive'],
+                                      'typeAggregator'=>$result['typeAggregator']];
+            }
             $shop->aggregatorHasShop = $aggregatorHasShop;
+            $marketplaceHasShop=[];
+            $sql='select ahs.id as id,`ahs`.`name` as `name`, `m`.`type` as typeAggregator, m.id as marketplaceId,ma.id as marketplaceAccountId, ma.config as config, ma.isActive as isActive  from MarketplaceAccount ma join
+            Marketplace m on ma.marketplaceId=m.id join MarketplaceHasShop ahs on m.id=ahs.marketplaceId where m.type ="marketplace" and ahs.shopId='.$shopId;
+            $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+            foreach ($res as $result) {
+                $marketplaceHasShop[]=['id'=>$result['id'],
+                    'name'=>$result['name'],
+                    'marketplaceAccountId'=>$result['marketplaceAccountId'],
+                    'marketplaceId'=>$result['marketplaceId'],
+                    'isActive'=>$result['isActive'],
+                    'typeAggregator'=>$result['typeAggregator']];
+            }
+            $shop->marketplaceHasShop=$marketplaceHasShop;
+/*
             $marketplaceHasShop = \Monkey::app()->repoFactory->create('MarketplaceHasShop')->findBy(['shopId' => $shopId]);
-            $shop->marketplaceHasShop = $marketplaceHasShop;
+            $marketplaceHasshop=[];
+
+            $shop->marketplaceHasShop = $marketplaceHasShop; */
             $campaign = \Monkey::app()->repoFactory->create('Campaign')->findBy(['remoteShopId' => $shopId]);
             $shop->campaign = $campaign;
             $couponEvent = [];
