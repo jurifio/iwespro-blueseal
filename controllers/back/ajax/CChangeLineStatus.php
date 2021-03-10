@@ -74,10 +74,10 @@ class CChangeLineStatus extends AAjaxController
                         "Value" => $line->friendRevenue,
                         "Payment_type" => $line->order->orderPaymentMethod->name,
                     ];
-                    if (ENV=='prod') {
+                    /*if (ENV=='prod') {
                         $alduca = new CAlducadaostaOrderAPI($orderId,$row);
                         $alduca->newOrder();
-                    }
+                    }*/
 
             }
             $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $orderLine->remoteShopSellerId]);
