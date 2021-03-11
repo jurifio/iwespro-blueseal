@@ -608,7 +608,7 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-function modifyRowAggregatorEdit(marteplaceId,marketplaceAccountId,aggregatorType){
+function modifyRowAggregatorEdit(marketplaceId,marketplaceAccountId,aggregatorType){
     if(aggregatorType=='cpc') {
         let url = '/blueseal/marketplace/account?id='+marketplaceAccountId+'-'+marketplaceId;
     }else{
@@ -618,7 +618,7 @@ function modifyRowAggregatorEdit(marteplaceId,marketplaceAccountId,aggregatorTyp
 
 }
 function modifyRowMarketplaceEdit(marketplaceId){
-    let url='/marketplace/marketplace-shop/modifica/'+marketplaceId;
+    let url='/blueseal/marketplace/marketplace-shop/modifica/'+marketplaceId;
     window.open(url,'_blank');
 
 }
