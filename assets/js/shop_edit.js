@@ -609,10 +609,11 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 function modifyRowAggregatorEdit(marketplaceId,marketplaceAccountId,aggregatorType){
+    let url='';
     if(aggregatorType=='cpc') {
-        let url = '/blueseal/marketplace/account?id='+marketplaceAccountId+'-'+marketplaceId;
+         url = '/blueseal/marketplace/account?id='+marketplaceAccountId+'-'+marketplaceId;
     }else{
-        let url = 'blueseal/aggregator/account-social-edit?id='+marketplaceAccountId+'-'+marketplaceId;
+         url = 'blueseal/aggregator/account-social-edit?id='+marketplaceAccountId+'-'+marketplaceId;
     }
     window.open(url,'_blank');
 
