@@ -13,6 +13,7 @@ use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\STimeToolbox;
 use DateTime;
+use DateInterval;
 use PDO;
 use PDOException;
 
@@ -956,17 +957,49 @@ class CFriendAccept extends AAjaxController
                              $serial = new CSerialNumber();
                              $serial->generate();
 
-                             $today = new \DateTime();
-                             $issueDate = $today->format('Y-m-d');
+                             $issueDate = $today->format('Y-m-d H:i:s');
 
-                             $couponValidThru = STimeToolbox::DbFormattedDateTime($today->add(new \DateInterval($validityRemote)));
-                             $couponValidThruEmail = (new DateTime($couponValidThru))->format('d-m-Y');
+
+                             $couponValidThru = $today->modify('+1 year')->format('Y-m-d H:i:s');
+
 
                              $couponCode = $serial->__toString();
-
-                             $stmtInsertCoupon = $db_con1->prepare('INSERT INTO Coupon (couponTypeId, tagId, `code`, `issueDate`,`validThru`,`amount`,`amountType`,`userId`,`valid`,`couponEventId`,`sid`,`isImport`,`isExtend`) 
-                                                VALUES (\'' . $couponTypeIdRemote . '\',NULL,\'' . $couponCode . '\',\'' . $issueDate . '\',\'' . $couponValidThru . '\',\'' . $amountCouponRemote . '\',\'' . $amountTypeRemote . '\',\'' . $amountCouponRemote . '\',\'' . $remoteUserId . '\',1,NULL,NULL,1,NULL)   ');
+                             \Monkey::app()->applicationLog('CfriendAccept','log','coupon',$couponCode,'');
+                             \Monkey::app()->applicationLog('CfriendAccept','log','coupon',$issueDate,'');
+                             \Monkey::app()->applicationLog('CfriendAccept','log','coupon',$couponValidThru,'');
+                             \Monkey::app()->applicationLog('CfriendAccept','log','coupon',$amountCouponRemote,'');
+                             \Monkey::app()->applicationLog('CfriendAccept','log','coupon',$amountTypeRemote,'');
+                             \Monkey::app()->applicationLog('CfriendAccept','log','coupon',$remoteUserId,'');
+                             $stmtInsertCoupon = $db_con1->prepare('INSERT INTO Coupon (couponTypeId,
+                                                                                                 tagId, 
+                                                                                                `code`, 
+                                                                                                `issueDate`,
+                                                                                                `validThru`,`amount`,`amountType`,`userId`,`valid`,`couponEventId`,`sid`,`isImport`,`isExtended`) 
+                                                VALUES (
+                                                \'' . $couponTypeIdRemote . '\',
+                                                NULL,
+                                                \'' . $couponCode . '\',
+                                                \'' . $issueDate . '\',
+                                                \'' . $couponValidThru . '\',
+                                                \'' . $amountCouponRemote . '\',
+                                                \'' . $amountTypeRemote . '\',
+                                                 \'' . $remoteUserId . '\',
+                                                 1,
+                                                 NULL,
+                                                 NULL,
+                                                 1,
+                                                 NULL)   ');
+                             /* $sql='INSERT INTO Coupon (couponTypeId,
+                                                                                                   tagId,
+                                                                                                  `code`,
+                                                                                                  `issueDate`,
+                                                                                                  `validThru`,`amount`,`amountType`,`userId`,`valid`,`couponEventId`,`sid`,`isImport`,`isExtend`)
+                                                  VALUES (\'' . $couponTypeIdRemote . '\',NULL,\'' . $couponCode . '\',\'' . $issueDate . '\',
+                                                          \'' . $couponValidThru . '\',\'' . $amountCouponRemote . '\',\'' . $amountTypeRemote . '\',
+                                                          \'' . $remoteUserId . '\',1,NULL,NULL,1,NULL)   ';
+                              \Monkey::app()->applicationLog('CfriendAccept', 'log','sql coupon', $sql,'');*/
                              $stmtInsertCoupon->execute();
+                             $couponValidThruEmail = (new \DateTime($couponValidThru))->format('d-m-Y');
 
                              $stmtFindCouponGenerate = $db_con1->prepare('select id from Coupon where `code` like \'%' . $couponCode . '%\'');
                              $stmtFindCouponGenerate->execute();
