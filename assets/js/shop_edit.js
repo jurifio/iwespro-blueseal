@@ -244,7 +244,7 @@ var couponType=0;
                 }else{
                     isActive='no';
                 }
-                bodyres = bodyres + '<tr><td style="width:20%;">' + v.id + '</td><td style="width:20%;">' + v.name + '</td><td style="width:20%;"><img width="80" src="' + v.imgAggregator + '"/></td><td style="width:20%;">' + isActive + '</td><td><button class="success" id="modifyRowAggregatorButton' + v.id + '" onclick="modifyRowAggregatorEdit(' + v.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                bodyres = bodyres + '<tr><td style="width:20%;">' + v.id + '</td><td style="width:20%;">' + v.name + '</td><td style="width:20%;"><img width="80" src="' + v.imgAggregator + '"/></td><td style="width:20%;">' + isActive + '</td><td><button class="success" id="modifyRowAggregatorButton' + v.id + '" onclick="modifyRowAggregatorEdit(' + v.marketplaceId + ','+v.marketplaceAccountId+','+v.typeAggregator+')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyres = bodyres + '</table>';
@@ -260,7 +260,7 @@ var couponType=0;
                 }else{
                     isActiveMarketplace='no';
                 }
-                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:25%;">' + n.name + '</td><td style="width:25%;">' + isActiveMarketplace + '</td><td><button class="success" id="modifyRowMarketplaceButton' + n.id + '" onclick="modifyRowMarketplaceEdit(' + n.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                bodyresi = bodyresi + '<tr><td style="width:25%;">' + n.id + '</td><td style="width:25%;">' + n.name + '</td><td style="width:25%;">' + isActiveMarketplace + '</td><td><button class="success" id="modifyRowMarketplaceButton' + n.marketplaceAccountId + '" onclick="modifyRowMarketplaceEdit(' + n.marketplaceId + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresi = bodyresi + '</table>';
@@ -608,13 +608,17 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-function modifyRowAggregatorEdit(aggregatorId){
-    let url='/blueseal/aggregatori/account-shop/modifica/'+aggregatorId
+function modifyRowAggregatorEdit(marteplaceId,marketplaceAccountId,aggregatorType){
+    if(aggregatorType=='cpc') {
+        let url = '/blueseal/marketplace/account?id='+marketplaceAccountId+'-'+marketplaceId;
+    }else{
+        let url = 'blueseal/aggregator/account-social-edit?id='+marketplaceAccountId+'-'+marketplaceId;
+    }
     window.open(url,'_blank');
 
 }
 function modifyRowMarketplaceEdit(marketplaceId){
-    let url='/blueseal/marketplace/account-shop/modifica/'+marketplaceId
+    let url='/marketplace/marketplace-shop/modifica/'+marketplaceId;
     window.open(url,'_blank');
 
 }
