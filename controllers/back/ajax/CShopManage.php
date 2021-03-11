@@ -74,7 +74,7 @@ class CShopManage extends AAjaxController
 
 
             $aggregatorHasShop=[];
-            $sql='select ahs.id as id,`ahs`.`name` as `name`, ahs.imgAggregator as imgAggregator,`m`.`type` as typeAggregator, ahs.marketplaceId as marketplaceId,ma.id as marketplaceAccountId, ma.config as config, ma.isActive as isActive  from MarketplaceAccount ma join
+            $sql='select ahs.id as id,`ma`.`name` as `name`, ahs.imgAggregator as imgAggregator,`m`.`type` as typeAggregator, ahs.marketplaceId as marketplaceId,ma.id as marketplaceAccountId, ma.config as config, ma.isActive as isActive  from MarketplaceAccount ma join
             Marketplace m on ma.marketplaceId=m.id join AggregatorHasShop ahs on m.id=ahs.marketplaceId where m.type !="marketplace" and ahs.shopId='.$shopId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
@@ -88,7 +88,7 @@ class CShopManage extends AAjaxController
             }
             $shop->aggregatorHasShop = $aggregatorHasShop;
             $marketplaceHasShop=[];
-            $sql='select ahs.id as id,`ahs`.`name` as `name`, `m`.`type` as typeMarketplace, m.id as marketplaceId, ma.id as marketplaceAccountId, ma.config as config, ma.isActive as isActive  from MarketplaceAccount ma join
+            $sql='select ahs.id as id,`ma`.`name` as `name`, `m`.`type` as typeMarketplace, m.id as marketplaceId, ma.id as marketplaceAccountId, ma.config as config, ma.isActive as isActive  from MarketplaceAccount ma join
             Marketplace m on ma.marketplaceId=m.id join MarketplaceHasShop ahs on m.id=ahs.marketplaceId where m.type ="marketplace" and ahs.shopId='.$shopId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
