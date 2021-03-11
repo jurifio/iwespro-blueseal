@@ -40,10 +40,10 @@
                             <button class="tablinks" onclick="openTab(event, 'modifyClientPlace')">Sedi
 
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'modifyClientAggregator')">Aggregatori
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientAggregator')">Regole Aggregatori
 
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'modifyClientMarketplace')">Marketplace
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientMarketplace')">Regole Marketplace
 
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'modifyClientCampaign')">Campagne
