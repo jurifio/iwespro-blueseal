@@ -613,7 +613,7 @@ function modifyRowAggregatorEdit(marketplaceId,marketplaceAccountId,aggregatorTy
     if(aggregatorType=='cpc') {
          url = '/blueseal/marketplace/account?id='+marketplaceAccountId+'-'+marketplaceId;
     }else{
-         url = 'blueseal/aggregator/account-social-edit?id='+marketplaceAccountId+'-'+marketplaceId;
+         url = '/blueseal/aggregator/account-social-edit?id='+marketplaceAccountId+'-'+marketplaceId;
     }
     window.open(url,'_blank');
 
