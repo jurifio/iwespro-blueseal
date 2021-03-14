@@ -3,10 +3,16 @@
         "engine": "mysql",
         "host": "5.189.152.89",
         "port": "3306",
-        "name": "iwes_wp",
+        "name": "thomas",
         "user": "root",
         "pass": "F1fiI3EYv9JXl8Z",
         "charset": "utf8",
         "options": {}
-    }
+    },
+    "tables": [
+        {
+            "name": "User",
+            "mode": "full"
+        }
+    ]
 }
