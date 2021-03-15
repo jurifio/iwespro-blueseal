@@ -9,6 +9,8 @@ use bamboo\domain\entities\CMarketplaceAccount;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CAggregatorHasProduct;
+use bamboo\domain\entities\CMarketplaceAccountHasProduct;
 use bamboo\domain\entities\CProductBrand;
 use DateTime;
 
