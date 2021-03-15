@@ -21,7 +21,7 @@ $(document).on('bs.marketplace.filter',function() {
 
     Pace.ignore(function () {
         $.ajax({
-            url: '/blueseal/xhr/MarketplaceProductManageController',
+            url: '/blueseal/xhr/AggregatorProductManageController',
             type: "get",
         }).done(function (response) {
             var accounts = JSON.parse(response);
