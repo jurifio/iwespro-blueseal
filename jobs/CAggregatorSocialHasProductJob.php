@@ -11,6 +11,7 @@ use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductBrand;
 use bamboo\domain\entities\CAggregatorHasProduct;
+use DateTime;
 
 
 /**
