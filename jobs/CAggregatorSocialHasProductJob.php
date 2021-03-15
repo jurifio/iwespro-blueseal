@@ -45,12 +45,12 @@ class CAggregatorSocialHasProductJob extends ACronJob
         try {
             $this->report('CMarketplaceHasProductJob','start Preparing','');
 
-            $marketplaces = $marketplaceRepo->findBy(['type' => 'social']);
+            $marketplaces = $marketplaceRepo->findBy(['type'=>'social']);
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
                     if ($marketplaceAccount->isActive == 1) {
-                        $this->report('CAggregatorHasProductJob','Working ' . $marketplace->name,'');
+                        $this->report('CAggregatorSocialHasProductJob','Working ' . $marketplace->name,'');
 
                         $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
@@ -193,12 +193,9 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
 
 
                                 } elseif ($product['status'] == 0) {
-                                    $marketProductInsert = $phphmhsRepo->getEmptyEntity();
-                                    $marketProductInsert->productId = $product['productId'];
-                                    $marketProductInsert->productVariantId = $product['productVariantId'];
                                     $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
                                     $marketProductInsert->istoWork = 1;
-                                    $marketProductInsert->isRevised = 0;
+                                    $marketProductInsert->isRevised = 1;
                                     $marketProductInsert->isDeleted = 0;
                                     $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
                                     $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
@@ -208,7 +205,7 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                                     } else {
                                         $marketProductInsert->titleModified = 0;
                                     }
-                                    $marketProductInsert->insert();
+                                    $marketProductInsert->update();
                                 } else {
 
                                     $marketProduct->istoWork = 1;
@@ -224,12 +221,12 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                                     $marketProduct->update();
                                 }
                             } else {
-                                $marketProductInsert = $phphmhsRepo->getEmptyEntity();
+                                $marketProductInsert = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
                                 $marketProductInsert->productId = $product['productId'];
                                 $marketProductInsert->productVariantId = $product['productVariantId'];
                                 $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
                                 $marketProductInsert->istoWork = 1;
-                                $marketProductInsert->isRevised = 0;
+                                $marketProductInsert->isRevised = 1;
                                 $marketProductInsert->isDeleted = 0;
                                 $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
                                 $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
