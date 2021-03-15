@@ -89,6 +89,49 @@ $(document).ready(function () {
         });
 
     });
+    var selectCampaignId=$('#selectCampaignId').val();
+    if(selectCampaignId!='') {
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Campaign'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var selectCampaign = $('#CampaignName');
+            if (typeof (selectCampaign[0].selectize) != 'undefined') selectCampaign[0].selectize.destroy();
+            selectCampaign.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2,
+                onInitialize: function () {
+                    var selectize = this;
+                    selectize.setValue(selectCampaignId);
+                }
+
+            });
+        });
+    }else{
+        $.ajax({
+            method: 'GET',
+            url: '/blueseal/xhr/GetTableContent',
+            data: {
+                table: 'Campaign'
+            },
+            dataType: 'json'
+        }).done(function (res2) {
+            var selectCampaign = $('#campaignName');
+            if (typeof (selectCampaign[0].selectize) != 'undefined') selectCampaign[0].selectize.destroy();
+            selectCampaign.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                searchField: ['name'],
+                options: res2
+            });
+        });
+    }
 
 
 
@@ -173,7 +216,6 @@ $(document).on('bs.aggregator-account.save', function () {
     }
 
     var config = '?nameAggregator=' + marketplace_account_name + '&' +
-        'typeInsertionCampaign=' + typeInsertionCampaign + '&' +
         'typeInsertion=' + typeInsertion + '&' +
         'campaignName=' + campaignName + '&' +
         'marketplaceId='+ marketplaceId + '&' +
@@ -212,6 +254,8 @@ $(document).on('bs.aggregator-account.save', function () {
         });
     });
 });
+
+
 
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;

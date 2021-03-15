@@ -193,6 +193,9 @@
                                     </div>
                                     <div class="row" id="divcampaign">
                                         <div class="col-md-12">
+                                            <input type="hidden" id="selectCampaignId"
+                                                       name="selectCampaignId"
+                                                       value="<?php echo $campaignOption; ?>">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="campaignName">Associata
                                                     Campagna
@@ -202,7 +205,7 @@
                                                         class="full-width selectpicker"
                                                         placeholder=""
                                                         data-init-plugin="selectize">
-                                                    <?php echo $campaignOption ?>
+
                                                 </select>
                                             </div>
                                         </div>

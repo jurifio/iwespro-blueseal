@@ -78,15 +78,15 @@ $bodyres.='<div class="col-md-4"><input type="checkbox" class="form-control"  id
         }
 $bodyres.='</table>';
 
-$campaigns=\Monkey::app()->repoFactory->create('Campaign')->findAll();
+$campaigns=\Monkey::app()->repoFactory->create('Campaign')->findOneBy(['marketplaceId'=>$marketplaceAccount->marketplaceId,'marketplaceAccountId'=>$marketplaceAccount->id]);
 $campaignOption='';
-foreach($campaigns as $campaign) {
-    if($campaign->marketplaceId==$marketplaceAccount->marketplaceId && $campaign->marketplaceAccountId==$marketplaceAccount->id) {
-        $campaignOption .= '<option selected="selected" value"' . $campaign->id . '">' . $campaign->name . '</option>';
+
+    if(!$campaigns) {
+        $campaignOption='';
     }else{
-        $campaignOption .= '<option value="' . $campaign->id . '">' . $campaign->name . '</option>';
+        $campaignOption = $campaigns->id;
     }
-}
+
 
 
         return $view->render([
