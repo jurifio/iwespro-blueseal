@@ -177,7 +177,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                                                             
  and p.productVariantId=shp.productVariantId
 join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId
-where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
+where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
                             $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);

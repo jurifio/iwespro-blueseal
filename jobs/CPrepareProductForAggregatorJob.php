@@ -66,7 +66,7 @@ class CPrepareProductForAggregatorJob extends ACronJob
                                     $phphmhs->isRevised=0;
                                     $phphmhs->isToWork=0;
                                     $phphmhs->update();
-                                    \Monkey::app()->applicationLog('CPrepareProductForAggregatorAjaxController','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
+                                    \Monkey::app()->applicationLog('CPrepareProductForAggregatorJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
                                 }
                             }else{
                                 continue;
