@@ -26,18 +26,22 @@ class CAggregatorProductManageController extends AAjaxController
     public function get()
     {
         $response = [];
-        foreach (\Monkey::app()->repoFactory->create('Marketplace')->findBy(['type' => 'cpc']) as $mp) {
-            foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]) as $account) {
-                $activeAutomatic = isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
-                $modifier = isset($account->config['priceModifier']) ? $account->config['priceModifier'] : 0;
-                $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
-                $cpcM = isset($account->config['defaultCpcM']) ? $account->config['defaultCpcM'] : 0;
-                $cpcFM = isset($account->config['defaultCpcFM']) ? $account->config['defaultCpcFM'] : 0;
-                $cpcF = isset($account->config['defaultCpcF']) ? $account->config['defaultCpcF'] : 0;
+        foreach (\Monkey::app()->repoFactory->create('Marketplace')->findAll() as $mp) {
+            if($mp->type != 'marketplace') {
+                foreach (\Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => $mp->id]) as $account) {
+                    $activeAutomatic = isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
+                    $modifier = isset($account->config['priceModifier']) ? $account->config['priceModifier'] : 0;
+                    $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
+                    $cpcM = isset($account->config['defaultCpcM']) ? $account->config['defaultCpcM'] : 0;
+                    $cpcFM = isset($account->config['defaultCpcFM']) ? $account->config['defaultCpcFM'] : 0;
+                    $cpcF = isset($account->config['defaultCpcF']) ? $account->config['defaultCpcF'] : 0;
 
 
-                $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $account->marketplace->name,'modifier' => $modifier,'cpc' => $cpc,'cpcF' => $cpcF,'cpcM' => $cpcM,'cpcFM' => $cpcFM,'activeAutomatic' => $activeAutomatic];
+                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $account->marketplace->name,'modifier' => $modifier,'cpc' => $cpc,'cpcF' => $cpcF,'cpcM' => $cpcM,'cpcFM' => $cpcFM,'activeAutomatic' => $activeAutomatic];
 
+                }
+            }else{
+                continue;
             }
         }
 

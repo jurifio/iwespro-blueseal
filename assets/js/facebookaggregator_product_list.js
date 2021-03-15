@@ -203,8 +203,8 @@ $(document).on('bs.aggregator.prepare.product', function () {
 	products='';
 
 
-	let bsModal = new $.bsModal('Selezione Prodotti per Shop associato al Marketplace ', {
-		body: `Emulatore Job popolamento tabella Prodotti per Marketplace `
+	let bsModal = new $.bsModal('Selezione Prodotti per Shop associato all Aggregatore ', {
+		body: `Emulatore Job popolamento tabella Prodotti per Aggregatore `
 	});
 
 
