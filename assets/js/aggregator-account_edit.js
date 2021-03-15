@@ -99,7 +99,7 @@ $(document).ready(function () {
             },
             dataType: 'json'
         }).done(function (res2) {
-            var selectCampaign = $('#CampaignName');
+            var selectCampaign = $('#campaignName');
             if (typeof (selectCampaign[0].selectize) != 'undefined') selectCampaign[0].selectize.destroy();
             selectCampaign.selectize({
                 valueField: 'id',
