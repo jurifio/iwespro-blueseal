@@ -300,7 +300,7 @@ class CAggregatorHasProductJobAjaxController extends AAjaxController
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActive'] == 1) {
+                    if ($marketplaceAccount->isActive == 1) {
 
                           \Monkey::app()->applicationLog('CAggregatorHasProductJob','error','Working to Select Eligible Products to ' . $marketplace->name,'','');
                         $sql = 'select p.id as productId,
