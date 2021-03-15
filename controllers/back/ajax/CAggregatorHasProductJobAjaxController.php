@@ -422,10 +422,11 @@ where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketpl
 
             }
               \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','End Work Publishing Eligible Products to Aggregator  Table','');
+            return 'Fine Pubblicazione';
         } catch
         (\Throwable $e) {
               \Monkey::app()->applicationLog('CMarketplaceHasProductJob','error','ERROR Work Publishing Eligible Products to Aggregator',$e->getMessage() . '-' . $e->getLine());
-
+            return 'errore fine pubblicazione '.$e-getMessage();
         }
     }
 
