@@ -282,7 +282,7 @@ class CAggregatorAccountInsertManage extends AAjaxController
         }
 
 
-        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->findOneBy(['id' => $marketplaceAccountId,'marketplaceId' => $marketplaceId]);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id' => $marketplaceAccountId,'marketplaceId' => $marketplaceId]);
         $marketplaceAccount->config = $collectUpdate;
         $marketplaceAccount->urlSite = $urlSite;
         $marketplaceAccount->isActive = $isActive;
