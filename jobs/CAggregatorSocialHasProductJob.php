@@ -10,6 +10,7 @@ use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductBrand;
+use bamboo\domain\entities\CAggregatorHasProduct;
 
 
 /**
@@ -65,7 +66,6 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                 $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                                 if ($pshsd) {
 
-                                    if ($pshsd->dateUpdate != $marketplaceAccount->config['dateUpdate']) {
                                         $pshsd->status = 2;
 
                                             $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
@@ -93,11 +93,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
 
 
 
-                                    } else {
-                                        $pshsd->status = 1;
-                                        $pshsd->productStatusAggregatorId = 2;
-                                        $pshsd->update();
-                                    }
+
                                 } else {
                                     $pshsdInsert = $phsRepo->getEmptyEntity();
                                     $pshsdInsert->productId = $product['productId'];
@@ -143,13 +139,13 @@ class CAggregatorSocialHasProductJob extends ACronJob
                 }
             }
 
-            $this->report('CAggregatorHasProductJob','End Work publishing','');
+            $this->report('CAggregatorSocialHasProductJob','End Work publishing','');
         } catch (\Throwable $e) {
-            $this->report('CAggregatorHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
+            $this->report('CAggregatorSocialHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
 
         }
         try {
-            $this->report('CAggregatorHasProductJob','startPublish','');
+            $this->report('CAggregatorSocialHasProductJob','startPublish','');
 
             $marketplaces = $marketplaceRepo->findBy(['type' => 'social']);
             foreach ($marketplaces as $marketplace) {
@@ -157,7 +153,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                 if ($marketplaceAccount) {
 
 
-                        $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
+                        $this->report('CAggregatorSocialHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                         $sql = 'select p.id as productId,
                                     p.productVariantId as productVariantId,
                                     p.productBrandId as productBrandId,
@@ -215,7 +211,7 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                                     $marketProductInsert->insert();
                                 } else {
 
-                                    $marketProduct->istoWork = 0;
+                                    $marketProduct->istoWork = 1;
                                     $marketProduct->isRevised = 1;
                                     $marketProduct->isDeleted = 0;
                                     $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
@@ -249,19 +245,19 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                             $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                             $phpUpdate->status = 1;
                             $phpUpdate->update();
-                            $this->report('CAggregatorHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
+                            $this->report('CAggregatorSocialHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
                         }
 
                 }
 
-                $this->report('CAggregatorHasProductJob','End Work Publish for  ' . $marketplace->name,'');
+                $this->report('CAggregatorSocialHasProductJob','End Work Publish for  ' . $marketplace->name,'');
 
 
             }
-            $this->report('CAggregatorHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
+            $this->report('CAggregatorSocialHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
         } catch
         (\Throwable $e) {
-            $this->report('CMarketplaceHasProductJob','ERROR Work Publishing Eligible Products to Aggregator',$e->getMessage() . '-' . $e->getLine());
+            $this->report('CAggregatorSocialHasProductJob','ERROR Work Publishing Eligible Products to Aggregator',$e->getMessage() . '-' . $e->getLine());
 
         }
 
