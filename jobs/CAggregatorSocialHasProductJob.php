@@ -176,6 +176,7 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
 where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
+                            $this->report('CAggregatorSocialHasProductJob','Start Working Product ' . $product['productId'] . '-' . $product['productVariantId'],'');
                             $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                             if ($marketProduct) {
                                 if ($product['status'] == 2) {
@@ -226,7 +227,7 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                                 $marketProductInsert->productVariantId = $product['productVariantId'];
                                 $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
                                 $marketProductInsert->istoWork = 1;
-                                $marketProductInsert->isRevised = 1;
+                                $marketProductInsert->isRevised = 0;
                                 $marketProductInsert->isDeleted = 0;
                                 $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
                                 $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
