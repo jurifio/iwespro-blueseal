@@ -313,7 +313,7 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
 where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
-                            $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
+                            $marketProduct = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceAccountId' => $marketplaceAccount->id,'marketplaceId'=>$marketplaceAccount->marketplaceId]);
                             if ($marketProduct) {
                                 if ($product['status'] == 2) {
                                     $marketProduct->priceModifier = $product['priceModifier'];
