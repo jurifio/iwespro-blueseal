@@ -155,6 +155,7 @@ $(document).on('bs.aggregator-account.save', function () {
     var slug = $('#slug').val();
     var aggregatorHasShopId = $('#aggregatorHasShopId').val();
     var nameAdminister = $('#nameAdminister').val();
+    var marketplaceId = $('#marketplaceId').val();
     var marketplaceAccountId = $('#marketplaceAccountId').val();
     var emailNotify = $('#emailNotify').val();
     var isActive = $('#isActive').val();
@@ -175,6 +176,7 @@ $(document).on('bs.aggregator-account.save', function () {
         'typeInsertionCampaign=' + typeInsertionCampaign + '&' +
         'typeInsertion=' + typeInsertion + '&' +
         'campaignName=' + campaignName + '&' +
+        'marketplaceId='+ marketplaceId + '&' +
         'lang=' + lang + '&' +
         'aggregatorHasShopId=' + aggregatorHasShopId + '&' +
         'marketplaceAccountId='+ marketplaceAccountId + '&' +
