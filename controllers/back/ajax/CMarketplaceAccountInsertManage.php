@@ -985,7 +985,7 @@ class CMarketplaceAccountInsertManage extends AAjaxController
         }
 
 
-        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketPlaceAccount')->findOneBy(['id' => $marketplaceAccountId,'marketplaceId' => $marketplaceId]);
+        $marketplaceAccount = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findOneBy(['id' => $marketplaceAccountId,'marketplaceId' => $marketplaceId]);
         $marketplaceAccount->marketplaceId = $marketplaceId;
         $marketplaceAccount->name = $marketplace_account_name;
         $marketplaceAccount->config = $collectUpdate;
