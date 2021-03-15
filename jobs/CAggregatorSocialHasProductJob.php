@@ -151,7 +151,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
         try {
             $this->report('CAggregatorHasProductJob','startPublish','');
 
-            $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
+            $marketplaces = $marketplaceRepo->findBy(['type' => 'social']);
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
