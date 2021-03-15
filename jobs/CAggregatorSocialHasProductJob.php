@@ -135,22 +135,6 @@ class CAggregatorSocialHasProductJob extends ACronJob
                         }
                         $this->report('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
                     }
-                }
-            }
-
-            $this->report('CAggregatorSocialHasProductJob','End Work publishing','');
-        } catch (\Throwable $e) {
-            $this->report('CAggregatorSocialHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
-
-        }
-        try {
-            $this->report('CAggregatorSocialHasProductJob','startPublish','');
-
-            $aggregators = $marketplaceRepo->findBy(['type' => 'social']);
-            foreach ($aggregators as $marketplace) {
-                $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
-                if ($marketplaceAccount) {
-
 
                     $this->report('CAggregatorSocialHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                     $sql = 'select p.id as productId,
