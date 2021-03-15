@@ -282,7 +282,7 @@ class CAggregatorHasProductJobAjaxController extends AAjaxController
 
                                 }
                             }
-                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
+                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'','');
                         }
                     }
                 }
