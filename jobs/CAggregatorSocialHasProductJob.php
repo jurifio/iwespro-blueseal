@@ -87,7 +87,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                             $pshsd->feeCustomer = 0;
                                             $pshsd->feeCustomerMobile = 0.25;
                                             $pshsd->productStatusAggregatorId = 2;
-                                            $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
+                                            $pshsd->lastUpdate = (new DateTime())->format('Y-m-d H:i:s');
                                             $pshsd->status = 2;
                                             $pshsd->update();
 
