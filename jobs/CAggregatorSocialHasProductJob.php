@@ -48,7 +48,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActive'] == 1) {
+                    if ($marketplaceAccount->isActive == 1) {
                         $this->report('CAggregatorHasProductJob','Working ' . $marketplace->name,'');
 
                         $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,

@@ -282,19 +282,19 @@ class CAggregatorHasProductJobAjaxController extends AAjaxController
 
                                 }
                             }
-                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'','');
+                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','End Work  prepare for publishing From ' . $marketplace->name,'','');
                         }
                     }
                 }
             }
 
-              \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work publishing','','');
+              \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','End Work publishing','','');
         } catch (\Throwable $e) {
-              \Monkey::app()->applicationLog('CAggregatorHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
+              \Monkey::app()->applicationLog('CAggregatorHasProductJob','eror','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
 
         }
         try {
-              \Monkey::app()->applicationLog('CAggregatorHasProductJob','startPublish','');
+              \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','startPublish','','');
 
             $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
             foreach ($marketplaces as $marketplace) {
@@ -302,7 +302,7 @@ class CAggregatorHasProductJobAjaxController extends AAjaxController
                 if ($marketplaceAccount) {
                     if ($marketplaceAccount->config['isActive'] == 1) {
 
-                          \Monkey::app()->applicationLog('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
+                          \Monkey::app()->applicationLog('CAggregatorHasProductJob','error','Working to Select Eligible Products to ' . $marketplace->name,'','');
                         $sql = 'select p.id as productId,
                                     p.productVariantId as productVariantId,
                                     p.productBrandId as productBrandId,
@@ -412,19 +412,19 @@ where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketpl
                             $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                             $phpUpdate->status = 1;
                             $phpUpdate->update();
-                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
+                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
                         }
                     }
                 }
 
-                  \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work Publish for  ' . $marketplace->name,'');
+                  \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','End Work Publish for  ' . $marketplace->name,'');
 
 
             }
-              \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
+              \Monkey::app()->applicationLog('CAggregatorHasProductJob','log','End Work Publishing Eligible Products to Aggregator  Table','');
         } catch
         (\Throwable $e) {
-              \Monkey::app()->applicationLog('CMarketplaceHasProductJob','ERROR Work Publishing Eligible Products to Aggregator',$e->getMessage() . '-' . $e->getLine());
+              \Monkey::app()->applicationLog('CMarketplaceHasProductJob','error','ERROR Work Publishing Eligible Products to Aggregator',$e->getMessage() . '-' . $e->getLine());
 
         }
     }
