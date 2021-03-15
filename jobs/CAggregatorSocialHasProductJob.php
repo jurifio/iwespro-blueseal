@@ -177,7 +177,7 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
 where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
-                            $this->report('CAggregatorSocialHasProductJob','Start Working Product ' . $product['productId'] . '-' . $product['productVariantId'],'');
+                            $this->report('CAggregatorSocialHasProductJob','Start Working Product ' . $product['productId'] . '-' . $product['productVariantId'],$marketplaceAccount->config['aggregatorHasShopId']);
                             $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                             if ($marketProduct) {
                                 if ($product['status'] == 2) {
