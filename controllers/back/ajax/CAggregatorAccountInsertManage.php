@@ -256,7 +256,6 @@ class CAggregatorAccountInsertManage extends AAjaxController
         }
 
         $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$aggregatorHasShopId]);
-        $marketplaceId=$aggregatorHasShop->marketplaceId;
         $shopId=$aggregatorHasShop->shopId;
 
 
