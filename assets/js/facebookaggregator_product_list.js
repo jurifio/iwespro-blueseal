@@ -218,7 +218,7 @@ $(document).on('bs.aggregator.prepare.product', function () {
 
 		$.ajax({
 			method: 'post',
-			url: '/blueseal/xhr/PrepareProductForMarketplaceAjaxController',
+			url: '/blueseal/xhr/PrepareProductForAggregatorAjaxController',
 			data: data
 		}).done(function (res) {
 			bsModal.writeBody(res);

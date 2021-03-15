@@ -4,48 +4,47 @@ $('#btnsearchplus').click(function() {
 		accountid = '&accountid='+$('#accountid').val();
 	}
 
-	var url='/blueseal/aggregatori/prodotti/lista/google?'+accountid;
+	var url='/blueseal/aggregatori/prodotti/lista/facebook?'+accountid;
 
 	window.location.href=url;
 });
-
 $(document).on('bs.marketplace.filter',function() {
-    var bsModal = $('#bsModal');
-    var header = $('.modal-header h4');
-    var body = $('.modal-body');
-    var cancelButton = $('.modal-footer .btn-default');
-    var okButton = $('.modal-footer .btn-success');
+	var bsModal = $('#bsModal');
+	var header = $('.modal-header h4');
+	var body = $('.modal-body');
+	var cancelButton = $('.modal-footer .btn-default');
+	var okButton = $('.modal-footer .btn-success');
 
-    header.html('Filtra Tabella');
+	header.html('Filtra Tabella');
 
-    body.html('<img src="/assets/img/ajax-loader.gif" />');
+	body.html('<img src="/assets/img/ajax-loader.gif" />');
 
-    Pace.ignore(function () {
-        $.ajax({
-            url: '/blueseal/xhr/MarketplaceProductManageController',
-            type: "get",
-        }).done(function (response) {
-            var accounts = JSON.parse(response);
-            var html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
-                '<label for="accountFilterId">Marketplace Account</label>' +
-                '<select class="full-width" placeholder="Seleziona l\'account" ' +
-                'data-init-plugin="selectize" title="" name="accountId" id="accountFilterId" required>' +
-                '<option value=""></option>';
-            for(let account of accounts) {
-                html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
-            }
-            html+='</select>';
-            html+='</div>';
+	Pace.ignore(function () {
+		$.ajax({
+			url: '/blueseal/xhr/AggregatorProductManageController',
+			type: "get",
+		}).done(function (response) {
+			var accounts = JSON.parse(response);
+			var html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
+				'<label for="accountFilterId">Marketplace Account</label>' +
+				'<select class="full-width" placeholder="Seleziona l\'account" ' +
+				'data-init-plugin="selectize" title="" name="accountId" id="accountFilterId" required>' +
+				'<option value=""></option>';
+			for(let account of accounts) {
+				html+='<option value="'+account.id+'" data-has-cpc="'+account.cpc+'" data-modifier="'+account.modifier+'">'+account.marketplace+' - '+account.name+'</option>';
+			}
+			html+='</select>';
+			html+='</div>';
 
-            body.html($(html));
+			body.html($(html));
 
-            okButton.off().on('click',function () {
-                window.location.href = '/blueseal/prodotti/marketplace/account/'+$('#accountFilterId').val();
-            });
-        });
-    });
+			okButton.off().on('click',function () {
+				window.location.href = '/blueseal/prodotti/marketplace/account/'+$('#accountFilterId').val();
+			});
+		});
+	});
 
-    bsModal.modal();
+	bsModal.modal();
 });
 
 $(document).on('bs.ean.newRange', function (e, element, button) {
@@ -204,8 +203,8 @@ $(document).on('bs.aggregator.prepare.product', function () {
 	products='';
 
 
-	let bsModal = new $.bsModal('Selezione Prodotti per Shop associato al Marketplace ', {
-		body: `Emulatore Job popolamento tabella Prodotti per Marketplace `
+	let bsModal = new $.bsModal('Selezione Prodotti per Shop associato all Aggregatore ', {
+		body: `Emulatore Job popolamento tabella Prodotti per Aggregatore `
 	});
 
 
@@ -219,7 +218,7 @@ $(document).on('bs.aggregator.prepare.product', function () {
 
 		$.ajax({
 			method: 'post',
-			url: '/blueseal/xhr/PrepareProductForMarketplaceAjaxController',
+			url: '/blueseal/xhr/PrepareProductForAggregatorAjaxController',
 			data: data
 		}).done(function (res) {
 			bsModal.writeBody(res);
