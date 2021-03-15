@@ -165,9 +165,9 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
             $aggregatorFind->update();
 
             \Monkey::app()->applicationLog('CAggregatorAccountShopInsertManage','Report','update','update Marketplace Account HasShop ' . $marketplaceId . ' ' . $marketplace_account_name);
-            return 'Creazione MarketplaceAccount ' . $marketplace_account_name . ' con ' . $marketplaceId;
+            return 'Creazione Aggregaore Account ' . $marketplace_account_name . ' con ' . $marketplaceId;
         }else{
-            return 'problemi con la modifica dell\' Account Aggergatore ';
+            return 'problemi con la modifica dell\' Account Aggregatore ';
         }
     }
 
@@ -175,7 +175,7 @@ class CAggregatorAccountShopInsertManage extends AAjaxController
     {
         $id = \Monkey::app()->router->request()->getRequestData('id');
         $aggregatorHasShop = \Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id' => $id]);
-        $marketplaceHasShop->delete();
+        $aggregatorHasShop->delete();
         return 'Aggregatore Account  Cancellato definitivamente ricordati di cancellare le regole ';
 
     }

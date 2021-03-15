@@ -25,7 +25,7 @@ use bamboo\domain\entities\CProductBrand;
  * @date 27/04/2020
  * @since 1.0
  */
-class CAggregatorHasProductJob extends ACronJob
+class CAggregatorSocialHasProductJob extends ACronJob
 {
 
     /**
@@ -37,7 +37,7 @@ class CAggregatorHasProductJob extends ACronJob
         $marketplaceAccountRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
         $phphmhsRepo = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct');
-        /** @var CRepo phsRepo */
+
         $phsRepo = \Monkey::app()->repoFactory->create('AggregatorHasProduct');
 
 
@@ -67,19 +67,7 @@ class CAggregatorHasProductJob extends ACronJob
 
                                     if ($pshsd->dateUpdate != $marketplaceAccount->config['dateUpdate']) {
                                         $pshsd->status = 2;
-                                        if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
 
-                                            $pshsd->priceModifier = 0;
-                                            $pshsd->feeCustomer = 0;
-                                            $pshsd->feeCustomerMobile = 0.25;
-                                            $pshsd->fee = 0.25;
-                                            $pshsd->feeMobile = 0.25;
-                                            $pshsd->status = 2;
-                                            $pshsd->productStatusAggregatorId = 2;
-                                            $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
-                                            $pshsd->update();
-
-                                        } else {
                                             $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                             $isOnSale = $prod->isOnSale();
                                             $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
@@ -102,7 +90,7 @@ class CAggregatorHasProductJob extends ACronJob
                                             $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
                                             $pshsd->status = 2;
                                             $pshsd->update();
-                                        }
+
 
 
                                     } else {
@@ -115,16 +103,8 @@ class CAggregatorHasProductJob extends ACronJob
                                     $pshsdInsert->productId = $product['productId'];
                                     $pshsdInsert->productVariantId = $product['productVariantId'];
                                     $pshsdInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
-                                    if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
-
-                                        $pshsdInsert->priceModifier = 0.10;
 
 
-                                        $pshsdInsert->feeCustomer = 0.10;
-                                        $pshsdInsert->feeCustomerMobile = 0.10;
-                                        $pshsdInsert->fee = 0.10;
-                                        $pshsdInsert->feeMobile = 0.10;
-                                    } else {
                                         $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                         $isOnSale = $prod->isOnSale();
                                         $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
@@ -148,7 +128,7 @@ class CAggregatorHasProductJob extends ACronJob
                                         $pshsdInsert->feeCustomer = 0.10;
                                         $pshsdInsert->feeCustomerMobile = 0.10;
 
-                                    }
+
                                     $pshsdInsert->status = 0;
                                     $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
                                     $pshsdInsert->productStatusAggregatorId = 2;
@@ -175,7 +155,7 @@ class CAggregatorHasProductJob extends ACronJob
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActive'] == 1) {
+
 
                         $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                         $sql = 'select p.id as productId,
@@ -271,7 +251,7 @@ where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketpl
                             $phpUpdate->update();
                             $this->report('CAggregatorHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
                         }
-                    }
+
                 }
 
                 $this->report('CAggregatorHasProductJob','End Work Publish for  ' . $marketplace->name,'');

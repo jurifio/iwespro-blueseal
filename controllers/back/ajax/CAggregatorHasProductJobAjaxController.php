@@ -47,58 +47,165 @@ class CAggregatorHasProductJobAjaxController extends AAjaxController
         try {
               \Monkey::app()->applicationLog('CMarketplaceHasProductJob','start Preparing','');
 
-            $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
-            foreach ($marketplaces as $marketplace) {
-                $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
-                if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActive'] == 1) {
-                          \Monkey::app()->applicationLog('CAggregatorHasProductJob','Working ' . $marketplace->name,'');
+            $marketplaces = $marketplaceRepo->finAll();
+            if($mp->type != 'marketplace') {
+                foreach ($marketplaces as $marketplace) {
+                    $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
+                    if ($marketplaceAccount) {
+                        if ($marketplaceAccount->config['isActive'] == 1) {
+                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','Working ' . $marketplace->name,'');
 
-                        $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
+                            $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where p.qty>0 and p.productStatusId in(6,15) and  shp.shopId =' . $marketplaceAccount->config['shopId'] . ' ) UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
  and p2.productVariantId=shp2.productVariantId where  p2.qty>0 and p2.productStatusId in(6,15) and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . ')';
 
-                        $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-                        foreach ($products as $product) {
-                            if ($product['qty'] > 0) {
-                                /** @var $pshsd CAggregatorHasProduct */
-                                $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
-                                if ($pshsd) {
+                            $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach ($products as $product) {
+                                if ($product['qty'] > 0) {
+                                    /** @var $pshsd CAggregatorHasProduct */
+                                    $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
+                                    if ($pshsd) {
 
-                                    if ($pshsd->dateUpdate != $marketplaceAccount->config['dateUpdate']) {
-                                        $pshsd->status = 2;
+                                        if ($pshsd->dateUpdate != $marketplaceAccount->config['dateUpdate']) {
+                                            $pshsd->status = 2;
+                                            if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
+
+                                                $pshsd->priceModifier = $marketplaceAccount->config['priceModifier'];
+
+                                                if (isset($marketplaceAccount->config['defaultCpcF'])) {
+                                                    $pshsd->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                                } else {
+                                                    $pshsd->feeCustomer = 0;
+                                                }
+                                                if (isset($marketplaceAccount->config['defaultCpcFM'])) {
+                                                    $pshsd->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                                } else {
+                                                    $pshsd->feeCustomerMobile = 0.25;
+                                                }
+                                                if (isset($marketplaceAccount->config['defaultCpc'])) {
+                                                    $pshsd->fee = $marketplaceAccount->config['defaultCpc'];
+                                                } else {
+                                                    $pshsd->fee = 0.25;
+                                                }
+                                                if (isset($marketplaceAccount->config['defaultCpcM'])) {
+                                                    $pshsd->feeMobile = $marketplaceAccount->config['defaultCpcM'];
+                                                } else {
+                                                    $pshsd->feeMobile = 0.25;
+                                                }
+                                                $pshsd->status = 2;
+                                                $pshsd->productStatusAggregatorId = 2;
+                                                $pshsd->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
+                                                $pshsd->update();
+
+
+                                            } else {
+                                                $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
+                                                $isOnSale = $prod->isOnSale();
+                                                $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
+                                                $price = $productSku->price;
+                                                $salePrice = $productSku->salePrice;
+                                                if ($isOnSale == 1) {
+                                                    $activePrice = $salePrice;
+                                                } else {
+                                                    $activePrice = $price;
+                                                }
+                                                if($mp->type == 'cpc') {
+                                                    $priceRange1 = explode('-',$marketplaceAccount->config['priceModifierRange1']);
+                                                    $priceRange2 = explode('-',$marketplaceAccount->config['priceModifierRange2']);
+                                                    $priceRange3 = explode('-',$marketplaceAccount->config['priceModifierRange3']);
+                                                    $priceRange4 = explode('-',$marketplaceAccount->config['priceModifierRange4']);
+                                                    $priceRange5 = explode('-',$marketplaceAccount->config['priceModifierRange5']);
+
+                                                    switch (true) {
+                                                        case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
+                                                            $fee = $marketplaceAccount->config['range1Cpc'];
+                                                            $feeMobile = $marketplaceAccount->config['range1CpcM'];
+                                                            $priceModifier = $marketplaceAccount->config['valueexcept1'];
+
+                                                            break;
+                                                        case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
+                                                            $fee = $marketplaceAccount->config['range2Cpc'];
+                                                            $feeMobile = $marketplaceAccount->config['range2CpcM'];
+                                                            $priceModifier = $marketplaceAccount->config['valueexcept2'];
+                                                            break;
+                                                        case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
+                                                            $fee = $marketplaceAccount->config['range3Cpc'];
+                                                            $feeMobile = $marketplaceAccount->config['range3CpcM'];
+                                                            $priceModifier = $marketplaceAccount->config['valueexcept3'];
+                                                            break;
+                                                        case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
+                                                            $fee = $marketplaceAccount->config['range4Cpc'];
+                                                            $feeMobile = $marketplaceAccount->config['range4CpcM'];
+                                                            $priceModifier = $marketplaceAccount->config['valueexcept4'];
+                                                            break;
+                                                        case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
+                                                            $fee = $marketplaceAccount->config['range5Cpc'];
+                                                            $feeMobile = $marketplaceAccount->config['range5CpcM'];
+                                                            $priceModifier = $marketplaceAccount->config['valueexcept5'];
+                                                            break;
+                                                    }
+                                                }else{
+                                                    $priceModifier=0;
+                                                    $fee=0;
+                                                    $feeMobile=0;
+                                                }
+                                                $pshsd->priceModifier = $priceModifier;
+                                                $pshsd->fee = $fee;
+                                                $pshsd->feeMobile = $feeMobile;
+                                                if (isset($marketplaceAccount->config['defaultCpcF'])) {
+                                                    $pshsd->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                                } else {
+                                                    $pshsd->feeCustomer = 0;
+                                                }
+                                                if (isset($marketplaceAccount->config['defaultCpcFM'])) {
+                                                    $pshsd->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                                } else {
+                                                    $pshsd->feeCustomerMobile = 0.25;
+                                                }
+                                                $pshsd->productStatusAggregatorId = 2;
+                                                $pshsd->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
+                                                $pshsd->status = 2;
+                                                $pshsd->update();
+                                            }
+
+
+                                        } else {
+                                            $pshsd->status = 1;
+                                            $pshsd->productStatusAggregatorId = 2;
+                                            $pshsd->update();
+                                        }
+                                    } else {
+                                        $pshsdInsert = $phsRepo->getEmptyEntity();
+                                        $pshsdInsert->productId = $product['productId'];
+                                        $pshsdInsert->productVariantId = $product['productVariantId'];
+                                        $pshsdInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
                                         if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
 
-                                            $pshsd->priceModifier = $marketplaceAccount->config['priceModifier'];
+                                            $pshsdInsert->priceModifier = $marketplaceAccount->config['priceModifier'];
 
                                             if (isset($marketplaceAccount->config['defaultCpcF'])) {
-                                                $pshsd->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                                $pshsdInsert->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
                                             } else {
-                                                $pshsd->feeCustomer = 0;
+                                                $pshsdInsert->feeCustomer = 0;
                                             }
                                             if (isset($marketplaceAccount->config['defaultCpcFM'])) {
-                                                $pshsd->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                                $pshsdInsert->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
                                             } else {
-                                                $pshsd->feeCustomerMobile = 0.25;
+                                                $pshsdInsert->feeCustomerMobile = 0.25;
                                             }
                                             if (isset($marketplaceAccount->config['defaultCpc'])) {
-                                                $pshsd->fee = $marketplaceAccount->config['defaultCpc'];
+                                                $pshsdInsert->fee = $marketplaceAccount->config['defaultCpc'];
                                             } else {
-                                                $pshsd->fee = 0.25;
+                                                $pshsdInsert->fee = 0.25;
                                             }
                                             if (isset($marketplaceAccount->config['defaultCpcM'])) {
-                                                $pshsd->feeMobile = $marketplaceAccount->config['defaultCpcM'];
+                                                $pshsdInsert->feeMobile = $marketplaceAccount->config['defaultCpcM'];
                                             } else {
-                                                $pshsd->feeMobile = 0.25;
+                                                $pshsdInsert->feeMobile = 0.25;
                                             }
-                                            $pshsd->status = 2;
-                                            $pshsd->productStatusAggregatorId = 2;
-                                            $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
-                                            $pshsd->update();
-
 
                                         } else {
                                             $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
@@ -111,167 +218,72 @@ class CAggregatorHasProductJobAjaxController extends AAjaxController
                                             } else {
                                                 $activePrice = $price;
                                             }
+                                            if($mp->type == 'cpc') {
+                                                $priceRange1 = explode('-',$marketplaceAccount->config['priceModifierRange1']);
+                                                $priceRange2 = explode('-',$marketplaceAccount->config['priceModifierRange2']);
+                                                $priceRange3 = explode('-',$marketplaceAccount->config['priceModifierRange3']);
+                                                $priceRange4 = explode('-',$marketplaceAccount->config['priceModifierRange4']);
+                                                $priceRange5 = explode('-',$marketplaceAccount->config['priceModifierRange5']);
 
-                                            $priceRange1 = explode('-',$marketplaceAccount->config['priceModifierRange1']);
-                                            $priceRange2 = explode('-',$marketplaceAccount->config['priceModifierRange2']);
-                                            $priceRange3 = explode('-',$marketplaceAccount->config['priceModifierRange3']);
-                                            $priceRange4 = explode('-',$marketplaceAccount->config['priceModifierRange4']);
-                                            $priceRange5 = explode('-',$marketplaceAccount->config['priceModifierRange5']);
+                                                switch (true) {
+                                                    case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
+                                                        $fee = $marketplaceAccount->config['range1Cpc'];
+                                                        $feeMobile = $marketplaceAccount->config['range1CpcM'];
+                                                        $priceModifier = $marketplaceAccount->config['valueexcept1'];
 
-                                            switch (true) {
-                                                case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
-                                                    $fee = $marketplaceAccount->config['range1Cpc'];
-                                                    $feeMobile = $marketplaceAccount->config['range1CpcM'];
-                                                    $priceModifier = $marketplaceAccount->config['valueexcept1'];
-
-                                                    break;
-                                                case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
-                                                    $fee = $marketplaceAccount->config['range2Cpc'];
-                                                    $feeMobile = $marketplaceAccount->config['range2CpcM'];
-                                                    $priceModifier = $marketplaceAccount->config['valueexcept2'];
-                                                    break;
-                                                case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
-                                                    $fee = $marketplaceAccount->config['range3Cpc'];
-                                                    $feeMobile = $marketplaceAccount->config['range3CpcM'];
-                                                    $priceModifier = $marketplaceAccount->config['valueexcept3'];
-                                                    break;
-                                                case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
-                                                    $fee = $marketplaceAccount->config['range4Cpc'];
-                                                    $feeMobile = $marketplaceAccount->config['range4CpcM'];
-                                                    $priceModifier = $marketplaceAccount->config['valueexcept4'];
-                                                    break;
-                                                case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
-                                                    $fee = $marketplaceAccount->config['range5Cpc'];
-                                                    $feeMobile = $marketplaceAccount->config['range5CpcM'];
-                                                    $priceModifier = $marketplaceAccount->config['valueexcept5'];
-                                                    break;
+                                                        break;
+                                                    case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
+                                                        $fee = $marketplaceAccount->config['range2Cpc'];
+                                                        $feeMobile = $marketplaceAccount->config['range2CpcM'];
+                                                        $priceModifier = $marketplaceAccount->config['valueexcept2'];
+                                                        break;
+                                                    case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
+                                                        $fee = $marketplaceAccount->config['range3Cpc'];
+                                                        $feeMobile = $marketplaceAccount->config['range3CpcM'];
+                                                        $priceModifier = $marketplaceAccount->config['valueexcept3'];
+                                                        break;
+                                                    case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
+                                                        $fee = $marketplaceAccount->config['range4Cpc'];
+                                                        $feeMobile = $marketplaceAccount->config['range4CpcM'];
+                                                        $priceModifier = $marketplaceAccount->config['valueexcept4'];
+                                                        break;
+                                                    case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
+                                                        $fee = $marketplaceAccount->config['range5Cpc'];
+                                                        $feeMobile = $marketplaceAccount->config['range5CpcM'];
+                                                        $priceModifier = $marketplaceAccount->config['valueexcept5'];
+                                                        break;
+                                                }
+                                            }else{
+                                                $priceModifier=0;
+                                                $fee=0;
+                                                $feeMobile=0;
                                             }
-                                            $pshsd->priceModifier = $priceModifier;
-                                            $pshsd->fee = $fee;
-                                            $pshsd->feeMobile = $feeMobile;
+                                            $pshsdInsert->priceModifier = $priceModifier;
+                                            $pshsdInsert->fee = $fee;
+                                            $pshsdInsert->feeMobile = $feeMobile;
                                             if (isset($marketplaceAccount->config['defaultCpcF'])) {
-                                                $pshsd->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
+                                                $pshsdInsert->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
                                             } else {
-                                                $pshsd->feeCustomer = 0;
+                                                $pshsdInsert->feeCustomer = 0.25;
                                             }
                                             if (isset($marketplaceAccount->config['defaultCpcFM'])) {
-                                                $pshsd->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
+                                                $pshsdInsert->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
                                             } else {
-                                                $pshsd->feeCustomerMobile = 0.25;
+                                                $pshsdInsert->feeCustomerMobile = 0.25;
                                             }
-                                            $pshsd->productStatusAggregatorId = 2;
-                                            $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
-                                            $pshsd->status = 2;
-                                            $pshsd->update();
-                                        }
 
-
-                                    } else {
-                                        $pshsd->status = 1;
-                                        $pshsd->productStatusAggregatorId = 2;
-                                        $pshsd->update();
-                                    }
-                                } else {
-                                    $pshsdInsert = $phsRepo->getEmptyEntity();
-                                    $pshsdInsert->productId = $product['productId'];
-                                    $pshsdInsert->productVariantId = $product['productVariantId'];
-                                    $pshsdInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
-                                    if ($marketplaceAccount->config['activeAutomatic'] == '0' || $marketplaceAccount->config['activeAutomatic'] == '') {
-
-                                        $pshsdInsert->priceModifier = $marketplaceAccount->config['priceModifier'];
-
-                                        if (isset($marketplaceAccount->config['defaultCpcF'])) {
-                                            $pshsdInsert->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
-                                        } else {
-                                            $pshsdInsert->feeCustomer = 0;
                                         }
-                                        if (isset($marketplaceAccount->config['defaultCpcFM'])) {
-                                            $pshsdInsert->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
-                                        } else {
-                                            $pshsdInsert->feeCustomerMobile = 0.25;
-                                        }
-                                        if (isset($marketplaceAccount->config['defaultCpc'])) {
-                                            $pshsdInsert->fee = $marketplaceAccount->config['defaultCpc'];
-                                        } else {
-                                            $pshsdInsert->fee = 0.25;
-                                        }
-                                        if (isset($marketplaceAccount->config['defaultCpcM'])) {
-                                            $pshsdInsert->feeMobile = $marketplaceAccount->config['defaultCpcM'];
-                                        } else {
-                                            $pshsdInsert->feeMobile = 0.25;
-                                        }
-
-                                    } else {
-                                        $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
-                                        $isOnSale = $prod->isOnSale();
-                                        $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
-                                        $price = $productSku->price;
-                                        $salePrice = $productSku->salePrice;
-                                        if ($isOnSale == 1) {
-                                            $activePrice = $salePrice;
-                                        } else {
-                                            $activePrice = $price;
-                                        }
-
-                                        $priceRange1 = explode('-',$marketplaceAccount->config['priceModifierRange1']);
-                                        $priceRange2 = explode('-',$marketplaceAccount->config['priceModifierRange2']);
-                                        $priceRange3 = explode('-',$marketplaceAccount->config['priceModifierRange3']);
-                                        $priceRange4 = explode('-',$marketplaceAccount->config['priceModifierRange4']);
-                                        $priceRange5 = explode('-',$marketplaceAccount->config['priceModifierRange5']);
-
-                                        switch (true) {
-                                            case $activePrice >= $priceRange1[0] && $activePrice <= $priceRange1[1]:
-                                                $fee = $marketplaceAccount->config['range1Cpc'];
-                                                $feeMobile = $marketplaceAccount->config['range1CpcM'];
-                                                $priceModifier = $marketplaceAccount->config['valueexcept1'];
-
-                                                break;
-                                            case $activePrice >= $priceRange2[0] && $activePrice <= $priceRange2[1]:
-                                                $fee = $marketplaceAccount->config['range2Cpc'];
-                                                $feeMobile = $marketplaceAccount->config['range2CpcM'];
-                                                $priceModifier = $marketplaceAccount->config['valueexcept2'];
-                                                break;
-                                            case $activePrice >= $priceRange3[0] && $activePrice <= $priceRange3[1]:
-                                                $fee = $marketplaceAccount->config['range3Cpc'];
-                                                $feeMobile = $marketplaceAccount->config['range3CpcM'];
-                                                $priceModifier = $marketplaceAccount->config['valueexcept3'];
-                                                break;
-                                            case $activePrice >= $priceRange4[0] && $activePrice <= $priceRange4[1]:
-                                                $fee = $marketplaceAccount->config['range4Cpc'];
-                                                $feeMobile = $marketplaceAccount->config['range4CpcM'];
-                                                $priceModifier = $marketplaceAccount->config['valueexcept4'];
-                                                break;
-                                            case $activePrice >= $priceRange5[0] && $activePrice <= $priceRange5[1]:
-                                                $fee = $marketplaceAccount->config['range5Cpc'];
-                                                $feeMobile = $marketplaceAccount->config['range5CpcM'];
-                                                $priceModifier = $marketplaceAccount->config['valueexcept5'];
-                                                break;
-                                        }
-                                        $pshsdInsert->priceModifier = $priceModifier;
-                                        $pshsdInsert->fee = $fee;
-                                        $pshsdInsert->feeMobile = $feeMobile;
-                                        if (isset($marketplaceAccount->config['defaultCpcF'])) {
-                                            $pshsdInsert->feeCustomer = $marketplaceAccount->config['defaultCpcF'];
-                                        } else {
-                                            $pshsdInsert->feeCustomer = 0.25;
-                                        }
-                                        if (isset($marketplaceAccount->config['defaultCpcFM'])) {
-                                            $pshsdInsert->feeCustomerMobile = $marketplaceAccount->config['defaultCpcFM'];
-                                        } else {
-                                            $pshsdInsert->feeCustomerMobile = 0.25;
-                                        }
+                                        $pshsdInsert->status = 0;
+                                        $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
+                                        $pshsdInsert->productStatusAggregatorId = 2;
+                                        $pshsdInsert->insert();
 
                                     }
-                                    $pshsdInsert->status = 0;
-                                    $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
-                                    $pshsdInsert->productStatusAggregatorId = 2;
-                                    $pshsdInsert->insert();
 
                                 }
-
                             }
+                            \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
                         }
-                          \Monkey::app()->applicationLog('CAggregatorHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
                     }
                 }
             }
