@@ -154,12 +154,13 @@ class CAggregatorSocialHasProductJob extends ACronJob
                 if ($marketplace->type != 'social') {
                     continue;
                 } else {
-                    $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
-                    if ($marketplaceAccount) {
+                    $marketplaceAccounts = $marketplaceAccountRepo->findBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
+                    foreach($marketplaceAccounts as $marketplaceAccount) {
+                        if ($marketplaceAccount) {
 
 
-                        $this->report('CAggregatorSocialHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
-                        $sql = 'select p.id as productId,
+                            $this->report('CAggregatorSocialHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
+                            $sql = 'select p.id as productId,
                                     p.productVariantId as productVariantId,
                                     p.productBrandId as productBrandId,
                                     p.qty as qty,
@@ -179,31 +180,75 @@ class CAggregatorSocialHasProductJob extends ACronJob
  and p.productVariantId=shp.productVariantId
 join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId
 where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
-                        $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
-                        foreach ($products as $product) {
-                            $this->report('CAggregatorSocialHasProductJob','Start Working Product ' . $product['productId'] . '-' . $product['productVariantId'],$marketplaceAccount->config['aggregatorHasShopId']);
-                            $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
-                            if ($marketProduct) {
-                                if ($product['status'] == 2) {
-                                    $this->report('CAggregatorSocialHasProductJob','typeOperation  exist' . $product['productId'] . '-' . $product['productVariantId'],'status 2');
-                                    $marketProduct->istoWork = 1;
-                                    $marketProduct->isRevised = 1;
-                                    $marketProduct->isDeleted = 0;
-                                    $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
-                                    if ($product['isOnSale'] == 1) {
-                                        $marketProduct->titleModified = 1;
+                            $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+                            foreach ($products as $product) {
+                                $this->report('CAggregatorSocialHasProductJob','Start Working Product ' . $product['productId'] . '-' . $product['productVariantId'],$marketplaceAccount->config['aggregatorHasShopId']);
+                                $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
+                                if ($marketProduct) {
+                                    if ($product['status'] == 2) {
+                                        $this->report('CAggregatorSocialHasProductJob','typeOperation  exist' . $product['productId'] . '-' . $product['productVariantId'],'status 2');
+                                        $marketProduct->istoWork = 1;
+                                        $marketProduct->isRevised = 1;
+                                        $marketProduct->isDeleted = 0;
+                                        $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
+                                        if ($product['isOnSale'] == 1) {
+                                            $marketProduct->titleModified = 1;
+                                        } else {
+                                            $marketProduct->titleModified = 0;
+                                        }
+                                        $marketProduct->update();
+
+
+                                    } elseif ($product['status'] == 0) {
+                                        $this->report('CAggregatorSocialHasProductJob','typeOperation  exist' . $product['productId'] . '-' . $product['productVariantId'],'status 0');
+                                        $marketProduct->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
+                                        $marketProduct->istoWork = 1;
+                                        $marketProduct->fee = 0;
+                                        $marketProduct->feeCustomer = 0;
+                                        $marketProduct->feeMobile = 0;
+                                        $marketProduct->feeCustomerMobile = 0;
+                                        $marketProduct->isRevised = 1;
+                                        $marketProduct->isDeleted = 0;
+                                        $marketProduct->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
+                                        $marketProduct->marketplaceAccountId = $marketplaceAccount->id;
+                                        $marketProduct->marketplaceId = $marketplaceAccount->marketplaceId;
+                                        if ($product['isOnSale'] == 1) {
+                                            $marketProduct->titleModified = 1;
+                                        } else {
+                                            $marketProduct->titleModified = 0;
+                                        }
+                                        $marketProduct->update();
                                     } else {
-                                        $marketProduct->titleModified = 0;
+                                        $this->report('CAggregatorSocialHasProductJob','typeOperation  exist' . $product['productId'] . '-' . $product['productVariantId'],'status not 1 and 2');
+                                        $marketProduct->istoWork = 1;
+                                        $marketProduct->isRevised = 1;
+                                        $marketProduct->isDeleted = 0;
+                                        $marketProduct->fee = 0;
+                                        $marketProduct->feeCustomer = 0;
+                                        $marketProduct->feeMobile = 0;
+                                        $marketProduct->feeCustomerMobile = 0;
+                                        $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
+
+                                        if ($product['isOnSale'] == 1) {
+                                            $marketProduct->titleModified = 1;
+                                        } else {
+                                            $marketProduct->titleModified = 0;
+                                        }
+                                        $marketProduct->update();
                                     }
-                                    $marketProduct->update();
-
-
-                                } elseif ($product['status'] == 0) {
-                                    $this->report('CAggregatorSocialHasProductJob','typeOperation  exist' . $product['productId'] . '-' . $product['productVariantId'],'status 0');
+                                } else {
+                                    $this->report('CAggregatorSocialHasProductJob','typeOperation not  exist' . $product['productId'] . '-' . $product['productVariantId'],'status 2');
+                                    $marketProductInsert = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
+                                    $marketProductInsert->productId = $product['productId'];
+                                    $marketProductInsert->productVariantId = $product['productVariantId'];
                                     $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
                                     $marketProductInsert->istoWork = 1;
-                                    $marketProductInsert->isRevised = 1;
+                                    $marketProductInsert->isRevised = 0;
                                     $marketProductInsert->isDeleted = 0;
+                                    $marketProductInsert->fee = 0;
+                                    $marketProductInsert->feeCustomer = 0;
+                                    $marketProductInsert->feeMobile = 0;
+                                    $marketProductInsert->feeCustomerMobile = 0;
                                     $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
                                     $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
                                     $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
@@ -212,52 +257,20 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                                     } else {
                                         $marketProductInsert->titleModified = 0;
                                     }
-                                    $marketProductInsert->update();
-                                } else {
-                                    $this->report('CAggregatorSocialHasProductJob','typeOperation  exist' . $product['productId'] . '-' . $product['productVariantId'],'status not 1 and 2');
-                                    $marketProduct->istoWork = 1;
-                                    $marketProduct->isRevised = 1;
-                                    $marketProduct->isDeleted = 0;
-                                    $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
+                                    $marketProductInsert->insert();
 
-                                    if ($product['isOnSale'] == 1) {
-                                        $marketProduct->titleModified = 1;
-                                    } else {
-                                        $marketProduct->titleModified = 0;
-                                    }
-                                    $marketProduct->update();
                                 }
-                            } else {
-                                $this->report('CAggregatorSocialHasProductJob','typeOperation not  exist' . $product['productId'] . '-' . $product['productVariantId'],'status 2');
-                                $marketProductInsert = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->getEmptyEntity();
-                                $marketProductInsert->productId = $product['productId'];
-                                $marketProductInsert->productVariantId = $product['productVariantId'];
-                                $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
-                                $marketProductInsert->istoWork = 1;
-                                $marketProductInsert->isRevised = 0;
-                                $marketProductInsert->isDeleted = 0;
-                                $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
-                                $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
-                                $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
-                                if ($product['isOnSale'] == 1) {
-                                    $marketProductInsert->titleModified = 1;
-                                } else {
-                                    $marketProductInsert->titleModified = 0;
-                                }
-                                $marketProductInsert->insert();
-
+                                $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
+                                $phpUpdate->status = 1;
+                                $phpUpdate->update();
+                                $this->report('CAggregatorSocialHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
                             }
-                            $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
-                            $phpUpdate->status = 1;
-                            $phpUpdate->update();
-                            $this->report('CAggregatorSocialHasProductJob','End Work   ' . $product['productId'] . '-' . $product['productVariantId'],'');
+
                         }
 
+                        $this->report('CAggregatorSocialHasProductJob','End Work Publish for  ' . $marketplace->name,'');
+
                     }
-
-                    $this->report('CAggregatorSocialHasProductJob','End Work Publish for  ' . $marketplace->name,'');
-
-
                 }
             }
             $this->report('CAggregatorSocialHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
