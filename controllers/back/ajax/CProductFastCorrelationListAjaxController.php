@@ -131,7 +131,7 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
 JOIN ShopHasProduct sp ON sp.productId=p.id AND p.productVariantId=sp.productVariantId
   JOIN Shop s ON s.id = sp.shopId
 left JOIN ProductHasProductCorrelation ph ON ph.productId=sp.productId AND ph.productVariantId=sp.productVariantId AND ph.shopId=sp.shopId
-left join ProductCorrelation pc on ph.id=pc.correlationId
+left join ProductCorrelation pc on ph.correlationId=pc.id
      LEFT JOIN (ProductSizeGroup psg
                               JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id)
                             ON p.productSizeGroupId = psg.id
