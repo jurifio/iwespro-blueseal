@@ -15,7 +15,7 @@ use  \GuzzleHttp\Client;
 
 
 /**
- * Class CAmazonNewAddProductAjaxControllerController
+ * Class CAmazonNewAddProductAjaxController
  * @package bamboo\controllers\back\ajax
  *
  * @author Iwes Team <it@iwes.it>
@@ -27,7 +27,7 @@ use  \GuzzleHttp\Client;
  * @date 11/05/2020
  * @since 1.0
  */
-class CAmazonNewAddProductAjaxControllerController extends AAjaxController
+class CAmazonNewAddProductAjaxController extends AAjaxController
 {
 
 
@@ -62,6 +62,7 @@ class CAmazonNewAddProductAjaxControllerController extends AAjaxController
             'secret_key' => 'LjsdAOxxFzqP155c6nKmeTzA42CP01hIB9c510c+',
             'endpoint' =>  'https://sandbox.sellingpartnerapi-eu.amazon.com',
             'role_arn' => 'arn:aws:iam::446278990062:role/PartnerRoleAPI',
+            'marketplaceId' =>'APJ6JRA9NG5V4'
         ];
 
         $config = \Swagger\Client\Configuration::getDefaultConfiguration();
