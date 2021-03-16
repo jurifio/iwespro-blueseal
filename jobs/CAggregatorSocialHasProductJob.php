@@ -43,7 +43,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
         $phsRepo = \Monkey::app()->repoFactory->create('AggregatorHasProduct');
 
 
-        try {
+  /*      try {
             $this->report('CMarketplaceHasProductJob','start Preparing','');
 
             $marketplaces = $marketplaceRepo->findBy(['type'=>'social']);
@@ -64,7 +64,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                         foreach ($products as $product) {
                             if ($product['qty'] > 0) {
                                 /** @var $pshsd CAggregatorHasProduct */
-                                $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
+                               /* $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'aggregatorHasShopId' => $marketplaceAccount->config['aggregatorHasShopId']]);
                                 if ($pshsd) {
 
                                     $pshsd->status = 2;
@@ -144,7 +144,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
         } catch (\Throwable $e) {
             $this->report('CAggregatorSocialHasProductJob','ERROR Work publishing',$e->getMessage() . '-' . $e->getLine());
 
-        }
+        }*/
         try {
             $this->report('CAggregatorSocialHasProductJob','startPublish','');
 
