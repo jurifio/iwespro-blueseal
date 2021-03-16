@@ -23,7 +23,7 @@ use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
  * @date 11/05/2020
  * @since 1.0
  */
-class CAmazonAddProductAjaxControllerController extends AAjaxController
+class CAmazonAddProductAjaxController extends AAjaxController
 {
 
 
@@ -84,12 +84,12 @@ class CAmazonAddProductAjaxControllerController extends AAjaxController
     }
     protected function prepareAndSend($marketplaceAccount, AAmazonFeedBuilder $builder,$products,$typeFeed,$messageId) {
         \Monkey::app()->vendorLibraries->load('amazonMWS');
-      /*  $service = new \MarketplaceWebService_Client(
+        $service = new \MarketplaceWebService_Client(
             $marketplaceAccount->config['awsAccessKeyId'],
             $marketplaceAccount->config['awsSecretAccessKey'],
             ["ServiceURL"=>$marketplaceAccount->config['serviceUrl'],],
             "BlueSeal",
-            "1.01");*/
+            "1.01");
 
         $content = $builder->prepare($products,false)->getRawBody();
 
@@ -129,7 +129,7 @@ class CAmazonAddProductAjaxControllerController extends AAjaxController
             $parameters['MWSAuthToken'] = $marketplaceAccount->config['MWSAuthToken']; // Optional]
         }
         rewind($feedHandle);
-      /*  $request = new \MarketplaceWebService_Model_SubmitFeedRequest($parameters);
+        $request = new \MarketplaceWebService_Model_SubmitFeedRequest($parameters);
 
         try {
             $response = $service->submitFeed($request);
@@ -197,7 +197,7 @@ class CAmazonAddProductAjaxControllerController extends AAjaxController
             echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
             fclose($feedHandle);
             return false;
-        }*/
+        }
         fclose($feedHandle);
         return true;
     }

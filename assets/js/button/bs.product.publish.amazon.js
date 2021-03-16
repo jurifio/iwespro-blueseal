@@ -19,7 +19,7 @@ $(document).on('bs-product-publish-amazon', function (e, element, button) {
         var data={ id: 1
         }
         $.ajax({
-            url: '/blueseal/xhr/AmazonAddProductAjaxControllerController',
+            url: '/blueseal/xhr/AmazonAddProductAjaxController',
             method: 'post',
             data: data
         }).done(function (res) {

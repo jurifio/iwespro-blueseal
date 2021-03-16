@@ -118,7 +118,9 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
                   pb.name                                                                                           AS brand,
                   ps.name                                                                                           AS status,
                   concat(psg.locale, ' - ',
-                         psmg.name)                                                                                 AS productSizeGroup
+                         psmg.name)                                                                                 AS productSizeGroup,            
+                pc.`name` as productCorrelationName 
+       
 								  
 
  from Product p 
@@ -129,6 +131,7 @@ class CProductFastCorrelationListAjaxController extends AAjaxController
 JOIN ShopHasProduct sp ON sp.productId=p.id AND p.productVariantId=sp.productVariantId
   JOIN Shop s ON s.id = sp.shopId
 left JOIN ProductHasProductCorrelation ph ON ph.productId=sp.productId AND ph.productVariantId=sp.productVariantId AND ph.shopId=sp.shopId
+left join ProductCorrelation pc on ph.id=pc.correlationId
      LEFT JOIN (ProductSizeGroup psg
                               JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id)
                             ON p.productSizeGroupId = psg.id
@@ -174,7 +177,7 @@ where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStat
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
             $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
-
+            $row['productCorrelationName'];
             $row['details'] = "";
             $COLOUR='';
             $LOOK='';
