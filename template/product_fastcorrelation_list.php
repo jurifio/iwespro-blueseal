@@ -149,10 +149,6 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">CPF
                                 </th>
-                                <th data-slug="productCorrelationName"
-                                    data-searchable="true"
-                                    data-orderable="true" class="center">Correlazione
-                                </th>
                                 <th data-slug="COLOUR"
                                     data-searchable="true"
                                     data-orderable="true"
