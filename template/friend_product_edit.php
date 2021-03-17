@@ -279,21 +279,20 @@
                                                 <div class="summernote-wrapper">
                                                     <?php
                                                     $descr='';
-                                                    if (isset($productEdit) && !is_null($productEdit->productDescriptionTranslation)) {
-                                                        foreach ($productEdit->productDescriptionTranslation as $val) {
-                                                            if ($val->langId == 1 && $val->marketplaceId == 1) {
-                                                                $descr = $val->description;
-                                                            }else{
-                                                                $descr='';
-                                                            }
-                                                            if($descr!=''){
-                                                                 break;
-                                                            }
-                                                        }
-                                                    } ?>
-                                                    <label for="ProductDescription">Descrizione</label>
-                                                    <textarea id="ProductDescription" class="" rows="10"
-                                                              name="ProductDescription"><?php echo $descr ; ?></textarea>
+                                                    if (isset($productEdit)){
+                                                       $pdt=\Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'marketplaceId'=>1,'langId'=>1]);
+                                                       if($pdt){
+                                                           $descr=$pdt->description;
+                                                       }else{
+                                                           $descr='';
+                                                       }
+                                                    }else{
+                                                        $descr='';
+                                                    }
+                                                     ?>
+                                                    <label for="summernote1">Descrizione</label>
+                                                    <textarea id="summernote1" class="" rows="10"
+                                                              name="ProductDescription_1"><?php echo $descr ; ?></textarea>
                                                 </div>
                                             </div>
                                         </div>

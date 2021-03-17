@@ -188,16 +188,16 @@ class CProductManageController extends ARestrictedAccessRootController
             $context = "Description Update";
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
-                if ($key != 'ProductDescription') {
+                if ($inputName[0] != 'ProductDescription') {
                     continue;
                 } else {
-                    $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'langId' =>1,'marketplaceId' => 1]);
+                    $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'langId' => $inputName[1],'marketplaceId' => 1]);
                        if($productDescriptionTranslation){
                         $productDescriptionTranslation->description = $input;
                         $productDescriptionTranslation->update();
                     } else {
                         $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
-                        $productDescriptionTranslation->langId = 1;
+                        $productDescriptionTranslation->langId = $inputName[1];
                         $productDescriptionTranslation->marketplaceId = 1;
                         $productDescriptionTranslation->description = $input;
                         $productDescriptionTranslation->productId = $productEdit->id;
