@@ -191,7 +191,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 if ($inputName[0] != 'ProductDescription') {
                     continue;
                 } else {
-                    $productDescriptionTranslation = $productEdit->productDescriptionTranslation->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'langId' => $inputName[1],'marketplaceId' => 1]);
+                    $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'langId' => $inputName[1],'marketplaceId' => 1]);
                        if($productDescriptionTranslation){
                         $productDescriptionTranslation->description = $input;
                         $productDescriptionTranslation->update();
