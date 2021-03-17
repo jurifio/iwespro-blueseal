@@ -282,12 +282,17 @@
                                                         foreach ($productEdit->productDescriptionTranslation as $val) {
                                                             if ($val->langId == 1 && $val->marketplaceId == 1) {
                                                                 $descr = $val->description;
+                                                            }else{
+                                                                $descr='';
+                                                            }
+                                                            if($descr!=''){
+                                                                 break;
                                                             }
                                                         }
                                                     } ?>
                                                     <label for="summernote1">Descrizione</label>
                                                     <textarea id="summernote1" class="" rows="10"
-                                                              name="ProductDescription_1"><?php echo isset($descr) ? $descr : ""; ?></textarea>
+                                                              name="ProductDescription_1"><?php echo $descr ; ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
