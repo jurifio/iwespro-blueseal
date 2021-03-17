@@ -188,19 +188,22 @@ class CProductManageController extends ARestrictedAccessRootController
             $context = "Description Update";
             foreach ($post as $key => $input) {
                 $inputName = explode('_', $key);
-                if ($inputName[0] != 'ProductDescription') continue;
-	            $productDescriptionTranslation = $productEdit->productDescriptionTranslation->findOneByKeys(['langId'=>$inputName[1],'marketplaceId'=>1]);
-	            if($productDescriptionTranslation instanceof IEntity){
-		            $productDescriptionTranslation->description = $input;
-		            $productDescriptionTranslation->update();
-	            } else {
-		            $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
-		            $productDescriptionTranslation->langId = $inputName[1];
-		            $productDescriptionTranslation->marketplaceId = 1;
-		            $productDescriptionTranslation->description = $input;
-		            $productDescriptionTranslation->productId = $productEdit->id;
-		            $productDescriptionTranslation->productVariantId = $productEdit->productVariantId;
-		            $productDescriptionTranslation->insert();
+                if ($inputName[0] != 'ProductDescription') {
+                    continue;
+                } else {
+                    $productDescriptionTranslation = $productEdit->productDescriptionTranslation->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'langId' => $inputName[1],'marketplaceId' => 1]);
+                       if($productDescriptionTranslation){
+                        $productDescriptionTranslation->description = $input;
+                        $productDescriptionTranslation->update();
+                    } else {
+                        $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->getEmptyEntity();
+                        $productDescriptionTranslation->langId = $inputName[1];
+                        $productDescriptionTranslation->marketplaceId = 1;
+                        $productDescriptionTranslation->description = $input;
+                        $productDescriptionTranslation->productId = $productEdit->id;
+                        $productDescriptionTranslation->productVariantId = $productEdit->productVariantId;
+                        $productDescriptionTranslation->insert();
+                    }
                 }
             }
             /** INSERIMENTO SHOP */
