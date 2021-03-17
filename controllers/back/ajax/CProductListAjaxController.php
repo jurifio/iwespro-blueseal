@@ -125,7 +125,7 @@ class CProductListAjaxController extends AAjaxController
             $statuses[$status->code] = $status->name;
         }
 
-        $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
+        $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/modifica";
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
 
