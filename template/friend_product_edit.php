@@ -291,9 +291,9 @@
                                                             }
                                                         }
                                                     } ?>
-                                                    <label for="summernote1">Descrizione</label>
-                                                    <textarea id="summernote1" class="" rows="10"
-                                                              name="ProductDescription_1"><?php echo $descr ; ?></textarea>
+                                                    <label for="ProductDescription">Descrizione</label>
+                                                    <textarea id="ProductDescription" class="" rows="10"
+                                                              name="ProductDescription"><?php echo $descr ; ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
