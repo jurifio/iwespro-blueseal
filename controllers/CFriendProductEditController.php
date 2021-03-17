@@ -74,7 +74,7 @@ class CFriendProductEditController extends CProductManageController
             $statuses[$status->id] = $status->name;
         }
 
-        /* $em = $this->app->entityManagerFactory->create('Product', false);
+         $em = $this->app->entityManagerFactory->create('Product', false);
          $productEdit = $em->findOne(array($_GET['id'], $_GET['productVariantId']));
 
          $cats = [];
@@ -86,7 +86,7 @@ class CFriendProductEditController extends CProductManageController
          $statuses = [];
              $statuses['selected'] = $productEdit->productStatusId;
          }
-         }*/
+
 
         $em = $this->app->entityManagerFactory->create('SortingPriority');
         $sortingPriorities = $em->findAll();
