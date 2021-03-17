@@ -278,6 +278,7 @@
                                             <div class="col-md-12">
                                                 <div class="summernote-wrapper">
                                                     <?php
+                                                    $descr='';
                                                     if (isset($productEdit) && !is_null($productEdit->productDescriptionTranslation)) {
                                                         foreach ($productEdit->productDescriptionTranslation as $val) {
                                                             if ($val->langId == 1 && $val->marketplaceId == 1) {
