@@ -56,7 +56,7 @@ $(document).on('bs.add.video', function (e){
         url: "/blueseal/xhr/ProductVideoAjaxManage",
         maxFilesize: 500, // MB
         maxFiles: 4,
-        timeout:5000,
+        timeout:50000,
         acceptedFiles: "video/*",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: false,
