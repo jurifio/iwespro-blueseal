@@ -290,8 +290,8 @@
                                                         $descr='';
                                                     }
                                                      ?>
-                                                    <label for="summernote1">Descrizione</label>
-                                                    <textarea id="summernote1" class="" rows="10"
+                                                    <label for="ProductDescription_1">Descrizione</label>
+                                                    <textarea id="ProductDescription_1" class="" rows="10"
                                                               name="ProductDescription_1"><?php echo $descr ; ?></textarea>
                                                 </div>
                                             </div>
