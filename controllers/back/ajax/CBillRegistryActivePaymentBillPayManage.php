@@ -48,17 +48,17 @@ class CBillRegistryActivePaymentBillPayManage extends AAjaxController
     public function put()
     {
         $paymentBillData = $this->app->router->request()->getRequestData('paymentBill');
-        $paymentBill = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneByStringId($paymentBillData['id']);
+        $paymentBill = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id'=>$paymentBillData['id']]);
         $amountPaid=$paymentBillData['amount'];
         $amount=$paymentBill->amount;
-        $paymentBill->paymentDate = (new \DateTime($paymentBillData['paymentDate']))->format('Y-m-d H:i:s');
+        $paymentBill->paymentDate = substr((new \DateTime($paymentBillData['paymentDate']))->format('Y-m-d H:i:s'),0,10).'00:0:00';
         if($amountPaid<$amount) {
             $paymentBill->statusId = 5;
         }else if($amountPaid>=$amount){
             $paymentBill->statusId = 2;
             $now=new \DateTime();
             $dateNow=$now->format('Y-m-d H:i:s');
-            $paymetBill->submissionDate=$dateNow;
+            $paymentBill->submissionDate=$dateNow;
         }else{
             $paymentBill->statusId=5;
         }
