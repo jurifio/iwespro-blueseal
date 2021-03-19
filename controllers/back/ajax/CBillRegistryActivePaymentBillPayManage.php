@@ -8,6 +8,7 @@ use bamboo\core\intl\CLang;
 use bamboo\domain\entities\CPaymentBill;
 use bamboo\domain\entities\CProduct;
 use bamboo\utils\time\STimeToolbox;
+use DateTime;
 
 /**
  * Class CBillRegistryActivePaymentBillPayManage
@@ -50,7 +51,7 @@ class CBillRegistryActivePaymentBillPayManage extends AAjaxController
         $paymentBill = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneByStringId($paymentBillData['id']);
         $amountPaid=$paymentBillData['amount'];
         $amount=$paymentBill->amount;
-        $paymentBill->paymentDate = $paymentBillData['paymentDate'] ;
+        $paymentBill->paymentDate = (new \DateTime($paymentBillData['paymentDate']))->format('Y-m-d H:i:s');
         if($amountPaid<$amount) {
             $paymentBill->statusId = 5;
         }else if($amountPaid>=$amount){
