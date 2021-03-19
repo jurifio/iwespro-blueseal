@@ -51,7 +51,7 @@ class CBillRegistryActivePaymentBillPayManage extends AAjaxController
         $paymentBill = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip')->findOneBy(['id'=>$paymentBillData['id']]);
         $amountPaid=$paymentBillData['amount'];
         $amount=$paymentBill->amount;
-        $paymentBill->paymentDate = substr((new \DateTime($paymentBillData['paymentDate']))->format('Y-m-d H:i:s'),0,10).'00:0:00';
+        $paymentBill->paymentDate = substr((new \DateTime($paymentBillData['paymentDate']))->format('Y-m-d H:i:s'),0,10).' 00:00:00';
         if($amountPaid<$amount) {
             $paymentBill->statusId = 5;
         }else if($amountPaid>=$amount){
