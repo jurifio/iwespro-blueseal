@@ -66,6 +66,7 @@ $(document).on('bs-paymentActiveBill-pay', function (e, element, button) {
             modal.setOkEvent(function () {
                 paymentBill.paymentDate = $('#paymentDate').val();
                 paymentBill.amount = $('#amountPayment').val();
+                paymentBill.id=paymentBillId;
                 modal.showLoader();
                 modal.setOkEvent(function () {
                     modal.hide();
