@@ -62,6 +62,7 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
             $bri = $billRegistryInvoice->findOneBy(['id' => $invoiceId]);
             $billRegistryClient = $billRegistryClientRepo->findOneBy(['id' => $bri->billRegistryClientId]);
+            $brc=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$billRegistryClient->id]);
             $shop = $shopRepo->findOneBy([$brc->shopId]);
             $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $billRegistryClient->countryId]);
             $isExtraUe = $country->extraue;
