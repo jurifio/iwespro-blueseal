@@ -50,6 +50,7 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             $billRegistryProductDetailRepo = \Monkey::app()->repoFactory->create('BillRegistryProductDetail');
             $invoiceRepo = \Monkey::app()->repoFactory->create('Invoice');
             $billRegistryInvoice = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
+            $billRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
             $billRegistryInvoiceRowRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoiceRow');
             $shopRepo = \Monkey::app()->repoFactory->create('Shop');
             $billRegistrySocialRepo = \Monkey::app()->repoFactory->create('BillRegistrySocial');
