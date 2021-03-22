@@ -575,9 +575,9 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
 
             }
             $invoiceText .= '</tbody><br><tr class="text-left font-montserrat small">
+                    <td colspan="1" style="border: 0px"></td>
                     <td style="border: 0px"></td>
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px">
+                    <td  colspan="2"style="border: 0px">
                         <strong>';
             if ($isExtraUe != 1) {
                 $invoiceText .= 'Totale Netto';
@@ -585,13 +585,13 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
                 $invoiceText .= 'Total Amount ';
             }
             $invoiceText .= '</strong></td>
-                    <td style="border: 0px"
+                    <td  colspan="3" style="border: 0px"
                         class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td>
                 </tr>';
             $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
+                        <td  colspan="1" style="border: 0px"></td>
                         <td style="border: 0px"></td>
-                        <td style="border: 0px"></td>
-                        <td style="border: 0px">
+                        <td  colspan="2" style="border: 0px">
                             <strong>';
             if ($isExtraUe != "1") {
                 $invoiceText .= 'Totale Tasse';
@@ -600,15 +600,15 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             }
             $invoiceText .= '</strong></td>';
             if ($isExtraUe != 1) {
-                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$vatTotal) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',$vatTotal) . ' &euro;' . '</td></tr>';
             } else {
-                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',0) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',0) . ' &euro;' . '</td></tr>';
             }
 
             $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
+                        <td  colspan="1" style="border: 0px"></td>
                         <td style="border: 0px"></td>
-                        <td style="border: 0px"></td>
-                        <td style="border: 0px">
+                        <td  colspan="2" style="border: 0px">
                             <strong>';
             if ($isExtraUe != "1") {
                 $invoiceText .= 'Totale Dovuto';
@@ -617,9 +617,9 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             }
             $invoiceText .= '</strong></td>';
             if ($isExtraUe != "1") {
-                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$grossTotal) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',$grossTotal) . ' &euro;' . '</td></tr>';
             } else {
-                $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
+                $invoiceText .= '<td  colspan="3" style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
             }
             $invoiceText .= '<tr style="border: 0px" class="text-center">
                         <td colspan="2" style="border: 0px">';
