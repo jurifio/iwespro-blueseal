@@ -35,7 +35,7 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
         $invoiceId = $this->app->router->request()->getRequestData('invoiceId');
         $BillRegistryInvoiceRepo = \Monkey::app()->repoFactory->create('BillRegistryInvoice');
         $invoice = $BillRegistryInvoiceRepo->findOneBy(['id' => $invoiceId]);
-        if ($invoiceText != '') {
+        if ($invoice->invoiceText != '') {
             return $invoice->invoiceText;
         } else {
             $billRegistryClientRepo = \Monkey::app()->repoFactory->create('BillRegistryClient');
