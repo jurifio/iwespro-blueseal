@@ -65,18 +65,16 @@ class CPrepareProductForAggregatorJob extends ACronJob
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
-                        if(!is_null($phs)){
+                        if($phs){
                             if($phs->productStatusAggregatorId =='4'){
                                 $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'aggregatorHasShopId'=>$mhs->id]);
-                                if(!is_null($phphmhs)){
+                                if($phphmhs){
                                     $phphmhs->isDeleted=1;
                                     $phphmhs->isRevised=0;
                                     $phphmhs->isToWork=0;
                                     $phphmhs->update();
                                     \Monkey::app()->applicationLog('CPrepareProductForAggregatorJob','Report','booking Depublish ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id,'');
                                 }
-                            }else{
-                                continue;
                             }
                         }else{
                             $phsInsert=$phsRepo->getEmptyEntity();
