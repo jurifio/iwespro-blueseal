@@ -632,7 +632,7 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             $invoiceText .= '</td>';
             $invoiceText .= ' <td style="border: 0px"></td>';
             $invoiceText .= ' <td style="border: 0px"></td></tr>';
-            $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $lastBillRegistryInvoiceId]);
+            $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $invoiceId]);
             foreach ($billRegistryTimeTableFind as $paymentInvoice) {
                 $invoiceText .= '<tr style="border: 0px" class="text-center">
                         <td colspan="2" style="border: 0px">';
