@@ -62,8 +62,8 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             $billRegistryTimeTableRepo = \Monkey::app()->repoFactory->create('BillRegistryTimeTable');
             $bri = $billRegistryInvoice->findOneBy(['id' => $invoiceId]);
             $billRegistryClient = $billRegistryClientRepo->findOneBy(['id' => $bri->billRegistryClientId]);
-            $brc=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$billRegistryClient->id]);
-            $shop = $shopRepo->findOneBy([$brc->shopId]);
+            /*$brc=$billRegistryClientAccountRepo->findOneBy(['billRegistryClientId'=>$billRegistryClient->id]);
+            $shop = $shopRepo->findOneBy([$brc->shopId]);*/
             $country = \Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $billRegistryClient->countryId]);
             $isExtraUe = $country->extraue;
             $shopHub = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => 57]);
@@ -82,78 +82,78 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             $rowInvoiceDetail = $billRegistryInvoiceRowRepo->findBy(['billRegistryInvoiceId' => $invoiceId]);
             $netTotal = $bri->netTotal;
             $discountTotal = $bri->discountTotal;
-            $vatTotal = $bri->vatTotal;
+            $vatTotal = $bri->vat;
             $grossTotal = $bri->grossTotal;
             $billRegistryTypePayment = $billRegistryTypePaymentRepo->findOneBy(['id' => $bri->billRegistryTypePaymentId]);
             $namePayment = $billRegistryTypePayment->name;
-            $invoiceTex = '';
+            $invoiceText = '';
             $invoiceText .= addslashes('
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>');
             $invoiceText .= addslashes('<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <link rel="icon" type="image/x-icon" sizes="32x32" href="/assets/img/favicon32.png"/>
-    <link rel="icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
-    <link rel="icon" type="image/x-icon" sizes="16x16" href="/assets/img/favicon16.png"/>
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta content="" name="description"/>
-    <meta content="" name="author"/>
-    <script>
-        paceOptions = {
-            ajax: {ignoreURLs: [\'/blueseal/xhr/TemplateFetchController\', \'/blueseal/xhr/CheckPermission\']}
-        }
-    </script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<link rel="icon" type="image/x-icon" sizes="32x32" href="/assets/img/favicon32.png"/>
+<link rel="icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
+<link rel="icon" type="image/x-icon" sizes="16x16" href="/assets/img/favicon16.png"/>
+<link rel="apple-touch-icon" type="image/x-icon" sizes="256x256" href="/assets/img/favicon256.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<script>
+    paceOptions = {
+        ajax: {ignoreURLs: [\'/blueseal/xhr/TemplateFetchController\', \'/blueseal/xhr/CheckPermission\']}
+    }
+</script>
     <link type="text/css" href="https://www.iwes.pro/assets/css/pace.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen,print"/>
-    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="screen,print"/>
-    <link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/flick/jquery-ui.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://s3-eu-west-1.amazonaws.com/bamboo-css/jquery.scrollbar.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://s3-eu-west-1.amazonaws.com/bamboo-css/bootstrap-colorpicker.min.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://github.com/mar10/fancytree/blob/master/dist/skin-common.less" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/skin-bootstrap/ui.fancytree.min.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.min.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/basic.min.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://www.iwes.pro/assets/css/ui.dynatree.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/summernote.min.css" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300" rel="stylesheet" media="screen"/>
-    <link type="text/css" href="https://raw.githubusercontent.com/kleinejan/titatoggle/master/dist/titatoggle-dist-min.css" rel="stylesheet" media="screen,print"/>
-    <link type="text/css" href="https://www.iwes.pro/assets/css/pages-icons.css" rel="stylesheet" media="screen,print"/>
-    <link type="text/css" href="https://www.iwes.pro/assets/css/pages.css" rel="stylesheet" media="screen,print"/>
-    <link type="text/css" href="https://www.iwes.pro/assets/css/style.css" rel="stylesheet" media="screen,print"/>
-    <link type="text/css" href="https://www.iwes.pro/assets/css/fullcalendar.css" rel="stylesheet" media="screen,print"/>
-    <script  type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-    <script  type="application/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script  type="application/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script  type="application/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/pages.js"></script>
-    <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.prototype.js"></script>
-    <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.ui.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script defer type="application/javascript" src="https://cdn.jsdelivr.net/jquery.bez/1.0.11/jquery.bez.min.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/unveil/1.3.0/jquery.unveil.min.js"></script>
-    <script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/jquery.scrollbar.min.js"></script>
-    <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/Sortable.min.js"></script>
-    <script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/bootstrap-colorpicker.min.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/jquery.fancytree-all.min.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone-amd-module.min.js"></script>
-    <script defer type="application/javascript" src="https://cdn.jsdelivr.net/jquery.dynatree/1.2.4/jquery.dynatree.min.js"></script>
-    <script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/summernote.min.js"></script>
-    <script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/summernote-it-IT.js"></script>
-    <script defer type="application/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-    <script defer type="application/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>
-    <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.kickstart.js"></script>
-    <script  type="application/javascript" src="https://www.iwes.pro/assets/js/monkeyUtil.js"></script>
-    <script defer type="application/javascript" src="https://www.iwes.pro/assets/js/invoice_print.js"></script>
-    <script defer async type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.common.js"></script>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/flick/jquery-ui.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://s3-eu-west-1.amazonaws.com/bamboo-css/jquery.scrollbar.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://s3-eu-west-1.amazonaws.com/bamboo-css/bootstrap-colorpicker.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://github.com/mar10/fancytree/blob/master/dist/skin-common.less" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/skin-bootstrap/ui.fancytree.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/basic.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/ui.dynatree.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/summernote.min.css" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300" rel="stylesheet" media="screen"/>
+<link type="text/css" href="https://raw.githubusercontent.com/kleinejan/titatoggle/master/dist/titatoggle-dist-min.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/pages-icons.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/pages.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/style.css" rel="stylesheet" media="screen,print"/>
+<link type="text/css" href="https://www.iwes.pro/assets/css/fullcalendar.css" rel="stylesheet" media="screen,print"/>
+<script  type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+<script  type="application/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script  type="application/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script  type="application/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/pages.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.prototype.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.ui.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script defer type="application/javascript" src="https://cdn.jsdelivr.net/jquery.bez/1.0.11/jquery.bez.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/unveil/1.3.0/jquery.unveil.min.js"></script>
+<script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/jquery.scrollbar.min.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/Sortable.min.js"></script>
+<script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/bootstrap-colorpicker.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.24.0/jquery.fancytree-all.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone-amd-module.min.js"></script>
+<script defer type="application/javascript" src="https://cdn.jsdelivr.net/jquery.dynatree/1.2.4/jquery.dynatree.min.js"></script>
+<script defer type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.6.16/summernote.min.js"></script>
+<script defer type="application/javascript" src="https://s3-eu-west-1.amazonaws.com/bamboo-js/summernote-it-IT.js"></script>
+<script defer type="application/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+<script defer type="application/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.kickstart.js"></script>
+<script  type="application/javascript" src="https://www.iwes.pro/assets/js/monkeyUtil.js"></script>
+<script defer type="application/javascript" src="https://www.iwes.pro/assets/js/invoice_print.js"></script>
+<script defer async type="application/javascript" src="https://www.iwes.pro/assets/js/blueseal.common.js"></script>
     <title>BlueSeal - Stampa fattura</title>
     <style type="text/css">');
 
@@ -565,12 +565,12 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
 
             if ($rowInvoiceDetail != null) {
                 foreach ($rowInvoiceDetail as $rowInvoice) {
-                    $invoiceText .= '<tr><td class="text-center">' . $rowInvoice['description'] . '</td>';
-                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['priceRow']) . ' &euro;' . '</td>';
-                    $invoiceText .= '<td class="text-center">' . $rowInvoice['percDiscount'] . '%: ' . money_format('%.2n',$rowInvoice['discountRow']) . ' &euro;' . '</td>';
-                    $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice['billRegistryTypeTaxesId']]);
-                    $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice['vatRow']) . ' &euro;' . '</td>';
-                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice['grossTotalRow']) . ' &euro;' . '</td></tr>';
+                    $invoiceText .= '<tr><td class="text-center">' . $rowInvoice->description . '</td>';
+                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice->priceRow) . ' &euro;' . '</td>';
+                    $invoiceText .= '<td class="text-center">' . $rowInvoice->percentDiscount . '%: ' . money_format('%.2n',$rowInvoice->discountRow) . ' &euro;' . '</td>';
+                    $customerTaxesRow = \Monkey::app()->repoFactory->create('BillRegistryTypeTaxes')->findOneBy(['id' => $rowInvoice->billRegistryTypeTaxesId]);
+                    $invoiceText .= '<td class="text-center">' . $customerTaxesRow->perc . '%: ' . money_format('%.2n',$rowInvoice->vatRow) . ' &euro;' . '</td>';
+                    $invoiceText .= '<td class="text-center">' . money_format('%.2n',$rowInvoice->grossTotalRow) . ' &euro;' . '</td></tr>';
                 }
 
             }
@@ -588,28 +588,11 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
                     <td style="border: 0px"
                         class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td>
                 </tr>';
-            $invoiceText .= '<tr class="text-left font-montserrat small">
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px">
-                        <strong>';
-            if ($discountTotal != '0.00') {
-                if ($isExtraUe != 1) {
-                    $invoiceText .= 'Sconto Total';
-                } else {
-                    $invoiceText .= 'Total Discount ';
-                }
-                $invoiceText .= '</strong></td>
-                    <td style="border: 0px"
-                        class="text-center">' . money_format('%.2n',$discountTotal) . ' &euro;' . '</td>
-                </tr>';
-            }
-
             $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px">
-                        <strong>';
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px">
+                            <strong>';
             if ($isExtraUe != "1") {
                 $invoiceText .= 'Totale Tasse';
             } else {
@@ -623,10 +606,10 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             }
 
             $invoiceText .= '<tr style="border: 0px" class="text-left font-montserrat small hint-text">
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px"></td>
-                    <td style="border: 0px">
-                        <strong>';
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px"></td>
+                        <td style="border: 0px">
+                            <strong>';
             if ($isExtraUe != "1") {
                 $invoiceText .= 'Totale Dovuto';
             } else {
@@ -639,7 +622,7 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
                 $invoiceText .= '<td style="border: 0px" class="text-center">' . money_format('%.2n',$netTotal) . ' &euro;' . '</td></tr>';
             }
             $invoiceText .= '<tr style="border: 0px" class="text-center">
-                    <td colspan="2" style="border: 0px">';
+                        <td colspan="2" style="border: 0px">';
             if ($isExtraUe != "1") {
                 $invoiceText .= 'Modalità di pagamento ' . $namePayment;
             } else {
@@ -652,52 +635,37 @@ class CBillInvoiceOnlyPrintAjaxController extends AAjaxController
             $billRegistryTimeTableFind = $billRegistryTimeTableRepo->findBy(['billRegistryInvoiceId' => $lastBillRegistryInvoiceId]);
             foreach ($billRegistryTimeTableFind as $paymentInvoice) {
                 $invoiceText .= '<tr style="border: 0px" class="text-center">
-                    <td colspan="2" style="border: 0px">';
+                        <td colspan="2" style="border: 0px">';
                 $invoiceText .= $paymentInvoice->description;
                 $invoiceText .= '</td>';
                 $invoiceText .= ' <td style="border: 0px"></td>';
                 $invoiceText .= ' <td style="border: 0px"></td></tr>';
             }
             $invoiceText .= '</table>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div>
+              <center><img alt="" class="invoice-thank" data-src-retina="/assets/img/' . $logoThankYou . '"
+                             data-src="/assets/img/' . $logoThankYou . '" src="/assets/img/' . $logoThankYou . '">
+                </center>
+            </div>
+            <br>
+            <br>
         </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div>
-            <center><img alt="" class="invoice-thank" data-src-retina="/assets/img/' . $logoThankYou . '"
-                         data-src="/assets/img/' . $logoThankYou . '" src="/assets/img/' . $logoThankYou . '">
-            </center>
-        </div>
-        <br>
-        <br>
     </div>
-</div>
 </div><!--end-->';
 
-            $invoiceText .= addslashes('<script type="application/javascript">
-    $(document).ready(function () {
-
-        Pace.on(\'done\', function () {
-
-        setTimeout(function () {
-            window.print();
-
-            setTimeout(function () {
-                window.close();
-            }, 1);
-
-        }, 200);
-
-    });
-    });
-</script>
+            $invoiceText .= '
 </body>
-</html>');
-            $bri->invoiceText = $invoiceText;
+</html>';
+            $bri->invoiceText = stripslashes($invoiceText);
             $bri->update();
-            return $invoiceText;
+            $briFind=$billRegistryInvoiceRepo->findOneBy(['id'=>$invoiceId]);
+            return stripslashes($briFind->invoiceText);
 
         }
 
