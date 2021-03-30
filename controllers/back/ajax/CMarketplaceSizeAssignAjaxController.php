@@ -44,7 +44,7 @@ class CMarketplaceSizeAssignAjaxController extends AAjaxController
                                   (`pchmac`.`marketplaceId`,`pchmac`.`marketplaceAccountId`, `pchmac`.`marketplaceSizeId`)
                                   where m.type='marketplace'";
 
-        $datatable = new CDataTables($sql,$marketplaceAccountSizeRepo->getEmptyEntity()->getPrimaryKeys(),$_GET,true);
+         $datatable = new CDataTables($sql,$marketplaceAccountSizeRepo->getEmptyEntity()->getPrimaryKeys(),$_GET,true);
 		$datatable->addCondition('isRelevant',[1]);
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
