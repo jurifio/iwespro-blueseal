@@ -4584,6 +4584,20 @@
             "methods": [
                 "GET"
             ]
+        },
+        {
+            "pattern": "/blueseal/marketplace/taglie(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CMarketplaceSizeAssignController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }
