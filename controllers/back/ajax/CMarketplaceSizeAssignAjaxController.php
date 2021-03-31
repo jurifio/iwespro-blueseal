@@ -46,7 +46,8 @@ class CMarketplaceSizeAssignAjaxController extends AAjaxController
 
          $datatable = new CDataTables($sql,$marketplaceAccountSizeRepo->getEmptyEntity()->getPrimaryKeys(),$_GET,true);
 		$datatable->addCondition('isRelevant',[1]);
-
+        $marketplaceRepo=\Monkey::app()->repoFactory->create('Marketplace');
+        $marketplaceAccountRepo=\Monkey::app()->repoFactory->create('MarketplaceAccount');
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         $datatable->doAllTheThings(true);
@@ -54,8 +55,10 @@ class CMarketplaceSizeAssignAjaxController extends AAjaxController
         foreach($datatable->getResponseSetData() as $key => $row) {
             $val = $marketplaceAccountSizeRepo->findOne($row);
             $row["DT_RowId"] = 'row__'.$val->printId();
-            $row['marketplace'] = $val->marketplaceAccount->marketplace->name;
-            $row['marketplaceAccount'] = $val->marketplaceAccount->name;
+            $marketplace=$marketplaceRepo->findOneBy(['id'=>$val->marketplaceId]);
+            $row['marketplace'] = $marketplace->name;
+            $marketplaceAccount=$marketplaceAccountRepo->findOneBy(['id'=>$val->marketplaceAccountId,'marketplaceId'=>$val->marketplaceId]);
+            $row['marketplaceAccount'] = $marketplaceAccount->name;
             $row['marketplaceAccountSize'] = $val->name;
 			try {
 				$appoggio = explode('_',$val->path);
@@ -70,13 +73,15 @@ class CMarketplaceSizeAssignAjaxController extends AAjaxController
 				$html = 'Non si può';
 	        } else {
 	        	$catIds = [];
-	        	foreach($val->productSize as $productSize) {
+
+	        	/*foreach($val->marketplaceSizeId as $productSize) {
 					$catIds[] = $productSize->id;
-		        }
+		        }*/
+                $catIds=$val->marketplaceSizeId;
 		        $html = '<select class="full-width selectpicker selectize-streachable" 
 		                         placeholder="Seleziona la taglia"
 		                         data-name="sizeSelect"
-		                         data-selected="'.implode('__',$catIds).'"
+		                         data-selected="'.$catIds.'"
 		                         data-id="' . $val->printId() . '" 
 		                         tabindex="-1" ></select>';
 	        }
