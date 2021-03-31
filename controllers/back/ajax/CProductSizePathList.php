@@ -28,7 +28,7 @@ class CProductSizePathList extends AAjaxController
 			$productSizeGroupFind=$psghpsRepo->findOneBy(['productSizeId'=>$size['id']]);
 			if($productSizeGroupFind) {
                 $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $productSizeGroupFind->productSizeGroupId]);
-                $one['value'] = $size['slug'] . '/' . $productSizeGroup->locale . '-' . $productSizeGroup->name;
+                $one['value'] = $size['slug'] . '_' . $productSizeGroup->locale . '-' . $productSizeGroup->name;
                 $all[] = $one;
 			}else{
 			    continue;
