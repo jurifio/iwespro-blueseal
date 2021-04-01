@@ -67,7 +67,7 @@ where (`pc`.`id` <> 1) and (m.type='marketplace') group by `pc`.`id`,`ma`.`id`,`
                     'marketplaceCategoryId'=>$val['marketplaceCategoryId']]);
 
             } else {
-                $marketplaceAccountCateogory  = null;
+                $marketplaceAccountCategory  = null;
             }
             $catIds = !is_null($marketplaceAccountCateogory) ? $marketplaceAccountCateogory->getHashKey('md5') : "";
 
