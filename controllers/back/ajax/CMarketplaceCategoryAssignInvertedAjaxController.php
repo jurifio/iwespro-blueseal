@@ -46,6 +46,7 @@ where (`pc`.`id` <> 1) and (m.type='marketplace') group by `pc`.`id`,`ma`.`id`,`
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
         $count = $this->app->dbAdapter->query($datatable->getQuery(true,true),$datatable->getParams())->fetch();
         $totalCount = $this->app->dbAdapter->query($datatable->getQuery('full',true),$datatable->getParams())->fetch();
+        $marketplaceRepo=\Monkey::app()->repoFactory->create('Marketplace');
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $c = $datatable->getQuery(false,true);
         $response = [];
@@ -71,6 +72,8 @@ where (`pc`.`id` <> 1) and (m.type='marketplace') group by `pc`.`id`,`ma`.`id`,`
             $catIds = !is_null($marketplaceAccountCateogory) ? $marketplaceAccountCateogory->getHashKey('md5') : "";
 
             $row["DT_RowId"] = 'c_'.$productCategory->printId().'__ma_'.$marketplaceAccount->printId();
+            $marketplace=$marketplaceRepo->findOneBy(['id'=>$val->marketplaceId]);
+            $row['marketplace'] = $marketplace->name;
             $row['marketplace'] = $marketplaceAccount->marketplace->name;
             $row['marketplaceAccount'] = $marketplaceAccount->name;
             $row['productCategory'] = $productCategory->getLocalizedPath();
