@@ -72,7 +72,7 @@ where (`pc`.`id` <> 1) and (m.type='marketplace') group by `pc`.`id`,`ma`.`id`,`
             $catIds = !is_null($marketplaceAccountCateogory) ? $marketplaceAccountCateogory->getHashKey('md5') : "";
 
             $row["DT_RowId"] = 'c_'.$productCategory->printId().'__ma_'.$marketplaceAccount->printId();
-            $marketplace=$marketplaceRepo->findOneBy(['id'=>$val->marketplaceId]);
+            $marketplace=$marketplaceRepo->findOneBy(['id'=>$val['marketplaceId']]);
             $row['marketplace'] = $marketplace->name;
             $row['marketplaceAccount'] = $marketplaceAccount->name;
             $row['productCategory'] = $productCategory->getLocalizedPath();
