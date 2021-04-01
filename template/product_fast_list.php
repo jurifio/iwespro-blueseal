@@ -337,6 +337,9 @@
         <bs-toolbar-button
                 data-remote="bs.product.publish.amazon"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.product.publish.spartoo"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Shooting">
         <bs-toolbar-button
