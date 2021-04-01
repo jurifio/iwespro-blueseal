@@ -53,7 +53,8 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
         foreach($datatable->getResponseSetData() as $key => $row) {
             $val = $marketplaceAccountCategoryRepo->findOne($row);
             $row["DT_RowId"] = 'row__'.$val->printId();
-            $row['marketplace'] = $val->marketplaceAccount->marketplace->name;
+            $marketplace=$marketplaceRepo->findOneBy(['id'=>$val->marketplaceId]);
+            $row['marketplace'] = $marketplace->name;
             $row['marketplaceAccount'] = $val->marketplaceAccount->name;
             $row['marketplaceAccountCategory'] = $val->name;
 			try {
