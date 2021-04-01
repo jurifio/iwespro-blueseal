@@ -45,7 +45,8 @@ class CMarketplaceCategoryAssignAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql,$marketplaceAccountCategoryRepo->getEmptyEntity()->getPrimaryKeys(),$_GET,true);
 		$datatable->addCondition('isRelevant',[1]);
-
+        $marketplaceRepo=\Monkey::app()->repoFactory->create('Marketplace');
+        $marketplaceAccountRepo=\Monkey::app()->repoFactory->create('MarketplaceAccount');
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         $datatable->doAllTheThings(true);
