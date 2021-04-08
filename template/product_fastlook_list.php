@@ -127,7 +127,7 @@
                     <div class="panel-body">
                         <table class="table table-striped responsive" width="100%"
                                data-datatable-name="product_fastcorrelook_list"
-                               data-controller="ProductFastlookListAjaxController"
+                               data-controller="ProductFastLookListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
                                data-product-zero-quantity="<?php echo $productZeroQuantity?>"
