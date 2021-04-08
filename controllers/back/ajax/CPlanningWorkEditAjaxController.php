@@ -96,7 +96,7 @@ class CPlanningWorkEditAjaxController extends AAjaxController
             $newStartMailDate = (new \DateTime($startDateWork))->format('d-m-Y');
             $newEndMailDate = (new \DateTime($endDateWork))->format('d-m-Y');
             $today = (new \DateTime())->format('d-m-Y');
-            $todaSent = (new \DateTime())->format('Y-m-d H:i:s');
+            $todaySent = (new \DateTime())->format('Y-m-d H:i:s');
             $planningWorkType=\Monkey::app()->repoFactory->create('PlanningWorkType')->findOneBy(['id'=>$planningWorkTypeId]);
 
             switch($data['planningWorkStatusId']){
