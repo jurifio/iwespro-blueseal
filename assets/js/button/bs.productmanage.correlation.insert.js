@@ -30,7 +30,7 @@ $(document).on('bs-productmanage-correlation-insert', function () {
     let shopId = selectedRows[0].shopId;
 
 
-    let bsModal = new $.bsModal('Inserisci un Tema di Correlazione fra Prodotti', {
+    let bsModal = new $.bsModal('Seleziona un Tema di Correlazione fra Prodotti', {
         body: `<div class="row">
                  <div class="form-group form-group-default selectize-enabled">
                                         <label for="code">seleziona la Correlazione</label>
