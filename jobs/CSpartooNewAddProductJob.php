@@ -148,16 +148,16 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<productColor><![CDATA['.$product->productColorGroup->name.']]></productColor>';
                 $category=$product->getLocalizedProductCategories('<br>', '/');
                 switch(true){
-                    case (strpos($category,'Donna')):
+                    case (strpos($category,'Donna')!==false):
                         $categoryId='F';
                         break;
-                    case (strpos($category,'Uomo')):
+                    case (strpos($category,'Uomo')!==false):
                         $categoryId='H';
                         break;
-                    case (strpos($category,'Bambino')):
+                    case (strpos($category,'Bambino')!==false):
                         $categoryId='K';
                         break;
-                    case (strpos($category,'Bambina')):
+                    case (strpos($category,'Bambina')!==false):
                         $categoryId='G';
                         break;
                     default:

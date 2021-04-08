@@ -29,7 +29,7 @@ class CAmazonAddProductAjaxController extends AAjaxController
 
     public function post()
     {
-
+//seleziono gli account che hanno amazon
         \Monkey::app()->vendorLibraries->load('amazonMWS');
         $sql = "SELECT 	marketplaceAccountId as id,
 						marketplaceId
@@ -41,10 +41,12 @@ class CAmazonAddProductAjaxController extends AAjaxController
 					marketplaceAccountId";
 
         $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->em()->findBySql($sql,[]);
-
+        //ciclo gli account
         foreach ($marketplaceAccounts as $marketplaceAccount) {
             $messageId=1;
+            //inizio routine
             try {
+                //seleziono i prodotti che sono eletti nel marketplace
                 $sql = "SELECT 	productId, 
 						productVariantId, 
 						marketplaceId,
