@@ -60,8 +60,8 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
 
 
             foreach ($shopHasProducts as $shopHasProduct) {
-                $nameCorrelation=$shopHasProduct['productId'].'-'.$shopHasProduct['shopId'];
-                $findProductCorrelation = $productCorrelationRepo->findOneBy(['name' => $nameCorrelation]);
+                $nameCorrelation = $shopHasProduct['productId'] . '-' . $shopHasProduct['shopId'];
+                $findProductCorrelation = $productCorrelationRepo->findOneBy(['code' => 'COLOUR','name' => $nameCorrelation]);
                 if ($findProductCorrelation == null) {
                     $findProductCorrelationInsert = $productCorrelationRepo->getEmptyEntity();
                     $findProductCorrelationInsert->name = $nameCorrelation;
@@ -69,39 +69,36 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
                     $findProductCorrelationInsert->note = 'varianti taglie ' . $nameCorrelation;
                     $findProductCorrelationInsert->code = 'COLOUR';
                     $findProductCorrelationInsert->seo = 'varianti taglie ' . $nameCorrelation;
-                    $combinations=explode(',',$shopHasProduct['variant']);
+                    $combinations = explode(',',$shopHasProduct['variant']);
                     $findProductCorrelationInsert->image = 'https://cdn.iwes.it/dummy/bs-dummy-16-9.png';
                     $findProductCorrelationInsert->insert();
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductCorrelation ',[])->fetchAll();
                     foreach ($res as $result) {
                         $lastId = $result['id'];
                     }
-                    foreach($combinations as $combination) {
-                        $findProductQuantity = $productRepo->findOneBy(['id' => $shopHasProduct['productId'],'productVariantId' => $combination]);
-                        if ($findProductQuantity->qty > 0) {
-                            $findProductHasProductCorrelation = $productHasProductCorrelationRepo->findOneBy(['productId' => $shopHasProduct['productId'],
-                                'productVariantId' => $combination,
-                                'shopId' => $shopHasProduct['shopId'],
-                                'correlationId' => $lastId]);
-                            if ($findProductHasProductCorrelation == null) {
-                                $findProductHasProductCorrelationInsert = $productHasProductCorrelationRepo->getEmptyEntity();
-                                $findProductHasProductCorrelationInsert->correlationId = $lastId;
-                                $findProductHasProductCorrelationInsert->productId = $shopHasProduct['productId'];
-                                $findProductHasProductCorrelationInsert->productVariantId = $combination;
-                                $findProductHasProductCorrelationInsert->shopId = $shopHasProduct['shopId'];
-                                $findProductHasProductCorrelationInsert->insert();
+                    foreach ($combinations as $combination) {
+                        $findProductHasProductCorrelation = $productHasProductCorrelationRepo->findOneBy(['productId' => $shopHasProduct['productId'],
+                            'productVariantId' => $combination,
+                            'shopId' => $shopHasProduct['shopId'],
+                            'correlationId' => $lastId]);
+                        if ($findProductHasProductCorrelation == null) {
+                            $findProductHasProductCorrelationInsert = $productHasProductCorrelationRepo->getEmptyEntity();
+                            $findProductHasProductCorrelationInsert->correlationId = $lastId;
+                            $findProductHasProductCorrelationInsert->productId = $shopHasProduct['productId'];
+                            $findProductHasProductCorrelationInsert->productVariantId = $combination;
+                            $findProductHasProductCorrelationInsert->shopId = $shopHasProduct['shopId'];
+                            $findProductHasProductCorrelationInsert->insert();
 
-                            } else {
-                                continue 2;
-                            }
+                        } else {
+                            continue ;
                         }
+
                     }
 
 
                 } else {
                     continue;
                 }
-
             }
         }catch(\Throwable $e){
             $this->report('CCreateProductCorrelationJob',$e->getMessage(),$e->getLine());
