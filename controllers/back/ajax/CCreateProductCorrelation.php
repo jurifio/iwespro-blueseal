@@ -76,8 +76,10 @@ JOIN Product p ON sp.productId=p.id WHERE p.productStatusId=6 and `stored`=0 and
                     continue;
                 }
             }
+            return 'Tutte le Correlazioni Colore sono state create';
         }catch(\Throwable $e){
-            \Monkey::app()->applicationLog('CCreateProductCorrelationJob','Error','populate',$e->getMessage(),$e->getLine());
+            \Monkey::app()->applicationLog('CCreateProductCorrelation','Error','populate',$e->getMessage(),$e->getLine());
+            return 'error '.$e->getMessage();
         }
 
 

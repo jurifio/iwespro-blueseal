@@ -57,6 +57,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">importo</th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop Destinazione</th>
                             </tr>
                             </thead>
                             <tbody>

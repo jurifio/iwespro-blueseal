@@ -30,6 +30,10 @@ $(document).on('bs-product-look.modify', function () {
     var seldaNo='';
     var selTypeDiscountP='';
     var selTypeDiscountF='';
+    var remoteId=selectedRows[0].remoteId;
+    var remoteShopId=selectedRows[0].remoteShopId;
+    var amount=selectedRows[0].amount;
+
 
     switch (discountActive) {
         case 'no':
@@ -101,7 +105,7 @@ $(document).on('bs-product-look.modify', function () {
                 <div class="row">
                 <div class="form-group form-group-default">
                                         <label for="amount">Valore</label>
-                                        <input type="text" id="amount" name="amount" value="` + amount `"/>
+                                        <input type="text" id="amount" name="amount" value="` + amount +`"/>
                                     </div>
                 </div>
               
@@ -122,8 +126,9 @@ $(document).on('bs-product-look.modify', function () {
             note: $('#note').val(),
             typeDiscount:$('#typeDiscount').val(),
             discountActive:$('#discountActive').val(),
-            amount:$('#amount').val()
-
+            amount:$('#amount').val(),
+            remoteId:remoteId,
+            remoteShopId:remoteShopId
         };
         $.ajax({
             method: 'put',

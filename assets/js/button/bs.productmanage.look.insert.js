@@ -70,12 +70,14 @@ $(document).on('bs-productmanage-look-insert', function () {
                     } else if (item.img == null && item.name != null){
                         rendResCats = '<div>' +
                             escape(item.id) + ' | ' +
-                            escape(item.name) +
+                            escape(item.name) + ' | ' +
+                            escape(item.shopName) +
                             '</div>';
                     } else {
                         rendResCats = '<div>' +
                             escape(item.id) + ' | ' +
                             escape(item.name) + ' | ' +
+                            escape(item.shopName) + ' | ' +
                             "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                             '</div>';
                     }

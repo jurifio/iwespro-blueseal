@@ -30,12 +30,16 @@ class CProductCorrelationListAjaxController extends AAjaxController
                   `p`.`note`                                      AS `note`,
                   `p`.`code`                                      AS `code`,
                   `p`.`image`                                      AS `image`,
-                   `p`.`seo`                                      AS `seo` 
-                FROM `ProductCorrelation` `p`";
+                   `p`.`seo`                                      AS `seo`,
+                    `s`.`name` as shopName,
+                    `s`.`id` as remoteShopId,
+                    `p`.`remoteId` as remoteId
+                FROM `ProductCorrelation` `p` join Shop s on s.id=p.remoteShopId";
 
         $datatable = new CDataTables($sql, ['id'], $_GET);
 
         $productCorrelation = \Monkey::app()->repoFactory->create('ProductCorrelation')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         $count = \Monkey::app()->repoFactory->create('ProductCorrelation')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = \Monkey::app()->repoFactory->create('ProductCorrelation')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
@@ -58,6 +62,10 @@ class CProductCorrelationListAjaxController extends AAjaxController
                 $response['data'][$i]['image'] = ($v->image!=null)? '<img width="50px" src="'.$v->image.'"/>': '';
                 $response['data'][$i]['code'] = $v->code;
                 $response['data'][$i]['seo'] = $v->seo;
+                $shop=$shopRepo->findOneBy(['id'=>$v->remoteShopId]);
+                $response['data'][$i]['shopName'] = $shop->name;
+                $response['data'][$i]['remoteShopId'] = $v->remoteShopId;
+                $response['data'][$i]['remoteId'] = $v->remoteId;
                 $i++;
             } catch (\Throwable $e) {
                 throw $e;

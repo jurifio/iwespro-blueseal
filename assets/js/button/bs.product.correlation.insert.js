@@ -22,6 +22,16 @@ $(document).on('bs-product-correlation.insert', function () {
                 </div>
                 <div class="row">
                <div class="form-group form-group-default selectize-enabled">
+                                        <label for="shopId">seleziona lo Shop Di Destinazione</label>
+                                        <select id="shopId" name="shopId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize"></select>
+                                                
+                                    </div>
+                </div>
+                <div class="row">
+               <div class="form-group form-group-default selectize-enabled">
                                         <label for="code">seleziona il Tipo di Correlazione</label>
                                         <select id="code" name="code"
                                                 class="full-width selectpicker"
@@ -68,6 +78,26 @@ $(document).on('bs-product-correlation.insert', function () {
                         '</form>';
                 `
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop',
+            condition: {hasEcommerce: 1}
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
     let dropzone = new Dropzone("#dropzoneModal",{
         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
@@ -107,6 +137,7 @@ $(document).on('bs-product-correlation.insert', function () {
             note:$('#note').val(),
             seo:$('#seo').val(),
             code:$('#code').val(),
+            shopId:$('#shopId').val(),
             image:urldef
         };
         $.ajax({

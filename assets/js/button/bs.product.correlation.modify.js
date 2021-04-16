@@ -26,6 +26,8 @@ $(document).on('bs-product-correlation.modify', function () {
     var note = selectedRows[0].note;
     var code = selectedRows[0].code;
     var seo = selectedRows[0].seo;
+    var remoteShopId=  selectedRows[0].remoteShopId;
+    var remoteId=selectedRows[0].remoteId;
     var selAPP = '';
     var selLOOK = '';
     var selCOLOUR = '';
@@ -54,6 +56,16 @@ $(document).on('bs-product-correlation.modify', function () {
         <input type="text" id="nameCorrelation" name="nameCorrelation" value="` + name + `"/>
                 </div>
                 </div>
+                 <div class="row">
+               <div class="form-group form-group-default selectize-enabled">
+                                        <label for="shopId">seleziona lo Shop Di Destinazione</label>
+                                        <select id="shopId" name="shopId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize"></select>
+                                                
+                                    </div>
+                </div>
                 <div class="row">
                <div class="form-group form-group-default selectize-enabled">
                                         <label for="code">seleziona il Tipo di Correlazione</label>
@@ -74,13 +86,45 @@ $(document).on('bs-product-correlation.modify', function () {
                                                   ` + description + `</textarea>
                                     </div>
                 </div>
+                <div class="row">
                 <div class="form-group form-group-default">
                                         <label for="note">Note</label>
                                         <textarea class="form-control" name="note" id="note"
                                                   >` + note + `</textarea>
                                     </div>
                 </div>
+                 <div class="row">
+                <div class="form-group form-group-default">
+                                        <label for="seo">seo</label>
+                                        <textarea class="form-control" name="seo" id="seo"
+                                                  >` + seo + `</textarea>
+                                    </div>
+                </div>
                 `
+    });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop',
+            condition: {hasEcommerce: 1}
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+            onInitialize: function () {
+                var selectize = this;
+                selectize.setValue(remoteShopId);
+            }
+        });
+
     });
 
 
@@ -94,7 +138,12 @@ $(document).on('bs-product-correlation.modify', function () {
             id: id,
             name: $('#nameCorrelation').val(),
             description: $('#description').val(),
+            code:$('#code').val(),
+            seo:$('#seo').val(),
             note: $('#note').val(),
+            shopId:$('#shopId').val(),
+            remoteId:remoteId
+
         };
         $.ajax({
             method: 'put',

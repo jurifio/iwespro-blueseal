@@ -62,20 +62,22 @@ $(document).on('bs-productmanage-correlation-insert', function () {
                         rendResCats = '<div>' +
                             escape(item.name) +
                             '</div>';
-                    } else if(item.img != null && item.code == null){
+                    } else if(item.img != null && item.name == null){
                         rendResCats = '<div>' +
-                            escape(item.name) + ' | ' +
+                            escape(item.id) + ' | ' +
                             "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                             '</div>';
-                    } else if (item.img == null && item.code != null){
+                    } else if (item.img == null && item.name != null){
                         rendResCats = '<div>' +
+                            escape(item.id) + ' | ' +
                             escape(item.name) + ' | ' +
-                            escape(item.code) +
+                            escape(item.shopName) +
                             '</div>';
                     } else {
                         rendResCats = '<div>' +
+                            escape(item.id) + ' | ' +
                             escape(item.name) + ' | ' +
-                            escape(item.code) + ' | ' +
+                            escape(item.shopName) + ' | ' +
                             "<img style='width: 50px' src='" + escape(item.img) + "'>" +
                             '</div>';
                     }

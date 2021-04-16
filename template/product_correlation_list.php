@@ -62,6 +62,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Seo</th>
+                                <th data-slug="shopName"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Shop Destinazione</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,7 +95,7 @@
                 data-remote="bs.productpopulatecolour.correlation"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.goto.correlation"
+                data-remote="\"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

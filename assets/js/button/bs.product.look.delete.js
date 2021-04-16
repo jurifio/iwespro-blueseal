@@ -21,6 +21,8 @@ $(document).on('bs-product-look.delete', function () {
         return false;
     }
     var id =selectedRows[0].DT_RowId;
+    var remoteId=selectedRows[0].remoteId;
+    var remoteShopId=selectedRows[0].remoteShopId;
 
 
     let bsModal = new $.bsModal('Cancella un Look fra Prodotti', {

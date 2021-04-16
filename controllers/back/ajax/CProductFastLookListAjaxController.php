@@ -118,7 +118,8 @@ class CProductFastLookListAjaxController extends AAjaxController
                   pb.name                                                                                           AS brand,
                   ps.name                                                                                           AS status,
                   concat(psg.locale, ' - ',
-                         psmg.name)                                                                                 AS productSizeGroup
+                         psmg.name)                                                                                 AS productSizeGroup,
+                    pl.name as LOOK  
 								  
 
  from Product p 
@@ -129,6 +130,7 @@ class CProductFastLookListAjaxController extends AAjaxController
 JOIN ShopHasProduct sp ON sp.productId=p.id AND p.productVariantId=sp.productVariantId
   JOIN Shop s ON s.id = sp.shopId
 left JOIN ProductHasProductLook ph ON ph.productId=sp.productId AND ph.productVariantId=sp.productVariantId AND ph.shopId=sp.shopId
+     left Join ProductLook pl on ph.productLookId=pl.id
      LEFT JOIN (ProductSizeGroup psg
                               JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id)
                             ON p.productSizeGroupId = psg.id

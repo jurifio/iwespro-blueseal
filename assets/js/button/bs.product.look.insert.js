@@ -21,6 +21,16 @@ $(document).on('bs-product-correlation.insert', function () {
                 <input type="text" id="nameLook" name="nameLook" value=""/>
                 </div>
                 </div>
+                  <div class="row">
+               <div class="form-group form-group-default selectize-enabled">
+                                        <label for="shopId">seleziona lo Shop Di Destinazione</label>
+                                        <select id="shopId" name="shopId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize"></select>
+                                                
+                                    </div>
+                </div>
                 <div class="row">
                 <div class="form-group form-group-default">
                                         <label for="description">Descrizione</label>
@@ -82,6 +92,26 @@ $(document).on('bs-product-correlation.insert', function () {
                         </div>
                 `
     });
+    $.ajax({
+        method: 'GET',
+        url: '/blueseal/xhr/GetTableContent',
+        data: {
+            table: 'Shop',
+            condition: {hasEcommerce: 1}
+
+        },
+        dataType: 'json'
+    }).done(function (res2) {
+        var select = $('#shopId');
+        if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+        select.selectize({
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            options: res2,
+        });
+
+    });
     let dropzone = new Dropzone("#dropzoneModal",{
         url: '/blueseal/xhr/EditorialPlanDetailImageUploadAjaxManage',
 
@@ -121,6 +151,7 @@ $(document).on('bs-product-correlation.insert', function () {
             description: $('#description').val(),
             typeDiscount:$('#typeDiscount').val(),
             discountActive:$('#discountActive').val(),
+            shopId:$('#shopId').val(),
             amount:$('#amount').val(),
             note:$('#note').val(),
             image:urldef

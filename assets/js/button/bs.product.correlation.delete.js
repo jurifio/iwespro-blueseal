@@ -21,6 +21,8 @@ $(document).on('bs-product-correlation.delete', function () {
         return false;
     }
     var id =selectedRows[0].DT_RowId;
+    var remoteId=selectedRows[0].remoteId;
+    var remoteShopId=selectedRows[0].remoteShopId;
 
 
     let bsModal = new $.bsModal('Cancella un Tema di Correlazione fra Prodotti', {
@@ -39,6 +41,8 @@ $(document).on('bs-product-correlation.delete', function () {
 
         const data = {
             id:id,
+            shopId:remoteShopId,
+            remoteId:remoteId
         };
         $.ajax({
             method: 'delete',

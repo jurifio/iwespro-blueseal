@@ -30,15 +30,16 @@ class CProductLookListAjaxController extends AAjaxController
                   `p`.`image2`                                      AS `image2`,
                   `p`.`image3`                                      AS `image3`,
                   `p`.`image4`                                      AS `image4`,
-       
-       
+                    `s`.`name` as shopName,
+                    `s`.`id` as remoteShopId,
+                    `p`.`remoteId` as remoteId,
                    if(`p`.`discountActive`=0,'si','no')                                      AS `discountActive`,
                    if(`p`.`typeDiscount`=1,'percentuale','Fisso') as typeDiscount,
                    `p`.`amount` as amount 
-                FROM `ProductLook` `p`";
+                FROM `ProductLook` `p` join Shop s on s.id=p.remoteShopId";
 
         $datatable = new CDataTables($sql, ['id'], $_GET);
-
+        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
         $productLook = \Monkey::app()->repoFactory->create('ProductLook')->em()->findBySql($datatable->getQuery(), $datatable->getParams());
         $count = \Monkey::app()->repoFactory->create('ProductLook')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = \Monkey::app()->repoFactory->create('ProductLook')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
@@ -63,7 +64,13 @@ class CProductLookListAjaxController extends AAjaxController
                 $response['data'][$i]['image4'] = ($v->image3!=null)? '<img width="50px" src="'.$v->image4.'"/>': '';
                 $response['data'][$i]['discountActive'] = ($v->discountActive==1)?'si':'no';
                 $response['data'][$i]['typeDiscount'] = ($v->typeDiscount==1)?'percentuale':'fisso';
-                $response['data'][$i]['amount'] = number_format($v->amount,2,',','');
+                $response['data'][$i]['amount'] = number_format($v->amount,2,'.','');
+                $shop=$shopRepo->findOneBy(['id'=>$v->remoteShopId]);
+                $response['data'][$i]['shopName'] = $shop->name;
+                $response['data'][$i]['remoteShopId'] = $v->remoteShopId;
+                $response['data'][$i]['remoteId'] = $v->remoteId;
+                $response['data'][$i]['description'] = $v->description;
+                $response['data'][$i]['note'] = $v->note;
                 $i++;
             } catch (\Throwable $e) {
                 throw $e;
