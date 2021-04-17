@@ -24,7 +24,9 @@ class CBrandListAjaxController extends AAjaxController
      */
     public function get()
     {
-        $sql = "SELECT pb.id,
+        $currentUser=$this->app->getUser()->getId();
+        if ($this->app->getUser()->hasPermission('allShops')) {
+            $sql = "SELECT pb.id,
                         pb.name,
                         pb.slug,
                         pb.description,
@@ -35,6 +37,23 @@ class CBrandListAjaxController extends AAjaxController
                   JOIN ProductStatus ps on p.productStatusId = ps.id and ps.isVisible = 1) 
                     on pb.id = p.productBrandId
                 GROUP BY pb.id";
+        }else{
+            $userHasShop=\Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId'=>$currentUser]);
+            $sql = "SELECT pb.id,
+                        pb.name,
+                        pb.slug,
+                        pb.description,
+                        pb.logoUrl,
+                        count(distinct p.id, p.productVariantId) as productCount 
+                from ProductBrand pb LEFT JOIN 
+                (Product p 
+                  JOIN ProductStatus ps on p.productStatusId = ps.id and ps.isVisible = 1
+                    JOIN ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId ) 
+                    on pb.id = p.productBrandId
+                where sp.shopId=".$userHasShop->shopId."
+                
+                GROUP BY pb.id";
+        }
         $datatable = new CDataTables($sql, ['id'], $_GET );
 
         $prodotti = \Monkey::app()->repoFactory->create('ProductBrand')->findBySql($datatable->getQuery(), $datatable->getParams());

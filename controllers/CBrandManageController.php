@@ -115,8 +115,30 @@ class CBrandManageController extends ARestrictedAccessRootController
         } else {
             $slug = $slugify->slugify($data['ProductBrand_name']);
         }
-
+        if(isset($data['shopId'])){
+            $remoteShopId=$data['shopId'];
+        }else{
+            return 'error';
+        }
+        $productBrandTranslationRepo=\Monkey::app()->repoFactory->create('ProductBrandTranslation');
         $this->app->dbAdapter->insert("ProductBrand", ["slug"=>trim($slug), "name"=>trim($data['ProductBrand_name'])]);
+        $res = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductBrand ',[])->fetchAll();
+        foreach ($res as $result) {
+            $lastId = $result['id'];
+        }
+        foreach($data as $key => $lang){
+           if (strpos($key,'ProductBrandTranslation')!==false){
+               $langId=trim(str_replace('ProductBrandTranslation_','',$key));
+               $value=$lang;
+               $productBrandTranslation=$productBrandTranslationRepo->getEmptyEntity();
+               $productBrandTranslation->productBrandId=$lastId;
+               $productBrandTranslation->langId=$langId;
+               $productBrandTranslation->text=$value;
+               $productBrandTranslation->remoteShopId=$remoteShopId;
+               $productBrandTranslation->insert();
+           }
+        }
+
 
         if(!headers_sent()){
             header("Location: ".$blueseal."/prodotti/brand");

@@ -29,6 +29,8 @@
                         <form id="form-project" role="form" action="#" method="POST" autocomplete="on">
                             <div class="row clearfix">
                                 <div class="col-md-7">
+                                    <input type="hidden" id="currentUser" name="currentUser" value="<?php echo $currentUser;?>"/>
+                                    <input type="hidden" id="allShops" name="allShops" value="<?php echo $allShops;?>"/>
                                     <div class="form-group form-group-default required">
                                         <label for="ProductBrand_name">Nome Brand</label>
                                         <input type="text" class="form-control" id="ProductBrand_name" name="ProductBrand_name" value="<?php echo $brandEdit->name; ?>" required/>
@@ -46,7 +48,7 @@
                             <div class="row clearfix">
                                 <div class="col-md-8">
                                     <div class="form-group form-group-default">
-                                        <label for="ProductBrand_description">Descrizione Brand</label>
+                                        <label for="ProductBrand_description">Descrizione Brand (min caratteri 160 max 2000)</label>
                                         <textarea style="height: 400px" class="form-control" id="ProductBrand_description" name="ProductBrand_description"><?php echo $brandEdit->description; ?></textarea>
                                     </div>
                                 </div>
@@ -69,16 +71,28 @@
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="">
+        <?php if($allShops=='1'):?>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-floppy-o"
-            data-permission="/admin/product/add"
+            data-permission="allShops"
             data-event="bs.brand.edit"
             data-class="btn btn-default"
             data-rel="tooltip"
             data-title="Aggiorna"
             data-placement="bottom"
             ></bs-toolbar-button>
+        <?php endif; ?>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-language"
+                data-permission="allShops"
+                data-event="bs.brand.translation"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiorna lingue "
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

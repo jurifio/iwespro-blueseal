@@ -35,15 +35,49 @@
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row clearfix">
                                 <div class="col-md-4">
                                     <div class="form-group form-group-default">
                                         <label for="ProductBrand_slug">Slug Brand</label>
                                         <input type="text" class="form-control" id="ProductBrand_slug" name="ProductBrand_slug" value="<?php echo isset($brandEdit) ? $brandEdit->slug : "" ?>" />
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <input type="hidden" id="allShops" name="allShops" value="<?php echo $allShops?>"/>
+                                    <?php if ($allShops=='1'):?>
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="shopId">Seleziona Se ha uno Shop</label>
+                                        <select id="shopId" name="shopId"
+                                                class="full-width selectpicker"
+                                                placeholder="Seleziona la Lista"
+                                                data-init-plugin="selectize">
+                                        </select>
+                                        <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                    </div>
+                                        <? else:?>
+                                        <?php $userHasShop=\Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId'=>$currentUser]);?>
+                                        <input type="hidden" id="shopSelected" name="shopSelected" value="<?php echo $userHasShop->shopId?>"/>
+                                        <div class="form-group form-group-default selectize-enabled">
+                                            <label for="shopId">Seleziona Se ha uno Shop</label>
+                                            <select id="shopId" name="shopId"
+                                                    class="full-width selectpicker"
+                                                    placeholder="Seleziona la Lista"
+                                                    data-init-plugin="selectize">
+                                            </select>
+                                            <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
+                                        </div>
+                                        <?endif?>
+                                    </div>
+                                </div>
                             </div>
+                            <?php foreach($langs as $lang){
+                                echo '<div class="row clearfix"> 
+                                 <div class="form-group form-group-default">
+                                        <label for="ProductBrandTranslation_'.$lang->id.'">Traduzione '.$lang->name.'</label>
+                                        <textarea class="form-control" rows="20" cols="180" name="ProductBrandTranslation_'.$lang->id.'" id="ProductBrandTranslation_'.$lang->id.'"></textarea>
+                                  </div>
+                                 </div>';
+                            }?>
+
                         </form>
                     </div>
                 </div>
