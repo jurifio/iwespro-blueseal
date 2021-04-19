@@ -25,7 +25,9 @@ class CDetailTranslateListAjaxController extends AAjaxController
     public function get()
     {
         $productDetail = \Monkey::app()->repoFactory->create('ProductDetail')->getEmptyEntity();
-        $sql = "SELECT
+        $currentUser=$this->app->getUser()->getId();
+        if ($this->app->getUser()->hasPermission('allShops')) {
+            $sql = "SELECT
                   `view`.`id`                                     AS `id`,
                   `view`.`slug`                                   AS `slug`,
                   `view`.`translatedLangId`                       AS `translatedLangId`,
@@ -52,6 +54,36 @@ class CDetailTranslateListAjaxController extends AAjaxController
                     ON (((`ProductSheetActual`.`productId` = `ProductSku`.`productId`) AND
                          (`ProductSheetActual`.`productVariantId` = `ProductSku`.`productVariantId`))))
                 GROUP BY `view`.`id`";
+        }else{
+            $userHasShop=\Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId'=>$currentUser]);
+            $sql = "SELECT
+                  `view`.`id`                                     AS `id`,
+                  `view`.`slug`                                   AS `slug`,
+                  `view`.`translatedLangId`                       AS `translatedLangId`,
+                  `view`.`translatedName`                         AS `translatedName`,
+                  if((sum(`ProductSku`.`stockQty`) > 0), 1, 0)    AS `hasQuantity`,
+                  count(DISTINCT `ProductSku`.`productVariantId`) AS `timesDetailIsUsedInProduct`
+                FROM ((
+                 (
+                 SELECT
+                    pd.id,
+                    pd.slug,
+                    group_concat(l.lang ORDER BY l.id ASC SEPARATOR '|')                                                 AS translatedLangCode,
+                    group_concat(if(pdt.name IS NULL OR pdt.name = '', 'x', pdt.langId) ORDER BY l.id ASC SEPARATOR
+                                 '|')                                                                                    AS translatedLangId,
+                    group_concat(if(pdt.name IS NULL OR pdt.name = '', 'x', pdt.name) ORDER BY l.id ASC SEPARATOR
+                                 '|')                                                                                    AS translatedName
+                  FROM ProductDetail pd LEFT JOIN Lang l ON 1 = 1
+                    LEFT JOIN
+                    ProductDetailTranslation pdt ON pd.id = pdt.productDetailId AND pdt.langId = l.id
+                  GROUP BY pd.id
+                 )
+                 `view`
+                  JOIN `ProductSheetActual` ON ((`ProductSheetActual`.`productDetailId` = `view`.`id`))) JOIN `ProductSku`
+                    ON (((`ProductSheetActual`.`productId` = `ProductSku`.`productId`) AND
+                         (`ProductSheetActual`.`productVariantId` = `ProductSku`.`productVariantId`)))) where `ProductSku`.`shopId`=".$userHasShop->shopId."
+                GROUP BY `view`.`id`";
+        }
         $datatable = new CDataTables($sql, $productDetail->getPrimaryKeys(), $this->app->router->request()->getRequestData(),true);
         $modifica = $this->app->baseUrl(false) . "/blueseal/traduzioni/dettagli/modifica";
 
@@ -69,7 +101,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 		    $datatable->addIgnobleCondition('translatedLangId', $langsCond);
 	    }
 
-        $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/edit');
+        $userHasPermission = $this->app->getUser()->hasPermission('/admin/product/list');
 		$datatable->addCondition('hasQuantity',[1]);
 
         $query = $datatable->getQuery(false,true);
@@ -101,7 +133,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
             $row["DT_RowId"] = 'row__' . $productDetail['id'];
             $row["DT_RowClass"] = 'colore';
-            $row['id'] = $userHasPermission ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $productDetail['id'] . '">' . $productDetail['id'] . '</a>' : $productDetail['id'];
+            $row['id'] = '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $productDetail['id'] . '">' . $productDetail['id'] . '</a>';
             $row['source'] = $translationStatus[1];
 
             if ($this->app->router->request()->getRequestData('useTargetLang')) {
