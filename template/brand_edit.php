@@ -82,6 +82,16 @@
             data-title="Aggiorna"
             data-placement="bottom"
             ></bs-toolbar-button>
+            <bs-toolbar-button
+                    data-tag="a"
+                    data-icon="fa-plus-circle"
+                    data-permission="allShops"
+                    data-event="bs.brandtranslation.add"
+                    data-class="btn btn-default"
+                    data-rel="tooltip"
+                    data-title="Aggiungi Traduzioni"
+                    data-placement="bottom"
+            ></bs-toolbar-button>
         <?php endif; ?>
         <bs-toolbar-button
                 data-tag="a"
