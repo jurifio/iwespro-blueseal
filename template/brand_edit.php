@@ -96,7 +96,7 @@
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-language"
-                data-permission="allShops"
+                data-permission="allShops||/admin/product/list"
                 data-event="bs.brand.translation"
                 data-class="btn btn-default"
                 data-rel="tooltip"
