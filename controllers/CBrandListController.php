@@ -17,7 +17,7 @@ class CBrandListController extends ARestrictedAccessRootController
     {
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/brand_list.php');
-
+        $allShops = $this->app->getUser()->hasPermission('allShops');
         $blueseal = $this->app->baseUrl(false).'/blueseal';
         $addUrl = $blueseal."/prodotti/brand/aggiungi";
 
@@ -25,6 +25,7 @@ class CBrandListController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page'=>$this->page,
             'addUrl' => $addUrl,
+            'allShops'=>$allShops,
             'sidebar' => $this->sidebar->build()
         ]);
     }
