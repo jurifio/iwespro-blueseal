@@ -105,6 +105,7 @@
             data-options='<?php echo json_encode($languages); ?>'
         ></bs-toolbar-select>
     </bs-toolbar-group>
+    <?php  if($allShops):?>
     <bs-toolbar-group data-group-label="Associa al lotto">
         <bs-toolbar-button-toggle
                 data-tag="a"
@@ -119,6 +120,7 @@
                 data-key="mustHaveQty"
         ></bs-toolbar-button-toggle>
     </bs-toolbar-group>
+    <?php endif ?>
 </bs-toolbar>
 </body>
 </html>
