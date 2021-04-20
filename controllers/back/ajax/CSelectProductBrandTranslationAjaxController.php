@@ -106,8 +106,8 @@ class CSelectProductBrandTranslationAjaxController extends AAjaxController
                     foreach ($res as $result) {
                         $lastId = $result['id'];
                     }
-                    $listTranslation[] = ['idTranslation' => '',
-                        'productBrandId' => $lastId,
+                    $listTranslation[] = ['idTranslation' =>$lastId,
+                        'productBrandId' => $productBrandId,
                         'text' => '',
                         'remoteShopId' => $shopId,
                         'remoteShopName' => $shopName,
