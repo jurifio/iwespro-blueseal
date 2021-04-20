@@ -92,7 +92,7 @@ class CSelectProductBrandTranslationAjaxController extends AAjaxController
                     ];
                 }
             } else {
-                $langs=$langRepo->findBy(['isActive'=>1]);
+                $langs=$langRepo->findBy(['isActive'=>"1"]);
                 foreach($langs as $lang){
                     $productBrandTranslationInsert=$productBrandTranslationRepo->getEmptyEntity();
                     $productBrandTranslationInsert->productBrandId=$productBrandId;
