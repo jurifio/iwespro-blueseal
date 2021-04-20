@@ -100,7 +100,7 @@ class CSelectProductBrandTranslationAjaxController extends AAjaxController
                     $productBrandTranslationInsert->text='';
                     $productBrandTranslationInsert->remoteShopId=$shopId;
                     $productBrandTranslationInsert->insert();
-                    $shop = $shopRepo->findOneBy(['id' => $brandTranslation->remoteShopId]);
+                    $shop = $shopRepo->findOneBy(['id' => $shopId]);
                     $shopName = $shop->name;
                     $res = \Monkey::app()->dbAdapter->query('select max(id) as id from ProductBrandTranslation',[])->fetchAll();
                     foreach ($res as $result) {
