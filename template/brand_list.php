@@ -67,7 +67,8 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Gestione prodotti">
+    <bs-toolbar-group data-group-label="Gestione Brand">
+        <?php  if($allShops):?>
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-file-o fa-plus"
@@ -98,6 +99,7 @@
             data-title="Assegna brand a lotto"
             data-placement="bottom"
         ></bs-toolbar-button>
+        <?php endif ?>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>
