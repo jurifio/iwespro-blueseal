@@ -70,8 +70,9 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="">
+
         <?php if($allShops=='1'):?>
+    <bs-toolbar-group data-group-label="Gestione Brand Amministratore">
         <bs-toolbar-button
             data-tag="a"
             data-icon="fa-floppy-o"
@@ -92,7 +93,9 @@
                     data-title="Aggiungi Traduzioni"
                     data-placement="bottom"
             ></bs-toolbar-button>
+    </bs-toolbar-group>
         <?php endif; ?>
+    <bs-toolbar-group data-group-label="Gestione Traduzioni Brand">
         <bs-toolbar-button
                 data-tag="a"
                 data-icon="fa-language"
@@ -100,7 +103,7 @@
                 data-event="bs.brand.translation"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Aggiorna lingue "
+                data-title="Gestione Lingue"
                 data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
