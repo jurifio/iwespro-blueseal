@@ -55,12 +55,28 @@ class CProductLookAjaxController extends AAjaxController
         foreach ($images as $image) {
             if ($i == 0) {
                 $pc->image = $image;
+
             } elseif ($i == 1) {
                 $pc->image2 = $image;
+
             } elseif ($i == 2) {
                 $pc->image3 = $image;
+
             } elseif ($i == 4) {
                 $pc->image4 = $image;
+
+            } elseif ($i == 5) {
+                $pc->video1 = $image;
+
+            } elseif ($i == 7) {
+                $pc->video2 = $image;
+
+            } elseif ($i == 8) {
+                $pc->video3 = $image;
+
+            } elseif ($i == 9) {
+                $pc->video4 = $image;
+
             } else {
                 break;
             }
