@@ -48,7 +48,7 @@
                             <div class="row clearfix">
                                 <div class="col-md-8">
                                     <div class="form-group form-group-default">
-                                        <label for="ProductBrand_description">Descrizione Brand (min caratteri 160 max 2000)</label>
+                                        <label for="ProductBrand_description">Descrizione Brand uso Interno</label>
                                         <textarea style="height: 400px" class="form-control" id="ProductBrand_description" name="ProductBrand_description"><?php echo $brandEdit->description; ?></textarea>
                                     </div>
                                 </div>
