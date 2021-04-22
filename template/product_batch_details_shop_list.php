@@ -151,6 +151,11 @@
                 data-remote="bs.product.processingUpdate"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Foto">
+        <bs-toolbar-button
+                data-remote="bs.product.photo.manage"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Istruzioni">
         <bs-toolbar-button
                 data-tag="a"

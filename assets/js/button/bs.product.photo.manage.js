@@ -1,7 +1,7 @@
 window.buttonSetup = {
     tag:"a",
     icon:"fa-camera-retro",
-    permission:"/admin/product/edit&&allShops",
+    permission:"/admin/product/edit||allShops||/admin/product/list",
     event:"bs-manage-photo",
     class:"btn btn-default",
     rel:"tooltip",
