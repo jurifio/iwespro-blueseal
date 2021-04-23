@@ -132,7 +132,7 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                         $um='nr';
                     }
 
-                    $quantity = $row->qty;
+                    $quantity = 1;
                     $descrizione = $row->description;
                     $categoria = "";
                     $prezzo_netto = number_format($row->priceRow,2,'.','');
