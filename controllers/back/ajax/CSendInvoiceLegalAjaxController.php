@@ -250,8 +250,8 @@ return 'Inserimento su fatture in cloud eseguito con successo';
 
 
 
-        } catch (\Exception $e) {
-            \Monkey::app()->applicationLog('CSendInvoiceLegalAjaxController','error','Inserimento fattura su fattureincloud', $e->getMessage(),$e->getCode());
+        } catch (\Throwable $e) {
+            \Monkey::app()->applicationLog('CSendInvoiceLegalAjaxController','error','Inserimento fattura su fattureincloud', $e->getMessage(),$e->getLIne());
 return 'Problema con l\'inserimento codice errore '.$resultApi;
 
         }
