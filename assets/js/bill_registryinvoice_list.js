@@ -135,7 +135,7 @@ $(document).on('bs.invoice.sendLegal', function () {
     });
 
     bsModal.setOkEvent(function () {
-        var data = {
+        const data = {
             billRegistryInvoiceId:invoice
         };
         var urldef = "/blueseal/xhr/SendInvoiceLegalAjaxController";

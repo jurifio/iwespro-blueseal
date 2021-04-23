@@ -32,6 +32,7 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
 
     public function post()
     {
+        $resultApi='';
         $data = \Monkey::app()->router->request()->getRequestData();
         $invoiceId = $data['billRegistryInvoiceId'];
         $paymentBillRepo = \Monkey::app()->repoFactory->create('BillRegistryActivePaymentSlip');
@@ -218,6 +219,7 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                         "content" => $insertJson
                     ),
                 );
+
                 $context = stream_context_create($options);
                 $result = json_decode(file_get_contents($urlInsert,false,$context),true);
                 if (array_key_exists('success',$result)) {
