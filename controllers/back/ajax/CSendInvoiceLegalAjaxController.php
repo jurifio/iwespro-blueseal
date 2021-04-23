@@ -136,7 +136,7 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                     $descrizione = $row->description;
                     $categoria = "";
                     $prezzo_netto = number_format($row->priceRow,2,'.','');
-                    $prezzo_lordo = number_format($row->priceRow,2,'.','');
+                    $prezzo_lordo = number_format($row->grossTotalRow,2,'.','');
                     $scontoCharge = $row->percentDiscount;
                     $sconto = $row->discountRow;
                     $cod_iva = "0";
