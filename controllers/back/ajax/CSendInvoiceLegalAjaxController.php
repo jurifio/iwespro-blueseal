@@ -132,8 +132,6 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                         $um='nr';
                     }
 
-                    $nome = $product->nameProduct;
-
                     $quantity = $row->qty;
                     $descrizione = $row->description;
                     $categoria = "";
