@@ -122,10 +122,18 @@ class CSendInvoiceLegalAjaxController extends AAjaxController
                     $idlineaordine = $idlineaordine + 1;
                     $ordineArticolo=$ordineArticolo + 1;
                     $product=$productRepo->findOneBy(['id'=>$row->billRegistryProductId]);
-                    $codice = $product->codeProduct;
+                    if($product) {
+                        $codice = $product->codeProduct;
+                        $nome = $product->nameProduct;
+                        $um = $product->um;
+                    }else{
+                        $codice=999;
+                        $nome='servizi vari';
+                        $um='nr';
+                    }
 
                     $nome = $product->nameProduct;
-                    $um = $product->um;
+
                     $quantity = $row->qty;
                     $descrizione = $row->description;
                     $categoria = "";
