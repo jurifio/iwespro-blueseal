@@ -41,6 +41,7 @@ class CSocialAccountListAjaxController extends AMarketplaceAccountAjaxController
 
 
         $mapRepo=\Monkey::app()->repoFactory->create('MarketplaceAccount');
+        $marketplaceRepo=\Monkey::app()->repoFactory->create('Marketplace');
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
@@ -50,7 +51,8 @@ class CSocialAccountListAjaxController extends AMarketplaceAccountAjaxController
                 $row['code'] = $marketplaceAccount->printId();
                 $row['marketplace'] = $marketplaceAccount->marketplace->name;
                 $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
-                $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
+                $marketplace=$marketplaceRepo->findOneBy(['id'=>$marketplaceAccount->marketplaceId]);
+                $row['marketplaceType'] = $marketplace->type;
                $row['isActive'] = ($marketplaceAccount->isActive==1)?'si':'no';
 
             $datatable->setResponseDataSetRow($key,$row);
