@@ -99,7 +99,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
 
 
                                     } else {
-                                        $pshsdInsert = $phsRepo->getEmptyEntity();
+                                        $pshsdInsert = \Monkey::app()->repoFactory->create('AggregatorHasProduct')->getEmptyEntity();
                                         $pshsdInsert->productId = $product['productId'];
                                         $pshsdInsert->productVariantId = $product['productVariantId'];
                                         $pshsdInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
