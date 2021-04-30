@@ -234,9 +234,9 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                                         $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
 
                                         if ($product['isOnSale'] == 1) {
-                                            $marketProduct->titleModified = 1;
+                                            $marketProduct->titleModified = '1';
                                         } else {
-                                            $marketProduct->titleModified = 0;
+                                            $marketProduct->titleModified = '0';
                                         }
                                         $marketProduct->update();
                                     }
