@@ -48,9 +48,11 @@ class CAggregatorSocialHasProductJob extends ACronJob
 
             $marketplaces = $marketplaceRepo->findBy(['type' => 'social']);
             foreach ($marketplaces as $marketplace) {
+                $this->report('CAggregatorSocialHasProductJob','start select for   ' . $marketplace->name,'');
                 $marketplaceAccounts = $marketplaceAccountRepo->findBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
+                        $this->report('CAggregatorSocialHasProductJob','start marketplaceAccount   ' . $marketplaceAccount->name,'');
                         if ($marketplaceAccount->isActive == 1) {
                             $this->report('CAggregatorSocialHasProductJob','Working ' . $marketplace->name,'');
                         if($marketplaceAccount->config['shopId']!=44) {
