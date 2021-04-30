@@ -41,16 +41,18 @@ class CAggregatorAccountListAjaxController extends AMarketplaceAccountAjaxContro
 
 
         $mapRepo=\Monkey::app()->repoFactory->create('MarketplaceAccount');
+        $mpRepo=\Monkey::app()->repoFactory->create('Marketplace');
 
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
-
+            /** @var  $marketplaceAccount CMarketplaceAccount */
             $marketplaceAccount = $mapRepo->findOneBy($row);
                 $row["DT_RowId"] = $marketplaceAccount->printId();
                 $row['code'] = $marketplaceAccount->printId();
-                $row['marketplace'] = $marketplaceAccount->marketplace->name;
+                $marketplace=$mpRepo->findOneBy(['id'=>$marketplaceAccount->marketplaceId]);
+                $row['marketplace'] = $marketplace->name;
                 $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
-                $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
+                $row['marketplaceType'] = $marketplace->type;
                $row['isActive'] = ($marketplaceAccount->isActive==1)?'si':'no';
 
             $datatable->setResponseDataSetRow($key,$row);
