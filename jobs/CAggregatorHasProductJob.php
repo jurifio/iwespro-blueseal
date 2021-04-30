@@ -107,7 +107,7 @@ class CAggregatorHasProductJob extends ACronJob
 
                                             } else {
                                                 $prod = $productRepo->findOneBy(['id' => $product['productId'],'productVariantId' => $product['productVariantId']]);
-                                                $isOnSale = $prod->isOnSale();
+                                                $isOnSale = $prod->isOnSale;
                                                 $productSku = \Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId']]);
                                                 $price = $productSku->price;
                                                 $salePrice = $productSku->salePrice;
