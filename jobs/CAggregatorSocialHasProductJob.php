@@ -152,12 +152,10 @@ class CAggregatorSocialHasProductJob extends ACronJob
         try {
             $this->report('CAggregatorSocialHasProductJob','startPublish','');
 
-            $marketplaces = $marketplaceRepo->findAll();
+            $marketplaces = $marketplaceRepo->findBy(['type'=>'social']);
 
             foreach ($marketplaces as $marketplace) {
-                if ($marketplace->type != 'social') {
-                    continue;
-                } else {
+
                     $marketplaceAccounts = $marketplaceAccountRepo->findBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                     foreach($marketplaceAccounts as $marketplaceAccount) {
                         if ($marketplaceAccount) {
@@ -275,7 +273,7 @@ where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSh
                         $this->report('CAggregatorSocialHasProductJob','End Work Publish for  ' . $marketplace->name,'');
 
                     }
-                }
+
             }
             $this->report('CAggregatorSocialHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
         } catch
