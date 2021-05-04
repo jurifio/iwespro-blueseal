@@ -76,7 +76,7 @@ class CGenerateDummyJob extends ACronJob
             $res = $this->app->dbAdapter->query($query,[])->fetchAll();
             foreach ($res as $result) {
                 $product = $productRepo->findOneBy(['id' => $result['productId'],'productVariantId' => $result['productVariantId']]);
-                $url = 'https://cdn.iwes.it/'.$product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB);
+                $url = 'https://cdn.iwes.it/'.$product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_BIG);
                 $product->dummyPicture = $url;
                 $product->update();
             }
