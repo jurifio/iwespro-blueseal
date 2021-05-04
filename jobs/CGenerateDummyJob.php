@@ -30,7 +30,6 @@ class CGenerateDummyJob extends ACronJob
     public function generateDummy()
     {
         try {
-            ini_set('allow_url_fopen',1);
             /** @var  $productRepo CProductRepo */
             $productRepo = \Monkey::app()->repoFactory->create('Product');
             /* $query = "SELECT
