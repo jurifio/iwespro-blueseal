@@ -32,7 +32,7 @@ class CGenerateDummyJob extends ACronJob
         try {
             /** @var  $productRepo CProductRepo */
             $productRepo = \Monkey::app()->repoFactory->create('Product');
-            /* $query = "SELECT
+             $query = "SELECT
                `p`.`id`                                                         AS `productId`,
                `p`.`productVariantId`                                           AS `productVariantId`,
                concat(`p`.`id`, '-', `p`.`productVariantId`)                    AS `productCode`,
@@ -70,10 +70,10 @@ class CGenerateDummyJob extends ACronJob
                                                                ProductHasProductPhoto.productId,
                                                                ProductHasProductPhoto.productVariantId
                                                              FROM ProductHasProductPhoto), 'sì', 'no') ='sì' and
-                    p.dummyPicture LIKE '%bs-dummy-16-9.png%' or p.dummyPicture like '%//assets//%'
+                    p.dummyPicture LIKE '%bs-dummy-16-9.png%' or p.dummyPicture like '%//assets//%' or p.dummyPicture = 'https://cdn.iwes.it/'
 
-             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";*/
-            $query ='select id as productId, productVariantId from Product ';
+             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
+          //  $query ='select id as productId, productVariantId from Product ';
             $res = $this->app->dbAdapter->query($query,[])->fetchAll();
             foreach ($res as $result) {
                 $product = $productRepo->findOneBy(['id' => $result['productId'],'productVariantId' => $result['productVariantId']]);
