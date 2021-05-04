@@ -3,6 +3,7 @@ namespace bamboo\blueseal\jobs;
 
 use bamboo\core\db\pandaorm\repositories\ARepo;
 use bamboo\core\jobs\ACronJob;
+use bamboo\domain\repositories\CProductRepo;
 
 /**
  * Class CDispatchPreorderToFriend
@@ -29,6 +30,7 @@ class CGenerateDummyJob extends ACronJob
     public function generateDummy()
     {
         try {
+            /** @var  $productRepo CProductRepo */
             $productRepo = \Monkey::app()->repoFactory->create('Product');
             $query = "SELECT
               `p`.`id`                                                         AS `productId`,
@@ -42,6 +44,7 @@ class CGenerateDummyJob extends ACronJob
               `ps`.`name`                                                      AS `status`,
               concat_ws('-',`psg`.`locale`, `psmg`.`name`)                     AS `sizeGroup`,
               `p`.`creationDate`                                               AS `creationDate`,
+              `pb`.slug as productBrandSlug,  
               group_concat(`ds`.`size` ORDER BY `ds`.`size` ASC SEPARATOR '-') AS `problems`,
           if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
@@ -73,7 +76,7 @@ class CGenerateDummyJob extends ACronJob
             $res = $this->app->dbAdapter->query($query,[])->fetchAll();
             foreach ($res as $result) {
                 $product = $productRepo->findOneBy(['id' => $result['productId'],'productVariantId' => $result['productVariantId']]);
-                $url = $product->getDummyPictureUrl();
+                $url = 'https://cdn.iwes.it/'.$product->getPhoto(1, \bamboo\domain\entities\CProductPhoto::SIZE_THUMB);
                 $product->dummyPicture = $url;
                 $product->update();
             }
