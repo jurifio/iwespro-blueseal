@@ -48,6 +48,7 @@ class CRenameImageJpegS3Job extends ACronJob
     {
         try {
             $this->app->vendorLibraries->load("amazon2723");
+            $s3 = new S3Manager($config['credential']);
             $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
             $sql = "SELECT p.id,p.productVariantId,phs.productPhotoId,pb.slug as slug, pp.`name` as `name`,pp.id as photoId  FROM  ProductPhoto pp JOIN ProductHasProductPhoto phs ON pp.id=phs.productPhotoId JOIN Product p ON phs.productId=p.id AND phs.productVariantId=p.productVariantId
 join ProductBrand pb ON p.productBrandId=pb.id where  pp.name LIKE BINARY  '%.JPG%' limit 1";
@@ -57,7 +58,7 @@ join ProductBrand pb ON p.productBrandId=pb.id where  pp.name LIKE BINARY  '%.JP
                 $newName = str_replace('.JPG','.jpg',$result['name']);
                 $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
                 $image->copy($result['slug'] . '/' . $oldName,$config['bucket'],$result['slug'] . '/' . $newName,$config['bucket']);
-                $image->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
+                $s3->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
                 $sql1 = "update set `name`='" . $newName . "'  where `name`='" . $oldName . "' and id=" . $result['photoId'];
                 \Monkey::app()->dbAdapter->query($sql1,[]);
             }
