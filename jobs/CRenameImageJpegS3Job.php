@@ -59,7 +59,7 @@ join ProductBrand pb ON p.productBrandId=pb.id where  pp.name LIKE BINARY  '%.JP
                 $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
                 $image->copy($result['slug'] . '/' . $oldName,$config['bucket'],$result['slug'] . '/' . $newName,$config['bucket']);
                 $s3->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
-                $sql1 = "update set `name`='" . $newName . "'  where `name`='" . $oldName . "' and id=" . $result['photoId'];
+                $sql1 = "update ProductPhoto set `name`='" . $newName . "'  where `name`='" . $oldName . "' and id=" . $result['photoId'];
                 \Monkey::app()->dbAdapter->query($sql1,[]);
             }
         }catch (\Throwable $e) {
