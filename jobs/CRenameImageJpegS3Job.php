@@ -48,8 +48,9 @@ class CRenameImageJpegS3Job extends ACronJob
     {
         try {
             $this->app->vendorLibraries->load("amazon2723");
-            $s3 = new S3Manager($config['credential']);
+
             $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
+            $s3 = new S3Manager($config['credential']);
             $sql = "SELECT p.id,p.productVariantId,phs.productPhotoId,pb.slug as slug, pp.`name` as `name`,pp.id as photoId  FROM  ProductPhoto pp JOIN ProductHasProductPhoto phs ON pp.id=phs.productPhotoId JOIN Product p ON phs.productId=p.id AND phs.productVariantId=p.productVariantId
 join ProductBrand pb ON p.productBrandId=pb.id where  pp.name LIKE BINARY  '%.JPG%' limit 1";
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
