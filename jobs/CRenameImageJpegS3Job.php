@@ -46,6 +46,8 @@ class CRenameImageJpegS3Job extends ACronJob
     public function run($args = null)
 
     {
+        set_time_limit(0);
+        ini_set('memory_limit', '2048M');
         try {
             $this->app->vendorLibraries->load("amazon2723");
 
