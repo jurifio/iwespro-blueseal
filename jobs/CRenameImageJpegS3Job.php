@@ -54,7 +54,7 @@ class CRenameImageJpegS3Job extends ACronJob
             $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
             $s3 = new S3Manager($config['credential']);
             $sql = "SELECT p.id,p.productVariantId,phs.productPhotoId,pb.slug as slug, pp.`name` as `name`,pp.id as photoId  FROM  ProductPhoto pp JOIN ProductHasProductPhoto phs ON pp.id=phs.productPhotoId JOIN Product p ON phs.productId=p.id AND phs.productVariantId=p.productVariantId
-join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0 order by p.creationDate desc";
+join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0 AND pb.slug LIKE '%sam-edelman%' order by p.creationDate desc";
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             $this->report('CRenameImageJpegS3Job','Report','startLoop');
             foreach ($res as $result) {
