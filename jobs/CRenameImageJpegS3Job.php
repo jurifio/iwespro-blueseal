@@ -71,24 +71,19 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
                 $resu = curl_exec($ch);
                 curl_close($ch);
                 if($resu === FALSE){
-
                     $this->report('CRenameImageJpegS3Job','Report productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
                     continue;
-
                 }else{
                     $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName. 'to '.'https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
 
                     $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
 
-                        $image->copy($result['slug'] . '/' . $transitionName,$config['bucket'],$result['slug'] . '/' . $result['name'],$config['bucket']);
-                    if(@get_headers($url)[0] != 'HTTP/1.1 404 Not Found') {
-                        $s3->delImage($result['slug'] . '/' . $transitionName,$config['bucket']);
-                    }
+                        $image->copy($result['slug'] .'/'.$transitionName,$config['bucket'],$result['slug'].'/'.$result['name'],$config['bucket']);
 
                 }
             }
         }catch (\Throwable $e) {
-            $this->report('CRenameImageJpegS3Job','error','productPhoto rename ' .$e->getMessage().$e->getLine());
+            $this->report('CRenameImageJpegS3Job','error','productPhoto rename ' .$e->getMessage());
         }
 
     }
