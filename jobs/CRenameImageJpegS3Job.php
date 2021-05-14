@@ -61,13 +61,14 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
             foreach ($res as $result) {
                 $transitionName= str_replace('.jpg','.JPG',$result['name']);
                 $url= 'https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName;
+                $name = $result['name'];
                 if(@get_headers($url)[0] == 'HTTP/1.1 404 Not Found'){
                     $this->report('CRenameImageJpegS3Job','Report productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
                     continue;
 
                 }else{
                     $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName. 'to '.'https://cdn.iwes.it/'.$result['slug'].'/'.$name);
-                    $name = $result['name'];
+
                     $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
                     $image->copy($result['slug'] . '/' . $transitionName,$config['bucket'],$result['slug'] . '/' . $name,$config['bucket']);
                     $s3->delImage($result['slug'] . '/' . $transitionName,$config['bucket']);
