@@ -59,8 +59,8 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0 order by p.creati
             \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','startLoop','','');
             foreach ($res as $result) {
                 $transitionName= str_replace('.jpg','.JPG',$result['name']);
-                $url=@getimagesize('https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName);
-                if(!is_array($url)) {
+                $url= 'https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName;
+                if(@get_headers($url)[0] == 'HTTP/1.1 404 Not Found'){
                     \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name'],'');
                     continue;
 
