@@ -88,7 +88,7 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
                 }
             }
         }catch (\Throwable $e) {
-            $this->report('CRenameImageJpegS3Job','error','productPhoto rename ' .$e->getMessage().$e->getLine().$url);
+            $this->report('CRenameImageJpegS3Job','error','productPhoto rename ' .$e->getMessage().$e->getLine());
         }
 
     }
