@@ -70,8 +70,12 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
                     $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName. 'to '.'https://cdn.iwes.it/'.$result['slug'].'/'.$name);
 
                     $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
-                    $image->copy($result['slug'] . '/' . $transitionName,$config['bucket'],$result['slug'] . '/' . $name,$config['bucket']);
-                    $s3->delImage($result['slug'] . '/' . $transitionName,$config['bucket']);
+                    if(@get_headers('https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName)[0] != 'HTTP/1.1 404 Not Found') {
+                        $image->copy($result['slug'] . '/' . $transitionName,$config['bucket'],$result['slug'] . '/' . $name,$config['bucket']);
+                    }
+                    if(@get_headers('https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName)[0] != 'HTTP/1.1 404 Not Found') {
+                        $s3->delImage($result['slug'] . '/' . $transitionName,$config['bucket']);
+                    }
 
                 }
             }
