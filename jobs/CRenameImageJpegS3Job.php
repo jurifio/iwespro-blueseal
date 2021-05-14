@@ -66,15 +66,16 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
                     continue;
 
                 }else{
+                    $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName. 'to '.'https://cdn.iwes.it/'.$result['slug'].'/'.$name);
                     $name = $result['name'];
                     $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
                     $image->copy($result['slug'] . '/' . $transitionName,$config['bucket'],$result['slug'] . '/' . $name,$config['bucket']);
                     $s3->delImage($result['slug'] . '/' . $transitionName,$config['bucket']);
-                    $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName);
+
                 }
             }
         }catch (\Throwable $e) {
-            $this->report('CRenameImageJpegS3Job','error','productPhoto rename ' .$e->getMessage().$e->getLine());
+            $this->report('CRenameImageJpegS3Job','error','productPhoto rename ' .$e->getMessage().$e->getLine().$url);
         }
 
     }
