@@ -54,7 +54,7 @@ class CRenameImageJpegS3Job extends ACronJob
             $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
             $s3 = new S3Manager($config['credential']);
             $sql = "SELECT p.id,p.productVariantId,phs.productPhotoId,pb.slug as slug, pp.`name` as `name`,pp.id as photoId  FROM  ProductPhoto pp JOIN ProductHasProductPhoto phs ON pp.id=phs.productPhotoId JOIN Product p ON phs.productId=p.id AND phs.productVariantId=p.productVariantId
-join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like  '%jpg%'  order by p.creationDate desc";
+join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like  '%jpg%'  order by p.creationDate asc";
 
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             $this->report('CRenameImageJpegS3Job','Report','startLoop');
@@ -74,11 +74,13 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
                     $this->report('CRenameImageJpegS3Job','Report productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
                     continue;
                 }else{
-                    $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName. 'to '.'https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
+                    $this->report('CRenameImageJpegS3Job','Report productPhoto rename','https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName. ' to '.'https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
 
                     $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
 
                         $image->copy($result['slug'] .'/'.$transitionName,$config['bucket'],$result['slug'].'/'.$result['name'],$config['bucket']);
+                    $s3->delImage($result['slug'] . '/' . $transitionName,$config['bucket']);
+
 
                 }
             }
