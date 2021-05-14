@@ -61,7 +61,17 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
             foreach ($res as $result) {
                 $transitionName= str_replace('.jpg','.JPG',$result['name']);
                 $url= 'https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName;
-                if(@get_headers($url)[0] == 'HTTP/1.1 404 Not Found'){
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL,$url);
+                // don't download content
+                curl_setopt($ch, CURLOPT_NOBODY, 1);
+                curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+                $result = curl_exec($ch);
+                curl_close($ch);
+                if($result === FALSE){
+
                     $this->report('CRenameImageJpegS3Job','Report productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
                     continue;
 
