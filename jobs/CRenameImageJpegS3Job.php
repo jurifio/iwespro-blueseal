@@ -63,6 +63,7 @@ join ProductBrand pb ON p.productBrandId=pb.id ";
                     $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
                     $image->copy($result['slug'] . '/' . $oldName,$config['bucket'],$result['slug'] . '/' . $newName,$config['bucket']);
                     $s3->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
+                    \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','productPhoto rename',$url,'');
                 }else{
                     continue;
                 }
