@@ -54,6 +54,7 @@ class CRenameImageJpegS3Job extends ACronJob
             $sql = "SELECT p.id,p.productVariantId,phs.productPhotoId,pb.slug as slug, pp.`name` as `name`,pp.id as photoId  FROM  ProductPhoto pp JOIN ProductHasProductPhoto phs ON pp.id=phs.productPhotoId JOIN Product p ON phs.productId=p.id AND phs.productVariantId=p.productVariantId
 join ProductBrand pb ON p.productBrandId=pb.id ";
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+            \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','startLoop','','');
             foreach ($res as $result) {
                 $transitionName= str_replace('.jpg','.JPG',$result['name']);
                 $url='https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName;
