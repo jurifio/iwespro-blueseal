@@ -66,7 +66,7 @@ join ProductBrand pb ON p.productBrandId=pb.id ";
                     $s3->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
                     \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','productPhoto rename',$url,'');
                 }else{
-                    \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','productPhoto saltata',$url,'');
+                    \Monkey::app()->applicationLog('CRenameImageJpegS3Job','Report','productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name'],'');
                     continue;
                 }
             }
