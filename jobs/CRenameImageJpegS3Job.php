@@ -52,16 +52,20 @@ class CRenameImageJpegS3Job extends ACronJob
             $config = $this->app->cfg()->fetch('miscellaneous','amazonConfiguration');
             $s3 = new S3Manager($config['credential']);
             $sql = "SELECT p.id,p.productVariantId,phs.productPhotoId,pb.slug as slug, pp.`name` as `name`,pp.id as photoId  FROM  ProductPhoto pp JOIN ProductHasProductPhoto phs ON pp.id=phs.productPhotoId JOIN Product p ON phs.productId=p.id AND phs.productVariantId=p.productVariantId
-join ProductBrand pb ON p.productBrandId=pb.id where  pp.name LIKE BINARY  '%.JPG%' ";
+join ProductBrand pb ON p.productBrandId=pb.id ";
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
-                $oldName = $result['name'];
-                $newName = str_replace('.JPG','.jpg',$result['name']);
-                $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
-                $image->copy($result['slug'] . '/' . $oldName,$config['bucket'],$result['slug'] . '/' . $newName,$config['bucket']);
-                $s3->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
-                $sql1 = "update ProductPhoto set `name`='" . $newName . "'  where `name`='" . $oldName . "' and id=" . $result['photoId'];
-                \Monkey::app()->dbAdapter->query($sql1,[]);
+                $transitionName= str_replace('.jpg','.JPG',$result['name']);
+                $url='https://cdn.iwes.it/'.$result['slug'].'/'.$transitionName;
+                if(@getimagesize($url)) {
+                    $oldName = $result['name'];
+                    $newName = str_replace('.JPG','.jpg',$result['name']);
+                    $image = new ImageManager(new S3Manager($config['credential']),$this->app,"");
+                    $image->copy($result['slug'] . '/' . $oldName,$config['bucket'],$result['slug'] . '/' . $newName,$config['bucket']);
+                    $s3->delImage($result['slug'] . '/' . $oldName,$config['bucket']);
+                }else{
+                    continue;
+                }
             }
         }catch (\Throwable $e) {
             \Monkey::app()->applicationLog('CRenameImageJpegS3Job','error','productPhoto rename',$e->getMessage(),$e->getLine());
