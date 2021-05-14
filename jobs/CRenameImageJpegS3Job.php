@@ -68,9 +68,9 @@ join ProductBrand pb ON p.productBrandId=pb.id where p.qty > 0  and pp.name like
                 curl_setopt($ch, CURLOPT_FAILONERROR, 1);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-                $result = curl_exec($ch);
+                $resu = curl_exec($ch);
                 curl_close($ch);
-                if($result === FALSE){
+                if($resu === FALSE){
 
                     $this->report('CRenameImageJpegS3Job','Report productPhoto saltata','https://cdn.iwes.it/'.$result['slug'].'/'.$result['name']);
                     continue;
