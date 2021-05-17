@@ -109,9 +109,8 @@ class CProductFastLookListAjaxController extends AAjaxController
                   p.productVariantId                                                                                AS productVariantId,
                   concat(pse.name, ' ', pse.year)                                                               AS season,
                   pse.isActive                                                                                      AS isActive,
-                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,      
-                  p.externalId as externalId,  
-       
+                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,    
+                 concat(ifnull(p.externalId, ''), '-', ifnull(dp.extId, ''), '-', ifnull(ds.extSkuId, '')) AS externalId,
                   pv.description                                                                                    AS colorNameManufacturer,
                   concat(s.id, '-', s.name)                                                                     AS shop,        
                    s.id                                                                                              AS shopId,
@@ -121,7 +120,7 @@ class CProductFastLookListAjaxController extends AAjaxController
                   ps.name                                                                                           AS status,
                   concat(psg.locale, ' - ',
                          psmg.name)                                                                                 AS productSizeGroup,
-                    pl.name as LOOK  
+                  pl.name as LOOK  
 								  
 
  from Product p 
@@ -133,9 +132,13 @@ JOIN ShopHasProduct sp ON sp.productId=p.id AND p.productVariantId=sp.productVar
   JOIN Shop s ON s.id = sp.shopId
 left JOIN ProductHasProductLook ph ON ph.productId=sp.productId AND ph.productVariantId=sp.productVariantId AND ph.shopId=sp.shopId
      left Join ProductLook pl on ph.productLookId=pl.id
+     
      LEFT JOIN (ProductSizeGroup psg
                               JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id)
                             ON p.productSizeGroupId = psg.id
+							LEFT JOIN (DirtyProduct dp
+                              LEFT JOIN DirtySku ds ON dp.id = ds.dirtyProductId)
+                    ON (sp.productId,sp.productVariantId,sp.shopId) = (dp.productId,dp.productVariantId,dp.shopId)
 where 1=1 " . $sqlFilterSeason . ' ' . $sqlFilterQuantity . ' ' . $sqlFilterStatus . ' ' . $sqlFilterBrand. ' ' . $sqlFilterShop. ' ' . $sqlFilterStored. ' ' . $sqlFilterShooting;
 
 
