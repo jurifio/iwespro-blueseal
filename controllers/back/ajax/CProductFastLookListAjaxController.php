@@ -109,7 +109,9 @@ class CProductFastLookListAjaxController extends AAjaxController
                   p.productVariantId                                                                                AS productVariantId,
                   concat(pse.name, ' ', pse.year)                                                               AS season,
                   pse.isActive                                                                                      AS isActive,
-                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,
+                  concat(p.itemno, ' # ', pv.name)                                                              AS cpf,      
+                  p.externalId as externalId,  
+       
                   pv.description                                                                                    AS colorNameManufacturer,
                   concat(s.id, '-', s.name)                                                                     AS shop,        
                    s.id                                                                                              AS shopId,

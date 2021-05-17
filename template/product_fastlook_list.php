@@ -191,6 +191,10 @@
                                     data-searchable="true"
                                     data-orderable="true" class="center">Brand
                                 </th>
+                                <th data-slug="externalId"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">externalId
+                                </th>
                                 <th data-slug="productSizeGroup"
                                     data-searchable="true"
                                     data-orderable="true"
