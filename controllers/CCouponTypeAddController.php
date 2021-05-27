@@ -74,6 +74,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
             $hasFreeReturn=(isset($data['hasFreeReturn']) && $data['hasFreeReturn'] === 'on') ? 1 : 0;
             $couponType->hasFreeShipping = $hasFreeShipping;
             $couponType->hasFreeReturn = $hasFreeReturn;
+            $couponType->isActive=(isset($data['isActive']) && $data['isActive'] === '1') ? 1 : 0;
             $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $data['remoteShopId']]);
                 $db_host = $findShopId->dbHost;
                 $db_name = $findShopId->dbName;
@@ -105,7 +106,7 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                 }else{
                     $remoteCampaign = 'null';
                 }
-                $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImport)
+                $stmtCouponTypeInsert = $db_con->prepare('INSERT INTO CouponType (`name`,amount,amountType,validity,validForCartTotal,hasFreeShipping,hasFreeReturn,campaignId,isImport,isActive)
                 VALUES(
                                  \'' . $data['name'] . '\',
                                  \'' . $data['amount'] . '\',
@@ -115,7 +116,8 @@ class CCouponTypeAddController extends ARestrictedAccessRootController
                                  \'' . $hasFreeShipping . '\',
                                  \'' . $hasFreeReturn . '\',
                                   '. $remoteCampaign.',
-                                 1                        
+                                 1,
+                                  \'' . $data['isActive'] . '\',                        
                                     )');
                 $stmtCouponTypeInsert->execute();
                 $remoteId = $db_con->lastInsertId();

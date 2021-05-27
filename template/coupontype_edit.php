@@ -36,7 +36,28 @@
                                                value="<?php echo $coupon->name; ?>"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-3">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="isActive">Seleziona se Attivo
+                                        </label>
+                                        <select id="isActive"
+                                                name="isActive"
+                                                class="full-width selectpicker"
+                                                placeholder="Selezione se attivo"
+                                                data-init-plugin="selectize">
+                                            <?php if($coupon->isActive==1){
+                                            echo '<option value=""></option>';
+                                            echo '<option value="1" selected="selected">Si</option>';
+                                            echo '<option value="0">No</option>';
+                                            }else{
+                                                echo '<option value=""></option>';
+                                                echo '<option value="1" >Si</option>';
+                                                echo '<option value="0" selected="selected">No</option>';
+                                            }?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
                                     <div class="form-group form-group-default selectize-enabled">
                                         <label for="validity">Validità</label>
                                         <select class="full-width selectpicker"

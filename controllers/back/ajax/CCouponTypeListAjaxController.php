@@ -30,6 +30,7 @@ class CCouponTypeListAjaxController extends AAjaxController
                   `ct`.`validity`          AS `validity`,
                   `ct`.`validForCartTotal` AS `validForCartTotal`,
                    s.title as remoteShopId,
+                  if(`ct`.`isActive` = 1, 'sisì','no') as isActive,
                   if(`ct`.`hasFreeShipping` = 1, 'sisì','no') as hasFreeShipping,
                   if(`ct`.`hasFreeReturn` = 1, 'sisì','no') as hasFreeReturn,
                   ifnull(group_concat(distinct t.slug),'') as tags,

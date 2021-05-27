@@ -22,6 +22,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
         $couponRepo = \Monkey::app()->repoFactory->create('CouponType');
         $coupon = $couponRepo->findOneBy(['id'=>$couponId]);
 
+
         $possValids =[];
         $possValids[0] = '1 anno';
         $possValids[1] = '1 mese';
@@ -99,6 +100,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
                                                               ct.hasFreeReturn,
                                                               ct.remoteId,
                                                               ct.remoteShopId,
+                                                              ct.isActive,
                                                               ct.campaignId as campaignId,
                                                               ct.remoteCampaignId as remoteCampaignId      
        from CouponType ct
@@ -112,6 +114,7 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
             $validForCartTotal=$remoteCouponType['validForCartTotal'];
             $hasFreeShipping=$remoteCouponType['hasFreeShipping'];
             $hasFreeReturn=$remoteCouponType['hasFreeReturn'];
+            $isActive=$remoteCouponType['isActive'];
             $campaignId=$remoteCouponType['campaignId'];
             $remoteCampaignId=$remoteCouponType['remoteCampaignId'];
         }
@@ -124,7 +127,8 @@ class CCouponTypeEditController extends ARestrictedAccessRootController
                       validForCartTotal='".$validForCartTotal."',
                       hasFreeShipping='".$hasFreeShipping."',
                       hasFreeReturn='".$hasFreeReturn."',
-                      campaignId='".$remoteCampaignId."'
+                      campaignId='".$remoteCampaignId."',
+                      isActive='".$isActive."'
                     
                       where id=".$couponTypeId);
         $stmtUpdateCouponType->execute();

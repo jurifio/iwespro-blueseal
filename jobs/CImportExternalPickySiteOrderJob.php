@@ -296,7 +296,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                            ct.validity as validity,
                                            ct.validForCartTotal as validForCartTotal,
                                            ct.hasFreeShipping as hasFreeShipping,
-                                           ct.hasFreeReturn as hasFreeReturn
+                                           ct.hasFreeReturn as hasFreeReturn,
+                                           ct.isActive 
                                 
                                            FROM CouponType ct WHERE ct.isImport is null ");
                 $stmtCouponType -> execute();
@@ -313,6 +314,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                         $couponTypeInsert -> hasFreeReturn = $rowCouponType['hasFreeReturn'];
                         $couponTypeInsert -> remoteId = $rowCouponType['remoteId'];
                         $couponTypeInsert -> remoteShopId = $shop;
+                        $couponTypeInsert -> isActive = $rowCouponType['isActive'];
                         $couponTypeInsert -> insert();
 
                     } else {

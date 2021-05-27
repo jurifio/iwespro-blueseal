@@ -2,7 +2,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui', 'forms'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
     <style>
         #form-project .row > div {
@@ -38,6 +38,21 @@
                                         <label for="name">Nome tipo coupon</label>
                                         <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
                                         <input type="text" class="form-control" id="name" name="name"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group form-group-default selectize-enabled">
+                                        <label for="isActive">Seleziona se Attivo
+                                        </label>
+                                        <select id="isActive"
+                                                name="isActive"
+                                                class="full-width selectpicker"
+                                                placeholder="Selezione se attivo"
+                                                data-init-plugin="selectize">
+                                            <option value=""></option>
+                                            <option value="1" selected="selected">Si</option>
+                                            <option value="0">No</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">

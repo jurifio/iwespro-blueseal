@@ -37,6 +37,10 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Validità</th>
+                                <th data-slug="isActive"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Attivo</th>
                                 <th data-slug="validForCartTotal"
                                     data-searchable="false"
                                     data-orderable="false"
