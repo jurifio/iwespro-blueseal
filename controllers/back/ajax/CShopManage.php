@@ -112,6 +112,7 @@ class CShopManage extends AAjaxController
             $sql = 'select ce.id, ce.`name`, ce.`description`,DATE_FORMAT(ce.startDate, "%d-%m-%Y") as startDate,DATE_FORMAT(ce.endDate, "%d-%m-%Y") as endDate,
              if(c.isActive=1,"Attiva","Non Attiva") as isActive,
        ct.name as couponTypeName, 
+        if(ct.isActive=1,"Attivo","Non Attivo") as isActiveType,
             if(c.name is null,"nessuna campagna","c.name") as campaignName from CouponEvent ce
                 
              join CouponType ct on ce.couponTypeId=ct.id
@@ -119,7 +120,7 @@ class CShopManage extends AAjaxController
              where ce.remoteShopId=' . $shopId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
-                $couponEvent[] = ['id' => $result['id'],'name' => $result['name'],'description' => $result['description'],'startDate' => $result['startDate'],'endDate' => $result['endDate'],'couponTypeName' => $result['couponTypeName'],'campaignName' => $result['campaignName'],'isActive' => $result['isActive']];
+                $couponEvent[] = ['id' => $result['id'],'name' => $result['name'],'description' => $result['description'],'startDate' => $result['startDate'],'endDate' => $result['endDate'],'couponTypeName' => $result['couponTypeName'],'isActiveType'=>$result['isActiveType'],'campaignName' => $result['campaignName'],'isActive' => $result['isActive']];
             }
             $banner = \Monkey::app()->repoFactory->create('Banner')->findBy(['remoteShopId' => $shopId]);
             $shop->banner=$banner;
