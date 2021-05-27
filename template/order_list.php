@@ -5,157 +5,165 @@
     <?php echo $app->getAssets(['ui','forms','tables'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
-<body class="fixed-header">
-<?php include "parts/sidebar.php"; ?>
-<div class="page-container">
-    <?php include "parts/header.php"; ?>
-    <?php include "parts/operations.php" ?>
+<div class="fixed-header">
+    <?php include "parts/sidebar.php"; ?>
+    <div class="page-container">
+        <?php include "parts/header.php"; ?>
+        <?php include "parts/operations.php" ?>
 
-    <div class="page-content-wrapper">
-        <div class="content sm-gutter">
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4 alert-container closed">
+        <div class="page-content-wrapper">
+            <div class="content sm-gutter">
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4 alert-container closed">
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="panel panel-transparent">
-                    <div class="panel-body">
-                        <div class="row" align="center" style="padding-top: 10px;">
-                            <div class="col-md-12">
-                                <div class="tab">
-                                    <a href="/blueseal/ordini" class="btn btn-light" role="button"><i
-                                                class="fa fa-diamond" aria-hidden="true"></i> Tutti gli Ordini </a>
-                                    <a href="/blueseal/ordini-in-lavorazione" class="btn btn-light" role="button"><i
-                                                class="fa fa-folder-open" aria-hidden="true"></i> In lavorazione</a>
-                                    <a href="/blueseal/vendite" class="btn btn-light" role="button"><i
-                                                class="fa fa-truck" aria-hidden="true"></i> Spediti</a>
-                                    <a href="/blueseal/ordini-cancellati" class="btn btn-light" role="button"><i
-                                                class="fa fa-trash" aria-hidden="true"></i> Cancellati</a>
-                                    <a href="/blueseal/ordini-resi" class="btn btn-light" role="button"><i
-                                                class="fa fa-ambulance" aria-hidden="true"></i> Resi</a>
-                                    <a href="/blueseal/ordini-con-righe-diverse" class="btn btn-light" role="button"><i
-                                                class="fa fa-indent" aria-hidden="true"></i> Con Righe Diverse</a>
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body">
+                            <div class="row" align="center" style="padding-top: 10px;">
+                                <div class="col-md-12">
+                                    <div class="tab">
+                                        <a href="/blueseal/ordini" class="btn btn-light" role="button"><i
+                                                    class="fa fa-diamond" aria-hidden="true"></i> Tutti gli Ordini </a>
+                                        <a href="/blueseal/ordini-in-lavorazione" class="btn btn-light" role="button"><i
+                                                    class="fa fa-folder-open" aria-hidden="true"></i> In lavorazione</a>
+                                        <a href="/blueseal/vendite" class="btn btn-light" role="button"><i
+                                                    class="fa fa-truck" aria-hidden="true"></i> Spediti</a>
+                                        <a href="/blueseal/ordini-cancellati" class="btn btn-light" role="button"><i
+                                                    class="fa fa-trash" aria-hidden="true"></i> Cancellati</a>
+                                        <a href="/blueseal/ordini-resi" class="btn btn-light" role="button"><i
+                                                    class="fa fa-ambulance" aria-hidden="true"></i> Resi</a>
+                                        <a href="/blueseal/ordini-con-righe-diverse" class="btn btn-light"
+                                           role="button"><i
+                                                    class="fa fa-indent" aria-hidden="true"></i> Con Righe Diverse</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div><?php foreach ($shopsList as $shopList) {
-                                    echo '<b>Sezionali</b>  :' . $shopList->name . ' <b>fatture intracee:</b> ' . $shopList->invoiceUe . ' <b>ricevute:</b> ' . $shopList->receipt . ' <b>fatture extracee:</b> ' . $shopList->invoiceExtraUe . '<br>';
-                                } ?>
+                </div>
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div><?php foreach ($shopsList as $shopList) {
+                                            echo '<b>Sezionali</b>  :' . $shopList->name . ' <b>fatture intracee:</b> ' . $shopList->invoiceUe . ' <b>ricevute:</b> ' . $shopList->receipt . ' <b>fatture extracee:</b> ' . $shopList->invoiceExtraUe . '<br>';
+                                        } ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid container-fixed-lg bg-white">
-                <div class="panel panel-transparent">
-                    <div class="panel-body">
-                        <table class="table table-striped" data-datatable-name="order_list"
-                               data-controller="OrderListAjaxController"
-                               data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
-                               data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 200, 500,1000,2000"
-                               data-display-length="50">
-                            <thead>
-                            <tr>
-                                <th data-slug="orderDate"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    data-default-order="desc"
-                                    class="center dataFilterType">Data<br>Ordine
-                                </th>
-                                <th data-slug="id"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Iwes Order<br/>Parallel <br/> Status
-                                </th>
-                                <th data-slug="user"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Utente<br/>Seller Shop-Order
-                                </th>
-                                <th data-slug="product"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Dettaglio Ordine<br/>Supplier Shop-Order
-                                </th>
-                                <th data-slug="dareavere"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Dovuto
-                                </th>
-                                <th data-slug="paymentDate"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center dataFilterType">Data<br>Pagamento
-                                </th>
-                                <th data-slug="payment"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Metodo<br>Pagamento
-                                </th>
-                                <th data-slug="orderParal"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Ordine<br>Parallelo
-                                </th>
-                                <th data-slug="marketplaceName"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Marketplace<br/>
-                                    Shop<br/>Order
-                                </th>
-                                <th data-slug="notes"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Note
-                                </th>
-                                <th data-slug="userNote"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Note<br>Utente
-                                </th>
-                                <th data-slug="shipmentId"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">spedizione<br>Tracking Number<br>Cod. Interno
-                                </th>
-                                <th data-slug="invoice"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Fatture...................<br/>Seller<br/>Supplier<br>Iwes su
-                                    Seller</br>
-                                </th>
-                                <th data-slug="documents"
-                                    data-searchable="true"
-                                    data-orderable="false"
-                                    class="center">Documenti
-                                </th>
-                                <th data-slug="address"
-                                    data-searchable="false"
-                                    data-orderable="false"
-                                    class="center">Indirizzi
-                                </th>
-                                <th data-slug="lastUpdate"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center dataFilterType">Ultimo Aggiornamento
-                                </th>
-                                <th data-slug="orderSources"
-                                    data-searchable="true"
-                                    data-orderable="true"
-                                    class="center">Campagna </br>Traffico
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                <div class="container-fluid container-fixed-lg bg-white">
+                    <div class="panel panel-transparent">
+                        <div class="panel-body">
+                            <table class="table table-striped" data-datatable-name="order_list"
+                                   data-controller="OrderListAjaxController"
+                                   data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
+                                   data-inner-setup="true"
+                                   data-length-menu-setup="50, 100, 200, 500,1000,2000"
+                                   data-display-length="50">
+                                <thead>
+                                <tr>
+                                    <th data-slug="orderDate"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        data-default-order="desc"
+                                        class="center dataFilterType">Data<br>Ordine
+                                    </th>
+                                    <th data-slug="id"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Iwes Order<br/>Parallel <br/> Status
+                                    </th>
+                                    <th data-slug="user"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Utente<br/>Seller Shop-Order
+                                    </th>
+                                    <th data-slug="product"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Dettaglio Ordine<br/>Supplier Shop-Order
+                                    </th>
+                                    <th data-slug="dareavere"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Dovuto
+                                    </th>
+                                    <th data-slug="paymentDate"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center dataFilterType">Data<br>Pagamento
+                                    </th>
+                                    <th data-slug="payment"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Metodo<br>Pagamento
+                                    </th>
+                                    <th data-slug="orderParal"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Ordine<br>Parallelo
+                                    </th>
+                                    <th data-slug="marketplaceName"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Marketplace<br/>
+                                        Shop<br/>Order
+                                    </th>
+                                    <th data-slug="notes"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Note
+                                    </th>
+                                    <th data-slug="userNote"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Note<br>Utente
+                                    </th>
+                                    <th data-slug="shipmentId"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">spedizione<br>Tracking Number<br>Cod. Interno
+                                    </th>
+                                    <th data-slug="invoice"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Fatture...................<br/>Seller<br/>Supplier<br>Iwes su
+                                        Seller</br>
+                                    </th>
+                                    <th data-slug="documents"
+                                        data-searchable="true"
+                                        data-orderable="false"
+                                        class="center">Documenti
+                                    </th>
+                                    <th data-slug="address"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Indirizzi
+                                    </th>
+                                    <th data-slug="lastUpdate"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center dataFilterType">Ultimo Aggiornamento
+                                    </th>
+                                    <th data-slug="orderSources"
+                                        data-searchable="true"
+                                        data-orderable="true"
+                                        class="center">Campagna </br>Traffico
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
