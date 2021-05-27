@@ -19,6 +19,12 @@
                     <div class="col-md-4 col-md-offset-4 alert-container closed"></div>
                 </div>
             </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 style="margin-left:35%;margin-right:35%" id="shopNameH4"></h4>
+                    </div>
+                </div>
 
             <div class="container-fluid">
                 <div class="row">
