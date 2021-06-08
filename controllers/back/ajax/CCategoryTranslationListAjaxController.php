@@ -37,6 +37,7 @@ class CCategoryTranslationListAjaxController extends AAjaxController
                         if(pct.longDescription!='','sisì','no') as hasLongDescription,
                         pc.depth as depth,
                         pct.langId as langId,
+                        pct.shopId as shopId,   
                         pc.id as categoryId,
                         s.`name` as shopName,
                         l.`name` as langName
