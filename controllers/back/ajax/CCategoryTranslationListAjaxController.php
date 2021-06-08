@@ -27,7 +27,7 @@ class CCategoryTranslationListAjaxController extends AAjaxController
      */
     public function get()
     {
-        $currentUser=$this->app->getUser()->getId();
+        $currentUser = $this->app->getUser()->getId();
         if ($this->app->getUser()->hasPermission('allShops')) {
             $sql = "SELECT pct.productCategoryId as productCategoryId,
                         `pct`.`name` as `name`,
@@ -45,8 +45,8 @@ class CCategoryTranslationListAjaxController extends AAjaxController
 join Lang l on  pct.langId=l.id 
 join Shop s on pct.shopId=s.id
                 GROUP BY pc.id order by pc.id";
-        }else{
-            $userHasShop=\Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId'=>$currentUser]);
+        } else {
+            $userHasShop = \Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId' => $currentUser]);
             $sql = "SELECT pct.productCategoryId as productCategoryId,
                         `pct`.`name` as `name`,
                         pc.slug as slug,
@@ -62,19 +62,19 @@ join Shop s on pct.shopId=s.id
                 from ProductCategoryTranslation pct  JOIN 
                 ProductCategory pc on pct.productCategoryId=pc.id
 join Lang l on  pct.langId=l.id
-join Shop s on pct.shopId=s.id where pct.shopId=".$userHasShop->shopId."
+join Shop s on pct.shopId=s.id where pct.shopId=" . $userHasShop->shopId . "
                 GROUP BY pc.id order by pc.id";
         }
 
-        $datatable = new CDataTables($sql, ['productCategoryId','langId'], $_GET );
+        $datatable = new CDataTables($sql,['productCategoryId','langId','shopId'],$_GET);
 
-        $category = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findBySql($datatable->getQuery(), $datatable->getParams());
-        $count = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
-        $totalCount = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
-        $pcRepo=\Monkey::app()->repoFactory->create('ProductCategory');
-        $langRepo=\Monkey::app()->repoFactory->create('Lang');
+        $category = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findBySql($datatable->getQuery(),$datatable->getParams());
+        $count = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->em()->findCountBySql($datatable->getQuery(true),$datatable->getParams());
+        $totalCount = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->em()->findCountBySql($datatable->getQuery('full'),$datatable->getParams());
+        $pcRepo = \Monkey::app()->repoFactory->create('ProductCategory');
+        $langRepo = \Monkey::app()->repoFactory->create('Lang');
         $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/categorie/traduzioni/modifica";
-        $shopRepo=\Monkey::app()->repoFactory->create('Shop');
+        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         $response = [];
@@ -87,34 +87,34 @@ join Shop s on pct.shopId=s.id where pct.shopId=".$userHasShop->shopId."
 
         foreach ($category as $val) {
 
-            $response['data'][$i]["DT_RowId"] =  $val->productCategoryId;
+            $response['data'][$i]["DT_RowId"] = $val->productCategoryId;
             /** @var  $pc CProductCategory */
-            $pc=$pcRepo->findOneBy(['id'=>$val->productCategoryId]);
+            $pc = $pcRepo->findOneBy(['id' => $val->productCategoryId]);
             $response['data'][$i]['name'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->productCategoryId . '">' . $val->name . '</a>' : $val->name;
-            $response['data'][$i]['nameCat']=$val->name;
+            $response['data'][$i]['nameCat'] = $val->name;
             $response['data'][$i]['slug'] = $pc->slug;
             $cats = \Monkey::app()->categoryManager->categories()->getPath($val->productCategoryId);
             $type = [];
-            $y=0;
+            $y = 0;
             foreach ($cats as $cat) {
                 if ($cat['id'] == 1) continue;
-                        $type[] = \Monkey::app()->repoFactory->create('ProductCategory')->findOne([$cat['id']])->getLocalizedName();
-                    $y++    ;
+                $type[] = \Monkey::app()->repoFactory->create('ProductCategory')->findOne([$cat['id']])->getLocalizedName();
+                $y++;
             }
 
             //$categories[] = implode('/',$type);
-                $response['data'][$i]['categoryId'] = '<span class="small">' .implode('/',$type). '</span>';
+            $response['data'][$i]['categoryId'] = '<span class="small">' . implode('/',$type) . '</span>';
 
-            $lang=$langRepo->findOneBy(['id'=>$val->langId]);
+            $lang = $langRepo->findOneBy(['id' => $val->langId]);
             $response['data'][$i]['langName'] = $lang->name;
             $response['data'][$i]['langId'] = $lang->id;
-            $shop=$shopRepo->findOneBy(['id'=>$val->shopId]);
+            $shop = $shopRepo->findOneBy(['id' => $val->shopId]);
             $response['data'][$i]['shopId'] = $shop->id;
             $response['data'][$i]['shopName'] = $shop->name;
-            $response['data'][$i]['hasDescription'] = ($val->description!='') ? 'Si' : 'No' ;
-            $response['data'][$i]['hasLongDescription'] = ($val->longDescription!='') ? 'Si' : 'No' ;
+            $response['data'][$i]['hasDescription'] = ($val->description != '') ? 'Si' : 'No';
+            $response['data'][$i]['hasLongDescription'] = ($val->longDescription != '') ? 'Si' : 'No';
 
-                $i++;
+            $i++;
         }
 
         return json_encode($response);
