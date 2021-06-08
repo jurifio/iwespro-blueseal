@@ -1159,6 +1159,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/categorie/traduzioni/lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryTranslationListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/categorie/aggiungi(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryManageController"

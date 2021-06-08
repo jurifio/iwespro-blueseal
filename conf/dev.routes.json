@@ -1145,6 +1145,19 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/categorie/traduzioni/lista(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CCategoryTranslationListController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE"
+            ]
+        },
+        {
             "pattern": "/blueseal/users/ruoli(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CRbacRoleListController"
