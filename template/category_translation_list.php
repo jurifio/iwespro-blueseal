@@ -28,7 +28,7 @@
                                data-controller="CategoryTranslationListAjaxController"
                                data-url="<?php echo $app->urlForBluesealXhr() ?>"
                                data-inner-setup="true"
-                               data-length-menu-setup="50, 100, 200, 500"
+                               data-length-menu-setup="10, 25, 50, 100, 200, 500"
                                data-display-length="50">
                             <thead>
                             <tr>
