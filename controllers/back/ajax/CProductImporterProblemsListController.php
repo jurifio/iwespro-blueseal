@@ -114,7 +114,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $cats = [];
             $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findBy(['productId'=>$shopHasProduct->product->id,'productVariantId'=>$shopHasProduct->product->productVariantId]);
             foreach ($productHasProductCategory as $cat) {
-                $path = $this->app->categoryManager->categories()->getPath($cat->id);
+                $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                 unset($path[0]);
                 $cats[] = '<span>' . implode('/', array_column($path, 'slug')) . '</span>';
             }
