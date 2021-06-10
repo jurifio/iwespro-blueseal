@@ -97,7 +97,7 @@
                 data-event="bs.categoryTranslation.add"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Modifica traduzione"
+                data-title="Aggiungi traduzione"
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button
