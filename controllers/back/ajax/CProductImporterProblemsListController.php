@@ -112,8 +112,9 @@ class CProductImporterProblemsListController extends AAjaxController
             /** @var CShopHasProduct $shopHasProduct */
             $shopHasProduct = $shopHasProductRepo->findOne($row);
             $cats = [];
-            foreach ($shopHasProduct->product->productCategoryTranslation->findBy(['productCategoryId'=>$catId,'langId'=>1,'shopId'=>44]) as $cat) {
-                $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
+            $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findBy(['productId'=>$shopHasProduct->product->id,'productVariantId'=>$shopHasProduct->product->productVariantId]);
+            foreach ($productHasProductCategory as $cat) {
+                $path = $this->app->categoryManager->categories()->getPath($cat->id);
                 unset($path[0]);
                 $cats[] = '<span>' . implode('/', array_column($path, 'slug')) . '</span>';
             }
