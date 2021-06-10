@@ -45,7 +45,7 @@ class CCategoryTranslationListAjaxController extends AAjaxController
                 ProductCategory pc on pct.productCategoryId=pc.id
 join Lang l on  pct.langId=l.id 
 join Shop s on pct.shopId=s.id
-                GROUP BY pc.id order by pc.id";
+                 order by pct.shopId Asc";
         } else {
             $userHasShop = \Monkey::app()->repoFactory->create('UserHasShop')->findOneBy(['userId' => $currentUser]);
             $sql = "SELECT pct.productCategoryId as productCategoryId,
@@ -64,7 +64,7 @@ join Shop s on pct.shopId=s.id
                 ProductCategory pc on pct.productCategoryId=pc.id
 join Lang l on  pct.langId=l.id
 join Shop s on pct.shopId=s.id where pct.shopId=" . $userHasShop->shopId . "
-                GROUP BY pc.id order by pc.id";
+                  order by pct.shopId Asc";
         }
 
         $datatable = new CDataTables($sql,['productCategoryId','langId','shopId'],$_GET);
