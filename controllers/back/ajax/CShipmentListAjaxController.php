@@ -44,7 +44,7 @@ class CShipmentListAjaxController extends AAjaxController
                     s.creationDate as creationDate,
                     O.id as orderId,
                     O.isParallel AS isParallel,
-                    if(is.isBilling=1,'si','no') as isBilling,
+                    if(s.isBilling=1,'si','no') as isBilling,
                     O.frozenShippingAddress as frozenShippingAddress,
                     O.frozenBillingAddress as frozenBillingAddress,
                     concat_ws(',',f.subject,f.city) as fromAddress,
