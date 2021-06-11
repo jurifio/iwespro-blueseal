@@ -44,6 +44,7 @@ class CShipmentListAjaxController extends AAjaxController
                     s.creationDate as creationDate,
                     O.id as orderId,
                     O.isParallel AS isParallel,
+                    if(is.isBilling=1,'si','no') as isBilling,
                     O.frozenShippingAddress as frozenShippingAddress,
                     O.frozenBillingAddress as frozenBillingAddress,
                     concat_ws(',',f.subject,f.city) as fromAddress,
@@ -113,7 +114,7 @@ class CShipmentListAjaxController extends AAjaxController
             $row['productContent'] = "";
             $row["shipmentInvoiceNumber"] = ($val->shipmentInvoiceNumber!=null) ? $val->shipmentInvoiceNumber : '';
 
-
+            $row['isBilling'] = ($val->isBilling==1)?'si':'no';
             $orderlineIds = [];
             $shippingSum = 0;
             foreach ($val->orderLine as $orderLine) {
