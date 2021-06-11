@@ -82,7 +82,7 @@ class CDhlHandler extends  CDhlStopWatchHandler
 
         $url = $this -> config['endpoint'];
         $data = ['XMLInfoParcel' => $rawXml];
-        \Monkey ::app() -> applicationReport('GlsItalyHandler', 'addDelivery', 'Request AddParcel', $rawXml);
+        \Monkey ::app() -> applicationReport('CDhlHandler', 'addDelivery', 'Request AddParcel', $rawXml);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
@@ -98,7 +98,7 @@ class CDhlHandler extends  CDhlStopWatchHandler
         $result = curl_exec($ch);
         $e = curl_error($ch);
         curl_close($ch);
-        \Monkey ::app() -> applicationReport('GlsItalyHandler', 'addDelivery', 'Result AddParcel', $result);
+        \Monkey ::app() -> applicationReport('CDhlHandler', 'addDelivery', 'Result AddParcel', $result);
         if (!$result) {
             throw new BambooException($e);
         } else {
