@@ -40,3 +40,4 @@ function reloadLineFromButton(button){
 function reloadLineFromForm(form){
     loadLine($(form).parent().parent());
 }
+

@@ -39,6 +39,32 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
     <span>Non modificabile</span>
     <?php endif; ?>
 </td>
+<td class="center">
+    <?php $shipmentPrint='';
+    $orderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['orderLineId'=>$line->id,'orderId'=>$line->orderId]);
+    if(count($orderLineHasShipment)>0){
+        $shipment=\Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id'=>$orderLineHasShipment->shipmentId]);
+        $findCarrier = \Monkey::app()->repoFactory->create('Carrier')->findOneBy(['id' => $shipment->carrierId]);
+        $btnclass='btn btn-success';
+        if ($shipment->deliveryDate != null && $shipment->shipmentDate != null) {
+            $btnclass = 'btn btn-success';
+        } else if ($shipment->deliveryDate == null && $shipment->shipmentDate != null) {
+            $btnclass = 'btn btn-warning';
+        } else {
+            $btnclass = 'btn btn-light';
+        }
+        if ($shipment->carrierId == 2) {
+            $shipmentPrint .= 'trackingNumber: '.$shipment->trackingNumber . '<br><button style="width: 200px ; height:32px;"  onclick="openTrackGlsDelivery(\'' . $shipment->trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier->name . '</button><br>Id Spedizione: </b>' . $shipment->id . '<br>';
+        } else {
+            $shipmentPrint .=  'trackingNumber: '.$shipment->trackingNumber . '<br><button style="width: 200px ; height:32px;"  onclick="openTrackDelivery(\'' . $shipment->trackingNumber . '\');" class=' . $btnclass . '> <i class="fa fa-truck" aria-hidden="true"></i>->' . $findCarrier->name . '</button><br>Id Spedizione: </br>' . $shipment->id . '<br>';
+            //  $shipmentCollect.= '<button onclick="openTrackDelivery(\'1Z463V1V6897807419\');" class="btn btn-light" role="button"><i class="fa fa-truck" aria-hidden="true"></i>1Z463V1V6897807419</button>';
+        }
+    }else{
+        $shipmentPrint='spedizione non Presente';
+    }
+    echo $shipmentPrint;
+    ?>
+</td>
 <td class="center"><img width="90" src="<?php echo $app->image($line->product->getPhoto(1,281),'amazon') ?>" /></td>
 <td class="center"><?php echo $line->product->productBrand->name ;?></td>
 <td class="center"><?php echo $line->product->productSeason->name . " " . $line->product->productSeason->year; ?></td>

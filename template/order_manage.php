@@ -218,6 +218,7 @@
                                         <th class="center sorting">Sku</th>
                                         <th class="center sorting">Stato Riga</th>
                                         <th class="center sorting">Opera Stato</th>
+                                        <th class="center sorting">Spedizione</th>
                                         <th class="center sorting">Foto</th>
                                         <th class="center sorting">Brand</th>
                                         <th class="center sorting">Stagione</th>
