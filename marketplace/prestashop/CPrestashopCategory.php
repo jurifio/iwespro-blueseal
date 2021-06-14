@@ -198,8 +198,10 @@ class CPrestashopCategory extends APrestashopMarketplace
             $blankXml = $this->getCategoryBlankSchema();
 
             $resources = $blankXml->children()->children();
+
             /** @var CProductCategoryTranslation $productCategoryTranslation */
-            $productCategoryTranslation = $productCategory->productCategoryTranslation->findOneByKey('langId', 1);
+
+            $productCategoryTranslation = $productCategory->productCategoryTranslation->findOneBy(['langId'=> 1,'shopId'=>44]);
 
             $date = date_format(new \DateTime(), 'Y-m-d H:i:s');
             $categorySlug = (is_null($productCategoryTranslation->slug) || empty($productCategoryTranslation->slug)) ? $slugy->slugify(trim($productCategoryTranslation->name)) : $productCategoryTranslation->slug;

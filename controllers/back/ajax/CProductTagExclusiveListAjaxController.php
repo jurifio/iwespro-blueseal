@@ -119,7 +119,8 @@ class CProductTagExclusiveListAjaxController extends AAjaxController
 
             /** @var CProduct $val */
             $cats = [];
-            foreach($val->productCategoryTranslation as $cat){
+            $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
+            foreach($productHasProductCategory as $cat){
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                 unset($path[0]);
                 $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';

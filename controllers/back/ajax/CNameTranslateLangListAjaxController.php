@@ -166,7 +166,8 @@ class CNameTranslateLangListAjaxController extends AAjaxController
             foreach($res as $v) {
                 if (10 == $iterator) break;
                 $p = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
-                foreach($p->productCategoryTranslation as $cat) {
+                $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findBy(['productId'=> $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                foreach($productHasProductCategory as $cat){
                     $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                     unset($path[0]);
                     $newCat = '<span class="small">'.implode('/',array_column($path, 'slug')).'</span><br />';

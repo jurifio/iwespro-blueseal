@@ -137,7 +137,7 @@ class CCreateAutoProductBatch extends ACronJob
                     $descr = 'Normalizzazione prodotti. Categorie interessate: ';
                     foreach ($keys as $key) {
                         /** @var CProductCategoryTranslation $pC */
-                        $pC = $pCR->findOneBy(['productCategoryId' => $key, 'langId' => 1]);
+                        $pC = $pCR->findOneBy(['productCategoryId' => $key, 'langId' => 1,'shopId'=>44]);
                         $catName = is_null($pC) ? 'Categoria non definita' : $pC->name;
                         $descr .= $catName . ', ';
                     }

@@ -88,7 +88,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
                 continue;
             }
             $id = $temp[1];
-            $pct = $pctRepo->findOneBy(["productCategoryId"=>$temp[1],"langId"=>$temp[2]]);
+            $pct = $pctRepo->findOneBy(["productCategoryId"=>$temp[1],"langId"=>$temp[2],"shopId"=>44]);
             if($pct) {
                 if($pct->name != $input){
                     $pct->name = $input;
@@ -99,7 +99,10 @@ class CCategoryManageController extends ARestrictedAccessRootController
                 $pct->productCategoryId = $temp[1];
                 $pct->langId = $temp[2];
                 $pct->slug = $slugy->slugify(trim($input));
-                $mysql->insert("ProductCategoryTranslation", array("productCategoryId"=>$temp[1],"langId"=>$temp[2],'name'=>$input));
+                $shops=\Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce'=>1]);
+                foreach($shops as $shop) {
+                    $mysql->insert("ProductCategoryTranslation",array("productCategoryId" => $temp[1],"langId" => $temp[2],'name' => $input,'shopId'=>$shop->id));
+                }
             }
         }
 

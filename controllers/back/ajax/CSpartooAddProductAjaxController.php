@@ -105,7 +105,10 @@ class CSpartooAddProductAjaxController extends AAjaxController
                         $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
                     $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
                 } else {
-                    $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
+
+                    $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+
+                    $name = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId'=>1,'productCategoryId'=>$productHasProductCategory->productCategoryId,'shopId'=>44])->name
                         . ' ' .
                         $product->productBrand->name
                         . ' ' .

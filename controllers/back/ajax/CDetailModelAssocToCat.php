@@ -33,7 +33,7 @@ class CDetailModelAssocToCat extends AAjaxController
                 $cats[$countCats] = [];
                 $cats[$countCats]['id'] = $v->id;
                 $cats[$countCats]['slug'] = $v->slug;
-                $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id])->name;
+                $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1, 'productCategoryId' => $v->id,'shopId'=>44])->name;
                 $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->id));
                 $cats[$countCats]['origin'] = 'code';
                 $countCats++;
@@ -49,7 +49,7 @@ class CDetailModelAssocToCat extends AAjaxController
                     $cats[$countCats]['id'] = $v->productCategory->id;
                     $cats[$countCats]['slug'] = $v->productCategory->slug;
                     $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('productCategoryTranslation')->findOneBy(
-                        ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
+                        ['langId' => 1, 'productCategoryId' => $v->productCategory->id,'shopId'=>44]
                     );
                     $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
                     $cats[$countCats]['origin'] = 'model';
@@ -67,7 +67,7 @@ class CDetailModelAssocToCat extends AAjaxController
                     $cats[$countCats]['id'] = $v->productCategory->id;
                     $cats[$countCats]['slug'] = $v->productCategory->slug;
                     $cats[$countCats]['name'] = \Monkey::app()->repoFactory->create('productCategoryTranslation')->findOneBy(
-                        ['langId' => 1, 'productCategoryId' => $v->productCategory->id]
+                        ['langId' => 1, 'productCategoryId' => $v->productCategory->id,'shopId'=>44]
                     );
                     $cats[$countCats]['path'] = $this->getCategoryTree($this->app->categoryManager->categories()->getPath($v->productCategory->id));
                     $cats[$countCats]['origin'] = 'model';

@@ -441,8 +441,10 @@ class CPrestashopProduct extends APrestashopMarketplace
             $productEanRepo->assignEanForProduct($product);
         }
         */
+        $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
 
-        $productName = $product->productCategoryTranslation->findOneByKey('langId',1)->name
+        $productName = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId'=>1,'productCategoryId'=>$productHasProductCategory->productCategoryId,'shopId'=>44])->name
+
             . ' ' .
             $product->productBrand->name
             . ' ' .
@@ -849,7 +851,9 @@ class CPrestashopProduct extends APrestashopMarketplace
                 $shopprice = $salePrice;
                 break;
             case 'remove':
-                $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
+                $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+
+                $name = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId'=>1,'productCategoryId'=>$productHasProductCategory->productCategoryId,'shopId'=>44])->name
                     . ' ' .
                     $product->productBrand->name
                     . ' ' .

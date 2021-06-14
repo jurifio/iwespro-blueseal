@@ -121,7 +121,7 @@ class CSubmenuListAjaxController extends AAjaxController
                     $elementId=$val->captionLink;
                     break;
                 case 3:
-                    $category=\Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['productCategoryId'=>$val->elementId,'langId'=>1]);
+                    $category=\Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['productCategoryId'=>$val->elementId,'langId'=>1,'shopId'=>44]);
                     $elementId=$category->name;
                     break;
                 case 4:

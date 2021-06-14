@@ -39,7 +39,7 @@ class CProductColorListAjaxController extends AAjaxController
                   JOIN `ProductSku` `ps` on (`p`.`id` = `ps`.`productId`) AND (`p`.`productVariantId` = `ps`.`productVariantId`) 
                   LEFT JOIN (`ProductHasProductCategory` `phpc` 
                               JOIN `ProductCategory` `pc` ON `phpc`.`productCategoryId` = `pc`.`id` 
-                              JOIN `ProductCategoryTranslation` `pct` on (`pc`.`id` = `pct`.`productCategoryId`)  
+                              JOIN `ProductCategoryTranslation` `pct` on (`pc`.`id` = `pct`.`productCategoryId`)  and pct.shopId=44
                               ) 
                         ON (`p`.`id` = `phpc`.`productId`) AND `p`.`productVariantId` = `phpc`.`productVariantId`
                   LEFT JOIN `ProductColorGroup` `pcg` ON `p`.`productColorGroupId` = `pcg`.`id`
@@ -73,7 +73,7 @@ class CProductColorListAjaxController extends AAjaxController
                 $response['data'][$i]['categorie'] = '';
 
                 foreach ($v->productCategory as $cat) {
-                    $res = $this->app->dbAdapter->query("SELECT replace(group_concat(name), ',', '/') AS name FROM `ProductCategory` AS `pc` JOIN `ProductCategoryTranslation` AS `pct` WHERE `pc`.`id` = `pct`.productCategoryId AND `pc`.`lft` <= ? AND `pc`.`rght` >= ? AND pct.langId = 1 ORDER BY `pc`.`lft` ASC"
+                    $res = $this->app->dbAdapter->query("SELECT replace(group_concat(name), ',', '/') AS name FROM `ProductCategory` AS `pc` JOIN `ProductCategoryTranslation` AS `pct` WHERE `pc`.`id` = `pct`.productCategoryId AND `pc`.`lft` <= ? AND `pc`.`rght` >= ? AND pct.langId = 1 and pct.shopId=44 ORDER BY `pc`.`lft` ASC"
                         , [$cat->lft, $cat->rght])->fetchAll();
 
                     $response['data'][$i]['categorie'] .= '<span style="font-size: 0.8em">' . $res[0]['name'] . '</span><br />';

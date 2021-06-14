@@ -77,11 +77,12 @@ class CProductListAjaxDetail extends AAjaxController
             []
         )->fetchAll();
         $productList = "";
+        $homeShop = \Monkey::app()->cfg()->fetch("general","shop-id");
         foreach($pId as $v) {
             $cats = $this->app->categoryManager->getCategoriesForProduct($v['productId'], $v['productVariantId']);
             $catsName = [];
             foreach($cats as $catv) {
-                $catName = $this->app->dbAdapter->select('ProductCategoryTranslation', ['productCategoryId' => $catv['id'], 'langId' => 1])->fetchAll();
+                $catName = $this->app->dbAdapter->select('ProductCategoryTranslation', ['productCategoryId' => $catv['id'], 'langId' => 1,'shopId'=>44])->fetchAll();
                 if (isset($catName[0])) $catsName[] = $catName[0]['name'];
             }
             $cats = implode( " - " , $catsName);

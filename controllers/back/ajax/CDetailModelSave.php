@@ -346,7 +346,7 @@ class CDetailModelSave extends AAjaxController
             LEFT JOIN `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`
             LEFT JOIN `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`materialId` = `pspm`.`id`
           )
-          WHERE ((`pct`.`langId` = 1) AND (`pdt`.`langId` = 1) AND `p`.`isVisible` = 1 AND `p`.id = ?) GROUP BY `p`.`id`) t1";
+          WHERE ((`pct`.`langId` = 1) AND (`pdt`.`langId` = 1) AND (`pct`.`shopId` = 44) AND `p`.`isVisible` = 1 AND `p`.id = ?) GROUP BY `p`.`id`) t1";
 
 
         \Monkey::app()->dbAdapter->query($sql, [$protId]);
@@ -638,7 +638,7 @@ class CDetailModelSave extends AAjaxController
       LEFT JOIN `ProductSheetModelPrototypeGender` `pspg` ON `p`.`genderId` = `pspg`.`id`
       LEFT JOIN `ProductSheetModelPrototypeMaterial` `pspm` ON `p`.`materialId` = `pspm`.`id`
     )
-    WHERE ((`pct`.`langId` = 1) AND (`pdt`.`langId` = 1) AND `p`.`isVisible` = 1 AND `p`.id = $protId)) t1
+    WHERE ((`pct`.`langId` = 1) AND (`pdt`.`langId` = 1) AND (`pdt`.`shopId` = 44) AND `p`.`isVisible` = 1 AND `p`.id = $protId)) t1
 SET
   ProductSheetModelPrototypeSupport.modelCode = `t1`.`code`,
   ProductSheetModelPrototypeSupport.modelName = `t1`.`name`,

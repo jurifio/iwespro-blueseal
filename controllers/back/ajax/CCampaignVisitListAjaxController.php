@@ -119,7 +119,7 @@ class CCampaignVisitListAjaxController extends AAjaxController
                     FROM ProductCategory t2
                     WHERE t2.lft<t0.lft AND t2.rght>t0.rght
                     ORDER BY t2.lft) ancestors
-FROM ProductCategory  t0 JOIN ProductCategoryTranslation pct ON t0.id=pct.productCategoryId    WHERE depth=3 AND t0.id='.$productCategoryId.'
+FROM ProductCategory  t0 JOIN ProductCategoryTranslation pct ON t0.id=pct.productCategoryId and pct.shopId=44    WHERE depth=3 AND t0.id='.$productCategoryId.'
 GROUP BY t0.slug';
             $res_category = \Monkey::app()->dbAdapter->query($sqlCategory, [])->fetchAll();
             if($res_category!=null) {
