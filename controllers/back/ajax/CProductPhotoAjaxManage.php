@@ -89,7 +89,7 @@ class CProductPhotoAjaxManage extends AAjaxController
                 if(isNull($orderMax)){
                     $orderMax=1;
                 }
-                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key));
+                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key, 'isPublic'=>1));
             }
             unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
