@@ -49,7 +49,7 @@ class CProductPhotoAjaxManage extends AAjaxController
     public function post()
     {
         $product = \Monkey::app()->repoFactory->create('Product')->findOne([$this->app->router->request()->getRequestData('id'),
-                                                                        $this->app->router->request()->getRequestData('productVariantId')]);
+            $this->app->router->request()->getRequestData('productVariantId')]);
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
         $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
@@ -80,16 +80,7 @@ class CProductPhotoAjaxManage extends AAjaxController
                 if (empty($futureDummy)) {
                     $futureDummy = $val;
                 }
-                $orderMax=1;
-                $sql="select (max(`order`)+1) as orderMax from ProductPhoto where `name` like  '%".$product->id.'-'.$product->productVariantId."%'";
-                $res=$this->app->dbAdapter->query($sql,[])->fetchAll();
-                foreach($res as $result){
-                    $orderMax=$result['orderMax'];
-                }
-                if($orderMax==null){
-                    $orderMax=1;
-                }
-                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key, 'isPublic'=>1));
+                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $fileName['number'], 'size' => $key));
             }
             unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
@@ -120,16 +111,16 @@ class CProductPhotoAjaxManage extends AAjaxController
         unset($data['productVariantId']);
 
         \Monkey::app()->repoFactory->beginTransaction();
-	    foreach ($product->productPhoto as $photo) {
-		    foreach ($data as $newOrder => $oldOrder) {
-			    $oldOrder = (int)substr($oldOrder, 5);
-			    $newOrder = ((int)substr($newOrder, 1)) + 1;
-			    if ($oldOrder != $photo->order || $oldOrder == $newOrder ) continue;
-			    $photo->order = $newOrder;
-			    $photo->update();
-			    break;
-		    }
-	    }
+        foreach ($product->productPhoto as $photo) {
+            foreach ($data as $newOrder => $oldOrder) {
+                $oldOrder = (int)substr($oldOrder, 5);
+                $newOrder = ((int)substr($newOrder, 1)) + 1;
+                if ($oldOrder != $photo->order || $oldOrder == $newOrder ) continue;
+                $photo->order = $newOrder;
+                $photo->update();
+                break;
+            }
+        }
         \Monkey::app()->repoFactory->commit();
         return true;
     }
@@ -148,9 +139,9 @@ class CProductPhotoAjaxManage extends AAjaxController
                                             ppp.productId = ? AND
                                             ppp.productVariantId = ? AND
                                             pp.`order` = ?",[
-                                                        $id,
-                                                        $productVariantId,
-                                                        substr($this->app->router->request()->getRequestData('photoOrder'),5)])->fetchAll();
+            $id,
+            $productVariantId,
+            substr($this->app->router->request()->getRequestData('photoOrder'),5)])->fetchAll();
         \Monkey::app()->repoFactory->beginTransaction();
 
         $this->app->vendorLibraries->load("amazon2723");
