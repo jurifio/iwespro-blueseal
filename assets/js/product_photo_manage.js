@@ -44,7 +44,7 @@ $(document).on('bs.add.photo', function (e){
         okButton.off();
     });
     cancelButton.remove();
-    var bodyContent =
+    let bodyContent =
         '<form id="dropzoneModal" class="dropzone" enctype="multipart/form-data" name="dropzonePhoto" action="POST">'+
         '<div class="fallback">'+
         '<input name="file" type="file" multiple />' +
@@ -52,12 +52,12 @@ $(document).on('bs.add.photo', function (e){
         '</form>';
 
     body.html(bodyContent);
-    var dropzone = new Dropzone("#dropzoneModal",{
+    let  dropzone = new Dropzone("#dropzoneModal",{
         url: "/blueseal/xhr/ProductPhotoAjaxManage",
         maxFilesize: 4,
         maxFiles: 10,
         parallelUploads: 10,
-        acceptedFiles: "image/jpeg,video/*",
+        acceptedFiles: "image/*",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: false,
         sending: function(file, xhr, formData) {
