@@ -57,12 +57,13 @@ if($product) {
 
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
-
+       // $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
+        $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempFolder') . '-blog/';
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-        move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name']);
-
+        if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
+            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
+        }
 
 
         $fileName['name'] = $product->printId();
