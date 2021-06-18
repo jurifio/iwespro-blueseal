@@ -29,15 +29,19 @@ class CProductPhotoAjaxManage extends AAjaxController
         $id = $this->app->router->request()->getRequestData('id');
         $productVariantId = $this->app->router->request()->getRequestData('productVariantId');
         $product = \Monkey::app()->repoFactory->create('Product')->findOne([$id, $productVariantId]);
-
-        $photos = $this->app->dbAdapter->query("SELECT distinct `name`, `order`,size
+if($product) {
+    $photos = $this->app->dbAdapter->query("SELECT distinct `name`, `order`,size
                                       FROM ProductPhoto pp, ProductHasProductPhoto ppp
                                       WHERE pp.id = ppp.productPhotoId AND
                                       ppp.productId = ? AND
                                       ppp.productVariantId = ? AND
                                       pp.size = ?
                                       GROUP BY pp.id
-                                      ORDER BY pp.order", [$product->id, $product->productVariantId, $imgSize])->fetchAll();
+                                      ORDER BY pp.order",[$product->id,$product->productVariantId,$imgSize])->fetchAll();
+}else{
+    $photos=null;
+}
+
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
