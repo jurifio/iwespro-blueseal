@@ -61,7 +61,7 @@ if($product) {
         $tempFolder = $this->app->rootPath() . $this->app->cfg()->fetch('paths','tempFolder') . '-blog/';
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
+        if (!copy($_FILES['file']['name'], $tempFolder . $_FILES['file']['name'])) {
             throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
         }
 
