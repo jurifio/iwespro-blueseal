@@ -54,27 +54,15 @@ if($product) {
     {
 
         $product = \Monkey::app()->repoFactory->create('Product')->findOne([$this->app->router->request()->getRequestData('id'),$this->app->router->request()->getRequestData('productVariantId')]);
-        $files = $this->app->router->request()->getFiles();
+
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
         $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
-        $files = $this->app->router->request()->getFiles();
-        $name = md5(rand(100,200));
-        $ext = explode('.',$files['file']['name'][0]);
-        $filename = $name . '.' . $ext[1];
-        $destination = $tempFolder . $filename; //change this directory
-        $location = $files["file"]["tmp_name"][0];
-        move_uploaded_file($location,$destination);
-        $newname =  $files["file"]["name"][0];
-        rename($destination,$tempFolder . $newname);
-        $newdestination = $tempFolder . $newname;
-        $image = new S3Manager($config['credential']);
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
-            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
-        }
+        move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name']);
+
 
 
         $fileName['name'] = $product->printId();

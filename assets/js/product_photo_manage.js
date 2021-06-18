@@ -59,7 +59,7 @@ $(document).on('bs.add.photo', function (e){
         parallelUploads: 10,
         acceptedFiles: "image/*",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
-        uploadMultiple: false,
+        uploadMultiple: true,
         sending: function(file, xhr, formData) {
             formData.append("id", $.QueryString["id"]);
             formData.append("productVariantId", $.QueryString["productVariantId"]);
