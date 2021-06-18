@@ -62,7 +62,7 @@ if($product) {
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
         if (!move_uploaded_file($_FILES['file']['name'], $tempFolder . $_FILES['file']['name'])) {
-            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
+            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['name'].' in ' .$tempFolder.$_FILES['file']['name']);
         }
 
 
