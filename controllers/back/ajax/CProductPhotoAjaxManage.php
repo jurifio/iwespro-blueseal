@@ -61,7 +61,7 @@ if($product) {
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
+        if (!move_uploaded_file($_FILES['file']['name'], $tempFolder . $_FILES['file']['name'])) {
             throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
         }
 
@@ -96,7 +96,7 @@ if($product) {
                 }
                 $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key, 'isPublic'=>1));
             }
-            unlink($tempFolder . $_FILES['file']['name']);
+           // unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
             foreach ($ids as $key => $val) {
                 $this->app->dbAdapter->insert("ProductHasProductPhoto", ["productId" => $product->id, "productVariantId" => $product->productVariantId, "productPhotoId" => $val]);
