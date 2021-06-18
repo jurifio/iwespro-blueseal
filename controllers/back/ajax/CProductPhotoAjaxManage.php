@@ -86,7 +86,7 @@ class CProductPhotoAjaxManage extends AAjaxController
                 foreach($res as $result){
                     $orderMax=$result['orderMax'];
                 }
-                if(isNull($orderMax)){
+                if($orderMax==null){
                     $orderMax=1;
                 }
                 $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key, 'isPublic'=>1));
