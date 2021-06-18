@@ -71,7 +71,7 @@ if($product) {
 
         try{
             $res = $image->process($_FILES['file']['name'], $fileName, $config['bucket'], $product->productBrand->slug);
-        }catch(RedPandaAssetException $e){
+        }catch( \Throwable $e){
             $this->app->router->response()->raiseProcessingError();
             return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
         }
