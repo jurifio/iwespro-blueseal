@@ -52,6 +52,7 @@ if($product) {
 
     public function post()
     {
+
         $product = \Monkey::app()->repoFactory->create('Product')->findOne([$this->app->router->request()->getRequestData('id'),
             $this->app->router->request()->getRequestData('productVariantId')]);
         $this->app->vendorLibraries->load("amazon2723");
