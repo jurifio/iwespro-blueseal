@@ -57,7 +57,7 @@ $(document).on('bs.add.photo', function (e){
         maxFilesize: 4,
         maxFiles: 10,
         parallelUploads: 10,
-        acceptedFiles: "image/jpeg,video/*",
+        acceptedFiles: "image/jpg, video/*",
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
         uploadMultiple: false,
         sending: function(file, xhr, formData) {

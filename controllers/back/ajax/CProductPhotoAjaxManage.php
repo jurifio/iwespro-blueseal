@@ -80,7 +80,16 @@ class CProductPhotoAjaxManage extends AAjaxController
                 if (empty($futureDummy)) {
                     $futureDummy = $val;
                 }
-                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $fileName['number'], 'size' => $key));
+                $orderMax=1;
+                $sql="select (max(`order`)+1) as orderMax from ProductPhoto where `name` like  '%".$product->id.'-'.$product->productVariantId."%'";
+                $res=$this->app->dbAdapter->query($sql,[])->fetchAll();
+                foreach($res as $result){
+                    $orderMax=$result['orderMax'];
+                }
+                if($orderMax==null){
+                    $orderMax=1;
+                }
+                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key, 'isPublic'=>1));
             }
             unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
