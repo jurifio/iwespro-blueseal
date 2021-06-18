@@ -115,7 +115,8 @@ $(document).ready(function () {
 
         });
 
-
+    });
+});
     $(document).on('bs.marketplaceaccountshop-account.save', function () {
         let bsModal = new $.bsModal('Modifica Aggregatore Account', {
             body: '<p>Confermare?</p>'
@@ -166,6 +167,9 @@ $(document).ready(function () {
         });
     });
 
+
+
+
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -179,8 +183,5 @@ $(document).ready(function () {
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
     }
-
-});
-
 
 
