@@ -56,13 +56,12 @@ if($product) {
             $this->app->router->request()->getRequestData('productVariantId')]);
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-       // $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder').'-movePhoto'."/";
+        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-        if (!move_uploaded_file($_FILES['file']['name'], $tempFolder . $_FILES['file']['name'])) {
-            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['name'].' in ' .$tempFolder.$_FILES['file']['name']);
+        if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
+            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
         }
 
 
@@ -72,7 +71,7 @@ if($product) {
 
         try{
             $res = $image->process($_FILES['file']['name'], $fileName, $config['bucket'], $product->productBrand->slug);
-        }catch( \Throwable $e){
+        }catch( RedPandaAssetException $e){
             $this->app->router->response()->raiseProcessingError();
             return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
         }
