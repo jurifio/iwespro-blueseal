@@ -517,7 +517,6 @@ function modifyDelivery(orderId,orderLineId){
 	modal.setOkEvent(function () {
 		modal.setOkEvent(function () {
 			modal.hide();
-			$('.table').DataTable().ajax.reload(null, false);
 		});
 		let date = $('#shipmentDate').val();
 		let carrier = $('#carrierSelect').val();
