@@ -192,7 +192,7 @@ class CShipmentOrderManageController extends AAjaxController
         $shipment = $shipmentRepo->findOneBy(['id' => $shipmentId]);
         $remoteShipmentId = $shipment->remoteShipmentId;
         $remoteShopShipmentId = $shipment->remoteShopShipmentId;
-        if (!is_null($carrier->implementation) && ($trackingNumber == '')) {
+        if ($carrier->implementation!='' && $trackingNumber == '') {
             // creo chiamata api corriere e creo spedizione
             $orderLineHasShipment->delete();
             $shipmentRepo->newOrderShipmentToClientSingleLine($carrierId,$trackingNumber,$time,$order,$orderLineId);
@@ -221,12 +221,13 @@ class CShipmentOrderManageController extends AAjaxController
                                                                            trackingNumber='" . $trackingNumber . "',
                                                                            shipmentDate='" . (new \DateTime($shippingDate))->format('Y-m-d H:i:s') . "'
                                                                            where id=" . $remoteShipmentId);
-                $stmtShipmentUpdate->execute();
+                $stmtShipmentInsert->execute();
             }
 
 
             // controllo se l'ordine è un ordine parallelo o è ecommerce e aggiorno i relatvi database
-        } elseif (is_null($carrier->implementation) && ($trackingNumber != '')) {
+        } else {
+
             // aggiorno la spedizione con il nuovo tracking number
             $shipment->trackingNumber = $trackingNumber;
             $shipment->shipmentDate = (new \DateTime($shippingDate))->format('Y-m-d H:i:s');
@@ -235,8 +236,7 @@ class CShipmentOrderManageController extends AAjaxController
 
             // controllo se l'orinde è un ordine parallelo o è ecommerce e aggiorno i relativi database
 
-        } else {
-            return 'seleziona non valida';
+
         }
         if ($hasEcommerce == 1) {
 
