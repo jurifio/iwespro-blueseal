@@ -301,8 +301,7 @@ function createDelivery(orderId,orderLineId){
 		let carrier = $('#carrierSelect').val();
 		let fromAddress= $('#addressBook').val();
 		let trackingNumber=$('#trackingNumber').val();
-		let orderId=orderId;
-		let orderLineId=orderLineId;
+		orderLineId;
 		modal.showLoader();
 		$.ajax({
 			method: "post",
@@ -412,8 +411,8 @@ function addToOtherDelivery(orderId,orderLineId){
 		let carrier = $('#carrierSelect').val();
 		let fromAddress= $('#addressBook').val();
 		let bookingNumber=$('#bookingNumber').val();
-		let orderId=orderId;
-		let orderLineId=orderLineId;
+		orderId;
+		orderLineId;
 		modal.showLoader();
 		$.ajax({
 			method: "put",
@@ -524,8 +523,6 @@ function modifyDelivery(orderId,orderLineId){
 		let carrier = $('#carrierSelect').val();
 		let fromAddress= $('#addressBook').val();
 		let trackingNumber=$('#trackingNumber').val();
-		let orderId=orderId;
-		let orderLineId=orderLineId;
 		modal.showLoader();
 		$.ajax({
 			method: "post",
