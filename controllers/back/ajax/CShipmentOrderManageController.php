@@ -16,6 +16,8 @@ use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\SDateToolbox;
 use bamboo\utils\time\STimeToolbox;
 use DateTime;
+use PDO;
+use PDOException;
 
 /**
  * Class CShipmentManageController
@@ -151,7 +153,7 @@ class CShipmentOrderManageController extends AAjaxController
                 $findShipment->update();
 
             }
-            return true;
+            return $shipmentId;
         } else {
             return 'C\'è stato un problema';
         }
@@ -256,7 +258,7 @@ class CShipmentOrderManageController extends AAjaxController
         }
 
 
-        return true;
+        return $shipmentId;
     }
 
     /**

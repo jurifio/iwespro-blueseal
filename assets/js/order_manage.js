@@ -316,7 +316,7 @@ function createDelivery(orderId,orderLineId){
 			},
 			dataType: "json"
 		}).done(function (res) {
-			modal.writeBody('Creata distinta numero: ' + res.id);
+			modal.writeBody('Creata distinta numero: ' + res);
 		});
 	});
 
@@ -531,12 +531,13 @@ function modifyDelivery(orderId,orderLineId){
 				fromAddressId: fromAddress,
 				carrierId: carrier,
 				orderId:orderId,
-				orderLineId:orderLineId
+				orderLineId:orderLineId,
+				trackingNumber:trackingNumber
 
 			},
 			dataType: "json"
 		}).done(function (res) {
-			modal.writeBody('Creata distinta numero: ' + res.id);
+			modal.writeBody('Modifica spedizione  numero : ' + res);
 		});
 	});
 
