@@ -65,7 +65,7 @@ class CShipmentOrderManageController extends AAjaxController
         /** @var CShipmentRepo $shipmentRepo */
         $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
         $carrierRepo = \Monkey::app()->repoFactory->create('Carrier');
-        $carrier = $carrierRepo->finOneBy(['id' => $carrierId]);
+        $carrier = $carrierRepo->findOneBy(['id' => $carrierId]);
         $time = $carrier->prenotationTimeLimit;
         $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
         $remoteShopSellerId = $order->remoteShopSellerId;
@@ -174,7 +174,7 @@ class CShipmentOrderManageController extends AAjaxController
         /** @var CShipmentRepo $shipmentRepo */
         $shipmentRepo = \Monkey::app()->repoFactory->create('Shipment');
         $carrierRepo = \Monkey::app()->repoFactory->create('Carrier');
-        $carrier = $carrierRepo->finOneBy(['id' => $carrierId]);
+        $carrier = $carrierRepo->findOneBy(['id' => $carrierId]);
         $time = $carrier->prenotationTimeLimit;
         $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
         $remoteShopSellerId = $order->remoteShopSellerId;
