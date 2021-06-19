@@ -80,9 +80,13 @@ class CShipmentOrderManageController extends AAjaxController
         if ($shop->hasEcommerce == 1) {
             $hasEcommerce = 1;
         }
+        $orderLineHasShipment=\Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['orderId'=>$orderId,'orderLineId'=>$orderLineId]);
+        if($orderLineHasShipment){
+            $orderLineHasShipment->delete();
+        }
 
-        if ($shipmentRepo->newOrderShipmentFromSupplierToClientSingleLine($carrierId,$fromId,$bookingNumber,$shippingDate,$orderLineId,$ordeId)) {
-            $sql = 'select shipmentId from OrderLineHasShipment where orderId=' . $orderId . '  and orderLineId=' . $orderlineId;
+        if ($shipmentRepo->newOrderShipmentFromSupplierToClientSingleLine($carrierId,$fromAddressBookId,$bookingNumber,$shippingDate,$orderLineId,$orderId)) {
+            $sql = 'select shipmentId from OrderLineHasShipment where orderId=' . $orderId . '  and orderLineId=' . $orderLineId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
                 $shipmentId = $result['shipmentId'];
@@ -90,9 +94,10 @@ class CShipmentOrderManageController extends AAjaxController
 
             if ($hasEcommerce == 1) {
                 $newShipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id' => $shipmentId]);
-                $newShipment->remoteShopShipmentId = $remoteShopShipmentId;
+                $newShipment->remoteShopShipmentId = $remoteShopSellerId;
                 $newShipment->update();
                 $findShipment = \Monkey::app()->repoFactory->create('Shipment')->findOneBy(['id' => $shipmentId]);
+                $remoteShopShipmentId=$remoteShopSellerId;
                 try {
 
                     $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);

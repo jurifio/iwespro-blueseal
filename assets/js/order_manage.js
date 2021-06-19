@@ -215,7 +215,7 @@ function createDelivery(orderId,orderLineId){
 	let today = new Date().toISOString().slice(0, 10);
 	let modal = new $.bsModal('Aggiungi una nuova spedizione ', {
 			body:
-				'<div id="trackingDiv" class="hide"><label for="trackingNumber">TrackingNumber</label>'+
+				'<div id="trackingDiv" class="show"><label for="trackingNumber">Booking Number</label>'+
 				'<input class="form-control" type="text" id="trackingNumber" name="trackingNumber" value=""></div>'+
 				'<label for="addressBook">Da</label>' +
 				'<select id="addressBook" class="full-width selectize" name="addressBook"></select>' +
@@ -295,23 +295,22 @@ function createDelivery(orderId,orderLineId){
 	modal.setOkEvent(function () {
 		modal.setOkEvent(function () {
 			modal.hide();
-			$('.table').DataTable().ajax.reload(null, false);
 		});
 		let date = $('#shipmentDate').val();
 		let carrier = $('#carrierSelect').val();
 		let fromAddress= $('#addressBook').val();
-		let trackingNumber=$('#trackingNumber').val();
-		orderLineId;
+		let bookingNumber=$('#trackingNumber').val();
 		modal.showLoader();
 		$.ajax({
-			method: "post",
+			method: "put",
 			url: "/blueseal/xhr/ShipmentOrderManageController",
 			data: {
 				shipmentDate: date,
 				fromAddressId: fromAddress,
 				carrierId: carrier,
 				orderId:orderId,
-				orderLineId:orderLineId
+				orderLineId:orderLineId,
+				bookingNumber:bookingNumber
 
 			},
 			dataType: "json"
@@ -411,8 +410,6 @@ function addToOtherDelivery(orderId,orderLineId){
 		let carrier = $('#carrierSelect').val();
 		let fromAddress= $('#addressBook').val();
 		let bookingNumber=$('#bookingNumber').val();
-		orderId;
-		orderLineId;
 		modal.showLoader();
 		$.ajax({
 			method: "put",
