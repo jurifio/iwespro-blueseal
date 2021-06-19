@@ -79,7 +79,7 @@ class CShipmentOrderManageController extends AAjaxController
             $hasEcommerce = 1;
         }
 
-        if ($shipmentRepo->newOrderShipmentFromSupplierToClientSingleLine($carrierId,$fromId,$bookingNumber,$time,$orderLineId,$ordeId)) {
+        if ($shipmentRepo->newOrderShipmentFromSupplierToClientSingleLine($carrierId,$fromId,$bookingNumber,$shippingDate,$orderLineId,$ordeId)) {
             $sql = 'select shipmentId from OrderLineHasShipment where orderId=' . $orderId . '  and orderLineId=' . $orderlineId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
@@ -195,7 +195,7 @@ class CShipmentOrderManageController extends AAjaxController
         if ($carrier->implementation!='' && $trackingNumber == '') {
             // creo chiamata api corriere e creo spedizione
             $orderLineHasShipment->delete();
-            $shipmentRepo->newOrderShipmentToClientSingleLine($carrierId,$trackingNumber,$time,$order,$orderLineId);
+            $shipmentRepo->newOrderShipmentToClientSingleLine($carrierId,$trackingNumber,$shippingDate,$order,$orderLineId);
             $sql = 'select shipmentId from OderLineHasShipment where orderId=' . $orderId . '  and orderLineId=' . $orderlineId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
