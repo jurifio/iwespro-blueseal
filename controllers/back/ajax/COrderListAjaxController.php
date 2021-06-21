@@ -394,7 +394,7 @@ class COrderListAjaxController extends AAjaxController
             $addressOrder = '';
             $address = CUserAddress::defrost($val->frozenShippingAddress);
             $address = $address != false ? $address : CUserAddress::defrost($val->frozenBillingAddress);
-            $tableAddress = $val->user->userAddress->findOneByKey('id',$address->id);
+            $tableAddress = $val->user->userAddress->findOneBy('id',$address->id);
 
             $country = $countryR->findOneBy(['id' => $address->countryId]);
             if ($country != null) {
