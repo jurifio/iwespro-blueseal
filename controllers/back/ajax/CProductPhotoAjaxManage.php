@@ -85,7 +85,7 @@ if($product) {
                     $futureDummy = $val;
                 }
                 $orderMax=1;
-                $sql="select (max(`order`)+1) as orderMax from ProductPhoto where `name` like  '%".$product->id.'-'.$product->productVariantId."%'";
+                $sql="select (max(`order`)+1) as orderMax from ProductPhoto where `name` like  '%".$product->id.'-'.$product->productVariantId."%' and size ='1024'";
                 $res=$this->app->dbAdapter->query($sql,[])->fetchAll();
                 foreach($res as $result){
                     $orderMax=$result['orderMax'];
@@ -93,7 +93,7 @@ if($product) {
                 if($orderMax==null){
                     $orderMax=1;
                 }
-                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'size' => $key, 'isPublic'=>1));
+                $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'mime'=>'image/jpeg', 'size' => $key, 'isPublic'=>1));
             }
            // unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
