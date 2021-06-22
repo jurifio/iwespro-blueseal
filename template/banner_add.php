@@ -54,7 +54,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group form-group-default">
                                         <button type="button" class="btn btn-primary" name="uploadLogo"
-                                                id="uploadLogo">carica Banner
+                                                id="uploadLogo">carica Banner L281 X H374
                                         </button>
                                         <input id="textHtml" type="hidden" value=""/>
                                         <div id="returnFileLogo"></div>
