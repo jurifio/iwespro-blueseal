@@ -11,6 +11,7 @@ use bamboo\domain\entities\COrderLine;
 use bamboo\domain\entities\CCarrier;
 use bamboo\domain\entities\CShipment;
 use bamboo\domain\entities\CShipmentFault;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\SDateToolbox;
@@ -184,6 +185,7 @@ class CShipmentOrderManageController extends AAjaxController
         $carrier = $carrierRepo->findOneBy(['id' => $carrierId]);
         $time = $carrier->prenotationTimeLimit;
         $order = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+        $orderLine=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['id'=>$orderLineId,'orderId' => $orderId]);
         $remoteShopSellerId = $order->remoteShopSellerId;
         $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopSellerId]);
         $db_host = $shop->dbHost;
@@ -261,6 +263,21 @@ class CShipmentOrderManageController extends AAjaxController
                                                                            where id=" . $remoteShipmentId);
             $stmtShipmentUpdate->execute();
         }
+        try{
+            $stmtOrderUpdate=$db_con->prepare("Update OrderLine  set `status`='ORD_SENT'
+                                                                        
+                                                                           where orderId=" . $orderLine->remoteOrderSellerId . " and  id=".$orderLine->remoteOrderLineSellerId);
+            $stmtOrderUpdate->execute();
+        } catch (PDOException $e) {
+            $res = $e->getMessage();
+        }
+        $to = [$order->user->email];
+        $lang=\Monkey::app()->repoFactory->create('Lang')->findOneBy(['id'=>$order->user->langId]);
+        /** @var CEmailRepo $emailRepo */
+        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+        $res = $emailRepo->newPackagedMail('shipmentclient','no-reply', $to,[],[],
+            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'shopLogo'=>$shop->logoSite,'urlSite'=>$shop->urlSite],'mailGun',null);
+
 
 
         return $shipmentId;
