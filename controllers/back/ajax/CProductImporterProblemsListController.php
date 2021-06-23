@@ -97,7 +97,7 @@ class CProductImporterProblemsListController extends AAjaxController
                                                             FROM ProductHasProductPhoto), 'sì', 'no') ='sì' and
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
-              and p.qty > 0
+              and ds.qty > 0
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
 
