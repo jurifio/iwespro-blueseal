@@ -57,7 +57,7 @@ class CShipmentOrderManageController extends AAjaxController
     public function put()
     {
         $request = $this->app->router->request();
-        $fromAddressBookId = $request->getRequestData('fromAddressId');
+        $fromAddressBookId = $request->getRequestData('fromAddress');
         $carrierId = $request->getRequestData('carrierId');
         $shippingDate = $request->getRequestData('shipmentDate');
         $orderId = $request->getRequestData('orderId');
@@ -199,6 +199,12 @@ class CShipmentOrderManageController extends AAjaxController
         $orderLineHasShipment = \Monkey::app()->repoFactory->create('OrderLineHasShipment')->findOneBy(['orderId' => $orderId,'orderLineId' => $orderLineId]);
         $shipmentId = $orderLineHasShipment->shipmentId;
         $shipment = $shipmentRepo->findOneBy(['id' => $shipmentId]);
+        $to = [$order->user->email];
+        $lang=\Monkey::app()->repoFactory->create('Lang')->findOneBy(['id'=>$order->user->langId]);
+        /** @var CEmailRepo $emailRepo */
+        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+        $emailRepo->newPackagedMail('shipmentclient','no-reply', $to,[],[],
+            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$shop->logoSite,'urlSite'=>$shop->urlSite],'mailGun',null);
         $remoteShipmentId = $shipment->remoteShipmentId;
         $remoteShopShipmentId = $shipment->remoteShopShipmentId;
         if ($carrier->implementation!='' && $trackingNumber == '') {
@@ -239,7 +245,7 @@ class CShipmentOrderManageController extends AAjaxController
 
             // aggiorno la spedizione con il nuovo tracking number
             $shipment->trackingNumber = $trackingNumber;
-            $shipment->shipmentDate = (new \DateTime($shippingDate))->format('Y-m-d H:i:s');
+            $shipment->shipmentDate = STimeToolbox::DbFormattedDateTime($shippingDate);
             $shipment->fromAddressBookId = $fromAddressBookId;
             $shipment->update();
 
@@ -247,6 +253,7 @@ class CShipmentOrderManageController extends AAjaxController
 
 
         }
+
         if ($hasEcommerce == 1) {
 
             try {
@@ -257,26 +264,22 @@ class CShipmentOrderManageController extends AAjaxController
             } catch (PDOException $e) {
                 $res = $e->getMessage();
             }
+            try{
+                $stmtOrderUpdate=$db_con->prepare("Update OrderLine  set `status`='ORD_SENT'
+                                                                        
+                                                                           where orderId=" . $orderLine->remoteOrderSellerId . " and  id=".$orderLine->remoteOrderLineSellerId);
+                $stmtOrderUpdate->execute();
+            } catch (PDOException $e) {
+                $res = $e->getMessage();
+            }
+
             $stmtShipmentUpdate = $db_con->prepare("Update Shipment  set carrierId=" . $carrierId . ",
                                                                            trackingNumber='" . $trackingNumber . "',
-                                                                           shipmentDate='" . (new \DateTime($shippingDate))->format('Y-m-d H:i:s') . "'
+                                                                           shipmentDate='" . STimeToolbox::DbFormattedDateTime($shippingDate) . "'
                                                                            where id=" . $remoteShipmentId);
             $stmtShipmentUpdate->execute();
         }
-        try{
-            $stmtOrderUpdate=$db_con->prepare("Update OrderLine  set `status`='ORD_SENT'
-                                                                        
-                                                                           where orderId=" . $orderLine->remoteOrderSellerId . " and  id=".$orderLine->remoteOrderLineSellerId);
-            $stmtOrderUpdate->execute();
-        } catch (PDOException $e) {
-            $res = $e->getMessage();
-        }
-        $to = [$order->user->email];
-        $lang=\Monkey::app()->repoFactory->create('Lang')->findOneBy(['id'=>$order->user->langId]);
-        /** @var CEmailRepo $emailRepo */
-        $emailRepo = \Monkey::app()->repoFactory->create('Email');
-        $res = $emailRepo->newPackagedMail('shipmentclient','no-reply', $to,[],[],
-            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'shopLogo'=>$shop->logoSite,'urlSite'=>$shop->urlSite],'mailGun',null);
+
 
 
 
