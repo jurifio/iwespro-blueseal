@@ -203,12 +203,21 @@ class CShipmentOrderManageController extends AAjaxController
         $lang=\Monkey::app()->repoFactory->create('Lang')->findOneBy(['id'=>$order->user->langId]);
         $urlSite=$shop->urlSite;
         $logoSite=$shop->logoSite;
-        $noreply='no-reply@'.str_replace('https://www.','',$urlSite);
+        $product=\Monkey::app()->repoFactory->create('Product')->findOneBy(['id' =>$orderLine->productId,'productVariantId'=>$orderLine->productVariantId]);
+        $productBrandId=$product->productBrandId;
+        $sql = "SELECT DISTINCT p.id,p.productVariantId 
+                FROM Product p join ShopHasProduct shp on p.id=shp.productId and p.productVariantId=shp.productVariantId where 
+                 p.qty > 0 and 
+                 p.productBrandId= ?               and   
+                 shp.shopId=?       and                                                                                                        
+                p.productStatusId in (6,11) limit 6";
+
+        $productBrand = $this->app->dbAdapter->query($sql, [$productBrandId,$shop->id])->fetchAll();
+
         /** @var CEmailRepo $emailRepo */
         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-
         $emailRepo->newPackagedMail('shipmentclient','no-reply@iwes.pro', $to,[],[],
-            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$logoSite,'urlSite'=>$shop->urlSite],'mailGun',null);
+            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$logoSite,'urlSite'=>$shop->urlSite,'productBrand'=>$productBrand],'mailGun',null);
         $remoteShipmentId = $shipment->remoteShipmentId;
         $remoteShopShipmentId = $shipment->remoteShopShipmentId;
         if ($carrier->implementation!='' && $trackingNumber == '') {
