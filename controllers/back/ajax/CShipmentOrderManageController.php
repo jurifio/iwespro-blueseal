@@ -201,10 +201,14 @@ class CShipmentOrderManageController extends AAjaxController
         $shipment = $shipmentRepo->findOneBy(['id' => $shipmentId]);
         $to = [$order->user->email];
         $lang=\Monkey::app()->repoFactory->create('Lang')->findOneBy(['id'=>$order->user->langId]);
+        $urlSite=$shop->urlSite;
+        $logoSite=$shop->logoSite;
+        $noreply='no-reply@'.str_replace('https://www.','',$urlSite);
         /** @var CEmailRepo $emailRepo */
         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-        $emailRepo->newPackagedMail('shipmentclient','no-reply', $to,[],[],
-            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$shop->logoSite,'urlSite'=>$shop->urlSite],'mailGun',null);
+
+        $emailRepo->newPackagedMail('shipmentclient',$noreply.$urlSite, $to,[],[],
+            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$logoSite,'urlSite'=>$shop->urlSite],'mailGun',null);
         $remoteShipmentId = $shipment->remoteShipmentId;
         $remoteShopShipmentId = $shipment->remoteShopShipmentId;
         if ($carrier->implementation!='' && $trackingNumber == '') {
