@@ -217,7 +217,7 @@ class CShipmentOrderManageController extends AAjaxController
         /** @var CEmailRepo $emailRepo */
         $emailRepo = \Monkey::app()->repoFactory->create('Email');
         $emailRepo->newPackagedMail('shipmentclient','no-reply@iwes.pro', $to,[],[],
-            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$logoSite,'urlSite'=>$shop->urlSite,'productBrand'=>$productBrand],'mailGun',null);
+            ['order'=>$order,'orderId'=>$orderId,'shipment'=>$shipment,'lang'=>$lang->lang,'logoSite'=>$logoSite,'urlSite'=>$urlSite,'productBrand'=>$productBrand],'mailGun',null);
         $remoteShipmentId = $shipment->remoteShipmentId;
         $remoteShopShipmentId = $shipment->remoteShopShipmentId;
         if ($carrier->implementation!='' && $trackingNumber == '') {
