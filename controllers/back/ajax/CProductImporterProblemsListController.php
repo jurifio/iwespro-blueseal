@@ -161,7 +161,6 @@ class CProductImporterProblemsListController extends AAjaxController
                       JOIN DirtySku ds ON dp.id = ds.dirtyProductId 
                         
                     WHERE  
-                    ds.qty>0    and 
                     dp.productId = :productId AND 
                     dp.productVariantId = :productVariantId AND 
                     dp.shopId = :shopId', $shopHasProduct->getIds())->fetchAll();
