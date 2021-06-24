@@ -58,7 +58,7 @@ class CProductImporterProblemsListController extends AAjaxController
                   HAVING (sum(`ds`.`qty`) > 0)";
         //*/
 
-        $query="SELECT
+        $query="(SELECT
               `p`.`id`                                                         AS `productId`,
               `p`.`productVariantId`                                           AS `productVariantId`,
               concat(`p`.`id`, '-', `p`.`productVariantId`)                    AS `productCode`,
@@ -91,7 +91,7 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
-                ds.qty> 0  and 
+                ds.qty> 0  and ds.productSizeId is null and 
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
@@ -100,7 +100,49 @@ class CProductImporterProblemsListController extends AAjaxController
               `ps`.`id` NOT IN (6, 7, 8, 12, 13,14)
                AND (`s`.`importer` IS NOT NULL)
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
-            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
+               AND sp.shopId !=1
+            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId)
+            UNION
+            (SELECT
+              `p`.`id`                                                         AS `productId`,
+              `p`.`productVariantId`                                           AS `productVariantId`,
+              concat(`p`.`id`, '-', `p`.`productVariantId`)                    AS `productCode`,
+              concat(`p`.`itemno`, ' # ', `pv`.`name`)                         AS `code`,
+              `s`.`name`                                                       AS `shop`,
+              `s`.`id`                                                         AS `shopId`,
+              `pb`.`name`                                                      AS `brand`,
+              `p`.`externalId`                                                 AS `externalId`,
+              `ps`.`name`                                                      AS `status`,
+              concat_ws('-',`psg`.`locale`, `psmg`.`name`)                     AS `sizeGroup`,
+              `p`.`creationDate`                                               AS `creationDate`,
+              group_concat(`ds`.`size` ORDER BY `ds`.`size` ASC SEPARATOR '-') AS `problems`,
+          if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), 'sì', 'no')                 AS hasPhotos,
+              productCategoryId AS categoryId
+            FROM `Product` `p`
+              JOIN `ProductVariant` `pv` ON `pv`.`id` = `p`.`productVariantId`
+              JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
+              JOIN `ProductStatus` `ps` ON `p`.`productStatusId` = `ps`.`id`
+              JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId`) AND (`p`.`productVariantId` = `dp`.`productVariantId`)
+              JOIN `DirtySku` `ds` ON `dp`.`id` = `ds`.`dirtyProductId`
+              JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`)
+                                              AND (`dp`.`productVariantId` = `sp`.`productVariantId`)
+                                              AND (`dp`.`shopId` = `sp`.`shopId`)
+              JOIN `ProductSizeGroup` `psg` ON `sp`.`productSizeGroupId` = `psg`.`id`
+              JOIN `Shop` `s` ON `sp`.`shopId` = `s`.`id`
+              LEFT JOIN ProductSizeMacroGroup psmg ON psg.productSizeMacroGroupId = psmg.id
+
+              LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
+            WHERE
+                ds.qty> 0  and ds.productSizeId is null  and
+                  
+              `ps`.`id` NOT IN (6, 7, 8, 12, 13,14)
+               AND (`s`.`importer` IS NOT NULL)
+               AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
+               AND sp.shopId =1
+            GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId)";
 
         $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
         if (!empty($this->authorizedShops)) {
