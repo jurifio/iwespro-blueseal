@@ -91,14 +91,15 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
+                  ds.productSizeId IS  not NULL AND 
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 'sì', 'no') ='sì' and
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
-              and ds.qty > 0
-               AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
+             
+               AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL  )
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
 
         $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
