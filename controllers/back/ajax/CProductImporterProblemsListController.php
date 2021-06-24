@@ -91,13 +91,13 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
-                   (ds.qty> 0 and ds.productSizeId is  null) and 
+                ds.qty> 0  and 
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), 'sì', 'no') ='sì' and
                   
-              `ps`.`id` NOT IN (6, 7, 8, 12, 13)
+              `ps`.`id` NOT IN (6, 7, 8, 12, 13,14)
                AND (`s`.`importer` IS NOT NULL)
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId";
