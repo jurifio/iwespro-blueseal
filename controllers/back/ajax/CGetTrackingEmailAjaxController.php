@@ -116,7 +116,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
                     'from' => $from,
                     'to' => $to,
                     'subject' => $subject,
-                    'link' => $link
+                    'link' => $link,
+                    'ok'=>'1'
                 ]);
             }
 
@@ -180,7 +181,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
                 'from'=>$from,
                 'to'=>$to,
                 'subject'=>$subject,
-                'link'=>$link
+                'link'=>$link,
+                'ok'=>'1'
             ]);
 
         }
@@ -243,7 +245,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
                 'from'=>$from,
                 'to'=>$to,
                 'subject'=>$subject,
-                'link'=>$link
+                'link'=>$link,
+                'ok'=>'1'
             ]);
 
         }
@@ -306,7 +309,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
                 'from'=>$from,
                 'to'=>$to,
                 'subject'=>$subject,
-                'link'=>$link
+                'link'=>$link,
+                'ok'=>'1'
             ]);
 
         }
@@ -370,7 +374,8 @@ class CGetTrackingEmailAjaxController extends AAjaxController
                     'from' => $from,
                     'to' => $to,
                     'subject' => $subject,
-                    'link' => $link
+                    'link' => $link,
+                    'ok'=>'1'
                 ]);
             }
 

@@ -210,6 +210,56 @@ function openTrackDelivery(trackingNumber) {
 	});
 
 }
+function openTrackEmail(orderId) {
+	var modal1 = new $.bsModal('Elenco Comunicazioni', {
+		body: 'Email'
+	});
+
+
+	Pace.ignore(function () {
+		$.ajax({
+			url: '/blueseal/xhr/GetTrackingEmailAjaxController',
+			method: 'get',
+			dataType: 'json',
+			data: {orderId: orderId}
+		}).done(function (res) {
+			let bodyemail =
+				'<table class="table">' +
+				'<thead>' +
+				'<tr>' +
+				'<td align="center"><b>Ordine</b></td><td align="center"><b>oraInvio</b></td><td align="center"><b>Email Mittente</b></td><td align="center"><b>Email Destinatario</b></td><td align="center"><b>Mittente</b></td><td align="center"><b>Destinatario</b></td><td align="center"><b>Oggetto</b></td><td align="center"><b>link</b></td>' +
+				'</tr>' +
+				'</thead>' +
+				'<tbody>';
+			for (let i in res) {
+				if(res[i].ok=='1') {
+					bodyemail += '<tr>' +
+						'<td align="center"><font color="blue"<b>' + orderId + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].oraInvio + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].sender + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].targets + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].from + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].to + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].subject + '</b></font></td>' +
+						'<td align="center"><font color="blue"<b>' + res[i].link + '</b></font></td>';
+				}else{
+
+				}
+
+
+			}
+			bodyemail +=
+				'</tbody>' +
+				'</table>';
+
+
+			modal1.body.append(bodyemail);
+			modal1.addClass('modal-wide');
+			modal1.addClass('modal-high');
+		});
+	});
+
+}
 
 function createDelivery(orderId,orderLineId){
 	let today = new Date().toISOString().slice(0, 10);

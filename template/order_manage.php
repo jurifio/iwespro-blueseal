@@ -3,7 +3,7 @@
 <html>
 <head>
     <?php include "parts/head.php" ?>
-    <?php echo $app->getAssets(['ui','forms'], $page); ?>
+    <?php echo $app->getAssets(['ui','forms'],$page); ?>
     <title>BlueSeal - <?php echo $page->getTitle(); ?></title>
 </head>
 <body class="fixed-header">
@@ -36,11 +36,15 @@
                                               method="put">
                                             <input id="orderId" class="hidden" type="hidden" name="order_id"
                                                    value="<?php echo $order->id; ?>"/>
-
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12">
+                                                    <?php echo '<button onclick="openTrackEmail(\'' . $order->id . '\');" class="btn btn-light" role="button"><i class="fa fa-envelope" aria-hidden="true"></i> Comunicazioni</button>' ?>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-lg-10 col-md-10">
                                                     <div
-                                                        class="form-group form-group-default selectize-enabled">
+                                                            class="form-group form-group-default selectize-enabled">
                                                         <label class="">Stato dell'ordine</label>
                                                         <select id="orderStatus" class="full-width"
                                                                 placeholder="Seleziona lo stato"
@@ -48,7 +52,8 @@
                                                                 name="order_status" title="Seleziona lo stato">
                                                             <?php foreach ($statuses as $status): ?>
                                                                 <option
-                                                                    <?php if ($status->code == $order->status) echo 'selected="selected" '?> value="<?php echo $status->id ?>"><?php echo $status->title ?>
+                                                                    <?php if ($status->code == $order->status) echo 'selected="selected" ' ?>
+                                                                        value="<?php echo $status->id ?>"><?php echo $status->title ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>
@@ -65,7 +70,8 @@
                                                 <div class="col-lg-12 col-md-12">
                                                     <div class="form-group form-group-default">
                                                         <label class="">Stato dell'ordine</label>
-                                                        <input id="orderNote" name="order_note" autocomplete="off" class="full-width" value="<?php echo $order->note ?>"/>
+                                                        <input id="orderNote" name="order_note" autocomplete="off"
+                                                               class="full-width" value="<?php echo $order->note ?>"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -73,7 +79,9 @@
                                                 <div class="col-lg-12 col-md-12">
                                                     <div class="form-group form-group-default  ">
                                                         <label class="">Note di Spedizione</label>
-                                                        <input id="shipmentNote" name="order_shipmentNote" autocomplete="off" class="full-width" value="<?php echo $order->shipmentNote ?>"/>
+                                                        <input id="shipmentNote" name="order_shipmentNote"
+                                                               autocomplete="off" class="full-width"
+                                                               value="<?php echo $order->shipmentNote ?>"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -81,18 +89,23 @@
                                                 <div class="col-lg-12 col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label class="">Tipo di Spedizione</label>
-                                                        <select id="isShippingToIwes" name="isShippingToIwes" class="full-width"
+                                                        <select id="isShippingToIwes" name="isShippingToIwes"
+                                                                class="full-width"
                                                                 placeholder="Seleziona il tipo "
                                                                 data-init-plugin="selectize" tabindex="-1"
-                                                                <?php if($order->isShippingToIwes==1){?>
-                                                        <option value="" >Seleziona</option>
-                                                        <option value="1" selected="selected">Spedizione Gestita da Iwes</option>
-                                                        <option value="">Spedizione in dropShipping</option>
-                                                                <?php } else {?>
-                                                         <option value="" >Seleziona</option>
-                                                        <option value="1" >Spedizione Gestita da Iwes</option>
-                                                        <option value="null" selected="selected">Spedizione in dropShipping</option>
-                                                                <?php }?>
+                                                        <?php if ($order->isShippingToIwes == 1) { ?>
+                                                            <option value="">Seleziona</option>
+                                                            <option value="1" selected="selected">Spedizione Gestita da
+                                                                Iwes
+                                                            </option>
+                                                            <option value="">Spedizione in dropShipping</option>
+                                                        <?php } else { ?>
+                                                            <option value="">Seleziona</option>
+                                                            <option value="1">Spedizione Gestita da Iwes</option>
+                                                            <option value="null" selected="selected">Spedizione in
+                                                                dropShipping
+                                                            </option>
+                                                        <?php } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -134,9 +147,9 @@
                                     <div class="panel-body">
                                         <address class="margin-bottom-20 margin-top-10">
                                             <?php
-                                            $address =\bamboo\domain\entities\CUserAddress::defrost($order->frozenShippingAddress);
+                                            $address = \bamboo\domain\entities\CUserAddress::defrost($order->frozenShippingAddress);
                                             $address = $address != false ? $address : \bamboo\domain\entities\CUserAddress::defrost($order->frozenBillingAddress);
-                                            $tableAddress = $order->user->userAddress->findOneByKey('id', $address->id);
+                                            $tableAddress = $order->user->userAddress->findOneByKey('id',$address->id);
                                             if (!$tableAddress): ?>
                                                 <span><strong>Attenzione, l'utente ha eliminato l'indirizzo in
                                                         spedizione</strong></span><br><br>
@@ -144,7 +157,7 @@
                                                 <span><strong>Attenzione, l'utente ha modificato il suo indirizzo dopo
                                                         aver effettuato l'ordine</strong></span><br><br>
                                             <?php endif;
-                                            $country = $countries->findOneByKey('id', $address->countryId);
+                                            $country = $countries->findOneByKey('id',$address->countryId);
                                             ?>
                                             <span><strong>Destinatario: </strong> <?php echo $address->name . ' ' . $address->surname ?></span><br>
                                             <span><strong>Indirizzo: </strong> <?php echo $address->address ?></span><br>
@@ -184,17 +197,17 @@
                                 <div class="panel-body">
                                     <div>
                                         <span><strong>Totale
-                                                Merce: </strong> <?php echo number_format($order->grossTotal, 2); ?></span><br>
+                                                Merce: </strong> <?php echo number_format($order->grossTotal,2); ?></span><br>
                                         <span><strong>Totale Da
-                                                Pagare: </strong> <?php echo number_format($order->netTotal, 2) ?></span><br>
+                                                Pagare: </strong> <?php echo number_format($order->netTotal,2) ?></span><br>
                                         <span><strong>Sconto
-                                                Coupon: </strong> <?php echo isset($order->couponDiscount) ? number_format($order->couponDiscount, 2) : 0 ?></span><br>
+                                                Coupon: </strong> <?php echo isset($order->couponDiscount) ? number_format($order->couponDiscount,2) : 0 ?></span><br>
                                         <span><strong>Modifica
-                                                Pagamento: </strong> <?php echo isset($order->paymentModifier) ? number_format($order->paymentModifier, 2) : 0 ?></span><br>
+                                                Pagamento: </strong> <?php echo isset($order->paymentModifier) ? number_format($order->paymentModifier,2) : 0 ?></span><br>
                                         <span><strong>Sconto
-                                                Utente: </strong> <?php echo isset($order->userDiscount) ? number_format($order->userDiscount, 2) : 0 ?></span><br>
+                                                Utente: </strong> <?php echo isset($order->userDiscount) ? number_format($order->userDiscount,2) : 0 ?></span><br>
                                         <span><strong>Spese
-                                                Spedizione: </strong> <?php echo isset($order->shippingPrice) ? number_format($order->shippingPrice, 2) : 0 ?></span><br>
+                                                Spedizione: </strong> <?php echo isset($order->shippingPrice) ? number_format($order->shippingPrice,2) : 0 ?></span><br>
                                     </div>
                                 </div>
                             </div>
@@ -255,27 +268,27 @@
 <bs-toolbar class="toolbar-definition">
     <bs-toolbar-group data-group-label="Gestione ordine">
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-print"
-            data-permission="/admin/order/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Stampa ordine"
-            data-placement="bottom"
-            data-href="<?php echo $orderPrint . '?orderId='.$order->id ; ?>"
+                data-tag="a"
+                data-icon="fa-print"
+                data-permission="/admin/order/list"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Stampa ordine"
+                data-placement="bottom"
+                data-href="<?php echo $orderPrint . '?orderId=' . $order->id; ?>"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-tag="a"
-            data-icon="fa-file-o fa-archive"
-            data-permission="/admin/order/list"
-            data-class="btn btn-default"
-            data-rel="tooltip"
-            data-title="Stampa fattura"
-            data-placement="bottom"
-            data-href="<?php echo  $invoicePrint .'?orderId='.$order->id ; ?>"
+                data-tag="a"
+                data-icon="fa-file-o fa-archive"
+                data-permission="/admin/order/list"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Stampa fattura"
+                data-placement="bottom"
+                data-href="<?php echo $invoicePrint . '?orderId=' . $order->id; ?>"
         ></bs-toolbar-button>
         <bs-toolbar-button
-            data-remote="bs.order.pay"
+                data-remote="bs.order.pay"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.order.ModifyPayment"
