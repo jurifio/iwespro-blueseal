@@ -63,6 +63,7 @@ class CProductImporterProblemsListController extends AAjaxController
               `p`.`productVariantId`                                           AS `productVariantId`,
               concat(`p`.`id`, '-', `p`.`productVariantId`)                    AS `productCode`,
               concat(`p`.`itemno`, ' # ', `pv`.`name`)                         AS `code`,
+               ds.qty as dsSize, 
               `s`.`name`                                                       AS `shop`,
               `s`.`id`                                                         AS `shopId`,
               `pb`.`name`                                                      AS `brand`,
@@ -81,7 +82,7 @@ class CProductImporterProblemsListController extends AAjaxController
               JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
               JOIN `ProductStatus` `ps` ON `p`.`productStatusId` = `ps`.`id`
               JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId`) AND (`p`.`productVariantId` = `dp`.`productVariantId`)
-              JOIN `DirtySku` `ds` ON `dp`.`id` = `ds`.`dirtyProductId`
+              JOIN `DirtySku` `ds` ON `dp`.`id` = `ds`.`dirtyProductId` and ds.productSizeId is null and ds.qty !=0
               JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`)
                                               AND (`dp`.`productVariantId` = `sp`.`productVariantId`)
                                               AND (`dp`.`shopId` = `sp`.`shopId`)
@@ -91,7 +92,7 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
-                  ds.productSizeId IS  not NULL AND 
+                  
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
@@ -111,6 +112,9 @@ class CProductImporterProblemsListController extends AAjaxController
         $modifica = $bluesealBase . "prodotti/modifica";
         $shopHasProductRepo = \Monkey::app()->repoFactory->create('ShopHasProduct');
         foreach ($datatable->getResponseSetData() as $key => $row) {
+            if($row['dsSize']==0){
+                continue;
+            }
             /** @var CShopHasProduct $shopHasProduct */
             $shopHasProduct = $shopHasProductRepo->findOne($row);
             $cats = [];
@@ -157,6 +161,7 @@ class CProductImporterProblemsListController extends AAjaxController
                       JOIN DirtySku ds ON dp.id = ds.dirtyProductId 
                         
                     WHERE  
+                    ds.qty>0    and 
                     dp.productId = :productId AND 
                     dp.productVariantId = :productVariantId AND 
                     dp.shopId = :shopId', $shopHasProduct->getIds())->fetchAll();
