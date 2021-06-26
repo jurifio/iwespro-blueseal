@@ -33,7 +33,7 @@ class CFriendSellListAjaxController extends AAjaxController
         $user = $this->app->getUser();
         $allShops = $user->hasPermission('allShops');
         // Se non è allshop devono essere visualizzate solo le linee relative allo shop e solo a un certo punto di avanzamento
-        $currentUser=$this->app->getUser();
+        $currentUser=$this->app->getUser()-getId();
         $userHasShopRepo=\Monkey::app()->repoFactory->create('userHasShop');
         $userHasShop=$userHasShopRepo->findOneBy(['userId'=>$currentUser]);
         $filterSql= ' ';
