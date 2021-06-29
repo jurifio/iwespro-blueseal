@@ -7,7 +7,7 @@ use bamboo\domain\entities\CDirtySku;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
-use bamboo\offline\productsync\import\alducadaosta\CAlducadaostaOrderAPI;
+use bamboo\offline\productsync\import\mpk\CMpkOrderApi;
 use PDO;
 use PDOException;
 
@@ -55,7 +55,7 @@ class CChangeFromAdminLineStatus extends AAjaxController
             $newActive = $line->orderLineStatus->isActive;
             $newName =$line->orderLineStatus->title;
 
-            if($line->shopId == 46 AND $line->status == "ORD_WAIT") {
+            if($line->shopId == 61 AND $line->status == "ORD_WAIT") {
                 //Value for api
 
                 /** @var CObjectCollection $dirtySkus */
@@ -77,7 +77,7 @@ class CChangeFromAdminLineStatus extends AAjaxController
                     "Value" => $line->friendRevenue,
                     "Payment_type" => $line->order->orderPaymentMethod->name,
                 ];
-                $alduca = new CAlducadaostaOrderAPI($orderId, $row);
+                $alduca = new CMpkOrderApi($orderId, $row);
                 $alduca->newOrder();
             }
             $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$orderLine->remoteShopSellerId]);
