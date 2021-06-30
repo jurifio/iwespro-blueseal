@@ -97,7 +97,7 @@ class CDispatchOrderMailToCustomer extends ACronJob
                         $row['photo'] = $product->getPhoto(1,281);
                         /** @var CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newPackagedTemplateMail('ordermailtocustomer', 'no-reply@pickyshop.com', $to, [], [], ['row' => $row],'MailGun',null);
+                        $emailRepo->newPackagedEmail('ordermailtocustomer', 'no-reply@pickyshop.com', $to, [], [], ['row' => $row],'MailGun',null);
                         $orderLine = \Monkey::app()->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $line->status=$this->success;
                         $line->update();

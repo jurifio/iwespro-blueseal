@@ -50,7 +50,7 @@ class COrderDelete extends AAjaxController
 
         /** @var CEmailRepo $emailRepo */
         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-        $res = $emailRepo->newPackagedTemplateMail('deleteorderclient', 'noreply@pickyshop.com', $to, [], [],
+        $res = $emailRepo->newPackagedEmail('deleteorderclient', 'noreply@pickyshop.com', $to, [], [],
             ['order' => $order,
                 'orderId' => $orderId,
                 'products' => $products,

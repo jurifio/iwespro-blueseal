@@ -57,7 +57,7 @@ class CPaymentBillSendInvoiceMovements extends AAjaxController
 
             /** @var CEmailRepo $mailRepo */
             $mailRepo = \Monkey::app()->repoFactory->create('Email');
-            $mailRepo->newPackagedTemplateMail('friendpaymentinvoicemovements', 'no-reply@pickyshop.com', $to, [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
+            $mailRepo->newPackagedEmail('friendpaymentinvoicemovements', 'no-reply@pickyshop.com', $to, [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
                 'billId' => $paymentBillId,
                 'name' => $name,
                 'total' => abs($total),

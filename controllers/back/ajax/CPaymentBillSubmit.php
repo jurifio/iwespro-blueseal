@@ -46,7 +46,7 @@ class CPaymentBillSubmit extends AAjaxController
 
                 /** @var CEmailRepo $mailRepo */
                 $mailRepo = \Monkey::app()->repoFactory->create('Email');
-                $mailRepo->newPackagedTemplateMail('friendpaymentmail', 'no-reply@iwes.pro', $to, [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
+                $mailRepo->newPackagedEmail('friendpaymentmail', 'no-reply@iwes.pro', $to, [], ['amministrazione@iwes.it'], ['paymentBill' => $paymentBill,
                     'name' => $name,
                     'total' => $total,
                     'payment' => $payment],'MailGun',null);
