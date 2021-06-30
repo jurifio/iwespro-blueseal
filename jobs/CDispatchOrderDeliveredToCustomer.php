@@ -46,23 +46,20 @@ class CDispatchOrderDeliveredToCustomer extends ACronJob
         /** @var COrderRepo $orderRepo */
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $orders = $orderRepo->findBy(['status' => 'ORD_DELIVERED']);
-        $homeShop = $this->app->cfg()->fetch("general","shop-id");
+
         $couponRepo=\Monkey::app()->repoFactory->create('Coupon');
         try {
 
             \Monkey::app()->repoFactory->beginTransaction();
             foreach ($orders as $order) {
-                if (ENV === 'dev') {
-                    $db_host = 'localhost';
-                    $db_name = 'pickyshop_dev';
-                    $db_user = 'root';
-                    $db_pass = 'geh44fed';
-                } else {
-                    $db_host = '5.189.159.187';
-                    $db_name = 'pickyshopfront';
-                    $db_user = 'pickyshop4';
-                    $db_pass = 'rrtYvg6W!';
-                }
+                $remoteShopSellerId = $order->remoteShopSellerId;
+                $remoteOrderId = $order->remoteOrderSellerId;
+                $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopSellerId]);
+                $db_host = $shopRepo->dbHost;
+                $db_name = $shopRepo->dbName;
+                $db_user = $shopRepo->dbUsername;
+                $db_pass = $shopRepo->dbPassword;
+
                 try {
 
                     $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
@@ -85,17 +82,16 @@ class CDispatchOrderDeliveredToCustomer extends ACronJob
                         break;
                     }else{
                         if ($orderLineShipped->isParallel == 1) {
-                            $remoteIwesOrderId = $order->remoteIwesOrderId;
                             $stmtOrderLine = $db_con->prepare('UPDATE OrderLine SET `status`=\'' . $orderLineShipped->status . '\' WHERE 
                             productId=' . $orderLineShipped->productId . ' AND
                             productVariantId=' . $orderLineShipped->productVariantId . ' AND 
                             productSizeId=' . $orderLineShipped->productSizeId . ' AND  
-                            remoteOrderSupplierId=' . $orderLineShipped->orderId . '
-                            and orderId=' . $remoteIwesOrderId);
+                            id=' . $orderLineShipped->remoteOrderLineSellerId . '
+                            and orderId=' . $remoteOrderId);
                             $stmtOrderLine->execute();
 
                         } else {
-                            $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $orderLineShipped->status . "' WHERE remoteOrderLineSellerId=" . $orderLineShipped->id . " and remoteOrderSellerId=" . $orderLineShipped->orderId . " and remoteShopSellerId=".$homeShop);
+                            $stmtOrderLine = $db_con->prepare("UPDATE OrderLine SET `status`='" . $orderLineShipped->status . "' WHERE id=" . $orderLineShipped->remoteOrderLineSellerId . " and orderId=" . $remoteOrderId );
                             $stmtOrderLine->execute();
 
                         }
@@ -126,19 +122,17 @@ class CDispatchOrderDeliveredToCustomer extends ACronJob
 
                     /** @var CEmailRepo $emailRepo */
                     $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                    $emailRepo->newPackagedMail('orderdeliveredtocustomer','no-reply@cartechinishop.com',$to,[],[],
+                    $emailRepo->newPackagedMail('orderdeliveredtocustomer','no-reply@iwes.pro',$to,[],[],
                         ['order' => $order,'orderId' => $order->id,'shipment' => $shipment,'lang' => $lang->lang,'couponCode' => $couponCode,'logoSite' => $logoSite,'urlSite' => $urlSite,'productBrand' => $productBrand],'mailGun',null);
                     $order->status = 'ORD_ARCH';
                     $order->update();
                     if ($order->isParallel == 1) {
-                        $remoteIwesOrderId = $order->remoteIwesOrderId;
                         $stmtOrder = $db_con->prepare('UPDATE `Order` SET `status`="ORD_ARCH" WHERE
-                            remoteOrderSupplierId=' . $orderLineShipped->orderId . '
-                            and orderId=' . $remoteIwesOrderId);
+                           orderId=' . $remoteOrderId);
                         $stmtOrder->execute();
 
                     } else {
-                        $stmtOrder = $db_con->prepare('UPDATE `Order` SET `status`="ORD_ARCH" WHERE remoteOrderSellerId="' . $order->id . '"  and remoteShopSellerId='.$homeShop);
+                        $stmtOrder = $db_con->prepare('UPDATE `Order` SET `status`="ORD_ARCH" WHERE id=' . $remoteOrderId );
                         $stmtOrder->execute();
 
                     }

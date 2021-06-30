@@ -40,7 +40,7 @@ GROUP BY bri.billRegistryClientId,bri.billRegistryTypePaymentId,bri.dateEstimate
 
             if (ENV === 'dev') {
                 $db_host = 'localhost';
-                $db_name = 'information_schema';
+                $db_name = 'pickyshop_dev';
                 $db_user = 'root';
                 $db_pass = 'geh44fed';
                 $dbnamesel='pickyshop_dev';
