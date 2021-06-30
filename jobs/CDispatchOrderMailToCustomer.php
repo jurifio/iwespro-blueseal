@@ -26,8 +26,8 @@ use bamboo\domain\entities\COrderLine;
 class CDispatchOrderMailToCustomer extends ACronJob
 {
 
-    var $success = "ORD_MAIL_PREP_C";
-    var $fail = "ORD_FRND_OK";
+    var $success = "ORD_FRND_OK";
+    var $fail = "ORD_MAIL_PREP_C";
 
     /**
      * @param null $args
@@ -37,7 +37,7 @@ class CDispatchOrderMailToCustomer extends ACronJob
 
         /** @var COrderLineRepo $orderLineRepo */
         $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
-        $lines = $orderLineRepo->findBy(['status'=>'ORD_FRND_OK']);
+        $lines = $orderLineRepo->findBy(['status'=>'ORD_MAIL_PREP_C']);
             try {
 
                 \Monkey::app()->repoFactory->beginTransaction();
@@ -97,7 +97,7 @@ class CDispatchOrderMailToCustomer extends ACronJob
                         $row['photo'] = $product->getPhoto(1,281);
                         /** @var CEmailRepo $emailRepo */
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newPackagedMail('ordermailtocustomer', 'no-reply@pickyshop.com', $to, [], [], ['row' => $row],'MailGun',null);
+                        $emailRepo->newPackagedMail('ordermailtocustomer', 'no-reply@iwes.pro', $to, [], [], ['row' => $row],'MailGun',null);
                         $orderLine = \Monkey::app()->repoFactory->create("OrderLine")->findOneBy(['id' => $line->id, 'orderId' => $line->orderId]);
                         $line->status=$this->success;
                         $line->update();
