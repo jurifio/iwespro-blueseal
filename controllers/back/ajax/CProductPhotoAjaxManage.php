@@ -95,7 +95,7 @@ if($product) {
                 }
                 $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'mime'=>'image/jpeg', 'size' => $key, 'isPublic'=>1));
             }
-           // unlink($tempFolder . $_FILES['file']['name']);
+            unlink($tempFolder . $_FILES['file']['name']);
             $count = 0;
             foreach ($ids as $key => $val) {
                 $this->app->dbAdapter->insert("ProductHasProductPhoto", ["productId" => $product->id, "productVariantId" => $product->productVariantId, "productPhotoId" => $val]);
