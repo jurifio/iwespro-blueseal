@@ -29,7 +29,7 @@ class CDispatchPendingOrder extends ACronJob
     public function run($args = null)
     {
         $shops = \Monkey::app()->repoFactory->create('Shop')->findBy(['isActive' => 1]);
-        $query = "SELECT * from `OrderLine` ol join `Order` o on ol.orderId=o.id where ol.`status` in ('ORD_PENDING') AND o.dateOrder >'2021-06-20' AND shopId = ?";
+        $query = "SELECT * from `OrderLine` ol join `Order` o on ol.orderId=o.id where ol.`status` in ('ORD_PENDING') AND o.orderDate >'2021-06-20' AND shopId = ?";
         $orderExport = new COrderExport($this->app);
         /** @var COrderLineRepo $orderLineRepo */
         $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
