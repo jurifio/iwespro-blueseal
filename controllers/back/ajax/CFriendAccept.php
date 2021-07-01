@@ -65,7 +65,7 @@ class CFriendAccept extends AAjaxController
             }
 
             if ('ok' === $response) {
-                $newStatus = 'ORD_FRND_OK';
+                $newStatus = 'ORD_MAIL_PREP_C';
                 $verdict = 'Consenso';
             } elseif ('ko' === $response) {
                 $newStatus = 'ORD_FRND_CANC';
