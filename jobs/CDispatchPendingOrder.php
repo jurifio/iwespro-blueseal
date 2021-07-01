@@ -37,9 +37,12 @@ class CDispatchPendingOrder extends ACronJob
         foreach($shops as $shop) {
             $lines = new CObjectCollection();
             try {
-                $lines = $orderLineRepo->em()->findBySql($query,[$shop->id]);
+                $lines = $orderLineRepo->em()->findBySql($query, [$shop->id]);
                 $this->report( 'Working Shop ' . $shop->name . ' Start', 'Found ' . count($lines) . ' to send');
-                if (isset($shop->referrerEmails) && count($lines) > 0) {
+                if ($shop->preOrderExport == 1 && count($lines) >0 ) {
+                    $orderExport->exportPrefileForFriend($shop, $lines);
+                }
+                if ( count($lines) > 0) {
                     $orderExport->sendMailPendingOrder($shop,$lines);
                 }
                 $this->report('Working Shop ' . $shop->name . ' End','Export ended');
