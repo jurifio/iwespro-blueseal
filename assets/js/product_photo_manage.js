@@ -58,7 +58,7 @@ $(document).on('bs.add.photo', function (e){
         maxFiles: 10,
         parallelUploads: 10,
         acceptedFiles: "image/*",
-        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui",
+        dictDefaultMessage: "Trascina qui i file da inviare o clicca qui (consigliato MAX 200KB)",
         uploadMultiple: false,
         sending: function(file, xhr, formData) {
             formData.append("id", $.QueryString["id"]);
