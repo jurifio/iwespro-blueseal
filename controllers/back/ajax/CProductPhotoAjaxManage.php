@@ -85,7 +85,8 @@ if($product) {
                     $futureDummy = $val;
                 }
                 $orderMax=1;
-                $sql="select (max(`order`)+1) as orderMax from ProductPhoto where `name` like  '%".$product->id.'-'.$product->productVariantId."%' and size ='1024'";
+                $sql="SELECT MAX(`pp`.`order`) + 1 AS orderMax FROM ProductPhoto pp  JOIN ProductHasProductPhoto php ON pp.id =php.productPhotoId JOIN Product p ON php.productId=p.id AND php.productVariantId=p.productVariantId
+WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                 $res=$this->app->dbAdapter->query($sql,[])->fetchAll();
                 foreach($res as $result){
                     $orderMax=$result['orderMax'];
