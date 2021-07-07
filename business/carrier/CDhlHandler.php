@@ -2,8 +2,28 @@
 
 namespace bamboo\business\carrier;
 
+use bamboo\business\carrier\ACarrierHandler;
+use bamboo\business\carrier\IImplementedPickUpHandler;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CShipment;
+use bamboo\domain\repositories\CShipmentRepo;
+use bamboo\utils\time\SDateToolbox;
+use bamboo\utils\time\STimeToolbox;
+use DHL\Entity\GB\ShipmentResponse;
+use DHL\Entity\GB\ShipmentRequest;
+use DHL\Datatype\AM\PieceType;
+use DHL\Client\Web as WebserviceClient;
+use DHL\Entity\EA\KnownTrackingRequest as Tracking;
+use DHL\Datatype\GB\Piece;
+use DHL\Datatype\GB\SpecialService;
+use DHL\Entity\AM\GetQuote;
+
+
+use DHL\Datatype\GB\Barcodes;
+
+use DateTime;
+
 
 /**
  * Class CDhlHandler
@@ -18,173 +38,133 @@ use bamboo\domain\entities\CShipment;
  * @date $date
  * @since 1.0
  */
-class CDhlHandler extends  CDhlStopWatchHandler
+class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
 {
 
+    /*  vecchia configurzione xml
     protected $config = [
-        'endpoint' => 'http://xmlpitest-ea.dhl.com/XMLShippingServlet',
-        'testSiteID' => 'DServiceVal',
-        'CodiceClienteDHL' => '106971439',
-        'testPasswordClienteDHL' => 'testServVal',
-        'SiteID' => 'DServiceVal',
-        'PasswordClienteDHL' => 'u7qVouSKHY',
+         'endpoint' => 'http://xmlpitest-ea.dhl.com/XMLShippingServlet',
+         'testSiteID' => 'DServiceVal',
+         'CodiceClienteDHL' => '106971439',
+         'testPasswordClienteDHL' => 'testServVal',
+         'SiteID' => 'DServiceVal',
+         'PasswordClienteDHL' => 'u7qVouSKHY',
 
-    ];
-
+     ];*/
     /**
      * @param CShipment $shipment
-     * @return CShipment
+     * @param $orderId
+     * @return CShipment|bool
      * @throws BambooException
+     * @throws \Throwable
+     * @throws \bamboo\core\exceptions\RedPandaException
      */
-    public function addDelivery(CShipment $shipment)
+    public function addPickUp(CShipment $shipment,$orderId )
     {
-        \Monkey ::app() -> applicationReport('DHLHandler', 'addDelivery', 'Called AddParcel');
-        $xml = new \XMLWriter();
-        $xml -> openMemory();
-        $xml -> setIndent(true);
-        $xml -> startDocument('1.0', 'utf-8');
-        $xml -> startElement('req:ShipmentRequest');
-        $xml -> writeAttribute('xmlns:req', 'http://www.dhl.com');
-        $xml -> writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $xml -> writeAttribute('xsi:schemaLocation', 'http://www.dhl.com ship-val-global-req.xsd');
-        $xml -> writeAttribute('schemaVersion', '5.0');
-        $xml -> startElement('Request');
-        $xml -> startElement('ServiceHeader');
-        $xml -> writeElement('MessageTime', date(DATE_ATOM));
-        $messaggeReference = 'Shipment_id_' . $shipment -> id . '_order_' . $shipment -> orderLine -> getFirst() -> order -> id . '';
-        $xml -> writeElement('MessageReference', $messaggeReference);
-        if (ENV == 'dev') {
-            $xml -> writeElement('SiteID', $this -> config['testSiteID']);
-            $xml -> writeElement('Password', $this -> config['testPasswordClienteDHL']);
-        } else {
-            $xml -> writeElement('SiteID', $this -> config['SiteID']);
-            $xml -> writeElement('Password', $this -> config['PasswordClienteDHL']);
-        }
-        $xml -> endElement();
-        $xml -> endElement();
-        $xml -> writeElement('RegionCode', 'EU');
-        $xml -> writeElement('NewShipper', 'N');
-        $xml -> writeElement('LanguageCode', 'en');
-        $xml -> writeElement('PiecesEnabled', 'Y');
-        $xml -> startElement('Billing');
-        $xml -> writeElement('ShipperAccountNumber', $this -> config['CodiceClienteDHL']);
-        $xml -> writeElement('ShippingPaymentType', 'S');
-        $xml -> writeElement('BillingAccountNumber', $this -> config['CodiceClienteDHL']);
-        $xml -> writeElement('DutyPaymentType', 'R');
-        $xml -> endElement();
 
+        //funzione che genera la chiamata api
+        \Monkey::app()->applicationReport('CDhlHandler','addPickup','Called addPickUp');
 
-        $this -> writeParcel($xml, $shipment);
+        $shipmentReturn=$this->addDelivery( $shipment, $isShippingToIwes ,$isOrderParallel,$orderToShipment );
+        return $shipmentReturn;
 
-        $xml -> endDocument();
-        $rawXml = $xml -> outputMemory();
-
-
-        $url = $this -> config['endpoint'];
-        $data = ['XMLInfoParcel' => $rawXml];
-        \Monkey ::app() -> applicationReport('CDhlHandler', 'addDelivery', 'Request AddParcel', $rawXml);
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
-        ]);
-
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-        curl_close($ch);
-        \Monkey ::app() -> applicationReport('CDhlHandler', 'addDelivery', 'Result AddParcel', $result);
-        if (!$result) {
-            throw new BambooException($e);
-        } else {
-            $dom = new \DOMDocument();
-            try {
-                $dom -> loadXML($result);
-            } catch (\Throwable $e) {
-                throw new BambooException($result);
-            }
-            $parcels = $dom -> getElementsByTagName('Parcel');
-            foreach ($parcels as $parcel) {
-                /** @var \DOMElement $parcel */
-                $ids = $parcel -> getElementsByTagName('ContatoreProgressivo');
-                /** @var \DOMNodeList $ids */
-                if ($ids -> item(0) -> nodeValue == $shipment -> id) {
-                    $shipment -> trackingNumber = $this -> config['SedeGls'] . ' ' . $parcel -> getElementsByTagName('NumeroSpedizione') -> item(0) -> nodeValue;
-                    if ($shipment -> trackingNumber == $this -> config['SedeGls'] . ' ' . '999999999') throw new BambooException('Errore nella spedizione: ' . $parcel -> getElementsByTagName('NoteSpedizione') -> item(0) -> nodeValue);
-                    $shipment -> update();
-                    break;
-                }
-            }
-        }
-
-        return $shipment;
     }
 
     /**
-     * @param \XMLWriter $xml
      * @param CShipment $shipment
-     * @return bool
+     * @param $orderId
+     * @return CShipment
+     * @throws \bamboo\core\exceptions\RedPandaException
      */
-    protected function writeParcel(\XMLWriter $xml, CShipment $shipment)
+    public function addDelivery(CShipment $shipment, $orderId)
     {
+        \Monkey ::app() -> applicationReport('DHLHandler', 'addDelivery', 'Called AddParcel');
+        /*recupero la riga  dell ordine e l ordine*/
+        $orderLineHasShipment=\Monkey ::app() -> repoFactory -> create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
+        $shipmentFind=\Monkey ::app() ->repoFactory->create('Shipment')->findOneBy(['id'=>$shipment->id]);
+        /*colleziono l'ordine*/
+        $order=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderLineHasShipment->orderId]);
+        //colleziono i dati del cliente
+        $toAddress[] = json_decode($order->frozenShippingAddress, true);
 
-        $toAddress[] = json_decode($shipment -> orderLine -> getFirst() -> order -> fronzenShippingAddress, true);
+        if(ENV=='dev'){
+            require('/media/sf_sites/vendor/DHL-API-master/init.php');
+        }else{
+            require('/home/shared/vendor/DHL-API-master/init.php');
+        }
 
-        $xml -> startElement('Consignee');
-        $xml -> writeElement('CompanyName', $toAddress[0]['name'] . ' ' . $toAddress[0]['surname'] . ' ' . $toAddress[0]['company']);
-        $xml -> writeElement('AddressLine', $toAddress[0]['address'] . ' ' . $toAddress[0]['extra']);
-        $xml -> writeElement('City', $toAddress[0]['city']);
-        $xml -> writeElement('Division', $toAddress[0]['province']);
-        $xml -> writeElement('PostalCode', $toAddress[0]['postcode']);
+        /*genero  il MessageTime*/
+        $dateTime=(new DateTime())->format(DateTime::ATOM);
+        $dhl = $config['dhl'];
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        /* genero il MessageReference */
+        $randomString = '';
+        for ($i = 0; $i < 32; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+
+
+// creo la richiesta
+        $sample =  new ShipmentRequest();
+
+// assumo le variabili per il login
+        $sample->SiteID = $dhl['id'];
+        $sample->Password = $dhl['pass'];
+
+// setto i valori della richiesta
+        $sample->MessageTime = $dateTime;
+        $sample->MessageReference = $randomString;
+        $sample->RegionCode = 'EU';
+        $sample->RequestedPickupTime = 'Y';
+        $sample->NewShipper = 'N';
         $countryRepo = \Monkey ::app() -> repoFactory -> create('Country') -> findOneBy(['id' => $toAddress[0]['countryId']]);
+        if($toAddress[0]['countryId']!=110) {
+            $sample->LanguageCode = 'en';
+        }else{
+            $sample->LanguageCode = 'it';
+        }
+        $sample->PiecesEnabled = 'Y';
+        $sample->Billing->ShipperAccountNumber = $dhl['shipperAccountNumber'];
+        $sample->Billing->ShippingPaymentType = 'S';
+        $sample->Billing->BillingAccountNumber = $dhl['billingAccountNumber'];
+        $sample->Billing->DutyPaymentType = 'S';
+        $sample->Billing->DutyAccountNumber = $dhl['dutyAccountNumber'];
+        $sample->Consignee->CompanyName = $toAddress[0]['name'] . ' ' . $toAddress[0]['surname'] . ' ' . $toAddress[0]['company'];
+        $sample->Consignee->addAddressLine($toAddress[0]['address'].' '.$toAddress[0]['extra']);
+        $sample->Consignee->City = $toAddress[0]['city'];
+        $sample->Consignee->PostalCode = $toAddress[0]['postcode'];
         $countryISOCode = $countryRepo -> ISO;
         $countryName = $countryRepo -> name;
-        $xml -> writeElement('Division', $toAddress[0]['province']);
-        $xml -> writeElement('CountryCode', $countryISOCode);
-        $xml -> writeElement('CountryName', $countryName);
-        $xml -> startElement('Contact');
-
-        $xml -> writeElement('PersonName', $toAddress[0]['name'] . '' . $toAddress[0]['surname']);
-        $xml -> writeElement('PhoneNumber', $toAddress[0]['phone'] . '' . $toAddress[0]['surname']);
-        $xml -> endElement();
-        $xml -> endElement();
-        $xml -> startElement('ShipmentDetails');
-        $xml -> startElement('Pieces');
-        if ($countryRepo -> extraue == 1) {
-            $isDutiable = "Y";
-        } else {
-            $isDutiable = "N";
-        }
+        $sample->Consignee->CountryCode = $countryISOCode;
+        $sample->Consignee->CountryName =  $countryName;
+        $sample->Consignee->Contact->PersonName = $toAddress[0]['name'] . '' . $toAddress[0]['surname'];
+        $sample->Consignee->Contact->PhoneNumber = $toAddress[0]['phone'];
+        $sample->Consignee->Contact->PhoneExtension = '';
+        $sample->Consignee->Contact->FaxNumber = '';
+        $sample->Consignee->Contact->Telex = '';
+        $sample->Consignee->Contact->Email = '';
+        $sample->Commodity->CommodityCode = 'cc';
+        $sample->Commodity->CommodityName = 'cn';
         $orderId = $shipment -> orderLine -> getFirst() -> order -> id;
-        $orderLine = \Monkey ::app() -> repoFactory -> create('OrderLine') -> findBy(['orderId' => $orderId]);
-        $numberOfPieces = 0;
+        $orderLine = \Monkey ::app() -> repoFactory -> create('OrderLine') -> findOneBy(['id'=>$orderLineHasShipment->orderLineId,'orderId' => $orderId]);
+        $numberOfPieces = 1;
         $weight = 0;
         $orderTotal = 0;
-        foreach ($orderLine as $lines) {
-            $xml -> startElement('Piece');
-            $xml -> writeElement('PieceID', $lines -> id);
-            $xml -> writeElement('PackageType', 'EE');
-            $xml -> writeElement('Weight', '2.5');
-            $xml -> writeElement('DimWeight', '1.0');
-            $xml -> writeElement('Width', '20.5');
-            $xml -> writeElement('Depth', '11.5');
-            $xml -> writeElement('Height', '30');
-            $xml -> endElement();
-            $numberOfPieces = $numberOfPieces + 1;
-            $weight = $weight + 2.5;
-            $orderTotal = $orderTotal + $lines -> netPrice;
-        }
-        $xml -> endElement();
-        $xml -> writeElement('IsDutiable', $isDutiable);
-        $xml -> writeElement('NumberOfPieces', $numberOfPieces);
-        $xml -> writeElement('Weight', $weight);
-        $xml -> writeElement('WeightUnit', 'K');
+        $sample->Dutiable->DeclaredValue = money_format('%.2n', $orderTotal);
+        $sample->Dutiable->DeclaredCurrency = 'EUR';
+        $sample->ShipmentDetails->NumberOfPieces = 1;
 
+        $piece = new Piece();
+        $piece->PieceID = '1';
+        $piece->PackageType = 'EE';
+        $piece->Weight = '1';
+        $piece->DimWeight = '1';
+        $piece->Width = '20';
+        $piece->Height = '30';
+        $piece->Depth = '15';
+        $sample->ShipmentDetails->addPiece($piece);
         if ($countryRepo -> id == 110) {
             $globalProductCode = 'N';
         } else {
@@ -195,52 +175,214 @@ class CDhlHandler extends  CDhlStopWatchHandler
             }
 
         }
-        $xml -> writeElement('GlobalProductCode', $globalProductCode);
-        $xml -> writeElement('localProductCode', $globalProductCode);
-        $xml -> writeElement('Date', $shipment -> predictedShipmentDate);
-        $xml -> writeElement('PackageType', 'EE');
-        $xml -> writeElement('IsDutiable', 'Y');
-        $xml -> writeElement('CurrencyCode', 'EUR');
-        $xml -> endElement();
-        $xml -> startElement('Shipper');
-        $xml -> writeElement('ShipperID', $this -> config['CodiceClienteDHL']);
-        $xml -> writeElement('CompanyName', 'Iwes snc International Web Ecommerce Services ');
-        $xml -> writeElement('AddressLine', 'Via Cesare Pavese, 1');
-        $xml -> writeElement('City', 'Civitanova Marche');
-        $xml -> writeElement('Division', 'MC');
-        $xml -> writeElement('PostalCode', '62012');
-        $xml -> writeElement('CountryCode', 'IT');
-        $xml -> writeElement('CountryName', 'Italy');
-        $xml -> startElement('Contact');
-        $xml -> writeElement('PersonName', 'delivery service');
-        $xml -> writeElement('PhoneNumber', '+390733471365');
-        $xml -> writeElement('Email', 'gianluca@iwes.it');
-        $xml -> endElement();
-        $xml -> endElement();
+
+
+        $sample->ShipmentDetails->Weight = '1';
+        $sample->ShipmentDetails->WeightUnit = 'K';
+        $sample->ShipmentDetails->GlobalProductCode = $globalProductCode;
+        $sample->ShipmentDetails->LocalProductCode = $globalProductCode;
+        $sample->ShipmentDetails->Date = date('Y-m-d');
+        $sample->ShipmentDetails->Contents = 'AM international shipment contents';
+        $sample->ShipmentDetails->DoorTo = 'DD';
+        $sample->ShipmentDetails->DimensionUnit = 'I';
+        $sample->ShipmentDetails->PackageType = 'EE';
+        $sample->ShipmentDetails->IsDutiable = 'N';
+        $sample->ShipmentDetails->CurrencyCode = 'EUR';
+        $sample->Shipper->ShipperID = '106971439';
+        $sample->Shipper->CompanyName = 'Iwes snc';
+        $sample->Shipper->RegisteredAccount = '106971439';
+        $sample->Shipper->addAddressLine('Via Cesare Pavese, 1');
+        $sample->Shipper->City = 'Civitanova Marche';
+        $sample->Shipper->Division = 'Macerata';
+        $sample->Shipper->DivisionCode = 'mc';
+        $sample->Shipper->PostalCode = '62012';
+        $sample->Shipper->CountryCode = 'IT';
+        $sample->Shipper->CountryName = 'Italy';
+        $sample->Shipper->Contact->PersonName = 'delivery service';
+        $sample->Shipper->Contact->PhoneNumber = '390733471365';
+        $sample->Shipper->Contact->PhoneExtension = '';
+        $sample->Shipper->Contact->FaxNumber = '390733471365';
+        $sample->Shipper->Contact->Telex = '';
+        $sample->Shipper->Contact->Email = 'ginaluca@iwes.it';
+
         if ($shipment -> orderLine -> getFirst() -> order -> orderPaymentMethod -> name == 'contrassegno') {
-            $xml -> startElement('SpecialService');
-            $xml -> writeElement('SpecialServiceType', 'KB');
-            $xml -> endElement();
+            $specialService = new SpecialService();
+            $specialService->SpecialServiceType = 'KB';
+            $sample->addSpecialService($specialService);
         }
-        $xml -> startElement('Dutiable');
-        $xml -> writeElement('DeclaredValue', money_format('%.2n', $orderTotal));
-        $xml -> writeElement('DeclaredCurrency', 'EUR');
-        $xml -> endElement();
-        $xml -> startElement('Place');
-        $xml -> writeElement('ResidenceOrBusiness', 'B');
-        $xml -> writeElement('CompanyName', 'Iwes snc International Web Ecommerce Services ');
-        $xml -> writeElement('AddressLine', 'Via Cesare Pavese, 1');
-        $xml -> writeElement('City', 'Civitanova Marche');
-        $xml -> writeElement('Division', 'MC');
-        $xml -> writeElement('PostalCode', '62012');
-        $xml -> writeElement('CountryCode', 'IT');
-        $xml -> writeElement('CountryName', 'Italy');
-        $xml -> writeElement('PackageLocation', 'iwes');
-        $xml -> endElement();
-        $xml -> writeElement('EProcShip', 'N');
-        $xml -> writeElement('LabelImageFormat', 'PDF');
-        $xml -> endElement();
-        return true;
+
+
+        $sample->EProcShip = 'N';
+        $sample->LabelImageFormat = 'PDF';
+
+// chiamata a  DHL XML API
+        $start = microtime(true);
+
+// visualizza il risultato della chiamata
+
+// Seleziona quale ambiente in base all  ENVIROMENT
+        IF(ENV=='dev') {
+            $client = new WebserviceClient('staging');
+        }else{
+            $client = new WebserviceClient('production');
+        }
+
+//CHIAMA IL SERVICE E VISUALIZZA IL RISULTATO
+        $xml=$client->call($sample);
+        $response = new ShipmentResponse();
+        $response->initFromXML($xml);
+
+// GENERA FILE PDF
+        if(ENV=='dev') {
+            file_put_contents('/media/sf_sites/cartechiniNew/client/public/themes/flatize/assets/shipment/' . $orderLineHasShipment->orderLineId . '-' . $orderLineHasShipment->orderId . '-dhl-label.pdf',base64_decode($response->LabelImage->OutputImage));
+        }else{
+            file_put_contents('/home/cartechini/public_html/client/public/themes/flatize/assets/shipment/' . $orderLineHasShipment->orderLineId . '-' . $orderLineHasShipment->orderId . '-dhl-label.pdf',base64_decode($response->LabelImage->OutputImage));
+        }
+        $shipmentFind->trackingNumber=$response->AirwayBillNumber;
+        $shipmentFind->update();
+// VISUALIZZA FILE PDF IN BROWSER/*
+        /*   $data = base64_decode($response->LabelImage->OutputImage);
+           if ($data)
+           {
+               header('Content-Type: application/pdf');
+               header('Content-Length: ' . strlen($data));
+           }*/
+        return $shipmentFind;
+
+    }
+
+
+
+    public function getTracking($trackingNumber){
+        if(ENV=='dev'){
+            require('/media/sf_sites/vendor/DHL-API-master/init.php');
+        }else{
+            require('/home/shared/vendor/DHL-API-master/init.php');
+        }
+        $dateTime=(new DateTime())->format(DateTime::ATOM);
+        $dhl = $config['dhl'];
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 32; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+
+
+// INIZIALIZZO LA RICHIESTA
+        $sample =  new ShipmentRequest();
+
+// PASSO LE VARIABILI PER IL CLIENT
+        $sample->SiteID = $dhl['id'];
+        $sample->Password = $dhl['pass'];
+        // INIZIALIZZO LA RICHIESTA DI TRACKING
+        $request = new Tracking();
+        $request->SiteID = $dhl['id'];
+        $request->Password = $dhl['pass'];
+        $request->MessageReference = $randomString;
+        $request->MessageTime = $dateTime;
+        $request->LanguageCode = 'en';
+        $request->AWBNumber = $trackingNumber;
+        $request->LevelOfDetails = 'ALL_CHECK_POINTS';
+        $request->PiecesEnabled = 'S';
+
+        echo $request->toXML();
+        $client = new WebserviceClient();
+        $xml = $client->call($request);
+
+
+        $result = new DHL\Entity\EA\TrackingResponse();
+        $result->initFromXML($xml);
+        return $result->toXML();
+
+
+    }
+    /**
+    /**
+     * @param CShipment $shipment
+     * @param $orderId
+     * @return CShipment
+     * @throws \bamboo\core\exceptions\RedPandaException
+     */
+
+    public function getQuoteDelivery(CShipment $shipment, $orderId)
+    {
+
+        $orderLineHasShipment=\Monkey ::app() -> repoFactory -> create('OrderLineHasShipment')->findOneBy(['shipmentId'=>$shipment->id]);
+        $order=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderLineHasShipment->orderId]);
+        $toAddress[] = json_decode($order->frozenShippingAddress, true);
+        $countryToAddress=\Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $toAddress[0]['countryId']]);
+        $countryToAddressIso=$countryToAddress->ISO;
+
+        $fromAddress=\Monkey::app()->repoFactory->create('AddressBook')->findOneBy(['id'=>$shipment->fromAddressBookId]);
+        $country=\Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $fromAddress->countryId]);
+
+
+        if(ENV=='dev'){
+            require('/media/sf_sites/vendor/DHL-API-master/init.php');
+        }else{
+            require('/home/shared/vendor/DHL-API-master/init.php');
+        }
+        $dateTime=(new DateTime())->format(DateTime::ATOM);
+        $dhl = $config['dhl'];
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 32; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        $sample = new GetQuote();
+        $sample->SiteID = $dhl['id'];
+        $sample->Password = $dhl['pass'];
+
+
+// SETTO I VALORI DELLA REQUEST
+        $sample->MessageTime = $dateTime;
+        $sample->MessageReference = $randomString;
+        $sample->BkgDetails->Date = date('Y-m-d');
+
+        $piece = new PieceType();
+        $piece->PieceID = 1;
+        $piece->Height = 10;
+        $piece->Depth = 30;
+        $piece->Width = 15;
+        $piece->Weight = 1;
+        $sample->BkgDetails->addPiece($piece);
+        $sample->BkgDetails->IsDutiable = 'Y';
+        $sample->BkgDetails->QtdShp->QtdShpExChrg->SpecialServiceType = 'WY';
+        $sample->BkgDetails->ReadyTime = 'PT10H21M';
+        $sample->BkgDetails->ReadyTimeGMTOffset = '+01:00';
+        $sample->BkgDetails->DimensionUnit = 'CM';
+        $sample->BkgDetails->WeightUnit = 'KG';
+        $sample->BkgDetails->PaymentCountryCode = 'CA';
+        $sample->BkgDetails->IsDutiable = 'Y';
+
+// RICHIEDO LA PAPERLESS
+        $sample->BkgDetails->QtdShp->QtdShpExChrg->SpecialServiceType = 'WY';
+
+        $sample->From->CountryCode = $country->ISO;
+        $sample->From->Postalcode = $fromAddress->postCode;
+        $sample->From->City = $fromAddress->city;
+
+        $sample->To->CountryCode = $countryToAddressIso;
+        $sample->To->Postalcode = $toAddress[0]['postcode'];
+        $sample->To->City = $toAddress[0]['city'];
+        $sample->Dutiable->DeclaredValue = $order->netTotal;
+        $sample->Dutiable->DeclaredCurrency = 'EUR';
+
+// ESEGUO CHIAMATA DHL
+        $start = microtime(true);
+        echo $sample->toXML();
+        IF(ENV=='dev') {
+            $client = new WebserviceClient('staging');
+        }else{
+            $client = new WebserviceClient('production');
+        }
+        $xml = $client->call($sample);
+        echo PHP_EOL . 'Executed in ' . (microtime(true) - $start) . ' seconds.' . PHP_EOL;
+        echo $xml . PHP_EOL;
+
     }
 
     /**
@@ -249,48 +391,7 @@ class CDhlHandler extends  CDhlStopWatchHandler
      */
     public function cancelDelivery(CShipment $shipment)
     {
-        $url = $this -> config['endpoint'] . '/DeleteSped';
-
-        $data = [
-            'SedeGls' => $this -> config['SedeGls'],
-            'CodiceClienteGls' => $this -> config['CodiceClienteGls'],
-            'PasswordClienteGls' => $this -> config['PasswordClienteGls'],
-            'NumSpedizione' => ltrim($shipment -> trackingNumber, $this -> config['SedeGls'] . ' ')
-        ];
-
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
-        ]);
-        \Monkey ::app() -> applicationReport(
-            'GlsItaly',
-            'addDelivery',
-            'Called cancelDelivery to ' . $url,
-            json_encode($data));
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-        curl_close($ch);
-        \Monkey ::app() -> applicationReport(
-            'GlsItaly',
-            'addDelivery',
-            'Result cancelDelivery to ' . $url,
-            json_encode($data));
-        if (!$result) {
-            \Monkey ::dump($e);
-            return false;
-        } else {
-            $dom = new \DOMDocument();
-            $dom -> loadXML($result);
-            return $dom -> getElementsByTagName('DescrizioneErrore') -> item(0) -> nodeValue == "Eliminazione della spedizione " . $data['NumSpedizione'] . " avvenuta.";
-        }
+        // TODO: Implement cancelDelivery() method.
     }
 
     /**
@@ -300,55 +401,7 @@ class CDhlHandler extends  CDhlStopWatchHandler
      */
     public function closePendentShipping($shippings)
     {
-        \Monkey ::app() -> applicationReport('GlsItalyHandler', 'closePendentShipping', 'Called CloseWorkDay');
-        $xml = new \XMLWriter();
-        $xml -> openMemory();
-        $xml -> setIndent(true);
-        $xml -> startDocument('1.0', 'utf-8');
-        $xml -> startElement('Info');
-        $xml -> writeElement('SedeGls', $this -> config['SedeGls']);
-        $xml -> writeElement('CodiceClienteGls', $this -> config['CodiceClienteGls']);
-        $xml -> writeElement('PasswordClienteGls', $this -> config['PasswordClienteGls']);
-
-        foreach ($shippings as $shipping) {
-            $this -> writeParcel($xml, $shipping);
-        }
-
-        $xml -> endDocument();
-        $rawXml = $xml -> outputMemory();
-
-
-        $url = $this -> config['endpoint'] . '/CloseWorkDay';
-        $data = ['XMLCloseInfoParcel' => $rawXml];
-
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
-        $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-type: application/x-www-form-urlencoded'
-        ]);
-        \Monkey ::app() -> applicationReport('GlsItalyHandler', 'closePendentShipping', 'Request CloseWorkDay', $rawXml);
-        $result = curl_exec($ch);
-        $e = curl_error($ch);
-        curl_close($ch);
-        \Monkey ::app() -> applicationReport('GlsItalyHandler', 'closePendentShipping', 'Response CloseWorkDay', $result);
-        if (!$result) {
-            throw new BambooException('Errore nella chiusura Giornata ' . $e);
-        } else {
-            $dom = new \DOMDocument();
-            $dom -> loadXML($result);
-            $errore = $dom -> getElementsByTagName('DescrizioneErrore') -> item(0) -> nodeValue;
-            if ($errore == 'OK') {
-                return true;
-            } else {
-                throw new BambooException('Errore nella chiusura Giornata ' . $errore);
-            }
-        }
+        // TODO: Implement closePendentShipping() method.
     }
 
     /**
@@ -436,7 +489,7 @@ class CDhlHandler extends  CDhlStopWatchHandler
         $e = curl_error($ch);
         curl_close($ch);
         if (!$result) {
-          //  var_dump($e);
+            //  var_dump($e);
             return "";
         } else {
             $dom = new \DOMDocument();
@@ -479,233 +532,232 @@ class CDhlHandler extends  CDhlStopWatchHandler
         $arg6 = "+01:00";
 
 //FILE PATH
-$dir_url = $arg1;
+        $dir_url = $arg1;
 //REQUEST PATH & REQUEST FILE
-$filename = $arg1.$arg2;
+        $filename = $arg1.$arg2;
 //RESPONSE PATH
-$response_url = $arg1.$arg3;
+        $response_url = $arg1.$arg3;
 //SERVER URL
-$server_url = $arg4;
+        $server_url = $arg4;
 //Future Date
-$futureDate = $arg5;
+        $futureDate = $arg5;
 
 //Starting the StopWatch
-CDhlStopWatchHandler::start();
+        CDhlStopWatchHandler::start();
 
 //IP ADDRESS
-$localIPAddress = getHostByName(getHostName());
+        $localIPAddress = getHostByName(getHostName());
 
 //Set Cookie to store Client's IP address
-$_COOKIE['info[0]'] = $localIPAddress;
+        $_COOKIE['info[0]'] = $localIPAddress;
 
 //Set Cookie to store filename that is being executed
-$_COOKIE['info[1]'] = $arg0;
+        $_COOKIE['info[1]'] = $arg0;
 
 //Setting timezone to UTC
-date_default_timezone_set("UTC");
-$utc = $arg6;
-$utc_parsed_1 = str_replace(":",".",$utc);
-$utc_parsed_2 = str_replace(".30",".50",$utc_parsed_1);
-$utc_parsed_2 = str_replace(".45",".75",$utc_parsed_1);
-$ts = (time() + ($utc_parsed_2*3600));
-$dtformat = "Y_m_d_H_i_s_";
+        date_default_timezone_set("UTC");
+        $utc = $arg6;
+        $utc_parsed_1 = str_replace(":",".",$utc);
+        $utc_parsed_2 = str_replace(".30",".50",$utc_parsed_1);
+        $ts = (time() + ($utc_parsed_2*3600));
+        $dtformat = "Y_m_d_H_i_s_";
 
 //Set Cookie for timestamp after timezone is applied
-$_COOKIE['info[2]'] = $ts;
+        $_COOKIE['info[2]'] = $ts;
 
 //Logger
-require_once('KLogger.php');
-$log = new KLogger ($dir_url."logs/DHLClient_".date('Ymd').".log" , KLogger::DEBUG );
+        require_once('KLogger.php');
+        $log = new KLogger ($dir_url."logs/DHLClient_".date('Ymd').".log" , KLogger::DEBUG );
 
-$count = 0;
+        $count = 0;
 
-goto A;
-echo "\n";
+        goto A;
+        echo "\n";
 
-A:
+        A:
 
 //Getting the .xml file.
-$file = file_get_contents($filename, true);
-$len = strlen($file);
+        $file = file_get_contents($filename, true);
+        $len = strlen($file);
 
-$log->LogInfo(" | START DHLClient");
-$log->LogInfo(" | futureDate set to :: ".$futureDate);
-echo  "futureDate set to :: ".$futureDate."\n";
+        $log->LogInfo(" | START DHLClient");
+        $log->LogInfo(" | futureDate set to :: ".$futureDate);
+        echo  "futureDate set to :: ".$futureDate."\n";
 
-$log->LogInfo(" | TimeZone set to :: UTC".$arg6);
-echo "TimeZone set to :: UTC".$arg6."\n";
+        $log->LogInfo(" | TimeZone set to :: UTC".$arg6);
+        echo "TimeZone set to :: UTC".$arg6."\n";
 
 //UTF-8 checking for .xml file.
-$encoding = mb_detect_encoding($file, 'UTF-8');
-if ($encoding == "UTF-8") {
-    $new_server_url = $server_url.'?isUTF8Support=true';
-    $reqxml= $file;
-    $el_start = "<MessageReference>";
-    $el_end = "</MessageReference>";
-    $MessageReference = getBetween($reqxml,$el_start,$el_end);
-    $log->LogInfo(" | isUTF8Support set to :: true");
-} else {
-    $new_server_url = $server_url;
-    $MessageReference = "";
-    $log->LogWarn(" | isUTF8Support set to :: false");
-}
+        $encoding = mb_detect_encoding($file, 'UTF-8');
+        if ($encoding == "UTF-8") {
+            $new_server_url = $server_url.'?isUTF8Support=true';
+            $reqxml= $file;
+            $el_start = "<MessageReference>";
+            $el_end = "</MessageReference>";
+            $MessageReference = getBetween($reqxml,$el_start,$el_end);
+            $log->LogInfo(" | isUTF8Support set to :: true");
+        } else {
+            $new_server_url = $server_url;
+            $MessageReference = "";
+            $log->LogWarn(" | isUTF8Support set to :: false");
+        }
 
-$log->LogInfo($MessageReference." | Connecting to Server IP: ".$localIPAddress." URL:".$new_server_url);
-echo "Opening the connection ..... : ".$server_url."\n\n";
+        $log->LogInfo($MessageReference." | Connecting to Server IP: ".$localIPAddress." URL:".$new_server_url);
+        echo "Opening the connection ..... : ".$server_url."\n\n";
 //echo "Connecting to Server IP: ".$localIPAddress." URL:".$new_server_url."\n\n";
 
 //Check whether url exist.
-$invalidurl = "";
-$file_headers = @get_headers($new_server_url);
-if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
-    $invalidurl = true;
-    $flushDNS = true;
-    $retry = true;
-} else {
-    $log->LogInfo($MessageReference." | Connected to IP: ".$localIPAddress." URL:".$new_server_url." | ".StopWatch::elapsed());
-    $flushDNS = false;
-    $retry = false;
-}
+        $invalidurl = "";
+        $file_headers = @get_headers($new_server_url);
+        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+            $invalidurl = true;
+            $flushDNS = true;
+            $retry = true;
+        } else {
+            $log->LogInfo($MessageReference." | Connected to IP: ".$localIPAddress." URL:".$new_server_url." | ".StopWatch::elapsed());
+            $flushDNS = false;
+            $retry = false;
+        }
 
-if ($invalidurl == true) {
-}
-else {
-    $log->LogInfo($MessageReference." | Begin sending request to XML Appl");
+        if ($invalidurl == true) {
+        }
+        else {
+            $log->LogInfo($MessageReference." | Begin sending request to XML Appl");
 
-    if ($encoding == "UTF-8") {
-        $post_header = 'Content-type: application/x-www-form-urlencoded'."\r\n".'Accept-Charset: UTF-8'."\r\n".'Content-Length: '.$len."\r\n".'futureDate: '.$futureDate."\r\n".'languageCode: PHP'."\r\n";
-    }
-    else {
-        $post_header = 'Content-type: application/x-www-form-urlencoded'."\r\n".'Content-Length: '.$len."\r\n".'futureDate: '.$futureDate."\r\n".'languageCode: PHP'."\r\n";
-    }
+            if ($encoding == "UTF-8") {
+                $post_header = 'Content-type: application/x-www-form-urlencoded'."\r\n".'Accept-Charset: UTF-8'."\r\n".'Content-Length: '.$len."\r\n".'futureDate: '.$futureDate."\r\n".'languageCode: PHP'."\r\n";
+            }
+            else {
+                $post_header = 'Content-type: application/x-www-form-urlencoded'."\r\n".'Content-Length: '.$len."\r\n".'futureDate: '.$futureDate."\r\n".'languageCode: PHP'."\r\n";
+            }
 
 //Sending the Request
-    $stream_options = array(
-        'http' => array(
-            'method' => 'POST',
-            'header' => $post_header,
-            'content' => $file
-        )
-    );
+            $stream_options = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => $post_header,
+                    'content' => $file
+                )
+            );
 
-    $log->LogInfo($MessageReference." | Finish sending request to XML Appl | ".CDhlStopWatchHandler::elapsed());
+            $log->LogInfo($MessageReference." | Finish sending request to XML Appl | ".CDhlStopWatchHandler::elapsed());
 
-    $log->LogInfo($MessageReference." | Begin receiving reply from XML Appl");
+            $log->LogInfo($MessageReference." | Begin receiving reply from XML Appl");
 
 //Getting the response
-    $context  = stream_context_create($stream_options);
-    $response = file_get_contents($new_server_url, false, $context);
-    $resxml=simplexml_load_string($response) or die("Error: Cannot create object");
+            $context  = stream_context_create($stream_options);
+            $response = file_get_contents($new_server_url, false, $context);
+            $resxml=simplexml_load_string($response) or die("Error: Cannot create object");
 
-    if ($response != "") {
+            if ($response != "") {
 //Get microtime and convert into miliseconds and assign to date for .xml file creation.
-        $microstamp = microtime(true);
-        $micro = sprintf("%06d",($microstamp - floor($microstamp)) * 1000);
-        $milli = substr($micro, -3);
-        $ndatetime = date($dtformat, $ts).$milli;
+                $microstamp = microtime(true);
+                $micro = sprintf("%06d",($microstamp - floor($microstamp)) * 1000);
+                $milli = substr($micro, -3);
+                $ndatetime = date($dtformat, $ts).$milli;
 
 //Create and write response into .xml file.
-        $action = fopen($response_url.$resxml->getName()."_".$ndatetime.'.xml', 'w') or die('Unable to open file!');
-        fwrite($action, $response);
-        fclose($action);
+                $action = fopen($response_url.$resxml->getName()."_".$ndatetime.'.xml', 'w') or die('Unable to open file!');
+                fwrite($action, $response);
+                fclose($action);
 
-        $log->LogInfo($MessageReference." | Response received and saved successfully at :".$response_url);
-        echo "Response received and saved successfully at :".$response_url."\n\n";
-        $log->LogInfo($MessageReference." | The file name is:".$resxml->getName()."_".$ndatetime.".xml");
-        echo "The file name is:".$resxml->getName()."_".$ndatetime.".xml \n\n";
-    } else {
-        $log->LogWarn($MessageReference."| Failed to receive response.");
-        echo "Failed to receive response \n\n";
-    }
-    $log->LogInfo($MessageReference." | Finished receving reply from XML Appl | ".StopWatch::elapsed());
+                $log->LogInfo($MessageReference." | Response received and saved successfully at :".$response_url);
+                echo "Response received and saved successfully at :".$response_url."\n\n";
+                $log->LogInfo($MessageReference." | The file name is:".$resxml->getName()."_".$ndatetime.".xml");
+                echo "The file name is:".$resxml->getName()."_".$ndatetime.".xml \n\n";
+            } else {
+                $log->LogWarn($MessageReference."| Failed to receive response.");
+                echo "Failed to receive response \n\n";
+            }
+            $log->LogInfo($MessageReference." | Finished receving reply from XML Appl | ".StopWatch::elapsed());
 
-    $log->LogInfo($MessageReference." | Total time taken to process request and respond back to client | ".StopWatch::elapsed());
-    echo "Total time taken to process request and respond back to client | ".StopWatch::elapsed()."\n";
+            $log->LogInfo($MessageReference." | Total time taken to process request and respond back to client | ".StopWatch::elapsed());
+            echo "Total time taken to process request and respond back to client | ".StopWatch::elapsed()."\n";
 
-    $log->LogInfo($MessageReference." | END DHLClient");
+            $log->LogInfo($MessageReference." | END DHLClient");
 
-}
+        }
 
 //Unset Cookie
-unset($_COOKIE['ipaddress']);
+        unset($_COOKIE['ipaddress']);
 
 //StopWatch
 
 
-function getBetween($reqxml,$el_start,$el_end){
-    $el_config = explode($el_start, $reqxml);
-    if (isset($el_config[1])){
-        $el_config = explode($el_end, $el_config[1]);
-        return $el_config[0];
-    }
-    return '';
-}
+        function getBetween($reqxml,$el_start,$el_end){
+            $el_config = explode($el_start, $reqxml);
+            if (isset($el_config[1])){
+                $el_config = explode($el_end, $el_config[1]);
+                return $el_config[0];
+            }
+            return '';
+        }
 
 //Flush DNS
-if ($flushDNS == true) {
-    $getOSName = PHP_OS_FAMILY;
-    //Windows', 'BSD', 'Darwin', 'Solaris', 'Linux' or 'Unknown'.
-    $count = $count + 1;
+        if ($flushDNS == true) {
+            $getOSName = PHP_OS_FAMILY;
+            //Windows', 'BSD', 'Darwin', 'Solaris', 'Linux' or 'Unknown'.
+            $count = $count + 1;
 
-    if ($count > 1) {
-    } else {
-        echo "\n================= Please Wait for 60 seconds; Retry in progress ...... ================= \n\n";
-        Switch ($getOSName) {
-            case "Windows": //Windows OS
-                $cmd_str = "ipconfig /flushdns";
-                $responsetxt = exec($cmd_str);
-                $log->LogInfo($MessageReference."WINDOWS OS -> ".$cmd_str." -> ".$responsetxt);
-                echo "WINDOWS OS -> ".$cmd_str." -> ".$responsetxt."\n\n";
-                break;
+            if ($count > 1) {
+            } else {
+                echo "\n================= Please Wait for 60 seconds; Retry in progress ...... ================= \n\n";
+                Switch ($getOSName) {
+                    case "Windows": //Windows OS
+                        $cmd_str = "ipconfig /flushdns";
+                        $responsetxt = exec($cmd_str);
+                        $log->LogInfo($MessageReference."WINDOWS OS -> ".$cmd_str." -> ".$responsetxt);
+                        echo "WINDOWS OS -> ".$cmd_str." -> ".$responsetxt."\n\n";
+                        break;
 
-            case "Darwin": //Macintosh
-                $cmd_str = "dscacheutil -flushcache";
-                $responsetxt = exec($cmd_str);
-                $log->LogInfo($MessageReference."MAC OS -> ".$cmd_str." -> ".$responsetxt);
-                echo "MAC OS -> ".$cmd_str." -> ".$responsetxt."\n\n";
-                break;
+                    case "Darwin": //Macintosh
+                        $cmd_str = "dscacheutil -flushcache";
+                        $responsetxt = exec($cmd_str);
+                        $log->LogInfo($MessageReference."MAC OS -> ".$cmd_str." -> ".$responsetxt);
+                        echo "MAC OS -> ".$cmd_str." -> ".$responsetxt."\n\n";
+                        break;
 
-            case "Linux": //Unix/Linux OS
-                $cmd_str_1 = "nscd -I hosts";
-                $responsetxt_1 = exec($cmd_str_1);
-                $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_1." -> ".$responsetxt_1);
-                echo "Unix/Linux OS -> ".$cmd_str_1." -> ".$responsetxt_1."\n\n";
+                    case "Linux": //Unix/Linux OS
+                        $cmd_str_1 = "nscd -I hosts";
+                        $responsetxt_1 = exec($cmd_str_1);
+                        $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_1." -> ".$responsetxt_1);
+                        echo "Unix/Linux OS -> ".$cmd_str_1." -> ".$responsetxt_1."\n\n";
 
-                $cmd_str_2 = "dnsmasq restart";
-                $responsetxt_2 = exec($cmd_str_2);
-                $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_2." -> ".$responsetxt_2);
-                echo "Unix/Linux OS -> ".$cmd_str_2." -> ".$responsetxt_2."\n\n";
+                        $cmd_str_2 = "dnsmasq restart";
+                        $responsetxt_2 = exec($cmd_str_2);
+                        $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_2." -> ".$responsetxt_2);
+                        echo "Unix/Linux OS -> ".$cmd_str_2." -> ".$responsetxt_2."\n\n";
 
-                $cmd_str_3 = "rndc restart";
-                $responsetxt_3 = exec($cmd_str_3);
-                $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_3." -> ".$responsetxt_3);
-                echo "Unix/Linux OS -> ".$cmd_str_3." -> ".$responsetxt_3."\n\n";
-                break;
+                        $cmd_str_3 = "rndc restart";
+                        $responsetxt_3 = exec($cmd_str_3);
+                        $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_3." -> ".$responsetxt_3);
+                        echo "Unix/Linux OS -> ".$cmd_str_3." -> ".$responsetxt_3."\n\n";
+                        break;
 
-            case "Solaris":
-            case "BSD":
-            case "Unknown": //Unknown
-                $log->LogInfo($MessageReference." | Unable to flush DNS");
-                $log->LogWarn($MessageReference." | Unable to flush DNS");
-                echo "Unable to flush DNS \n\n";
-                break;
-        }
-        sleep(60);
+                    case "Solaris":
+                    case "BSD":
+                    case "Unknown": //Unknown
+                        $log->LogInfo($MessageReference." | Unable to flush DNS");
+                        $log->LogWarn($MessageReference." | Unable to flush DNS");
+                        echo "Unable to flush DNS \n\n";
+                        break;
+                }
+                sleep(60);
 
-    }
-    if ($count > 3) {
-        echo "=================    Three (3) retries are done - please contact DHL Support Team       ====================== \n\n";
-        $log->LogInfo($MessageReference." | Total time taken to process request and respond back to client | ".StopWatch::elapsed());
-        echo "Total time taken to process request and respond back to client | ".StopWatch::elapsed()."\n";
-        $log->LogInfo($MessageReference." | END DHLClient");
-        exit();
-    } else {
-        $log->LogInfo(" | RETRY =========> ".($count));
-        echo "\nRETRY =========> ".($count)."\n";
+            }
+            if ($count > 3) {
+                echo "=================    Three (3) retries are done - please contact DHL Support Team       ====================== \n\n";
+                $log->LogInfo($MessageReference." | Total time taken to process request and respond back to client | ".StopWatch::elapsed());
+                echo "Total time taken to process request and respond back to client | ".StopWatch::elapsed()."\n";
+                $log->LogInfo($MessageReference." | END DHLClient");
+                exit();
+            } else {
+                $log->LogInfo(" | RETRY =========> ".($count));
+                echo "\nRETRY =========> ".($count)."\n";
 
-        goto A;
-    }
-} else {}
+                goto A;
+            }
+        } else {}
         return true;
 
     }
@@ -722,11 +774,10 @@ if ($flushDNS == true) {
     }
 
     /**
-     * @param \XMLWriter $xml
      * @param CShipment $shipment
      * @return bool|string
      */
-    public function cancelPickup(\XMLWriter $xml, CShipment $shipment)
+    public function cancelPickup( CShipment $shipment)
     {
 
         return true;
@@ -783,6 +834,21 @@ if ($flushDNS == true) {
     {
         return true;
     }
+
+
+    public function getFirstPickUpDate(CAddressBook $fromAddress,CAddressBook $toAddress)
+    {
+        $possibleDate=(new DateTime())->modify('+3 day');
+        return $possibleDate;
+    }
+
+
+
+    public function addPickUpReturn(CShipment $shipment,$isShippingToIwes,$isOrderParallel,$orderToShipment)
+    {
+        // TODO: Implement addPickUpReturn() method.
+    }
+
 
 
 }

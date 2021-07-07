@@ -55,7 +55,6 @@ class CUPSHandler extends ACarrierHandler implements IImplementedPickUpHandler
      * @param CShipment $shipment
      * @param $orderId
      * @return CShipment|bool
-     * $orderId
      * @throws BambooException
      * @throws \Throwable
      * @throws \bamboo\core\exceptions\RedPandaException

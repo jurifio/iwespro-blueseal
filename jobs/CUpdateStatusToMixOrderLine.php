@@ -48,18 +48,19 @@ class CUpdateStatusToMixOrderLine extends ACronJob
         $query = "SELECT * from `Order`";
         $order = $orderRepo->findBySql($query,[]);
         foreach ($order as $orders) {
+            $countStatusWorking = 0;
+            $countStatusShipped = 0;
+            $countStatusCancel = 0;
+            $countStatusPending = 0;
+            $countStatusCart = 0;
+            $countStatusDelivered = 0;
+            $countStatusReturn = 0;
+            $countStatusPacking = 0;
+            $countOrderLine = 0;
             $dateEstimated = (new \DateTime($orders->orderDate))->format('Y-m-d');
             if ($dateEstimated >= '2021-06-11') {
                 if ($orders->remoteOrderSellerId != null && $orders->remoteShopSellerId) {
-                    $countStatusWorking = 0;
-                    $countStatusShipped = 0;
-                    $countStatusCancel = 0;
-                    $countStatusPending = 0;
-                    $countStatusCart = 0;
-                    $countStatusDelivered = 0;
-                    $countStatusReturn = 0;
-                    $countStatusPacking = 0;
-                    $countOrderLine = 0;
+
 
                     $orderLine = $orderLineRepo->findBy(['orderId' => $orders->id]);
 
@@ -111,8 +112,8 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                             $orders->update();
                             $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_MIX ' . $orders->id . ' Order','');
                         } elseif ($countStatusCancel >= 2 && $countStatusShipped == 0 && $countStatusWorking == 0) {
-                            $orders->status = 'ORD_CANC';
-                            $statusForRemote = 'CANC';
+                            $orders->status = 'ORD_MIX';
+                            $statusForRemote = 'ORD_MIX';
                             $orders->update();
                             $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_CANC' . $orders->id . ' Order','');
                         } elseif ($countStatusCancel == 0 && $countStatusShipped >= 2 && $countStatusWorking == 0) {
