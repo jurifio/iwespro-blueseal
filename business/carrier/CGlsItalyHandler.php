@@ -31,7 +31,7 @@ class CGlsItalyHandler extends ACarrierHandler implements IImplementedPickUpHand
         'endpoint' => 'https://labelservice.gls-italy.com/ilswebservice.asmx',
         'SedeGls' => 'MC',
         'CodiceClienteGls' => '136887',
-        'PasswordClienteGls' => 'iwesnc',
+        'PasswordClienteGls' => 'Iwes2104',
         'CodiceContrattoGls' => '1108'
     ];
     /**
