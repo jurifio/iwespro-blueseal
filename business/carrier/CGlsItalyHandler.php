@@ -1,15 +1,21 @@
 <?php
 
 namespace bamboo\business\carrier;
-
+use bamboo\business\carrier\ACarrierHandler;
+use bamboo\business\carrier\IImplementedPickUpHandler;
 use bamboo\core\exceptions\BambooException;
+use bamboo\domain\entities\CAddressBook;
 use bamboo\domain\entities\CShipment;
-
+use bamboo\domain\repositories\CShipmentRepo;
+use bamboo\utils\time\SDateToolbox;
+use bamboo\utils\time\STimeToolbox;
+use \Throwable;
+use \DateTime;
 /**
  * Class CGlsItalyHandler
  * @package bamboo\business\carrier
  *
- * @author Iwes Team <it@iwes.it>
+ * @author Iwes Team <juri@iwes.it>
  *
  * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -18,23 +24,42 @@ use bamboo\domain\entities\CShipment;
  * @date $date
  * @since 1.0
  */
-class CGlsItalyHandler extends ACarrierHandler
+class CGlsItalyHandler extends ACarrierHandler implements IImplementedPickUpHandler
 {
-    
+
     protected $config = [
-        'endpoint' => 'https://weblabeling.gls-italy.com/IlsWebService.asmx',
+        'endpoint' => 'https://labelservice.gls-italy.com/ilswebservice.asmx',
         'SedeGls' => 'MC',
         'CodiceClienteGls' => '136887',
         'PasswordClienteGls' => 'iwesnc',
         'CodiceContrattoGls' => '1108'
     ];
+    /**
+     * @param CShipment $shipment
+     * @param $orderId
+     * @return CShipment|bool
+     * @throws \Throwable
+     */
+    public function addPickUp(CShipment $shipment,$orderId)
+    {
+
+        //funzione che genera la chiamata api
+        \Monkey::app()->applicationReport('CGlsItalyHandler','addPickup','Called addPickUp');
+
+        $shipmentReturn = $this->addDelivery($shipment,$orderId);
+        return $shipmentReturn;
+
+    }
 
     /**
      * @param CShipment $shipment
-     * @return CShipment
+     * @param $orderId
+     * @param $isOrderParallel
+     * @param $orderToShipment
+     * @return CShipment|bool
      * @throws BambooException
      */
-    public function addDelivery(CShipment $shipment)
+    public function addDelivery(CShipment $shipment, $orderId)
     {
         \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Called AddParcel');
         $xml = new \XMLWriter();
@@ -51,19 +76,18 @@ class CGlsItalyHandler extends ACarrierHandler
         $xml->endDocument();
         $rawXml = $xml->outputMemory();
 
-
         $url = $this->config['endpoint'] . '/AddParcel';
         $data = ['XMLInfoParcel' => $rawXml];
         \Monkey::app()->applicationReport('GlsItalyHandler','addDelivery','Request AddParcel',$rawXml);
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, count($data));
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_POST,count($data));
         $postFields = http_build_query($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$postFields);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($ch,CURLOPT_HTTPHEADER,[
             'Content-type: application/x-www-form-urlencoded'
         ]);
 
@@ -94,6 +118,7 @@ class CGlsItalyHandler extends ACarrierHandler
             }
         }
 
+
         return $shipment;
     }
 
@@ -122,20 +147,44 @@ class CGlsItalyHandler extends ACarrierHandler
         //$xml->writeElement('Incoterm',$shipment->toAddress->subject);
         $xml->writeElement('PesoReale', 2.5);
 
+
         if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
             $xml->writeElement('ImportoContrassegno', $shipment->orderLine->getFirst()->order->netTotal);
+
+        }
+        if($shipment->note!='') {
+            $xml->writeElement('Notespedizione',$shipment->note);
+        }
+
+        $xml->writeElement('TipoPorto', 'F');
+        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
+        $xml->writeElement('TipoCollo', '0');
+        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
+        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
+        if ($shipment->orderLine->getFirst()->order->orderPaymentMethod->name == 'contrassegno') {
             $xml->writeElement('ModalitaIncasso', 'CONT');
         }
 
-        $xml->writeElement('Notespedizione', $shipment->note);
-        $xml->writeElement('NoteAggiuntive', 'Order ' . $shipment->orderLine->getFirst()->order->id);
-        $xml->writeElement('TipoPorto', 'F');
-        $xml->writeElement('TipoCollo', '0');
+        $now=(new \DateTime())->format('ymd');
 
-        $xml->writeElement('Email', $shipment->orderLine->getFirst()->order->user->email);
-        $xml->writeElement('Cellulare1', $shipment->toAddress->phone);
         $xml->writeElement('GeneraPdf', 1);
         $xml->writeElement('ContatoreProgressivo', $shipment->id);
+        $xml->writeElement('ValoreDichiarato', $shipment->orderLine->getFirst()->order->netTotal);
+        $xml->writeElement('PersonaRiferimento', $shipment->toAddress->subject);
+        $xml->writeElement('CategoriaMerceologica', '5');
+        $xml->writeElement('FatturaDoganale', $shipment->orderLine->getFirst()->order->id);
+        $xml->writeElement('DataFatturaDoganale', $now);
+        $orderLine=\Monkey::app()->repoFactory->create('OrderLine')->findBy(['orderId' => $shipment->orderLine->getFirst()->order->id]);
+        $numberLine=0;
+        foreach($orderLine as $line){
+            $numberLine++;
+        }
+        $xml->writeElement('DataFatturaDoganale', $now);
+        $xml->writeElement('PezziDichiarati', $numberLine);
+        $xml->writeElement('NazioneOrigine', 380);
+        $xml->writeElement('TelefonoMittente', '0733471365');
+        $xml->writeElement('NumeroFatturaCOD', $shipment->orderLine->getFirst()->order->id);
+        $xml->writeElement('DataFatturaCOD', $now);
         $xml->endElement();
         return true;
     }
@@ -352,4 +401,19 @@ class CGlsItalyHandler extends ACarrierHandler
         }
     }
 
+    public function getFirstPickUpDate(CAddressBook $fromAddress,CAddressBook $toAddress)
+    {
+        $possibleDate = (new DateTime())->modify('+1 day');
+        return $possibleDate;
+    }
+
+    public function addPickUpReturn(CShipment $shipment,$isShippingToIwes,$isOrderParallel,$orderToShipment)
+    {
+        // TODO: Implement addPickUpReturn() method.
+    }
+
+    public function cancelPickUp(CShipment $shipment)
+    {
+        // TODO: Implement cancelPickUp() method.
+    }
 }
