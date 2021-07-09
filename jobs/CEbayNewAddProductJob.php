@@ -99,7 +99,7 @@ class CEbayNewAddProductJob extends ACronJob
 
                 $xml = '';
                 $xml .= '<?xml version="1.0" encoding="utf-8"?>';
-                $xml .= '<AddItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
+                $xml .= '<AddFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">';
                 $xml .= '<ErrorLanguage>it_IT</ErrorLanguage>';
                 $xml .= '<WarningLevel>High</WarningLevel>';
                 //intestazione prodotto
@@ -108,6 +108,7 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<Country>IT</Country>';
                 $xml .= '<Currency>EUR</Currency>';
                 $xml .= '<ListingDuration>Days_120</ListingDuration>';
+                $xml .= '<ListingType>FixedPriceItem</ListingType>';
                 $xml .= '<PostalCode>62012</PostalCode>';
                 $xml .= '<Location>Civitanova Marche</Location>';
                 $xml .= '<BestOfferDetails>';
@@ -123,6 +124,15 @@ class CEbayNewAddProductJob extends ACronJob
                 //varianti taglie n
                 /** @var CProductSku $productSku */
                 $productSku = $productSkuRepo->findBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
+                $xml .= '<VariationSpecificsSet>';
+                $xml .= '<NameValueList>';
+                $xml .= '<Name>Taglia</Name>';
+                foreach ($productSku as $sku) {
+                    $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
+                    $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                }
+                $xml .= '</NameValueList>';
+                $xml .= '</VariationSpecificsSet>';
                 foreach ($productSku as $sku) {
                     if ($sku->stockQty > 0) {
                         $xml .= '<Variation>';
@@ -169,15 +179,7 @@ class CEbayNewAddProductJob extends ACronJob
                         $xml .= '</NameValueList>';
                         $xml .= '</VariationSpecifics>';
                         $xml .= '</Variation>';
-                        $xml .= '<VariationSpecificsSet>';
-                        $xml .= '<NameValueList>';
-                        $xml .= '<Name>Taglia</Name>';
-                        $xml .= '<Value>' . $productSizeColl->name . '</Value>';
-                        $xml .= '<NameValueList>';
-                        $xml .= '<Name>Color</Name>';
-                        $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
-                        $xml .= '</NameValueList>';
-                        $xml .= '</VariationSpecificsSet>';
+
                     }
                 }
                 $xml .= '</Variations>';
@@ -225,6 +227,7 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<Value><![CDATA[non applicabile]]></Value>';
                 $xml .= '</NameValueList>';
                 $xml .= '</ItemSpecifics>';
+
                 $xml .= '<ConditionID>1000</ConditionID>';
                 if ($good->titleModified == "1" && $good->isOnSale == "1") {
                     $percSc = number_format(100 * ($good->price - $good->salePrice) / $good->price,0);
@@ -917,7 +920,7 @@ footer {
     <eBayAuthToken>v^1.1#i^1#r^1#p^3#I^3#f^0#t^Ul4xMF8xOjk3MDVGODY4MkI3QUI4QkZGNzlGRTAwMjQwMjk4NkI4XzBfMSNFXjI2MA==</eBayAuthToken>
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>
-</AddItemRequest>';
+</AddFixedPriceItem>';
                 $xml = preg_replace(
                     '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]'
                     . '|[\x00-\x7F][\x80-\xBF]+'
