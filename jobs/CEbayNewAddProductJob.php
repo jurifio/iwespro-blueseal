@@ -923,7 +923,7 @@ footer {
                 $devID = '9c29584f-1f9e-4c60-94dc-84f786d8670e';
                 $appID = 'VendiloS-c310-4f4c-88a9-27362c05ea78';
                 $certID = '3050bb00-db24-4842-999c-b943deb09d1a';
-                $siteID = 0;
+                $siteID = 101;
 
                 $apiUrl = 'https://api.ebay.com/ws/api.dll';
                 $apiCall = 'AddItem';
