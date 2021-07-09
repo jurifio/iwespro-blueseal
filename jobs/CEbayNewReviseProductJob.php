@@ -188,7 +188,7 @@ class CEbayNewReviseProductJob extends ACronJob
                             $productSkuEanSelect->update();
                         }
 
-                    $xml .= '<EAN><![CDATA['. $productSkuEan .']]></EAN>';
+                     //   $xml .= '<EAN><![CDATA['. $productSkuEan .']]></EAN>';
                         $xml .= '<UPC>Non applicabile</UPC>';
                         $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
                         $xml .= '</VariationProductListingDetails>';
