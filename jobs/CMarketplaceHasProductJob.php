@@ -110,33 +110,33 @@ class CMarketplaceHasProductJob extends ACronJob
                                     $pshsdInsert->productVariantId = $product['productVariantId'];
                                     $pshsdInsert->marketplaceHasShopId = $marketplaceAccount->config['marketplaceHasShopId'];
                                     if ($marketplaceAccount->config['activeFullPrice'] == "1") {
-                                        $pshsd->modifyType = 'nf';
+                                        $pshsdInsert->modifyType = 'nf';
 
                                     } else {
                                         if ($marketplaceAccount->config['signFullPrice'] == "1") {
-                                            $pshsd->modifyType = '-p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentFullPrice'];
+                                            $pshsdInsert->modifyType = '-p';
+                                            $pshsdInsert->variantValue = $marketplaceAccount->config['percentFullPrice'];
                                         } else {
-                                            $pshsd->modifyType = '+p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentFullPrice'];
+                                            $pshsdInsert->modifyType = '+p';
+                                            $pshsdInsert->variantValue = $marketplaceAccount->config['percentFullPrice'];
                                         }
                                     }
                                     if ($marketplaceAccount->config['activeSalePrice'] == "1") {
-                                        $pshsd->modifyTypeSale = 'nf';
+                                        $pshsdInsert->modifyTypeSale = 'nf';
 
                                     } else {
                                         if ($marketplaceAccount->config['signSale'] == "1") {
-                                            $pshsd->modifyTypeSale = '-p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentSalePrice'];
+                                            $pshsdInsert->modifyTypeSale = '-p';
+                                            $pshsdInsert->variantValue = $marketplaceAccount->config['percentSalePrice'];
                                         } else {
-                                            $pshsd->modifyTypeSale = '+p';
-                                            $pshsd->variantValue = $marketplaceAccount->config['percentSalePrice'];
+                                            $pshsdInsert->modifyTypeSale = '+p';
+                                            $pshsdInsert->variantValue = $marketplaceAccount->config['percentSalePrice'];
                                         }
                                     }
-                                    $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
-                                    $pshsd->status = 2;
-                                    $pshsd->lastUpdate = '2011-01-01 00:00:00';
-                                    $pshsd->productStatusMarkeplaceId=2;
+                                    $pshsdInsert->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
+                                    $pshsdInsert->status = 2;
+                                    $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
+                                    $pshsdInsert->productStatusMarkeplaceId=2;
                                     $pshsdInsert->insert();
 
                                 }
