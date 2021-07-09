@@ -238,7 +238,7 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '</ItemSpecifics>';
 
                 $xml .= '<ConditionID>1000</ConditionID>';
-                if ($good->titleModified == "1" && $good->isOnSale == "1") {
+              /*  if ($good->titleModified == "1" && $good->isOnSale == "1") {
                     $percSc = number_format(100 * ($good->price - $good->salePrice) / $good->price,0);
                     $name = $product->productBrand->name
                         . ' Sconto del ' . $percSc . '% da ' . number_format($good->price,'2','.','') . ' € a ' . number_format($good->salePrice,'2','.','')
@@ -247,7 +247,7 @@ class CEbayNewAddProductJob extends ACronJob
                         . ' ' .
                         $product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
                     $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
-                } else {
+                } else {*/
                     $name = $product->productCategoryTranslation->findOneByKey('langId',1)->name
                         . ' ' .
                         $product->productBrand->name
@@ -258,7 +258,7 @@ class CEbayNewAddProductJob extends ACronJob
 
 
                     $xml .= '<Title><![CDATA[' . $name . ']]></Title>';
-               }
+              // }
                 $xml .= '<Description>';
                 $xml .= '<![CDATA[' . $name . ']]>
     </Description>';
