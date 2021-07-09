@@ -938,7 +938,7 @@ footer {
                 $siteID = 101;
 
                 $apiUrl = 'https://api.ebay.com/ws/api.dll';
-                $apiCall = 'AddItem';
+                $apiCall = 'AddFixedPriceItem';
                 $compatibilityLevel = 741;
 
                 $runame = 'Vendilo_SpA-VendiloS-c310-4-prlqnbrjv';
