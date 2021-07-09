@@ -244,7 +244,7 @@ class CEbayNewReviseProductJob extends ACronJob
         <NameValueList>
         <Name><![CDATA[Reparto]]></Name>
         <Value><![CDATA[non applicabile]]></Value>
-      </NameValueList></NameValueList>
+      </NameValueList>
         <NameValueList>
         <Name><![CDATA[Stile]]></Name>
         <Value><![CDATA[non applicabile]]></Value>
