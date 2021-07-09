@@ -160,7 +160,7 @@ class CMarketplaceHasProductJob extends ACronJob
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActivePublish'] == 1) {
+                    if ($marketplaceAccount->config['isActive'] == 1) {
                         $now = strtotime(date("Y-m-d"));
                         $dateStartPeriod1 = strtotime($marketplaceAccount->config['dateStartPeriod1'] . ' 00:00:00');
                         $dateEndPeriod1 = strtotime($marketplaceAccount->config['dateEndPeriod1'] . ' 23:59:59');
