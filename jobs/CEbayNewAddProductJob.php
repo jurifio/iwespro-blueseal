@@ -134,6 +134,10 @@ class CEbayNewAddProductJob extends ACronJob
                     }
                 }
                 $xml .= '</NameValueList>';
+                $xml .= '<NameValueList>';
+                $xml .= '<Name>Color</Name>';
+                $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
+                $xml .= '</NameValueList>';
                 $xml .= '</VariationSpecificsSet>';
                 foreach ($productSku as $sku) {
                     if ($sku->stockQty > 0) {
