@@ -96,6 +96,7 @@ class CEbayNewReviseProductJob extends ACronJob
                 }
                 $productCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$good->productId,'productVariantId' => $good->productVariantId]);
                 $productCategoryId=$productCategory->productCategoryId;
+
                 $category = \Monkey::app()->repoFactory->create('ProductCategoryHasMarketplaceAccountCategory')->findOneBy(['marketplaceId' => 3,'marketplaceAccountId' => 3,'productCategoryId' => $productCategoryId]);
                 if (!$category) {
                     continue;
@@ -245,6 +246,12 @@ class CEbayNewReviseProductJob extends ACronJob
         <Name><![CDATA[Reparto]]></Name>
         <Value><![CDATA[non applicabile]]></Value>
       </NameValueList>';
+                $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+                $stile=\Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId'=>1,'productCategoryId'=>$productHasProductCategory->productCategoryId,'shopId'=>44])->name;
+                $xml .= '<NameValueList>';
+                $xml .= '<Name><![CDATA[Stile]]></Name>';
+                $xml .= '<Value><![CDATA['.$stile.']]></Value>';
+                $xml .= '</NameValueList>';
                 $xml .= '<NameValueList>';
                 $xml .= '<Name><![CDATA[Vintage]]></Name>';
                 $xml .= '<Value><![CDATA[non applicabile]]></Value>';
