@@ -42,11 +42,11 @@ class CMarketplaceHasProductJob extends ACronJob
         try {
             $this->report('CMarketplaceHasProductJob','start Preparing','');
 
-            $marketplaces = $marketplaceRepo->findBy(['type' => 'marketplace']);
+            $marketplaces = $marketplaceRepo->findBy(['type' => 'marketplace','id'=>3]);
             foreach ($marketplaces as $marketplace) {
                 $marketplaceAccount = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
                 if ($marketplaceAccount) {
-                    if ($marketplaceAccount->config['isActive'] == 1) {
+                    if ($marketplaceAccount->config['isActivePublish'] == 1) {
                         $this->report('CMarketplaceHasProductJob','Working ' . $marketplace->name,'');
                         if ($marketplaceAccount->config['brands'] == 0 || $marketplaceAccount->config['brands'] == '') {
                             $sqlBrandFilter = 'and 1=1';
@@ -60,14 +60,14 @@ class CMarketplaceHasProductJob extends ACronJob
                         }
                         $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where shp.shopId =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandFilter . ' ) UNION
+ and p.productVariantId=shp.productVariantId where p.qty>0 and  shp.shopId =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandFilter . ' ) UNION
 (select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandParallelFilter . ')';
+ and p2.productVariantId=shp2.productVariantId where p2.qty>0 and  shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . '  ' . $sqlBrandParallelFilter . ')';
 
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
-                            if ($product['qty'] > 0) {
+
                                 $pshsd = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                                 if ($pshsd) {
 
@@ -141,7 +141,7 @@ class CMarketplaceHasProductJob extends ACronJob
 
                                 }
 
-                            }
+
                         }
                         $this->report('CMarketplaceHasProductJob','End Work  prepare for publishing From ' . $marketplace->name,'');
                     }
@@ -208,7 +208,7 @@ class CMarketplaceHasProductJob extends ACronJob
                         from Product p join PrestashopHasProduct shp on p.id=shp.productId  
                                                                             
  and p.productVariantId=shp.productVariantId
-join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where shp.productStatusMarketplaceId in (2,3) and shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
+join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId where p.qty>0 shp.productStatusMarketplaceId in (2,3) and shp.marketplaceHasShopId =' . $marketplaceAccount->config['marketplaceHasShopId'];
                         $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                         foreach ($products as $product) {
                             $marketProduct = $phphmhsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
