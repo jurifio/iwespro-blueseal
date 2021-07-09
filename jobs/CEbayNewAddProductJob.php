@@ -210,7 +210,6 @@ class CEbayNewAddProductJob extends ACronJob
         <Value><![CDATA[non applicabile]]></Value>
       </NameValueList>
        ';
-
                 $xml .= '<NameValueList>';
                 $xml .= '<Name><![CDATA[Vintage]]></Name>';
                 $xml .= '<Value><![CDATA[non applicabile]]></Value>';
