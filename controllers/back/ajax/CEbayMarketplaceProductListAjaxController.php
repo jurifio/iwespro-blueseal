@@ -8,6 +8,8 @@ use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\repositories\CPrestashopHasProductRepo;
+use Throwable;
+use bamboo\domain\repositories\CEmailRepo;
 
 /**
  * Class CEbayMarketplaceProductListAjaxController
@@ -26,17 +28,18 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
 {
     public function get()
     {
-        if (isset($_REQUEST['accountid'])) {
-            $accountid = $_REQUEST['accountid'];
-        } else {
-            $accountid = '';
-        }
-        if ($accountid == 0) {
-            $sqlFilterAccount = '';
-        } else {
-            $sqlFilterAccount = 'and phphmhs.marketplaceHasShopId=' . $accountid;
-        }
-        $sql = "
+        try {
+            if (isset($_REQUEST['accountid'])) {
+                $accountid = $_REQUEST['accountid'];
+            } else {
+                $accountid = '';
+            }
+            if ($accountid == 0) {
+                $sqlFilterAccount = '';
+            } else {
+                $sqlFilterAccount = 'and phphmhs.marketplaceHasShopId=' . $accountid;
+            }
+            $sql = "
             SELECT
               concat(php.productId, '-', php.productVariantId) AS productCode,
               php.productId,
@@ -90,34 +93,34 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0 and m.id=3 and phphmhs.isPublished=1 and phphmhs.refMarketplaceId is not null  ".$sqlFilterAccount."
-            GROUP BY phphmhs.productId, phphmhs.productVariantId,phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
+            where p.qty>0 and m.id=3 and phphmhs.isPublished=1 and phphmhs.refMarketplaceId is not null  " . $sqlFilterAccount . "
+            GROUP BY phphmhs.productId, phphmhs.productVariantId, phphmhs.marketplaceHasShopId  order by phphmhs.marketplaceHasShopId asc
         ";
 
 
-        $datatable = new CDataTables($sql,['productId','productVariantId','marketplaceHasShopId'],$_GET,true);
+            $datatable = new CDataTables($sql,['productId','productVariantId','marketplaceHasShopId'],$_GET,true);
 
-        $datatable->doAllTheThings();
+            $datatable->doAllTheThings();
 
 
-        $phpmsRepo=\Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
+            $phpmsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
 
-        /** @var CRepo $mhsRepo */
-        $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
-        $mpaRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
-        foreach ($datatable->getResponseSetData() as $key => $row) {
+            /** @var CRepo $mhsRepo */
+            $mhsRepo = \Monkey::app()->repoFactory->create('MarketplaceHasShop');
+            $mpaRepo = \Monkey::app()->repoFactory->create('MarketplaceAccount');
+            foreach ($datatable->getResponseSetData() as $key => $row) {
 
-            /** @var CPrestashopHasProductHasMarketplaceHasShop $php */
-            $php = $phpmsRepo->findOneBy($row);
-            $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
-            $row['productCode'] = $php->productId . '-' . $php->productVariantId;
-            $row['refMarketplaceId'] = ($php->refMarketplaceId) ?: '';
-            $row['marketplaceShopName'] = $php->marketplaceHasShop->name;
-            $row['marketplacePrice'] = $php->price;
-            $row['marketplaceSalePrice'] = $php->salePrice;
-            switch (true) {
-                case $php->lastTypeOperation = 0:
-                    $lastTypeOperation = '<i style="color: black;
+                /** @var CPrestashopHasProductHasMarketplaceHasShop $php */
+                $php = $phpmsRepo->findOneBy($row);
+                $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
+                $row['productCode'] = $php->productId . '-' . $php->productVariantId;
+                $row['refMarketplaceId'] = ($php->refMarketplaceId) ?: '';
+                $row['marketplaceShopName'] = $php->marketplaceHasShop->name;
+                $row['marketplacePrice'] = $php->price;
+                $row['marketplaceSalePrice'] = $php->salePrice;
+                switch (true) {
+                    case $php->lastTypeOperation = 0:
+                        $lastTypeOperation = '<i style="color: black;
     font-size: 12px;
     display: inline-block;
     border: black;
@@ -126,107 +129,105 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
     padding: 0.1em;
     margin-top: 0.5em;
     padding-right: 4px;
-    padding-left: 4px;"><b>'.'da inserire '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s'). '</b></i>';
-                    break;
-                case $php->lastTypeOperation = 2:
-                    $lastTypeOperation =  '<i style="color: orange;
-    font-size: 12px;
-    display: inline-block;
-    border: black;
-    border-style: solid;
-    border-width: 1.2px;
-    padding: 0.1em;
-    margin-top: 0.5em;
-    padding-right: 4px;
-    padding-left: 4px;"><b>'.'ADD '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s'). '</b></i>';
-                    break;
-                case $php->lastTypeOperation = 1:
-                    $lastTypeOperation = '<i style="color: green;
-    font-size: 12px;
-    display: inline-block;
-    border: black;
-    border-style: solid;
-    border-width: 1.2px;
-    padding: 0.1em;
-    margin-top: 0.5em;
-    padding-right: 4px;
-    padding-left: 4px;"><b>'.'REVISE '.(new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s'). '</b></i>';
-                    break;
-            }
-            $row['lastTypeOperation'] =$lastTypeOperation;
-            if ($php->isOnSale == 1) {
-                $row['activePrice'] = $php->salePrice;
-            } else {
-                $row['activePrice'] = $php->price;
-            }
-            $row['titleModified'] = ($php->titleModified == 1) ? 'si' : 'no';
-            $row['isOnSale'] = ($php->isOnSale == 1) ? 'si' : 'no';
-            if (($php->titleModified == 1) && ($php->isOnSale == 1)) {
-                $percSc = number_format(100 * ($php->price - $php->salePrice) / $php->price,0);
-                $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->price,'2','.','') . ' € a ' . number_format($php->salePrice,'2','.','') . ' € ' .
-                    $php->product->itemno
-                    . ' ' .
-                    $php->product->productColorGroup->productColorGroupTranslation->findOneBy(['langId'=>1,'shopId'=>$php->product->shopHasProduct->shopId])->name;
-            } else {
-                $name = $php->product->productCategoryTranslation->findOneBy(['langId'=>1,'shopId'=>$php->product->shopHasProduct->shopId])->name
-                    . ' ' .
-                    $php->product->productBrand->name
-                    . ' ' .
-                    $php->product->itemno
-                    . ' ' .
-                    $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
-            }
-            $row['title'] = $name;
-            $row['img']='<img width="50" src="' .$php->marketplaceHasShop->imgMarketPlace. '" />';
-
-
-
-            $row['brand'] = $php->product->productBrand->name;
-            $row['productStatus'] = $php->product->productStatus->name;
-
-
-
-
-            $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
-            $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
-            $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
-            $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
-            $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
-            $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
-            $mpas = $mpaRepo->findBy(['marketplaceId' => 3,'isActive' => 1]);
-            $tableSaldi='';
-            if($mpas) {
-                foreach ($mpas as $mpa) {
-                    if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
-                        $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
-                        $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
-                        $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
-                        $dateEndPeriod2 = ($mpa->config['dateEndPeriod2'] != '') ? (new \DateTime($mpa->config['dateEndPeriod2']))->format('d-m-Y') : 'non definito';
-                        $dateStartPeriod3 = ($mpa->config['dateStartPeriod3'] != '') ? (new \DateTime($mpa->config['dateStartPeriod3']))->format('d-m-Y') : "non definto";
-                        $dateEndPeriod3 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod3']))->format('d-m-Y') : "non definito";
-                        $dateStartPeriod4 = ($mpa->config['dateStartPeriod4'] != '') ? (new \DateTime($mpa->config['dateStartPeriod4']))->format('d-m-Y') : 'non definito';
-                        $dateEndPeriod4 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod4']))->format('d-m-Y') : 'non definito';
-                        $tableSaldi .= 'dal ' . $dateStartPeriod1 . ' al ' . $dateEndPeriod1 . '<br>';
-                        $tableSaldi .= 'dal ' . $dateStartPeriod2 . ' al ' . $dateEndPeriod2 . '<br>';
-                        $tableSaldi .= 'dal ' . $dateStartPeriod3 . ' al ' . $dateEndPeriod3 . '<br>';
-                        $tableSaldi .= 'dal ' . $dateStartPeriod4 . ' al ' . $dateEndPeriod4 . '<br>';
+    padding-left: 4px;"><b>' . 'da inserire ' . (new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s') . '</b></i>';
                         break;
+                    case $php->lastTypeOperation = 2:
+                        $lastTypeOperation = '<i style="color: orange;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>' . 'ADD ' . (new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s') . '</b></i>';
+                        break;
+                    case $php->lastTypeOperation = 1:
+                        $lastTypeOperation = '<i style="color: green;
+    font-size: 12px;
+    display: inline-block;
+    border: black;
+    border-style: solid;
+    border-width: 1.2px;
+    padding: 0.1em;
+    margin-top: 0.5em;
+    padding-right: 4px;
+    padding-left: 4px;"><b>' . 'REVISE ' . (new \DateTime($php->lastTimeOperation))->format('d-m-Y H:i:s') . '</b></i>';
+                        break;
+                }
+                $row['lastTypeOperation'] = $lastTypeOperation;
+                if ($php->isOnSale == 1) {
+                    $row['activePrice'] = $php->salePrice;
+                } else {
+                    $row['activePrice'] = $php->price;
+                }
+                $row['titleModified'] = ($php->titleModified == 1) ? 'si' : 'no';
+                $row['isOnSale'] = ($php->isOnSale == 1) ? 'si' : 'no';
+                if (($php->titleModified == 1) && ($php->isOnSale == 1)) {
+                    $percSc = number_format(100 * ($php->price - $php->salePrice) / $php->price,0);
+                    $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->price,'2','.','') . ' € a ' . number_format($php->salePrice,'2','.','') . ' € ' .
+                        $php->product->itemno
+                        . ' ' .
+                        $php->product->productColorGroup->productColorGroupTranslation->findOneBy(['langId' => 1,'shopId' => $php->product->shopHasProduct->shopId])->name;
+                } else {
+                    $name = $php->product->productCategoryTranslation->findOneBy(['langId' => 1,'shopId' => $php->product->shopHasProduct->shopId])->name
+                        . ' ' .
+                        $php->product->productBrand->name
+                        . ' ' .
+                        $php->product->itemno
+                        . ' ' .
+                        $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+                }
+                $row['title'] = $name;
+                $row['img'] = '<img width="50" src="' . $php->marketplaceHasShop->imgMarketPlace . '" />';
+
+
+                $row['brand'] = $php->product->productBrand->name;
+                $row['productStatus'] = $php->product->productStatus->name;
+
+
+                $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $php->product->getDummyPictureUrl() . '" /></a>';
+                $row['shop'] = '<span class="small">' . $php->product->getShops('<br />',true) . '</span>';
+                $row['season'] = '<span class="small">' . $php->product->productSeason->name . " " . $php->product->productSeason->year . '</span>';
+                $row['totalQty'] = '<span class="small">' . $php->product->qty . '</span>';
+                $row['stock'] = '<table class="nested-table inner-size-table" data-product-id="' . $php->product->printId() . '"></table>';
+                $row['externalId'] = '<span class="small">' . $php->product->itemno . '</span>';
+                $mpas = $mpaRepo->findBy(['marketplaceId' => 3,'isActive' => 1]);
+                $tableSaldi = '';
+                if ($mpas) {
+                    foreach ($mpas as $mpa) {
+                        if ($mpa->config['marketplaceHasShopId'] == $php->marketplaceHasShopId) {
+                            $dateStartPeriod1 = ($mpa->config['dateStartPeriod1'] != '') ? (new \DateTime($mpa->config['dateStartPeriod1']))->format('d-m-Y') : 'non definito';
+                            $dateEndPeriod1 = ($mpa->config['dateEndPeriod1'] != '') ? (new \DateTime($mpa->config['dateEndPeriod1']))->format('d-m-Y') : 'non definito';
+                            $dateStartPeriod2 = ($mpa->config['dateStartPeriod2'] != '') ? (new \DateTime($mpa->config['dateStartPeriod2']))->format('d-m-Y') : "non definito";
+                            $dateEndPeriod2 = ($mpa->config['dateEndPeriod2'] != '') ? (new \DateTime($mpa->config['dateEndPeriod2']))->format('d-m-Y') : 'non definito';
+                            $dateStartPeriod3 = ($mpa->config['dateStartPeriod3'] != '') ? (new \DateTime($mpa->config['dateStartPeriod3']))->format('d-m-Y') : "non definto";
+                            $dateEndPeriod3 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod3']))->format('d-m-Y') : "non definito";
+                            $dateStartPeriod4 = ($mpa->config['dateStartPeriod4'] != '') ? (new \DateTime($mpa->config['dateStartPeriod4']))->format('d-m-Y') : 'non definito';
+                            $dateEndPeriod4 = ($mpa->config['dateEndPeriod3'] != '') ? (new \DateTime($mpa->config['dateEndPeriod4']))->format('d-m-Y') : 'non definito';
+                            $tableSaldi .= 'dal ' . $dateStartPeriod1 . ' al ' . $dateEndPeriod1 . '<br>';
+                            $tableSaldi .= 'dal ' . $dateStartPeriod2 . ' al ' . $dateEndPeriod2 . '<br>';
+                            $tableSaldi .= 'dal ' . $dateStartPeriod3 . ' al ' . $dateEndPeriod3 . '<br>';
+                            $tableSaldi .= 'dal ' . $dateStartPeriod4 . ' al ' . $dateEndPeriod4 . '<br>';
+                            break;
+                        }
                     }
                 }
+                $row['tableSaldi'] = $tableSaldi;
+
+                /** @var CMarketplaceHasShop $mhsCron */
+                $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
+
+
+                $datatable->setResponseDataSetRow($key,$row);
             }
-            $row['tableSaldi']=$tableSaldi;
 
-            /** @var CMarketplaceHasShop $mhsCron */
-            $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
+            return $datatable->responseOut();
+        }catch(\Throwable $e){
+            \Monkey::app()->applicationLog('CEbayMarketplaceProductListAjaxController','Error','getError',$e->getMessage(),$e->getLine());
 
-
-
-
-
-            $datatable->setResponseDataSetRow($key,$row);
         }
-
-        return $datatable->responseOut();
     }
 
 }
