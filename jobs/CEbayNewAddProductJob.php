@@ -128,8 +128,10 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<NameValueList>';
                 $xml .= '<Name>Taglia</Name>';
                 foreach ($productSku as $sku) {
-                    $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
-                    $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                    if ($sku->stockQty > 0) {
+                        $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
+                        $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                    }
                 }
                 $xml .= '</NameValueList>';
                 $xml .= '</VariationSpecificsSet>';
