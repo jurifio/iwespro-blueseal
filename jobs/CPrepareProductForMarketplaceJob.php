@@ -76,7 +76,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                             $phsInsert->status = 0;
                             $phsInsert->dateUpdate = '2011-01-01 00:00:00';
                             $phsInsert->productStatusMarketplaceId = 1;
-                            $phs->insert();
+                            $phsInsert->insert();
                             $this->report('CPrepareProductForMarketplaceJob','Report','insert ' . $product['productId'] . '-' . $product['productVariantId'] . ' to marketplace' . $mhs->id);
 
                         }
