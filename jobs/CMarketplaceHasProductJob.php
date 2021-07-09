@@ -687,14 +687,12 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                                 $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
                                                 break;
                                         }
-                                        $marketProductInsert->productId = $product['productId'];
-                                        $marketProductInsert->productVariantId = $product['productVariantId'];
-                                        $marketProductInsert->marketplaceHasShopId = $marketplaceAccount->config['marketplaceHasShopId'];
+
                                         $marketProductInsert->isOnSale = 0;
                                         $marketProductInsert->titleModified = 0;
                                         $marketProductInsert->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
                                         $marketProductInsert->isPublished = 2;
-                                        $marketProductInsert->insert();
+
                                     } else {
                                         switch ($product['modifyTypeSale']) {
                                             case  'p+':
@@ -736,10 +734,7 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                         }
                                         $marketProductInsert->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
                                         $marketProductInsert->isPublished = 2;
-                                        $marketProductInsert->productId = $product['productId'];
-                                        $marketProductInsert->productVariantId = $product['productVariantId'];
-                                        $marketProductInsert->marketplaceHasShopId = $marketplaceAccount->config['marketplaceHasShopId'];
-                                        $marketProductInsert->insert();
+
                                     }
                                 } else {
                                     switch ($product['modifyType']) {
@@ -805,8 +800,11 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                     $marketProductInsert->isOnSale = 0;
                                     $marketProductInsert->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
                                     $marketProductInsert->isPublished = 2;
-                                    $marketProductInsert->insert();
                                 }
+                                $marketProductInsert->productId = $product['productId'];
+                                $marketProductInsert->productVariantId = $product['productVariantId'];
+                                $marketProductInsert->marketplaceHasShopId = $marketplaceAccount->config['marketplaceHasShopId'];
+                                $marketProductInsert->insert();
                                 $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                                 $phpUpdate->status = 1;
                                 $phpUpdate->update();
