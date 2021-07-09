@@ -616,7 +616,7 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                 } else {
 
                                 }
-                                $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShop' => $marketplaceAccount->config['marketplaceHasShopId']]);
+                                $phpUpdate = $phsRepo->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                                 $phpUpdate->status = 1;
                                 $phpUpdate->update();
                             }
