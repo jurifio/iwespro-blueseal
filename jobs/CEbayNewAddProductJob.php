@@ -169,6 +169,15 @@ class CEbayNewAddProductJob extends ACronJob
                         $xml .= '</NameValueList>';
                         $xml .= '</VariationSpecifics>';
                         $xml .= '</Variation>';
+                        $xml .= '<VariationSpecificsSet>';
+                        $xml .= '<NameValueList>';
+                        $xml .= '<Name>Taglia</Name>';
+                        $xml .= '<Value>' . $productSizeColl->name . '</Value>';
+                        $xml .= '<NameValueList>';
+                        $xml .= '<Name>Color</Name>';
+                        $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
+                        $xml .= '</NameValueList>';
+                        $xml .= '</VariationSpecificsSet>';
                     }
                 }
                 $xml .= '</Variations>';
