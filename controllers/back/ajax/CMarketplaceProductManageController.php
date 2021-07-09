@@ -26,10 +26,11 @@ class CMarketplaceProductManageController extends AAjaxController
                 $activeAutomatic = isset($account->config['activeAutomatic']) ? $account->config['activeAutomatic'] : 0;
                 $modifier = isset($account->config['priceModifier']) ? $account->config['priceModifier'] : 0;
                 $cpc = isset($account->config['defaultCpc']) ? $account->config['defaultCpc'] : 0;
-                if ($account->marketplace->type == 'cpc') {
-                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $account->marketplace->name,'modifier' => $modifier,'cpc' => $cpc,'activeAutomatic' => $activeAutomatic];
+                $marketplace=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$account->marketplaceId]);
+                if ($marketplace->type == 'cpc') {
+                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $marketplace->name,'modifier' => $modifier,'cpc' => $cpc,'activeAutomatic' => $activeAutomatic];
                 } else {
-                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $account->marketplace->name,'modifier' => $modifier,'cpc' => 0,'activeAutomatic' => 0];
+                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $marketplace->name,'modifier' => $modifier,'cpc' => 0,'activeAutomatic' => 0];
                 }
             }
         }
