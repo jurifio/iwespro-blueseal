@@ -244,6 +244,22 @@ class CEbayNewReviseProductJob extends ACronJob
         <NameValueList>
         <Name><![CDATA[Reparto]]></Name>
         <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList></NameValueList>
+        <NameValueList>
+        <Name><![CDATA[Stile]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList> 
+      <NameValueList>
+        <Name><![CDATA[Materiale Tomaia]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList>
+       <NameValueList>
+        <Name><![CDATA[Colore]]></Name>
+        <Value><![CDATA['.$product->productColorGroup->name.']]></Value>
+      </NameValueList>
+       <NameValueList>
+        <Name><![CDATA[Materiale]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
       </NameValueList>';
                 $xml .= '<NameValueList>';
                 $xml .= '<Name><![CDATA[Vintage]]></Name>';
