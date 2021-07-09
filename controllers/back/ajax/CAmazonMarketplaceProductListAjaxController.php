@@ -112,6 +112,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
             $php = $phpmsRepo->findOneBy($row);
             $row['cpf'] = $php->product->itemno . ' # ' . $php->product->productVariant->name;
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
+            $row['DT_RowId'] = $php->productId . '-' . $php->productVariantId;
             $row['refMarketplaceId'] = ($php->refMarketplaceId) ?: '';
             $row['marketplaceShopName'] = $php->marketplaceHasShop->name;
             $row['marketplacePrice'] = $php->price;
