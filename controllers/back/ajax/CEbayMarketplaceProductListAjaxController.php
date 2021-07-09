@@ -166,9 +166,9 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                 $name = $php->product->productBrand->name . ' Sconto del ' . $percSc . '% da ' . number_format($php->price,'2','.','') . ' € a ' . number_format($php->salePrice,'2','.','') . ' € ' .
                     $php->product->itemno
                     . ' ' .
-                    $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
+                    $php->product->productColorGroup->productColorGroupTranslation->findOneBy(['langId'=>1,'shopId'=>$php->product->shopHasProduct->shopId])->name;
             } else {
-                $name = $php->product->productCategoryTranslation->findOneByKey('langId',1)->name
+                $name = $php->product->productCategoryTranslation->findOneBy(['langId'=>1,'shopId'=>$php->product->shopHasProduct->shopId])->name
                     . ' ' .
                     $php->product->productBrand->name
                     . ' ' .
