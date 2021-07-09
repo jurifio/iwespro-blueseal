@@ -144,6 +144,8 @@ class CEbayNewReviseProductJob extends ACronJob
                 $xml .= '<ItemID>' . $good->refMarketplaceId . '</ItemID>';
                 $xml .= '<Country>IT</Country>';
                 $xml .= '<Currency>EUR</Currency>';
+                $xml .= '<ListingDuration>GTC</ListingDuration>';
+                $xml .= '<ListingType>FixedPriceItem</ListingType>';
                 $xml .= '<PostalCode>62012</PostalCode>';
                 $xml .= '<Location>Civitanova Marche</Location>';
                 $xml .= '<BestOfferDetails>';
