@@ -181,7 +181,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
                     $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
             }
             $row['title'] = $name;
-            $row['img']='<img width="50" src="' .$php->marketplaceHasShop->imgMarketPlace. '" />';
+            $row['img'] = '<img width="50" src="' . $php->marketplaceHasShop->imgMarketPlace . '" />';
 
 
             $row['brand'] = $php->product->productBrand->name;
