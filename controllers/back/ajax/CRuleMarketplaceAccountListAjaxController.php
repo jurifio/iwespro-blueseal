@@ -52,7 +52,7 @@ class CRuleMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxC
                 $marketplace=\Monkey::app()->repoFactory->create('Marketplace')->findOneBy(['id'=>$marketplaceAccount->marketplaceId]);
                 $row['marketplace'] = $marketplace->name;
                 $row['marketplaceAccount'] = '<a href="/blueseal/prodotti/marketplace/account/' . $marketplaceAccount->printId() . '">' . $marketplaceAccount->name . '</a>';
-                $row['marketplaceType'] = $marketplaceAccount->marketplace->type;
+                $row['marketplaceType'] = $marketplace->type;
                $row['isActive'] = ($marketplaceAccount->isActive==1)?'si':'no';
 
             $datatable->setResponseDataSetRow($key,$row);
