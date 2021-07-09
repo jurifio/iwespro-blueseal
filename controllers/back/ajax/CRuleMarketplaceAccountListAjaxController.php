@@ -27,7 +27,7 @@ class CRuleMarketplaceAccountListAjaxController extends AMarketplaceAccountAjaxC
           m.name                                          AS marketplace,
           ma.name                                         AS marketplaceAccount,
          m.type as marketplaceType,
-          if(ma.isActive='0','si','no') as isActive 
+          if(ma.isActive='0','no','si') as isActive 
         FROM Marketplace m
           JOIN MarketplaceAccount ma ON m.id = ma.marketplaceId
         where m.type='marketplace'
