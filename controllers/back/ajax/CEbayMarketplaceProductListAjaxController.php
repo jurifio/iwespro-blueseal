@@ -217,7 +217,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                 $row['tableSaldi'] = $tableSaldi;
 
                 /** @var CMarketplaceHasShop $mhsCron */
-                $mhsCron = $mhsRepo->findOneBy(['id' => $mpa->config['marketplaceHasShopId']]);
+                $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
 
 
                 $datatable->setResponseDataSetRow($key,$row);
