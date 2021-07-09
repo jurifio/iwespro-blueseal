@@ -107,7 +107,7 @@ class CEbayNewAddProductJob extends ACronJob
                 $xml .= '<AutoPay>false</AutoPay>';
                 $xml .= '<Country>IT</Country>';
                 $xml .= '<Currency>EUR</Currency>';
-                $xml .= '<ListingDuration>Days_120</ListingDuration>';
+                $xml .= '<ListingDuration>GTC</ListingDuration>';
                 $xml .= '<ListingType>FixedPriceItem</ListingType>';
                 $xml .= '<PostalCode>62012</PostalCode>';
                 $xml .= '<Location>Civitanova Marche</Location>';
