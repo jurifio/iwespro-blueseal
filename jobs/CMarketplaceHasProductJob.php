@@ -448,19 +448,19 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                             }
                                             switch ($marketplaceAccount->config['optradio']) {
                                                 case  '-0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
+                                                    $marketProductInsert->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
                                                     break;
                                                 case  '+0.5':
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
+                                                    $marketProductInsert->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
                                                     break;
                                                 case  '-1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
+                                                    $marketProductInsert->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
                                                     break;
                                                 case  '+1':
-                                                    $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
+                                                    $marketProductInsert->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
                                                     break;
                                                 default:
-                                                    $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
+                                                    $marketProductInsert->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
 
                                             }
                                             switch ($product['modifyTypeSale']) {
@@ -480,19 +480,19 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                             }
                                             switch ($marketplaceAccount->config['optradioSalePrice']) {
                                                 case  '-0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
+                                                    $marketProductInsert->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
                                                     break;
                                                 case  '+0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
+                                                    $marketProductInsert->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
                                                     break;
                                                 case  '-1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
+                                                    $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
                                                     break;
                                                 case  '+1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
+                                                    $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
                                                     break;
                                                 default:
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
+                                                    $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
                                                     break;
                                             }
 
@@ -519,19 +519,19 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                             }
                                             switch ($marketplaceAccount->config['optradioSalePrice']) {
                                                 case  '-0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
+                                                    $marketProductInsert->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
                                                     break;
                                                 case  '+0.5':
-                                                    $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
+                                                    $marketProductInsert->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
                                                     break;
                                                 case  '-1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
+                                                    $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
                                                     break;
                                                 case  '+1':
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
+                                                    $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
                                                     break;
                                                 default:
-                                                    $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
+                                                    $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
                                                     break;
                                             }
                                             $marketProductInsert->isOnSale = 1;
@@ -558,19 +558,19 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                         }
                                         switch ($marketplaceAccount->config['optradio']) {
                                             case  '-0.5':
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
+                                                $marketProductInsert->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
                                                 break;
                                             case  '+0.5':
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
+                                                $marketProductInsert->price = round($newPrice,1,PHP_ROUND_HALF_UP);;
                                                 break;
                                             case  '-1':
-                                                $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
+                                                $marketProductInsert->price = round($newPrice,0,PHP_ROUND_HALF_DOWN);;
                                                 break;
                                             case  '+1':
-                                                $marketProduct->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
+                                                $marketProductInsert->price = round($newPrice,0,PHP_ROUND_HALF_UP);;
                                                 break;
                                             default:
-                                                $marketProduct->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
+                                                $marketProductInsert->price = round($newPrice,1,PHP_ROUND_HALF_DOWN);
                                         }
                                         switch ($product['modifyTypeSale']) {
                                             case  'p+':
@@ -589,19 +589,19 @@ join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVar
                                         }
                                         switch ($marketplaceAccount->config['optradioSalePrice']) {
                                             case  '-0.5':
-                                                $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
+                                                $marketProductInsert->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_DOWN);
                                                 break;
                                             case  '+0.5':
-                                                $marketProduct->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
+                                                $marketProductInsert->salePrice = round($newSalePrice,1,PHP_ROUND_HALF_UP);;
                                                 break;
                                             case  '-1':
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
+                                                $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);;
                                                 break;
                                             case  '+1':
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
+                                                $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_UP);;
                                                 break;
                                             default:
-                                                $marketProduct->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
+                                                $marketProductInsert->salePrice = round($newSalePrice,0,PHP_ROUND_HALF_DOWN);
                                                 break;
                                         }
 
