@@ -112,7 +112,7 @@ class CFriendAccept extends AAjaxController
                 $request->getRequestData();
                 $this->app->eventManager->triggerEvent('orderLine.friend.accept', ['orderLines' => $orderLineCollection]);
                 \Monkey ::app() -> repoFactory -> commit();
-                return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato', 'shipmentId' => $shipment->id]);
+                return json_encode(['error' => false, 'message' => $verdict . ' correttamente registrato', 'shipmentId' => $shipment->id,'orderId'=>$ol->orderId,'orderLineId'=>$ol->id]);
 
                 $orderRepo = \Monkey ::app() -> repoFactory -> create('Order') -> findOneBy(['id' => $ol -> orderId]);
                 $remoteShopSellerId = $orderRepo -> remoteSellerId;
