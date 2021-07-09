@@ -67,8 +67,8 @@ class CEbayNewAddProductJob extends ACronJob
                 if ($product->qty == 0) {
                     continue;
                 }
-                $productCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$good->productId,'productVariantId' => $good->productVariantId]);
-                $productCategoryId=$productCategory->productCategoryId;
+                $productCategory = \Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
+                $productCategoryId = $productCategory->productCategoryId;
                 $category = \Monkey::app()->repoFactory->create('ProductCategoryHasMarketplaceAccountCategory')->findOneBy(['marketplaceId' => 3,'marketplaceAccountId' => 3,'productCategoryId' => $productCategoryId]);
                 if (!$category) {
                     continue;
@@ -80,14 +80,14 @@ class CEbayNewAddProductJob extends ACronJob
                 if ($productEanParent) {
                     $productEan = $productEanParent->ean;
                 } else {
-                    $productEanSelect =$productEanRepo->findOneBy(['used'=>0]);
-                    $productEan=$productEanSelect->ean;
-                    $productEanSelect->productId=$good->productId;
-                    $productEanSelect->productVariantId=$good->productVariantId;
-                    $productEanSelect->productSizeId=0;
-                    $productEanSelect->usedForParent=1;
-                    $productEanSelect->brandAssociate=$product->productBrandId;
-                    $productEanSelect->shopId=$marketplaceAccount->config['shopId'];
+                    $productEanSelect = $productEanRepo->findOneBy(['used' => 0]);
+                    $productEan = $productEanSelect->ean;
+                    $productEanSelect->productId = $good->productId;
+                    $productEanSelect->productVariantId = $good->productVariantId;
+                    $productEanSelect->productSizeId = 0;
+                    $productEanSelect->usedForParent = 1;
+                    $productEanSelect->brandAssociate = $product->productBrandId;
+                    $productEanSelect->shopId = $marketplaceAccount->config['shopId'];
                     $productEanSelect->update();
                 }
 
@@ -146,23 +146,23 @@ class CEbayNewAddProductJob extends ACronJob
 
                         $xml .= '<Quantity>' . $sku->stockQty . '</Quantity>';
                         $xml .= '<VariationProductListingDetails>';
-                       $findSkuEan=$productEanRepo->findOneBy(['productId' => $sku->productId,'productVariantId' => $sku->productVariantId,'productSizeId' => $sku->productSizeId]);
+                        $findSkuEan = $productEanRepo->findOneBy(['productId' => $sku->productId,'productVariantId' => $sku->productVariantId,'productSizeId' => $sku->productSizeId]);
                         if ($findSkuEan) {
                             $productSkuEan = $findSkuEan->ean;
                         } else {
-                            $productSkuEanSelect =$productEanRepo->findOneBy(['used'=>0]);
-                            $productSkuEan=$productSkuEanSelect->ean;
-                            $productSkuEanSelect->productId=$sku->productId;
-                            $productSkuEanSelect->productVariantId=$sku->productVariantId;
-                            $productSkuEanSelect->productSizeId=$sku->productSizeId;
-                            $productSkuEanSelect->usedForParent=0;
-                            $productSkuEanSelect->used=1;
-                            $productSkuEanSelect->brandAssociate=$product->productBrandId;
-                            $productSkuEanSelect->shopId=$marketplaceAccount->config['shopId'];
+                            $productSkuEanSelect = $productEanRepo->findOneBy(['used' => 0]);
+                            $productSkuEan = $productSkuEanSelect->ean;
+                            $productSkuEanSelect->productId = $sku->productId;
+                            $productSkuEanSelect->productVariantId = $sku->productVariantId;
+                            $productSkuEanSelect->productSizeId = $sku->productSizeId;
+                            $productSkuEanSelect->usedForParent = 0;
+                            $productSkuEanSelect->used = 1;
+                            $productSkuEanSelect->brandAssociate = $product->productBrandId;
+                            $productSkuEanSelect->shopId = $marketplaceAccount->config['shopId'];
                             $productSkuEanSelect->update();
                         }
 
-                            $xml .= '<EAN><![CDATA['. $productSkuEan .']]></EAN>';
+                        $xml .= '<EAN><![CDATA[' . $productSkuEan . ']]></EAN>';
 
                         $xml .= '<UPC>Non applicabile</UPC>';
                         $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
@@ -991,25 +991,25 @@ footer {
                     sleep(1);
 
                     $responseNewProduct = new \SimpleXMLElement($response);
-                    if($responseNewProduct->Ack=='Success') {
+                    if ($responseNewProduct->Ack == 'Success') {
                         $this->report('CEbayNewAddProductJob','Report ',$xml);
                         $refMarketplaceId = $responseNewProduct->ItemID;
                         $today = new \DateTime();
                         $now = $today->format('Y-m-d H:i:s');
                         sleep(1);
                         $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
-                    }elseif ($responseNewProduct->Ack=='Warning') {
+                    } elseif ($responseNewProduct->Ack == 'Warning') {
                         $this->report('CEbayNewAddProductJob','Report ',$xml);
                         $refMarketplaceId = $responseNewProduct->ItemID;
                         $today = new \DateTime();
                         $now = $today->format('Y-m-d H:i:s');
                         sleep(1);
                         $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
-                    }else{
+                    } else {
 
                         $good->result = 0;
                         $good->update();
-                        $this->report('CEbayNewAddProductJob','Error api Call ' .$good->productId. '-'.$good->productVariantId,$xml);
+                        $this->report('CEbayNewAddProductJob','Error api Call ' . $good->productId . '-' . $good->productVariantId,$xml);
                     }
                 } catch (\Throwable $e) {
                     $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
