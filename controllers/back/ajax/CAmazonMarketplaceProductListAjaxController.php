@@ -62,8 +62,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
               psm.`name` as productStatusMarketplaceId,     
               phphmhs.refMarketplaceId as refMarketplaceId,      
               phphmhs.marketplaceHasShopId as marketplaceHasShopId,     
-              concat(s2.name, ' | ', m2.name) AS cronjobReservation,
-              mhs.imgMarketPlace as img,           
+                        
               concat('Type operation: ', php.modifyType, ' | Operation amount: ', php.variantValue) AS cronjobOperation,
               if((isnull(p.dummyPicture) OR (p.dummyPicture = 'bs-dummy-16-9.png')), 'no', 'sì')            AS dummy,
                concat(shop.id, '-', shop.name)                                                                     AS shop,
@@ -219,8 +218,7 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
             }*/
             $row['tableSaldi']=$tableSaldi;
 
-            /** @var CMarketplaceHasShop $mhsCron */
-            $mhsCron = $mhsRepo->findOneBy(['id' => $php->marketplaceHasShopId]);
+
 
 
 
