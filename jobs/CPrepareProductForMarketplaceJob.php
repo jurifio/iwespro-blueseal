@@ -57,7 +57,7 @@ class CPrepareProductForMarketplaceJob extends ACronJob
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
                         $phs=$phsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
-                        if(!is_null($phs)){
+                        if($phs){
                           if($phs->productStatusMarketplaceId==4){
                               $phphmhs= $phphmhsRepo->findOneBy(['productId'=>$product['productId'],'productVariantId'=>$product['productVariantId'],'marketplaceHasShopId'=>$mhs->id]);
                               if(!is_null($phphmhs)){
