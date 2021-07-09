@@ -195,7 +195,7 @@ class CEbayNewReviseProductJob extends ACronJob
                         $xml .= '<UPC>Non applicabile</UPC>';
                         $xml .= '<ProductReferenceID><![CDATA[' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . ']]></ProductReferenceID>';
                         $xml .= '</VariationProductListingDetails>';
-                        $xml .= '<VariationSpecificsSet>';
+                        $xml .= '<VariationSpecifics>';
                         $xml .= '<NameValueList>';
                         $xml .= '<Name>Taglia</Name>';
                         $productSizeColl = $productSizeRepo->findOneBy(['id' => $sku->productSizeId]);
@@ -205,7 +205,7 @@ class CEbayNewReviseProductJob extends ACronJob
                         $xml .= '<Name>Color</Name>';
                         $xml .= '<Value>' . $product->productColorGroup->name . '</Value>';
                         $xml .= '</NameValueList>';
-                        $xml .= '</VariationSpecificsSet>';
+                        $xml .= '</VariationSpecifics>';
                         $xml .= '</Variation>';
                    // }
                 }
