@@ -173,7 +173,7 @@ class CEbayMarketplaceProductListAjaxController extends AAjaxController
                 } else {
                     $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$php->product->id,'productVariantId'=>$php->product->productVariantId]);
 
-                    $name = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1,'shopId' => $php->product->shopHasProduct->shopId,'productCategoryId'=>$productHasProductCategory->productCategoryId])->name
+                    $name = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1,'productCategoryId'=>$productHasProductCategory->productCategoryId])->name
                         . ' ' .
                         $php->product->productBrand->name
                         . ' ' .
