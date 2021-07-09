@@ -170,7 +170,9 @@ class CAmazonMarketplaceProductListAjaxController extends AAjaxController
                     . ' ' .
                     $php->product->productColorGroup->productColorGroupTranslation->findOneByKey('langId',1)->name;
             } else {
-                $name = $php->product->productCategoryTranslation->findOneByKey('langId',1)->name
+                $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$php->product->id,'productVariantId'=>$php->product->productVariantId]);
+
+                $name = \Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId' => 1,'productCategoryId'=>$productHasProductCategory->productCategoryId])->name
                     . ' ' .
                     $php->product->productBrand->name
                     . ' ' .
