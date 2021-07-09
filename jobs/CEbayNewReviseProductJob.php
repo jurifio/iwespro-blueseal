@@ -256,6 +256,10 @@ class CEbayNewReviseProductJob extends ACronJob
         <NameValueList>
         <Name><![CDATA[Reparto]]></Name>
         <Value><![CDATA[non applicabile]]></Value>
+      </NameValueList>
+      <NameValueList>
+        <Name><![CDATA[Stile]]></Name>
+        <Value><![CDATA[non applicabile]]></Value>
       </NameValueList>';
                 $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
                 $stile=\Monkey::app()->repoFactory->create('ProductCategoryTranslation')->findOneBy(['langId'=>1,'productCategoryId'=>$productHasProductCategory->productCategoryId,'shopId'=>44])->name;
