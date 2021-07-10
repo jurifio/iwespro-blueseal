@@ -127,7 +127,7 @@ class CShopManage extends AAjaxController
 
             $sql = 'select ct.id,  ct.`amount`,ct.amountType,ct.validity,ct.validForCartTotal,
        if(ct.hasFreeShipping=1,"Spedizione Gratuita","Spedizione in Pagamento") as  hasFreeShipping,
-       if(ct.hasFreeReturn=1,"Reso Gratuito","Reso in Pagamento") as  hasFreeShipping,
+       if(ct.hasFreeReturn=1,"Reso Gratuito","Reso in Pagamento") as  hasFreeReturn,
        if(ct.isActive=1,"Attiva","Non Attiva") as isActive,
        ct.name as couponTypeName,
        if(c.name is null,"nessuna campagna",c.name) as campaignName 
