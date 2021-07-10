@@ -130,7 +130,7 @@ class CShopManage extends AAjaxController
        if(ct.hasFreeReturn=1,"Reso Gratuito","Reso in Pagamento") as  hasFreeShipping,
        if(ct.isActive=1,"Attiva","Non Attiva") as isActive,
        ct.name as couponTypeName,
-       if(c.name is null,"nessuna campagna",c.name) as campaignName from
+       if(c.name is null,"nessuna campagna",c.name) as campaignName 
         from CouponType ct left join Campaign c on ct.campaignId=c.id
              where ce.remoteShopId=' . $shopId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
