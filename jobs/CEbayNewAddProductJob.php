@@ -368,7 +368,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $now = $today->format('Y-m-d H:i:s');
                             $resultCall = 1;
 
-                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $refMarketplaceId,'result' => $resultCall],
+                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $responseNewProduct->ItemID,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
 
@@ -379,7 +379,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $now = $today->format('Y-m-d H:i:s');
 
                             $resultCall = 1;
-                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $refMarketplaceId,'result' => $resultCall],
+                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $responseNewProduct->ItemID,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
 
