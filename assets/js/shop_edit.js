@@ -292,6 +292,16 @@ var couponType=0;
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresicoupon = bodyresicoupon + '</table>';
+            $('#rowCouponType').empty();
+            var couponType=res.couponType;
+            var bodyresicoupontype;
+            bodyresicoupontype = bodyresicoupontype + '<table id="myTable"><tr><th style="width:5%;">id</th><th style="width:10%;">Coupon Tipo</th><th style="width:15%;">Validità</th><th style="width:15%;">Validità</th><th style="width:15%;">Importo Carrello</th><th style="width:10%;">Stato Tipo Coupon</th><th style="width:15%;">Campagna</th><th style="width:15%;">Operazioni</th></tr>';
+            $.each(couponType, function (r, s) {
+
+                bodyresicoupontype = bodyresicoupontype + '<tr><td style="width:5%;">' + s.id + '</td><td style="width:10%;">' + s.name + '</td><td style="width:15%;">' + s.validity + '</td><td style="width:15%;">s.validForCartTotal</td><td style="width:15%;"><a target="_blank" href="/blueseal/tipocoupon/modifica/'+s.id+'">' + s.name + '</a></td><td style="width:10%;">' + s.isActive + '</td><td style="width:15%;">' + s.campaignName + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponEvenEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
+            });
+            bodyresicoupontype = bodyresicoupontype + '</table>';
 
             $('#rowBanner').empty();
             var banner=res.banner;
@@ -306,9 +316,10 @@ var couponType=0;
                 bodyresibanner = bodyresibanner + '<tr><td style="width:10%;">' + z.id + '</td><td style="width:15%;">' + z.name + '</td><td style="width:15%;">' + z.link + '</td><td style="width:15%;">' + z.position + '</td><td style="width:15%;"><img width="250px" src="' + z.textHtml + '"/></td><td style="width:15%;">' + z.isActiveBanner + '</td><td><button class="success" id="modifyRowBannerButton' + z.id + '" onclick="modifyRowBannerEdit(' + z.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
-            bodyresicoupon = bodyresicoupon + '</table>';
+            bodyresibanner = bodyresibanner + '</table>';
             $('#rowCouponEvent').append(bodyresicoupon);
-
+            $('#rowCouponType').append(bodyresicoupontype);
+            ('#rowBanner').append(bodyresibanner);
         });
     }
 })(jQuery);

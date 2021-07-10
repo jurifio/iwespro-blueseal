@@ -123,9 +123,32 @@ class CShopManage extends AAjaxController
             foreach ($res as $result) {
                 $couponEvent[] = ['id' => $result['id'],'name' => $result['name'],'description' => $result['description'],'startDate' => $result['startDate'],'endDate' => $result['endDate'],'couponTypeName' => $result['couponTypeName'],'couponTypeId' => $result['couponTypeId'],'isActiveType'=>$result['isActiveType'],'campaignName' => $result['campaignName'],'isActive' => $result['isActive']];
             }
+            $couponType = [];
+
+            $sql = 'select ct.id,  ct.`amount`,ct.amountType,ct.validity,ct.validForCartTotal,
+       if(ct.hasFreeShipping=1,"Spedizione Gratuita","Spedizione in Pagamento") as  hasFreeShipping,
+       if(ct.hasFreeReturn=1,"Reso Gratuito","Reso in Pagamento") as  hasFreeShipping,
+       if(ct.isActive=1,"Attiva","Non Attiva") as isActive,
+       ct.name as couponTypeName,
+       if(c.name is null,"nessuna campagna","c.name") as campaignName from
+        from CouponType ct left join Campaign c on ct.campaignId=c.id
+             where ce.remoteShopId=' . $shopId;
+            $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
+            foreach ($res as $result) {
+                $couponType[] = ['id' => $result['id'],
+                                 'name' => $result['couponTypeName'],
+                                 'amountType' => $result['amountType'],
+                                 'validity' => $result['validity'],
+                                 'validForCartTotal' => $result['validForCarTotal'],
+                                 'hasFreeShipping' => $result['hasFreeShipping'],
+                                 'hasFreeReturn' => $result['hasFreeReturn'],
+                                 'campaignName' => $result['campaignName'],
+                                 'isActive' => $result['isActive']];
+            }
             $banner = \Monkey::app()->repoFactory->create('Banner')->findBy(['remoteShopId' => $shopId]);
             $shop->banner=$banner;
             $shop->couponEvent = $couponEvent;
+            $shop->couponType = $couponType;
             $shop->productStatistics = $shop->getDailyActiveProductStatistics();
             $shop->orderStatistics = $shop->getDailyOrderFriendStatistics();
             return json_encode($shop);

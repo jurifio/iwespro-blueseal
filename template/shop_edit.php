@@ -55,7 +55,10 @@
                             <button class="tablinks" onclick="openTab(event, 'modifyClientCampaign')">Campagne
 
                             </button>
-                            <button class="tablinks" onclick="openTab(event, 'modifyClientCouponEvent')">Coupon
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientCouponEvent')">Coupon Evento
+
+                            </button>
+                            <button class="tablinks" onclick="openTab(event, 'modifyClientCouponType')">Tipo Coupon
 
                             </button>
                             <button class="tablinks" onclick="openTab(event, 'modifyClientBanner')">Banner
@@ -640,12 +643,26 @@
                                             <div class="col-md-12">
                                                 <div class="panel panel-default clearfix">
                                                     <div class="panel-heading clearfix">
-                                                        <h5 class="m-t-10">Informazioni sui Coupon dello Shop</h5>
+                                                        <h5 class="m-t-10">Informazioni sui Coupon Evento dello Shop</h5>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row" id="rowCouponEvent">
+
+                                        </div>
+                                    </div>
+                                    <div id="modifyClientCouponType" class="tabcontent">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel panel-default clearfix">
+                                                    <div class="panel-heading clearfix">
+                                                        <h5 class="m-t-10">Informazioni sui Coupon Tipo dello Shop</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="rowCouponType">
 
                                         </div>
                                     </div>
