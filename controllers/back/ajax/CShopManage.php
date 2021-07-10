@@ -139,7 +139,7 @@ class CShopManage extends AAjaxController
                                  'name' => $result['couponTypeName'],
                                  'amountType' => $result['amountType'],
                                  'validity' => $result['validity'],
-                                 'validForCartTotal' => $result['validForCarTotal'],
+                                 'validForCartTotal' => $result['validForCartTotal'],
                                  'hasFreeShipping' => $result['hasFreeShipping'],
                                  'hasFreeReturn' => $result['hasFreeReturn'],
                                  'campaignName' => $result['campaignName'],
