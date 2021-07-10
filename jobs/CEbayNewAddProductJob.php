@@ -368,9 +368,10 @@ class CEbayNewAddProductJob extends ACronJob
                             $now = $today->format('Y-m-d H:i:s');
                             $resultCall = 1;
                             sleep(1);
-                            $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $refMarketplaceId,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+                            $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
+
                         } elseif ($responseNewProduct->Ack == 'Warning') {
                             $this->report('CEbayNewAddProductJob','Report ',$xml);
                             $refMarketplaceId = $responseNewProduct->ItemID;
@@ -378,9 +379,10 @@ class CEbayNewAddProductJob extends ACronJob
                             $now = $today->format('Y-m-d H:i:s');
                             sleep(1);
                             $resultCall = 1;
-                            $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $refMarketplaceId,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+                            $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
+
                         } else {
 
                             $refMarketplaceId = '';
