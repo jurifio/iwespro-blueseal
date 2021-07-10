@@ -62,7 +62,6 @@ class CEbayNewAddProductJob extends ACronJob
             $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shopId']]);
             $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
             foreach ($goods as $good) {
-                if($good->refMarketplaceId=='') {
                     /**  @var CProduct $product * */
                     $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
                     if ($product->qty == 0) {
@@ -392,7 +391,7 @@ class CEbayNewAddProductJob extends ACronJob
                         $this->report('CEbayNewAddProductJob','Error'.$good->productId . '-' . $good->productVariantId,$e->getLine() . '-' . $e->getMessage());
 
                     }
-                }
+
             }
 
 
