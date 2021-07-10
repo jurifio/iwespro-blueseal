@@ -367,7 +367,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
                             $resultCall = 1;
-                            sleep(1);
+
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $refMarketplaceId,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
@@ -377,7 +377,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $refMarketplaceId = $responseNewProduct->ItemID;
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
-                            sleep(1);
+
                             $resultCall = 1;
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' => $refMarketplaceId,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
