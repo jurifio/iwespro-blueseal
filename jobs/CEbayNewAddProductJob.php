@@ -379,6 +379,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
 
+
                             $resultCall = 1;
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' =>  (string) $responseNewProduct->ItemID,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
