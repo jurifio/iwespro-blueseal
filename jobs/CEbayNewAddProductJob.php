@@ -368,7 +368,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
                             sleep(1);
-                            $good->lastUpdate=$now;
+
                             $good->result = 1;
                             $good->update();
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
@@ -377,7 +377,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $good->refMarketplaceId= $refMarketplaceId;
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
-                            $good->lastUpdate=$now;
+
                             sleep(1);
                             $good->result = 1;
                             $good->update();
