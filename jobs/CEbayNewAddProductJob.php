@@ -62,6 +62,7 @@ class CEbayNewAddProductJob extends ACronJob
             $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shopId']]);
             $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
             foreach ($goods as $good) {
+                if($good->refMarketplaceId=='') {
                     /**  @var CProduct $product * */
                     $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id' => $good->productId,'productVariantId' => $good->productVariantId]);
                     if ($product->qty == 0) {
@@ -328,14 +329,15 @@ class CEbayNewAddProductJob extends ACronJob
                         // SiteID Indicates the eBay site to associate the call with
                         'X-EBAY-API-SITEID: ' . $siteID
                     );
+                    $refMarketplaceId = '';
+                    $resultCall = 0;
                     try {
                         $connection = curl_init();
                         curl_setopt($connection,CURLOPT_URL,$apiUrl);
 
                         curl_setopt($connection,CURLINFO_HEADER_OUT,true);
 // Stop CURL from verifying the peer's certificate
-                        curl_setopt($connection,CURLOPT_SSL_VERIFYPEER,0);
-                        curl_setopt($connection,CURLOPT_SSL_VERIFYHOST,0);
+
 
 // Set the headers (Different headers depending on the api call !)
 
@@ -358,40 +360,37 @@ class CEbayNewAddProductJob extends ACronJob
                         sleep(1);
 
                         $responseNewProduct = new \SimpleXMLElement($response);
-
-
-                        $refMarketplaceId = $responseNewProduct->ItemID;
                         if ($responseNewProduct->Ack == 'Success') {
                             $this->report('CEbayNewAddProductJob','Report ',$xml);
-                            $good->refMarketplaceId= $refMarketplaceId;
+                            $refMarketplaceId = $responseNewProduct->ItemID;
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
+                            $resultCall = 1;
                             sleep(1);
-
-                            $good->result = 1;
-                            $good->update();
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
                         } elseif ($responseNewProduct->Ack == 'Warning') {
                             $this->report('CEbayNewAddProductJob','Report ',$xml);
-                            $good->refMarketplaceId= $refMarketplaceId;
+                            $refMarketplaceId = $responseNewProduct->ItemID;
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
-
                             sleep(1);
-                            $good->result = 1;
-                            $good->update();
+                            $resultCall = 1;
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
                         } else {
+                            $refMarketplaceId = '';
+                            $resultCall = 0;
 
-                            $good->result = 0;
-                            $good->update();
                             $this->report('CEbayNewAddProductJob','Error api Call ' . $good->productId . '-' . $good->productVariantId,$xml);
+
                         }
                     } catch (\Throwable $e) {
-                        $this->report('CEbayNewAddProductJob','Error'.$good->productId . '-' . $good->productVariantId,$e->getLine() . '-' . $e->getMessage());
+                        $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
                     }
-
+                    $good->refMarketplaceId = $refMarketplaceId;
+                    $good->result = $resultCall;
+                    $good->update();
+                }
             }
 
 
