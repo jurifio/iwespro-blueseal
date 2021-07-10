@@ -295,10 +295,10 @@ var couponType=0;
             $('#rowCouponType').empty();
             var couponType=res.couponType;
             var bodyresicoupontype;
-            bodyresicoupontype = bodyresicoupontype + '<table id="myTable"><tr><th style="width:5%;">id</th><th style="width:10%;">Coupon Tipo</th><th style="width:15%;">Validità</th><th style="width:15%;">Validità</th><th style="width:15%;">Importo Carrello</th><th style="width:10%;">Stato Tipo Coupon</th><th style="width:15%;">Campagna</th><th style="width:15%;">Operazioni</th></tr>';
+            bodyresicoupontype = bodyresicoupontype + '<table id="myTable"><tr><th style="width:5%;">id</th><th style="width:10%;">Coupon Tipo</th><th style="width:15%;">Validità</th><th style="width:15%;">Importo Carrello</th><th style="width:15%;"></th>Nome<th style="width:10%;">Stato Tipo Coupon</th><th style="width:15%;">Campagna</th><th style="width:15%;">Operazioni</th></tr>';
             $.each(couponType, function (r, s) {
 
-                bodyresicoupontype = bodyresicoupontype + '<tr><td style="width:5%;">' + s.id + '</td><td style="width:10%;">' + s.name + '</td><td style="width:15%;">' + s.validity + '</td><td style="width:15%;">s.validForCartTotal</td><td style="width:15%;"><a target="_blank" href="/blueseal/tipocoupon/modifica/'+s.id+'">' + s.name + '</a></td><td style="width:10%;">' + s.isActive + '</td><td style="width:15%;">' + s.campaignName + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponTypeEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
+                bodyresicoupontype = bodyresicoupontype + '<tr><td style="width:5%;">' + s.id + '</td><td style="width:10%;">' + s.name + '</td><td style="width:15%;">' + s.validity + '</td><td style="width:15%;">'+s.validForCartTotal+'</td><td style="width:15%;"><a target="_blank" href="/blueseal/tipocoupon/modifica/'+s.id+'">' + s.name + '</a></td><td style="width:10%;">' + s.isActive + '</td><td style="width:15%;">' + s.campaignName + '</td><td><button class="success" id="modifyRowCouponEventButton' + s.id + '" onclick="modifyRowCouponTypeEdit(' + s.id + ')" type="button"><span class="fa fa-pencil">Modifica</span></button></td></tr>';
                 // $('#rawBrands').append('<option value="'+v.id+'-'+v.shopIdOrigin+'">'+v.brandName+'-'+v.shopName+'</option>');
             });
             bodyresicoupontype = bodyresicoupontype + '</table>';
