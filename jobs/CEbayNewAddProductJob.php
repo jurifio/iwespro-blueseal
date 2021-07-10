@@ -381,10 +381,11 @@ class CEbayNewAddProductJob extends ACronJob
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
                                 ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                         } else {
-                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
-                                ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+
                             $refMarketplaceId = '';
                             $resultCall = 0;
+                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
+                                ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
 
                             $this->report('CEbayNewAddProductJob','Error api Call ' . $good->productId . '-' . $good->productVariantId,$xml);
 
