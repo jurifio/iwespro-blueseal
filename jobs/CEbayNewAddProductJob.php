@@ -368,6 +368,8 @@ class CEbayNewAddProductJob extends ACronJob
                             $resultCall = 1;
                             sleep(1);
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
+                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
+                                ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                         } elseif ($responseNewProduct->Ack == 'Warning') {
                             $this->report('CEbayNewAddProductJob','Report ',$xml);
                             $refMarketplaceId = $responseNewProduct->ItemID;
@@ -376,7 +378,11 @@ class CEbayNewAddProductJob extends ACronJob
                             sleep(1);
                             $resultCall = 1;
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
+                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
+                                ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                         } else {
+                            \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
+                                ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
                             $refMarketplaceId = '';
                             $resultCall = 0;
 
@@ -388,8 +394,7 @@ class CEbayNewAddProductJob extends ACronJob
 
                     }
 
-                \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
-                    ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+
 
 
             }
