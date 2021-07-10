@@ -362,6 +362,7 @@ class CEbayNewAddProductJob extends ACronJob
                         if ($responseNewProduct->Ack == 'Success') {
                             $this->report('CEbayNewAddProductJob','Report ',$xml);
                             $refMarketplaceId = $responseNewProduct->ItemID;
+                            $good->refMarketplaceId= $refMarketplaceId;
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
                             sleep(1);
@@ -371,6 +372,7 @@ class CEbayNewAddProductJob extends ACronJob
                         } elseif ($responseNewProduct->Ack == 'Warning') {
                             $this->report('CEbayNewAddProductJob','Report ',$xml);
                             $refMarketplaceId = $responseNewProduct->ItemID;
+                            $good->refMarketplaceId= $refMarketplaceId;
                             $today = new \DateTime();
                             $now = $today->format('Y-m-d H:i:s');
                             sleep(1);
