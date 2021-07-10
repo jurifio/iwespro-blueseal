@@ -132,7 +132,7 @@ class CShopManage extends AAjaxController
        ct.name as couponTypeName,
        if(c.name is null,"nessuna campagna",c.name) as campaignName 
         from CouponType ct left join Campaign c on ct.campaignId=c.id
-             where ce.remoteShopId=' . $shopId;
+             where ct.remoteShopId=' . $shopId;
             $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach ($res as $result) {
                 $couponType[] = ['id' => $result['id'],
