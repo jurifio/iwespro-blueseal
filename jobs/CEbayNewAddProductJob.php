@@ -387,10 +387,10 @@ class CEbayNewAddProductJob extends ACronJob
                         $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
                     }
-                    $phpms=\Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop')->findOneBy(['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
-                    $phpms->refMarketplaceId = $refMarketplaceId;
-                    $phpms->result = $resultCall;
-                    $phpms->update();
+
+                \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop', ['refMarketplaceId'=>$refMarketplaceId, 'result'=>$resultCall],
+                    ['productId'=>$good->productId,'productVariantId'=>$good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+
 
             }
 
