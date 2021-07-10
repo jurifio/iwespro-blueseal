@@ -349,7 +349,8 @@ class CEbayNewAddProductJob extends ACronJob
 
 // Set it to return the transfer as a string from curl_exec
                         curl_setopt($connection,CURLOPT_RETURNTRANSFER,1);
-
+                        curl_setopt($connection,CURLOPT_SSL_VERIFYPEER,0);
+                        curl_setopt($connection,CURLOPT_SSL_VERIFYHOST,0);
 // Send the Request
                         $response = curl_exec($connection);
                         //$xmlresponse = new \SimpleXMLElement($response);
