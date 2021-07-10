@@ -389,7 +389,7 @@ class CEbayNewAddProductJob extends ACronJob
                             $this->report('CEbayNewAddProductJob','Error api Call ' . $good->productId . '-' . $good->productVariantId,$xml);
                         }
                     } catch (\Throwable $e) {
-                        $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
+                        $this->report('CEbayNewAddProductJob','Error'.$good->productId . '-' . $good->productVariantId,$e->getLine() . '-' . $e->getMessage());
 
                     }
                 }
