@@ -23,7 +23,7 @@ class CNewsletterUserListAjaxController extends AAjaxController
         $insertionId = \Monkey::app()->router->request()->getRequestData('insertionid');
 
         $sql = "SELECT 
-                 n.id, 
+                 n.id as id, 
                  n.newsletterCloneId AS newsletterCloneId,
                  n.name,
                  ea.address AS fromEmailAddressId, 
