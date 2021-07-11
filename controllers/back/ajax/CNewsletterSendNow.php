@@ -55,7 +55,7 @@ class CNewsletterSendNow extends AAjaxController
         $now =  (new \DateTime())->format('Y-m-d H:i:s');
         $newsletter->sendAddressDate = $now;
         $newsletter->update();
-        return $res;
+        return 'Fine lavoro dell\'invio Newsletter ';
 
 
     }
