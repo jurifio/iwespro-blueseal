@@ -9,6 +9,8 @@ use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CProductSku;
+use bamboo\domain\repositories\CEmailRepo;
+use \Throwable;
 use PDO;
 
 /**
@@ -383,6 +385,11 @@ class CEbayNewAddProductJob extends ACronJob
                             $resultCall = 1;
                             \Monkey::app()->dbAdapter->update('PrestashopHasProductHasMarketplaceHasShop',['refMarketplaceId' =>  (string) $responseNewProduct->ItemID,'result' => $resultCall],
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
+                            /** @var CEmailRepo $emailRepo */
+                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $emailRepo->newMail('it@iwes.it', ['gianluca@iwes.it'],[],[],'CEbayNewAddProductJob Add', 'prodotto:'.$good->productId . '-' . $good->productVariantId.(string) $responseNewProduct->ItemID, null, null, null, 'mailGun', false,null);
+                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Add ', 'prodotto:'.$good->productId . '-' . $good->productVariantId.(string) $responseNewProduct->ItemID, null, null, null, 'mailGun', false,null);
                             $this->report('CEbayNewAddProductJob','Report  Add ' . $refMarketplaceId,$xml);
                             sleep(1);
 
@@ -394,9 +401,21 @@ class CEbayNewAddProductJob extends ACronJob
                                 ['productId' => $good->productId,'productVariantId' => $good->productVariantId,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
 
                             $this->report('CEbayNewAddProductJob','Error api Call ' . $good->productId . '-' . $good->productVariantId,$xml);
+                            /** @var CEmailRepo $emailRepo */
+                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $emailRepo->newMail('it@iwes.it', ['gianluca@iwes.it'],[],[],'CEbayNewAddProductJob Error', 'prodotto:'.$good->productId . '-' . $good->productVariantId.$xml, null, null, null, 'mailGun', false,null);
+                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                            $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Error ', 'prodotto:'.$good->productId . '-' . $good->productVariantId.$xml, null, null, null, 'mailGun', false,null);
+
+
 
                         }
                     } catch (\Throwable $e) {
+                        /** @var CEmailRepo $emailRepo */
+                        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                        $emailRepo->newMail('it@iwes.it', ['gianluca@iwes.it'],[],[],'CEbayNewAddProductJob Error', $e->getLine() . '-' . $e->getMessage(), null, null, null, 'mailGun', false,null);
+                        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                        $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Error ', $e->getLine() . '-' . $e->getMessage(), null, null, null, 'mailGun', false,null);
                         $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
                     }
