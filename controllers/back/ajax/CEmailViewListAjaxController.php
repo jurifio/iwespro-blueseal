@@ -39,7 +39,7 @@ class CEmailViewListAjaxController extends AAjaxController
         $htmlBody = 'Email Non Visualizzabile';
         $messaggeId =  $this->app->router->request()->getRequestData('messageId') ;
         $orderId = $this->app->router->request()->getRequestData('orderId');
-        $isLocal=$this->app->router->request()->getRequestData('orderId');
+        $isLocal=$this->app->router->request()->getRequestData('local');
         $order=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
 
         if ($isLocal!= 1) {
