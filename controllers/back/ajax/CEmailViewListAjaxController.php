@@ -69,6 +69,7 @@ class CEmailViewListAjaxController extends AAjaxController
 
 
         } else {
+           $email=\Monkey::app()->repoFactory->create('Email')->findOneBy(['id' => $messageId]);
             $htmlBody = $email->htmlBody;
         }
 
