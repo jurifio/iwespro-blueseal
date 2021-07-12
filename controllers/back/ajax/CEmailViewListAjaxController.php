@@ -37,12 +37,14 @@ class CEmailViewListAjaxController extends AAjaxController
         $this->page = new CBlueSealPage($this->pageSlug,$this->app);
         $view->setTemplatePath($this->app->rootPath() . $this->app->cfg()->fetch('paths','blueseal') . '/template/email_view.php');
         $htmlBody = 'Email Non Visualizzabile';
-        $messaggeId = '<' . $this->app->router->request()->getRequestData('messageId') . '>';
+        $messaggeId =  $this->app->router->request()->getRequestData('messageId') ;
         $orderId = $this->app->router->request()->getRequestData('orderId');
-        $email = \Monkey::app()->repoFactory->create('Email')->findOneBy(['providerEmailId' => $messaggeId]);
-        if ($email == null) {
-            $shops = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => 1]);
-            foreach ($shops as $shop) {
+        $isLocal=$this->app->router->request()->getRequestData('orderId');
+        $order=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
+
+        if ($isLocal!= 1) {
+            $shops = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $order->remoteShopSellerId]);
+
                 $db_host = $shop->dbHost;
                 $db_name = $shop->dbName;
                 $db_user = $shop->dbUsername;
@@ -56,19 +58,16 @@ class CEmailViewListAjaxController extends AAjaxController
                 } catch (PDOException $e) {
                     $res = $e->getMessage();
                 }
-                $stmtEmail = $db_con->prepare('SELECT count(*) as countRecord, htmlBody as htmlBody FROM `Email` where providerEmailId LIKE \'%' . $messaggeId . '%\'');
+                $stmtEmail = $db_con->prepare('SELECT count(*) as countRecord, htmlBody as htmlBody FROM `Email` where id ='.$messaggeId);
                 $stmtEmail->execute();
 
-                $rowEmail = $stmtEmail->fetch(PDO::FETCH_ASSOC);
-                if ($rowEmail['countRecord']==0) {
-                    continue;
-                } else {
+                while($rowEmail = $stmtEmail->fetch(PDO::FETCH_ASSOC)){
                     $htmlBody = $rowEmail['htmlBody'];
-                    break;
                 }
 
 
-            }
+
+
         } else {
             $htmlBody = $email->htmlBody;
         }

@@ -66,7 +66,7 @@ e.providerEmailId AS messageId,
 join EmailAddress ea on er.emailAddressId=ea.id WHERE  ea.address=\'' . $email.'\'';
         $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
         foreach ($res as $result) {
-            $link = "<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $result['id'] . "&orderId=" . $orderId . "'>link</a><br />";
+            $link = "<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $result['id'] . "&orderId=" . $orderId . "&local=1'>link</a><br />";
             array_push($trackLine,[
                 'oraInvio' => ((new \DateTime($result['submissionDate']))->format('d-m-Y H:i:s')),
                 'sender' => $result['FromEmailAddress'],
@@ -108,7 +108,7 @@ $stmtEmail->execute();
 
 
           while  ($rowEmail = $stmtEmail->fetch(PDO::FETCH_ASSOC)){
-              $link = "<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $rowEmail['id'] . "&orderId=" . $orderId . "'>link</a><br />";
+              $link = "<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $rowEmail['id'] . "&orderId=" . $orderId . "&local=2'>link</a><br />";
               array_push($trackLine,[
                   'oraInvio' => ((new \DateTime($rowEmail['submissionDate']))->format('d-m-Y H:i:s')),
                   'sender' => $rowEmail['FromEmailAddress'],
