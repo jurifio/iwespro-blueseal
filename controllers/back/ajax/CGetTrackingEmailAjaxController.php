@@ -63,7 +63,7 @@ if(e.isError=1,\'Errore\',\'Ok\') AS `isError`,
 e.providerEmailId AS messageId,
  e.submissionDate
   FROM Email e JOIN EmailRecipient er ON e.id=er.emailId 
-join EmailAddress ea on er.emailAddressId=ea.id WHERE  ea.address=' . $email;
+join EmailAddress ea on er.emailAddressId=ea.id WHERE  ea.address=\'' . $email.'\'';
         $res = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
         foreach ($res as $result) {
             $link = "<a target='_blank' href='/blueseal/xhr/emailViewListAjaxController?messageId=" . $result['id'] . "&orderId=" . $orderId . "'>link</a><br />";
@@ -103,7 +103,7 @@ if(e.isError=1,"Errore","Ok") AS `isError`,
 e.providerEmailId AS messageId,
  e.submissionDate
   FROM Email e JOIN EmailRecipient er ON e.id=er.emailId 
-join EmailAddress ea on er.emailAddressId=ea.id WHERE  ea.address=' . $email);
+join EmailAddress ea on er.emailAddressId=ea.id WHERE  ea.address=\'' . $email.'\'');
 $stmtEmail->execute();
 
 
