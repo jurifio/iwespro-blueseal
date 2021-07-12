@@ -43,7 +43,7 @@ class CEmailViewListAjaxController extends AAjaxController
         $order=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderId]);
 
         if ($isLocal!= 1) {
-            $shops = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $order->remoteShopSellerId]);
+            $shop = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $order->remoteShopSellerId]);
 
                 $db_host = $shop->dbHost;
                 $db_name = $shop->dbName;
