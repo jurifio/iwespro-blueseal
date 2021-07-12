@@ -171,7 +171,7 @@ function openTrackEmail(orderId) {
                 '<table class="table">' +
                 '<thead>' +
                 '<tr>' +
-                '<td align="center"><b>Ordine</b></td><td align="center"><b>oraInvio</b></td><td align="center"><b>Email Mittente</b></td><td align="center"><b>Email Destinatario</b></td><td align="center"><b>Mittente</b></td><td align="center"><b>Destinatario</b></td><td align="center"><b>Oggetto</b></td><td align="center"><b>link</b></td>' +
+                '<td align="center"><b>Ordine</b></td><td align="center"><b>oraInvio</b></td><td align="center"><b>Email Mittente</b></td><td align="center"><b>Email Destinatario</b></td><td align="center"><b>Mittente</b></td><td align="center"><b>Destinatario</b></td><td align="center"><b>Oggetto</b></td><td align="center"><b>errore</b></td><td align="center"><b>link</b></td>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody>';
@@ -184,6 +184,7 @@ function openTrackEmail(orderId) {
                         '<td align="center"><font color="blue"<b>' + res[i].from + '</b></font></td>' +
                         '<td align="center"><font color="blue"<b>' + res[i].to + '</b></font></td>' +
                         '<td align="center"><font color="blue"<b>' + res[i].subject + '</b></font></td>' +
+                        '<td align="center"><font color="blue"<b>' + res[i].isError + '</b></font></td>' +
                         '<td align="center"><font color="blue"<b>' + res[i].link + '</b></font></td>';
 
 
