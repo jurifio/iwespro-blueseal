@@ -589,4 +589,13 @@ function modifyDelivery(orderId,orderLineId){
 	});
 
 }
+function printShipment(shipmentId){
+
+	let url = window.origin + '/blueseal/xhr/PrintOrderShipmentLabel?shipmentId=';
+
+			window.open(url + shipmentId, 'Label: '+shipmentId);
+
+
+
+}
 

@@ -63,6 +63,7 @@ $sku = \bamboo\domain\entities\CProductSku::defrost($line->frozenProduct);
     $shipmentPrint .='<br><button style="width: 200px ; height:32px;"  onclick="createDelivery('.$line->orderId.','.$line->id.')" class="btn btn-light"><i class="fa fa-plus" aria-hidden="true"></i>Crea Spedizione</button>';
     $shipmentPrint.='<br><button style="width: 200px ; height:32px;"  onclick="modifyDelivery(' . $line->orderId . ','.$line->id.')" class="btn btn-light"><i class="fa fa-pencil" aria-hidden="true"></i>Modifica Spedizione</button>';
     $shipmentPrint.='<br><button style="width: 200px ; height:32px;"  onclick="addToOtherDelivery(' . $line->orderId . ','.$line->id.')" class="btn btn-light"><i class="fa fa-list" aria-hidden="true"></i>Accorpa Spedizione</button>';
+    $shipmentPrint.='<br><button style="width: 200px ; height:32px;"  onclick="printShipment(' . $shipment->id .')" class="btn btn-light"><i class="fa fa-list" aria-hidden="true"></i>Accorpa Spedizione</button>';
     echo $shipmentPrint;
     ?>
 
