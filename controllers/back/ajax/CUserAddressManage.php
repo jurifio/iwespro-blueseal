@@ -21,14 +21,16 @@ class CUserAddressManage extends AAjaxController
      */
 	public function get()
 	{
-		$list = [];
-		$user = \Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$this->app->router->request()->getRequestData('userId')]);
-		foreach ($user->userAddress as $userAddress) {
+        $list = [];
+        $user = \Monkey::app()->repoFactory->create('User')->findOneBy(['id'=>$this->app->router->request()->getRequestData('userId')]);
+        foreach ($user->userAddress as $userAddress) {
             $address = $userAddress->toArray();
+            $country=\Monkey::app()->repoFactory->create('Country')->findOneBy(['id'=>$userAddress->countryId]);
+            $address['countryName']=$country->name;
             $address['label'] = $userAddress->name.' '.$userAddress->surname.' - '.$userAddress->address;
             $list[] = $address;
-		}
-		return json_encode($list);
+        }
+        return json_encode($list);
 	}
 
     /**

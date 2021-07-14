@@ -132,7 +132,7 @@
                                             <div class="form-group form-group-default">
                                                 <label for="note">Note</label>
                                                 <input id="note" class="form-control"
-                                                       placeholder="Ponte ponente ponte pì, tappetà Perugia, ponte ponente ponte pì, tappetà perì. Ponti nflò, la mano no!" name="note">
+                                                       placeholder="Note" name="note">
                                             </div>
                                         </div>
                                     </div>
