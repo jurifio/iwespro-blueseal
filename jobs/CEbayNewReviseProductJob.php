@@ -333,7 +333,7 @@ class CEbayNewReviseProductJob extends ACronJob
 
 
                 $xml .= '<RequesterCredentials>
-    <eBayAuthToken>v^1.1#i^1#r^1#p^3#I^3#f^0#t^Ul4xMF8xOjk3MDVGODY4MkI3QUI4QkZGNzlGRTAwMjQwMjk4NkI4XzBfMSNFXjI2MA==</eBayAuthToken>
+    <eBayAuthToken>v^1.1#i^1#p^3#I^3#f^0#r^1#t^Ul4xMF81Ojk2MjY2OENBNzQxNUNDOTYwQjE0NDQ3Q0IwQUJDNEREXzFfMSNFXjI2MA==</eBayAuthToken>
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>
 </ReviseFixedPriceItem>';
