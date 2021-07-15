@@ -334,7 +334,7 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
-                                            div class="col-md-2">
+                                            <div class="col-md-2">
                                             <div class="form-group form-group-default">
                                                 <label for="shop_hasCouponNewsletter">ha Attivo Coupon Newsletter?(Si 1)/(No
                                                     0)</label>
