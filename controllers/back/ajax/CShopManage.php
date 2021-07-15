@@ -182,6 +182,7 @@ class CShopManage extends AAjaxController
                 $shop->billingParallelId = $shopData['billingParallelId'];
                 $shop->hasEcommerce = $shopData['hasEcommerce'];
                 $shop->hasCoupon = $shopData['hasCoupon'];
+                $shop->hasCouponNewsletter = $shopData['hasCouponNewsletter'];
                 $shop->hasMarketplace = $shopData['hasMarketplace'];
                 $shop->receipt = $shopData['receipt'];
                 $shop->invoiceUe = $shopData['invoiceUe'];

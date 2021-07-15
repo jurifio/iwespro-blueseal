@@ -284,7 +284,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-1">
+                                            <div class="col-md-3">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_paralellFee">Percentuale Fee Parallela</label>
                                                     <input id="shop_paralellFee" autocomplete="off" type="text"
@@ -293,7 +293,7 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-3">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_parallelFeeOrder">Percentuale Fee Parallela
                                                         Ordine</label>
@@ -303,7 +303,7 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-3">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_BillingParallelId">id billing Parallelo</label>
                                                     <input id="shop_BillingParallelId" autocomplete="off" type="text"
@@ -312,7 +312,7 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-3">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_hasMarketplace">ha attivato Marketplace?(Si 1)/(No
                                                         0)</label>
@@ -322,6 +322,8 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_hasEcommerce">ha un nostro ecommerce ?(Si 1)/(No
@@ -332,6 +334,16 @@
                                                                 class="fa fa-asterisk"></i></span>
                                                 </div>
                                             </div>
+                                            div class="col-md-2">
+                                            <div class="form-group form-group-default">
+                                                <label for="shop_hasCouponNewsletter">ha Attivo Coupon Newsletter?(Si 1)/(No
+                                                    0)</label>
+                                                <input id="shop_hasCouponNewsletter" autocomplete="off" type="text"
+                                                       class="form-control" name="shop_hasCouponNewsletter" value=""/>
+                                                <span class="bs red corner label"><i
+                                                            class="fa fa-asterisk"></i></span>
+                                            </div>
+                                        </div>
                                             <div class="col-md-2">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_hasCoupon">ha Attivo Coupon Post Selling?(Si 1)/(No

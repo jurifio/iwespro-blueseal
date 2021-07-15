@@ -24,6 +24,7 @@ $(document).on('bs.shop.save', function () {
     data.billingParallelId=$('#shop_BillingParallelId').val();
     data.hasMarketplace=$('#shop_hasMarketplace').val();
     data.hasCoupon=$('#shop_hasCoupon').val();
+    data.hasCouponNewsletter=$('#shop_hasCouponNewsletter').val();
     data.hasEcommerce=$('#shop_hasEcommerce').val();
     data.receipt=$('#shop_receipt').val();
     data.invoiceUe=$('#shop_invoiceUe').val();
@@ -176,6 +177,7 @@ var couponType=0;
             $('#shop_hasMarketplace').val(res.hasMarketplace);
             $('#shop_hasEcommerce').val(res.hasEcommerce);
             $('#shop_hasCoupon').val(res.hasCoupon);
+            $('#shop_hasCouponNewsletter').val(res.hasCouponNewsletter);
             $('#shop_receipt').val(res.receipt);
             $('#shop_invoiceUe').val(res.invoiceUe);
             $('#shop_invoiceExtraUe').val(res.invoiceExtraUe);
