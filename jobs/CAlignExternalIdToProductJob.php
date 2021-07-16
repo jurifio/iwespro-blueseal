@@ -33,7 +33,7 @@ class CAlignExternalIdToProductJob extends ACronJob
     public function alignexternalId()
     {
         $dirtyProducts = \Monkey::app()->dbAdapter->query(
-            'SELECT dp.productId, dp.productVariantId,dp.externalId
+            'SELECT dp.productId, dp.productVariantId,dp.extId
             FROM DirtyProduct dp
               JOIN Product p ON dp.productId = p.id AND dp.productVariantId = p.productVariantId
             WHERE  p.productStatusId in (6,11)
