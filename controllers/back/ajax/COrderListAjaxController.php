@@ -149,7 +149,7 @@ class COrderListAjaxController extends AAjaxController
             }
             $row['couponGenerateId']=$val->couponGenerateId;
 
-            $row['marketplaceOrderId'] = $val->marketplaceOrderId;
+            $row['marketplaceOrderId'] = $val->orderIDMarketplace;
             if ($val->marketplaceId != null && $val->marketplaceId != 0) {
                 $findMarketplace = $markeplaceRepo->findOneBy(['prestashopId' => $val->marketplaceId]);
                 $row['marketplaceName'] = $findMarketplace->name;
