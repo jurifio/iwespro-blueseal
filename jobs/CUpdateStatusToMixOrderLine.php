@@ -37,9 +37,9 @@ class CUpdateStatusToMixOrderLine extends ACronJob
     {
         $orderRepo = \Monkey::app()->repoFactory->create('Order');
         $orderLineRepo = \Monkey::app()->repoFactory->create('OrderLine');
-        $orderLinePending = ['ORD_WAIT','ORD_PENDING'];
+        $orderLinePending = ['ORD_PENDING'];
         $orderLineCart = ['CRT','CRT_MRG'];
-        $orderLineWorking = ['ORD_LAB','ORD_FRND_SENT','ORD_FRND_SNDING'];
+        $orderLineWorking = ['ORD_LAB','ORD_FRND_SENT','ORD_FRND_SNDING','ORD_WAIT',];
         $orderLinePacking = ['ORD_FRND_OK','ORD_MAIL_PREP_C','ORD_FRND_ORDSNT','ORD_CHK_IN','ORD_PCK_CLI','ORD_ERR_SEND'];
         $orderLineShipped = ['ORD_FRND_PYD','ORD_SENT'];
         $OrderLineDelivered = ['ORD_DELIVERED'];
