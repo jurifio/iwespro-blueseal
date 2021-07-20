@@ -1154,11 +1154,10 @@ class products extends AApi
                 if (2000 < $i) break;
                 /** @var CProduct $p */
                 $p = \Monkey::app()->repoFactory->create("Product")->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
-
                 $path = pathinfo($v['url']);
                 $c = curl_init();
                 curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode($v['url']));
+                curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode(str_replace(' ','%20',$v['url'])));
                 $imgBody = curl_exec($c);
                 curl_close($c);
                 //$imgBody = file_get_contents(htmlspecialchars_decode($v['url']));
