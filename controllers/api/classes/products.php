@@ -1165,7 +1165,8 @@ class products extends AApi
 
 
                 $imgN = str_pad($v['position'], 3, "0", STR_PAD_LEFT);
-                $destFileName = $p->getAztecCode() . " - " . $imgN . "." . $path['extension'];
+                $destTempFileName = $p->getAztecCode() . " - " . $imgN . "." . $path['extension'];
+                $destFileName=str_replace(' ','',$destTempFileName);
                 if ($p->productPhoto->count()) $existing = true;
                 else $existing = false;
 
