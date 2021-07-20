@@ -725,9 +725,9 @@ class products extends AApi
             $detailSet = $this->mapDictionary("Detail", \Monkey::app()->dbAdapter->query("SELECT slug AS term, id AS foreignKey FROM ProductDetail WHERE slug != ''", [])->fetchAll());
 
             $sizeConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->em()->findBySql("SELECT id FROM ImporterConnector WHERE shopId = ? AND scope = ?", [$this->shop->shopId, 'sizeGroupId']);
-         /*   if ($sizeConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
+           if ($sizeConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
             /** @var \bamboo\domain\entities\CImporterConnector $sizeConnector */
-         //   $sizeConnector = $sizeConnector->getFirst();
+            $sizeConnector = $sizeConnector->getFirst();
 
        //     $productSheetConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->em()->findBySql("SELECT id FROM ImporterConnector where shopId = ? and scope = ?",[$this->shop->shopId,'sheetName']);
        //     if($productSheetConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
