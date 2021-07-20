@@ -42,7 +42,7 @@ class CUpdateStatusToMixOrderLine extends ACronJob
         $orderLineWorking = ['ORD_LAB','ORD_FRND_SENT','ORD_FRND_SNDING','ORD_WAIT',];
         $orderLinePacking = ['ORD_FRND_OK','ORD_MAIL_PREP_C','ORD_FRND_ORDSNT','ORD_CHK_IN','ORD_PCK_CLI','ORD_ERR_SEND'];
         $orderLineShipped = ['ORD_FRND_PYD','ORD_SENT'];
-        $OrderLineDelivered = ['ORD_DELIVERED'];
+        $orderLineDelivered = ['ORD_DELIVERED'];
         $orderLineCancel = ['ORD_FRND_CANC','ORD_MISSNG','ORD_CANCEL','ORD_QLTY_KO'];
         $orderLineReturn = ['ORD_RETURN'];
         $query = "SELECT * from `Order`";
@@ -79,10 +79,16 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                                 ++$countStatusPending;
                                 break;
                             case in_array($orderLines->status,$orderLinePacking,true):
-                                ++$countStatusCart;
+                                ++$countStatusPacking;
                                 break;
                             case in_array($orderLines->status,$orderLineCart,true):
                                 ++$countStatusCart;
+                                break;
+                            case in_array($orderLines->status,$orderLineDelivered,true):
+                                ++$countStatusDelivered;
+                                break;
+                            case in_array($orderLines->status,$orderLineReturn,true):
+                                ++$countStatusReturn;
                                 break;
 
                         }
@@ -128,52 +134,75 @@ class CUpdateStatusToMixOrderLine extends ACronJob
                             $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_WORK ' . $orders->id . ' Order','');
                         }
                     } else {
-                        if ($countStatusCancel == 1 && $countStatusShipped == 0 && $countStatusWorking == 0) {
+                        if ($countStatusCancel == 1 && $countStatusShipped == 0 && $countStatusWorking == 0 && $countStatusPending == 0 && $countStatusPacking == 0 && $countStatusCart == 0 && $countStatusDelivered == 0 && $countStatusReturn = 0) {
                             $orders->status = 'ORD_CANC';
                             $statusForRemote = 'ORD_CANC';
                             $orders->update();
                             $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_CANC' . $orders->id . ' Order','');
-                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 1 && $countStatusWorking == 0) {
+                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 1 && $countStatusWorking == 0 && $countStatusPending == 0 && $countStatusPacking == 0 && $countStatusCart == 0 && $countStatusDelivered == 0 && $countStatusReturn = 0) {
                             $orders->status = 'ORD_SHIPPED';
                             $statusForRemote = 'ORD_SHIPPED';
                             $orders->update();
                             $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_SHIPPED ' . $orders->id . ' Order','');
-                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking == 1) {
+                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking == 1 && $countStatusPending == 0 && $countStatusPacking == 0 && $countStatusCart == 0 && $countStatusDelivered == 0 && $countStatusReturn = 0) {
                             $orders->status = 'ORD_WORK';
                             $statusForRemote = 'ORD_WORK';
                             $orders->update();
                             $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_WORK ' . $orders->id . ' Order','');
+                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking == 0 && $countStatusPending == 1 && $countStatusPacking == 0 && $countStatusCart == 0 && $countStatusDelivered == 0 && $countStatusReturn = 0) {
+                            $orders->status = 'ORD_PENDING';
+                            $statusForRemote = 'ORD_PENDING';
+                            $orders->update();
+                            $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_WORK ' . $orders->id . ' Order','');
+                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking == 0 && $countStatusPending == 0 && $countStatusPacking == 1 && $countStatusCart == 0 && $countStatusDelivered == 0 && $countStatusReturn = 0) {
+                            $orders->status = 'ORD_PACK';
+                            $statusForRemote = 'ORD_PACK';
+                            $orders->update();
+                            $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_PACK ' . $orders->id . ' Order','');
+                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking == 0 && $countStatusPending == 0 && $countStatusPacking == 0 && $countStatusCart == 0 && $countStatusDelivered == 1 && $countStatusReturn = 0) {
+                            $orders->status = 'ORD_DELIVERED';
+                            $statusForRemote = 'ORD_DELIVERED';
+                            $orders->update();
+                            $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_DELIVERED ' . $orders->id . ' Order','');
+                        } elseif ($countStatusCancel == 0 && $countStatusShipped == 0 && $countStatusWorking == 0 && $countStatusPending == 0 && $countStatusPacking == 0 && $countStatusCart == 0 && $countStatusDelivered == 0 && $countStatusReturn = 1) {
+                            $orders->status = 'ORD_RETURNED';
+                            $statusForRemote = 'ORD_RETURNED';
+                            $orders->update();
+                            $this->report('UpdateStatusToMixOrderLine','Updated status to ORD_RETURNED ' . $orders->id . ' Order','');
                         }
+
+
+
 
                     }
-                    if ($countOrderLine >= 1) {
-                        $remoteShopSellerId = $orders->remoteShopSellerId;
-                        $remoteOrderId = $orders->remoteOrderSellerId;
-                        $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopSellerId]);
-                        $db_host = $shopRepo->dbHost;
-                        $db_name = $shopRepo->dbName;
-                        $db_user = $shopRepo->dbUsername;
-                        $db_pass = $shopRepo->dbPassword;
-                        try {
+                if ($countOrderLine >= 1) {
+                    $remoteShopSellerId = $orders->remoteShopSellerId;
+                    $remoteOrderId = $orders->remoteOrderSellerId;
+                    $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $remoteShopSellerId]);
+                    $db_host = $shopRepo->dbHost;
+                    $db_name = $shopRepo->dbName;
+                    $db_user = $shopRepo->dbUsername;
+                    $db_pass = $shopRepo->dbPassword;
+                    try {
 
-                            $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
-                            $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-                            $res = " connessione ok <br>";
-                        } catch (PDOException $e) {
-                            $res = $e->getMessage();
-                        }
-                        try {
-                            $stmtUpdateOrder = $db_con->prepare('UPDATE `Order` set `status`=\'' . $statusForRemote . '\' WHERE id=' . $remoteOrderId);
-                            $stmtUpdateOrder->execute();
-                        } catch (\Throwable $e) {
-                            $this->report('CUpdateStatusToMixOrderLine','error',$e);
-
-                        }
+                        $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                        $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                        $res = " connessione ok <br>";
+                    } catch (PDOException $e) {
+                        $res = $e->getMessage();
                     }
+                    try {
+                        $stmtUpdateOrder = $db_con->prepare('UPDATE `Order` set `status`=\'' . $statusForRemote . '\' WHERE id=' . $remoteOrderId);
+                        $stmtUpdateOrder->execute();
+                    } catch (\Throwable $e) {
+                        $this->report('CUpdateStatusToMixOrderLine','error',$e);
 
+                    }
                 }
+
             }
         }
-
     }
+
+}
 }
