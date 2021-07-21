@@ -119,7 +119,7 @@ class CEbayNewReviseProductJob extends ACronJob
                     $productEanSelect->update();
                 }
                 $brands = explode(',',$marketplaceAccount->config['brands']);
-                if (in_array($product->productBrandId,$brands)) {
+                /*if (in_array($product->productBrandId,$brands)) {
                     continue;
                 }
 
@@ -127,7 +127,7 @@ class CEbayNewReviseProductJob extends ACronJob
                 if (in_array($product->productBrandId,$brandParallel)) {
                     continue;
                 }
-                $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);
+                $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);*/
                 $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $product->productSizeGroupId]);
                 $productSizeGroupHasProductSize = $productSizeGroupHasProductSizeRepo->findBy(['ProductSizeGroupId' => $productSizeGroup->id]);
                 $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
@@ -141,6 +141,7 @@ class CEbayNewReviseProductJob extends ACronJob
                 $xml .= '<WarningLevel>High</WarningLevel>';
                 //intestazione prodotto
                 $xml .= '<Item>';
+                $xml .= '<AutoPay>false</AutoPay>';
                 $xml .= '<ItemID>' . $good->refMarketplaceId . '</ItemID>';
                 $xml .= '<Country>IT</Country>';
                 $xml .= '<Currency>EUR</Currency>';
@@ -180,7 +181,7 @@ class CEbayNewReviseProductJob extends ACronJob
                 /** @var CProductSku $productSku */
                 $productSku = $productSkuRepo->findBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
                 foreach ($productSku as $sku) {
-                    if ($sku->stockQty > 0) {
+                    //if ($sku->stockQty > 0) {
                         $xml .= '<Variation>';
                         // $xml .= '<SKU>prestashop-' . $reservedId['prestaId'] . '-' . $rowsGetReferenceIdProductAttribute[0]['id_product_attribute'] . '</SKU>';
                         $xml .= '<SKU>' . $sku->productId . '-' . $sku->productVariantId . '-' . $sku->productSizeId . '</SKU>';
@@ -225,7 +226,7 @@ class CEbayNewReviseProductJob extends ACronJob
                         $xml .= '</NameValueList>';
                         $xml .= '</VariationSpecifics>';
                         $xml .= '</Variation>';
-                    }
+                    //}
                 }
                 $xml .= '</Variations>';
                 $xml .= '<PictureDetails>';
