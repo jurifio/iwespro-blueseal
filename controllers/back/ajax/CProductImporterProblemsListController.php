@@ -95,7 +95,7 @@ class CProductImporterProblemsListController extends AAjaxController
                   if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), 'sì', 'no') ='si' and
+                                                            FROM ProductHasProductPhoto), 'sì', 'no') ='no' and
                   
               `ps`.`id` NOT IN (6, 7, 8, 12, 13,14)
                AND (`s`.`importer` IS NOT NULL)
