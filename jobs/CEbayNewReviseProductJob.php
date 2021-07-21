@@ -119,7 +119,7 @@ class CEbayNewReviseProductJob extends ACronJob
                     $productEanSelect->update();
                 }
                 $brands = explode(',',$marketplaceAccount->config['brands']);
-                /*if (in_array($product->productBrandId,$brands)) {
+                if (in_array($product->productBrandId,$brands)) {
                     continue;
                 }
 
@@ -127,7 +127,7 @@ class CEbayNewReviseProductJob extends ACronJob
                 if (in_array($product->productBrandId,$brandParallel)) {
                     continue;
                 }
-                $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);*/
+                $brandSaleExclusion = explode(',',$marketplaceAccount->config['brandSaleExclusion']);
                 $productSizeGroup = $productSizeGroupRepo->findOneBy(['id' => $product->productSizeGroupId]);
                 $productSizeGroupHasProductSize = $productSizeGroupHasProductSizeRepo->findBy(['ProductSizeGroupId' => $productSizeGroup->id]);
                 $phphmhsRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
