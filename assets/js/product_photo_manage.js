@@ -1,5 +1,5 @@
 /**
- * Created by Fabrizio Marconi on 12/10/2015.
+ * Revisioned by Juri Fiorani after Created by Fabrizio Marconi on 12/10/2015.
  */
 var el = document.getElementById("selectable");
 var photoOrderList = Sortable.create(el, {

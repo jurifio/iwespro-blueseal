@@ -1,5 +1,5 @@
 /**
- * Created by Fabrizio Marconi on 09/05/2017.
+ * Revisioned by Juri Fiorani after Created by Fabrizio Marconi on 09/05/2017.
  */
 (function ($) {
     "use strict";

@@ -37,7 +37,7 @@ $(document).on('bs.manage.paidAmount', function () {
 });
 
 /**
- * Created by Fabrizio Marconi on 11/09/2015.
+ * Revisioned by Juri Fiorani after Created by Fabrizio Marconi on 11/09/2015.
  */
 (function ($) {
 	$('[data-order]').each(function () {

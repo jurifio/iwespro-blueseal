@@ -1,5 +1,5 @@
 /**
- * Created by Fabrizio Marconi on 09/09/2016.
+ * Revisioned by Juri Fiorani after Created by Fabrizio Marconi on 09/09/2016.
  */
 
 window.buttonSetup = {

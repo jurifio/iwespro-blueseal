@@ -5,16 +5,17 @@ use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CProduct;
 
 /**
- * Class CProductListAjaxController
- * @package bamboo\blueseal\controllers\ajax
+ * Class CProducrSizeGroupEditListAjaxController
+ * @package bamboo\controllers\back\ajax
  *
- * @author Bambooshoot Team <emanuele@bambooshoot.agency>, ${DATE}
+ * @author Iwes Team <it@iwes.it>
  *
- * @copyright (c) Bambooshoot snc - All rights reserved
+ * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  *
- * @since ${VERSION}
+ * @date 23/07/2021
+ * @since 1.0
  */
 class CProducrSizeGroupEditListAjaxController extends AAjaxController
 {
