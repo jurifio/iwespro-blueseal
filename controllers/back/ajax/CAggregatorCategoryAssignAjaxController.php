@@ -45,7 +45,7 @@ class CAggregatorCategoryAssignAjaxController extends AAjaxController
 
         $datatable = new CDataTables($sql,$marketplaceAccountCategoryRepo->getEmptyEntity()->getPrimaryKeys(),$_GET,true);
 		$datatable->addCondition('isRelevant',[1]);
-
+        $marketplaceRepo=\Monkey::app()->repoFactory->create('Marketplace');
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
         $datatable->doAllTheThings(true);
@@ -53,7 +53,8 @@ class CAggregatorCategoryAssignAjaxController extends AAjaxController
         foreach($datatable->getResponseSetData() as $key => $row) {
             $val = $marketplaceAccountCategoryRepo->findOne($row);
             $row["DT_RowId"] = 'row__'.$val->printId();
-            $row['marketplace'] = $val->marketplaceAccount->marketplace->name;
+            $findMarketplace=$marketplaceRepo->findOneBy(['id'=>$val->marketplaceAccount->marketplaceId]);
+            $row['marketplace'] = $findMarketplace->name;
             $row['marketplaceAccount'] = $val->marketplaceAccount->name;
             $row['marketplaceAccountCategory'] = $val->name;
 			try {
