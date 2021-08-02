@@ -28,7 +28,7 @@ class CAggregatorCategoryAssignInvertedAjaxController extends AAjaxController
     {
         $sql = "select `m`.`id` AS `marketplaceId`,`ma`.`id` AS `marketplaceAccountId`,
                         `mac`.`marketplaceCategoryId` AS `marketplaceCategoryId`,
-                        `m`.`name` AS `marketplace`,
+                        `m`.`name` AS `marketplaceName`,
                         `ma`.`name` AS `marketplaceAccount`,
                         `mac`.`name` AS `marketplaceAccountCategory`,
                         `mac`.`path` AS `marketplaceAccountPath`,
@@ -72,7 +72,7 @@ where (`pc`.`id` <> 1) and (m.type='cpc') group by `pc`.`id`,`ma`.`id`,`m`.`id`"
             $catIds = !is_null($marketplaceAccountCateogory) ? $marketplaceAccountCateogory->getHashKey('md5') : "";
 
             $row["DT_RowId"] = 'c_'.$productCategory->printId().'__ma_'.$marketplaceAccount->printId();
-            $row['marketplace'] = $marketplaceAccount->marketplace->name;
+            $row['marketplaceName'] = $marketplaceAccount->marketplace->name;
             $row['marketplaceAccount'] = $marketplaceAccount->name;
             $row['productCategory'] = $productCategory->getLocalizedPath();
 

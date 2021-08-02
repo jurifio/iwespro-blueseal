@@ -35,7 +35,7 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Categoria Interna</th>
-                                <th data-slug="marketplace"
+                                <th data-slug="marketplaceName"
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Marketplace</th>
