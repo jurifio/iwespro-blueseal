@@ -41,7 +41,7 @@ from ((((`ProductCategory` `pc`
     left join `ProductCategoryHasMarketplaceAccountCategory` `pchmac` on(((`pc`.`id` = `pchmac`.`productCategoryId`) and (`ma`.`id` = `pchmac`.`marketplaceAccountId`) and (`ma`.`marketplaceId` = `pchmac`.`marketplaceId`))))
      left join `MarketplaceAccountCategory` `mac` on(((`mac`.`marketplaceAccountId` = `pchmac`.`marketplaceAccountId`) and (`mac`.`marketplaceId` = `pchmac`.`marketplaceId`) and (`mac`.`marketplaceCategoryId` = `pchmac`.`marketplaceAccountCategoryId`))))
 where (`pc`.`id` <> 1) and (m.type='cpc') group by `pc`.`id`,`ma`.`id`,`m`.`id`";
-        $datatable = new CDataTables($sql,['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET,true);
+
         $datatable = new CDataTables($sql,['marketplaceId','marketplaceAccountId','productCategoryId'],$_GET,true);
 
         $orribilità = $this->app->dbAdapter->query($datatable->getQuery(false,true),$datatable->getParams())->fetchAll();
