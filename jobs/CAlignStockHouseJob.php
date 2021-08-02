@@ -60,7 +60,7 @@ class CAlignStockHouseJob extends ACronJob
                     $oldQuantity = $dsas->qty;
                     $productCode = $dsas->productId . '-' . $dsas->productVariantId . '-Size: ' . $dsas->size;
                     $dsas->qty = $sku->qty;
-                    $das->update();
+                    $dsas->update();
                     if ($oldQuantity != $sku->qty) {
                         $this->report('CAlignStockHouseJob','start update' . $productCode . 'quantity: ' . $sku->qty);
                     }
