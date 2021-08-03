@@ -5,7 +5,7 @@ window.buttonSetup = {
     event:"bs-product-aggregator-publish",
     class:"btn btn-default",
     rel:"tooltip",
-    title:"Pubblica prodotto sui marketplace",
+    title:"Pubblica prodotto su aggregatori",
     placement:"bottom",
     toggle:"modal"
 };
