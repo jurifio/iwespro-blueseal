@@ -37,7 +37,7 @@ class CAggregatorProductManageController extends AAjaxController
                     $cpcF = isset($account->config['defaultCpcF']) ? $account->config['defaultCpcF'] : 0;
 
 
-                    $response[] = ['id' => $account->printId(),'name' => $mp->name,'marketplace' => $mp->name,'modifier' => $modifier,'cpc' => $cpc,'cpcF' => $cpcF,'cpcM' => $cpcM,'cpcFM' => $cpcFM,'activeAutomatic' => $activeAutomatic];
+                    $response[] = ['id' => $account->printId(),'name' => $account->name,'marketplace' => $mp->name,'modifier' => $modifier,'cpc' => $cpc,'cpcF' => $cpcF,'cpcM' => $cpcM,'cpcFM' => $cpcFM,'activeAutomatic' => $activeAutomatic];
 
                 }
             }else{
