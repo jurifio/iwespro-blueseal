@@ -329,7 +329,7 @@
                 data-remote="bs.product.photo.download"
         ></bs-toolbar-button>
         <bs-toolbar-button
-                data-remote="bs.product.marketplace.publish"
+                data-remote="bs.product.aggregator.publish"
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.product.marketplace.publish"

@@ -50,7 +50,7 @@ $(document).on('bs-product-aggregator-publish', function (e, element, button) {
             okButton.show();
             let accounts = JSON.parse(response);
             let html =  '<div class="form-group form-group-default selectize-enabled full-width">' +
-                '<label for="accountId">Marketplace Account</label>' +
+                '<label for="accountId">Aggregatore Account</label>' +
                 '<select class="full-width" placeholder="Seleziona l\'account" ' +
                 'data-init-plugin="selectize" title="" name="accountId" id="accountId" required>' +
                 '<option value=""></option>';
