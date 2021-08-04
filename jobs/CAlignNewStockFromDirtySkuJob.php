@@ -48,13 +48,13 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
         $res = "";
         try {
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
-            $sql='select p.id as productId, p.productVariantId as productVariantId, ds.qty as qty,ds.productSizeId as productSizeId,
+            $sql='select p.id as productId, p.productVariantId as productVariantId, ds.qty as qty, ds.productSizeId as productSizeId,
                                 shp.shopId as shopId from Product p join DirtyProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId join DirtySku ds on shp.id=ds.dirtyProductId where shp.shopId IN (1,51,58,61) and ds.productSizeId is not null';
             $res=\Monkey::app()->dbAdapter->query($sql,[]);
             foreach($res as $result){
                                 $sku = $productSkuRepo->findOneBy(['productId' => $result['productId'],'productVariantId' => $result['productVariantId'],'productSizeId' => $result['productSizeId'],'shopId' => $result['shopId']]);
-                                $sku->stockQty = $dirtySku->qty;
+                                $sku->stockQty = $dirtySku['qty'];
                                 $sku->update();
                             }
 
