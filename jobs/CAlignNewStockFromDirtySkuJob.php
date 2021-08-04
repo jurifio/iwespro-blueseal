@@ -35,22 +35,13 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
 
     /**
      * @param null $args
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
+  */
     public function run($args = null)
     {
         $this->alignStockProduct();
     }
 
-    /**
-     * @throws \PrestaShopWebserviceException
-     * @throws \bamboo\core\exceptions\BambooException
-     * @throws \bamboo\core\exceptions\BambooORMInvalidEntityException
-     * @throws \bamboo\core\exceptions\BambooORMReadOnlyException
-     */
+
     private function alignStockProduct()
     {
         $res = "";
