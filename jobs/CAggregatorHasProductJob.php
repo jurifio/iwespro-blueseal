@@ -49,7 +49,7 @@ class CAggregatorHasProductJob extends ACronJob
 
             $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
             foreach ($marketplaces as $marketplace) {
-                $marketplaceAccounts = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
+                $marketplaceAccounts = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id]);
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
                         if ($marketplaceAccount->config['isActive'] == 1) {
@@ -292,7 +292,7 @@ class CAggregatorHasProductJob extends ACronJob
 
             $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
             foreach ($marketplaces as $marketplace) {
-                $marketplaceAccounts = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id,'isActive' => 1]);
+                $marketplaceAccounts = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id]);
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
                         if ($marketplaceAccount->config['isActive'] == 1) {
