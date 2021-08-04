@@ -38,6 +38,7 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
   */
     public function run($args = null)
     {
+        $this->report('CAlignNewStockFromDirtySkuJob','log','start Align Quantity');
         $this->alignStockProduct();
     }
 
@@ -46,7 +47,6 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
     {
         $res = "";
         try {
-            $this->report('CAlignNewStockFromDirtySkuJob','log','start Align Quantity');
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
             $sql='select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,ds.productSizeId as productSizeId,
                                 shp.shopId as shopId from Product p join DirtyProduct shp on p.id=shp.productId
