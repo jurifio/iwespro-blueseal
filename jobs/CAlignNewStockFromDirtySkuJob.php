@@ -53,6 +53,7 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
  and p.productVariantId=shp.productVariantId join DirtySku ds on shp.id=ds.dirtyProductId where  ds.productSizeId is not null';
             $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach($res as $result){
+                $this->report('CAlignNewStockFromDirtySkuJob',$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId']);
                                 $sku = $productSkuRepo->findOneBy(['productId' => $result['productId'],'productVariantId' => $result['productVariantId'],'productSizeId' => $result['productSizeId'],'shopId' => $result['shopId']]);
                                 $sku->stockQty = $result['qty'];
                                 $sku->update();
