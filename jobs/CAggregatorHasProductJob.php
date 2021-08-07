@@ -296,7 +296,7 @@ class CAggregatorHasProductJob extends ACronJob
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
                         $this->report('CAggregatorHasProductJob','marketplaceAccount',$marketplaceAccount->id.'-'.$marketplaceAccount->marketplaceId);
-
+                        if ($marketplaceAccount->config['isActive'] == "1") {
 
                             $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                             $sql = 'select p.id as productId,
@@ -420,7 +420,7 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                     $this->report('CAggregatorHasProductJob','End Work Publish for  ' . $marketplace->name,'');
 
 
-
+                }
             }
             $this->report('CAggregatorHasProductJob','End Work Publishing Eligible Products to Aggregator  Table','');
         } catch
