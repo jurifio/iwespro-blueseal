@@ -295,6 +295,7 @@ class CAggregatorHasProductJob extends ACronJob
                 $marketplaceAccounts = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id]);
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
+                        $this->report('CAggregatorHasProductJob','marketplaceAccount',$marketplaceAccount->id.'-'.$marketplaceAccount->marketplaceId);
                         if ($marketplaceAccount->config['isActive'] == 1) {
 
                             $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
@@ -337,6 +338,7 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                                         } else {
                                             $marketProduct->titleModified = 0;
                                         }
+                                        $this->report('CAggregatorHasProductJob','update' . $marketplace->name,$product['productId'].'-'.$product['productVariantId']);
                                         $marketProduct->update();
 
 
@@ -361,6 +363,7 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                                         } else {
                                             $marketProductInsert->titleModified = 0;
                                         }
+                                        $this->report('CAggregatorHasProductJob','insert' . $marketplace->name,$product['productId'].'-'.$product['productVariantId']);
                                         $marketProductInsert->insert();
                                     } else {
                                         $marketProduct->priceModifier = $product['priceModifier'];
@@ -378,6 +381,7 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                                         } else {
                                             $marketProduct->titleModified = 0;
                                         }
+                                        $this->report('CAggregatorHasProductJob','update' . $marketplace->name,$product['productId'].'-'.$product['productVariantId']);
                                         $marketProduct->update();
                                     }
                                 } else {
@@ -401,6 +405,7 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                                     } else {
                                         $marketProductInsert->titleModified = 0;
                                     }
+                                    $this->report('CAggregatorHasProductJob','insert' . $marketplace->name,$product['productId'].'-'.$product['productVariantId']);
                                     $marketProductInsert->insert();
 
                                 }
