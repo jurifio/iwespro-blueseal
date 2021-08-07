@@ -296,7 +296,7 @@ class CAggregatorHasProductJob extends ACronJob
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
                         $this->report('CAggregatorHasProductJob','marketplaceAccount',$marketplaceAccount->id.'-'.$marketplaceAccount->marketplaceId);
-                        if ($marketplaceAccount->config['isActive'] == 1) {
+                        if ($marketplaceAccount->config['isActive'] == "1") {
 
                             $this->report('CAggregatorHasProductJob','Working to Select Eligible Products to ' . $marketplace->name,'');
                             $sql = 'select p.id as productId,
