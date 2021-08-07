@@ -292,7 +292,7 @@ class CAggregatorHasProductJob extends ACronJob
 
             $marketplaces = $marketplaceRepo->findBy(['type' => 'cpc']);
             foreach ($marketplaces as $marketplace) {
-                $marketplaceAccounts = $marketplaceAccountRepo->findOneBy(['marketplaceId' => $marketplace->id]);
+                $marketplaceAccounts = $marketplaceAccountRepo->findBy(['marketplaceId' => $marketplace->id]);
                 foreach ($marketplaceAccounts as $marketplaceAccount) {
                     if ($marketplaceAccount) {
                         $this->report('CAggregatorHasProductJob','marketplaceAccount',$marketplaceAccount->id.'-'.$marketplaceAccount->marketplaceId);
