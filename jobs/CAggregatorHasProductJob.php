@@ -101,7 +101,7 @@ class CAggregatorHasProductJob extends ACronJob
                                                 }
                                                 $pshsd->status = 2;
                                                 $pshsd->productStatusAggregatorId = 2;
-                                                $pshsd->lastUpdate = $marketplaceAccount->config['lastUpdate'];
+                                                $pshsd->dateUpdate = $marketplaceAccount->config['dateUpdate'];
                                                 $pshsd->update();
 
 
@@ -165,7 +165,7 @@ class CAggregatorHasProductJob extends ACronJob
                                                     $pshsd->feeCustomerMobile = 0.25;
                                                 }
                                                 $pshsd->productStatusAggregatorId = 2;
-                                                $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
+                                                $pshsd->dateUpdate = $marketplaceAccount->config['dateUpdate'];
                                                 $pshsd->status = 2;
                                                 $pshsd->update();
                                             }
@@ -268,7 +268,7 @@ class CAggregatorHasProductJob extends ACronJob
 
                                         }
                                         $pshsdInsert->status = 0;
-                                        $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
+                                        $pshsdInsert->dateUpdate = '2011-01-01 00:00:00';
                                         $pshsdInsert->productStatusAggregatorId = 2;
                                         $pshsdInsert->insert();
 
@@ -317,7 +317,7 @@ class CAggregatorHasProductJob extends ACronJob
                                                                             
  and p.productVariantId=shp.productVariantId
 join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId
-where shp.productStatusAggregatorId=2 and shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
+where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                             $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($products as $product) {
                                 $marketProduct = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceAccountId' => $marketplaceAccount->id,'marketplaceId' => $marketplaceAccount->marketplaceId]);
