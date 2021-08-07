@@ -323,7 +323,6 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                             foreach ($products as $product) {
                                 $marketProduct = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceAccountId' => $marketplaceAccount->id,'marketplaceId' => $marketplaceAccount->marketplaceId]);
                                 if ($marketProduct) {
-
                                         $marketProduct->priceModifier = $product['priceModifier'];
                                         $marketProduct->fee = $product['fee'];
                                         $marketProduct->feeCustomer = $product['feeCustomer'];
