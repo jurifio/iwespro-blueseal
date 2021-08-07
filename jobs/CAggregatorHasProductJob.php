@@ -322,8 +322,8 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                             $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($products as $product) {
                                 $marketProduct = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findOneBy(['productId' => $product['productId'],'productVariantId' => $product['productVariantId'],'marketplaceAccountId' => $marketplaceAccount->id,'marketplaceId' => $marketplaceAccount->marketplaceId]);
-                                if ($marketProduct) {
-                                    if ($product['status'] == 2) {
+                                if (count($marketProduct)>0) {
+
                                         $marketProduct->priceModifier = $product['priceModifier'];
                                         $marketProduct->fee = $product['fee'];
                                         $marketProduct->feeCustomer = $product['feeCustomer'];
@@ -342,48 +342,7 @@ where shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasSho
                                         $marketProduct->update();
 
 
-                                    } elseif ($product['status'] == 0) {
-                                        $marketProductInsert = $phphmhsRepo->getEmptyEntity();
-                                        $marketProductInsert->productId = $product['productId'];
-                                        $marketProductInsert->productVariantId = $product['productVariantId'];
-                                        $marketProductInsert->priceModifier = $product['priceModifier'];
-                                        $marketProductInsert->fee = $product['fee'];
-                                        $marketProductInsert->feeCustomer = $product['feeCustomer'];
-                                        $marketProductInsert->feeCustomerMobile = $product['feeCustomerMobile'];
-                                        $marketProductInsert->feeMobile = $product['feeMobile'];
-                                        $marketProductInsert->insertionDate = (new \DateTime())->format('Y-m-d H:i:s');
-                                        $marketProductInsert->istoWork = 1;
-                                        $marketProductInsert->isRevised = 0;
-                                        $marketProductInsert->isDeleted = 0;
-                                        $marketProductInsert->aggregatorHasShopId = $marketplaceAccount->config['aggregatorHasShopId'];
-                                        $marketProductInsert->marketplaceAccountId = $marketplaceAccount->id;
-                                        $marketProductInsert->marketplaceId = $marketplaceAccount->marketplaceId;
-                                        if ($product['isOnSale'] == 1) {
-                                            $marketProductInsert->titleModified = 1;
-                                        } else {
-                                            $marketProductInsert->titleModified = 0;
-                                        }
-                                        $this->report('CAggregatorHasProductJob','insert' . $marketplace->name,$product['productId'].'-'.$product['productVariantId']);
-                                        $marketProductInsert->insert();
-                                    } else {
-                                        $marketProduct->priceModifier = $product['priceModifier'];
-                                        $marketProduct->fee = $product['fee'];
-                                        $marketProduct->feeCustomer = $product['feeCustomer'];
-                                        $marketProduct->feeCustomerMobile = $product['feeCustomerMobile'];
-                                        $marketProduct->feeMobile = $product['feeMobile'];
-                                        $marketProduct->istoWork = 0;
-                                        $marketProduct->isRevised = 1;
-                                        $marketProduct->isDeleted = 0;
-                                        $marketProduct->lastUpdate = (new \DateTime())->format('Y-m-d H:i:s');
 
-                                        if ($product['isOnSale'] == 1) {
-                                            $marketProduct->titleModified = 1;
-                                        } else {
-                                            $marketProduct->titleModified = 0;
-                                        }
-                                        $this->report('CAggregatorHasProductJob','update' . $marketplace->name,$product['productId'].'-'.$product['productVariantId']);
-                                        $marketProduct->update();
-                                    }
                                 } else {
                                     $marketProductInsert = $phphmhsRepo->getEmptyEntity();
                                     $marketProductInsert->productId = $product['productId'];
