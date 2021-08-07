@@ -62,7 +62,7 @@ class CAggregatorHasProductJob extends ACronJob
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
  and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and p2.productStatusId in (6,15) and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . ')';
                         }else{
-                            $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
+                            $sql = 'select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
  and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId in (6,15) and shp.shopId in (1,51,58,61)';
                         }
