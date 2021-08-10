@@ -47,9 +47,9 @@ class products extends AApi
      * @throws BambooException
      * @throws \bamboo\core\exceptions\RedPandaCookieException
      */
-    public function __construct($app, $data)
+    public function __construct($app,$data)
     {
-        parent::__construct($app, $data);
+        parent::__construct($app,$data);
         $this->readEntitySettings();
         $this->shop = \Monkey::app()->repoFactory->create('SiteApi')->findOneBy(['id' => $this->id]);
         $this->uniqueId = uniqid();
@@ -79,17 +79,17 @@ class products extends AApi
 
         $this->specSettings = $this->generalSettings->fetchAll('post');
 
-        if ($this->checkIntervalForNextCall('POST', 'Products', $this->specSettings['intervalSecondForNextCall'])) {
+        if ($this->checkIntervalForNextCall('POST','Products',$this->specSettings['intervalSecondForNextCall'])) {
             $res = $this->validateFile();
             if ($res === true) {
                 $this->processFile();
                 $this->workDirtyData();
                 $zipFile = $this->saveFile();
-                if($zipFile !== true) unlink($zipFile);
-                $this->report($this::POST, 'Products', 'success', 'Product inserted correctly', null, $this->uniqueId, $this->id);
+                if ($zipFile !== true) unlink($zipFile);
+                $this->report($this::POST,'Products','success','Product inserted correctly',null,$this->uniqueId,$this->id);
                 return true;
             }
-        } else $res = 'Tempo necessario fra due esportazioni di prodotto: ' . STimeToolbox::formatTo('seconds', 'hours', $this->specSettings['intervalSecondForNextCall']) . ' ore';
+        } else $res = 'Tempo necessario fra due esportazioni di prodotto: ' . STimeToolbox::formatTo('seconds','hours',$this->specSettings['intervalSecondForNextCall']) . ' ore';
 
         return $res;
     }
@@ -105,7 +105,7 @@ class products extends AApi
         $res = $this->validateFile(1);
         if ($res === true) {
             $res = $this->updateProduct();
-            if($res === true) return true;
+            if ($res === true) return true;
         }
 
         return $res;
@@ -121,7 +121,7 @@ class products extends AApi
     private function readEntitySettings()
     {
 
-        $filePath = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch("paths", "api") . 'products.json';
+        $filePath = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch("paths","api") . 'products.json';
 
         if (!file_exists($filePath)) throw new BambooConfigException('Configuration not found for Importer: ' . $filePath);
 
@@ -153,7 +153,7 @@ class products extends AApi
 
             foreach ($product as $field => $value) {
                 if (
-                    $this->checkFieldType($requiredFields + $notRequiredFields, $field, $value)
+                $this->checkFieldType($requiredFields + $notRequiredFields,$field,$value)
                 ) {
                     continue;
                 };
@@ -164,16 +164,16 @@ class products extends AApi
             if (!empty($notValidFields)) return $notValidFields;
         }
 
-        $this->report($this::POST, 'Products', 'report', 'File validated correctly', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','File validated correctly',null,$this->uniqueId,$this->id);
         return true;
     }
 
-    private function checkFieldType($fields, $field, $value)
+    private function checkFieldType($fields,$field,$value)
     {
 
-        if(array_key_exists($field, $this->specSettings['requiredFields'])){
+        if (array_key_exists($field,$this->specSettings['requiredFields'])) {
             $mandatory = true;
-        } else if(array_key_exists($field, $this->specSettings['notRequiredFields'])){
+        } else if (array_key_exists($field,$this->specSettings['notRequiredFields'])) {
             $mandatory = false;
         } else return false;
 
@@ -182,24 +182,24 @@ class products extends AApi
         $resType = null;
         switch ($type) {
             case 'string':
-                if($mandatory) {
+                if ($mandatory) {
                     $resType = is_string($value) && !empty(trim($value));
                 } else {
                     $resType = is_string($value);
                 }
                 break;
             case 'numeric':
-                $resType = is_numeric(str_replace(',', '.', $value));
+                $resType = is_numeric(str_replace(',','.',$value));
                 break;
             case 'string || numeric':
-                if($mandatory){
-                    if ((is_string($value) && !empty(trim($value))) || is_numeric(str_replace(',', '.', $value))) {
+                if ($mandatory) {
+                    if ((is_string($value) && !empty(trim($value))) || is_numeric(str_replace(',','.',$value))) {
                         $resType = true;
                     } else {
                         $resType = false;
                     }
                 } else {
-                    if (is_string($value) || is_numeric(str_replace(',', '.', $value))) {
+                    if (is_string($value) || is_numeric(str_replace(',','.',$value))) {
                         $resType = true;
                     } else {
                         $resType = false;
@@ -207,7 +207,7 @@ class products extends AApi
                 }
                 break;
             case 'array':
-                if($mandatory){
+                if ($mandatory) {
                     $resType = is_array($value) && !empty($value);
                 } else {
                     $resType = is_array($value);
@@ -230,7 +230,7 @@ class products extends AApi
         $countUpdatedDirtySku = 0;
         $seenSkus = [];
 
-        $this->report($this::POST, 'Products', 'report', 'Process DirtyProduct', 'Init insert of: ' . count($this->data['json']) . ' elements', $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','Process DirtyProduct','Init insert of: ' . count($this->data['json']) . ' elements',$this->uniqueId,$this->id);
 
         foreach ($this->data['json'] as $product) {
 
@@ -246,12 +246,12 @@ class products extends AApi
                 $newDirtyProduct['extId'] = $product['referenceId'];
                 $newDirtyProduct['brand'] = $product['brand'];
                 $newDirtyProduct['itemno'] = $product['supplierArticle'];
-                $newDirtyProduct['value'] = floatval(str_replace(',', '.', $product['supplierPrice']));
-                $newDirtyProduct['price'] = floatval(str_replace(',', '.', $product['marketPrice']));
+                $newDirtyProduct['value'] = floatval(str_replace(',','.',$product['supplierPrice']));
+                $newDirtyProduct['price'] = floatval(str_replace(',','.',$product['marketPrice']));
                 $newDirtyProduct['var'] = $product['var'];
-                $newDirtyProduct['text'] = implode(',', $newDirtyProduct);
+                $newDirtyProduct['text'] = implode(',',$newDirtyProduct);
 
-                $newDirtyProduct['checksum'] = md5(implode(',', $newDirtyProduct));
+                $newDirtyProduct['checksum'] = md5(implode(',',$newDirtyProduct));
                 $newDirtyProduct['dirtyStatus'] = 'F';
 
 
@@ -273,7 +273,7 @@ class products extends AApi
                     $newDirtyProductExtend['tag' . ($i + 1)] = $product['tags'][$i];
                 }
 
-                $existingDirtyProduct = \Monkey::app()->dbAdapter->selectCount('DirtyProduct', ['checksum' => $newDirtyProduct['checksum']]);
+                $existingDirtyProduct = \Monkey::app()->dbAdapter->selectCount('DirtyProduct',['checksum' => $newDirtyProduct['checksum']]);
 
                 $mainKey = [];
                 if ($existingDirtyProduct == 0) {
@@ -283,50 +283,50 @@ class products extends AApi
                     $mainKey['var'] = $newDirtyProduct['var'];
                     $mainKey['shopId'] = $this->shop->shopId;
 
-                    $existProductWithMainKey = \Monkey::app()->dbAdapter->select('DirtyProduct', $mainKey)->fetch();
+                    $existProductWithMainKey = \Monkey::app()->dbAdapter->select('DirtyProduct',$mainKey)->fetch();
 
                     //lo trovo --> qualcosa è cambiato presumibilmente il value o il price
                     if ($existProductWithMainKey) {
-                        \Monkey::app()->dbAdapter->update('DirtyProduct', [
+                        \Monkey::app()->dbAdapter->update('DirtyProduct',[
                             'value' => $newDirtyProduct['value'],
                             'price' => $newDirtyProduct['price'],
                             'text' => $newDirtyProduct['text'],
                             'checksum' => $newDirtyProduct['checksum']
-                        ], $mainKey);
+                        ],$mainKey);
 
                         $countUpdatedDirtyProduct++;
 
                         $dirtyProductId = $existProductWithMainKey['id'];
 
                         //aggiorno DirtyProductExtend
-                        $existingDirtyProductExtend = \Monkey::app()->dbAdapter->select('DirtyProductExtend', ['dirtyProductId' => $existProductWithMainKey['id']])->fetch();
+                        $existingDirtyProductExtend = \Monkey::app()->dbAdapter->select('DirtyProductExtend',['dirtyProductId' => $existProductWithMainKey['id']])->fetch();
 
                         if ($existingDirtyProductExtend) {
-                            \Monkey::app()->dbAdapter->update('DirtyProductExtend', $newDirtyProductExtend, ['dirtyProductId' => $existProductWithMainKey['id']]);
+                            \Monkey::app()->dbAdapter->update('DirtyProductExtend',$newDirtyProductExtend,['dirtyProductId' => $existProductWithMainKey['id']]);
                         } else {
-                            $this->report($this::POST, 'Products', 'error', 'DirtyProductExtend', 'Error while looking at dirtyProductId: ' . $existProductWithMainKey['id'] . ' on DirtyProductExtend table', $this->uniqueId, $this->id);
+                            $this->report($this::POST,'Products','error','DirtyProductExtend','Error while looking at dirtyProductId: ' . $existProductWithMainKey['id'] . ' on DirtyProductExtend table',$this->uniqueId,$this->id);
                         }
                     } else {
 
                         //inserisco il prodotto
-                        $newDirtyProductExtend['dirtyProductId'] = \Monkey::app()->dbAdapter->insert('DirtyProduct', $newDirtyProduct);
+                        $newDirtyProductExtend['dirtyProductId'] = \Monkey::app()->dbAdapter->insert('DirtyProduct',$newDirtyProduct);
 
                         //inserisco dirty product extend
                         $newDirtyProductExtend['shopId'] = $this->shop->shopId;
 
-                        \Monkey::app()->dbAdapter->insert('DirtyProductExtend', $newDirtyProductExtend);
+                        \Monkey::app()->dbAdapter->insert('DirtyProductExtend',$newDirtyProductExtend);
                         $countNewDirtyProduct++;
 
                         $dirtyProductId = $newDirtyProductExtend['dirtyProductId'];
                     }
                 } else if ($existingDirtyProduct > 1) {
-                    $this->report($this::POST, 'Products', 'report', 'Multiple dirty product founded', 'Procedure has founded ' . $existingDirtyProduct . ' dirty product', $this->uniqueId, $this->id);
+                    $this->report($this::POST,'Products','report','Multiple dirty product founded','Procedure has founded ' . $existingDirtyProduct . ' dirty product',$this->uniqueId,$this->id);
                     continue;
                 } else {
-                    $dirtyProductId = \Monkey::app()->dbAdapter->select('DirtyProduct', ['checksum' => $newDirtyProduct['checksum']])->fetch()['id'];
+                    $dirtyProductId = \Monkey::app()->dbAdapter->select('DirtyProduct',['checksum' => $newDirtyProduct['checksum']])->fetch()['id'];
                 }
 
-                $dirtyPhotos = \Monkey::app()->dbAdapter->select('DirtyPhoto', ['dirtyProductId' => $dirtyProductId])->fetchAll();
+                $dirtyPhotos = \Monkey::app()->dbAdapter->select('DirtyPhoto',['dirtyProductId' => $dirtyProductId])->fetchAll();
                 $position = 0;
 
                 foreach ($product['imgs'] as $img) {
@@ -335,7 +335,7 @@ class products extends AApi
                         if ($exImg['url'] == $img) continue 2;
                     }
                     $position++;
-                    \Monkey::app()->dbAdapter->insert('DirtyPhoto', [
+                    \Monkey::app()->dbAdapter->insert('DirtyPhoto',[
                         'dirtyProductId' => $dirtyProductId,
                         'shopId' => $this->shop->shopId,
                         'url' => $img,
@@ -348,13 +348,13 @@ class products extends AApi
                 \Monkey::app()->repoFactory->commit();
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products', 'error', 'Error reading Product', 'Error reading Product: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Error reading Product','Error reading Product: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(),$this->uniqueId,$this->id);
                 continue;
             }
 
             //DIRTY SKU
             try {
-                $this->report($this::POST, 'Products', 'report', 'Process DirtySku', 'Init insert sku', $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','report','Process DirtySku','Init insert sku',$this->uniqueId,$this->id);
 
                 $dirtySku = [];
                 $mainKeyForSku = [];
@@ -362,10 +362,10 @@ class products extends AApi
                 $mainKeyForSku['var'] = $product['var'];
                 $mainKeyForSku['shopId'] = $this->shop->shopId;
 
-                $dirtyProduct = $existingDirtyProductExtend = \Monkey::app()->dbAdapter->select('DirtyProduct', $mainKeyForSku)->fetch();
+                $dirtyProduct = $existingDirtyProductExtend = \Monkey::app()->dbAdapter->select('DirtyProduct',$mainKeyForSku)->fetch();
 
                 if (!$dirtyProduct) {
-                    $this->report($this::POST, 'Products', 'error', 'Reading Skus', 'Dirty Product not found while looking at sku. Product: ' . json_encode($product), $this->uniqueId, $this->id);
+                    $this->report($this::POST,'Products','error','Reading Skus','Dirty Product not found while looking at sku. Product: ' . json_encode($product),$this->uniqueId,$this->id);
                     continue;
                 }
 
@@ -373,20 +373,20 @@ class products extends AApi
                 $newDirtySku['size'] = $product['size'];
                 $newDirtySku['shopId'] = $this->shop->shopId;
                 $newDirtySku['dirtyProductId'] = $dirtyProduct['id'];
-                $newDirtySku['value'] = floatval(str_replace(',', '.', $product['supplierPrice']));
-                $newDirtySku['price'] = floatval(str_replace(',', '.', $product['marketPrice']));
+                $newDirtySku['value'] = floatval(str_replace(',','.',$product['supplierPrice']));
+                $newDirtySku['price'] = floatval(str_replace(',','.',$product['marketPrice']));
                 $newDirtySku['qty'] = $product['qty'];
                 $newDirtySku['barcode'] = $product['ean'] ?: null;
                 $newDirtySku['barcode_int'] = $product['barcodeInt'] ?: null;
-                $newDirtySku['text'] = implode(',', $newDirtySku);
-                $newDirtySku['checksum'] = md5(implode(',', $newDirtySku));
+                $newDirtySku['text'] = implode(',',$newDirtySku);
+                $newDirtySku['checksum'] = md5(implode(',',$newDirtySku));
 
                 //cerco lo sku con il checksum
-                $existDirtySku = \Monkey::app()->dbAdapter->selectCount('DirtySku', ['checksum' => $newDirtySku['checksum']]);
+                $existDirtySku = \Monkey::app()->dbAdapter->selectCount('DirtySku',['checksum' => $newDirtySku['checksum']]);
 
                 if ($existDirtySku == 0) {
 
-                    $existDirtySkuWithMainKey = \Monkey::app()->dbAdapter->select('DirtySku', [
+                    $existDirtySkuWithMainKey = \Monkey::app()->dbAdapter->select('DirtySku',[
                         'dirtyProductId' => $newDirtySku['dirtyProductId'],
                         'shopId' => $newDirtySku['shopId'],
                         'size' => $newDirtySku['size']
@@ -394,14 +394,14 @@ class products extends AApi
 
                     if ($existDirtySkuWithMainKey) {
                         //update
-                        \Monkey::app()->dbAdapter->update('DirtySku', [
+                        \Monkey::app()->dbAdapter->update('DirtySku',[
                             'value' => $newDirtySku['value'],
                             'price' => $newDirtySku['price'],
                             'qty' => $newDirtySku['qty'],
                             'changed' => 1,
                             'text' => $newDirtySku['text'],
                             'checksum' => $newDirtySku['checksum']
-                        ], [
+                        ],[
                             'dirtyProductId' => $existDirtySkuWithMainKey['dirtyProductId'],
                             'shopId' => $existDirtySkuWithMainKey['shopId'],
                             'size' => $existDirtySkuWithMainKey['size']
@@ -412,29 +412,29 @@ class products extends AApi
                         $countUpdatedDirtySku++;
                     } else {
                         //INSERT
-                        $dirtySku['id'] = \Monkey::app()->dbAdapter->insert('DirtySku', $newDirtySku);
+                        $dirtySku['id'] = \Monkey::app()->dbAdapter->insert('DirtySku',$newDirtySku);
                         $seenSkus[] = $dirtySku['id'];
                         $countNewDirtySku++;
                     }
 
                 } else if ($existDirtySku > 1) {
-                    $this->report($this::POST, 'Products', 'error', 'Multiple dirty sku founded', 'Procedure has founded ' . $existDirtySku . ' dirty sku', $this->uniqueId, $this->id);
+                    $this->report($this::POST,'Products','error','Multiple dirty sku founded','Procedure has founded ' . $existDirtySku . ' dirty sku',$this->uniqueId,$this->id);
                     continue;
                 } else if ($existDirtySku == 1) {
-                    $noChangedSku = \Monkey::app()->dbAdapter->select('DirtySku', ['checksum' => $newDirtySku['checksum']])->fetch();
+                    $noChangedSku = \Monkey::app()->dbAdapter->select('DirtySku',['checksum' => $newDirtySku['checksum']])->fetch();
                     $seenSkus[] = $noChangedSku['id'];
                 }
 
 
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products', 'error', 'Error reading sku', 'Error reading sku: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Error reading sku','Error reading sku: ' . json_encode($product) . ' Error detail: ' . $e->getMessage(),$this->uniqueId,$this->id);
                 continue;
             }
 
         }
 
-        $this->report($this::POST, 'Products', 'report', 'End products', 'End of reading and writing dirty product: New Dirty Product: ' . $countNewDirtyProduct . ' Updated Dirty product: ' . $countUpdatedDirtyProduct, $this->uniqueId, $this->id);
-        $this->report($this::POST, 'Products', 'report', 'End skus', 'End of reading and writing dirty skus: New Dirty Sku: ' . $countNewDirtySku . ' Updated Dirty product: ' . $countUpdatedDirtySku, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','End products','End of reading and writing dirty product: New Dirty Product: ' . $countNewDirtyProduct . ' Updated Dirty product: ' . $countUpdatedDirtyProduct,$this->uniqueId,$this->id);
+        $this->report($this::POST,'Products','report','End skus','End of reading and writing dirty skus: New Dirty Sku: ' . $countNewDirtySku . ' Updated Dirty product: ' . $countUpdatedDirtySku,$this->uniqueId,$this->id);
 
         $this->findZeroSkus($seenSkus);
     }
@@ -458,47 +458,47 @@ class products extends AApi
             $mainKey['shopId'] = $this->shop->shopId;
             $mainKey['extId'] = $this->data['resource'];
 
-            $dirtyProduct = \Monkey::app()->dbAdapter->select('DirtyProduct', $mainKey)->fetch();
+            $dirtyProduct = \Monkey::app()->dbAdapter->select('DirtyProduct',$mainKey)->fetch();
 
-            if(!$dirtyProduct) return 'Il prodotto che stai cercando di aggiornare non esiste';
+            if (!$dirtyProduct) return 'Il prodotto che stai cercando di aggiornare non esiste';
 
-            $this->report($this::PUT, 'Products', 'report', 'Init updating product', 'Init updating product: ' . $dirtyProduct['id'] . ' with size ' . $prToUpdate['size'], $this->uniqueId, $this->id);
+            $this->report($this::PUT,'Products','report','Init updating product','Init updating product: ' . $dirtyProduct['id'] . ' with size ' . $prToUpdate['size'],$this->uniqueId,$this->id);
 
-            $dirtySku = \Monkey::app()->dbAdapter->select('DirtySku', [
+            $dirtySku = \Monkey::app()->dbAdapter->select('DirtySku',[
                 'dirtyProductId' => $dirtyProduct['id'],
                 'shopId' => $this->shop->shopId,
                 'size' => $prToUpdate['size']
             ])->fetch();
 
-            if(!$dirtySku){
+            if (!$dirtySku) {
                 throw new BambooException('Product founded, sku NOT founded');
             }
 
             $updDirtySku['size'] = $dirtySku['size'];
             $updDirtySku['shopId'] = $dirtySku['shopId'];
             $updDirtySku['dirtyProductId'] = $dirtySku['dirtyProductId'];
-            $updDirtySku['value'] = floatval(str_replace(',', '.', $dirtySku['value']));
-            $updDirtySku['price'] = floatval(str_replace(',', '.', $dirtySku['price']));
+            $updDirtySku['value'] = floatval(str_replace(',','.',$dirtySku['value']));
+            $updDirtySku['price'] = floatval(str_replace(',','.',$dirtySku['price']));
             $updDirtySku['qty'] = $prToUpdate['qty'];
             $updDirtySku['barcode'] = $dirtySku['barcode'];
             $updDirtySku['barcode_int'] = $dirtySku['barcode_int'];
-            $updDirtySku['text'] = implode(',', $updDirtySku);
-            $updDirtySku['checksum'] = md5(implode(',', $updDirtySku));
+            $updDirtySku['text'] = implode(',',$updDirtySku);
+            $updDirtySku['checksum'] = md5(implode(',',$updDirtySku));
 
-            \Monkey::app()->dbAdapter->update('DirtySku', [
+            \Monkey::app()->dbAdapter->update('DirtySku',[
                 'qty' => $updDirtySku['qty'],
                 'changed' => 1,
                 'text' => $updDirtySku['text'],
                 'checksum' => $updDirtySku['checksum']
-            ], [
+            ],[
                 'dirtyProductId' => $dirtyProduct['id'],
                 'shopId' => $this->shop->shopId,
                 'size' => $prToUpdate['size']
             ]);
-            $this->report($this::PUT, 'Products', 'report', 'End updating product', 'End updating product: ' . $dirtyProduct['id'] . ' with size ' . $prToUpdate['size'], $this->uniqueId, $this->id);
+            $this->report($this::PUT,'Products','report','End updating product','End updating product: ' . $dirtyProduct['id'] . ' with size ' . $prToUpdate['size'],$this->uniqueId,$this->id);
 
         } catch (\Throwable $e) {
-            $this->report($this::PUT, 'Products', 'report', 'Error updating product', 'Error updating product: ' . $dirtyProduct['id'] . ' with size ' . $prToUpdate['size'] . 'Error detail: ' . $e->getMessage(), $this->uniqueId, $this->id);
+            $this->report($this::PUT,'Products','report','Error updating product','Error updating product: ' . $dirtyProduct['id'] . ' with size ' . $prToUpdate['size'] . 'Error detail: ' . $e->getMessage(),$this->uniqueId,$this->id);
             return false;
         }
 
@@ -525,20 +525,20 @@ class products extends AApi
                                                       WHERE
                                                           dp.fullMatch = 1 AND
                                                           ds.qty != 0 AND
-                                                          ps.shopId = ?", [$this->shop->shopId])->fetchAll();
+                                                          ps.shopId = ?",[$this->shop->shopId])->fetchAll();
 
-        $this->report($this::POST, 'Products', 'error', 'Seen skus', "Seen Skus: " . count($seenSkus), $this->uniqueId, $this->id);
-        $this->report($this::POST, 'Products', 'error', 'Seen skus', "Product not at 0: " . count($res), $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','error','Seen skus',"Seen Skus: " . count($seenSkus),$this->uniqueId,$this->id);
+        $this->report($this::POST,'Products','error','Seen skus',"Product not at 0: " . count($res),$this->uniqueId,$this->id);
 
         $i = 0;
 
         foreach ($res as $one) {
-            if (!in_array($one['id'], $seenSkus)) {
-                $qty = \Monkey::app()->dbAdapter->update("DirtySku", ["qty" => 0, "changed" => 1, "checksum" => null], $one);
+            if (!in_array($one['id'],$seenSkus)) {
+                $qty = \Monkey::app()->dbAdapter->update("DirtySku",["qty" => 0,"changed" => 1,"checksum" => null],$one);
                 $i++;
             }
         }
-        $this->report($this::POST, 'Products', 'error', 'Seen skus', "Product set 0: " . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','error','Seen skus',"Product set 0: " . $i,$this->uniqueId,$this->id);
     }
 
 
@@ -549,21 +549,21 @@ class products extends AApi
      */
     private function workDirtyData($args = null)
     {
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries launch', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries launch',null,$this->uniqueId,$this->id);
         $this->updateDictionaries();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries end', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries end',null,$this->uniqueId,$this->id);
 
-        $this->report($this::POST, 'Products', 'report', 'createProducts launch', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','createProducts launch',null,$this->uniqueId,$this->id);
         $this->createProducts();
-        $this->report($this::POST, 'Products', 'report', 'createProducts end', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','createProducts end',null,$this->uniqueId,$this->id);
 
-        $this->report($this::POST, 'Products', 'report', 'checkForNewDetails launch', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','checkForNewDetails launch',null,$this->uniqueId,$this->id);
         $this->checkForNewDetails();
-        $this->report($this::POST, 'Products', 'report', 'checkForNewDetails end', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','checkForNewDetails end',null,$this->uniqueId,$this->id);
 
-        $this->report($this::POST, 'Products', 'report', 'sendPhotos launch', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','sendPhotos launch',null,$this->uniqueId,$this->id);
         $this->sendPhotos();
-        $this->report($this::POST, 'Products', 'report', 'sendPhotos end', null, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','sendPhotos end',null,$this->uniqueId,$this->id);
     }
 
     /**
@@ -572,25 +572,25 @@ class products extends AApi
     public function updateDictionaries()
     {
         $i = $this->updateBrandDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Brand terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Brand terms inserted: ' . $i,$this->uniqueId,$this->id);
 
         $i = $this->updateSeasonDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Season terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Season terms inserted: ' . $i,$this->uniqueId,$this->id);
 
         $i = $this->updateCategoryDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Category terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Category terms inserted: ' . $i,$this->uniqueId,$this->id);
 
         $i = $this->updateTagDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Tag terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Tag terms inserted: ' . $i,$this->uniqueId,$this->id);
 
         $i = $this->updateGereralColorDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Color terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Color terms inserted: ' . $i,$this->uniqueId,$this->id);
 
         $i = $this->updateSizeDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Size terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Size terms inserted: ' . $i,$this->uniqueId,$this->id);
 
         $i = $this->updateDetailDictionary();
-        $this->report($this::POST, 'Products', 'report', 'updateDictionaries', 'Detail terms inserted: ' . $i, $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','updateDictionaries','Detail terms inserted: ' . $i,$this->uniqueId,$this->id);
 
     }
 
@@ -603,7 +603,7 @@ class products extends AApi
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionaryBrand (shopId, term)
 										SELECT DISTINCT shopId, brand
 										FROM DirtyProduct
-										WHERE shopId = ? AND dirtyStatus != 'C'", [$this->shop->shopId]);
+										WHERE shopId = ? AND dirtyStatus != 'C'",[$this->shop->shopId]);
 
         return \Monkey::app()->dbAdapter->countAffectedRows();
     }
@@ -617,7 +617,7 @@ class products extends AApi
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionarySeason (shopId, term) 
                                         SELECT DISTINCT dpe.shopId, dpe.season 
                                         FROM DirtyProductExtend  dpe, DirtyProduct dp 
-                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C'", [$this->shop->shopId]);
+                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C'",[$this->shop->shopId]);
 
         return \Monkey::app()->dbAdapter->countAffectedRows();
     }
@@ -631,7 +631,7 @@ class products extends AApi
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionaryCategory (shopId, term) 
                                         SELECT DISTINCT dpe.shopId, concat(ifnull(audience,''),'-',ifnull(cat1,''),'-',ifnull(cat2,''),'-',ifnull(cat3,''),'-',ifnull(cat4,''),'-',ifnull(cat5,'')) 
                                         FROM DirtyProductExtend  dpe, DirtyProduct dp 
-                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C'", [$this->shop->shopId]);
+                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C'",[$this->shop->shopId]);
 
         return \Monkey::app()->dbAdapter->countAffectedRows();
     }
@@ -645,17 +645,17 @@ class products extends AApi
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionaryTag (shopId, term) 
                                         SELECT DISTINCT dpe.shopId, dpe.tag1 
                                         FROM DirtyProductExtend  dpe, DirtyProduct dp 
-                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C' AND trim(tag1) != ''", [$this->shop->shopId]);
+                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C' AND trim(tag1) != ''",[$this->shop->shopId]);
         $i = \Monkey::app()->dbAdapter->countAffectedRows();
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionaryTag (shopId, term) 
                                         SELECT DISTINCT dpe.shopId, dpe.tag2 
                                         FROM DirtyProductExtend  dpe, DirtyProduct dp 
-                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C' AND trim(tag2) != ''", [$this->shop->shopId]);
+                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C' AND trim(tag2) != ''",[$this->shop->shopId]);
         $i += \Monkey::app()->dbAdapter->countAffectedRows();
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionaryTag (shopId, term) 
                                         SELECT DISTINCT dpe.shopId, dpe.tag3 
                                         FROM DirtyProductExtend  dpe, DirtyProduct dp 
-                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C' AND trim(tag3) != ''", [$this->shop->shopId]);
+                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C' AND trim(tag3) != ''",[$this->shop->shopId]);
         $i += \Monkey::app()->dbAdapter->countAffectedRows();
 
         return $i;
@@ -670,7 +670,7 @@ class products extends AApi
         \Monkey::app()->dbAdapter->query("INSERT IGNORE INTO DictionaryColorGroup (shopId, term) 
                                         SELECT DISTINCT dpe.shopId, generalColor 
                                         FROM DirtyProductExtend  dpe, DirtyProduct dp 
-                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C'", [$this->shop->shopId]);
+                                        WHERE dpe.dirtyProductId = dp.id AND dpe.shopId = ? AND dp.dirtyStatus != 'C'",[$this->shop->shopId]);
 
         return \Monkey::app()->dbAdapter->countAffectedRows();
     }
@@ -689,7 +689,7 @@ class products extends AApi
                                         ON DUPLICATE KEY UPDATE 
                                         DictionarySize.shopId=ds.shopId,
                                         DictionarySize.term=size,
-                                        DictionarySize.categoryFriend=concat(ifnull(audience,''),'-',ifnull(cat1,''),'-',ifnull(cat2,''),'-',ifnull(cat3,''),'-',ifnull(cat4,''),'-',ifnull(cat5,''))", [$this->shop->shopId]);
+                                        DictionarySize.categoryFriend=concat(ifnull(audience,''),'-',ifnull(cat1,''),'-',ifnull(cat2,''),'-',ifnull(cat3,''),'-',ifnull(cat4,''),'-',ifnull(cat5,''))",[$this->shop->shopId]);
 
         return \Monkey::app()->dbAdapter->countAffectedRows();
     }
@@ -717,28 +717,28 @@ class products extends AApi
     {
         /** fetch dictionaries */
         try {
-            $brandDic = $this->mapDictionary("Brand", \Monkey::app()->dbAdapter->query("SELECT term, productBrandId AS foreignKey FROM DictionaryBrand WHERE shopId = ? AND productBrandId IS NOT NULL", [$this->shop->shopId])->fetchAll());
-            $categoryDic = $this->mapDictionary("Category", \Monkey::app()->dbAdapter->query("SELECT term, productCategoryId AS foreignKey FROM DictionaryCategory WHERE shopId = ? AND productCategoryId IS NOT NULL", [$this->shop->shopId])->fetchAll());
-            $colorGroupDic = $this->mapDictionary("ColorGroup", \Monkey::app()->dbAdapter->query("SELECT term, productColorGroupId AS foreignKey FROM DictionaryColorGroup WHERE shopId = ? AND productColorGroupId IS NOT NULL", [$this->shop->shopId])->fetchAll());
-            $seasonDic = $this->mapDictionary("Season", \Monkey::app()->dbAdapter->query("SELECT term, productSeasonId AS foreignKey FROM DictionarySeason WHERE shopId = ? AND productSeasonId IS NOT NULL", [$this->shop->shopId])->fetchAll());
+            $brandDic = $this->mapDictionary("Brand",\Monkey::app()->dbAdapter->query("SELECT term, productBrandId AS foreignKey FROM DictionaryBrand WHERE shopId = ? AND productBrandId IS NOT NULL",[$this->shop->shopId])->fetchAll());
+            $categoryDic = $this->mapDictionary("Category",\Monkey::app()->dbAdapter->query("SELECT term, productCategoryId AS foreignKey FROM DictionaryCategory WHERE shopId = ? AND productCategoryId IS NOT NULL",[$this->shop->shopId])->fetchAll());
+            $colorGroupDic = $this->mapDictionary("ColorGroup",\Monkey::app()->dbAdapter->query("SELECT term, productColorGroupId AS foreignKey FROM DictionaryColorGroup WHERE shopId = ? AND productColorGroupId IS NOT NULL",[$this->shop->shopId])->fetchAll());
+            $seasonDic = $this->mapDictionary("Season",\Monkey::app()->dbAdapter->query("SELECT term, productSeasonId AS foreignKey FROM DictionarySeason WHERE shopId = ? AND productSeasonId IS NOT NULL",[$this->shop->shopId])->fetchAll());
 
-            $detailSet = $this->mapDictionary("Detail", \Monkey::app()->dbAdapter->query("SELECT slug AS term, id AS foreignKey FROM ProductDetail WHERE slug != ''", [])->fetchAll());
+            $detailSet = $this->mapDictionary("Detail",\Monkey::app()->dbAdapter->query("SELECT slug AS term, id AS foreignKey FROM ProductDetail WHERE slug != ''",[])->fetchAll());
 
-            $sizeConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->em()->findBySql("SELECT id FROM ImporterConnector WHERE shopId = ? AND scope = ?", [$this->shop->shopId, 'sizeGroupId']);
-           if ($sizeConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
+            $sizeConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->em()->findBySql("SELECT id FROM ImporterConnector WHERE shopId = ? AND scope = ?",[$this->shop->shopId,'sizeGroupId']);
+            if ($sizeConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
             /** @var \bamboo\domain\entities\CImporterConnector $sizeConnector */
             $sizeConnector = $sizeConnector->getFirst();
 
-       //     $productSheetConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->em()->findBySql("SELECT id FROM ImporterConnector where shopId = ? and scope = ?",[$this->shop->shopId,'sheetName']);
-       //     if($productSheetConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
-       //     $productSheetConnector = $productSheetConnector->getFirst();
+            //     $productSheetConnector = \Monkey::app()->repoFactory->create('ImporterConnector')->em()->findBySql("SELECT id FROM ImporterConnector where shopId = ? and scope = ?",[$this->shop->shopId,'sheetName']);
+            //     if($productSheetConnector->isEmpty()) throw new BambooOutOfBoundException('Could not find connector for sizes');
+            //     $productSheetConnector = $productSheetConnector->getFirst();
             try {
-                $tagDic = $this->mapDictionary("Tag", \Monkey::app()->dbAdapter->query("SELECT term, tagId AS foreignKey FROM DictionaryTag WHERE shopId = ? AND tagId IS NOT NULL", [$this->shop->shopId])->fetchAll());
+                $tagDic = $this->mapDictionary("Tag",\Monkey::app()->dbAdapter->query("SELECT term, tagId AS foreignKey FROM DictionaryTag WHERE shopId = ? AND tagId IS NOT NULL",[$this->shop->shopId])->fetchAll());
             } catch (BambooOutOfBoundException $e) {
             }
 
         } catch (BambooOutOfBoundException $e) {
-            $this->report($this::POST, 'Products', 'report', 'Create Products', 'Found emptyDictionary for: ' . $e->getMessage(), $this->uniqueId, $this->id);
+            $this->report($this::POST,'Products','report','Create Products','Found emptyDictionary for: ' . $e->getMessage(),$this->uniqueId,$this->id);
             return false;
         }
 
@@ -749,7 +749,7 @@ class products extends AApi
 												WHERE dp.shopId = ? AND
 													  productId IS NULL AND
 													  productVariantId IS NULL AND
-													  dirtyStatus = 'F' GROUP BY dp.id HAVING sum(ds.qty) > 0", [$this->shop->shopId])->fetchAll();
+													  dirtyStatus = 'F' GROUP BY dp.id HAVING sum(ds.qty) > 0",[$this->shop->shopId])->fetchAll();
 
         $dpEm = \Monkey::app()->repoFactory->create('DirtyProduct');
         $productFactory = \Monkey::app()->repoFactory->create('Product');
@@ -763,10 +763,10 @@ class products extends AApi
         $sheetPrototype = \Monkey::app()->repoFactory->create('ProductSheetPrototype')->findOneBy(["name" => "Generica"]);
 
         $slugify = new CSlugify();
-        $this->report($this::POST, 'Products', 'report', 'Create Products', 'working ' . count($dps) . ' dirtyProducts', $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','Create Products','working ' . count($dps) . ' dirtyProducts',$this->uniqueId,$this->id);
 
         foreach ($dps as $dpId) {
-            $this->report($this::POST, 'Products', 'report', 'Create Products', 'working for ' . $dpId['id'], $this->uniqueId, $this->id);
+            $this->report($this::POST,'Products','report','Create Products','working for ' . $dpId['id'],$this->uniqueId,$this->id);
 
             try {
                 /** @var CDirtyProduct $dirtyProduct */
@@ -785,8 +785,10 @@ class products extends AApi
                 $product->productStatusId = 11;
                 $product->itemno = $dirtyProduct->itemno;
 
-                if (!isset($brandDic[$slugify->slugify($dirtyProduct->brand)])) throw new BambooOutOfBoundException('Product Brand not found in Dictionary: %s', [$dirtyProduct->brand]);
+                if (!isset($brandDic[$slugify->slugify($dirtyProduct->brand)])) throw new BambooOutOfBoundException('Product Brand not found in Dictionary: %s',[$dirtyProduct->brand]);
+                if (!isset($seasonDic[$slugify->slugify($dirtyProduct->extend->season)])) throw new BambooOutOfBoundException('Product Season not found in Dictionary: %s',[$dirtyProduct->extend->season]);
                 $product->productBrandId = $brandDic[$slugify->slugify($dirtyProduct->brand)];
+                $newSeason = $seasonDic[$slugify->slugify($dirtyProduct->extend->season)];
 
                 $existingProduct = \Monkey::app()->dbAdapter->select('Product',
                     ['itemno' => $product->itemno,
@@ -800,7 +802,7 @@ class products extends AApi
                         throw new BambooLogicException('Cannot find valid product relationship');
                     }
                 } else {
-                    $product->id = \Monkey::app()->dbAdapter->query("SELECT id FROM Product ORDER BY id DESC LIMIT 0,1", [])->fetch()['id'] + 1;
+                    $product->id = \Monkey::app()->dbAdapter->query("SELECT id FROM Product ORDER BY id DESC LIMIT 0,1",[])->fetch()['id'] + 1;
                 }
 
 
@@ -810,13 +812,14 @@ class products extends AApi
 													WHERE Product.productVariantId = ProductVariant.id AND
 														  Product.itemno LIKE ? AND
 														  Product.productBrandId = ? AND
+													      Product.productSeasonId = ? AND
 														  ProductVariant.name LIKE ? AND
-														  Product.productStatusId NOT IN (8,13)", [$dirtyProduct->itemno, $product->productBrandId, $variant->name])->fetch()['conto'];
+														  Product.productStatusId NOT IN (8,13)",[$dirtyProduct->itemno,$product->productBrandId,$newSeason,$variant->name])->fetch()['conto'];
                 if ($conto > 0) {
                     /** CHANGE EXECUTION; FUSE AND CONTINUE; END TRANSACTION */
-                    if (!isset($seasonDic[$slugify->slugify($dirtyProduct->extend->season)])) throw new BambooOutOfBoundException('Product Season not found in Dictionary: %s', [$dirtyProduct->extend->season]);
-                    $newSeason = $seasonDic[$slugify->slugify($dirtyProduct->extend->season)];
-                    $this->fuseProduct($product, $variant, $dirtyProduct, $newSeason, $sizeConnector);
+
+
+                    $this->fuseProduct($product,$variant,$dirtyProduct,$newSeason,$sizeConnector);
                     \Monkey::app()->repoFactory->commit();
                     continue;
                 } else {
@@ -824,12 +827,12 @@ class products extends AApi
                     $product->productVariantId = $variant->id;
                 }
 
-                if (!isset($seasonDic[$slugify->slugify($dirtyProduct->extend->season)])) throw new BambooOutOfBoundException('Product Season not found in Dictionary: %s', [$dirtyProduct->extend->season]);
+                if (!isset($seasonDic[$slugify->slugify($dirtyProduct->extend->season)])) throw new BambooOutOfBoundException('Product Season not found in Dictionary: %s',[$dirtyProduct->extend->season]);
                 $product->productSeasonId = $seasonDic[$slugify->slugify($dirtyProduct->extend->season)];
                 $product->sortingPriorityId = 99;
                 $product->dummyPicture = "bs-dummy-16-9.png";
                 /** aggiungo il colore */
-                if (!isset($colorGroupDic[$slugify->slugify($dirtyProduct->extend->generalColor)])) throw new BambooOutOfBoundException('Product Color not found in Dictionary: %s', [$dirtyProduct->extend->generalColor]);
+                if (!isset($colorGroupDic[$slugify->slugify($dirtyProduct->extend->generalColor)])) throw new BambooOutOfBoundException('Product Color not found in Dictionary: %s',[$dirtyProduct->extend->generalColor]);
                 $product->productColorGroupId = $colorGroupDic[$slugify->slugify($dirtyProduct->extend->generalColor)];
                 $product->insert();
                 $product = $productFactory->findOne($product->getIds());
@@ -841,16 +844,16 @@ class products extends AApi
                 $tags[] = $dirtyProduct->extend->tag3;
                 foreach ($tags as $tag) {
                     if (empty($tag)) continue;
-                    if (!isset($tagDic[$slugify->slugify($tag)])) throw new BambooOutOfBoundException('Product Tag not found in Dictionary: %s', [$tag]);
+                    if (!isset($tagDic[$slugify->slugify($tag)])) throw new BambooOutOfBoundException('Product Tag not found in Dictionary: %s',[$tag]);
                     \Monkey::app()->dbAdapter->insert('ProductHasTag',
                         ['productId' => $product->id,
                             'productVariantId' => $product->productVariantId,
-                            'tagId' => $tagDic[$slugify->slugify($tag)]], false, true);
+                            'tagId' => $tagDic[$slugify->slugify($tag)]],false,true);
                 }
-                $mandatoryTags = [1, 6];
+                $mandatoryTags = [1,6];
                 foreach ($mandatoryTags as $oneTag) {
                     try {
-                        \Monkey::app()->dbAdapter->insert('ProductHasTag', ['productId' => $product->id,
+                        \Monkey::app()->dbAdapter->insert('ProductHasTag',['productId' => $product->id,
                             'productVariantId' => $product->productVariantId,
                             'tagId' => $oneTag]);
                     } catch (\Throwable $e) {
@@ -865,13 +868,13 @@ class products extends AApi
                 $term[] = $dirtyProduct->extend->cat3;
                 $term[] = $dirtyProduct->extend->cat4;
                 $term[] = $dirtyProduct->extend->cat5;
-                $term = implode('-', $term);
-                if (!isset($categoryDic[$slugify->slugify($term)])) throw new BambooOutOfBoundException('Product Category not found in Dictionary: %s', [$term]);
-                \Monkey::app()->dbAdapter->insert('ProductHasProductCategory', ['productId' => $product->id,
+                $term = implode('-',$term);
+                if (!isset($categoryDic[$slugify->slugify($term)])) throw new BambooOutOfBoundException('Product Category not found in Dictionary: %s',[$term]);
+                \Monkey::app()->dbAdapter->insert('ProductHasProductCategory',['productId' => $product->id,
                     'productVariantId' => $product->productVariantId,
                     'productCategoryId' => $categoryDic[$slugify->slugify($term)]]);
 
-                $product->productSizeGroupId = $sizeConnector->findConnectionForProduct($product, $dirtyProduct); //FIXME Will it work?
+                $product->productSizeGroupId = $sizeConnector->findConnectionForProduct($product,$dirtyProduct); //FIXME Will it work?
 
                 if (!is_numeric($product->productSizeGroupId)) throw new BambooOutOfBoundException('Product Size group not found');
 
@@ -891,7 +894,7 @@ class products extends AApi
 
                 $name = $nameFactory->insertName(trim($dirtyProduct->extend->name));
                 try {
-                    $nameFactory->saveNameForNewProduct($product->id, $product->productVariantId, $name);
+                    $nameFactory->saveNameForNewProduct($product->id,$product->productVariantId,$name);
                 } catch (\Throwable $e) {
                 }
 
@@ -915,10 +918,10 @@ class products extends AApi
                     }
                     /** insert new detail into table */
                     if (!isset($detailSet[$detailSlug])) {
-                        $detailSet[$detailSlug] = \Monkey::app()->dbAdapter->insert('ProductDetail', ['slug' => $detailSlug]);
-                        \Monkey::app()->dbAdapter->insert('ProductDetailTranslation', ["productDetailId" => $detailSet[$detailSlug], "langId" => 1, "name" => strip_tags($detail->content) . " !"]);
+                        $detailSet[$detailSlug] = \Monkey::app()->dbAdapter->insert('ProductDetail',['slug' => $detailSlug]);
+                        \Monkey::app()->dbAdapter->insert('ProductDetailTranslation',["productDetailId" => $detailSet[$detailSlug],"langId" => 1,"name" => strip_tags($detail->content) . " !"]);
                     }
-                    \Monkey::app()->dbAdapter->insert('ProductSheetActual', [
+                    \Monkey::app()->dbAdapter->insert('ProductSheetActual',[
                         "productId" => $product->id,
                         "productVariantId" => $product->productVariantId,
                         "productDetailLabelId" => $sheetPrototype->productDetailLabel->current()->id,
@@ -935,21 +938,21 @@ class products extends AApi
 
                 \Monkey::app()->repoFactory->commit();
                 $done++;
-                $this->report($this::POST, 'Products', 'report', 'Create Products', 'Created new Product: ' . $product->id . '-' . $product->productVariantId, $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','report','Create Products','Created new Product: ' . $product->id . '-' . $product->productVariantId,$this->uniqueId,$this->id);
 
             } catch (BambooOutOfBoundException $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products', 'error', 'Create Products', 'Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Create Products','Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(),$this->uniqueId,$this->id);
                 $dictionaryProblem = true;
             } catch (BambooException $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products', 'error', 'Create Products', 'Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Create Products','Errore in crezione, gestito per ' . $dpId['id'] . ' | ' . $e->getMessage(),$this->uniqueId,$this->id);
             } catch (\ErrorException $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products', 'error', 'Errore ErrorException in crezione generico . ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Errore ErrorException in crezione generico . ' . $dpId['id'] . ' | ' . $e->getMessage(),$this->uniqueId,$this->id);
             } catch (\Throwable $e) {
                 \Monkey::app()->repoFactory->rollback();
-                $this->report($this::POST, 'Products', 'error', 'Create Products', 'Errore Exception in crezione generico ' . $dpId['id'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Create Products','Errore Exception in crezione generico ' . $dpId['id'] . ' | ' . $e->getMessage(),$this->uniqueId,$this->id);
 
             }
         }
@@ -967,7 +970,7 @@ class products extends AApi
      * @return array
      * @throws BambooOutOfBoundException
      */
-    protected function mapDictionary($name, array $rowDictionary)
+    protected function mapDictionary($name,array $rowDictionary)
     {
         $s = new CSlugify();
         $dic = [];
@@ -993,7 +996,7 @@ class products extends AApi
      * @throws BambooLogicException
      * @throws \bamboo\core\exceptions\BambooDBALException
      */
-    protected function fuseProduct($product, $variant, $dirtyProduct, $newSeasonId, $sizeConnector)
+    protected function fuseProduct($product,$variant,$dirtyProduct,$newSeasonId,$sizeConnector)
     {
         $existing = \Monkey::app()->repoFactory->create('Product')->findOneBySql("SELECT Product.id, Product.productVariantId
 													FROM Product, ProductVariant
@@ -1001,12 +1004,14 @@ class products extends AApi
 														  Product.itemno LIKE ? AND
 														  Product.productBrandId = ? AND
 														  ProductVariant.name LIKE ? AND
-														  Product.productStatusId NOT IN (8,13)", [$dirtyProduct->itemno, $product->productBrandId, $variant->name]);
+													      Product.productSeasonId=? AND 
+														  Product.productStatusId NOT IN (8,13)",[$dirtyProduct->itemno,$product->productBrandId,$newSeasonId,$variant->name]);
 
         if ($existing) {
             $shp = \Monkey::app()->repoFactory->create('ShopHasProduct')->getEmptyEntity();
             $shp->shopId = $this->shop->shopId;
             $shp->productId = $existing->id;
+            $shp->productSeasonId = $newSeasonId;
             $shp->productVariantId = $existing->productVariantId;
 
             $shp2 = \Monkey::app()->repoFactory->create('ShopHasProduct')->findOne($shp->getIds());
@@ -1014,7 +1019,7 @@ class products extends AApi
                 $shp->price = $dirtyProduct->getDirtyPrice();
                 $shp->salePrice = $dirtyProduct->getDirtySalePrice();
                 $shp->value = $dirtyProduct->getDirtyValue();
-                $shp->productSizeGroupId = $sizeConnector->findConnectionForProduct($product, $dirtyProduct);
+                $shp->productSizeGroupId = $sizeConnector->findConnectionForProduct($product,$dirtyProduct);
                 if (!is_numeric($shp->productSizeGroupId)) $shp->productSizeGroupId = $product->productSizeGroupId;
                 $shp->insert();
             } else {
@@ -1029,30 +1034,32 @@ class products extends AApi
             $dirtyProduct->dirtyStatus = 'K';
             $dirtyProduct->update();
 
-            $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Fusing DirtyProduct: ' . $dirtyProduct->id . ' with Product: ' . $existing->printId(), $this->uniqueId, $this->id);
+            $this->report($this::POST,'Products','warning','Fuse Products','Fusing DirtyProduct: ' . $dirtyProduct->id . ' with Product: ' . $existing->printId(),$this->uniqueId,$this->id);
+            /* vecchio cambio stagione disabilitato
+                        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy([
+                            'id' => $dirtyProduct->productId,
+                            'productVariantId' => $dirtyProduct->productVariantId
+                        ]);
 
-            $product = \Monkey::app()->repoFactory->create('Product')->findOneBy([
-                'id' => $dirtyProduct->productId,
-                'productVariantId' => $dirtyProduct->productVariantId
-            ]);
+                        if ($product->productSeasonId != $newSeasonId) {
+                            $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Season Change for product:' . $product->printId() . ' from ' . $product->productSeasonId . ' to ' . $newSeasonId, $this->uniqueId, $this->id);
 
-            if ($product->productSeasonId != $newSeasonId) {
-                $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Season Change for product:' . $product->printId() . ' from ' . $product->productSeasonId . ' to ' . $newSeasonId, $this->uniqueId, $this->id);
-
-                $productSeason = \Monkey::app()->repoFactory->create('ProductSeason')->findOneBy(['id' => $newSeasonId]);
-                if ($productSeason->order > $product->productSeason->order) {
-                    $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Season Change, the new season is newer, CHANGE!', $this->uniqueId, $this->id);
-                    $product->productSeasonId = $newSeasonId;
-                    $product->isOnSale = false;
-                    $product->update();
-                } else {
-                    $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Season Change, the new season NOT newer no need for update', $this->uniqueId, $this->id);
-                }
-            }
+                            $productSeason = \Monkey::app()->repoFactory->create('ProductSeason')->findOneBy(['id' => $newSeasonId]);
+                            if ($productSeason->order > $product->productSeason->order) {
+                                $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Season Change, the new season is newer, CHANGE!', $this->uniqueId, $this->id);
+                                $product->productSeasonId = $newSeasonId;
+                                $product->isOnSale = false;
+                                $product->update();
+                            } else {
+                                $this->report($this::POST, 'Products', 'warning', 'Fuse Products', 'Season Change, the new season NOT newer no need for update', $this->uniqueId, $this->id);
+                            }
+                        }
+            */
         } else {
-            $this->report($this::POST, 'Products', 'error', 'Fuse Products', 'Error Fusing DirtyProduct: ' . $dirtyProduct->id . ' existing in context...' . ' | ' . $existing, $this->uniqueId, $this->id);
+            $this->report($this::POST,'Products','error','Fuse Products','Error Fusing DirtyProduct: ' . $dirtyProduct->id . ' existing in context...' . ' | ' . $existing,$this->uniqueId,$this->id);
             throw new BambooLogicException("Product already extisting");
         }
+
 
     }
 
@@ -1062,7 +1069,7 @@ class products extends AApi
      */
     public function checkForNewDetails()
     {
-        $detailSet = $this->mapDictionary("Detail", \Monkey::app()->dbAdapter->query("SELECT slug AS term, id AS foreignKey FROM ProductDetail WHERE slug != ''", [])->fetchAll());
+        $detailSet = $this->mapDictionary("Detail",\Monkey::app()->dbAdapter->query("SELECT slug AS term, id AS foreignKey FROM ProductDetail WHERE slug != ''",[])->fetchAll());
 
         $sql = "SELECT DISTINCT(dp.id) AS id
                 FROM Product p
@@ -1074,8 +1081,8 @@ class products extends AApi
                 GROUP BY p.id, p.productVariantId
                 HAVING count(psa.productDetailLabelId) = 0 AND count(dd.id) > 0";
 
-        $dirtyProducts = \Monkey::app()->repoFactory->create('DirtyProduct')->findBySql($sql, [$this->shop->shopId]);
-        $this->report($this::POST, 'Products', 'report', 'checkForNewDetails', 'Found ' . $dirtyProducts->count() . ' to work', $this->uniqueId, $this->id);
+        $dirtyProducts = \Monkey::app()->repoFactory->create('DirtyProduct')->findBySql($sql,[$this->shop->shopId]);
+        $this->report($this::POST,'Products','report','checkForNewDetails','Found ' . $dirtyProducts->count() . ' to work',$this->uniqueId,$this->id);
 
         $slugify = new CSlugify();
         /** @var CDirtyProduct $dirtyProduct */
@@ -1084,7 +1091,7 @@ class products extends AApi
 
                 $dirtyProduct->product->productSheetPrototypeId = 33;
                 $dirtyProduct->product->update();
-                $this->report($this::POST, 'Products', 'report', 'checkForNewDetails', 'DirtyProduct ' . $dirtyProduct->id . ' has ' . $dirtyProduct->dirtyDetail->count() . ' details', $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','report','checkForNewDetails','DirtyProduct ' . $dirtyProduct->id . ' has ' . $dirtyProduct->dirtyDetail->count() . ' details',$this->uniqueId,$this->id);
                 $dirtyProduct->product->productSheetPrototype->productDetailLabel->rewind();
                 foreach ($dirtyProduct->dirtyDetail as $detail) {
                     if (!$dirtyProduct->product->productSheetPrototype->productDetailLabel->valid()) break;
@@ -1097,10 +1104,10 @@ class products extends AApi
                     }
                     /** insert new detail into table */
                     if (!isset($detailSet[$detailSlug])) {
-                        $detailSet[$detailSlug] = \Monkey::app()->dbAdapter->insert('ProductDetail', ['slug' => $detailSlug]);
-                        \Monkey::app()->dbAdapter->insert('ProductDetailTranslation', ["productDetailId" => $detailSet[$detailSlug], "langId" => 1, "name" => strip_tags($detail->content) . " !"]);
+                        $detailSet[$detailSlug] = \Monkey::app()->dbAdapter->insert('ProductDetail',['slug' => $detailSlug]);
+                        \Monkey::app()->dbAdapter->insert('ProductDetailTranslation',["productDetailId" => $detailSet[$detailSlug],"langId" => 1,"name" => strip_tags($detail->content) . " !"]);
                     }
-                    \Monkey::app()->dbAdapter->insert('ProductSheetActual', [
+                    \Monkey::app()->dbAdapter->insert('ProductSheetActual',[
                         "productId" => $dirtyProduct->product->id,
                         "productVariantId" => $dirtyProduct->product->productVariantId,
                         "productDetailLabelId" => $dirtyProduct->product->productSheetPrototype->productDetailLabel->current()->id,
@@ -1110,7 +1117,7 @@ class products extends AApi
                     $dirtyProduct->product->productSheetPrototype->productDetailLabel->next();
                 }
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products', 'error', 'checkForNewDetails', 'Error writing new detail for ' . $dirtyProduct->id . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','checkForNewDetails','Error writing new detail for ' . $dirtyProduct->id . ' | ' . $e->getMessage(),$this->uniqueId,$this->id);
             }
         }
 
@@ -1123,9 +1130,9 @@ class products extends AApi
      */
     private function sendPhotos()
     {
-        $this->report($this::POST, 'Products', 'report', 'sendPhotos', 'Starting', $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','sendPhotos','Starting',$this->uniqueId,$this->id);
 
-        $ftpDestination = new CFTPClient(\Monkey::app(), [
+        $ftpDestination = new CFTPClient(\Monkey::app(),[
             'host' => 'fiber.office.iwes.it',
             'user' => 'shooting',
             'pass' => 'PBYI34nbf',
@@ -1140,60 +1147,60 @@ class products extends AApi
             "SELECT dpp.id AS id, dpp.dirtyProductId AS dirtyProductID, url, location, position, worked, dpp.shopId AS shopId, p.id AS productId, p.productVariantId FROM DirtyPhoto dpp, DirtyProduct dp, Product p WHERE dpp.dirtyProductId = dp.id AND dp.productId = p.id AND dp.productVariantId = p.productVariantId AND dpp.shopId = ? AND ( dpp.worked = 0 OR dpp.worked IS NULL ) ORDER BY dpp.creationDate DESC",
             [$this->shop->shopId]
         )->fetchAll();
-        $this->report($this::POST, 'Products', 'report', 'download immagini', 'inizio', $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','download immagini','inizio',$this->uniqueId,$this->id);
 
         //creo la cartella
         $destDir = \Monkey::app()->rootPath() . "/temp/tempApiImgs/";
-        if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
+        if (!is_dir(rtrim($destDir,"/"))) mkdir($destDir,0777,true);
 
         $i = 0;
         foreach ($res as $k => $v) {
             try {
-                if ($i % 50 == 0) $this->report($this::POST, 'Products', 'report', 'download immagini', 'tentate ' . $k . ' immagini', $this->uniqueId, $this->id);
+                if ($i % 50 == 0) $this->report($this::POST,'Products','report','download immagini','tentate ' . $k . ' immagini',$this->uniqueId,$this->id);
 
                 if (2000 < $i) break;
                 /** @var CProduct $p */
-                $p = \Monkey::app()->repoFactory->create("Product")->findOneBy(['id' => $v['productId'], 'productVariantId' => $v['productVariantId']]);
+                $p = \Monkey::app()->repoFactory->create("Product")->findOneBy(['id' => $v['productId'],'productVariantId' => $v['productVariantId']]);
                 $path = pathinfo($v['url']);
                 $c = curl_init();
-                curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($c, CURLOPT_URL, htmlspecialchars_decode(str_replace(' ','%20',$v['url'])));
+                curl_setopt($c,CURLOPT_RETURNTRANSFER,1);
+                curl_setopt($c,CURLOPT_URL,htmlspecialchars_decode(str_replace(' ','%20',$v['url'])));
                 $imgBody = curl_exec($c);
                 curl_close($c);
                 //$imgBody = file_get_contents(htmlspecialchars_decode($v['url']));
 
 
-                $imgN = str_pad($v['position'], 3, "0", STR_PAD_LEFT);
+                $imgN = str_pad($v['position'],3,"0",STR_PAD_LEFT);
                 $destTempFileName = $p->getAztecCode() . " - " . $imgN . "." . $path['extension'];
-                $destFileName=str_replace(' ','',$destTempFileName);
+                $destFileName = str_replace(' ','',$destTempFileName);
                 if ($p->productPhoto->count()) $existing = true;
                 else $existing = false;
 
                 $putRes = NULL;
                 try {
-                    $putRes = file_put_contents($destDir . $destFileName, $imgBody);
+                    $putRes = file_put_contents($destDir . $destFileName,$imgBody);
                     if ($imgN == 1 && !$existing) {
-                        $this->saveDummyPicture($p, $destDir . $destFileName);
+                        $this->saveDummyPicture($p,$destDir . $destFileName);
                     }
                     if ($putRes) {
                         if ($existing) $ftpDestination->changeDir($ftpDestDir . '/existing');
                         else $ftpDestination->changeDir($ftpDestDir);
-                        chmod($destDir . $destFileName, 0777);
-                        if ($ftpDestination->put($destDir . $destFileName, $destFileName)) {
+                        chmod($destDir . $destFileName,0777);
+                        if ($ftpDestination->put($destDir . $destFileName,$destFileName)) {
                             //segno come "worked" le immagini importate
-                            \Monkey::app()->dbAdapter->update("DirtyPhoto", ['worked' => 1], ['id' => $v['id']]);
+                            \Monkey::app()->dbAdapter->update("DirtyPhoto",['worked' => 1],['id' => $v['id']]);
                         } else {
-                            $this->report($this::POST, 'Products', 'error', 'ftp-upload', "file non uploadato sul NAS: " . $ftpDestDir . $destFileName, $this->uniqueId, $this->id);
+                            $this->report($this::POST,'Products','error','ftp-upload',"file non uploadato sul NAS: " . $ftpDestDir . $destFileName,$this->uniqueId,$this->id);
                         }
                         unlink($destDir . $destFileName);
                     }
                 } catch (\Throwable $e) {
-                    $this->report($this::POST, 'Products', 'error', 'download immagini', $destFileName . "non salvato. File scaricato, ma impossibile salvarlo su disco. Url corrispondente: " . $v['url'] . ' | ' . $e->getMessage(), $this->uniqueId, $this->id);
-                    if (!is_dir(rtrim($destDir, "/"))) mkdir($destDir, 0777, true);
+                    $this->report($this::POST,'Products','error','download immagini',$destFileName . "non salvato. File scaricato, ma impossibile salvarlo su disco. Url corrispondente: " . $v['url'] . ' | ' . $e->getMessage(),$this->uniqueId,$this->id);
+                    if (!is_dir(rtrim($destDir,"/"))) mkdir($destDir,0777,true);
                 }
 
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products', 'error', 'Downloading Photo', 'generic error: | ' . $e->getMessage(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','error','Downloading Photo','generic error: | ' . $e->getMessage(),$this->uniqueId,$this->id);
             }
             $i++;
         }
@@ -1205,9 +1212,9 @@ class products extends AApi
             }
             rmdir($destDir);
         } catch (\Throwable $e) {
-            $this->report($this::POST, 'Products', 'error', 'SendPhotos', 'error while deleting photos | ' . $e->getMessage(), $this->uniqueId, $this->id);
+            $this->report($this::POST,'Products','error','SendPhotos','error while deleting photos | ' . $e->getMessage(),$this->uniqueId,$this->id);
         }
-        $this->report($this::POST, 'Products', 'report', 'download immagini', 'fine', $this->uniqueId, $this->id);
+        $this->report($this::POST,'Products','report','download immagini','fine',$this->uniqueId,$this->id);
 
         return true;
     }
@@ -1219,15 +1226,15 @@ class products extends AApi
      * @throws \Throwable
      * @throws \bamboo\core\exceptions\RedPandaException
      */
-    private function saveDummyPicture(CProduct $p, $photoPath)
+    private function saveDummyPicture(CProduct $p,$photoPath)
     {
         if (empty($p->dummyPicture) || $p->dummyPicture == 'bs-dummy-16-9.png') {
-            $dummyFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'dummyFolder') . '/';
+            $dummyFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths','dummyFolder') . '/';
             \Monkey::app()->vendorLibraries->load("amazon2723");
             $width = 500;
             $imager = new ImageEditor();
             $fileName = pathinfo($photoPath);
-            $dummyName = rand(0, 9999999999) . '.' . $fileName['extension'];
+            $dummyName = rand(0,9999999999) . '.' . $fileName['extension'];
             try {
 
                 if (!$imager->load($photoPath)) throw new BambooException('Could not load image. Photopath: ' . $photoPath);
@@ -1235,9 +1242,9 @@ class products extends AApi
                 $imager->save($dummyFolder . '/' . $dummyName);
                 $p->dummyPicture = $dummyName;
                 $p->update();
-                $this->report($this::POST, 'Products', 'report', 'PhotoDownload', 'Set dummyPicture: ' . $dummyName . ' for: ' . $p->printId(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','report','PhotoDownload','Set dummyPicture: ' . $dummyName . ' for: ' . $p->printId(),$this->uniqueId,$this->id);
             } catch (\Throwable $e) {
-                $this->report($this::POST, 'Products', 'warning', 'PhotoDownload', 'Failed setting dummyPicture: ' . $dummyName . ' for ' . $p->printId(), $this->uniqueId, $this->id);
+                $this->report($this::POST,'Products','warning','PhotoDownload','Failed setting dummyPicture: ' . $dummyName . ' for ' . $p->printId(),$this->uniqueId,$this->id);
                 throw $e;
             }
 
@@ -1246,15 +1253,15 @@ class products extends AApi
 
     private function saveFile()
     {
-        $doneFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths', 'productSync') . '/' . $this->shop->name . '/import/done/';
+        $doneFolder = \Monkey::app()->rootPath() . \Monkey::app()->cfg()->fetch('paths','productSync') . '/' . $this->shop->name . '/import/done/';
         $file = $doneFolder . time() . '.json';
-        file_put_contents($file, json_encode($this->data['json']));
+        file_put_contents($file,json_encode($this->data['json']));
 
         $now = new \DateTime();
         $zipName = $doneFolder . $now->format('YmdHis') . '_' . pathinfo($file)['filename'] . '.tar';
         $phar = new \PharData($zipName);
 
-        $phar->addFile($file, pathinfo($file)['basename']);
+        $phar->addFile($file,pathinfo($file)['basename']);
 
         if ($phar->count() > 0) {
             /** @var \PharData $compressed */
