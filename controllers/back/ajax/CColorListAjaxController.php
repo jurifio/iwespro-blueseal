@@ -26,7 +26,7 @@ class CColorListAjaxController extends AAjaxController
         $count = \Monkey::app()->repoFactory->create('ProductColorGroup')->em()->findCountBySql($datatable->getQuery(true), $datatable->getParams());
         $totalCount = \Monkey::app()->repoFactory->create('ProductColorGroup')->em()->findCountBySql($datatable->getQuery('full'), $datatable->getParams());
 
-        $modifica = $this->app->baseUrl()."/blueseal/prodotti/gruppo-colore/modifica";
+        $modifica = "/blueseal/prodotti/gruppo-colore/modifica";
 
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
 
