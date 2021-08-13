@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\core\exceptions\BambooException;
 use bamboo\core\traits\TMySQLTimestamp;
 use bamboo\domain\entities\COrder;
+use bamboo\core\base\CObjectCollection;
 use bamboo\domain\entities\CProductCategory;
 use bamboo\domain\entities\CProductSheetModelPrototype;
 use bamboo\domain\repositories\COrderRepo;

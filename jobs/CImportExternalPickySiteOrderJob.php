@@ -577,6 +577,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                                o.marketplaceOrderId as marketplaceOrderId,
                                                o.orderIDMarketplace as orderIDMarketplace,
                                                o.orderTypeId as orderTypeId,
+                                               o.currencyId as currencyId, 
                                                o.isImport as isImport
                                                from `Order` o join User U on o.userId = U.id WHERE isParallel is null  AND o.isImport=0 ');
                 $stmtOrder->execute();
@@ -608,6 +609,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrder->userId = $userId;
                                 $insertOrder->cartId = $cartId;
                                 $insertOrder->status = $rowOrder['status'];
+                                $insertOrder->currencyId = $rowOrder['currencyId'];
 
                                 $findUserAddressId=$userAddressRepo->findOneBy(['userId'=>$userId]);
                                 if($findUserAddressId!=null){
@@ -688,7 +690,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.pickyCoinsMovementAmount as pickyCoinsMovementAmount,
                                      ol.isParallel as isParallel,
 									 ol.isImport as isImport,
-                                     ol.orderTypeId as orderTypeId
+                                     ol.orderTypeId as orderTypeId,
+                                     ol.currencyId as currencyId
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null and ol.isImport=0');
                 } else {
                     $stmtOrderLine = $db_con->prepare('SELECT 
@@ -721,7 +724,8 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      ol.pickyCoinsMovementAmount as pickyCoinsMovementAmount,
                                      ol.isParallel as isParallel,
                                      ol.isImport as isImport,
-                                     ol.orderTypeId as orderTypeId
+                                     ol.orderTypeId as orderTypeId,
+                                     ol.currencyId as currencyId
                                      FROM OrderLine ol WHERE ol.frozenProduct IS NOT NULL and isParallel is null  AND isImport=0');
                 }
                 $stmtOrderLine->execute();
@@ -756,6 +760,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrderLine->activePrice = $rowOrderLine['activePrice'];
                                 $insertOrderLine->vat = $rowOrderLine['vat'];
                                 $insertOrderLine->cost = $rowOrderLine['cost'];
+                                $inserOrderLine->currency = $rowOrderLine['currency'];
                                 $insertOrderLine->shippingCharge = $rowOrderLine['shippingCharge'];
                                 $insertOrderLine->couponCharge = $rowOrderLine['couponCharge'];
                                 $insertOrderLine->userCharge = $rowOrderLine['userCharge'];
