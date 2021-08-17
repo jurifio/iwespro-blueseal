@@ -760,7 +760,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                 $insertOrderLine->activePrice = $rowOrderLine['activePrice'];
                                 $insertOrderLine->vat = $rowOrderLine['vat'];
                                 $insertOrderLine->cost = $rowOrderLine['cost'];
-                                $inserOrderLine->currencyId = $rowOrderLine['currencyId'];
+                                $insertOrderLine->currencyId = $rowOrderLine['currencyId'];
                                 $insertOrderLine->shippingCharge = $rowOrderLine['shippingCharge'];
                                 $insertOrderLine->couponCharge = $rowOrderLine['couponCharge'];
                                 $insertOrderLine->userCharge = $rowOrderLine['userCharge'];
