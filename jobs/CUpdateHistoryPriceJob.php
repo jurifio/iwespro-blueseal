@@ -55,7 +55,7 @@ GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,dp.shopId
                 $php = $phpRepo->findOneBy(['productId' => $result['productId'],'productVariantId' => $result['productVariantId'],'productSizeId' => $result['productSizeId'],'shopId' => $result['shopId']]);
                 if ($php) {
                     if ($php->price != $result['newPrice'] || $php->salePrice != $result['newSalePrice']) {
-                        $phpInsert = $phpRepo->getEmptyEntiy();
+                        $phpInsert = \Monkey::app()->repoFactory->create('ProductHistoryPrice')->getEmptyEntiy();
                         $phpInsert->productId = $result['productId'];
                         $phpInsert->productVariantId = $result['productVariantId'];
                         $phpInsert->productSizeId = $result['productSizeId'];
@@ -65,9 +65,11 @@ GROUP BY dp.productId,dp.productVariantId,ds.productSizeId,dp.shopId
                         $phpInsert->datePrice = $today;
                         $phpInsert->insert();
 
+                    }else{
+                        continue;
                     }
                 } else {
-                    $phpInsert = $phpRepo->getEmptyEntiy();
+                    $phpInsert = \Monkey::app()->repoFactory->create('ProductHistoryPrice')->getEmptyEntiy();
                     $phpInsert->productId = $result['productId'];
                     $phpInsert->productVariantId = $result['productVariantId'];
                     $phpInsert->productSizeId = $result['productSizeId'];
