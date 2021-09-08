@@ -108,6 +108,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                                      u.lastSeen as lastSeen,
                                      u.creationDate as creationDate,
                                      u.isEmailChanged as isEmailChanged,
+                                     u.priceListId as priceListId,
                                      ud.name AS name,
                                      ud.surname AS surname,
                                      ud.screenName as screenName,
@@ -136,6 +137,7 @@ class CImportExternalPickySiteOrderJob extends ACronJob
                         $insertUser -> remoteId = $rowUser['remoteId'];
                         $insertUser -> remoteShopId = $shop;
                         $insertUser -> ip =$rowUser['ip'];
+                        $insertUser->priceListId=$rowUser['priceListId'];
                         $insertUser -> insert();
                         $getuserId = $userRepo -> findOneBy(['email' => $rowUser['email']]);
                         $userId = $getuserId -> id;
