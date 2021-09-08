@@ -9,6 +9,8 @@ use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\offline\productsync\import\alducadaosta\CAlducadaostaOrderAPI;
+use bamboo\offline\productsync\import\edstema\CEdsTemaOrderApi;
+use bamboo\offline\productsync\import\mpk\CMpkOrderApi;
 use PDO;
 use PDOException;
 
@@ -40,7 +42,7 @@ class CChangeLineStatus extends AAjaxController
 
             $newActive = $line->orderLineStatus->isActive;
 
-            if ($line->shopId == 46 AND $line->status == "ORD_WAIT") {
+            if ($line->status == "ORD_WAIT") {
                 //Value for api
                 $currentYear=date('Y');
                     /** @var CObjectCollection $dirtySkus */
@@ -74,10 +76,19 @@ class CChangeLineStatus extends AAjaxController
                         "Value" => $line->friendRevenue,
                         "Payment_type" => $line->order->orderPaymentMethod->name,
                     ];
-                    /*if (ENV=='prod') {
-                        $alduca = new CAlducadaostaOrderAPI($orderId,$row);
-                        $alduca->newOrder();
-                    }*/
+                if (ENV == 'prod') {
+                    switch (true) {
+                        case $line->shopId == 61:
+                            $alduca = new CMpkOrderApi($orderId,$row);
+                            $alduca->newOrder();
+                            break;
+                        case $line->shopId == 1:
+                            $edstema = new CEdsTemaOrderApi($orderId,$row);
+                            $edstema->newOrder();
+                            break;
+                    }
+
+                }
 
             }
             $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $orderLine->remoteShopSellerId]);

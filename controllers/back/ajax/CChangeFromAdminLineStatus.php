@@ -1,12 +1,14 @@
 <?php
 
 namespace bamboo\controllers\back\ajax;
+
 use bamboo\core\base\CObjectCollection;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CDirtySku;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\COrderLine;
 use bamboo\domain\repositories\COrderLineRepo;
+use bamboo\offline\productsync\import\edstema\CEdsTemaOrderApi;
 use bamboo\offline\productsync\import\mpk\CMpkOrderApi;
 use PDO;
 use PDOException;
@@ -37,31 +39,30 @@ class CChangeFromAdminLineStatus extends AAjaxController
         $dba = \Monkey::app()->dbAdapter;
         try {
             \Monkey::app()->repoFactory->beginTransaction();
-            $lineO=$row[0];
-            $ids = explode('-', $lineO);
+            $lineO = $row[0];
+            $ids = explode('-',$lineO);
             /** @var COrderLineRepo $repo */
             $repo = \Monkey::app()->repoFactory->create('OrderLine');
-            $line = $repo->findOne(['id' => $ids[0], 'orderId' => $ids[1]]);
+            $line = $repo->findOne(['id' => $ids[0],'orderId' => $ids[1]]);
             $oldActive = $line->orderLineStatus->isActive;
             $oldName = $line->orderLineStatus->title;
 
 
             /** @var COrderLine $line */
-            $line = $repo->updateStatus($line, $statusLine);
-            $orderLine=$line;
-
+            $line = $repo->updateStatus($line,$statusLine);
+            $orderLine = $line;
 
 
             $newActive = $line->orderLineStatus->isActive;
-            $newName =$line->orderLineStatus->title;
+            $newName = $line->orderLineStatus->title;
 
-            if($line->shopId == 61 AND $line->status == "ORD_WAIT") {
+            if ($line->shopId == 61 and $line->status == "ORD_WAIT") {
                 //Value for api
 
                 /** @var CObjectCollection $dirtySkus */
                 $dirtySkus = $line->productSku->dirtySku;
 
-                if($dirtySkus->count() != 1) {
+                if ($dirtySkus->count() != 1) {
                     throw new BambooException('Collezione fatta da più sku, controllare');
                 }
 
@@ -77,12 +78,23 @@ class CChangeFromAdminLineStatus extends AAjaxController
                     "Value" => $line->friendRevenue,
                     "Payment_type" => $line->order->orderPaymentMethod->name,
                 ];
-                $alduca = new CMpkOrderApi($orderId, $row);
-                $alduca->newOrder();
+                if (ENV == 'prod') {
+                    switch (true) {
+                        case $line->shopId == 61:
+                            $alduca = new CMpkOrderApi($orderId,$row);
+                            $alduca->newOrder();
+                            break;
+                        case $line->shopId == 1:
+                            $edstema = new CEdsTemaOrderApi($orderId,$row);
+                            $edstema->newOrder();
+                            break;
+                    }
+
+                }
             }
-            $shopRepo=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$orderLine->remoteShopSellerId]);
-            $orderRepo=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id'=>$orderLine->orderId,'remoteShopSellerId'=>$orderLine->remoteShopSellerId]);
-            if($orderLine->remoteOrderSellerId!=null) {
+            $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $orderLine->remoteShopSellerId]);
+            $orderRepo = \Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderLine->orderId,'remoteShopSellerId' => $orderLine->remoteShopSellerId]);
+            if ($orderLine->remoteOrderSellerId != null) {
                 $db_host = $shopRepo->dbHost;
                 $db_name = $shopRepo->dbName;
                 $db_user = $shopRepo->dbUsername;
@@ -90,8 +102,8 @@ class CChangeFromAdminLineStatus extends AAjaxController
                 $shop = $shopRepo->id;
                 try {
 
-                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pass);
-                    $db_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                    $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
                     $res = ' connessione ok <br>';
                 } catch (PDOException $e) {
                     $res = $e->getMessage();
