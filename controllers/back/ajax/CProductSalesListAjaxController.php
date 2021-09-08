@@ -94,27 +94,27 @@ class CProductSalesListAjaxController extends AAjaxController
         if ($productZeroQuantity == 1) {
             $sqlFilterQuantity = '';
         } else {
-            $sqlFilterQuantity = 'and p.qty>0';
+            $sqlFilterQuantity = ' and p.qty>0 ';
         }
         if ($productStatus == 1) {
             $sqlFilterStatus = '';
         } else {
-            $sqlFilterStatus = 'and p.productStatusId=6';
+            $sqlFilterStatus = ' and p.productStatusId=6';
         }
         if ($productBrandId == 0) {
             $sqlFilterBrand = '';
         } else {
-            $sqlFilterBrand = 'and p.productBrandId='.$productBrandId;
+            $sqlFilterBrand = ' and p.productBrandId='.$productBrandId;
         }
         if ($shopid == 0) {
             $sqlFilterShop = '';
         } else {
-            $sqlFilterShop = 'and Shop.id='.$shopid;
+            $sqlFilterShop = ' and Shop.id='.$shopid;
         }
         if ($stored == 0) {
             $sqlFilterStored = '';
         } else {
-            $sqlFilterStored = 'and p.stored='.$stored;
+            $sqlFilterStored = ' and p.stored='.$stored;
         }
 
         $sql = "select `p`.`id` AS `id`,`p`.`productVariantId` AS `productVariantId`,`pc`.`slug` AS `slug`,
@@ -169,7 +169,9 @@ group by `p`.`id`,`p`.`productVariantId` having (`totalQty` >= 0)";
         foreach ($prodotti as $val) {
 
             $cats = [];
-            foreach($val->productCategoryTranslation as $cat){
+            $productHasProductCategory=\Monkey::app()->repoFactory->create('ProductHasProductCategory')->findBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
+            foreach($productHasProductCategory as $cat){
+            //foreach($val->productCategoryTranslation as $cat){
                 $path = $this->app->categoryManager->categories()->getPath($cat->productCategoryId);
                 unset($path[0]);
                 $cats[] = '<span>'.implode('/',array_column($path, 'slug')).'</span>';

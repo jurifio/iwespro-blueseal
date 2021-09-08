@@ -204,7 +204,7 @@ $('#btnsearchplus').click(function(){
     if($('#shopid').val()!=0) {
         shop = '&shopid='+$('#shopid').val();
     }
-    var stored='stored=0';
+    var stored='&stored=0';
     if ($('#stored').prop("checked")) {
         stored = '&stored=1';
     }
