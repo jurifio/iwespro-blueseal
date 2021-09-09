@@ -2,6 +2,7 @@
 namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
+use bamboo\core\db\pandaorm\repositories\CRepo;
 use bamboo\core\intl\CLang;
 
 
@@ -75,4 +76,43 @@ class CPriceListListAjaxController extends AAjaxController
         }
         return json_encode($response);
     }
+    public function delete(){
+        try {
+            $data = \Monkey::app()->router->request()->getRequestData();
+            /** @var CRepo $priceListRepo */
+            $priceListRepo = \Monkey::app()->repoFactory->create('PriceList');
+            $id = $data['id'];
+            $shopId = $data['shopId'];
+            $remoteId = $data['remoteId'];
+            /** @var CPriceList $pc */
+            $pc = $priceListRepo->findOneBy(['id' => $id]);
+            $pc->delete();
+            $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
+            $db_host = $findShopId->dbHost;
+            $db_name = $findShopId->dbName;
+            $db_user = $findShopId->dbUsername;
+            $db_pass = $findShopId->dbPassword;
+            try {
+                $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                $res = " connessione ok <br>";
+            } catch (PDOException $e) {
+                throw new BambooException('fail to connect');
+
+            }
+            $stmtDeletePc = $db_con->prepare("DELETE FROM PriceList 
+                                where id=" . $id.' and shopId='.$shopId);
+            $stmtDeletePc->execute();
+
+
+            return 'Listino   Cancellato con successo';
+        }catch(\Throwable $e){
+            \Monkey::app()->applicationLog('CPriceListListAjaxController','Error','Delete PriceList',$e->getMessage(),$e->getLine());
+            return 'Error TraceLog '.$e->getMessage();
+        }
+    }
+
+
+
+
 }
