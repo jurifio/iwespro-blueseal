@@ -74,7 +74,7 @@
                                                 <label for="dateEnd">Valido fino a</label>
                                                 <input type="datetime-local" class="form-control" id="dateEnd"
                                                        name="dateEnd"
-                                                       value="<?php echo (new DateTime($priceList->dateStart))->format('Y-m-d\TH:i'); ?>"/>
+                                                       value="<?php echo (new DateTime($priceList->dateEnd))->format('Y-m-d\TH:i'); ?>"/>
                                             </div>
                                         </div>
                                     </div>
