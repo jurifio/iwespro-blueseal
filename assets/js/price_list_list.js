@@ -1,4 +1,4 @@
-$(document).on('bs.post.delete', function() {
+$(document).on('bs.pricelist.delete', function() {
 
     let selectedRows = $('.table').DataTable().rows('.selected').data();
 

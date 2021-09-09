@@ -100,7 +100,7 @@
                 data-tag="a"
                 data-icon="fa-trash"
                 data-permission="/admin/content/delete"
-                data-event="bs.post.delete"
+                data-event="bs.pricelist.delete"
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Elimina un Listino"
