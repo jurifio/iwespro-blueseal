@@ -4641,11 +4641,14 @@
             ]
         },
         {
-            "pattern": "/blueseal/listini/modifica(/)?",
+            "pattern": "/blueseal/listini/modifica/:id(/):shopId(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CPriceListEditController"
             },
-            "filters": {},
+            "filters": {
+                "id": "[0-9]+",
+                "shopId": "[0-9]+"
+            },
             "translations": {},
             "methods": [
                 "GET",
