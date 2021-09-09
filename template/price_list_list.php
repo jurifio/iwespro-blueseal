@@ -54,6 +54,14 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Variazione %</th>
+                                <th data-slug="typeVariationSale"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Tipo di Variazione Sconti</th>
+                                <th data-slug="variationSale"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Variazione %</th>
                                 <th data-slug="dateStart"
                                     data-searchable="true"
                                     data-orderable="true"

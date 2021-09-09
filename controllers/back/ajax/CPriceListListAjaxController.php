@@ -30,6 +30,8 @@ class CPriceListListAjaxController extends AAjaxController
                    `p`.shopId as shopId, 
                   if(`p`.`typeVariation`=1,'Sconto','Maggiorazione')                                      AS `typeVariation`,
                   `p`.`variation`                                      AS `variation`,
+                  if(`p`.`typeVariationSale`=1,'Sconto','Maggiorazione')                                      AS `typeVariationSale`,
+                  `p`.`variationSale`                                      AS `variationSale`,
                   `p`.`dateStart`                                      AS `dateStart`,
                    `p`.`dateEnd`                                      AS `dateEnd`
 
@@ -56,9 +58,11 @@ class CPriceListListAjaxController extends AAjaxController
             try {
                 $response['data'][$i]["DT_RowId"] =  $v->id;
                 $response['data'][$i]['id'] = $v->id;
-                $response['data'][$i]['name'] = $v->name;
+                $response['data'][$i]['name'] = '<a href="/blueseal/listini/modifica/'.$v->id.'/'.$v->shopId.'/">'.$v->name.'</a>';
                 $response['data'][$i]['typeVariation'] = ($v->typeVariation==1) ? 'Sconto':'Maggiorazione';
                 $response['data'][$i]['variation'] = $v->variation;
+                $response['data'][$i]['typeVariationSale'] = ($v->typeVariation==1) ? 'Sconto':'Maggiorazione';
+                $response['data'][$i]['variationSale'] = $v->variation;
                 $shop=$shopRepo->findOneBy(['id'=>$v->shopId]);
                 $response['data'][$i]['shopName'] = $shop->name;
                 $response['data'][$i]['shopId'] = $v->shopId;
