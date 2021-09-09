@@ -101,7 +101,7 @@ class CPriceListEditController extends ARestrictedAccessRootController
             $priceList->dateStart=$dateStart;
             $priceList->dateEnd=$dateEnd;
             $priceList->update();
-            $link=$lastId.'/'.$shopId.'/';
+            $link=$priceListId.'/'.$shopId.'/';
 
             return $link;
         } catch (\Throwable $e) {
