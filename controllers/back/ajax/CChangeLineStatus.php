@@ -80,6 +80,7 @@ class CChangeLineStatus extends AAjaxController
                         "productVariantId"=>$line->productVariantId,
                         "productSizeId"=>$line->productSizeId
                     ];
+                    /*
                 if (ENV == 'prod') {
                     switch (true) {
                         case $line->shopId == 61:
@@ -92,7 +93,9 @@ class CChangeLineStatus extends AAjaxController
                             break;
                     }
 
+
                 }
+                    */
 
             }
             $shopRepo = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $orderLine->remoteShopSellerId]);
