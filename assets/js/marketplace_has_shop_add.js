@@ -256,7 +256,6 @@ $('#brandExclusion').change( function(){
     $('#brandSaleExclusion').val(newValueBrandSale);
     $('#appendBrandsSalePublishPar').append(`
     <div id="brandSaleAddDiv-` + $('#brandExclusion').val() + `" class="row"><div class="col-md-12">` + $('#brandExclusion :selected').text() + `</div><div class="col-md-2"> <button class="success" id="btnSaleAdd-` + $('#brandExclusion').val() + `" onclick="lessBrandSaleAdd(` + $('#brandExclusion').val() + `)" type="button"><span  class="fa fa-close"></span></button></div></div>`);
-
 });
 
 var paral;

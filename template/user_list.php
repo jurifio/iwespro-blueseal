@@ -64,6 +64,14 @@
                                     data-searchable="false"
                                     data-orderable="false"
                                     class="center">Metodo</th>
+                                <th data-slug="priceListName"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Listino Associato</th>
+                                <th data-slug="langName"
+                                    data-searchable="false"
+                                    data-orderable="false"
+                                    class="center">Lingua Utente</th>
                                 <th data-slug="creationDate"
                                     data-searchable="true"
                                     data-orderable="true"
@@ -145,6 +153,18 @@
             data-rel="tooltip"
             data-title="Vedi permessi"
             data-placement="bottom"
+        ></bs-toolbar-button>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Gestione Listini">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-eur"
+                data-permission="/admin/user"
+                data-event="bs.pricelist.assign"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Assegna Listino"
+                data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

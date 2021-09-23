@@ -75,12 +75,16 @@ class CChangeLineStatus extends AAjaxController
                         "SKU" => $extSkuId,
                         "Value" => $line->friendRevenue,
                         "Payment_type" => $line->order->orderPaymentMethod->name,
+                        "shopId"=>$line->shopId,
+                        "productId"=>$line->productId,
+                        "productVariantId"=>$line->productVariantId,
+                        "productSizeId"=>$line->productSizeId
                     ];
                 if (ENV == 'prod') {
                     switch (true) {
                         case $line->shopId == 61:
-                            $alduca = new CMpkOrderApi($orderId,$row);
-                            $alduca->newOrder();
+                            $edstema = new CMpkOrderApi($orderId,$row);
+                            $edstema->newOrder();
                             break;
                         case $line->shopId == 1:
                             $edstema = new CEdsTemaOrderApi($orderId,$row);
