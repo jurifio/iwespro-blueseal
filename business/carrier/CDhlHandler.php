@@ -92,6 +92,13 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
         }else{
             require('/home/shared/vendor/DHL-API-master/init.php');
         }
+        if (ENV == 'dev') {
+            $SiteID = 'v62_FWcwlY5Chq';
+            $Password = 'UO6VXNUV13';
+        } else {
+            $SiteID = 'v62_GcBntXbspo';
+            $Password = 'u7qVouSKHY';
+        }
 
         /*genero  il MessageTime*/
         $dateTime=(new DateTime())->format(DateTime::ATOM);
@@ -110,8 +117,8 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
         $sample =  new ShipmentRequest();
 
 // assumo le variabili per il login
-        $sample->SiteID = $dhl['id'];
-        $sample->Password = $dhl['pass'];
+        $sample->SiteID = $SiteID;
+        $sample->Password = $Password;
 
 // setto i valori della richiesta
         $sample->MessageTime = $dateTime;
@@ -268,14 +275,20 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
 
-
+        if (ENV == 'dev') {
+            $SiteID = 'v62_FWcwlY5Chq';
+            $Password = 'UO6VXNUV13';
+        } else {
+            $SiteID = 'v62_GcBntXbspo';
+            $Password = 'u7qVouSKHY';
+        }
 
 // INIZIALIZZO LA RICHIESTA
         $sample =  new ShipmentRequest();
 
 // PASSO LE VARIABILI PER IL CLIENT
-        $sample->SiteID = $dhl['id'];
-        $sample->Password = $dhl['pass'];
+        $sample->SiteID = $SiteID;
+        $sample->Password = $Password;
         // INIZIALIZZO LA RICHIESTA DI TRACKING
         $request = new Tracking();
         $request->SiteID = $dhl['id'];
@@ -324,6 +337,13 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
         }else{
             require('/home/shared/vendor/DHL-API-master/init.php');
         }
+        if (ENV == 'dev') {
+            $SiteID = 'v62_FWcwlY5Chq';
+            $Password = 'UO6VXNUV13';
+        } else {
+            $SiteID = 'v62_GcBntXbspo';
+            $Password = 'u7qVouSKHY';
+        }
         $dateTime=(new DateTime())->format(DateTime::ATOM);
         $dhl = $config['dhl'];
         $characters = '0123456789';
@@ -333,8 +353,8 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         $sample = new GetQuote();
-        $sample->SiteID = $dhl['id'];
-        $sample->Password = $dhl['pass'];
+        $sample->SiteID = $SiteID;
+        $sample->Password = $Password;
 
 
 // SETTO I VALORI DELLA REQUEST
