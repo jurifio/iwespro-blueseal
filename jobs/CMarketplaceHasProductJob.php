@@ -98,7 +98,7 @@ class CMarketplaceHasProductJob extends ACronJob
                                             }
                                         }
                                         $pshsd->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
-                                        $pshsd->lastUpdate = $marketplaceAccount->config['dateUpdate'];
+                                        $pshsd->dateUpdate = $marketplaceAccount->config['dateUpdate'];
                                     } else {
                                         $pshsd->status = 1;
                                     }
@@ -135,7 +135,7 @@ class CMarketplaceHasProductJob extends ACronJob
                                     }
                                     $pshsdInsert->maxPercentSalePrice = $marketplaceAccount->config['maxPercentSalePrice'];
                                     $pshsdInsert->status = 2;
-                                    $pshsdInsert->lastUpdate = '2011-01-01 00:00:00';
+                                    $pshsdInsert->dateUpdate = '2011-01-01 00:00:00';
                                     $pshsdInsert->productStatusMarkeplaceId=2;
                                     $pshsdInsert->insert();
 
