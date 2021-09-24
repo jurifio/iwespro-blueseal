@@ -52,17 +52,22 @@ class CPriceRuleEditController extends ARestrictedAccessRootController
 
         try {
             $data = $this->app->router->request()->getRequestData();
-            $priceListId = $data['id'];
+            $priceRuleId = $data['priceRuleId'];
             $shopId=$data['shopId'];
             $priceRuleListRepo = \Monkey::app()->repoFactory->create('PriceRuleList');
             $name=$data['name'];
+            $seasonsPar=$data['seasonsPar'];
+            $brandsPar=$data['brandsPar'];
             $variation=$data['variation'];
             $typeVariation=$data['typeVariation'];
+            $typeAssignBrand=$data['typeAssignBrand'];
+            $typeAssignSeason=$data['typeAssignSeason'];
+            $optRadioRound=$data['optRadioRound'];
             $variationSale=$data['variationSale'];
             $typeVariationSale=$data['typeVariationSale'];
             $dateStart = (new \DateTime($data['dateStart']))->format('Y-m-d H:i:s');
             $dateEnd=(new \DateTime($data['dateEnd']))->format('Y-m-d H:i:s');
-            $priceRuleList = $priceRuleListRepo->findOneBy(['id'=> $priceListId,'shopId'=> $shopId]);
+            $priceRuleList = $priceRuleListRepo->findOneBy(['id'=> $priceRuleId,'shopId'=> $shopId]);
             $shopId=$data['shopId'];
             $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
             $db_host = $findShopId->dbHost;
@@ -79,25 +84,35 @@ class CPriceRuleEditController extends ARestrictedAccessRootController
             }
 
             $stmtUpdatePriceRuleList=$db_con->prepare('update  PriceRuleList set 
-                    id='.$priceListId.',
+                    id='.$priceRuleId.',
                    shopId='.$shopId.',
                    `name`="'.$name.'",
                    typeVariation="'.$typeVariation.'",
                    typeVariationSale="'.$typeVariationSale.'",
                    variation="'.$variation.'",
                    variationSale="'.$variationSale.'",
+                    optRadioRound="'.$optRadioRound.'",
+                    typeAssignBrand="'.$typeAssignBrand.'",
+                    brandsPar="'.$brandsPar.'",
+                    typeAssignSeason="'.$typeAssignSeason.'",
+                    seasonsPar="'.$seasonsPar.'",
                    dateStart="'.$dateStart.'",
-                   dateEnd="'.$dateEnd.'" where id='.$priceListId.' and shopId='.$shopId);
+                   dateEnd="'.$dateEnd.'" where id='.$priceRuleId.' and shopId='.$shopId);
 
             $stmtUpdatePriceRuleList->execute();
 
-            $priceRuleList->id=$priceListId;
+            $priceRuleList->id=$priceRuleId;
             $priceRuleList->shopId=$shopId;
             $priceRuleList->name=$name;
             $priceRuleList->typeVariation=$typeVariation;
             $priceRuleList->typeVariationSale=$typeVariationSale;
             $priceRuleList->variation=$variation;
             $priceRuleList->variationSale=$variationSale;
+            $priceRuleList->optRadioRound=$optRadioRound;
+            $priceRuleList->typeAssignBrand=$typeAssignBrand;
+            $priceRuleList->brandsPar=$brandsPar;
+            $priceRuleList->typeAssignSeason=$typeAssignSeason;
+            $priceRuleList->seasonsPar=$seasonsPar;
             $priceRuleList->dateStart=$dateStart;
             $priceRuleList->dateEnd=$dateEnd;
             $priceRuleList->update();

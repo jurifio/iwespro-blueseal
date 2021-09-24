@@ -70,7 +70,7 @@ class CEbayNewAddProductJob extends ACronJob
                     if ($product->qty == 0) {
                         continue;
                     }
-                    $productCategory = \Monkey::app()->repoFactordy->create('ProductHasProductCategory')->findOneBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
+                    $productCategory = \Monkey::app()->repoFactory->create('ProductHasProductCategory')->findOneBy(['productId' => $good->productId,'productVariantId' => $good->productVariantId]);
                     $productCategoryId = $productCategory->productCategoryId;
                     $category = \Monkey::app()->repoFactory->create('ProductCategoryHasMarketplaceAccountCategory')->findOneBy(['marketplaceId' => 3,'marketplaceAccountId' => 3,'productCategoryId' => $productCategoryId]);
                     if (!$category) {
