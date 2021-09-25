@@ -55,7 +55,7 @@ class CPriceRuleListAjaxController extends AAjaxController
 
         $i = 0;
 
-        foreach ($priceList as $v) {
+        foreach ($priceRuleList as $v) {
             try {
                 $response['data'][$i]["DT_RowId"] =  $v->id;
                 $response['data'][$i]['id'] = $v->id;
@@ -85,7 +85,7 @@ class CPriceRuleListAjaxController extends AAjaxController
             $shopId = $data['shopId'];
             $remoteId = $data['remoteId'];
             /** @var CPriceList $pc */
-            $pc = $priceListRepo->findOneBy(['id' => $id]);
+            $pc = $priceListRepo->findOneBy(['id' => $id,'shopId'=>$shopId]);
             $pc->delete();
             $findShopId = \Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
             $db_host = $findShopId->dbHost;
