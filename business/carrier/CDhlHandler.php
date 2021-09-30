@@ -6,10 +6,13 @@ use bamboo\business\carrier\ACarrierHandler;
 use bamboo\business\carrier\IImplementedPickUpHandler;
 use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CAddressBook;
+use bamboo\domain\entities\COrderLineHasShipment;
 use bamboo\domain\entities\CShipment;
 use bamboo\domain\repositories\CShipmentRepo;
 use bamboo\utils\time\SDateToolbox;
 use bamboo\utils\time\STimeToolbox;
+use DHL\Entity\EA\BookPickupRequest;
+use DHL\Entity\EA\PickupResponse;
 use DHL\Entity\GB\ShipmentResponse;
 use DHL\Entity\GB\ShipmentRequest;
 use DHL\Datatype\AM\PieceType;
@@ -246,6 +249,8 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
             file_put_contents('/home/cartechini/public_html/client/public/themes/flatize/assets/shipment/' . $orderLineHasShipment->orderLineId . '-' . $orderLineHasShipment->orderId . '-dhl-label.pdf',base64_decode($response->LabelImage->OutputImage));
         }
         $shipmentFind->trackingNumber=$response->AirwayBillNumber;
+        $bookingNumber = $this->bookPickup($shipment,$orderLineHasShipment,$trackingNumber,$globalProductCode,$numberOfPieces);
+        $shipmentFind->bookingNumber=$bookingNumber;
         $shipmentFind->update();
 // VISUALIZZA FILE PDF IN BROWSER/*
         /*   $data = base64_decode($response->LabelImage->OutputImage);
@@ -531,254 +536,177 @@ class CDhlHandler extends ACarrierHandler implements IImplementedPickUpHandler
     /**
      * @param \XMLWriter $xml
      * @param CShipment $shipment
+     * @param COrderLineHasShipment $orderLineHasShipment
+     * @param $trackingNumber int
+     * @param $globalProductCode string
+     * @param $numberOfPieces string
      * @return bool|string
      */
-    public function bookPickup(\XMLWriter $xml, CShipment $shipment)
+    public function bookPickup(CShipment $shipment,COrderLineHasShipment $orderLineHasShipment,$trackingNumber,$globalProductCode,$numberOfPieces)
     {
-        //Argument from runDHLClient.cmd
-//Input for dhlclient path
-        $arg0 = "";
-//Input for directory path
-        $arg1 = "";
-//Input path for Request XML files
-        $arg2 = "";
-//Input path for Response XML Files
-        $arg3 = "";
-//Input path for Server url details
-        $arg4 = "https://xmlpitest-ea.dhl.com/XMLShippingServlet";
-//%FUTURE_DAY%
-        $arg5 = false;
-//%TIMEZONE%
-        $arg6 = "+01:00";
 
-//FILE PATH
-        $dir_url = $arg1;
-//REQUEST PATH & REQUEST FILE
-        $filename = $arg1.$arg2;
-//RESPONSE PATH
-        $response_url = $arg1.$arg3;
-//SERVER URL
-        $server_url = $arg4;
-//Future Date
-        $futureDate = $arg5;
-
-//Starting the StopWatch
-        CDhlStopWatchHandler::start();
-
-//IP ADDRESS
-        $localIPAddress = getHostByName(getHostName());
-
-//Set Cookie to store Client's IP address
-        $_COOKIE['info[0]'] = $localIPAddress;
-
-//Set Cookie to store filename that is being executed
-        $_COOKIE['info[1]'] = $arg0;
-
-//Setting timezone to UTC
-        date_default_timezone_set("UTC");
-        $utc = $arg6;
-        $utc_parsed_1 = str_replace(":",".",$utc);
-        $utc_parsed_2 = str_replace(".30",".50",$utc_parsed_1);
-        $ts = (time() + ($utc_parsed_2*3600));
-        $dtformat = "Y_m_d_H_i_s_";
-
-//Set Cookie for timestamp after timezone is applied
-        $_COOKIE['info[2]'] = $ts;
-
-//Logger
-        require_once('KLogger.php');
-        $log = new KLogger ($dir_url."logs/DHLClient_".date('Ymd').".log" , KLogger::DEBUG );
-
-        $count = 0;
-
-        goto A;
-        echo "\n";
-
-        A:
-
-//Getting the .xml file.
-        $file = file_get_contents($filename, true);
-        $len = strlen($file);
-
-        $log->LogInfo(" | START DHLClient");
-        $log->LogInfo(" | futureDate set to :: ".$futureDate);
-        echo  "futureDate set to :: ".$futureDate."\n";
-
-        $log->LogInfo(" | TimeZone set to :: UTC".$arg6);
-        echo "TimeZone set to :: UTC".$arg6."\n";
-
-//UTF-8 checking for .xml file.
-        $encoding = mb_detect_encoding($file, 'UTF-8');
-        if ($encoding == "UTF-8") {
-            $new_server_url = $server_url.'?isUTF8Support=true';
-            $reqxml= $file;
-            $el_start = "<MessageReference>";
-            $el_end = "</MessageReference>";
-            $MessageReference = getBetween($reqxml,$el_start,$el_end);
-            $log->LogInfo(" | isUTF8Support set to :: true");
+        if (ENV == 'dev') {
+            $SiteID = 'v62_FWcwlY5Chq';
+            $Password = 'UO6VXNUV13';
         } else {
-            $new_server_url = $server_url;
-            $MessageReference = "";
-            $log->LogWarn(" | isUTF8Support set to :: false");
+            $SiteID = 'v62_GcBntXbspo';
+            $Password = 'u7qVouSKHY';
         }
 
-        $log->LogInfo($MessageReference." | Connecting to Server IP: ".$localIPAddress." URL:".$new_server_url);
-        echo "Opening the connection ..... : ".$server_url."\n\n";
-//echo "Connecting to Server IP: ".$localIPAddress." URL:".$new_server_url."\n\n";
 
-//Check whether url exist.
-        $invalidurl = "";
-        $file_headers = @get_headers($new_server_url);
-        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
-            $invalidurl = true;
-            $flushDNS = true;
-            $retry = true;
-        } else {
-            $log->LogInfo($MessageReference." | Connected to IP: ".$localIPAddress." URL:".$new_server_url." | ".StopWatch::elapsed());
-            $flushDNS = false;
-            $retry = false;
+        $client = new WebserviceClient('production');
+        $orderLineGet=\Monkey::app()->repoFactory->create('OrderLine')->findOneBy(['orderId' => $orderLineHasShipment->orderId,'id'=>$orderLineHasShipment->orderLineId]);
+        $sku=\Monkey::app()->repoFactory->create('ProductSku')->findOneBy(['productId' => $orderLineGet->productId,'productVariantId'=>$orderLineGet->productVariantId,'shopId'=>$orderLineGet->shopId,'productSizeId'=>$orderLineGet->productSizeId]);
+        $dirtyProduct=\Monkey::app()->repoFactory->create('DirtyProduct')->findOneBy(['productId'=>$sku->productId,'productVariantId'=>$sku->productVariantId,'shopId'=>$sku->shopId]);
+        $dirtySkus=\Monkey::app()->repoFactory->create('DirtySku')->findBy(['dirtyProductId'=>$dirtyProduct->id,'shopId'=>$orderLineGet->shopId,'productSizeId'=>$orderLineGet->productSizeId]);
+        $order=\Monkey::app()->repoFactory->create('Order')->findOneBy(['id' => $orderLineHasShipment->orderId]);
+        $address = \bamboo\domain\entities\CUserAddress::defrost($order->frozenShippingAddress);
+        $storeHouseId=1;
+        foreach($dirtySkus as $dirtySku) {
+            if ($dirtySku->qty > 0) {
+                $storeHouseId = $dirtySku->storeHouseId;
+                break;
+            }
+        }
+        $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$orderLineGet->shopId]);
+        $storehouse=\Monkey::app()->repoFactory->create('StoreHouse')->findOneBy(['id'=>$storeHouseId,'shopId'=>$orderLineGet->shopId]);
+
+
+
+
+
+        $pickup = new BookPickupRequest();
+        $pickup->SiteID = $SiteID;
+        $pickup->Password = $Password;
+        $pickup->MessageTime = (new DateTime())->format(DateTime::ATOM);
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        /* genero il MessageReference */
+        $randomString = '';
+        for ($i = 0; $i < 32; $i++) {
+            $randomString .= $characters[rand(0,$charactersLength - 1)];
+        }
+        $country=\Monkey::app()->repoFactory->create('Country')->findOneBy(['id' => $storehouse->countryId]);
+        $pickup->MessageReference = $randomString;
+        $datePickUp=(new DateTime($order->orderDate))->modify('+1 day');
+        $countryCustomer=\Monkey::app()->repoFactory->create('Country')->findOneBy(['id'=>$address->countryId]);
+        $xmlToSend= '<?xml version="1.0" encoding="UTF-8"?>
+<req:BookPURequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com book-pickup-global-req_EA.xsd" schemaVersion="3.0">
+	<Request>
+		<ServiceHeader>
+			<MessageTime>'.(new DateTime())->format(DateTime::ATOM).'</MessageTime>
+			<MessageReference>'.$randomString.'</MessageReference>
+            <SiteID>'.$SiteID.'</SiteID>
+			<Password>'.$Password.'</Password>
+		</ServiceHeader>
+		<MetaData>
+			<SoftwareName>XMLPI</SoftwareName>
+			<SoftwareVersion>3.0</SoftwareVersion>
+		</MetaData>
+	</Request>
+	<Requestor>
+		<AccountType>D</AccountType>
+		<AccountNumber>106971439</AccountNumber>
+		<RequestorContact>
+			<PersonName>'.$shop->name.'</PersonName>
+			<Phone>'.$storehouse->phone.'</Phone>
+		</RequestorContact>
+		<CompanyName>'.$shop->title.'</CompanyName>
+		<Address1>'.$storehouse->address.'</Address1>
+		<Address2>'.$storehouse->number.'</Address2>
+		<City>'.$storehouse->city.'</City>
+		<CountryCode>GB</CountryCode>
+		<PostalCode>'. $storehouse->cap.'</PostalCode>
+	</Requestor>
+	<Place>
+		<LocationType>B</LocationType>
+		<CompanyName>'.$shop->name.'</CompanyName>
+		<Address1>'.$storehouse->address.'</Address1>
+		<Address2>'.$storehouse->number.'</Address2>
+		<PackageLocation>Reception</PackageLocation>
+		<City>'.$storehouse->city.'</City>
+		<CountryCode>'.$country->ISO.'</CountryCode>
+		<PostalCode>'. $storehouse->cap.'</PostalCode>
+	</Place>
+	<Pickup>
+		<PickupDate>'.$datePickUp->format('Y-m-d').'</PickupDate>
+		<PickupTypeCode>A</PickupTypeCode>
+		<ReadyByTime>16:00</ReadyByTime>
+		<CloseTime>19:00</CloseTime>
+		<Pieces>1</Pieces>
+		<RemotePickupFlag>Y</RemotePickupFlag>
+		<weight>
+			<Weight>1</Weight>
+			<WeightUnit>K</WeightUnit>
+		</weight>
+	</Pickup>
+	<PickupContact>
+		<PersonName>'.$storehouse->name.'</PersonName>
+		<Phone>'. $storehouse->phone.'</Phone>
+	</PickupContact>
+	<ShipmentDetails>
+		<AccountType>D</AccountType>
+		<AccountNumber>106971439</AccountNumber>
+		<BillToAccountNumber>106971439</BillToAccountNumber>
+		<AWBNumber>'.$trackingNumber.'</AWBNumber>
+		<NumberOfPieces>'.$numberOfPieces.'</NumberOfPieces>
+		<Weight>1</Weight>
+		<WeightUnit>K</WeightUnit>
+		<GlobalProductCode>'.$globalProductCode.'</GlobalProductCode>
+		<LocalProductCode>'.$globalProductCode.'</LocalProductCode>
+		<DoorTo>DD</DoorTo>
+		<DimensionUnit>C</DimensionUnit>
+		<Pieces>
+			<Piece>
+				<Weight>1</Weight>
+				<Width>15</Width>
+				<Height>25</Height>
+				<Depth>15</Depth>
+			</Piece>
+		</Pieces>
+	</ShipmentDetails>
+	<ConsigneeDetails>
+		<CompanyName>'.$address->company.' '.$address->name.' '.$address->surname.'</CompanyName>
+		<AddressLine>'.$address->address.'</AddressLine>
+		<City>'.$address->city.'</City>
+		<CountryCode>'.$countryCustomer->ISO.'</CountryCode>
+		<PostalCode>'.$address->postcode.'</PostalCode>
+		<Contact>
+			<PersonName>'.$address->name.' '.$address->surname.'</PersonName>
+			<Phone>'.$address->phone.'</Phone>
+		</Contact>
+	</ConsigneeDetails>
+</req:BookPURequest>';
+//$pickup->toXml();
+//$prova=$pickup->toXml();
+//$xml = $client->call($xmlToSend);
+        if (!$ch = curl_init())
+        {
+            throw new \Exception('could not initialize curl');
         }
 
-        if ($invalidurl == true) {
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, 'https://xmlpi-ea.dhl.com/XMLShippingServlet?isUTF8Support=true');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_PORT , 443);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlToSend);
+        $result = curl_exec($ch);
+
+        if (curl_error($ch))
+        {
+            return false;
         }
-        else {
-            $log->LogInfo($MessageReference." | Begin sending request to XML Appl");
-
-            if ($encoding == "UTF-8") {
-                $post_header = 'Content-type: application/x-www-form-urlencoded'."\r\n".'Accept-Charset: UTF-8'."\r\n".'Content-Length: '.$len."\r\n".'futureDate: '.$futureDate."\r\n".'languageCode: PHP'."\r\n";
-            }
-            else {
-                $post_header = 'Content-type: application/x-www-form-urlencoded'."\r\n".'Content-Length: '.$len."\r\n".'futureDate: '.$futureDate."\r\n".'languageCode: PHP'."\r\n";
-            }
-
-//Sending the Request
-            $stream_options = array(
-                'http' => array(
-                    'method' => 'POST',
-                    'header' => $post_header,
-                    'content' => $file
-                )
-            );
-
-            $log->LogInfo($MessageReference." | Finish sending request to XML Appl | ".CDhlStopWatchHandler::elapsed());
-
-            $log->LogInfo($MessageReference." | Begin receiving reply from XML Appl");
-
-//Getting the response
-            $context  = stream_context_create($stream_options);
-            $response = file_get_contents($new_server_url, false, $context);
-            $resxml=simplexml_load_string($response) or die("Error: Cannot create object");
-
-            if ($response != "") {
-//Get microtime and convert into miliseconds and assign to date for .xml file creation.
-                $microstamp = microtime(true);
-                $micro = sprintf("%06d",($microstamp - floor($microstamp)) * 1000);
-                $milli = substr($micro, -3);
-                $ndatetime = date($dtformat, $ts).$milli;
-
-//Create and write response into .xml file.
-                $action = fopen($response_url.$resxml->getName()."_".$ndatetime.'.xml', 'w') or die('Unable to open file!');
-                fwrite($action, $response);
-                fclose($action);
-
-                $log->LogInfo($MessageReference." | Response received and saved successfully at :".$response_url);
-                echo "Response received and saved successfully at :".$response_url."\n\n";
-                $log->LogInfo($MessageReference." | The file name is:".$resxml->getName()."_".$ndatetime.".xml");
-                echo "The file name is:".$resxml->getName()."_".$ndatetime.".xml \n\n";
-            } else {
-                $log->LogWarn($MessageReference."| Failed to receive response.");
-                echo "Failed to receive response \n\n";
-            }
-            $log->LogInfo($MessageReference." | Finished receving reply from XML Appl | ".StopWatch::elapsed());
-
-            $log->LogInfo($MessageReference." | Total time taken to process request and respond back to client | ".StopWatch::elapsed());
-            echo "Total time taken to process request and respond back to client | ".StopWatch::elapsed()."\n";
-
-            $log->LogInfo($MessageReference." | END DHLClient");
-
+        else
+        {
+            curl_close($ch);
         }
 
-//Unset Cookie
-        unset($_COOKIE['ipaddress']);
-
-//StopWatch
-
-
-        function getBetween($reqxml,$el_start,$el_end){
-            $el_config = explode($el_start, $reqxml);
-            if (isset($el_config[1])){
-                $el_config = explode($el_end, $el_config[1]);
-                return $el_config[0];
-            }
-            return '';
-        }
-
-//Flush DNS
-        if ($flushDNS == true) {
-            $getOSName = PHP_OS_FAMILY;
-            //Windows', 'BSD', 'Darwin', 'Solaris', 'Linux' or 'Unknown'.
-            $count = $count + 1;
-
-            if ($count > 1) {
-            } else {
-                echo "\n================= Please Wait for 60 seconds; Retry in progress ...... ================= \n\n";
-                Switch ($getOSName) {
-                    case "Windows": //Windows OS
-                        $cmd_str = "ipconfig /flushdns";
-                        $responsetxt = exec($cmd_str);
-                        $log->LogInfo($MessageReference."WINDOWS OS -> ".$cmd_str." -> ".$responsetxt);
-                        echo "WINDOWS OS -> ".$cmd_str." -> ".$responsetxt."\n\n";
-                        break;
-
-                    case "Darwin": //Macintosh
-                        $cmd_str = "dscacheutil -flushcache";
-                        $responsetxt = exec($cmd_str);
-                        $log->LogInfo($MessageReference."MAC OS -> ".$cmd_str." -> ".$responsetxt);
-                        echo "MAC OS -> ".$cmd_str." -> ".$responsetxt."\n\n";
-                        break;
-
-                    case "Linux": //Unix/Linux OS
-                        $cmd_str_1 = "nscd -I hosts";
-                        $responsetxt_1 = exec($cmd_str_1);
-                        $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_1." -> ".$responsetxt_1);
-                        echo "Unix/Linux OS -> ".$cmd_str_1." -> ".$responsetxt_1."\n\n";
-
-                        $cmd_str_2 = "dnsmasq restart";
-                        $responsetxt_2 = exec($cmd_str_2);
-                        $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_2." -> ".$responsetxt_2);
-                        echo "Unix/Linux OS -> ".$cmd_str_2." -> ".$responsetxt_2."\n\n";
-
-                        $cmd_str_3 = "rndc restart";
-                        $responsetxt_3 = exec($cmd_str_3);
-                        $log->LogInfo($MessageReference."Unix/Linux OS -> ".$cmd_str_3." -> ".$responsetxt_3);
-                        echo "Unix/Linux OS -> ".$cmd_str_3." -> ".$responsetxt_3."\n\n";
-                        break;
-
-                    case "Solaris":
-                    case "BSD":
-                    case "Unknown": //Unknown
-                        $log->LogInfo($MessageReference." | Unable to flush DNS");
-                        $log->LogWarn($MessageReference." | Unable to flush DNS");
-                        echo "Unable to flush DNS \n\n";
-                        break;
-                }
-                sleep(60);
-
-            }
-            if ($count > 3) {
-                echo "=================    Three (3) retries are done - please contact DHL Support Team       ====================== \n\n";
-                $log->LogInfo($MessageReference." | Total time taken to process request and respond back to client | ".StopWatch::elapsed());
-                echo "Total time taken to process request and respond back to client | ".StopWatch::elapsed()."\n";
-                $log->LogInfo($MessageReference." | END DHLClient");
-                exit();
-            } else {
-                $log->LogInfo(" | RETRY =========> ".($count));
-                echo "\nRETRY =========> ".($count)."\n";
-
-                goto A;
-            }
-        } else {}
-        return true;
+        $xml=$result;
+        $resultCall = new PickupResponse();
+        $resultCall->initFromXML($xml);
+        $bookingNumber=$resultCall->ConfirmationNumber;
+        return $bookingNumber;
 
     }
 
