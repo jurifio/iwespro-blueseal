@@ -484,22 +484,10 @@
         <bs-toolbar-button
                 data-remote="bs.productmanage.correlation.insert"
         ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.correlation.modify"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.correlation.delete"
-        ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione  Look">
         <bs-toolbar-button
                 data-remote="bs.productmanage.look.insert"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.look.modify"
-        ></bs-toolbar-button>
-        <bs-toolbar-button
-                data-remote="bs.productmanage.look.delete"
         ></bs-toolbar-button>
     </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Gestione Magazzini">
