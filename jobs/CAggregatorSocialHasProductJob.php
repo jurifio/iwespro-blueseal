@@ -57,15 +57,38 @@ class CAggregatorSocialHasProductJob extends ACronJob
                             $this->report('CAggregatorSocialHasProductJob','Working ' . $marketplace->name,'');
                         if($marketplaceAccount->config['shopId']!=44) {
                             $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
-                                shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId in (6,15,11) and shp.shopId =' . $marketplaceAccount->config['shopId'] . ' ) UNION
-(select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId from
+                                shp.shopId as shopId, if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from Product p join ShopHasProduct shp on p.id=shp.productId
+ and p.productVariantId=shp.productVariantId   where p.qty > 0  and shp.shopId =' . $marketplaceAccount->config['shopId'] . ' ) UNION
+(select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId,if((p2.id, p2.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")  AND 
+ if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\' from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and p2.productStatusId in (6,15,11) and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . ')';
+ and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and  AND 
+ 
+ if((p2.id, p2.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'  and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . ')';
                         }else{
                             $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
-                                shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId in (6,15,11) and shp.shopId in(1,58,51,61)';
+                                shp.shopId as shopId,if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from Product p join ShopHasProduct shp on p.id=shp.productId
+ and p.productVariantId=shp.productVariantId where p.qty > 0 and  AND 
+ 
+ if((p.id, p.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'  and shp.shopId in(1,58,51,61)';
                         }
                             $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($products as $product) {
