@@ -56,34 +56,40 @@ class CAggregatorSocialHasProductJob extends ACronJob
                         if ($marketplaceAccount->isActive == 1) {
                             $this->report('CAggregatorSocialHasProductJob','Working ' . $marketplace->name,'');
                         if($marketplaceAccount->config['shopId']!=44) {
-                            $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
+
+                            $sql='(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId, if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId   where p.qty > 0  and shp.shopId =' . $marketplaceAccount->config['shopId'] . ' ) UNION
-(select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId,if((p2.id, p2.productVariantId) IN (SELECT
-                                                              ProductHasProductPhoto.productId,
-                                                              ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), "sì", "no")  AND 
+ and p.productVariantId=shp.productVariantId   where p.qty > 0 AND 
  if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\' from
+                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'
+ 
+  and shp.shopId =' . $marketplaceAccount->config['shopId'] . ') UNION
+(select p2.id as productId, p2.productVariantId as productVariantId, p2.qty as qty, shp2.shopIdDestination as shopId,if((p2.id, p2.productVariantId) IN (SELECT
+                                                              ProductHasProductPhoto.productId,
+                                                              ProductHasProductPhoto.productVariantId
+                                                            FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where p2.qty > 0 and  AND 
+ and p2.productVariantId=shp2.productVariantId where p2.qty > 0 AND 
  
  if((p2.id, p2.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'  and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . ')';
+                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'
+  and shp2.shopIdDestination =' . $marketplaceAccount->config['shopId'] . ')';
+
+
                         }else{
                             $sql = '(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId,if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0 and  AND 
+ and p.productVariantId=shp.productVariantId where p.qty > 0 and  
  
  if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
