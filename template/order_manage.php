@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
     <?php include "parts/head.php" ?>
@@ -132,8 +131,7 @@
                                             <span><strong>Telefono: </strong> <?php echo isset($order->user->userDetails->phone) ? $order->user->userDetails->phone : '---' ?></span><br>
                                             <span><strong>Dovuto: </strong> <?php echo $order->netTotal ?></span><br>
                                             <span><strong>Pagato: </strong> <?php echo isset($order->paidAmount) ? $order->paidAmount : 0 ?></span><br>
-                                            <span><strong>Metodo
-                                                    Pagamento: </strong> <?php echo $order->orderPaymentMethod->name ?></span>
+                                            <span><strong>Metodo Pagamento: </strong> <?php echo $order->orderPaymentMethod->name ?></span>
                                         </order>
                                     </div>
                                 </div>
