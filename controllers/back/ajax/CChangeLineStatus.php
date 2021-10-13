@@ -7,6 +7,7 @@ use bamboo\core\exceptions\BambooException;
 use bamboo\domain\entities\CDirtySku;
 use bamboo\domain\entities\COrder;
 use bamboo\domain\entities\COrderLine;
+use bamboo\domain\repositories\CEmailRepo;
 use bamboo\domain\repositories\COrderLineRepo;
 use bamboo\offline\productsync\import\alducadaosta\CAlducadaostaOrderAPI;
 use bamboo\offline\productsync\import\edstema\CEdsTemaOrderApi;
@@ -41,6 +42,19 @@ class CChangeLineStatus extends AAjaxController
 
 
             $newActive = $line->orderLineStatus->isActive;
+            if ($line->status == "ORD_FRND_SNDING" && $line->shopId==1) {
+                /** @var CEmailRepo $emailRepo */
+                $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                $res = $emailRepo->newMail( 'noreply@iwes.pro', ['amministrazione@iwes.it'], [], [],
+                    'Ordine '.$line->id.'-'.$line->orderId.'Inoltrato allo Shop',
+                        'Ordine inviato allo shop per l\'accettazione e la preparazione dei documenti e del pacco',
+                    '',
+                    null,
+                null,
+                'MailGun',
+                false,
+                null);
+            }
 
             if ($line->status == "ORD_WAIT") {
                 //Value for api
