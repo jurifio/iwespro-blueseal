@@ -62,7 +62,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId   where p.qty > 0 AND 
+ and p.productVariantId=shp.productVariantId   where p.qty > 0 AND p.productSeasonId > 34 and 
  if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
@@ -74,7 +74,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from
  Product p2 join ProductHasShopDestination shp2 on p2.id=shp2.productId
- and p2.productVariantId=shp2.productVariantId where p2.qty > 0 AND 
+ and p2.productVariantId=shp2.productVariantId where p2.qty > 0 AND p2.productSeasonId > 34 AND 
  
  if((p2.id, p2.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
@@ -89,7 +89,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
                                                             FROM ProductHasProductPhoto), "sì", "no")  AS hasPhotos from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0 and  
+ and p.productVariantId=shp.productVariantId where p.qty > 0 AND p.productSeasonId > 34 and  
  
  if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
@@ -212,7 +212,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                                                                             
  and p.productVariantId=shp.productVariantId
 join ShopHasProduct sp on p.id=sp.productId and p.productVariantId=sp.productVariantId
-where  shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
+where p.productSeasonId > 34 and   shp.aggregatorHasShopId =' . $marketplaceAccount->config['aggregatorHasShopId'];
                             $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($products as $product) {
                                 $this->report('CAggregatorSocialHasProductJob','Start Working Product ' . $product['productId'] . '-' . $product['productVariantId'],$marketplaceAccount->config['aggregatorHasShopId']);
