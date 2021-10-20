@@ -55,8 +55,13 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
             foreach($res as $result){
                 $this->report('CAlignNewStockFromDirtySkuJob',$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId']);
                                 $sku = $productSkuRepo->findOneBy(['productId' => $result['productId'],'productVariantId' => $result['productVariantId'],'productSizeId' => $result['productSizeId'],'shopId' => $result['shopId']]);
-                                $sku->stockQty = $result['qty'];
-                                $sku->update();
+                                if($sku) {
+                                    $sku->stockQty = $result['qty'];
+                                    $sku->update();
+                                }else{
+                                    $this->report('CAlignNewStockFromDirtySkuJob','jump Align Quantity'.$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId'],'');
+                                    continue;
+                                }
                             }
 
         }catch(\Throwable $e){
