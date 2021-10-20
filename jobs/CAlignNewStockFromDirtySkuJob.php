@@ -47,6 +47,7 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
     {
         $res = "";
         try {
+            $productRepo=\Monkey::app()->repoFactory->create('Product');
             $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
             $sql='select p.id as productId, p.productVariantId as productVariantId, ds.qty as qty, ds.productSizeId as productSizeId,
                                 shp.shopId as shopId from Product p join DirtyProduct shp on p.id=shp.productId
@@ -54,15 +55,22 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
             $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach($res as $result){
                 $this->report('CAlignNewStockFromDirtySkuJob',$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId']);
-                                $sku = $productSkuRepo->findOneBy(['productId' => $result['productId'],'productVariantId' => $result['productVariantId'],'productSizeId' => $result['productSizeId'],'shopId' => $result['shopId']]);
-                                if($sku) {
-                                    $sku->stockQty = $result['qty'];
-                                    $sku->update();
-                                }else{
-                                    $this->report('CAlignNewStockFromDirtySkuJob','jump Align Quantity'.$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId'],'');
-                                    continue;
-                                }
-                            }
+                $sku = $productSkuRepo->findOneBy(['productId' => $result['productId'],'productVariantId' => $result['productVariantId'],'productSizeId' => $result['productSizeId'],'shopId' => $result['shopId']]);
+                if($sku) {
+                    $sku->stockQty = $result['qty'];
+                    $sku->update();
+                }else{
+                    $this->report('CAlignNewStockFromDirtySkuJob','jump Align Quantity'.$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId'],'');
+                    continue;
+                }
+            }
+            $sqlSku='select productId, productVariantId,sum(stockQty) as qty from ProductSku group by productId,productVariantId';
+            $resProduct=\Monkey::app()->dbAdapter->query($sqlSku,[])->fetchAll();
+            foreach($resProduct as $resultProduct){
+                $product=$productRepo->findOneBy(['id'=>$resultProduct['productId'],'productVariantId'=>$resultProduct['productVariantId']]);
+                $product->qty=$resultProduct['qty'];
+                $product->update();
+            }
 
         }catch(\Throwable $e){
             $this->report('CAlignNewStockFromDirtySkuJob','Error Align Quantity'.$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId'],$e->getMessage().'-'.$e->getLine());
