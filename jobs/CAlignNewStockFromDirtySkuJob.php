@@ -60,7 +60,7 @@ class CAlignNewStockFromDirtySkuJob extends ACronJob
                             }
 
         }catch(\Throwable $e){
-            $this->report('CAlignNewStockFromDirtySkuJob','Error Align Quantity',$e->getMessage().'-'.$e->getLine());
+            $this->report('CAlignNewStockFromDirtySkuJob','Error Align Quantity'.$result['productId'].'-'.$result['productVariantId'].'-'.$result['productSizeId'],$e->getMessage().'-'.$e->getLine());
         }
 
 
