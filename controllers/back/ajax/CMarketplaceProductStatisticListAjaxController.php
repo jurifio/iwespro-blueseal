@@ -51,6 +51,7 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
         $response ['recordsFiltered'] = $count;
         $response['queryParams'] = $queryParameters;
         $response ['data'] = [];
+        $marketplaceRepo=\Monkey::app()->repoFactory->create('Marketplace');
 
         foreach ($prodottiMarks as $values) {
 
@@ -89,7 +90,8 @@ class CMarketplaceProductStatisticListAjaxController extends AMarketplaceAccount
             $row['isToWork'] = $prodottiMark->isToWork ? 'sì' : 'no';
             $row['hasError'] = $prodottiMark->hasError ? 'sì' : 'no';
             $row['isDeleted'] = $prodottiMark->isDeleted ? 'sì' : 'no';
-            $row['marketplaceAccountName'] = $prodottiMark->marketplaceAccount->marketplace->name;
+            $marketplace=$marketplaceRepo->findOneBy(['id'=>$prodottiMark->marketplaceAccount->marketplaceId]);
+            $row['marketplaceAccountName'] = $marketplace->name;
             $row['creationDate'] = $val->creationDate;
             $row['categories'] = $val->getLocalizedProductCategories("<br>");
             $row['conversions'] = $values['conversions'];
