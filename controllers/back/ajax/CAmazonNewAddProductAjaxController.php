@@ -113,7 +113,11 @@ class CAmazonNewAddProductAjaxController extends AAjaxController
         $feedHandle = @fopen('php://temp', 'rw+');
         fwrite($feedHandle, $content);
         $dateNow=(new \DateTime())->format('Y-m-d_His');
-        $myfile = fopen("/media/sf_sites/iwespro/temp/".$typeFeed."_".$messageId."_".$dateNow.".xml", "w");
+        if(ENV=='dev') {
+            $myfile = fopen("/media/sf_sites/iwespro/temp/" . $typeFeed . "_" . $messageId . "_" . $dateNow . ".xml","w");
+        }else{
+            $myfile = fopen("/home/iwespro/public_html/temp/" . $typeFeed . "_" . $messageId . "_" . $dateNow . ".xml","w");
+        }
         fwrite($myfile, $content);
         fclose($myfile);
         rewind($feedHandle);
