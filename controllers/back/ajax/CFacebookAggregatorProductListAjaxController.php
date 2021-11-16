@@ -115,6 +115,7 @@ class CFacebookAggregatorProductListAjaxController extends AAjaxController
             /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct */
             $php = $mahpRepo->findOneBy($row);
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
+            $row['DT_RowId'] = $php->productId . '-' . $php->productVariantId;
             $associations = '';
             $img='';
 
