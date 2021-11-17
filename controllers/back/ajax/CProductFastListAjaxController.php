@@ -323,7 +323,7 @@ class CProductFastListAjaxController extends AAjaxController
             $row['friendValues'] = implode('<br />',$row['friendValues']);
             $row['friendSalePrices'] = implode('<br />',$row['friendSalePrices']);
 
-            $row['colorNameManufacturer'] = $val->productVariant->description;
+            $row['colorNameManufacturer'] = ($val->productVariant->description=='')? $val->productVariant->name : $val->productVariant->description;
 
             $row['isOnSale'] = $val->isOnSale();
             $row['creationDate'] = (new \DateTime($val->creationDate))->format('d-m-Y H:i');
