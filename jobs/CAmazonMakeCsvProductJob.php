@@ -1,21 +1,27 @@
 <?php
-namespace bamboo\controllers\back\ajax;
+
+namespace bamboo\blueseal\jobs;
+
+use bamboo\blueseal\marketplace\prestashop\CPrestashopProduct;
+use bamboo\core\base\CObjectCollection;
+use bamboo\core\jobs\ACronJob;
+use bamboo\domain\entities\CMarketplaceHasShop;
+use bamboo\domain\entities\CPrestashopHasProduct;
+use bamboo\domain\entities\CProduct;
+use bamboo\domain\entities\CProductSku;
+use PDO;
 use bamboo\amazon\business\builders\AAmazonFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonImageFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonInventoryFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonPricingFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonProductFeedBuilder;
 use bamboo\amazon\business\builders\CAmazonRelationshipFeedBuilder;
-use bamboo\domain\entities\CMarketplaceAccount;
+use bamboo\core\application\AApplication;
 use bamboo\domain\entities\CMarketplaceAccountHasProduct;
-use bamboo\domain\entities\CProduct;
-use bamboo\domain\entities\CProductSku;
-use bamboo\domain\repositories\CMarketplaceAccountHasProductRepo;
-use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 
 /**
- * Class CAmazonNewAddProductAjaxControllerController
- * @package bamboo\controllers\back\ajax
+ * Class CAmazonAddProductJob
+ * @package bamboo\blueseal\jobs
  *
  * @author Iwes Team <it@iwes.it>
  *
@@ -26,64 +32,72 @@ use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
  * @date 11/05/2020
  * @since 1.0
  */
-class CAmazonNewAddProductAjaxController extends AAjaxController
+class CAmazonMakeCsvProductJob extends ACronJob
 {
 
-
-    public function post()
+    /**
+     * @param null $args
+     */
+    public function run($args = null)
     {
-        $xml = '';
-
-        $shopActive = \Monkey::app()->repoFactory->create('Shop')->findBy(['hasEcommerce' => '1']);
-
-        $phpRepo = \Monkey::app()->repoFactory->create('PrestashopHasProduct');
-        $addressBookRepo = \Monkey::app()->repoFactory->create('AddressBook');
-        $shopRepo = \Monkey::app()->repoFactory->create('Shop');
-        $productRepo = \Monkey::app()->repoFactory->create('Product');
-        $productSizeGroupRepo = \Monkey::app()->repoFactory->create('ProductSizeGroup');
-        $productBrandRepo = \Monkey::app()->repoFactory->create('ProductBrand');
-        $productSizeGroupHasProductSizeRepo = \Monkey::app()->repoFactory->create('ProductSizeGroupHasProductSize');
-        $productSizeRepo = \Monkey::app()->repoFactory->create('ProductSize');
-        $productSkuRepo = \Monkey::app()->repoFactory->create('ProductSku');
-        $productEanRepo = \Monkey::app()->repoFactory->create('ProductEan');
-        $productInMarketplaceRepo = \Monkey::app()->repoFactory->create('PrestashopHasProductHasMarketplaceHasShop');
-        $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->findBy(['marketplaceId' => 4, 'id'=>42,'isActive' => 1]);
-        foreach ($marketplaceAccounts as $marketplaceAccount) {
-            $messageId=1;
-            try{
-            $goods = $productInMarketplaceRepo->findBy(['isPublished' => 2,'marketplaceHasShopId' => $marketplaceAccount->config['marketplaceHasShopId']]);
-
-            $shop = $shopRepo->findOneBy(['id' => $marketplaceAccount->config['shopId']]);
-            $addressBook = $addressBookRepo->findOneBy(['id' => $shop->billingAddressBookId]);
-            foreach ($goods as $good) {
-                $this->prepareSkus($good,$marketplaceAccount);
-            }
-            $productFeed="productFeed";
-            $product = new CAmazonProductFeedBuilder($this->app);
-            $this->prepareAndSend($marketplaceAccount,$product,$goods,$productFeed,$messageId);
-            $inventoryFeed="inventoryFeed";
-            $inventary = new CAmazonInventoryFeedBuilder($this->app);
-            $this->prepareAndSend($marketplaceAccount,$inventary,$goods,$inventoryFeed,$messageId);
-            $pricingFeed = "pricingFeed";
-            $pricing = new CAmazonPricingFeedBuilder($this->app);
-            $this->prepareAndSend($marketplaceAccount,$pricing,$goods,$pricingFeed,$messageId);
-            $imageFeed="imageFeed";
-            $image = new CAmazonImageFeedBuilder($this->app);
-            $this->prepareAndSend($marketplaceAccount,$image,$goods,$imageFeed,$messageId);
-            $relationshipFeed="relationshipFeed";
-            $relationship = new CAmazonRelationshipFeedBuilder($this->app);
-            $this->prepareAndSend($marketplaceAccount,$relationship,$goods,$relationshipFeed,$messageId);
-            $messageId++;
-        } catch
-        (\Throwable $e) {
-        \Monkey::app()->applicationLog('CAmazonAddProductJob','ERROR',$e->getLine(),$e->getMessage(),$e->getFile());
+        $this->addProductsInAmazonCsv();
+        \Monkey::app()->vendorLibraries->load('amazonMWS');
     }
 
-            return $messageId;
+    /**
+     * @throws \bamboo\core\exceptions\BambooDBALException
+     */
+    private function addProductsInAmazonCsv()
+    {
+        $sql = "SELECT 	marketplaceAccountId as id,
+						marketplaceId
+				FROM 	MarketplaceAccountHasProduct mahp, 
+						Marketplace m 
+				WHERE 	m.id = mahp.marketplaceId 
+					AND m.name = 'Amazon' and mahp.isToWork = 1
+					GROUP BY marketplaceId,
+					marketplaceAccountId";
 
+        $marketplaceAccounts = \Monkey::app()->repoFactory->create('MarketplaceAccount')->em()->findBySql($sql,[]);
+
+        foreach ($marketplaceAccounts as $marketplaceAccount) {
+            try {
+                $sql = "SELECT 	productId, 
+						productVariantId, 
+						marketplaceId,
+						marketplaceAccountId 
+				FROM 	MarketplaceAccountHasProduct mahp, 
+						Marketplace m 
+				WHERE 	m.id = mahp.marketplaceId 
+					AND m.name = 'Amazon' and mahp.isToWork = 1 and mahp.marketplaceAccountId = ?";
+                $res = \Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->em()->findBySql($sql,[$marketplaceAccount->id]);
+
+                foreach ($res as $re) {
+                    $this->prepareSkus($re);
+                }
+
+                $product = new CAmazonProductFeedBuilder($this->app);
+                $this->prepareAndSend($marketplaceAccount,$product,$res);
+
+                $inventary = new CAmazonInventoryFeedBuilder($this->app);
+                $this->prepareAndSend($marketplaceAccount,$inventary,$res);
+
+                $pricing = new CAmazonPricingFeedBuilder($this->app);
+                $this->prepareAndSend($marketplaceAccount,$pricing,$res);
+
+                $relationship = new CAmazonRelationshipFeedBuilder($this->app);
+                $this->prepareAndSend($marketplaceAccount,$relationship,$res);
+
+                $image = new CAmazonImageFeedBuilder($this->app);
+                $this->prepareAndSend($marketplaceAccount,$image,$res);
+
+            } catch
+            (\Throwable $e) {
+                $this->report('CAmazonAddProductJob',$e->getMessage(),$e->getLine());
+            }
         }
     }
-    protected function prepareAndSend($marketplaceAccount, AAmazonFeedBuilder $builder,$products,$typeFeed,$messageId) {
+    protected function prepareAndSend($marketplaceAccount, AAmazonFeedBuilder $builder,$products) {
         \Monkey::app()->vendorLibraries->load('amazonMWS');
         $service = new \MarketplaceWebService_Client(
             $marketplaceAccount->config['awsAccessKeyId'],
@@ -92,15 +106,15 @@ class CAmazonNewAddProductAjaxController extends AAjaxController
             "BlueSeal",
             "1.01");
 
-        $content = $builder->prepare($marketplaceAccount,$products,false)->getRawBody();
+        $content = $builder->prepare($products,false)->getRawBody();
 
         $x = new \XMLWriter();
         $x->openMemory();
         $x->setIndent(false);
         $x->startDocument();
         $x->startElement('AmazonEnvelope');
-        $x->writeAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
         $x->writeAttribute("xsi:noNamespaceSchemaLocation","amzn-envelope.xsd");
+        $x->writeAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
         $x->startElement('Header');
         $x->writeElement('DocumentVersion','1.01');
         $x->writeElement('MerchantIdentifier',$marketplaceAccount->config['merchantIdentifier']);
@@ -112,19 +126,10 @@ class CAmazonNewAddProductAjaxController extends AAjaxController
         echo $content;
         $feedHandle = @fopen('php://temp', 'rw+');
         fwrite($feedHandle, $content);
-        $dateNow=(new \DateTime())->format('Y-m-d_His');
-        if(ENV=='dev') {
-            $myfile = fopen("/media/sf_sites/iwespro/temp/" . $typeFeed . "_" . $messageId . "_" . $dateNow . ".xml","w");
-        }else{
-            $myfile = fopen("/home/iwespro/public_html/temp/" . $typeFeed . "_" . $messageId . "_" . $dateNow . ".xml","w");
-        }
-        fwrite($myfile, $content);
-        fclose($myfile);
         rewind($feedHandle);
-        //$marketplaceIdList=explode(',',$marketplaceAccount->config['marketplaceIdList']);
         $parameters = array (
             'Merchant' => $marketplaceAccount->config['merchantIdentifier'],
-            'MarketplaceIdList' => ["Id" => 'APJ6JRA9NG5V4'],
+            'MarketplaceIdList' => ["Id" => $marketplaceAccount->config['marketplaceIdList']],
             'FeedType' => $builder->getFeedTypeName(),
             'FeedContent' => $feedHandle,
             'PurgeAndReplace' => false,
@@ -134,9 +139,7 @@ class CAmazonNewAddProductAjaxController extends AAjaxController
             $parameters['MWSAuthToken'] = $marketplaceAccount->config['MWSAuthToken']; // Optional]
         }
         rewind($feedHandle);
-
-
-    /*    $request = new \MarketplaceWebService_Model_SubmitFeedRequest($parameters);
+        $request = new \MarketplaceWebService_Model_SubmitFeedRequest($parameters);
 
         try {
             $response = $service->submitFeed($request);
@@ -205,15 +208,14 @@ class CAmazonNewAddProductAjaxController extends AAjaxController
             fclose($feedHandle);
             return false;
         }
-    */
         fclose($feedHandle);
-
         return true;
     }
-    public function prepareSkus(CPrestashopHasProductHasMarketplaceHasShop $prestashopHasProductHasMarketplaceHasShop, CMarketplaceAccount $marketplaceAccount)
+
+    public function prepareSkus(CMarketplaceAccountHasProduct $marketplaceAccountHasProduct)
     {
         $sizesDone = [];
-        foreach ($prestashopHasProductHasMarketplaceHasShop->product->productSku as $sku) {
+        foreach ($marketplaceAccountHasProduct->product->productSku as $sku) {
             if(empty($sku->ean)) {
                 \Monkey::app()->repoFactory->create('ProductSku')->assignNewEan($sku);
             }
@@ -221,8 +223,8 @@ class CAmazonNewAddProductAjaxController extends AAjaxController
             $marketSku->productSizeId = $sku->productSizeId;
             $marketSku->productId = $sku->productId;
             $marketSku->productVariantId = $sku->productVariantId;
-            $marketSku->marketplaceId = $marketplaceAccount->marketplaceId;
-            $marketSku->marketplaceAccountId = $marketplaceAccount->id;
+            $marketSku->marketplaceId = $marketplaceAccountHasProduct->marketplaceId;
+            $marketSku->marketplaceAccountId = $marketplaceAccountHasProduct->marketplaceAccountId;
             $existingMarket = $marketSku->em()->findOneBy($marketSku->getIds());
             if (is_null($existingMarket)) {
                 $sizesDone[$sku->productSizeId] = $sku->stockQty;
