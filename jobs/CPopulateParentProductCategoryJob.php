@@ -55,7 +55,7 @@ class CPopulateParentProductCategoryJob extends ACronJob
             $phpcRepo=\Monkey::app()->repoFactory->create('ProductHasProductCategory');
             $sql='SELECT php.productId as productId, php.productVariantId as productVariantId,php.productCategoryId as productCategoryId, pc.depth as depth from ProductHasProductCategory php 
 join Product p on p.id = php.productId and p.productVariantId = php.productVariantId join ShopHasProduct shp on php.productId=shp.productId and php.productVariantId =shp.productVariantId
-join ProductCategory pc on pc.id=php.productCategoryId where pc.depth >1  and shp.shopId=1';
+join ProductCategory pc on pc.id=php.productCategoryId where pc.depth >1  and p.productStatusId in (6,11)';
             $res=\Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
             foreach($res as $row) {
                 $productId=$row['productId'];
