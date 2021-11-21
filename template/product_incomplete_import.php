@@ -41,6 +41,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Codice</th>
+                                <th data-slug="dirtyProductId"
+                                    data-searchable="true"
+                                    data-orderable="true"
+                                    class="center">Codice Prodotto Sporco</th>
                                 <th data-slug="shop"
                                     data-searchable="true"
                                     data-orderable="true"

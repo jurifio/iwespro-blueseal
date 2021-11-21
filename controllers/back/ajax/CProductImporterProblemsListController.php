@@ -29,6 +29,7 @@ class CProductImporterProblemsListController extends AAjaxController
               `s`.`id`                                                         AS `shopId`,
               `pb`.`name`                                                      AS `brand`,
               `p`.`externalId`                                                 AS `externalId`,
+              dp.id as dirtyProductId,
               `ps`.`name`                                                      AS `status`,
               concat_ws('-',`psg`.`locale`, `psmg`.`name`)                     AS `sizeGroup`,
               `p`.`creationDate`                                               AS `creationDate`,
@@ -60,7 +61,7 @@ class CProductImporterProblemsListController extends AAjaxController
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
         $datatable->doAllTheThings(true);
-
+        $dirtyProductRepo=\Monkey::app()->repoFactory->create('DirtyProduct');
         $modifica = $bluesealBase . "prodotti/modifica";
         $shopHasProductRepo = Monkey::app()->repoFactory->create('ShopHasProduct');
         foreach ($datatable->getResponseSetData() as $key => $row) {
@@ -80,6 +81,8 @@ class CProductImporterProblemsListController extends AAjaxController
             $creationDate = new DateTime($shopHasProduct->product->creationDate);
 
             $row["DT_RowId"] = $shopHasProduct->printId();
+            $dirtyProduct=$dirtyProductRepo->findOneBy(['productId'=>$shopHasProduct->productId,'productVariantId'=>$shopHasProduct->productVariantId]);
+            $row["dirtyProductId"] = $dirtyProduct->id ?? '';
             $row["DT_RowClass"] = 'colore';
             $row["productCode"] = $this->app->getUser()->hasPermission('/admin/product/edit') ? '<span class="tools-spaced"><a href="' . $modifica . '?id=' . $shopHasProduct->productId . '&productVariantId=' . $shopHasProduct->productVariantId . '">' . $shopHasProduct->printId() . '</a></span>' : $shopHasProduct->product->printId();
             $row["shop"] = $shopHasProduct->shop->name;
