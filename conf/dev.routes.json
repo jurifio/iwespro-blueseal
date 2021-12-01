@@ -959,6 +959,20 @@
             ]
         },
         {
+            "pattern": "/blueseal/prodotti/incompleti/cartechini/importatori(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductImporterCartechiniController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
+        },
+        {
             "pattern": "/blueseal/prodotti/brand(/)?",
             "behaviour": {
                 "ctrl": "\\bamboo\\blueseal\\controllers\\CBrandListController"

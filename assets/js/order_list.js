@@ -210,6 +210,15 @@ function openTrackGlsDelivery(trackingNumber){
         "height=768,width=1024,modal=yes,alwaysRaised=yes");
 
 }
+function openTrackDhlDelivery(trackingNumber){
+
+    let track=trackingNumber;
+    let url='https://www.dhl.com/it-it/home/tracking/tracking-express.html?submit=1&tracking-id='+track;
+    window.open(
+        url, "Dhl Tracking",
+        "height=768,width=1024,modal=yes,alwaysRaised=yes");
+
+}
 function reGenerate(trackingNumber){
 
     let track=trackingNumber;
