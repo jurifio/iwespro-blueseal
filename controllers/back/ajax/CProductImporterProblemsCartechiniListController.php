@@ -59,7 +59,7 @@ class CProductImporterProblemsCartechiniListController extends AAjaxController
                AND ((`ds`.`status` not in ('ok', 'exclude') ) OR ds.status IS NULL )
 and     `ds`.`shopId`=1
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
-            HAVING (sum(`ds`.`qty`) > 0)";
+           ";
 
         $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
         if (!empty($this->authorizedShops)) {
