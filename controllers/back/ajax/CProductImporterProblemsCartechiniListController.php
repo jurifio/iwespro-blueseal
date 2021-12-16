@@ -43,7 +43,7 @@ class CProductImporterProblemsCartechiniListController extends AAjaxController
               JOIN `ProductVariant` `pv` ON `pv`.`id` = `p`.`productVariantId`
               JOIN `ProductBrand` `pb` ON `p`.`productBrandId` = `pb`.`id`
               JOIN `ProductStatus` `ps` ON `p`.`productStatusId` = `ps`.`id`
-              JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId`) AND (`p`.`productVariantId` = `dp`.`productVariantId`)
+           left    JOIN `DirtyProduct` `dp` ON (`p`.`id` = `dp`.`productId`) AND (`p`.`productVariantId` = `dp`.`productVariantId`)
               JOIN `DirtySku` `ds` ON `dp`.`id` = `ds`.`dirtyProductId`
               JOIN `ShopHasProduct` `sp` ON (`dp`.`productId` = `sp`.`productId`)
                                               AND (`dp`.`productVariantId` = `sp`.`productVariantId`)
