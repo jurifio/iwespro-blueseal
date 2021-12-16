@@ -62,9 +62,9 @@ class CProductImporterProblemsCartechiniListController extends AAjaxController
            ";
 
         $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
-        if (!empty($this->authorizedShops)) {
+      /*  if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
-        }
+        }*/
         $datatable->doAllTheThings(true);
         $dirtyProductRepo=\Monkey::app()->repoFactory->create('DirtyProduct');
         $modifica = $bluesealBase . "prodotti/modifica";
