@@ -61,7 +61,7 @@ class CProductImporterProblemsCartechiniListController extends AAjaxController
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
            ";
 
-        $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId','categoryId'], $_GET, true);
+        $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
         if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
         }
