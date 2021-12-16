@@ -61,10 +61,10 @@ class CProductImporterProblemsCartechiniListController extends AAjaxController
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
            ";
 
-        $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId'], $_GET, true);
-      /*  if (!empty($this->authorizedShops)) {
+        $datatable = new CDataTables($query, ['productId', 'productVariantId', 'shopId','categoryId'], $_GET, true);
+        if (!empty($this->authorizedShops)) {
             $datatable->addCondition('shopId', $this->authorizedShops);
-        }*/
+        }
         $datatable->doAllTheThings(true);
         $dirtyProductRepo=\Monkey::app()->repoFactory->create('DirtyProduct');
         $modifica = $bluesealBase . "prodotti/modifica";
