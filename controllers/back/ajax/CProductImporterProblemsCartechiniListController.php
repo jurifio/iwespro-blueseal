@@ -56,8 +56,8 @@ class CProductImporterProblemsCartechiniListController extends AAjaxController
             WHERE
             
                 (`s`.`importer` IS NOT NULL)
-              and `status` like '%Size Mismatch%'and 
-and     `ds`.`shopId`=1
+              and `status` like '%Size Mismatch%' and 
+     `ds`.`shopId`=1
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
            ";
 
