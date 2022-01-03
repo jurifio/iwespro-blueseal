@@ -41,6 +41,9 @@
                                 <th data-slug="productSizeGroups"
                                     data-searchable="true"
                                     data-orderable="true" class="center">Nome gruppo</th>
+                                <th data-slug="productCategoryGroups"
+                                    data-searchable="true"
+                                    data-orderable="true" class="center">Categorie Associate</th>
                             </tr>
                             </thead>
                             <tbody>
