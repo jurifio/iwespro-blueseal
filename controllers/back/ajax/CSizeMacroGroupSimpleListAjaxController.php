@@ -37,7 +37,7 @@ class CSizeMacroGroupSimpleListAjaxController extends AAjaxController
         $sql = "SELECT
                   psm.id,
                   psm.name,
-                  GROUP_CONCAT(distinct(psg.id)) as productSizeGroups,
+                  GROUP_CONCAT(distinct(psg.id) as productSizeGroups,
                  GROUP_CONCAT(distinct(psmghpc.productCategoryId)) as productCategoryGroups
                 FROM ProductSizeMacroGroup psm
                 LEFT JOIN ProductSizeGroup psg ON psm.id = psg.productSizeMacroGroupId        
@@ -80,20 +80,20 @@ class CSizeMacroGroupSimpleListAjaxController extends AAjaxController
                     FROM ProductCategory t2
                     WHERE t2.lft<t0.lft AND t2.rght>t0.rght
                     ORDER BY t2.lft) ancestors
+
                     FROM ProductCategory  t0 where id=' . $singleProductCategory->productCategoryId . ' GROUP BY t0.slug';
                     $res_category = \Monkey::app()->dbAdapter->query($sqlCategory,[])->fetchAll();
 
                     foreach ($res_category as $category) {
                         $categoryName = str_replace(',','/',($category['ancestors'] . ',' . $category['slug']));
-                        $collectCategory.=$categoryName;
+
                     }
 
-
-
-
                     $row['productCategoryGroups'][] = '<br>'.$categoryName;
+
                     //$row['productCategoryGroups'][] = " ,".$singleProductCategory->productCategoryId;
                 }
+
             } else {
                 $row['productCategoryGroups'] = "---";
             }
