@@ -5,7 +5,7 @@ use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 
 /**
- * Class CCarrierCountryListController
+ * Class CCountryListController
  * @package bamboo\blueseal\controllers
  *
  * @author Iwes Team <it@iwes.it>
@@ -17,15 +17,15 @@ use bamboo\core\theming\CRestrictedAccessWidgetHelper;
  * @date 04/01/2022
  * @since 1.0
  */
-class CCarrierCountryListController extends ARestrictedAccessRootController
+class CCountryListController extends ARestrictedAccessRootController
 {
     protected $fallBack = "blueseal";
-    protected $pageSlug = "carrier_country_list";
+    protected $pageSlug = "country_list";
     
     public function get()
     {
         $view = new VBase(array());
-        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/carrier_country_list.php');
+        $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/country_list.php');
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

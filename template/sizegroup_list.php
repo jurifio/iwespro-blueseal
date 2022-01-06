@@ -104,6 +104,16 @@
                 data-title="Crea Macrogruppo"
                 data-placement="bottom"
         ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-globe"
+                data-permission="/admin/content/add"
+                data-event="bs-update-size-grouplocale"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Gestisci Gruppo taglia per locale"
+                data-placement="bottom"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

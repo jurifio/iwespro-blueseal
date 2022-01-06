@@ -37,8 +37,8 @@ class CSizeMacroGroupSimpleListAjaxController extends AAjaxController
         $sql = "SELECT
                   psm.id,
                   psm.name,
-                  GROUP_CONCAT(distinct(psg.id) as productSizeGroups,
-                 GROUP_CONCAT(distinct(psmghpc.productCategoryId)) as productCategoryGroups
+                  GROUP_CONCAT(psg.id) as productSizeGroups,
+                 GROUP_CONCAT(psmghpc.productCategoryId) as productCategoryGroups
                 FROM ProductSizeMacroGroup psm
                 LEFT JOIN ProductSizeGroup psg ON psm.id = psg.productSizeMacroGroupId        
                 left join ProductSizeMacroGroupHasProductCategory psmghpc on psm.id = psmghpc.productSizeMacroGroupId            
