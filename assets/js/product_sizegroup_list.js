@@ -180,8 +180,8 @@
             var valueArray = [];
 
             var selKeys = [];
-            /* bsModal.addClass('modal-wide');
-             bsModal.addClass('modal-high');*/
+            bsModal.addClass('modal-wide');
+             bsModal.addClass('modal-high');
 
             Pace.ignore(function () {
                 $.ajax({
