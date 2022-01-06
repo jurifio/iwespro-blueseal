@@ -167,8 +167,7 @@
     $(document).on('bs-update-size-grouplocale', function () {
         let dataTable = $('.dataTable').DataTable();
         let selectedRows = dataTable.rows('.selected').data();
-        var countryarray='';
-        var valueArray=[];
+
 
         if (selectedRows.length === 1) {
             let bsModal = new $.bsModal('Gestisci locale per il Gruppo Taglia', {
@@ -178,37 +177,41 @@
                     '<div id="categoriesTree"></div'
             });
 
+            var valueArray = [];
+
             var selKeys = [];
-            $('#bsModal').addClass('modal-wide');
-            $('#bsModal').addClass('modal-high');
+            /* bsModal.addClass('modal-wide');
+             bsModal.addClass('modal-high');*/
 
+            Pace.ignore(function () {
+                $.ajax({
+                    method: 'GET',
+                    url: '/blueseal/xhr/GetTableContent',
+                    data: {
+                        table: 'Country'
 
-            $.ajax({
-                method: 'GET',
-                url: '/blueseal/xhr/GetTableContent',
-                data: {
-                    table: 'Country'
+                    },
+                    dataType: 'json'
+                }).done(function (res2) {
+                    var select = $('#country');
+                    if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
+                    select.selectize({
+                        valueField: 'id',
+                        labelField: 'name',
+                        maxItems: 250,
+                        searchField: 'name',
+                        options: res2,
+                        onItemAdd: function (val) {
+                            valueArray.push(val);
+                        }
 
-                },
-                dataType: 'json'
-            }).done(function (res2) {
-                var select = $('#country');
-                if (typeof (select[0].selectize) != 'undefined') select[0].selectize.destroy();
-                select.selectize({
-                    valueField: 'id',
-                    labelField: 'name',
-                    maxItems: 250,
-                    searchField: 'name',
-                    options: res2,
-                    onItemAdd: function(val) {
-                        valueArray.push(val);
-                    }
+                    });
 
                 });
-
             });
+            Pace.ignore(function () {
             var radioTree = $("#categoriesTree");
-            if (radioTree.length) {
+
                 radioTree.dynatree({
                     initAjax: {
                         url: "/blueseal/xhr/CategoryTreeController"
@@ -242,36 +245,48 @@
                         //$("#ProductCategoryId").val(JSON.stringify(selKeys));
                     }
                 });
+            });
+            var body = $('#bsModal .modal-body');
+            var cancelButton = $('#bsModal .modal-footer .btn-default');
+            var okButton = $('#bsModal .modal-footer .btn-success');
+                cancelButton.html("Annulla");
+                cancelButton.show();
+                okButton.html("Cambia").off().on('click', function () {
+                    Pace.ignore(function () {
+                    if (selKeys.length) {
 
-                bsModal.showCancelBtn();
-                bsModal.setOkEvent(function () {
-                    const sizeinfo = {
-                        action: 'updateCat',
-                        rows: selectedRows,
-                        newCategories: selKeys,
-                        newCountry: valueArray
-                    };
-                    $.ajax({
-                        method: 'put',
-                        url: '/blueseal/xhr/ProductSizeGroupUpdateLocale',
-                        data: sizeinfo,
-                    }).done(function (res) {
-                        bsModal.writeBody(res);
-                    }).fail(function (res) {
-                        bsModal.writeBody('Errore grave');
-                    }).always(function (res) {
-                        bsModal.setOkEvent(function () {
-                            //refresha solo tabella e non intera pagina
-                            $.refreshDataTable();
-                            bsModal.hide();
+                       $.ajax({
+                            type: "put",
+                            url: "/blueseal/xhr/ProductSizeGroupUpdateLocale",
+                            data: {
+                                id:selectedRows[0].id,
+                                newCategories: selKeys,
+                                newCountry: valueArray
+                            }
+                        }).done(function (res) {
+                            bsModal.writeBody(res);
+                        }).fail(function (res) {
+                            bsModal.writeBody('Errore grave');
+                        }).always(function (res) {
+                            bsModal.setOkEvent(function () {
+                                //refresha solo tabella e non intera pagina
+                                $.refreshDataTable();
+                                bsModal.hide();
+                            });
+                            bsModal.showOkBtn();
                         });
-                        bsModal.showOkBtn();
-                    });
+                    } else {
+                        body.html('Nessuna categoria selezionata.');
+                        okButton.html('Ok').off().on('click', function () {
+                            bsModal.modal('hide');
+                        });
+                        cancelButton.hide();
+                    }
                 });
 
+                });
 
-
-            }
         }
     });
 })();
+

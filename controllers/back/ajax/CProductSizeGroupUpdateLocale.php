@@ -1,6 +1,7 @@
 <?php
 
 namespace bamboo\controllers\back\ajax;
+use bamboo\domain\entities\CProductSizeGroup;
 
 /**
  * Class CProductSizeGroupUpdateLocale
@@ -23,7 +24,7 @@ class CProductSizeGroupUpdateLocale extends AAjaxController
         $cache = $this->app->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
         if (!$cache) {
             $cache = $this->app->categoryManager->categories()->treeToJson(1);
-            $this->app->cacheService->getCache("misc")->add("FullCategoryTreeAsJSON", $cache, 13000);
+            $this->app->cacheService->getCache("misc")->add("FullCategoryTreeAsJSON",$cache,13000);
         }
         return $cache;
     }
@@ -31,30 +32,24 @@ class CProductSizeGroupUpdateLocale extends AAjaxController
     public function put()
     {
         $data = $this->app->router->request()->getRequestData();
-        $action = '';
-        if (array_key_exists("action", $data)) $action = $data['action'];
-        $psgRepo=\Monkey::app()->repoFactory->create('ProductSizeGroup');
-        switch ($action) {
-            case "updateCat":
 
 
-                try {
+        try {
+            $id=$data['id'];
+
+            $country = implode(',',$data['newCountry']);
+            $category = implode(',',$data['newCategories']);
+            $psg = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneBy(['id' => $id]);
+            $psg->country = $country;
+            $psg->category = $category;
+            $psg->update();
 
 
-                       $psg=$psgRepo->findOneBy(['id'=>$data['id']]);
-                       $psg->country=implode(',',$data['newCountry']);
-                       $psg->category=implode(',',$data['newCategories']);
-                       $psg-update();
+        } catch (\Throwable $e) {
 
-
-
-                    \Monkey::app()->repoFactory->commit();
-                } catch (\Throwable $e) {
-                    \Monkey::app()->repoFactory->rollback();
-                    return "OOPS! Errore nella combinazione dei Gruppi taglia e dei Paesi<br />" . $e->getMessage();
-                }
-                return "I Gruppi Taglia  sono state aggiornati!";
-                break;
+            return "OOPS! Errore nella combinazione dei Gruppi taglia e dei Paesi<br />" . $e->getMessage();
         }
+        return "I Gruppi Taglia  sono state aggiornati!";
+
     }
 }
