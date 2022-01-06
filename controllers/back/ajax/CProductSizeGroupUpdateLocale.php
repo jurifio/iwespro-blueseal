@@ -35,11 +35,11 @@ class CProductSizeGroupUpdateLocale extends AAjaxController
 
 
         try {
-            $id=$data['id'];
+            $id= (int) $data['id'];
 
             $country = implode(',',$data['newCountry']);
             $category = implode(',',$data['newCategories']);
-            $psg = \Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneBy(['id' => $id]);
+            $psg =\Monkey::app()->repoFactory->create('ProductSizeGroup')->findOneBy(['id' => $id]);
             $psg->country = $country;
             $psg->category = $category;
             $psg->update();

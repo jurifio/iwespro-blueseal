@@ -259,7 +259,7 @@
                             type: "put",
                             url: "/blueseal/xhr/ProductSizeGroupUpdateLocale",
                             data: {
-                                id:selectedRows[0].id,
+                                id:selectedRows[0].idGroupSize,
                                 newCategories: selKeys,
                                 newCountry: valueArray
                             }
