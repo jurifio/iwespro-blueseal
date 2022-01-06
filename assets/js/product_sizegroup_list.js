@@ -270,7 +270,6 @@
                         }).always(function (res) {
                             bsModal.setOkEvent(function () {
                                 //refresha solo tabella e non intera pagina
-                                $.refreshDataTable();
                                 bsModal.hide();
                             });
                             bsModal.showOkBtn();
