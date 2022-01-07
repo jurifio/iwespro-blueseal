@@ -235,7 +235,7 @@
                      axis: "y"
                      });
                      },*/
-                    onSelect: function (select, node) {
+                    /*onSelect: function (select, node) {
                         // Display list of selected nodes
                         var selNodes = node.tree.getSelectedNodes();
                         // convert to title/key array
@@ -243,7 +243,13 @@
                             return node.data.key;
                         });
                         //$("#ProductCategoryId").val(JSON.stringify(selKeys));
-                    }
+                    }*/
+                        onSelect: function (isSelected, node) {
+                            node.visit(function (childNode) {
+                                childNode.select(isSelected);
+                            });
+                        }
+                    ,
                 });
             });
             var body = $('#bsModal .modal-body');
