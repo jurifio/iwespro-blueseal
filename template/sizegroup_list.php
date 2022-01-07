@@ -56,6 +56,13 @@
                                 <th data-slug="modifica"
                                     data-searchable="false"
                                     data-orderable="false" class="center">Modifica</th>
+                                <th data-slug="country"
+                                    data-searchable="false"
+                                    data-orderable="false" class="center">Paesi Associati</th>
+                                <th data-slug="category"
+                                    data-searchable="false"
+                                    data-visible="true"
+                                    data-orderable="false" class="center">Categorie Associate</th>
                             </tr>
                             </thead>
                             <tbody>
