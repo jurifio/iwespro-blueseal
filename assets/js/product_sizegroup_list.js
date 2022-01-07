@@ -248,6 +248,11 @@
                             node.visit(function (childNode) {
                                 childNode.select(isSelected);
                             });
+                            var selNodes = node.tree.getSelectedNodes();
+                            // convert to title/key array
+                            selKeys = $.map(selNodes, function (node) {
+                                return node.data.key;
+                            });
                         }
                     ,
                 });
