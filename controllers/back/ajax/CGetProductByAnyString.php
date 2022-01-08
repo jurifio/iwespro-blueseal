@@ -28,7 +28,9 @@ class CGetProductByAnyString extends AAjaxController
                          myView.productVariantId as productVariantId 
                   from (SELECT p.id, 
                                p.productVariantId, 
+                               p.externalId,
                                concat_ws(',',
+                                    concat(p.externalId),
                                   concat(pb.name),
                                   concat(p.id,'-', p.productVariantId), 
                                   concat(p.itemno, '#', v.name), 
@@ -61,6 +63,7 @@ class CGetProductByAnyString extends AAjaxController
             $row['brand'] = $v->productBrand->name;
             $row['publicUrl'] = $v->getProductUrl();
             $row['dummyUrl'] = $v->getDummyPictureUrl();
+            $row['externalId'] = $v->externalId;
             $availableSizes = [];
             foreach($v->productSku as $sku) {
                 if($sku->stockQty > 0) {

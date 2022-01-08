@@ -1349,7 +1349,7 @@ $.bsModal = function (header, params) {
             create: false,
             render: {
                 option: function (item, escape) {
-                    return '<div><span class="small">codice: </span><strong>' + escape(item.code) + '</strong><br /><span class="small">CPF e Variante: </span><strong>' + escape(item.cpfVar) + '</strong></span></div>';
+                    return '<div><span class="small">codice: </span><strong>' + escape(item.code) + '</strong><br /><span class="small">CPF e Variante: </span><strong>' + escape(item.cpfVar) + '</strong></span><br /><span class="small">ExternalId: </span><strong>' + escape(item.externalId) + '</strong></span></div>';
                 }
             },
             load: function (query, callback) {
