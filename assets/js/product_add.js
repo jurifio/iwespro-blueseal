@@ -181,9 +181,9 @@ $(document).ready(function() {
                     options: window.detailsStorage
                 });
                 var initVal = $(this).data('init-selection');
-                if(initVal != 'undefined' && initVal.lenght != 0) {
+               // if(initVal != 'undefined' && initVal.lenght != 0) {
                     sel[0].selectize.setValue(initVal);
-                }
+               // }
             });
         });
     });
