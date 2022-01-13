@@ -18,10 +18,11 @@ class CCategoryTreeController extends AAjaxController
 {
     public function get()
     {
+        ini_set('memory_limit', '2048M');
         $cache = \Monkey::app()->cacheService->getCache("misc")->get("FullCategoryTreeAsJSON");
         if (!$cache) {
             $cache = $this->app->categoryManager->categories()->treeToJson(1);
-            $this->app->cacheService->getCache("misc")->set("FullCategoryTreeAsJSON", $cache, 18000);
+            $this->app->cacheService->getCache("misc")->set("FullCategoryTreeAsJSON", $cache, 360000);
         }
         return $cache;
     }

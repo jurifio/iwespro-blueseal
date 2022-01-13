@@ -402,20 +402,20 @@ class CEbayNewAddProductJob extends ACronJob
 
                             $this->report('CEbayNewAddProductJob','Error api Call ' . $good->productId . '-' . $good->productVariantId,$xml);
                             /** @var CEmailRepo $emailRepo */
-                            $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                           /* $emailRepo = \Monkey::app()->repoFactory->create('Email');
                             $emailRepo->newMail('it@iwes.it', ['gianluca@iwes.it'],[],[],'CEbayNewAddProductJob Error', 'prodotto:'.$good->productId . '-' . $good->productVariantId.$xml, null, null, null, 'mailGun', false,null);
                             $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                            $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Error ', 'prodotto:'.$good->productId . '-' . $good->productVariantId.$xml, null, null, null, 'mailGun', false,null);
+                            $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Error ', 'prodotto:'.$good->productId . '-' . $good->productVariantId.$xml, null, null, null, 'mailGun', false,null);*/
 
 
 
                         }
                     } catch (\Throwable $e) {
                         /** @var CEmailRepo $emailRepo */
-                        $emailRepo = \Monkey::app()->repoFactory->create('Email');
+                        /*$emailRepo = \Monkey::app()->repoFactory->create('Email');
                         $emailRepo->newMail('it@iwes.it', ['gianluca@iwes.it'],[],[],'CEbayNewAddProductJob Error', $e->getLine() . '-' . $e->getMessage(), null, null, null, 'mailGun', false,null);
                         $emailRepo = \Monkey::app()->repoFactory->create('Email');
-                        $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Error ', $e->getLine() . '-' . $e->getMessage(), null, null, null, 'mailGun', false,null);
+                        $emailRepo->newMail('it@iwes.it', ['juri@iwes.it'],[],[],'CEbayNewAddProductJob Error ', $e->getLine() . '-' . $e->getMessage(), null, null, null, 'mailGun', false,null);*/
                         $this->report('CEbayNewAddProductJob','Error',$e->getLine() . '-' . $e->getMessage());
 
                     }

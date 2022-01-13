@@ -62,7 +62,7 @@
                 <div class="container-fluid container-fixed-lg bg-white">
                     <div class="panel panel-transparent">
                         <div class="panel-body">
-                            <table class="table table-striped" data-datatable-name="order_list"
+                            <table class="table table-striped" data-datatable-name="order_list" width="100%"
                                    data-controller="OrderListAjaxController"
                                    data-url="<?php echo $app->urlForBluesealXhr() ?>" id="orderTable"
                                    data-inner-setup="true"
@@ -84,12 +84,12 @@
                                     <th data-slug="user"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        class="center">Utente<br/>Seller Shop-Order
+                                        class="center">Utente<br/>Seller<br/>Shop-Order
                                     </th>
                                     <th data-slug="product"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        class="center">Dettaglio Ordine<br/>Supplier Shop-Order
+                                        class="center">Dettaglio Ordine<br/>Supplier<br/>Shop-Order
                                     </th>
                                     <th data-slug="dareavere"
                                         data-searchable="false"
@@ -117,16 +117,6 @@
                                         class="center">Marketplace<br/>
                                         Shop<br/>Order
                                     </th>
-                                    <th data-slug="notes"
-                                        data-searchable="true"
-                                        data-orderable="true"
-                                        class="center">Note
-                                    </th>
-                                    <th data-slug="userNote"
-                                        data-searchable="false"
-                                        data-orderable="false"
-                                        class="center">Note<br>Utente
-                                    </th>
                                     <th data-slug="shipmentId"
                                         data-searchable="true"
                                         data-orderable="true"
@@ -135,13 +125,23 @@
                                     <th data-slug="invoice"
                                         data-searchable="true"
                                         data-orderable="true"
-                                        class="center">Fatture...................<br/>Seller<br/>Supplier<br>Iwes su
+                                        class="center">Fatture<br/>Seller<br/>Supplier<br>Iwes su
                                         Seller</br>
                                     </th>
                                     <th data-slug="documents"
-                                        data-searchable="true"
+                                        data-searchable="false"
                                         data-orderable="false"
                                         class="center">Documenti
+                                    </th>
+                                    <th data-slug="notes"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Note
+                                    </th>
+                                    <th data-slug="userNote"
+                                        data-searchable="false"
+                                        data-orderable="false"
+                                        class="center">Note<br>Utente
                                     </th>
                                     <th data-slug="address"
                                         data-searchable="false"
