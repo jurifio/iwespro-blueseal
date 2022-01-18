@@ -39,14 +39,12 @@ class CChangeLineStatus extends AAjaxController
             /** @var COrderLine $line */
             $line = $repo->updateStatus($line,$ids[2]);
             $orderLine = $line;
-
-
             $newActive = $line->orderLineStatus->isActive;
             if ($line->status == "ORD_FRND_SNDING" && $line->shopId==1) {
                 /** @var CEmailRepo $emailRepo */
                 $emailRepo = \Monkey::app()->repoFactory->create('Email');
                 $res = $emailRepo->newMail( 'noreply@iwes.pro', ['amministrazione@iwes.it'], [], [],
-                    'Ordine '.$line->id.'-'.$line->orderId.'Inoltrato allo Shop',
+                    'Ordine '.$line->id.'-'.$line->orderId.'Inoltrato allo Shop <a href="https://www.cartechinishop.com/blueseal/friend/ordini">clicca qui</a>',
                         'Ordine inviato allo shop per l\'accettazione e la preparazione dei documenti e del pacco',
                     '',
                     null,
