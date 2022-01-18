@@ -44,7 +44,7 @@ class CChangeLineStatus extends AAjaxController
                 /** @var CEmailRepo $emailRepo */
                 $emailRepo = \Monkey::app()->repoFactory->create('Email');
                 $res = $emailRepo->newMail( 'noreply@iwes.pro', ['amministrazione@iwes.it'], [], [],
-                    'Ordine '.$line->id.'-'.$line->orderId.'Inoltrato allo Shop <a href="https://www.cartechinishop.com/blueseal/friend/ordini">clicca qui</a>',
+                    'Ordine '.$line->id.'-'.$line->orderId.' Inoltrato allo Shop <a href="https://www.cartechinishop.com/blueseal/friend/ordini">clicca qui</a>',
                         'Ordine inviato allo shop per l\'accettazione e la preparazione dei documenti e del pacco',
                     '',
                     null,
