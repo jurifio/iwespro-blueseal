@@ -177,9 +177,11 @@ class CShopConfigManageFileAjaxController extends AAjaxController
             $sftp->login($shop->ftpUser, $shop->ftpPassword);
               $sftp->uploadFile($nameLocalFile, $remotePath);
               unlink($nameLocalFile);
+            return 'ok';
         }
         catch (\Exception $e) {
             \Monkey::app()->applicationLog('CShopConfigManageFileAjaxController','Error','sftp Tranfer'. $myfile,$e->getMessage(),$e->getLine());
+        return 'ko';
         }
 
 
