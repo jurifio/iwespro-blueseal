@@ -502,6 +502,44 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_remotePath">Account</label>
+                                                    <input id="shop_remotePath" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_remotePath" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ftpUser">Account username</label>
+                                                    <input id="shop_ftpUser" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ftpUser" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ftpPassword">Account Password</label>
+                                                    <input id="shop_ftpPassword" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ftpPassword" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ftpHost">Host</label>
+                                                    <input id="shop_ftpHost" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ftpHost" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-1">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_dbHost">Host</label>
@@ -731,6 +769,16 @@
                 data-class="btn btn-default"
                 data-rel="tooltip"
                 data-title="Lista Utenti"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus-square"
+                data-permission="/admin/product/add"
+                data-event="bs.shop.cpanel.create"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi Hosting"
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button

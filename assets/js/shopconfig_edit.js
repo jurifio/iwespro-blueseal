@@ -11,6 +11,10 @@ $(document).on('bs.shop.save', function () {
     data.pastSeasonMultiplier = $('#shop_pastSeasonMultiplier').val();
     data.saleMultiplier = $('#shop_saleMultiplier').val();
     data.minReleasedProducts = $('#shop_minReleasedProducts').val();
+    data.ftpHost=$('#shop_ftpHost').val();
+    data.ftpUser=$('#shop_ftpUser').val();
+    data.ftpPassword=$('#shop_ftpPassword').val();
+    data.remotePath=$('#shop_remotePath').val();
     data.dbHost=$('#shop_dbHost').val();
     data.dbUsername=$('#shop_dbUsername').val();
     data.dbPassword=$('#shop_dbPassword').val();
@@ -258,6 +262,10 @@ var couponType=0;
             $('#shop_config_photoCost').val(res.config.photoCost);
             $('#shop_config_shootingTransportCost').val(res.config.shootingTransportCost);
             $('#shop_config_orderTransportCost').val(res.config.orderTransportCost);
+            $('#shop_remotePath').val(res.remotePath);
+            $('#shop_ftpHost').val(res.ftpHost);
+            $('#shop_ftpUser').val(res.ftpUser);
+            $('#shop_ftpPassword').val(res.ftpPassword);
             $('#shop_dbHost').val(res.dbHost);
             $('#shop_dbUsername').val(res.dbUsername);
             $('#shop_dbPassword').val(res.dbPassword);
@@ -674,6 +682,59 @@ function appendShipmentNotIban(data, containerSelector) {
         });
     });
 }
+$(document).on('bs.shop.cpanel.create', function () {
+    let idShop = $('#shopConfigShopId').val();
+    let ftpHost=$('#shop_ftpHost').val();
+    let ftpUser=$('#shop_ftpUser').val();
+    let ftpPassword = $('#shop_ftpPassword').val();
+    let emailUser=$('#shop_referrerEmails').val();
+    if(ftpHost=='null' || ftpUser==''|| ftpPassword==''){
+        new Alert({
+            type: "warning",
+            message: "Devi compilare i campi necessari "
+        }).open();
+        return false;
+    }else{
+    var modal = new $.bsModal('Crea Hosting', {
+        body: 'Con Questa Funzione creerai  l\'utente '+ftpUser +' nell\'hosting '+ftpHost+''
+    });
+    modal.addClass('modal-wide');
+    modal.addClass('modal-high');
+
+
+    modal.setOkEvent(function () {
+
+        let dataJson = {
+            idShop: idShop,
+            ftpHost:ftpHost,
+            ftpUser:ftpUser,
+            ftpPassword:ftpPassword,
+            email:emailUser
+        }
+        $.ajax({
+            url: '/blueseal/xhr/CreateCPanelAccountAjaxController',
+            method: 'POST',
+            data: dataJson
+        }).done(function (res) {
+
+                window.open(res,'_blank');
+                modal.setOkEvent(function () {
+                    modal.hide();
+                });
+
+
+
+        }).fail(function (res) {
+            modal.writeBody(res);
+
+        });
+
+        });
+    }
+
+
+
+});
 
 $(document).on('click', '#keygen', function(e){
     e.preventDefault();
