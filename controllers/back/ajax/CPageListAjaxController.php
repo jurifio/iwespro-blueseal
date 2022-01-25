@@ -141,7 +141,7 @@ class CPageListAjaxController extends AAjaxController
                 if(count($sidebarGroup)>0) {
                     $sidebarSectionId = $sidebarGroup->sidebarSectionId;
                     $sidebarSection = $sidebarSectionTranslationRepo->findOneBy(['sidebarSectionId'=>$sidebarSectionId,'langId'=>1]);
-                    if(count($sidebatSection)>0) {
+                    if(count($sidebarSection)>0) {
                         $sectionTitle = $sidebarSection->title;
                         $sidebarGroupTranslation = $sidebarGroupTranslationRepo->findOneBy(['sidebarGroupId' => $sb->sidebarGroupId,'langId' => 1]);
                         if(count($sidebarGroupTranslation)>0) {

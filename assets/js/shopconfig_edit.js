@@ -127,18 +127,113 @@ $(document).on('bs.shop.add.user', function () {
 
 */
 });
+$(document).on('bs.shop.read.conf', function () {
+    let idShop = $('#shopConfigShopId').val();
+    let shopConfigId = $('#shopConfigId').val();
+    var modal = new $.bsModal('Seleziona la configurazione dei moduli', {
+        body: '<label for="fileConf">Seleziona il tipo di configurazione</label><br />' +
+            '<select id="fileConf" name="fileConf" class="full-width selectize">' +
+            '<option value="backComponents">Componenti del  BackOffice</option>'+
+            '<option value="backRoutes">Rotte Controller BackOffice</option>'+
+            '<option value="backModule">Moduli BackOffice</option>'+
+            '<option value="clientAssets">Assets Client</option>'+
+            '<option value="clientComponents">Componenti Client</option>'+
+            '<option value="clientModule">Client Module</option>'+
+            '<option value="clientRoutes">Client Route</option>'+
+            '<option value="coreComponents">Componenti Core</option>'+
+            '<option value="coreModule">Moduli Core</option>'+
+            '<option value="ecommerceComponents">Componenti  Ecommerce Front</option>'+
+            '<option value="ecommerceModule">Moduli Ecommerce Front</option>'+
+            '<option value="ecommerceRoutes">Rotte  Controller Ecommerce Front</option>'+
+            '<option value="siteComponents">Componenti  Site Front</option>'+
+            '<option value="siteModule">Moduli Site Front</option>'+
+            '<option value="siteRoutes">Rotte  Controller Site Front</option>'+
+            '</select>'
+    });
+    modal.addClass('modal-wide');
+    modal.addClass('modal-high');
+    $(document).on('change', "select[name=\"fileConf\"]", function () {
+        Pace.ignore(function () {
+            $.ajax({
+                url: '/blueseal/xhr/ShopConfigManageFileAjaxController',
+                method:'get',
+                data: {
+                    idShop: idShop,
+                    shopConfigId: shopConfigId,
+                    fileConf:$('#fileConf').val()
+                },
+                dataType: 'json'
+            }).done(function (res) {
+                var rawField = JSON.stringify(res,null,'\t');
+
+
+
+
+               var bodyListForm='';
+                bodyListForm+='<form id="form-project" enctype="multipart/form-data" role="form" action="" method="post">';
+                bodyListForm+='<div class="container" style="padding-top:30px;">';
+                    bodyListForm+='<input type="hidden" id="idShop" name="isShop" value="'+idShop+'"/>';
+                    bodyListForm+='<input type="hidden" id="shopConfigId" name="shopConfigId" value="'+shopConfigId+'"/>';
+
+                    bodyListForm+='<div class="row"><div class="form-group from-group-default"><div class="col-md-2"><label for="json">json</label></div>';
+                    bodyListForm+='<div class="col-md-10">';
+                    bodyListForm+='<textarea id="json" autocomplete="off" type="text" cols="250" rows="50" class="form-control" name="json">'+rawField+'</textarea></div></div></div>';
+                bodyListForm+='</div>';
+                bodyListForm+='</form>';
+                modal.body.append(bodyListForm);
+            });
+        });
+    });
+
+    modal.setOkEvent(function () {
+        let dataJson={
+            idShop :$('#idShop').val(),
+            shopConfigId:$('#shopConfigId').val(),
+            fileConf:$('#fileConf').val(),
+            json:$('#json').val()
+        }
+        $.ajax({
+            url: '/blueseal/xhr/ShopConfigManageFileAjaxController',
+            method: 'POST',
+            data: dataJson
+        }).done(function (res) {
+
+            if(res=='ok') {
+                modal.writeBody('File Salvato Correttamente');
+                modal.setOkEvent(function () {
+                    modal.hide();
+                });
+            }else{
+                modal.writeBody('Json non Salvato');
+            }
+
+
+
+
+
+        }).fail(function (res) {
+            modal.writeBody(res);
+
+        });
+
+
+    });
+
+});
+
 
 
 
 
 (function ($) {
 var couponType=0;
-    let params = $.decodeGetStringFromUrl(window.location.href);
-    if (typeof params.id != 'undefined') {
+    let idShop = $('#shopConfigShopId').val();
+    let shopConfigId = $('#shopConfigId').val();
+    if (typeof idShop != 'undefined') {
         $.ajax({
             url: "/blueseal/xhr/ShopManage",
             data: {
-                id: params.id
+                id: idShop
             },
             dataType: "json"
         }).done(function (res) {
@@ -319,7 +414,7 @@ var couponType=0;
             bodyresibanner = bodyresibanner + '</table>';
             $('#rowCouponEvent').append(bodyresicoupon);
             $('#rowCouponType').append(bodyresicoupontype);
-            ('#rowBanner').append(bodyresibanner);
+            $('#rowBanner').append(bodyresibanner);
         });
     }
 })(jQuery);
