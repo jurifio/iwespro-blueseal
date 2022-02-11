@@ -500,6 +500,44 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_remotePath">Account</label>
+                                                    <input id="shop_remotePath" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_remotePath" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ftpUser">Account username</label>
+                                                    <input id="shop_ftpUser" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ftpUser" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ftpPassword">Account Password</label>
+                                                    <input id="shop_ftpPassword" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ftpPassword" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ftpHost">Host</label>
+                                                    <input id="shop_ftpHost" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ftpHost" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-1">
                                                 <div class="form-group form-group-default">
                                                     <label for="shop_dbHost">Host</label>
@@ -557,7 +595,154 @@
                                                            class="form-control" name="shop_importer" value=""/>
                                                 </div>
                                             </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_domainShop">dominio</label>
+                                                    <input id="shop_domainShop" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_domainShop" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <!--inizio api-->
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_instagramAccount">Account Instagram</label>
+                                                    <input id="shop_instagramAccount" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_instagramAccount" value=""/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_facebookAccount">Account Facebook</label>
+                                                    <input id="shop_facebookAccount" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_facebookAccount" value=""/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_appIdFacebook">App Id Facebook</label>
+                                                    <input id="shop_appIdFacebook" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_appIdFacebook" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_twitterAccount">Account Twitter</label>
+                                                    <input id="shop_twitterAccount" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_twitterAccount" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_pinterestAccount">Account Pinterest</label>
+                                                    <input id="shop_pinterestAccount" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_pinterestAccount" value=""/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_emailSupporto">Email Supporto</label>
+                                                    <input id="shop_emailSupporto" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_emailSupporto" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_directoryUtente">Directory Myuser</label>
+                                                    <input id="shop_directoryUtente" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_directoryUtente" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_nameApp">Nome App</label>
+                                                    <input id="shop_nameApp" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_nameApp" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_phone">Telefono Front Contatti</label>
+                                                    <input id="sshop_phone" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_phone" value=""/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_mobile">Mobile Front Contatti</label>
+                                                    <input id="shop_mobile" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_mobile" value=""/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_banca">Banca Bonifico Bancario</label>
+                                                    <input id="shop_banca" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_banca" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_bic">bic/swift Banca</label>
+                                                    <input id="shop_bic" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_bic" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_ibanBanca">IBAN Banca</label>
+                                                    <input id="shop_ibanBanca" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_ibanBanca" value=""/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_creditCardApi">Alias Api Cartasì</label>
+                                                    <input id="shop_creditCardApi" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_creditCardApi" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_creditCardSecret">Secret Api Cartasì</label>
+                                                    <input id="shop_creditCardSecret" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_creditCardSecret" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group form-group-default">
+                                                    <label for="shop_emailPaypal">Email Account Paypal </label>
+                                                    <input id="shop_emailPaypal" autocomplete="off" type="text"
+                                                           class="form-control" name="shop_emailPaypal" value=""/>
+                                                    <span class="bs red corner label"><i
+                                                                class="fa fa-asterisk"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- fine configurazioni api-->
                                     </div>
                                     <div id="modifyClientStat" class="tabcontent">
                                         <div class="row">

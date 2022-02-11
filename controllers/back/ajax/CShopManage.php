@@ -197,6 +197,30 @@ class CShopManage extends AAjaxController
                 $shop->billingEmails = $shopData['billingEmails'];
                 $shop->billingContact = $shopData['billingContact'];
                 $shop->importer = $shopData['importer'];
+                $shop->instagramAccount = $shopData['instagramAccount'];
+                $shop->facebookAccount = $shopData['facebookAccount'];
+                $shop->pinterestAccount = $shopData['pinterestAccount'];
+                $shop->twitterAccount = $shopData['twitterAccount'];
+                $shop->pinterestAccount = $shopData['pinterestAccount'];
+                $shop->appIdFacebook = $shopData['appIdFacebook'];
+                $shop->domainShop = $shopData['domainShop'];
+                $shop->emailSupporto = $shopData['emailSupporto'];
+                $shop->directoryUtente = $shopData['directoryUtente'];
+                $shop->nameApp = $shopData['nameApp'];
+                $shop->mobile = $shopData['mobile'];
+                $shop->phone = $shopData['phone'];
+                $shop->creditCardApi = $shopData['creditCardApi'];
+                $shop->creditCardSecret = $shopData['creditCardSecret'];
+                $shop->bic=$shopData['bic'];
+                $shop->banca = $shopData['banca'];
+                $shop->ibanBanca = $shopData['ibanBanca'];
+                $shop->emailPaypal = $shopData['emailPaypal'];
+                $shop->remotePath = $shopData['remotePath'];
+                $shop->ftpUser = $shopData['ftpUser'];
+                $shop->ftpPassword = $shopData['ftpPassword'];
+                $shop->ftpHost = $shopData['ftpHost'];
+
+
 
 
                 if ($this->app->getUser()->hasPermission('allShops')) {
