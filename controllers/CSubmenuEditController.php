@@ -23,7 +23,7 @@ class CSubmenuEditController extends ARestrictedAccessRootController
         $menuNavTrans = \Monkey::app()->repoFactory->create('MenuNavTranslation')->findBy(['menuNavTranslationId' => $menuNavId]);
         $menus=\Monkey::app()->repoFactory->create('Menu')->findAll();
         $menuNavType=\Monkey::app()->repoFactory->create('MenuNavType')->findAll();
-        $langs = $this->app->entityManagerFactory->create('Lang')->findAll();
+        $langs = $this->app->entityManagerFactory->create('Lang')->findBy(['isActive'=>1]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

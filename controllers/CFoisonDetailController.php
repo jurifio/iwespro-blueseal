@@ -61,7 +61,7 @@ class CFoisonDetailController extends ARestrictedAccessRootController
             'app' => new CRestrictedAccessWidgetHelper($this->app),
             'page' => $this->page,
             'foison' => $foison,
-            'langs' => \Monkey::app()->repoFactory->create('Lang')->findAll(),
+            'langs' => \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]),
             'country' => \Monkey::app()->repoFactory->create('Country')->findAll(),
             'userAddress' => $userAddress,
             'sidebar' => $this->sidebar->build(),

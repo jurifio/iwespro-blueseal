@@ -89,7 +89,7 @@ class CDetailTranslateListAjaxController extends AAjaxController
 
 	    if($this->app->router->request()->getRequestData('useTargetLang')) {
 		    $langs = [];
-		    foreach(\Monkey::app()->repoFactory->create('Lang')->findAll() as $lang) {
+		    foreach(\Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]) as $lang) {
 			    if($this->app->router->request()->getRequestData('useTargetLang') == $lang->id) {
 				    $langs[] = 'x';
 			    } else {

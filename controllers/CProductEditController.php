@@ -51,7 +51,7 @@ class CProductEditController extends CProductManageController
 		$brands = $em->findAll(null, 'order by `name`');
 
 		$em = $this->app->entityManagerFactory->create('Lang');
-		$langs = $em->findAll();
+		$langs = $em->findBy(['isActive'=>1]);
 
 		$em = $this->app->entityManagerFactory->create('ProductSeason');
 		$seasons = $em->findAll();

@@ -25,7 +25,7 @@ class CTagExclusiveAddController extends ARestrictedAccessRootController
         $view = new VBase(array());
         $view->setTemplatePath($this->app->rootPath().$this->app->cfg()->fetch('paths','blueseal').'/template/tag_exclusive_add.php');
 
-        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]);
         $shops  =  \Monkey::app()->repoFactory->create('Shop')->findAll();
 
 

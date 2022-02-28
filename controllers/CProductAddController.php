@@ -3,6 +3,7 @@ namespace bamboo\blueseal\controllers;
 
 use bamboo\ecommerce\views\VBase;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
+use bamboo\core\application\AApplication;
 
 /**
  * Class CProductAddController
@@ -24,7 +25,7 @@ class CProductAddController extends CProductManageController
     /**
      * @throws \Exception
      * @throws \bamboo\core\exceptions\RedPandaDBALException
-     * @throws \bamboo\core\exceptions\RedPandaORMException
+     * @throws \bamboo\core\exceptions\RedPandaORMException|\Throwable
      */
     public function get()
     {
@@ -46,7 +47,7 @@ class CProductAddController extends CProductManageController
         $brands = $em->findAll(null, 'order by `name`');
 
         $em = $this->app->entityManagerFactory->create('Lang');
-        $langs = $em->findAll();
+        $langs = $em->findBy(['isActive'=>1]);
 
         $em = $this->app->entityManagerFactory->create('ProductSeason');
         $seasons = $em->findAll();
@@ -84,9 +85,10 @@ class CProductAddController extends CProductManageController
         foreach($productStatuses as $status){
             $statuses[$status->code] = $status->name;
         }
+        $app=new CRestrictedAccessWidgetHelper($this->app);
 
 	    return $view->render([
-            'app' => new CRestrictedAccessWidgetHelper($this->app),
+            'app' => $app,
             'statuses' =>$statuses,
             'tags' =>$tag,
             'dummyUrl' => $dummyUrl,

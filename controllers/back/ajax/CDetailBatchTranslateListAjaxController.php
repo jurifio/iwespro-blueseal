@@ -71,7 +71,7 @@ class CDetailBatchTranslateListAjaxController extends AAjaxController
 
 
         $langs = [];
-        foreach (\Monkey::app()->repoFactory->create('Lang')->findAll() as $lang) {
+        foreach (\Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]) as $lang) {
             if ($langId == $lang->id) {
                 $langs[] = 'x';
             } else {

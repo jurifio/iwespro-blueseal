@@ -1,5 +1,6 @@
+<?php use bamboo\core\application\AApplication;?>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <?php include "parts/head.php" ?>
     <?php echo $app->getAssets(['ui','forms'], $page); ?>
@@ -8,6 +9,7 @@
 <body class="fixed-header">
 <?php include "parts/sidebar.php"; ?>
 <div class="page-container">
+
     <?php include "parts/header.php" ?>
     <?php include "parts/operations.php" ?>
 
@@ -33,8 +35,11 @@
                                     <div class="row">
                                         <div class="col-md-7">
                                             <div class="form-group form-group-default form-group-photo">
-                                                <img id="dummyPicture" align="center" class="img-responsive" src="">
-                                                <div style="display:none"><input id="dummyFile" type="file" value="" name="Product_dummyPicture" /></div>
+                                                <img id="dummyPicture" align="center" class="img-responsive"
+                                                     src="<?php echo $productEdit->getDummyPictureUrl() ?>">
+                                            </div>
+                                            <div style="display:none;"><input id="dummyFile" type="hidden" value=""
+                                                                              name="Product_dummyPicture"/></div>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
@@ -58,7 +63,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group form-group-default selectize-enabled">
                                                         <label for="Shop">Shop</label>
-                                                        <select class="full-width" multiple="multiple" placeholder="Seleziona il propietario" data-init-plugin="selectize"  title="" name="Shop_id" id="Shop" required>
+                                                        <select class="full-width" multiple="multiple" placeholder="Seleziona il proprietario" data-init-plugin="selectize"  title="" name="Shop_id" id="Shop" required>
                                                             <option></option>
                                                             <?php foreach ($shops as $shop): ?>
                                                             <option value="<?php echo $shop->id ?>"><?php echo $shop->title ?></option>

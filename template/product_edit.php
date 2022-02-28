@@ -60,7 +60,7 @@
                                                 <img id="dummyPicture" align="center" class="img-responsive"
                                                      src="<?php echo $productEdit->getDummyPictureUrl() ?>">
                                             </div>
-                                            <div style="display:none;"><input id="dummyFile" type="file" value=""
+                                            <div style="display:none;"><input id="dummyFile" type="hidden" value=""
                                                                               name="Product_dummyPicture"/></div>
                                         </div>
                                         <div class="col-md-5">
@@ -386,6 +386,19 @@
             data-placement="bottom"
         ></bs-toolbar-button>
     </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Immagini">
+    <bs-toolbar-button
+            data-tag="a"
+            data-icon="fa-image"
+            data-permission="allShops"
+            data-class="btn btn-default"
+            data-rel="tooltip"
+            data-title="Gestisci Immagini"
+            data-placement="bottom"
+            data-href="/blueseal/prodotti/photos?id=<?php echo $productEdit->id;?>&productVariantId=<?php echo $productEdit->productVariantId;?>"
+            data-target="blank"
+    ></bs-toolbar-button>
+    </bs-toolbar-group>
     <bs-toolbar-group data-group-label="Stato del prodotto">
         <bs-toolbar-select
                 data-tag="select"
@@ -400,6 +413,19 @@
                 data-event="bs.product.changestatus"
                 data-options='<?php echo json_encode($statuses); ?>'
         ></bs-toolbar-select>
+    </bs-toolbar-group>
+    <bs-toolbar-group data-group-label="Movimenti di Magazzino">
+        <bs-toolbar-button
+                data-tag="a"
+                data-icon="fa-plus"
+                data-permission="allShops"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Gestisci Magazzino"
+                data-placement="bottom"
+                data-href="/blueseal/prodotti/movimenti/inserisci"
+                data-target="blank"
+        ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>
 </body>

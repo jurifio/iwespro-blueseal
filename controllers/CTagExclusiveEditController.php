@@ -24,7 +24,7 @@ class CTagExclusiveEditController extends ARestrictedAccessRootController
         $shops  =  \Monkey::app()->repoFactory->create('Shop')->findAll();
         $storeHouses=\Monkey::app()->repoFactory->create('Storehouse')->findBy(['shopId'=>$tag->shopId]);
 
-        $langs = $this->app->entityManagerFactory->create('Lang')->findAll();
+        $langs = $this->app->entityManagerFactory->create('Lang')->findBy(['isActive'=>1]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

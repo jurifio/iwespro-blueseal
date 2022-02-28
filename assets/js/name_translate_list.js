@@ -63,6 +63,7 @@ $(document).on('bs.name.to.batch', function() {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Lang',
+            condition: {isActive: 1}
         },
         dataType: 'json'
     }).done(function (res) {

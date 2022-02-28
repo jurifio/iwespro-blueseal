@@ -47,7 +47,7 @@ class CCategoryManageController extends ARestrictedAccessRootController
             }
         }
         $em = $this->app->entityManagerFactory->create('Lang');
-        $langs = $em->findAll("","");
+        $langs = $em->findBy(["isActive"=>1]);
 
         $blueseal = $this->app->baseUrl().'/blueseal';
         $elenco_prodotti = $blueseal."/prodotti";

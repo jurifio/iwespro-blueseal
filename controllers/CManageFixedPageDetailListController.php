@@ -33,7 +33,7 @@ class CManageFixedPageDetailListController extends ARestrictedAccessRootControll
         $langId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('langId');
         $fixedPageTypeId = \Monkey::app()->router->getMatchedRoute()->getComputedFilter('fixedPageTypeId');
 
-        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]);
 
         /** @var CFixedPage $fixedPage */
         $fixedPage = \Monkey::app()->repoFactory->create('FixedPage')->findOneBy(['id'=>$id, 'langId'=>$langId, 'fixedPageTypeId'=>$fixedPageTypeId]);

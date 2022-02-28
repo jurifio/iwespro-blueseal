@@ -22,7 +22,7 @@ class CMenuEditController extends ARestrictedAccessRootController
         $menu = \Monkey::app()->repoFactory->create('Menu')->findOneBy(['id' => $menuId]);
         $menuTrans = \Monkey::app()->repoFactory->create('MenuTranslation')->findBy(['menuTranslationId' => $menuId]);
 
-        $langs = $this->app->entityManagerFactory->create('Lang')->findAll();
+        $langs = $this->app->entityManagerFactory->create('Lang')->findBy(['isActive'=>1]);
 
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),

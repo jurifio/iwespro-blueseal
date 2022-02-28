@@ -36,7 +36,7 @@ class CUserManageController extends ARestrictedAccessRootController
         return $view->render([
             'app' => new CRestrictedAccessWidgetHelper($this->app),
 	        'sources' => $sources,
-            'langs' => \Monkey::app()->repoFactory->create('Lang')->findAll(),
+            'langs' => \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]),
             'page' => $this->page,
             'sidebar' => $this->sidebar->build()
         ]);

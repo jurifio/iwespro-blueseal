@@ -38,7 +38,7 @@ class CDescriptionTranslateLangListController extends CDescriptionTranslateLangM
 
         $marketplaces = \Monkey::app()->repoFactory->create('Marketplace')->findAll();
         $brands = \Monkey::app()->repoFactory->create('ProductBrand')->findAll();
-        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]);
         $seasons = \Monkey::app()->repoFactory->create('ProductSeason')->findAll();
         $colors = \Monkey::app()->repoFactory->create('ProductColorGroup')->findAll();
 

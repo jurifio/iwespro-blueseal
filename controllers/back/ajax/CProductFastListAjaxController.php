@@ -214,8 +214,13 @@ class CProductFastListAjaxController extends AAjaxController
         foreach ($productStatuses as $status) {
             $statuses[$status->code] = $status->name;
         }
-
-        $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
+        $user = $this->app->getUser();
+        $allShops = $user->hasPermission('allShops');
+if($allShops) {
+    $modifica = $this->app->baseUrl(false) . "/blueseal/prodotti/modifica";
+}else{
+    $modifica = $this->app->baseUrl(false) . "/blueseal/friend/prodotti/modifica";
+}
         $okManage = $this->app->getUser()->hasPermission('/admin/product/edit');
         $productRepo = \Monkey::app()->repoFactory->create('Product');
 

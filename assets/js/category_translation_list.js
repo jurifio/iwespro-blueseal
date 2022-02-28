@@ -155,6 +155,7 @@ $(document).on('bs.categoryTranslation.modify', function () {
                 url: '/blueseal/xhr/GetTableContent',
                 data: {
                     table: 'Lang',
+                    condition: {isActive: 1}
 
                 },
                 dataType: 'json'
@@ -265,6 +266,7 @@ $(document).on('bs.categoryTranslation.add', function () {
         url: '/blueseal/xhr/GetTableContent',
         data: {
             table: 'Lang',
+            condition: {isActive: 1}
 
         },
         dataType: 'json'

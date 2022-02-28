@@ -14,6 +14,7 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
 use bamboo\core\base\CObjectCollection;
 use PDO;
 use PDOException;
+use Throwable;
 
 /**
  * Class CProductAddController
@@ -61,25 +62,18 @@ class CProductManageController extends ARestrictedAccessRootController
 
             /** UPDATE VARIANTE */
             $context = 'ProductVariant';
-	        $productVariant = $productEdit->productVariant;
-	        $productVariant->name = $post['ProductVariant_name'];
-	        $productVariant->description = $post['ProductVariant_description'];
-	        $productVariant->update();
+            $productVariant = $productEdit->productVariant;
+            $productVariant->name = $post['ProductVariant_name'];
+            $productVariant->description = $post['ProductVariant_description'];
+            $productVariant->update();
             //$variantId = $this->app->dbAdapter->update("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']], array("id" => $post['Product_productVariantId']));
 
             /** UPDATE PRODUCT */
 
             $context = 'Product First Update';
-            if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
-                /** PRENDO E RINOMINO LA FOTO */
-                $name = pathinfo($files['Product_dummyPicture']['name']);
-                $uploadfile = rand(0, 9999999999) . '.' . $name['extension'];
-                if (!rename($files['Product_dummyPicture']['tmp_name'], $fileFolder . $uploadfile)) throw new \Exception();
-	            $productEdit->dummyPicture = $uploadfile;
+            if ($this->isValidInput("Product_dummyPicture", $post)) {
+                $productEdit->dummyPicture = $post['Product_dummyPicture'];
             }
-	        $productEdit->lastUpdate = date("Y-m-d H:i:s");
-	        $productEdit->itemno = $post['Product_itemno'];
-            $productEdit->update();
 
             //$productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
             \Monkey::app()->repoFactory->commit();
@@ -89,15 +83,15 @@ class CProductManageController extends ARestrictedAccessRootController
             if (!\Monkey::app()->repoFactory->beginTransaction()) throw new \Exception();
             /** UPDATE PRODUCT */
             if ($this->isValidInput("Product_productBrandId", $post)) {
-	            $productEdit->productBrandId = $post['Product_productBrandId'];
+                $productEdit->productBrandId = $post['Product_productBrandId'];
                 //$this->app->dbAdapter->update("Product", array("productBrandId" => $post['Product_productBrandId']), $productIds);
             }
             if ($this->isValidInput("Product_productSeasonId", $post)) {
-	            $productEdit->productSeasonId = $post['Product_productSeasonId'];
+                $productEdit->productSeasonId = $post['Product_productSeasonId'];
                 //$this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
             }
             if ($this->isValidInput("Product_sortingPriorityId", $post)) {
-	            $productEdit->sortingPriorityId = $post['Product_sortingPriorityId'];
+                $productEdit->sortingPriorityId = $post['Product_sortingPriorityId'];
                 //$this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
             }
             /*if ($this->isValidInput("Product_externalId", $post)) {
@@ -105,15 +99,16 @@ class CProductManageController extends ARestrictedAccessRootController
                 //$this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
             }*/
             if ($this->isValidInput("Product_sizes", $post)) {
-	            $productEdit->productSizeGroupId = $post['Product_sizes'];
+                $productEdit->productSizeGroupId = $post['Product_sizes'];
                 //$this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
             }
-	        if ($this->isValidInput("Product_note", $post)) {
-		        $productEdit->note = $post['Product_note'];
-		        //$this->app->dbAdapter->update("Product", array("note" => $post['Product_note']), $productIds);
-	        }
+            if ($this->isValidInput("Product_note", $post)) {
+                $productEdit->note = $post['Product_note'];
+                //$this->app->dbAdapter->update("Product", array("note" => $post['Product_note']), $productIds);
+            }
 
-	        $productEdit->update();
+
+            $productEdit->update();
 
             $context = "Tag Insert";
             if ($this->isValidInput("Tag_names", $post)) {
@@ -132,23 +127,23 @@ class CProductManageController extends ARestrictedAccessRootController
             /** UPDATE DEI DETTAGLI PRODOTTO */
             $context = "detail Update";
             if ($this->isValidInput("Product_dataSheet", $post)) {
-	            $detailRepo = \Monkey::app()->repoFactory->create('ProductDetail');
-	            $detailTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
-	            $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
+                $detailRepo = \Monkey::app()->repoFactory->create('ProductDetail');
+                $detailTranslationRepo = \Monkey::app()->repoFactory->create('ProductDetailTranslation');
+                $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
                 /** INSERIMENTO DETTAGLI PRODOTTO */
-	            if($post['Product_dataSheet'] != $productEdit->productSheetPrototypeId) {
-		            foreach($productEdit->productSheetActual as $val) $val->delete();
-		            $productEdit->productSheetPrototypeId = $post['Product_dataSheet'];
-		            unset($productEdit->productSheetPrototype);
-		            $productEdit->update();
-	            }
+                if($post['Product_dataSheet'] != $productEdit->productSheetPrototypeId) {
+                    foreach($productEdit->productSheetActual as $val) $val->delete();
+                    $productEdit->productSheetPrototypeId = $post['Product_dataSheet'];
+                    unset($productEdit->productSheetPrototype);
+                    $productEdit->update();
+                }
 
                 foreach ($post as $key => $input) {
                     $inputName = explode('_', $key);
                     if ($inputName[0] != 'ProductDetail') continue;
 
-	                /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label e lo cancella */
-	                $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
+                    /** cerco all'interno della sheet se esiste già un dettaglio con lo stesso label e lo cancella */
+                    $actual = $productEdit->productSheetActual->findOneByKey('productDetailLabelId', $inputName[2]);
                     if ($actual) $actual->delete();
                     if (0 == $input) continue;
 
@@ -192,7 +187,7 @@ class CProductManageController extends ARestrictedAccessRootController
                     continue;
                 } else {
                     $productDescriptionTranslation = \Monkey::app()->repoFactory->create('ProductDescriptionTranslation')->findOneBy(['productId'=>$productEdit->id,'productVariantId'=>$productEdit->productVariantId,'langId' => $inputName[1],'marketplaceId' => 1]);
-                       if($productDescriptionTranslation){
+                    if($productDescriptionTranslation){
                         $productDescriptionTranslation->description = $input;
                         $productDescriptionTranslation->update();
                     } else {
@@ -262,9 +257,13 @@ class CProductManageController extends ARestrictedAccessRootController
 
             $context = "Product Update Final";
             if ($this->isValidInput("Product_status", $post)) {
-	            $productEdit->productStatusId = $post['Product_status'];
-	            $productEdit->update();
+                $productEdit->productStatusId = $post['Product_status'];
+                $productEdit->update();
             }
+
+            $productEdit->lastUpdate = date("Y-m-d H:i:s");
+            $productEdit->itemno = $post['Product_itemno'];
+            $productEdit->update();
             $ret = ['code' => $productIds, 'message' => 'Il prodotto è stato aggiornato correttamente.'];
             $productPhotoRepo=\Monkey::app()->repoFactory->create('ProductPhoto');
             $productId=$productEdit->id;
@@ -289,14 +288,14 @@ class CProductManageController extends ARestrictedAccessRootController
 
                 $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-                    try{
-                        $res = $image->S3UploadBrand($config['bucket'],$photo->name, $newFolder);
-                    }catch(RedPandaAssetException $e){
-                        $this->app->router->response()->raiseProcessingError();
-                        return 'Non riesco a Copiare il file';
-                    }
+                try{
+                    $res = $image->S3UploadBrand($config['bucket'],$photo->name, $newFolder);
+                }catch(RedPandaAssetException $e){
+                    $this->app->router->response()->raiseProcessingError();
+                    return 'Non riesco a Copiare il file';
+                }
 
-                     unlink($local.$photo->name);
+                unlink($local.$photo->name);
 
 
 
@@ -383,31 +382,28 @@ class CProductManageController extends ARestrictedAccessRootController
             /** CONTROLLO SE IL PRODOTTO ESISTE GIA' */
 
             // CONTROLLO SE DEVO CREARE UNA VARIANTE O UN NUOVO PRODOTTO
-            $productControl = $this->app->dbAdapter->query("SELECT * FROM Product WHERE itemno = ? AND productBrandId = ?", [$post['Product_itemno'], $post['Product_productBrandId']])->fetch();
+            $productControl = $this->app->dbAdapter->query("SELECT * FROM Product WHERE itemno = ? AND productBrandId = ?",[$post['Product_itemno'],$post['Product_productBrandId']])->fetch();
             if ($productControl) {
-                $productId =  $productControl['id'];
+                $productId = $productControl['id'];
             }
             unset($productControl);
 
 
             /** INSERISCO IL PRODOTTO DI BASE */
-	        $var = \Monkey::app()->repoFactory->create('ProductVariant')->getEmptyEntity();
-	        $var->name = $post['ProductVariant_name'];
-	        $var->description = $post['ProductVariant_description'];
-	        $variantId = $var->insert();
+            $var = \Monkey::app()->repoFactory->create('ProductVariant')->getEmptyEntity();
+            $var->name = $post['ProductVariant_name'];
+            $var->description = $post['ProductVariant_description'];
+            $variantId = $var->insert();
 
 
-                /** LOGICA DI INSERIMENTO */
-            if (isset($files['Product_dummyPicture']) && isset($files['Product_dummyPicture']['name']) && !empty($files['Product_dummyPicture']['name'])) {
-                /** PRENDO E RINOMINO LA FOTO */
-                $name = pathinfo($files['Product_dummyPicture']['name']);
-                $uploadfile = rand(0, 9999999999) . '.' . $name['extension'];
-                if (!rename($files['Product_dummyPicture']['tmp_name'], $fileFolder . $uploadfile)) {
-                   throw new \Exception();
-                }
+            /** LOGICA DI INSERIMENTO */
+            if ($this->isValidInput("Product_dummyPicture",$post)) {
+                if ($post['Product_dummyPicture']!=''){
+                    $uploadfile = $post['Product_dummyPicture'];
             } else {
                 $uploadfile = 'bs-dummy-16-9.png';
             }
+        }
 
             if (!$productId) {
                 $productId = $this->app->dbAdapter->query('SELECT max(id) as maxId FROM Product', [])->fetch()['maxId'] + 1;
@@ -454,12 +450,12 @@ class CProductManageController extends ARestrictedAccessRootController
 
             if ($this->isValidInput('Product_productSeasonId', $post)) {
                 $productNew->productSeasonId = $post['Product_productSeasonId'];
-               // $this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
+                // $this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
             }
 
             if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 6) {
                 $productNew->productStatusId = $post['Product_status'];
-               // $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
+                // $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
             }
 
             if ($this->isValidInput('Product_externalId', $post)) {
@@ -492,29 +488,29 @@ class CProductManageController extends ARestrictedAccessRootController
                 $productNew->productColorGroupId = $post['ProductColorGroup_id'];
             }
 
-	        $slugify = new CSlugify();
+            $slugify = new CSlugify();
             /** INSERIMENTO DETTAGLI PRODOTTO */
-	        if ($this->isValidInput("Product_dataSheet", $post)) {
-		        $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
-		        /** INSERIMENTO DETTAGLI PRODOTTO */
+            if ($this->isValidInput("Product_dataSheet", $post)) {
+                $productSheetActualRepo = \Monkey::app()->repoFactory->create('ProductSheetActual');
+                /** INSERIMENTO DETTAGLI PRODOTTO */
 
-		        $productNew->productSheetPrototypeId = $post['Product_dataSheet'];
-		        $productNew->update();
+                $productNew->productSheetPrototypeId = $post['Product_dataSheet'];
+                $productNew->update();
 
-		        foreach ($post as $key => $input) {
-			        $inputName = explode('_', $key);
-			        if (($inputName[0] != 'ProductDetail') || ($input == '0') || ($input == '')) continue;
-			        /** cerco il valore del dettaglio $detail */
-			        $sheet = $productSheetActualRepo->getEmptyEntity();
+                foreach ($post as $key => $input) {
+                    $inputName = explode('_', $key);
+                    if (($inputName[0] != 'ProductDetail') || ($input == '0') || ($input == '')) continue;
+                    /** cerco il valore del dettaglio $detail */
+                    $sheet = $productSheetActualRepo->getEmptyEntity();
                     $sheet->productId = $productNew->id;
                     $sheet->productVariantId = $productNew->productVariantId;
                     $sheet->productDetailLabelId = $inputName[2];
                     $sheet->productDetailId = $input;
                     $sheet->insert();
-		        }
-	        }
+                }
+            }
 
-	        $productNew->update();
+            $productNew->update();
 
             /** INIZIO INSERIMENTO CATEGORIA PRODOTTO */
             if ($this->isValidInput('ProductCategory_id', $post)) {

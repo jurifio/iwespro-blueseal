@@ -36,7 +36,7 @@ class CNameTranslateEditController extends CNameTranslateManageController
 
         $name = $this->app->router->request()->getRequestData('name');
 
-        $langs = \Monkey::app()->repoFactory->create('Lang')->findAll();
+        $langs = \Monkey::app()->repoFactory->create('Lang')->findBy(['isActive'=>1]);
 
         $name = \Monkey::app()->repoFactory->create('ProductName')->findBy(['name' => $name]);
 
