@@ -33,14 +33,12 @@
                                 </div>
                                 <div class="panel-body clearfix">
                                     <div class="row">
-                                        <div class="col-md-7">
-                                            <div class="form-group form-group-default form-group-photo">
-                                                <img id="dummyPicture" align="center" class="img-responsive"
-                                                     src="<?php echo $productEdit->getDummyPictureUrl() ?>">
-                                            </div>
-                                            <div style="display:none;"><input id="dummyFile" type="hidden" value=""
-                                                                              name="Product_dummyPicture"/></div>
-                                            </div>
+                                        <div class="form-group form-group-default form-group-photo">
+                                            <img id="dummyPicture" align="center" class="img-responsive"
+                                                 src=""/>
+                                        </div>
+                                        <div style="display:none;"><input id="dummyFile" type="hidden" value=""
+                                                                          name="Product_dummyPicture"/></div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="row">
