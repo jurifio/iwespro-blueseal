@@ -46,7 +46,7 @@
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <div class="form-group form-group-default required">
-                                                        <label for="ooo">CPF</label>
+                                                        <label for="Product_itemno">CPF</label>
                                                         <input autocomplete="off" type="text" id="ooo"
                                                                class="form-control" name="Product_itemno" value=""
                                                                required>
