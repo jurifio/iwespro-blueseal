@@ -14,14 +14,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta content="" name="description"/>
 <meta content="" name="author"/>
-
+<?php if (ENV=='dev'):?>
 <script>
     paceOptions = {
         ajax: {ignoreURLs: ['/blueseal/xhr/CheckPermission']}
     }
 </script>
-<!--<script>
+<?php else:?>
+<script>
     paceOptions = {
         ajax: {ignoreURLs: ['/blueseal/xhr/TemplateFetchController', '/blueseal/xhr/CheckPermission']}
     }
-</script>-->
+</script>
+<?php endif; ?>
