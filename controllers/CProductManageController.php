@@ -66,7 +66,7 @@ class CProductManageController extends ARestrictedAccessRootController
             $productVariant->name = $post['ProductVariant_name'];
             $productVariant->description = $post['ProductVariant_description'];
             $productVariant->update();
-            //$variantId = $this->app->dbAdapter->update("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']], array("id" => $post['Product_productVariantId']));
+            $variantId = $this->app->dbAdapter->update("ProductVariant", ["name" => $post['ProductVariant_name'], "description" => $post['ProductVariant_description']], array("id" => $post['Product_productVariantId']));
 
             /** UPDATE PRODUCT */
 
@@ -75,7 +75,7 @@ class CProductManageController extends ARestrictedAccessRootController
                 $productEdit->dummyPicture = $post['Product_dummyPicture'];
             }
 
-            //$productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
+            $productId = $this->app->dbAdapter->update("Product", $updateData, $productIds);
             \Monkey::app()->repoFactory->commit();
 
             /** INIZIO TRANSACTION PER IL CARICAMENTO DEI VALORI FACOLTATIVI DI PRODOTTO E DI DETTAGLI PRODOTTO */
@@ -88,23 +88,23 @@ class CProductManageController extends ARestrictedAccessRootController
             }
             if ($this->isValidInput("Product_productSeasonId", $post)) {
                 $productEdit->productSeasonId = $post['Product_productSeasonId'];
-                //$this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
+                $this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
             }
             if ($this->isValidInput("Product_sortingPriorityId", $post)) {
                 $productEdit->sortingPriorityId = $post['Product_sortingPriorityId'];
-                //$this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
+                $this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
             }
-            /*if ($this->isValidInput("Product_externalId", $post)) {
+            if ($this->isValidInput("Product_externalId", $post)) {
 	            $productEdit->externalId = $post['Product_externalId'];
-                //$this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
-            }*/
+                $this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
+            }
             if ($this->isValidInput("Product_sizes", $post)) {
                 $productEdit->productSizeGroupId = $post['Product_sizes'];
-                //$this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
+                $this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
             }
             if ($this->isValidInput("Product_note", $post)) {
                 $productEdit->note = $post['Product_note'];
-                //$this->app->dbAdapter->update("Product", array("note" => $post['Product_note']), $productIds);
+                $this->app->dbAdapter->update("Product", array("note" => $post['Product_note']), $productIds);
             }
 
 
@@ -450,29 +450,29 @@ class CProductManageController extends ARestrictedAccessRootController
 
             if ($this->isValidInput('Product_productSeasonId', $post)) {
                 $productNew->productSeasonId = $post['Product_productSeasonId'];
-                // $this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
+                 $this->app->dbAdapter->update("Product", array("productSeasonId" => $post['Product_productSeasonId']), $productIds);
             }
 
             if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 6) {
                 $productNew->productStatusId = $post['Product_status'];
-                // $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
+                $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
             }
 
             if ($this->isValidInput('Product_externalId', $post)) {
                 $productNew->externalId = $post['Product_externalId'];
-                //$this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
+                $this->app->dbAdapter->update("Product", array("externalId" => $post['Product_externalId']), $productIds);
             }
             if ($this->isValidInput('Product_sortingPriorityId', $post)) {
                 $productNew->sortingPriorityId = $post['Product_sortingPriorityId'];
-                //$this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
+                $this->app->dbAdapter->update("Product", array("sortingPriorityId" => $post['Product_sortingPriorityId']), $productIds);
             }
             if ($this->isValidInput('Product_sizes', $post)) {
                 $productNew->productSizeGroupId = $post['Product_sizes'];
-                //$this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
+                $this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
             }
             if ($this->isValidInput('Product_note', $post)) {
                 $productNew->note = $post['Product_note'];
-                //$this->app->dbAdapter->update("Product", array("note" => $post['Product_note']), $productIds);
+                $this->app->dbAdapter->update("Product", array("note" => $post['Product_note']), $productIds);
             }
 
             if ($this->isValidInput('Tag_names', $post)) {

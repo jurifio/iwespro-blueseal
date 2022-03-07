@@ -17,6 +17,11 @@
 
 <script>
     paceOptions = {
-        ajax: {ignoreURLs: ['/blueseal/xhr/TemplateFetchController', '/blueseal/xhr/CheckPermission']}
+        ajax: {ignoreURLs: ['/blueseal/xhr/CheckPermission']}
     }
 </script>
+<!--<script>
+    paceOptions = {
+        ajax: {ignoreURLs: ['/blueseal/xhr/TemplateFetchController', '/blueseal/xhr/CheckPermission']}
+    }
+</script>-->

@@ -1,5 +1,6 @@
 <?php
 namespace bamboo\controllers\back\ajax;
+use Throwable;
 
 /**
  * Class CCheckPermission
