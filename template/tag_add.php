@@ -53,7 +53,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-4">
                                             <div class="form-group form-group-default selectize-enabled">
                                                 <label for="sorting">Priorità</label>
                                                 <span class="bs red corner label"><i class="fa fa-asterisk"></i></span>
@@ -73,6 +73,12 @@
                                             <div class="form-group form-group-default">
                                                 <label for="isPublic">Visibilità</label>
                                                 <input type="checkbox" id="isPublic" name="isPublic" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group form-group-default">
+                                                <label for="isDefault">Default</label>
+                                                <input type="checkbox" id="isDefault" name="isDefault" />
                                             </div>
                                         </div>
                                     </div>

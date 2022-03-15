@@ -73,6 +73,11 @@ class CTagEditController extends ARestrictedAccessRootController
 	        } else {
 		        $tag->isPublic = 0;
 	        }
+            if(isset($data['isDefault'])) {
+                $tag->isDefault = 1;
+            } else {
+                $tag->isDefault = 0;
+            }
 
             $tag->update();
 

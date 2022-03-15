@@ -25,6 +25,8 @@ class CBlueSealNewDashboardController extends ARestrictedAccessRootController
 
     public function get()
     {
+
+
         $data = \Monkey::app()->router->request()->getRequestData();
         $today = (new \DateTime())->format('Y-m-d H:i:s');
         $currentMonth = (new \DateTime())->format('m');
