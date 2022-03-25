@@ -4,6 +4,8 @@ namespace bamboo\controllers\back\ajax;
 
 use bamboo\blueseal\business\CDataTables;
 use bamboo\core\db\pandaorm\repositories\CRepo;
+use bamboo\domain\entities\CAggregatorHasProduct;
+use bamboo\domain\entities\CAggregatorHasShop;
 use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
