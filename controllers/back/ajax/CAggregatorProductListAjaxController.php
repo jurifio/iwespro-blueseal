@@ -71,7 +71,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
                    LEFT JOIN (ProductSku psk
                     JOIN ProductSize psiz ON psk.productSizeId = psiz.id)
                     ON (p.id, p.productVariantId) = (psk.productId, psk.productVariantId)
-            where p.qty>0
+            where p.qty > 0
             GROUP BY ahp.productId, ahp.productVariantId 
         ";
 
