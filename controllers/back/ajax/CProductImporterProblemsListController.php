@@ -50,7 +50,7 @@ class CProductImporterProblemsListController extends AAjaxController
 
               LEFT JOIN ProductHasProductCategory phpc ON p.id = phpc.productId AND p.productVariantId = phpc.productVariantId
             WHERE
-              `ps`.`id` NOT IN (6, 7, 8, 12, 13)
+              `ps`.`id` NOT IN (6, 7, 8, 12, 13,11)
                AND (`s`.`importer` IS NOT NULL)
               and `ds`.`status` like '%Size Mismatch%'
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
