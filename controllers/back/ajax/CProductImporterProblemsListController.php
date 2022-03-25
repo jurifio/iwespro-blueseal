@@ -52,7 +52,7 @@ class CProductImporterProblemsListController extends AAjaxController
             WHERE
               `ps`.`id` NOT IN (6, 7, 8, 12, 13)
                AND (`s`.`importer` IS NOT NULL)
-              and `ds`.`status` like '%Size Mismatch%'
+              and `ds`.`status` like '%Size Mismatch%' or `ds`.`status`='K'
             GROUP BY `dp`.`productId`, `dp`.`productVariantId`, `dp`.`shopId`, phpc.productCategoryId
             HAVING (sum(`ds`.`qty`) > 0)";
 
