@@ -11,6 +11,7 @@ use bamboo\domain\entities\CMarketplaceHasShop;
 use bamboo\domain\entities\CPrestashopHasProduct;
 use bamboo\domain\entities\CPrestashopHasProductHasMarketplaceHasShop;
 use bamboo\domain\repositories\CPrestashopHasProductRepo;
+use bamboo\core\base\CObjectCollection;
 
 /**
  * Class CMarketplacePrestashopProductListAjaxController
