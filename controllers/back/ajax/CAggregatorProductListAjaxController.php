@@ -40,7 +40,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
               p.externalId AS externalId,
                    
 
-              group_concat(concat(mahp.marketplaceProductId,' | ',`s`.`name`, ' | ', `m`.`name`, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastResponse=null, concat('Eseguito ',mahp.lastResponse),concat('Fallito ',mahp.lastResponse))  )) AS marketplaceAssociation,
+              # group_concat(concat(mahp.marketplaceProductId,' | ',`s`.`name`, ' | ', `m`.`name`, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastResponse=null, concat('Eseguito ',mahp.lastResponse),concat('Fallito ',mahp.lastResponse))  )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
               p.qty as totalQty,
               PS.name as productStatus,     
@@ -104,6 +104,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
 
 
             /** @var CMarketplaceAccountHasProduct $marketplaceAccountHasProduct*/
+            /*
             $marketplaceAccountHasProduct=\Monkey::app()->repoFactory->create('MarketplaceAccountHasProduct')->findBy(['productId'=>$php->productId,'productVariantId'=>$php->productVariantId]);
             foreach ($marketplaceAccountHasProduct as $pHPHmHs) {
                 $aggregatorHasShop=\Monkey::app()->repoFactory->create('AggregatorHasShop')->findOneBy(['id'=>$pHPHmHs->aggregatorHasShopId]);
@@ -118,7 +119,9 @@ class CAggregatorProductListAjaxController extends AAjaxController
 
 
 
+
             }
+            */
             $row['marketplaceAssociation'] = $associations;
 
 
