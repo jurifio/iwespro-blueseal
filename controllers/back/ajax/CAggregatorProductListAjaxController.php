@@ -38,7 +38,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
               pps.price,
               pb.name  as `brand`, 
               p.externalId AS externalId,
-                   
+              '' as marketplaceAssociation,     
 
               # group_concat(concat(mahp.marketplaceProductId,' | ',`s`.`name`, ' | ', `m`.`name`, ' | Fee: ', mahp.fee,' | Fee Mobile: ', mahp.feeMobile, ' | Fee Customer: ', mahp.feeCustomer,' | Fee  Customer Mobile: ', mahp.feeCustomerMobile,' | Price Modifier: ', mahp.priceModifier, ' | Titolo modificato: ', mahp.titleModified,' | Operazione: ',if(mahp.insertionDate=null,'da inserire ','inserito '),if(mahp.lastResponse=null, concat('Eseguito ',mahp.lastResponse),concat('Fallito ',mahp.lastResponse))  )) AS marketplaceAssociation,
               p.isOnSale AS pickySale,
