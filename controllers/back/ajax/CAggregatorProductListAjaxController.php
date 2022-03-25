@@ -33,8 +33,8 @@ class CAggregatorProductListAjaxController extends AAjaxController
         $sql = "
             SELECT
               concat(ahp.productId, '-', ahp.productVariantId) AS productCode,
-              ahp.productId,
-              ahp.productVariantId,
+              ahp.productId as productId,
+              ahp.productVariantId as productVariantId,
               pps.price,
               pb.name  as `brand`, 
               p.externalId AS externalId,
@@ -84,7 +84,7 @@ class CAggregatorProductListAjaxController extends AAjaxController
 
         $datatable->doAllTheThings();
 
-        /** @var CAggregatorHasShop $phpRepo */
+
         $phpRepo = \Monkey::app()->repoFactory->create('AggregatorHasProduct');
 
         /** @var CRepo $mhsRepo */
@@ -92,8 +92,8 @@ class CAggregatorProductListAjaxController extends AAjaxController
         $productStatusAggregatorRepo = \Monkey::app()->repoFactory->create('ProductStatusAggregator');
         foreach ($datatable->getResponseSetData() as $key => $row) {
 
-            /** @var CAggregatorHasProduct $php */
-            $php = $phpRepo->findOneBy($row);
+
+            $php = $phpRepo->findOneBy(['productId'=>$row['productId'],'productVariantId'=>$row['productVariantId']]);
 
             $row['productCode'] = $php->productId . '-' . $php->productVariantId;
 
