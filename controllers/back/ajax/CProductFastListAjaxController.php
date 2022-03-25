@@ -5,6 +5,7 @@ namespace bamboo\controllers\back\ajax;
 use bamboo\blueseal\business\CDataTables;
 use bamboo\domain\entities\CProduct;
 use bamboo\domain\entities\CShooting;
+use bamboo\domain\entities\CShopHasProduct;
 use bamboo\domain\repositories\CDocumentRepo;
 
 /**
@@ -240,7 +241,13 @@ if($allShops) {
 
             $row['code'] = $okManage ? '<a data-toggle="tooltip" title="modifica" data-placement="right" href="' . $modifica . '?id=' . $val->id . '&productVariantId=' . $val->productVariantId . '">' . $val->id . '-' . $val->productVariantId . '</a>' : $val->id . '-' . $val->productVariantId;
             $row['dummy'] = '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getDummyPictureUrl() . '" /></a>';
-            $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
+           $pdsize=($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
+           if($pdsize!='RIMP-zz') {
+               $row['productSizeGroup'] = ($val->productSizeGroup) ? '<span class="small">' . $val->productSizeGroup->locale . '-' . explode("-",$val->productSizeGroup->productSizeMacroGroup->name)[0] . '</span>' : '';
+           }else{
+               $sh=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId'=>$val->id,'productVariantId'=>$val->productVariantId]);
+               $row['productSizeGroup']='RIMP-zz'.$this->parseProblem($sh);
+           }
             $row['row_dummyUrl'] = $val->getDummyPictureUrl();
             $row['productCard'] = (!$val->getProductCardUrl() ? '-' : '<a href="#1" class="enlarge-your-img"><img width="50" src="' . $val->getProductCardUrl() . '"/></a>');
             $row['row_pCardUrl'] = (!$val->getProductCardUrl() ? '-' : $val->getProductCardUrl());
@@ -356,5 +363,27 @@ if($allShops) {
             $datatable->setResponseDataSetRow($key,$row);
         }
         return $datatable->responseOut();
+    }
+    /**
+     * @param CShopHasProduct $shopHasProduct
+     * @return string
+     */
+    private function parseProblem(CShopHasProduct $shopHasProduct)
+    {
+        $message = "[500] Size Mismatch";
+        $sizes = $this->app->dbAdapter->query(
+            'SELECT size 
+                    FROM DirtyProduct dp 
+                      JOIN DirtySku ds ON dp.id = ds.dirtyProductId 
+                    WHERE  
+                    dp.productId = :productId AND 
+                    dp.productVariantId = :productVariantId AND 
+                    dp.shopId = :shopId', $shopHasProduct->getIds())->fetchAll();
+        $newSize = [];
+        foreach ($sizes as $size) {
+            $newSize[] = $size['size'];
+        }
+        $message .= " " . implode('-', $newSize);
+        return '<span>' . $message . '</span>';
     }
 }
