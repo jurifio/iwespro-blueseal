@@ -57,7 +57,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
                             $this->report('CAggregatorSocialHasProductJob','Working ' . $marketplace->name,'');
                         if($marketplaceAccount->config['shopId']!=44) {
 
-                            $sql='(select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
+                            $sql='( select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId, if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
@@ -94,7 +94,7 @@ class CAggregatorSocialHasProductJob extends ACronJob
  if((p.id, p.productVariantId) IN (SELECT
                                                               ProductHasProductPhoto.productId,
                                                               ProductHasProductPhoto.productVariantId
-                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'  and shp.shopId in(1,58,51,61)';
+                                                            FROM ProductHasProductPhoto), "sì", "no")=\'sì\'  and shp.shopId in(1,51)';
                         }
                             $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                             foreach ($products as $product) {
