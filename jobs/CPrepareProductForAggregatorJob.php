@@ -60,7 +60,7 @@ class CPrepareProductForAggregatorJob extends ACronJob
                 }else{
                     $sql='select p.id as productId, p.productVariantId as productVariantId,p.qty as qty,
                                 shp.shopId as shopId from Product p join ShopHasProduct shp on p.id=shp.productId
- and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId in (6,15)  AND shopId IN(1,58,51,61)';
+ and p.productVariantId=shp.productVariantId where p.qty > 0 and p.productStatusId in (6,15)  AND shopId IN(1,51,61)';
                 }
                     $products = \Monkey::app()->dbAdapter->query($sql,[])->fetchAll();
                     foreach ($products as $product) {
