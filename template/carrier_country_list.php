@@ -32,6 +32,10 @@
                                data-length-menu-setup="100, 200, 500">
                             <thead>
                             <tr>
+                                <th data-slug="id"
+                                    data-searchable="true"
+                                    data-default-order="asc" data-orderable="true" class="center">id
+                                </th>
                                 <th data-slug="carrier"
                                     data-searchable="true"
                                     data-default-order="asc" data-orderable="true" class="center">Corriere
@@ -40,6 +44,10 @@
                                     data-searchable="true"
                                     data-orderable="true"
                                     class="center">Nazione
+                                </th>
+                                <th data-slug="rangeWeight"
+                                    data-searchable="true"
+                                    data-default-order="asc" data-orderable="true" class="center">Fascia
                                 </th>
                                 <th data-slug="isActive"
                                     data-searchable="true"
@@ -77,9 +85,15 @@
 <?php include "parts/bsmodal.php"; ?>
 <?php include "parts/alert.php"; ?>
 <bs-toolbar class="toolbar-definition">
-    <bs-toolbar-group data-group-label="Modifica Paese">
+    <bs-toolbar-group data-group-label="Gestione Fasce">
+        <bs-toolbar-button
+                data-remote="bs.carrierHasCountry.add"
+        ></bs-toolbar-button>
         <bs-toolbar-button
                 data-remote="bs.carrierHasCountry.edit"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-remote="bs.carrierHasCountry.clone"
         ></bs-toolbar-button>
     </bs-toolbar-group>
 </bs-toolbar>

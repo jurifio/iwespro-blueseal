@@ -100,7 +100,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
             if ($this->isValidInput("Product_sizes", $post)) {
                 $productEdit->productSizeGroupId = $post['Product_sizes'];
-                $this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
+                $this->app->dbAdapter->update("Product", array("productSizeGroupId" => $post['Product_sizes']), $productIds);
             }
             if ($this->isValidInput("Product_note", $post)) {
                 $productEdit->note = $post['Product_note'];
@@ -455,7 +455,7 @@ class CProductManageController extends ARestrictedAccessRootController
 
             if ($this->isValidInput('Product_status', $post) && $post['Product_status'] != 6) {
                 $productNew->productStatusId = $post['Product_status'];
-                $this->app->dbAdapter->update("Product", array("status" => $post['Product_status']), $productIds);
+                $this->app->dbAdapter->update("Product", array("productStatusId" => $post['Product_status']), $productIds);
             }
 
             if ($this->isValidInput('Product_externalId', $post)) {
@@ -468,7 +468,7 @@ class CProductManageController extends ARestrictedAccessRootController
             }
             if ($this->isValidInput('Product_sizes', $post)) {
                 $productNew->productSizeGroupId = $post['Product_sizes'];
-                $this->app->dbAdapter->update("Product", array("sizeGroupId" => $post['Product_sizes']), $productIds);
+                $this->app->dbAdapter->update("Product", array("productSizeGroupId" => $post['Product_sizes']), $productIds);
             }
             if ($this->isValidInput('Product_note', $post)) {
                 $productNew->note = $post['Product_note'];

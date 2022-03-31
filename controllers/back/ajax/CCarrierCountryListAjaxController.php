@@ -7,7 +7,7 @@ use bamboo\blueseal\business\CDataTables;
  * Class CJobListAjaxController
  * @package bamboo\blueseal\controllers\ajax
  *
- * @author Iwes Team <it@iwes.it>
+ * @author Iwes Team <juri@iwes.it>
  *
  * @copyright (c) Iwes  snc - All rights reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -21,20 +21,24 @@ class CCarrierCountryListAjaxController extends AAjaxController
     public function get()
     {
         $sql = "SELECT
+                    chc.id as id,
                     ca.name as carrier,
                     ca.id as carrierId,
                     co.id as countryId,
-                    co.name as country,
+                    co.name as country,    
+                    chc.minWeight as minWeight,
+                    chc.maxWeight as maxWeight,  
+                    concat(chc.minWeight,'-',chc.maxWeight) as rangeWeight, 
                     if(chc.isActive is not null and chc.isActive = 1, 'sisì','no' ) as isActive,
                     shipmentMinTime,
                     shipmentMaxTime,
                     shipmentCost,
                     shipmentPrice
                 FROM Carrier ca
-                LEFT JOIN Country co ON 1=1
-                LEFT JOIN CarrierHasCountry chc ON ca.id = chc.carrierId AND co.id = chc.countryId";
+                 JOIN Country co ON 1=1
+                 JOIN CarrierHasCountry chc ON ca.id = chc.carrierId AND co.id = chc.countryId order by chc.carrierId,chc.countryId,chc.minWeight asc";
 
-        $datatable = new CDataTables($sql, ['carrierId','countryId'], $_GET, true);
+        $datatable = new CDataTables($sql, ['id','carrierId','countryId'], $_GET, true);
         $datatable->doAllTheThings(true);
 
         foreach ($datatable->getResponseSetData() as $key=>$row) {
@@ -51,21 +55,45 @@ class CCarrierCountryListAjaxController extends AAjaxController
         foreach (\Monkey::app()->router->request()->getRequestData('selectedRows') as $key=>$val ) {
             $carrierHasCountry = $carrierHasCountryRepo->findOneBy([
                 'carrierId'=>$val['carrierId'],
-                'countryId'=>$val['countryId']
+                'countryId'=>$val['countryId'],
+                'id'=>$val['id']
             ]);
-            if($carrierHasCountry === null) {
-                $carrierHasCountry = $carrierHasCountryRepo->getEmptyEntity();
-                $carrierHasCountry->carrierId = $val['carrierId'];
-                $carrierHasCountry->countryId = $val['countryId'];
-                $carrierHasCountry->smartInsert();
-            }
-
+            if($carrierHasCountry) {
+            $carrierHasCountry->minWeight = empty($data['minWeight']) ? null : $data['minWeight'];
+            $carrierHasCountry->maxWeight = empty($data['maxWeight']) ? null : $data['maxWeight'];
             $carrierHasCountry->shipmentMinTime = empty($data['shipmentMinTime']) ? null : $data['shipmentMinTime'];
             $carrierHasCountry->shipmentMaxTime = empty($data['shipmentMaxTime']) ? null : $data['shipmentMaxTime'];
             $carrierHasCountry->shipmentCost = empty($data['shipmentCost']) ? null : $data['shipmentCost'];
             $carrierHasCountry->shipmentPrice = empty($data['shipmentPrice']) ? null : $data['shipmentPrice'];
             $carrierHasCountry->isActive = empty($data['isActive'] ?? '') ? false : (bool) $data['isActive'];
             $carrierHasCountry->update();
+            }
         }
     }
+    public function post() {
+        $carrierHasCountryRepo = \Monkey::app()->repoFactory->create('CarrierHasCountry');
+        $data = \Monkey::app()->router->request()->getRequestData('data');
+
+            $carrierHasCountry = $carrierHasCountryRepo->findOneBy([
+                'carrierId'=>$data['carrierId'],
+                'countryId'=>$data['countryId'],
+                'minWeight' => $data['minWeight'],
+                'maxWeight' => $data['maxWeight']
+            ]);
+            if($carrierHasCountry === null) {
+                $carrierHasCountry = $carrierHasCountryRepo->getEmptyEntity();
+                $carrierHasCountry->carrierId = $data['carrierId'];
+                $carrierHasCountry->countryId = $data['countryId'];
+                $carrierHasCountry->minWeight = empty($data['minWeight']) ? null : $data['minWeight'];
+                $carrierHasCountry->maxWeight = empty($data['maxWeight']) ? null : $data['maxWeight'];
+                $carrierHasCountry->shipmentMinTime = empty($data['shipmentMinTime']) ? null : $data['shipmentMinTime'];
+                $carrierHasCountry->shipmentMaxTime = empty($data['shipmentMaxTime']) ? null : $data['shipmentMaxTime'];
+                $carrierHasCountry->shipmentCost = empty($data['shipmentCost']) ? null : $data['shipmentCost'];
+                $carrierHasCountry->shipmentPrice = empty($data['shipmentPrice']) ? null : $data['shipmentPrice'];
+                $carrierHasCountry->isActive = empty($data['isActive'] ?? '') ? false : (bool) $data['isActive'];
+                $carrierHasCountry->smartInsert();
+            }
+
+        }
+
 }

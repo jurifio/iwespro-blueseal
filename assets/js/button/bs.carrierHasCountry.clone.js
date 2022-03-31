@@ -1,22 +1,28 @@
 window.buttonSetup = {
     tag: "a",
-    icon: "fa-pencil-square-o",
+    icon: "fa-clone",
     permission: "allShops",
-    event: "bs-carrierHasCountry-edit",
+    event: "bs-carrierHasCountry-clone",
     class: "btn btn-default",
     rel: "tooltip",
-    title: "Modifica",
+    title: "Clona Fascia",
     placement: "bottom"
 };
 
-$(document).on('bs-carrierHasCountry-edit', function (e, element, button) {
+$(document).on('bs-carrierHasCountry-clone', function (e, element, button) {
 
     var selectedRow = $.getDataTableSelectedRowsData(null,false,1);
 
     var template =
         '<form>' +
         '<div class="row" id="editForm">' +
-        '<div class="col-sm-12">' +
+        '<div class="col-sm-6">' +
+        '<div class="form-group form-group-default required">' +
+        '<label for="extraue">Applica solo ExtraUe</label>' +
+        '<input autocomplete="off" type="checkbox" id="extraue" class="form-control" name="extraue" value="extraue">' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-sm-6">' +
         '<div class="form-group form-group-default required">' +
         '<label for="isActive">Attivo</label>' +
         '<input autocomplete="off" type="checkbox" id="isActive" class="form-control" name="isActive" value="isActive">' +
@@ -71,24 +77,20 @@ $(document).on('bs-carrierHasCountry-edit', function (e, element, button) {
             .monkeyReplaceAll('{{shipmentPrice}}',selectedRow[0].shipmentPrice)
         ;
     } else {
-        template = template
-            .monkeyReplaceAll('{{isActive}}','')
-            .monkeyReplaceAll('{{minWeight}}','')
-            .monkeyReplaceAll('{{maxWeight}}','')
-            .monkeyReplaceAll('{{shipmentMinTime}}','')
-            .monkeyReplaceAll('{{shipmentMaxTime}}','')
-            .monkeyReplaceAll('{{shipmentCost}}','')
-            .monkeyReplaceAll('{{shipmentPrice}}','')
-        ;
+        new Alert({
+            type: "warning",
+            message: "Devi Selezionare una Fascia per Applicarla"
+        }).open();
+        return false;
     }
 
-    var modal = new $.bsModal('Gestione Fascia', {
+    var modal = new $.bsModal('Gestione Fascia Applica a tutte le nazioni', {
         body: template
     });
 
     modal.setCancelLabel('Annulla');
     modal.showCancelBtn();
-    modal.setOkLabel('Modifica');
+    modal.setOkLabel('Esegui');
 
     modal.setOkEvent(function () {
         "use strict";
@@ -102,11 +104,12 @@ $(document).on('bs-carrierHasCountry-edit', function (e, element, button) {
         });
         Pace.ignore(function () {
             $.ajax({
-                url: '/blueseal/xhr/CarrierCountryListAjaxController',
+                url: '/blueseal/xhr/CarrierCountryCloneZoneAjaxController',
                 method: 'put',
                 data: {
                     selectedRows: selectedRow,
-                    data: data
+                    data: data,
+                    extraue:$('#extraue').val()
                 }
             }).done(function (res) {
                 modal.writeBody('Tutto Ok');

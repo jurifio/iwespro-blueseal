@@ -81,9 +81,9 @@ class CProductAddController extends CProductManageController
         }
         
         $statuses = [];
-        $statuses['selected'] = 'S';
+        $statuses['selected'] = '1';
         foreach($productStatuses as $status){
-            $statuses[$status->code] = $status->name;
+            $statuses[$status->id] = $status->name;
         }
         $app=new CRestrictedAccessWidgetHelper($this->app);
 
