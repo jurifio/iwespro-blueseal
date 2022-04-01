@@ -16,56 +16,64 @@ $(document).on('bs-carrierHasCountry-clone', function (e, element, button) {
     var template =
         '<form>' +
         '<div class="row" id="editForm">' +
-        '<div class="col-sm-6">' +
+        '<div class="col-sm-4">' +
         '<div class="form-group form-group-default required">' +
-        '<label for="extraue">Applica solo ExtraUe</label>' +
-        '<input autocomplete="off" type="checkbox" id="extraue" class="form-control" name="extraue" value="extraue">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="isActive">Attivo</label>' +
-        '<input autocomplete="off" type="checkbox" id="isActive" class="form-control" name="isActive" value="isActive">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="minWeight">da Kg</label>' +
-        '<input autocomplete="off" type="number"  step="0.01" id="minWeight" class="form-control" name="minWeight" value="{{minWeight}}">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="maxWeight">a Kg</label>' +
-        '<input autocomplete="off" type="number" step="0.01" id="maxWeight" class="form-control" name="maxWeight" value="{{maxWeight}}">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="shipmentMinTime">Tempo Minimo di Consegna</label>' +
-        '<input autocomplete="off" type="number" id="isActive" class="form-control" name="shipmentMinTime" value="{{shipmentMinTime}}">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="shipmentMaxTime">Tempo Massimo di Consegna</label>' +
-        '<input autocomplete="off" type="number" id="shipmentMaxTime" class="form-control" name="shipmentMaxTime" value="{{shipmentMaxTime}}">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="shipmentCost">Costo di Spedizione</label>' +
-        '<input autocomplete="off" type="number" step="0.01" id="shipmentCost" class="form-control" name="shipmentCost" value="{{shipmentCost}}">' +
-        '</div>' +
-        '</div>' +
-        '<div class="col-sm-6">' +
-        '<div class="form-group form-group-default required">' +
-        '<label for="shipmentPrice">Prezzo di Spedizione</label>' +
-        '<input autocomplete="off" type="number" step="0.01" name="shipmentPrice" class="form-control" name="shipmentPrice" value="{{shipmentPrice}}">' +
-        '</div>' +
-        '</div>' +
-        '</form>' +
-        '</div>';
+        '<label for="extraue">Seleziona Zona</label>'+
+        '<select id="extraue" name="extraue"'+
+        'class="full-width selectpicker"'+
+        'placeholder="Seleziona la Lista"'+
+        'data-init-plugin="selectize">'+
+        '<option value="1">Italia</option>'+
+        '<option value="2">Ue</option>'+
+        '<option value="3">extraUe</option>'+
+        '<option value="4">Tutti</option>'
+    '</select>'+
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="isActive">Attivo</label>' +
+    '<input autocomplete="off" type="checkbox" id="isActive" class="form-control" name="isActive" value="isActive">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="minWeight">da Kg</label>' +
+    '<input autocomplete="off" type="number"  step="0.01" id="minWeight" class="form-control" name="minWeight" value="{{minWeight}}">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="maxWeight">a Kg</label>' +
+    '<input autocomplete="off" type="number" step="0.01" id="maxWeight" class="form-control" name="maxWeight" value="{{maxWeight}}">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="shipmentMinTime">Tempo Minimo di Consegna</label>' +
+    '<input autocomplete="off" type="number" id="isActive" class="form-control" name="shipmentMinTime" value="{{shipmentMinTime}}">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="shipmentMaxTime">Tempo Massimo di Consegna</label>' +
+    '<input autocomplete="off" type="number" id="shipmentMaxTime" class="form-control" name="shipmentMaxTime" value="{{shipmentMaxTime}}">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="shipmentCost">Costo di Spedizione</label>' +
+    '<input autocomplete="off" type="number" step="0.01" id="shipmentCost" class="form-control" name="shipmentCost" value="{{shipmentCost}}">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-sm-6">' +
+    '<div class="form-group form-group-default required">' +
+    '<label for="shipmentPrice">Prezzo di Spedizione</label>' +
+    '<input autocomplete="off" type="number" step="0.01" name="shipmentPrice" class="form-control" name="shipmentPrice" value="{{shipmentPrice}}">' +
+    '</div>' +
+    '</div>' +
+    '</form>' +
+    '</div>';
 
     if(selectedRow.length === 1) {
         template = template
