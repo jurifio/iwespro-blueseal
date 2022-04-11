@@ -4785,6 +4785,19 @@
                 "DELETE",
                 "PUT"
             ]
+        }, {
+            "pattern": "/blueseal/prodotti/gestorefoto(/)?",
+            "behaviour": {
+                "ctrl": "\\bamboo\\blueseal\\controllers\\CProductSearchPhotoManageController"
+            },
+            "filters": {},
+            "translations": {},
+            "methods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+            ]
         }
     ]
 }

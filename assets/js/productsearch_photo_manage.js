@@ -18,10 +18,10 @@ $(document).ready(function() {
 $(document).on('bs.load.photo',function(){
     $.ajax({
         type: 'GET',
-        url: '/blueseal/xhr/ProductPhotoAjaxManage',
+        url: '/blueseal/xhr/ProductSearchPhotoAjaxManage',
         data: {
-            "id" : $.QueryString["id"],
-            "productVariantId" : $.QueryString["productVariantId"]
+            "id" : $('#id').val(),
+            "productVariantId" : $('#productVariantId').val()
         }
     }).done(function (content) {
         $('#selectable').html(content);
@@ -54,7 +54,7 @@ $(document).on('bs.add.photo', function (e){
 
     body.html(bodyContent);
     let  dropzone = new Dropzone("#dropzoneModal",{
-        url: "/blueseal/xhr/ProductPhotoAjaxManage",
+        url: "/blueseal/xhr/ProductSearchPhotoAjaxManage",
         maxFilesize: 4,
         maxFiles: 10,
         parallelUploads: 10,
@@ -62,8 +62,8 @@ $(document).on('bs.add.photo', function (e){
         dictDefaultMessage: "Trascina qui i file da inviare o clicca qui (consigliato MAX 200KB)",
         uploadMultiple: false,
         sending: function(file, xhr, formData) {
-            formData.append("id", $.QueryString["id"]);
-            formData.append("productVariantId", $.QueryString["productVariantId"]);
+            formData.append("id", $('#id').val());
+            formData.append("productVariantId", $('#productVariantId').val());
         }
     });
 
@@ -74,6 +74,66 @@ $(document).on('bs.add.photo', function (e){
         okButton.removeAttr("disabled");
         $(document).trigger('bs.load.photo');
     });
+});
+$(document).on('bs.take.photo', function (e){
+    var bsModal = $('#bsModal');
+    var header = bsModal.find('.modal-header h4');
+    var body = bsModal.find('.modal-body');
+    var cancelButton = bsModal.find('.modal-footer .btn-default');
+    var okButton = bsModal.find('.modal-footer .btn-success');
+
+    bsModal.modal();
+
+    header.html('Scatta Foto');
+    okButton.html('Fatto').off().on('click', function () {
+        bsModal.modal('hide');
+        okButton.off();
+    });
+    cancelButton.remove();
+    let bodyContent ='<button id="start-camera">Stato Camera Avviata</button>'+
+    '<video id="video" width="1125" height="1500" autoplay></video>'+
+    '<button id="click-photo">Scatta</button>'+
+    '<canvas id="canvasfiga" width="1125" height="1500"></canvas>';
+
+
+    body.html(bodyContent);
+    let camera_button = document.querySelector("#start-camera");
+    let video = document.querySelector("#video");
+    let click_button = document.querySelector("#click-photo");
+    let canvas = document.querySelector("#canvasfiga");
+    camera_button.addEventListener('click', async function() {
+        let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        video.srcObject = stream;
+    });
+
+    click_button.addEventListener('click', function() {
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        let image_data_url = canvas.toDataURL('image/jpeg');
+        const data = {
+
+            id: $('#id').val(),
+            variantId: $('#productVariantId').val(),
+            file: image_data_url,
+            type: 2
+        };
+
+
+        $.ajax({
+            method: 'post',
+            url: '/blueseal/xhr/ProductSearchPhotoAjaxManage',
+            data: data
+        }).done(function (res) {
+            $(document).trigger('bs.load.photo');
+        }).fail(function (res) {
+            bsModal.writeBody('Errore grave');
+            $(document).trigger('bs.load.photo');
+        }).always(function (res) {
+
+        });
+
+
+    });
+
 });
 $('#photoOrderForm').on('submit',function(e){
     e.preventDefault();
@@ -87,7 +147,7 @@ $('#photoOrderForm').on('submit',function(e){
 
     $.ajax({
         type: 'PUT',
-        url: '/blueseal/xhr/ProductPhotoAjaxManage',
+        url: '/blueseal/xhr/ProductSearchPhotoAjaxManage',
         data: serialized+'&'+ids
     }).done(function (content) {
         modal = new $.bsModal('Salvataggio Foto',
@@ -122,10 +182,10 @@ $(document).on('bs.photo.delete', function (e, element) {
     okButton.html('Elimina Foto').off().on('click', function () {
         $.ajax({
             type: 'DELETE',
-            url: '/blueseal/xhr/ProductPhotoAjaxManage',
+            url: '/blueseal/xhr/ProductSearchPhotoAjaxManage',
             data: {
-                "id" : $.QueryString["id"],
-                "productVariantId" : $.QueryString["productVariantId"],
+                "id" : $('#id').val(),
+                "productVariantId" : $('#productVariantId').val(),
                 "photoOrder" : $(element.item).prop('id')
             }
         }).done(function (content) {

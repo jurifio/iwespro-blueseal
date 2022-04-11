@@ -19,7 +19,7 @@ use bamboo\core\utils\amazonPhotoManager\S3Manager;
  *
  * @since ${VERSION}
  */
-class CProductPhotoAjaxManage extends AAjaxController
+class CProductSearchPhotoAjaxManage extends AAjaxController
 {
     public function get()
     {
@@ -54,25 +54,29 @@ if($product) {
     public function post()
     {
         /** @var $product CProduct */
-        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$this->app->router->request()->getRequestData('id'),
-        'productVariantId'=>$this->app->router->request()->getRequestData('productVariantId')]);
+        $product = \Monkey::app()->repoFactory->create('Product')->findOneBy(['id'=>$this->app->router->request()->getRequestData('id'),'productVariantId'=>
+        $this->app->router->request()->getRequestData('variantId')]);
         $this->app->vendorLibraries->load("amazon2723");
         $config = $this->app->cfg()->fetch('miscellaneous', 'amazonConfiguration');
-        $tempFolder = $this->app->rootPath().$this->app->cfg()->fetch('paths', 'tempFolder')."/";
+       $image_parts = explode(";base64,", $this->app->router->request()->getRequestData('file'));
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+        $tempFolder = \Monkey::app()->rootPath().\Monkey::app()->cfg()->fetch('paths', 'tempFolder').'/';
+        $fileNamePost = $tempFolder.$product->id.'_'.$product->productVariantId.'__'.$product->productBrand->slug.'.jpg';
+        file_put_contents($fileNamePost, $image_base64);
 
         $image = new ImageManager(new S3Manager($config['credential']), $this->app, $tempFolder);
 
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $tempFolder . $_FILES['file']['name'])) {
-            throw new RedPandaException('Cannot move the uploaded Files named '.$_FILES['file']['tmp_name'].' in ' .$tempFolder.$_FILES['file']['name']);
-        }
+
 
 
         $fileName['name'] = $product->printId();
         $fileName['number'] = (string) str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
-        $fileName['extension'] = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+        $fileName['extension'] = "jpg";
 
         try{
-            $res = $image->process($_FILES['file']['name'], $fileName, $config['bucket'], $product->productBrand->slug);
+            $res = $image->process($product->id.'_'.$product->productVariantId.'__'.$product->productBrand->slug.'.jpg', $fileName, $config['bucket'], $product->productBrand->slug);
         }catch( RedPandaAssetException $e){
             $this->app->router->response()->raiseProcessingError();
             return 'Dimensioni della foto errate: il rapporto deve esser 9:16';
@@ -98,7 +102,7 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                 }
                 $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'mime'=>'image/jpeg', 'size' => $key, 'isPublic'=>1));
             }
-            unlink($tempFolder . $_FILES['file']['name']);
+            unlink($tempFolder .'/'. $product->id.'_'.$product->productVariantId.'__'.$product->productBrand->slug.'.jpg');
             $count = 0;
             foreach ($ids as $key => $val) {
                 $this->app->dbAdapter->insert("ProductHasProductPhoto", ["productId" => $product->id, "productVariantId" => $product->productVariantId, "productPhotoId" => $val]);
