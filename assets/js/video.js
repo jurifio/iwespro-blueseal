@@ -122,7 +122,10 @@ function dataURItoBlob(dataURI) {
 }
 
 // add button event
-buttonGo.onclick = function () {
+buttonGo.onclick =async function () {
+    let video = document.querySelector("#video");
+    let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    video.srcObject = stream;
     if (isPC) {
         canvas.style.display = 'none';
     } else {
