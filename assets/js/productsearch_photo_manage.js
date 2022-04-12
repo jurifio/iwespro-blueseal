@@ -125,7 +125,6 @@ $(document).on('bs.take.photo', function (e){
         }).done(function (res) {
             $(document).trigger('bs.load.photo');
         }).fail(function (res) {
-            bsModal.writeBody('Errore grave');
             $(document).trigger('bs.load.photo');
         }).always(function (res) {
 
