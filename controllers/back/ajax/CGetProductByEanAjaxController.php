@@ -31,6 +31,7 @@ class CGetProductByEanAjaxController extends AAjaxController
                                p.externalId,
                                concat_ws(',',
                                     concat(p.externalId),
+                                    CONCAT(ds.barcode),
                                   concat(pb.name),
                                   concat(p.id,'-', p.productVariantId), 
                                   concat(p.itemno, '#', v.name), 
@@ -38,7 +39,9 @@ class CGetProductByEanAjaxController extends AAjaxController
                           FROM Product p 
                             join ProductVariant v on p.productVariantId = v.id 
                             join ProductBrand pb on p.productBrandId = pb.id
-                            join ProductStatus ps on p.productStatusId = ps.id
+                            join ProductStatus ps on p.productStatusId = ps.id JOIN DirtyProduct dp ON dp.productId=p.id AND dp.productVariantId=p.productVariantId
+						    JOIN DirtySku ds ON dp.id=ds.dirtyProductId
+                  
                             group by p.id, p.productVariantId) as myView
                   WHERE ricerca like '%".$search."%' limit 1";
 
