@@ -39,7 +39,7 @@ class CGetProductByEanAjaxController extends AAjaxController
                           FROM Product p 
                             join ProductVariant v on p.productVariantId = v.id 
                             join ProductBrand pb on p.productBrandId = pb.id
-                            join ProductStatus ps on p.productStatusId = ps.id JOIN DirtyProduct dp ON dp.productId=p.id AND dp.productVariantId=p.productVariantId
+                            join ProductStatus ps on p.productStatusId = ps.id left  JOIN DirtyProduct dp ON dp.productId=p.id AND dp.productVariantId=p.productVariantId
 						    JOIN DirtySku ds ON dp.id=ds.dirtyProductId
                   
                             group by p.id, p.productVariantId) as myView

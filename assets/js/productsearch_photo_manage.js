@@ -83,6 +83,8 @@ $(document).on('bs.take.photo', function (e){
     var okButton = bsModal.find('.modal-footer .btn-success');
 
     bsModal.modal();
+    bsModal.addClass('modal-wide');
+    bsModal.addClass('modal-high');
 
     header.html('Scatta Foto');
     okButton.html('Fatto').off().on('click', function () {
@@ -91,7 +93,7 @@ $(document).on('bs.take.photo', function (e){
     });
     cancelButton.remove();
     let bodyContent ='<button id="start-camera">Stato Camera Avviata</button>'+
-    '<video id="video" width="1125" height="1500" autoplay></video>'+
+    '<video id="video" width="225" height="300" autoplay></video>'+
     '<button id="click-photo">Scatta</button>'+
     '<canvas id="canvasfiga" width="1125" height="1500"></canvas>';
 
