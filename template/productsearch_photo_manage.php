@@ -40,7 +40,7 @@
                                     <button id="go" class="btn btn-primary">Leggi il barcode</button>
                                 </div>
                                 <div class="col-md-4">
-                                    <video muted autoplay id="video" playsinline="true" width="240"></video>
+                                    <video muted autoplay id="video" playsinline="true"  width="240"></video>
 
                                 </div>
                                 <div class="col-md-4">

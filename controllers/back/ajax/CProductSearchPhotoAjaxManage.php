@@ -8,6 +8,8 @@ use bamboo\core\exceptions\RedPandaException;
 use bamboo\core\theming\CRestrictedAccessWidgetHelper;
 use bamboo\core\utils\amazonPhotoManager\ImageManager;
 use bamboo\core\utils\amazonPhotoManager\S3Manager;
+use PDO;
+use PDO\Exception;
 
 /**
  * Class CProductPhotoAjaxManage
@@ -101,6 +103,39 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                     $orderMax=1;
                 }
                 $ids[] = $this->app->dbAdapter->insert('ProductPhoto', array('name' => $val, 'order' => $orderMax, 'mime'=>'image/jpeg', 'size' => $key, 'isPublic'=>1));
+                $shopHasProduct=\Monkey::app()->repoFactory->create('ShopHasProduct')->findOneBy(['productId'=>$product->id,'productVariantId'=>$product->productVariantId]);
+                $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id'=>$shopHasProduct->shopId]);
+                $db_host = $shop->dbHost;
+                $db_name = $shop->dbName;
+                $db_user = $shop->dbUsername;
+                $db_pass = $shop->dbPassword;
+                if ($shop->hasEcommerce == 1) {
+                    try {
+
+                        $db_con = new PDO("mysql:host={$db_host};dbname={$db_name}",$db_user,$db_pass);
+                        $db_con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                        $res = ' connessione ok <br>';
+                        $stmtProductPhoto = $db_con->prepare("Insert INTO  ProductPhoto (`size`,`width`,`height`,`dpi`,`name`,`mime`,`order`,`creationDate`,`isPublic`)
+                VALUES(
+                '".$key."',
+                '0',
+                '0',
+                '72',
+                '".$val."',
+                'image/jpeg',
+                '".$orderMax."',
+                '".(new \DateTime($shippingDate))->format('Y-m-d H:i:s')."',  
+                '1')");
+
+                        $stmtProductPhoto->execute();
+                        $remoteIds[]=$stmtProductPhoto->lastInsertId();
+
+
+                    } catch (PDOException $e) {
+                        $res = $e->getMessage();
+                    }
+                }
+
             }
             unlink($tempFolder .'/'. $product->id.'_'.$product->productVariantId.'__'.$product->productBrand->slug.'.jpg');
             $count = 0;
@@ -108,6 +143,14 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                 $this->app->dbAdapter->insert("ProductHasProductPhoto", ["productId" => $product->id, "productVariantId" => $product->productVariantId, "productPhotoId" => $val]);
                 $count++;
             }
+            if ($shop->hasEcommerce == 1) {
+                foreach ($remoteIds as $remoteKey => $remoteVal) {
+                    $stmtProductHasProductPhoto = $db_con->prepare("Insert INTO  ProductHasProductPhoto (`productId`,`productVariantId`,`productPhotoId`)
+                VALUES( " . $product->id . "," . $product->productVariantId . "," . $remoteVal . ")");
+                    $stmtProductHasProductPhoto->insert();
+                }
+            }
+
             if ($count) {
                 \Monkey::app()->eventManager->triggerEvent(
                     'assignPhotosToProduct',
