@@ -124,7 +124,7 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                 '".$val."',
                 'image/jpeg',
                 '".$orderMax."',
-                '".(new \DateTime($shippingDate))->format('Y-m-d H:i:s')."',  
+                '".(new \DateTime())->format('Y-m-d H:i:s')."',  
                 '1')");
 
                         $stmtProductPhoto->execute();
