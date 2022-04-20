@@ -93,7 +93,7 @@ $(document).on('bs.take.photo', function (e){
     });
     cancelButton.remove();
     let bodyContent ='<button id="start-camera">Stato Camera Avviata</button>'+
-    '<video id="video" width="225" height="300" autoplay></video>'+
+    '<video  muted id="video" width="225" height="300" autoplay playsinline="true"></video>'+
     '<button id="click-photo">Scatta</button>'+
     '<canvas id="canvasfiga" width="1125" height="1500"></canvas>';
 

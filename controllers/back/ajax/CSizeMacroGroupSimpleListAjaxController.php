@@ -70,6 +70,7 @@ class CSizeMacroGroupSimpleListAjaxController extends AAjaxController
             } else {
                 $row['productSizeGroups'] = "---";
             }
+            $row['productCategoryGroups'] = "---";
             /** @var CProductSizeMacroGroupHasProductCategory $allProductCategory */
             $allProductCategory = \Monkey::app()->repoFactory->create('ProductSizeMacroGroupHasProductCategory')->findBy(['productSizeMacroGroupId' => $row['id']]);
             if (!empty($allProductCategory)) {
@@ -83,13 +84,13 @@ class CSizeMacroGroupSimpleListAjaxController extends AAjaxController
 
                     FROM ProductCategory  t0 where id=' . $singleProductCategory->productCategoryId . ' GROUP BY t0.slug';
                     $res_category = \Monkey::app()->dbAdapter->query($sqlCategory,[])->fetchAll();
-
+                    $categoryName='';
                     foreach ($res_category as $category) {
                         $categoryName = str_replace(',','/',($category['ancestors'] . ',' . $category['slug']));
 
                     }
 
-                    $row['productCategoryGroups'][] = '<br>'.$categoryName;
+                    $row['productCategoryGroups'][] = " <br>".$categoryName;
 
                     //$row['productCategoryGroups'][] = " ,".$singleProductCategory->productCategoryId;
                 }
