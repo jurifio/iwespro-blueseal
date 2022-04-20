@@ -296,6 +296,7 @@ table.dataTable thead .sorting_asc:after {
 
 .js-remove {
     color: red;
+    font-size: xx-large;
 }
 
 table.dataTable tbody tr.selected, table.dataTable tbody th.selected, table.dataTable tbody td.selected {
