@@ -104,8 +104,54 @@ $(document).on('bs.take.photo', function (e){
     let click_button = document.querySelector("#click-photo");
     let canvasPhoto = document.querySelector("#canvasfiga");
     camera_button.addEventListener('click', async function() {
-        let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-        videoPhoto.srcObject = stream;
+       /* let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        videoPhoto.srcObject = stream;*/
+        navigator.mediaDevices.enumerateDevices()
+            .then(gotDevices).then(getStream).catch(handleError);
+
+        videoPhoto.onchange = getStream;
+
+        function gotDevices(deviceInfos) {
+            for (var i = deviceInfos.length - 1; i >= 0; --i) {
+                var deviceInfo = deviceInfos[i];
+                var option = document.createElement('option');
+                option.value = deviceInfo.deviceId;
+                if (deviceInfo.kind === 'videoinput') {
+                    option.text = deviceInfo.label || 'camera ' +
+                        (videoSelect.length + 1);
+                    videoSelect.appendChild(option);
+                } else {455
+                    console.log('Found one other kind of source/device: ', deviceInfo);
+                }
+            }
+        }
+
+        function getStream() {
+            buttonGo.disabled = false;
+            if (window.stream) {
+                window.stream.getTracks().forEach(function(track) {
+                    track.stop();
+                });
+            }
+
+            var constraints = {
+                video: {
+                    deviceId: {exact: videoPhoto.value}
+                }
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints).
+            then(gotStream).catch(handleError);
+        }
+
+        function gotStream(stream) {
+            window.stream = stream; // make stream available to console
+            videoElement.srcObject = stream;
+        }
+
+        function handleError(error) {
+            console.log('Error: ', error);
+        }
     });
 
     click_button.addEventListener('click', function() {
