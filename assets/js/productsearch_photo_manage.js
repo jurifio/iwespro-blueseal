@@ -92,15 +92,15 @@ $(document).on('bs.take.photo', function (e){
         okButton.off();
     });
     cancelButton.remove();
-    let bodyContent ='<button id="start-camera">Stato Camera Avviata</button>'+
-    '<video  muted id="video" width="225" height="300" autoplay playsinline="true"></video>'+
-    '<button id="click-photo">Scatta</button>'+
-    '<canvas id="canvasfiga" width="1125" height="1500"></canvas>';
+    let bodyContent ='<button class="btn btn-primary" id="start-camera" name="start-camera">Stato Camera Avviata</button>'+
+        '<video  muted id="videoPhoto" name="videoPhoto" width="225" height="300" autoplay playsinline="true"></video>'+
+        '<button id="click-photo" name="click-photo" class="btn btn-primary">Scatta</button>'+
+        '<canvas id="canvasfiga" width="1125" height="1500"></canvas>';
 
 
     body.html(bodyContent);
     let camera_button = document.querySelector("#start-camera");
-    let video = document.querySelector("#video");
+    let video = document.querySelector("#videoPhoto");
     let click_button = document.querySelector("#click-photo");
     let canvas = document.querySelector("#canvasfiga");
     camera_button.addEventListener('click', async function() {
