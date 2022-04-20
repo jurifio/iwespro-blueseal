@@ -100,17 +100,17 @@ $(document).on('bs.take.photo', function (e){
 
     body.html(bodyContent);
     let camera_button = document.querySelector("#start-camera");
-    let video = document.querySelector("#videoPhoto");
+    let videoPhoto = document.querySelector("#videoPhoto");
     let click_button = document.querySelector("#click-photo");
-    let canvas = document.querySelector("#canvasfiga");
+    let canvasPhoto = document.querySelector("#canvasfiga");
     camera_button.addEventListener('click', async function() {
         let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-        video.srcObject = stream;
+        videoPhoto.srcObject = stream;
     });
 
     click_button.addEventListener('click', function() {
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        let image_data_url = canvas.toDataURL('image/jpeg');
+        canvasPhoto.getContext('2d').drawImage(videoPhoto, 0, 0, canvasPhoto.width, canvasPhoto.height);
+        let image_data_url = canvasPhoto.toDataURL('image/jpeg');
         const data = {
 
             id: $('#id').val(),
