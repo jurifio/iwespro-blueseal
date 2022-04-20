@@ -128,7 +128,7 @@ WHERE p.id=".$product->id." AND p.productVariantId=".$product->productVariantId;
                 '1')");
 
                         $stmtProductPhoto->execute();
-                        $remoteIds[]=$stmtProductPhoto->lastInsertId();
+                        $remoteIds[]=$db_con->lastInsertId();
 
 
                     } catch (PDOException $e) {
