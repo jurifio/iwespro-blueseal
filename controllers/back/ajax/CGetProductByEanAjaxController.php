@@ -31,7 +31,7 @@ class CGetProductByEanAjaxController extends AAjaxController
                                p.externalId,
                                concat_ws(',',
                                     concat(p.externalId),
-                                    CONCAT(ds.barcode),
+                                    group_CONCAT(ds.barcode),
                                   concat(pb.name),
                                   concat(p.id,'-', p.productVariantId), 
                                   concat(p.itemno, '#', v.name), 
