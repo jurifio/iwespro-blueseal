@@ -92,10 +92,14 @@ $(document).on('bs.take.photo', function (e){
         okButton.off();
     });
     cancelButton.remove();
-    let bodyContent ='<button class="btn btn-primary" id="start-camera" name="start-camera">Stato Camera Avviata</button>'+
-        '<video  muted id="videoPhoto" name="videoPhoto" width="225" height="300" autoplay playsinline="true"></video>'+
-        '<button id="click-photo" name="click-photo" class="btn btn-primary">Scatta</button>'+
-        '<canvas id="canvasfiga" width="1125" height="1500"></canvas>';
+    let bodyContent ='<div class="row"><div class="col-md-12"><div class="select">\n' +
+        '                                        <label for="videoSourceSelect">Video source: </label><select\n' +
+        '                                                id="videoSourceSelect"></select>\n' +
+        '                                    </div></div></div>'+
+        '<div class="row"><div class="col-md-12"><button class="btn btn-primary" id="start-camera" name="start-camera">Stato Camera Avviata</button></div></div>'+
+        '<div class="row"><div class="col-md-12"><video  muted id="videoPhoto" name="videoPhoto" width="225" height="300" autoplay playsinline="true"></video></div></div>'+
+        '<div class="row"><div class="col-md-12"><button id="click-photo" name="click-photo" class="btn btn-primary">Scatta</button></div></div>'+
+        '<div class="row"><div class="col-md-12"><canvas id="canvasfiga" width="1125" height="1500"></canvas></div></div>';
 
 
     body.html(bodyContent);
@@ -103,6 +107,54 @@ $(document).on('bs.take.photo', function (e){
     let videoPhoto = document.querySelector("#videoPhoto");
     let click_button = document.querySelector("#click-photo");
     let canvasPhoto = document.querySelector("#canvasfiga");
+    var videoSourceSelect = document.querySelector('select#videoSourceSelect');
+
+    navigator.mediaDevices.enumerateDevices()
+        .then(gotDevices).then(getStream).catch(handleError);
+
+    videoSourceSelect.onchange = getStream;
+
+    function gotDevices(deviceInfos) {
+        for (var i = deviceInfos.length - 1; i >= 0; --i) {
+            var deviceInfo = deviceInfos[i];
+            var option = document.createElement('option');
+            option.value = deviceInfo.deviceId;
+            if (deviceInfo.kind === 'videoinput') {
+                option.text = deviceInfo.label || 'camera ' +
+                    (videoSourceSelect.length + 1);
+                videoSourceSelect.appendChild(option);
+            } else {455
+                console.log('Found one other kind of source/device: ', deviceInfo);
+            }
+        }
+    }
+
+    function getStream() {
+        buttonGo.disabled = false;
+        if (window.stream) {
+            window.stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
+        }
+
+        var constraints = {
+            video: {
+                deviceId: {exact: videoSourceSelect.value}
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints).
+        then(gotStream).catch(handleError);
+    }
+
+    function gotStream(stream) {
+        window.stream = stream; // make stream available to console
+        videoPhoto.srcObject = stream;
+    }
+
+    function handleError(error) {
+        console.log('Error: ', error);
+    }
     camera_button.addEventListener('click', async function() {
         let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         videoPhoto.srcObject = stream;
