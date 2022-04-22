@@ -159,7 +159,116 @@ class CShopManage extends AAjaxController
     }
 
     public
-    function put()
+    function post()
+    {
+        try {
+
+                $shop = $this->app->repoFactory->create('Shop')->getEmptyEntity();
+                $shop->title = $shopData['title'];
+                $shop->owner = $shopData['owner'];
+                $shop->referrerEmails = $shopData['referrerEmails'];
+                $shop->eloyApiKey = $shopData['eloyApiKey'];
+                $shop->secret = $shopData['secret'];
+                $shop->dbHost = $shopData['dbHost'];
+                $shop->dbUsername = $shopData['dbUsername'];
+                $shop->dbPassword = $shopData['dbPassword'];
+                $shop->dbName = $shopData['dbName'];
+                $shop->logo = $shopData['logo'];
+                $shop->logoThankYou = $shopData['logoThankYou'];
+                $shop->paralellFee = $shopData['paralellFee'];
+                $shop->feeParallelOrder = $shopData['feeParallelOrder'];
+                $shop->billingParallelId = $shopData['billingParallelId'];
+                $shop->hasEcommerce = $shopData['hasEcommerce'];
+                $shop->hasCoupon = $shopData['hasCoupon'];
+                $shop->hasCouponNewsletter = $shopData['hasCouponNewsletter'];
+                $shop->hasMarketplace = $shopData['hasMarketplace'];
+                $shop->receipt = $shopData['receipt'];
+                $shop->invoiceUe = $shopData['invoiceUe'];
+                $shop->invoiceExtraUe = $shopData['invoiceExtraUe'];
+                $shop->invoiceParalUe = $shopData['invoiceParalUe'];
+                $shop->invoiceParalExtraUe = $shopData['invoiceParalExtraUe'];
+                $shop->siteInvoiceChar = $shopData['siteInvoiceChar'];
+                $shop->urlSite = $shopData['urlSite'];
+                $shop->analyticsId = $shopData['analyticsId'];
+                $shop->emailShop = $shopData['emailShop'];
+                $shop->amministrativeEmails = $shopData['amministrativeEmails'];
+                $shop->billingEmails = $shopData['billingEmails'];
+                $shop->billingContact = $shopData['billingContact'];
+                $shop->importer = $shopData['importer'];
+                $shop->instagramAccount = $shopData['instagramAccount'];
+                $shop->facebookAccount = $shopData['facebookAccount'];
+                $shop->pinterestAccount = $shopData['pinterestAccount'];
+                $shop->twitterAccount = $shopData['twitterAccount'];
+                $shop->pinterestAccount = $shopData['pinterestAccount'];
+                $shop->appIdFacebook = $shopData['appIdFacebook'];
+                $shop->domainShop = $shopData['domainShop'];
+                $shop->emailSupporto = $shopData['emailSupporto'];
+                $shop->directoryUtente = $shopData['directoryUtente'];
+                $shop->nameApp = $shopData['nameApp'];
+                $shop->mobile = $shopData['mobile'];
+                $shop->phone = $shopData['phone'];
+                $shop->creditCardApi = $shopData['creditCardApi'];
+                $shop->creditCardSecret = $shopData['creditCardSecret'];
+                $shop->bic=$shopData['bic'];
+                $shop->banca = $shopData['banca'];
+                $shop->ibanBanca = $shopData['ibanBanca'];
+                $shop->emailPaypal = $shopData['emailPaypal'];
+                $shop->remotePath = $shopData['remotePath'];
+                $shop->ftpUser = $shopData['ftpUser'];
+                $shop->ftpPassword = $shopData['ftpPassword'];
+                $shop->ftpHost = $shopData['ftpHost'];
+                $shopId=$shop->smartInsert();
+
+                 $shop=\Monkey::app()->repoFactory->create('Shop')->findOneBy(['id' => $shopId]);
+
+
+                if ($this->app->getUser()->hasPermission('allShops')) {
+                    $shop->currentSeasonMultiplier = $shopData['currentSeasonMultiplier'];
+                    $shop->pastSeasonMultiplier = $shopData['pastSeasonMultiplier'];
+                    $shop->saleMultiplier = $shopData['saleMultiplier'];
+                    $shop->minReleasedProducts = $shopData['minReleasedProducts'];
+                    $config = $shop->config;
+                    $config['refusalRate'] = $shopData['config']['refusalRate'] ?? null;
+                    $config['refusalRateLastMonth'] = $shopData['config']['refusalRateLastMonth'] ?? null;
+                    $config['reactionRate'] = $shopData['config']['reactionRate'] ?? null;
+                    $config['reactionRateLastMonth'] = $shopData['config']['reactionRateLastMonth'] ?? null;
+                    $config['accountStatus'] = $shopData['config']['accountStatus'] ?? null;
+                    $config['accountType'] = $shopData['config']['accountType'] ?? null;
+                    $config['photoCost'] = $shopData['config']['photoCost'] ?? null;
+                    $config['shootingTransportCost'] = $shopData['config']['shootingTransportCost'] ?? null;
+                    $config['orderTransportCost'] = $shopData['config']['orderTransportCost'] ?? null;
+
+                    $shop->config = $config;
+                }
+
+                $billingAddressBookData = $shopData['billingAddressBook'];
+                $billingAddressBook = $this->getAndFillAddressData($billingAddressBookData);
+
+                if (!is_null($billingAddressBook)) {
+                    if (isset($billingAddressBook->id)) $billingAddressBook->update();
+                    else $billingAddressBook->id = $billingAddressBook->insert();
+                    $shop->billingAddressBookId = $billingAddressBook->id;
+                }
+
+
+                foreach ($shopData['shippingAddresses'] as $shippingAddressData) {
+                    $shippingAddress = $this->getAndFillAddressData($shippingAddressData);
+                    if (is_null($shippingAddress)) continue;
+                    if (isset($shippingAddress->id)) $shippingAddress->update();
+                    else $shippingAddress->id = $shippingAddress->insert();
+                    $this->app->dbAdapter->insert('ShopHasShippingAddressBook',['shopId' => $shop->id,'addressBookId' => $shippingAddress->id],false,true);
+                }
+
+                $x = $shop->update();
+                $this->app->dbAdapter->commit();
+                return $x;
+
+        } catch (\Throwable $e) {
+            $this->app->dbAdapter->rollBack();
+            throw $e;
+        }
+    }
+    public function put()
     {
         try {
             $shopData = $this->app->router->request()->getRequestData('shop');
