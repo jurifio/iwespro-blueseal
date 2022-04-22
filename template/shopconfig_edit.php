@@ -930,6 +930,16 @@
         ></bs-toolbar-button>
         <bs-toolbar-button
                 data-tag="a"
+                data-icon="fa-tasks"
+                data-permission="/admin/product/add"
+                data-event="bs.shop.install.setup"
+                data-class="btn btn-default"
+                data-rel="tooltip"
+                data-title="Aggiungi Hosting"
+                data-placement="bottom"
+        ></bs-toolbar-button>
+        <bs-toolbar-button
+                data-tag="a"
                 data-icon="fa-cog"
                 data-permission="/admin/product/add"
                 data-event="bs.shop.read.conf"

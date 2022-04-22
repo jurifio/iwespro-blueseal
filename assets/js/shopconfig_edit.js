@@ -721,8 +721,8 @@ $(document).on('bs.shop.cpanel.create', function () {
     let ftpHost=$('#shop_ftpHost').val();
     let ftpUser=$('#shop_ftpUser').val();
     let ftpPassword = $('#shop_ftpPassword').val();
-    let emailUser=$('#shop_referrerEmails').val();
-    if(ftpHost=='null' || ftpUser==''|| ftpPassword==''){
+    let emailUser=$('#shop_emailShop').val();
+    if(ftpHost=='null' || ftpUser==''|| ftpPassword=='' || emailUser==''){
         new Alert({
             type: "warning",
             message: "Devi compilare i campi necessari "
@@ -737,31 +737,8 @@ $(document).on('bs.shop.cpanel.create', function () {
 
 
     modal.setOkEvent(function () {
-
-        let dataJson = {
-            idShop: idShop,
-            ftpHost:ftpHost,
-            ftpUser:ftpUser,
-            ftpPassword:ftpPassword,
-            email:emailUser
-        }
-        $.ajax({
-            url: '/blueseal/xhr/CreateCPanelAccountAjaxController',
-            method: 'POST',
-            data: dataJson
-        }).done(function (res) {
-
-                window.open(res,'_blank');
-                modal.setOkEvent(function () {
-                    modal.hide();
-                });
-
-
-
-        }).fail(function (res) {
-            modal.writeBody(res);
-
-        });
+        let url='/test/testCreateAccountCpanel.php?domain='+ftpHost+'&newUser='+ftpUser+'&newPass='+ftpPassword+'&newMail='+ emailUser;
+        window.open(url, '_blank');
 
         });
     }
