@@ -162,7 +162,7 @@ $(document).on('bs.take.photo', function (e){
 
     click_button.addEventListener('click', function() {
         canvasPhoto.getContext('2d').drawImage(videoPhoto, 0, 0, canvasPhoto.width, canvasPhoto.height);
-        let image_data_url = canvasPhoto.toDataURL('image/jpeg');
+        let image_data_url = canvasPhoto.toDataURL('image/jpeg',0.7);
         const data = {
 
             id: $('#id').val(),
