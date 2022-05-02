@@ -52,7 +52,7 @@ class CCreateSetupFileShopAjaxController extends AAjaxController
             $root='/home/'.$shop->remotePath.'/public_html';
             $prefix='prod';
         }
-        $localFile='setup.php';
+        $localFile='setup.json';
         if(ENV=='dev') {
             $myfile = fopen("/media/sf_sites/iwespro/temp/" . $localFile,"w");
             $nameLocalFile="/media/sf_sites/iwespro/temp/" . $localFile;
@@ -60,8 +60,9 @@ class CCreateSetupFileShopAjaxController extends AAjaxController
             $myfile = fopen("/home/iwespro/public_html/temp/" . $localFile,"w");
             $nameLocalFile="/home/iwespro/public_html/temp/" . $localFile;
         }
-        $json="<?php 
-        $data = system('unzip -d ".$root." /home/shared/setup/setupMonkey.zip);   ?>';";
+        $json=json_encode($shop);
+       /* $json="<?php
+        $data = system('unzip -d ".$root." /home/shared/setup/setupMonkey.zip);   ?>';";*/
         fwrite($myfile, $json);
 
         fclose($myfile);
