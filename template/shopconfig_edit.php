@@ -935,7 +935,7 @@
                 data-event="bs.shop.install.setup"
                 data-class="btn btn-default"
                 data-rel="tooltip"
-                data-title="Aggiungi Hosting"
+                data-title="Installa  Applicazione"
                 data-placement="bottom"
         ></bs-toolbar-button>
         <bs-toolbar-button

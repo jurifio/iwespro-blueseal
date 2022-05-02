@@ -716,6 +716,7 @@ function appendShipmentNotIban(data, containerSelector) {
         });
     });
 }
+//
 $(document).on('bs.shop.cpanel.create', function () {
     let idShop = $('#shopConfigShopId').val();
     let ftpHost=$('#shop_ftpHost').val();
@@ -739,6 +740,59 @@ $(document).on('bs.shop.cpanel.create', function () {
     modal.setOkEvent(function () {
         let url='/test/testCreateAccountCpanel.php?domain='+ftpHost+'&newUser='+ftpUser+'&newPass='+ftpPassword+'&newMail='+ emailUser;
         window.open(url, '_blank');
+
+        });
+    }
+
+
+
+});
+$(document).on('bs.shop.install.setup', function () {
+    let idShop = $('#shopConfigShopId').val();
+    let ftpHost=$('#shop_ftpHost').val();
+    let ftpUser=$('#shop_ftpUser').val();
+    let ftpPassword = $('#shop_ftpPassword').val();
+    let emailUser=$('#shop_referrerEmails').val();
+    if(ftpHost=='null' || ftpUser==''|| ftpPassword==''){
+        new Alert({
+            type: "warning",
+            message: "Devi compilare i campi necessari "
+        }).open();
+        return false;
+    }else{
+        var modal = new $.bsModal('Crea Hosting', {
+            body: 'Con Questa Funzione creerai  l\'utente '+ftpUser +' nell\'hosting '+ftpHost+''
+        });
+        modal.addClass('modal-wide');
+        modal.addClass('modal-high');
+
+
+        modal.setOkEvent(function () {
+
+            let dataJson = {
+                idShop: idShop,
+                ftpHost:ftpHost,
+                ftpUser:ftpUser,
+                ftpPassword:ftpPassword,
+                email:emailUser
+            }
+            $.ajax({
+                url: '/blueseal/xhr/CreateSetupFileShopAjaxController',
+                method: 'POST',
+                data: dataJson
+            }).done(function (res) {
+
+                modal.writeBody(res);
+                modal.setOkEvent(function () {
+                    modal.hide();
+                });
+
+
+
+            }).fail(function (res) {
+                modal.writeBody(res);
+
+            });
 
         });
     }
